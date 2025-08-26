@@ -12,7 +12,6 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SharedModule } from '../shared/shared.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { ApprovePettyCashEntryConfirmDialogComponent } from './components/approve-petty-cash-entry-confirm-dialog/approve-petty-cash-entry-confirm-dialog.component';
 import { ExpenseDetailsComponent } from './components/expense-details/expense-details.component';
@@ -31,6 +30,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { LightboxModule } from 'ngx-lightbox';
 import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [
@@ -52,7 +52,6 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
         CurrencyModule,
         MatPaginatorModule,
         SharedModule,
-        ShSelectModule,
         ModalModule.forRoot(),
         ElementViewChildModule,
         SalesModule,
@@ -68,7 +67,8 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
         MatDividerModule,
         MatInputModule,
         LightboxModule,
-        MatMenuModule
+        MatMenuModule,
+        FormFieldsModule
     ],
     exports: [
         ExpensesComponent,

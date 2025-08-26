@@ -11,25 +11,20 @@
                     <div class="clearfix">
                         <div class="row">
                             <div class="form-group col-xs-6 col-sm-6">
-                                <label>Unit Name<sup>*</sup></label>
-                                <sh-select
+                                <reactive-dropdown-field
                                     [options]="stockUnitsList"
                                     #unitName
-                                    name="name"
+                                    [name]="'name'"
                                     [(ngModel)]="customUnitObj.name"
                                     *ngIf="country == 'india'"
                                     [placeholder]="'Select unit'"
-                                    (selected)="setUnitName($event?.value); unitChange()"
-                                    [ItemHeight]="33"
+                                    (selectedOption)="setUnitName($event?.value); unitChange()"
                                     (onClear)="clearUnit()"
-                                    [forceClearReactive]="forceClear$ | async"
                                     (noOptionsFound)="noUnitFound(unitName)"
-                                    [notFoundMsg]="'Type to create custom unit'"
-                                    [isRequired]="true"
-                                    [doNotReset]="true"
+                                    [required]="true"
                                     [disabled]="editMode"
-                                    [fixedValue]="editMode ? customUnitObj.name : ''"
                                     (ngModelChange)="unitChange()"
+                                    [label]="'Unit Name'"
                                 >
                                     <ng-template #optionTemplate let-option="option">
                                         <ng-container>
@@ -75,16 +70,14 @@
                             <ng-container *ngFor="let mappingField of customUnitObj.mappings; let i = index">
                                 <div class="inventory-section d-flex" *ngIf="customUnitObj.name && customUnitObj.code">
                                     <div class="form-group col-xs-4 col-sm-4">
-                                        <label>Unit Name<sup>*</sup></label>
                                         <div class="d-flex">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="allStockMappedUnits"
                                                 [name]="'stockUnitX' + i"
                                                 [placeholder]="'Choose unit'"
                                                 [(ngModel)]="mappingField.stockUnitX.code"
-                                                (selected)="mappingField.stockUnitX.code = $event?.value"
-                                                [ItemHeight]="33"
-                                                [forceClearReactive]="forceClear$ | async"
+                                                (selectedOption)="mappingField.stockUnitX.code = $event?.value"
+                                                [label]="'Unit Name'"
                                                 class="select-unit-x"
                                                 [ngClass]="{
                                                     'error-box': !mappingField.stockUnitX.code && !isValidForm
@@ -103,7 +96,7 @@
                                                         </a>
                                                     </ng-container>
                                                 </ng-template>
-                                            </sh-select>
+                                            </reactive-dropdown-field>
                                         </div>
                                     </div>
                                     <span class="equal-sign">=</span>
@@ -122,16 +115,14 @@
                                         />
                                     </div>
                                     <div class="form-group col-xs-4 col-sm-4">
-                                        <label>Mapped Unit <sup>*</sup></label>
                                         <div class="d-flex">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="allStockMappedUnits"
                                                 [name]="'stockUnitY' + i"
                                                 [placeholder]="'Choose unit'"
                                                 [(ngModel)]="mappingField.stockUnitY.code"
-                                                (selected)="mappingField.stockUnitY.code = $event?.value"
-                                                [ItemHeight]="33"
-                                                [forceClearReactive]="forceClear$ | async"
+                                                (selectedOption)="mappingField.stockUnitY.code = $event?.value"
+                                                [label]="'Mapped Unit'"
                                                 class="select-unit"
                                                 [ngClass]="{
                                                     'error-box': !mappingField.stockUnitY.code && !isValidForm
@@ -150,7 +141,7 @@
                                                         </a>
                                                     </ng-container>
                                                 </ng-template>
-                                            </sh-select>
+                                            </reactive-dropdown-field>
                                             <div class="pull-right unit-add">
                                                 <button
                                                     mat-stroked-button class="mr-0"

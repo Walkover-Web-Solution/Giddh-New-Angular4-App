@@ -7,6 +7,7 @@ import { DeleteManufacturingConfirmationModelComponent } from './edit/modal/conf
 import { ManufacturingComponent } from './manufacturing.component';
 import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 import { SharedModule } from '../shared/shared.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { SharedModule } from '../shared/shared.module';
         ManufacturingRoutingModule,
         SharedModule,
         RouterModule,
-        MatTableModule
+        MatTableModule,
+        FormFieldsModule
     ],
 })
 export class ManufacturingModule {

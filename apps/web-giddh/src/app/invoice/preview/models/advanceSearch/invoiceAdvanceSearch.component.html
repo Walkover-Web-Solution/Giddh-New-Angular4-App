@@ -16,12 +16,11 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="row">
                             <div class="col-md-6 col-sm-6 col-12 mr-b1">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [options]="dateOptions"
-                                    [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'invoice')"
-                                ></sh-select>
+                                    (selectedOption)="dateChanged($event, 'invoice')">
+                                </reactive-dropdown-field>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-12 custom-input-field search-datepicker">
@@ -45,13 +44,12 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="total-amount row">
                             <div class="col-md-8 col-sm-6 col-6">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [placeholder]="commonLocaleData?.app_select"
-                                    name="entryTotalBy"
+                                    [name]="'entryTotalBy'"
                                     [options]="filtersForEntryTotal"
-                                    [ItemHeight]="33"
-                                    (selected)="invoiceTotalRangeChanged($event)"
-                                ></sh-select>
+                                    (selectedOption)="invoiceTotalRangeChanged($event)">
+                                </reactive-dropdown-field>
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6 pl-0">
@@ -77,14 +75,13 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="row">
                             <div class="col-md-4 col-sm-6 col-6">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [options]="dateOptions"
-                                    [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'due')"
-                                ></sh-select>
+                                    (selectedOption)="dateOptionSelected($event, 'dueDate')"
+                                    [labelValue]="selectedDueDateOption?.label">
+                                </reactive-dropdown-field>
                             </div>
-
                             <div class="col-md-8 col-sm-6 col-6 pl-0 custom-input-field search-datepicker">
                                 <giddh-datepicker
                                     name="invoiceDueDateRange"
@@ -106,15 +103,13 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="due-amount row">
                             <div class="col-md-8 col-sm-6 col-6">
-                                <sh-select
-                                    [placeholder]="commonLocaleData?.app_select"
-                                    name="entryTotalBy"
+                                <reactive-dropdown-field
+                                    [placeholder]="commonLocaleData?.app_select_range"
                                     [options]="filtersForEntryTotal"
-                                    [ItemHeight]="33"
-                                    (selected)="dueTotalRangeChanged($event)"
-                                ></sh-select>
+                                    [(ngModel)]="request.totalBy"
+                                    [labelValue]="request.totalBy?.label">
+                                </reactive-dropdown-field>
                             </div>
-
                             <div class="col-md-4 col-sm-6 col-6 pl-0">
                                 <input
                                     class="form-control"
@@ -135,14 +130,11 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="status-description row">
                             <div class="col-md-8 col-sm-12">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [placeholder]="commonLocaleData?.app_select_action"
-                                    [multiple]="true"
                                     [options]="statusDropdownOptions"
-                                    name="balanceStatus"
-                                    [(ngModel)]="request.balanceStatus"
-                                    [ItemHeight]="33"
-                                ></sh-select>
+                                    [(ngModel)]="request.statuses">
+                                </reactive-dropdown-field>
                             </div>
 
                             <div class="col-sm-4 col-md-4 pl-0"></div>
@@ -157,24 +149,22 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="status-description row">
                             <div class="col-md-8 col-sm-12">
-                                <sh-select
+                                <reactive-dropdown-field
                                     *ngIf="voucherApiVersion === 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
-                                    [multiple]="true"
+                                    [isMultiSelect]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
-                                    name="eInvoiceStatus"
+                                    [name]="'eInvoiceStatus'"
                                     [(ngModel)]="request.eInvoiceStatus"
-                                    [ItemHeight]="33"
-                                ></sh-select>
-                                <sh-select
+                                ></reactive-dropdown-field>
+                                <reactive-dropdown-field
                                     *ngIf="voucherApiVersion !== 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
-                                    [multiple]="true"
+                                    [isMultiSelect]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
-                                    name="eInvoiceStatus"
+                                    [name]="'eInvoiceStatus'"
                                     [(ngModel)]="request.status"
-                                    [ItemHeight]="33"
-                                ></sh-select>
+                                ></reactive-dropdown-field>
                             </div>
 
                             <div class="col-sm-4 col-md-4 pl-0"></div>
@@ -214,12 +204,11 @@
                     <div class="col-sm-8 col-md-8">
                         <div class="row">
                             <div class="col-sm-4 col-md-4">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [options]="dateOptions"
-                                    [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'invoice')"
-                                ></sh-select>
+                                    (selectedOption)="dateChanged($event, 'invoice')">
+                                </reactive-dropdown-field>
                             </div>
 
                             <div class="col-sm-8 col-md-8 pl-0">
@@ -242,12 +231,11 @@
                     <div class="col-sm-8 col-md-8">
                         <div class="total-amount row">
                             <div class="col-md-6 col-sm-6 col-6">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [placeholder]="commonLocaleData?.app_select_range"
                                     [options]="filtersForEntryTotal"
-                                    [ItemHeight]="33"
-                                    (selected)="invoiceTotalRangeChanged($event)"
-                                ></sh-select>
+                                    (selectedOption)="invoiceTotalRangeChanged($event)">
+                                </reactive-dropdown-field>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-6 pl-0">
@@ -270,24 +258,22 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="status-description row">
                             <div class="col-md-8 col-sm-12">
-                                <sh-select
+                                <reactive-dropdown-field
                                     *ngIf="voucherApiVersion === 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
-                                    [multiple]="true"
+                                    [isMultiSelect]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
-                                    name="eInvoiceStatus"
+                                    [name]="'eInvoiceStatus'"
                                     [(ngModel)]="request.eInvoiceStatus"
-                                    [ItemHeight]="33"
-                                ></sh-select>
-                                <sh-select
+                                ></reactive-dropdown-field>
+                                <reactive-dropdown-field
                                     *ngIf="voucherApiVersion !== 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
-                                    [multiple]="true"
+                                    [isMultiSelect]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
-                                    name="eInvoiceStatus"
+                                    [name]="'eInvoiceStatus'"
                                     [(ngModel)]="request.status"
-                                    [ItemHeight]="33"
-                                ></sh-select>
+                                ></reactive-dropdown-field>
                             </div>
 
                             <div class="col-sm-4 col-md-4 pl-0"></div>
@@ -335,15 +321,14 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="total-amount row">
                             <div class="col-md-7 col-sm-6 col-6 pr-0">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [placeholder]="commonLocaleData?.app_select_range"
-                                    name="amountFieldSelector"
+                                    [name]="'amountFieldSelector'"
                                     [options]="filtersForAmount"
                                     [(ngModel)]="request.amountFieldSelector"
-                                    [ItemHeight]="33"
-                                    (selected)="amountRangeChanged($event)"
+                                    (selectedOption)="amountRangeChanged($event)"
                                 >
-                                </sh-select>
+                                </reactive-dropdown-field>
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6">
@@ -370,13 +355,12 @@
                     <div class="col-sm-9 col-12">
                         <div class="row">
                             <div class="col-sm-5 col-12">
-                                <sh-select
+                                <reactive-dropdown-field
                                     class="select-action mr-b15"
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [options]="dateOptions"
-                                    [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'invoice')"
-                                ></sh-select>
+                                    (selectedOption)="dateChanged($event, 'invoice')"
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-sm-7 col-12 pl-0">
                                 <giddh-datepicker
@@ -396,13 +380,12 @@
                     <div class="col-sm-9 col-12">
                         <div class="status-description row">
                             <div class="col-md-5 col-sm-12">
-                                <sh-select
+                                <reactive-dropdown-field
                                     class="mr-b15"
                                     [placeholder]="commonLocaleData?.app_select_range"
                                     [options]="filtersForEntryTotal"
-                                    [ItemHeight]="33"
-                                    (selected)="invoiceTotalRangeChanged($event)"
-                                ></sh-select>
+                                    (selectedOption)="invoiceTotalRangeChanged($event)"
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-md-7 col-sm-12 pl-0">
                                 <input
@@ -423,13 +406,12 @@
                     <div class="col-sm-9 col-12">
                         <div class="status-description row">
                             <div class="col-sm-5 col-12">
-                                <sh-select
+                                <reactive-dropdown-field
                                     class="mr-b15"
                                     [placeholder]="commonLocaleData?.app_select_action"
                                     [options]="dateOptions"
-                                    [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'due')"
-                                ></sh-select>
+                                    (selectedOption)="dateChanged($event, 'due')"
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-sm-7 col-12 pl-0">
                                 <giddh-datepicker

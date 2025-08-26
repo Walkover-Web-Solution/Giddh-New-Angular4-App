@@ -20,7 +20,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { BalanceSheetComponent } from './components/balance-sheet/balance-sheet.component';
@@ -101,7 +101,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         }),
         HighlightModule,
         RecTypeModule,
-        ShSelectModule,
+        FormFieldsModule,
         ClickOutsideModule,
         
         CurrencyModule,

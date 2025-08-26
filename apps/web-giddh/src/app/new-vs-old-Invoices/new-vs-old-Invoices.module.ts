@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
@@ -45,12 +43,9 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
             style: 'slide-left',
             spinnerSize: 30
         }),
-        ShSelectModule,
-        
         SharedModule,
         SelectModule.forRoot(),
         ModalModule,
-
         CurrencyModule,
         FormFieldsModule,
         MatButtonModule,

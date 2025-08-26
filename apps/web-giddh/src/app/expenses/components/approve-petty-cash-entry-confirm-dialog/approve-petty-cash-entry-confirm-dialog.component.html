@@ -39,36 +39,34 @@
                             : selectedEntryForApprove?.baseAccount?.name
                     }}
                 </p>
-                <sh-select
+
+                <reactive-dropdown-field 
                     *ngIf="showCategoryOption"
                     [ngClass]="{ 'error-box': showEntryAgainstRequired }"
                     class="text-left multi-select entry-against"
-                    name="depositAccountUniqueName"
-                    #entryAgainstAccountDropDown
-                    [options]="entryAgainstObject.dropDownOption"
+                    [cssClass]="'border-0'" 
                     [(ngModel)]="entryAgainstObject.model"
-                    (selected)="onSelectEntryAgainstAccount($event)"
-                    (onClear)="onClearEntryAgainstAccount()"
+                    [name]="'depositAccountUniqueName'"
+                    [label]="entryAgainstObject && pettyCashEntry
+                    ? pettyCashEntry?.particular?.name
+                    : selectedEntryForApprove?.baseAccount?.name"
                     [placeholder]="commonLocaleData?.app_select_account"
-                    [notFoundLink]="false"
-                    [enableDynamicSearch]="true"
-                    [isPaginationEnabled]="true"
-                    (scrollEnd)="handleAccountScrollEnd()"
+                    [options]="entryAgainstObject.dropDownOption"
+                    (selectedOption)="onSelectEntryAgainstAccount($event)"
+                    (onClear)="onClearEntryAgainstAccount()"
+                    [enableDynamicSearch]="true" 
                     (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                    [defaultValue]="entryAgainstObject?.name"
-                    [fixedValue]="entryAgainstObject?.name"
-                    [forceClearReactive]="forceClear$ | async"
-                    [multiple]="false"
-                    [ItemHeight]="33"
-                    [useInBuiltFilterForIOptionTypeItems]="true"
+                    [isPaginationEnabled]="true"
+                    (scrollEnd)="handleAccountScrollEnd()" 
+                    [labelValue]="entryAgainstObject?.name"
                 >
-                    <ng-template #optionTemplate1 let-option="option">
+                    <ng-template #optionTemplate let-option="option">
                         <a href="javascript:void(0)" class="list-item">
                             <div class="item">{{ option.label }}</div>
                             <div class="item-unique">{{ option?.value }}</div>
                         </a>
                     </ng-template>
-                </sh-select>
+                </reactive-dropdown-field>
             </div>
         </div>
         <div class="row mr-b1">

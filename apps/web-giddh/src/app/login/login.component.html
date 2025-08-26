@@ -322,14 +322,15 @@
                 [formGroup]="mobileVerifyForm"
             >
                 <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="countryCodeList"
                         class="form-inline"
-                        (selected)="setCountryCode($event)"
+                        (selectedOption)="setCountryCode($event)"
                         [placeholder]="'CC'"
                         formControlName="country"
+                        [name]="'country'"
                     >
-                    </sh-select>
+                    </reactive-dropdown-field>
                     <input
                         class="form-control input-width-mobile"
                         formControlName="mobileNumber"

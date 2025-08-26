@@ -9,7 +9,6 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { AdvanceReceiptReportComponent } from './components/advance-receipt-report/advance-receipt-report.component';
 import { CashFlowStatementComponent } from './components/cash-flow-statement-component/cash.flow.statement.component';
@@ -85,7 +84,6 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         Daterangepicker,
         
 
-        ShSelectModule,
         FormsModule,
         CurrencyModule,
         AccountDetailModalModule,

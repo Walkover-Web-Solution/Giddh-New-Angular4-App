@@ -38,34 +38,27 @@
                                     <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                         <div class="clearfix d-flex flex-column">
                                             <div class="d-flex flex-column">
-                                                <sales-sh-select
+                                                <reactive-dropdown-field
                                                     #vendorNameDropDown
                                                     name="vendor"
                                                     class="select-customer-field"
                                                     [options]="vendorAcList$ | async"
                                                     [(ngModel)]="purchaseOrder.account.uniqueName"
-                                                    [customFilter]="customMoveGroupFilter"
-                                                    (selected)="onSelectVendor($event)"
+                                                    (selectedOption)="onSelectVendor($event)"
                                                     [placeholder]="localeData?.select_vendor"
-                                                    [notFoundLink]="true"
-                                                    [doNotReset]="true"
+                                                    [showCreateNew]="true"
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('vendor')"
                                                     (dynamicSearchedQuery)="  isAccountSearchData = true;
                                                         onSearchQueryChanged($event, 1, 'vendor')
                                                     "
-                                                    [notFoundMsg]="noResultsFoundLabel"
                                                     [enableDynamicSearch]="true"
-                                                    [fixedValue]="purchaseOrder.account.name"
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    [isFilterEnabled]="true"
-                                                    (noResultsClicked)="addNewAccount()"
-                                                    [multiple]="false"
-                                                    [ItemHeight]="67"
-                                                    [notFoundLinkText]="localeData?.add_vendor"
+                                                    [labelValue]="purchaseOrder.account.name"
+                                                    (createOption)="addNewAccount()"
+                                                    [createNewText]="localeData?.add_vendor"
                                                     (keyup)="resetVendor($event)"
                                                     (onClear)="resetVendor(null)"
-                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account?.uniqueName"
+                                                    [openDropdown]="!isUpdateMode && !purchaseOrder.account?.uniqueName"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
@@ -89,7 +82,7 @@
                                                             <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
                                                         </a>
                                                     </ng-template>
-                                                </sales-sh-select>
+                                                </reactive-dropdown-field>
                                                 <!-- region Unregistered Business / vendor details -->
                                                 <div
                                                     class="d-flex aqua-color"
@@ -225,7 +218,7 @@
                                                                         #vendorBillingState
                                                                         *ngIf="statesSource?.length"
                                                                     >
-                                                                        <sales-sh-select
+                                                                        <reactive-dropdown-field
                                                                             [placeholder]="commonLocaleData?.app_state"
                                                                             class="select-border-bottom"
                                                                             (selected)="
@@ -245,14 +238,14 @@
                                                                                     .state.code
                                                                             "
                                                                         >
-                                                                        </sales-sh-select>
+                                                                        </reactive-dropdown-field>
                                                                     </div>
                                                                     <div
                                                                         class="col-sm-12 col-md-6"
                                                                         #vendorBillingState
                                                                         *ngIf="regionsSource?.length"
                                                                     >
-                                                                        <sales-sh-select
+                                                                        <reactive-dropdown-field
                                                                             [placeholder]="commonLocaleData?.app_region"
                                                                             class="select-border-bottom"
                                                                             (selected)="
@@ -272,7 +265,7 @@
                                                                                     .county.code
                                                                             "
                                                                         >
-                                                                        </sales-sh-select>
+                                                                        </reactive-dropdown-field>
                                                                     </div>
                                                                     <div
                                                                         class="col-sm-12 col-md-6"
@@ -457,7 +450,7 @@
                                                                             #vendorShippingState
                                                                             *ngIf="statesSource?.length"
                                                                         >
-                                                                            <sales-sh-select
+                                                                            <reactive-dropdown-field
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_state
                                                                                 "
@@ -479,14 +472,14 @@
                                                                                         .shippingDetails.state.code
                                                                                 "
                                                                             >
-                                                                            </sales-sh-select>
+                                                                            </reactive-dropdown-field>
                                                                         </div>
                                                                         <div
                                                                             class="col-sm-12 col-md-6 select-border-bottom"
                                                                             #vendorShippingState
                                                                             *ngIf="regionsSource?.length"
                                                                         >
-                                                                            <sales-sh-select
+                                                                            <reactive-dropdown-field
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_region
                                                                                 "
@@ -508,7 +501,7 @@
                                                                                         .shippingDetails.county.code
                                                                                 "
                                                                             >
-                                                                            </sales-sh-select>
+                                                                            </reactive-dropdown-field>
                                                                         </div>
                                                                         <div
                                                                             class="col-sm-12 col-md-6"
@@ -611,14 +604,14 @@
                                 <div class="clearfix d-flex flex-column">
                                     <div class="d-flex flex-column">
                                         <!-- region if not cashinvoice show customer dropdown -->
-                                        <sh-select
+                                        <reactive-dropdown-field
                                             class="multi-select"
                                             name="warehouse"
                                             [placeholder]="localeData?.select_warehouse"
                                             [(ngModel)]="purchaseOrder.warehouse.uniqueName"
                                             [options]="warehouses"
                                             (selected)="onSelectWarehouse($event)"
-                                        ></sh-select>
+                                        ></reactive-dropdown-field>
                                         <!-- endregion -->
                                     </div>
                                 </div>
@@ -718,7 +711,7 @@
                                                                 #companyBillingState
                                                                 *ngIf="companyStatesSource?.length"
                                                             >
-                                                                <sales-sh-select
+                                                                <reactive-dropdown-field
                                                                     [placeholder]="commonLocaleData?.app_state"
                                                                     class="select-border-bottom"
                                                                     (selected)="
@@ -749,14 +742,14 @@
                                                                         purchaseOrder.company.billingDetails.state.code
                                                                     "
                                                                 >
-                                                                </sales-sh-select>
+                                                                </reactive-dropdown-field>
                                                             </div>
                                                             <div
                                                                 class="col-sm-12 col-md-6"
                                                                 #companyBillingState
                                                                 *ngIf="companyRegionsSource?.length"
                                                             >
-                                                                <sales-sh-select
+                                                                <reactive-dropdown-field
                                                                     [placeholder]="commonLocaleData?.app_region"
                                                                     class="select-border-bottom"
                                                                     (selected)="
@@ -787,7 +780,7 @@
                                                                         purchaseOrder.company.billingDetails.county.code
                                                                     "
                                                                 >
-                                                                </sales-sh-select>
+                                                                </reactive-dropdown-field>
                                                             </div>
                                                             <div
                                                                 class="col-sm-12 col-md-6"
@@ -968,7 +961,7 @@
                                                                     #companyShippingState
                                                                     *ngIf="companyStatesSource?.length"
                                                                 >
-                                                                    <sales-sh-select
+                                                                    <reactive-dropdown-field
                                                                         [placeholder]="commonLocaleData?.app_state"
                                                                         [disabled]="autoFillCompanyShipping"
                                                                         class="select-border-bottom disabled"
@@ -1001,14 +994,14 @@
                                                                                 .code
                                                                         "
                                                                     >
-                                                                    </sales-sh-select>
+                                                                    </reactive-dropdown-field>
                                                                 </div>
                                                                 <div
                                                                     class="col-sm-12 col-md-6"
                                                                     #companyShippingState
                                                                     *ngIf="companyRegionsSource?.length"
                                                                 >
-                                                                    <sales-sh-select
+                                                                    <reactive-dropdown-field
                                                                         [placeholder]="commonLocaleData?.app_region"
                                                                         [disabled]="autoFillCompanyShipping"
                                                                         class="select-border-bottom disabled"
@@ -1035,7 +1028,7 @@
                                                                                 .code
                                                                         "
                                                                     >
-                                                                    </sales-sh-select>
+                                                                    </reactive-dropdown-field>
                                                                 </div>
                                                                 <div
                                                                     class="col-sm-12 col-md-6"
@@ -1647,7 +1640,7 @@
                         <td>
                             <div class="product-name">
                                 <div class="ng-select-wrap" (click)="setUserManuallyClicked()">
-                                    <sh-select
+                                    <reactive-dropdown-field
                                         [options]="salesAccounts$ | async"
                                         #selectAccount
                                         [(ngModel)]="transaction.fakeAccForSelect2"
@@ -1700,7 +1693,7 @@
                                                 </a>
                                             </ng-container>
                                         </ng-template>
-                                    </sh-select>
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                             <ng-container
@@ -1720,14 +1713,14 @@
                                         [(ngModel)]="transaction.variant.uniqueName"
                                     >
                                     </select-field> -->
-                                    <sh-select
+                                    <reactive-dropdown-field
                                         [placeholder]="localeData?.select_variant"
                                         [options]="variants"
                                         (selected)="variantChanged($event, transaction, entry)"
                                         [isRequired]="true"
                                         name="{{ 'variant' + entryIdx }}"
                                         [(ngModel)]="transaction.variant.uniqueName"
-                                    ></sh-select>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </ng-container>
                             <div *ngIf="transaction.fakeAccForSelect2">
@@ -2723,7 +2716,7 @@
                                         <label class="card-label">{{ localeData?.product_service_description }}</label>
                                         <div class="product-name">
                                             <div class="ng-select-wrap">
-                                                <sh-select
+                                                <reactive-dropdown-field
                                                     [options]="salesAccounts$ | async"
                                                     [(ngModel)]="transaction.fakeAccForSelect2"
                                                     #selectAccount
@@ -2768,7 +2761,7 @@
                                                             </a>
                                                         </ng-container>
                                                     </ng-template>
-                                                </sh-select>
+                                                </reactive-dropdown-field>
                                             </div>
                                         </div>
                                         <div>

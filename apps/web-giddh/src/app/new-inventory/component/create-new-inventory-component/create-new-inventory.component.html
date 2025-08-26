@@ -244,11 +244,11 @@
                                                                 </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
-                                                                <sh-select
-                                                                    id="stock-output-unit"
-                                                                    placeholder="Enter Qty"
+                                                                <reactive-dropdown-field
+                                                                    [name]="'stockOutputUnit'"
+                                                                    [placeholder]="'Enter Qty'"
                                                                 >
-                                                                </sh-select>
+                                                                </reactive-dropdown-field>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -276,12 +276,12 @@
                                                             id="enter-qty"
                                                             placeholder="Enter Qty"
                                                         ></text-field>
-                                                        <sh-select
+                                                        <reactive-dropdown-field
                                                             class="ml-3"
-                                                            id="select-stock-unit"
-                                                            placeholder="Select Unit"
+                                                            [name]="'selectStockUnit'"
+                                                            [placeholder]="'Select Unit'"
                                                         >
-                                                        </sh-select>
+                                                        </reactive-dropdown-field>
                                                         <button mat-icon-button role="button" type="button">
                                                             <i class="icon-plus pd cp"></i>
                                                         </button>
@@ -411,11 +411,11 @@
                                                                 <label>Applicable Tax </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select
-                                                                    id="sales-applicable-tax"
-                                                                    placeholder="Select Tax"
-                                                                    disabled
-                                                                ></sh-select>
+                                                                <reactive-dropdown-field
+                                                                    [name]="'sales-applicable-tax'"
+                                                                    [placeholder]="'Select Tax'"
+                                                                    [disabled]="true">
+                                                                </reactive-dropdown-field>
                                                                 <p class="mt-2 font-15">
                                                                     <mat-checkbox color="primary" id="sales-price-tax">
                                                                         Price Inclusive of Tax ?
@@ -571,12 +571,11 @@
                                                             id="select-stock-qty"
                                                             placeholder="Enter Qty"
                                                         ></text-field>
-                                                        <sh-select
+                                                        <reactive-dropdown-field
                                                             class="ml-3"
-                                                            id="select-stock-unit"
-                                                            placeholder="Select Unit"
-                                                        >
-                                                        </sh-select>
+                                                            [name]="'select-stock-unit'"
+                                                            [placeholder]="'Select Unit'">
+                                                        </reactive-dropdown-field>
                                                         <button mat-icon-button role="button" type="button">
                                                             <i class="icon-plus pd cp"></i>
                                                         </button>
@@ -973,7 +972,7 @@
                                             <div class="col-xl-2 col-md-6">
                                                 <label> Available on variant </label>
                                                 <!-- All available variant list show with checkbox -->
-                                                <sh-select placeholder="" id="addon-available"></sh-select>
+                                                <reactive-dropdown-field [name]="'addon-available'" [placeholder]="''"></reactive-dropdown-field>
                                             </div>
                                         </div>
                                         <div>
@@ -1012,7 +1011,7 @@
                                                     <div class="variant-name-field mr-b15">
                                                         <label> Variant Name </label>
                                                         <!-- All variant list will show in dropdown -->
-                                                        <sh-select placeholder="" id="variant-name"></sh-select>
+                                                        <reactive-dropdown-field [name]="'variant-name'" [placeholder]="''"></reactive-dropdown-field>
                                                     </div>
                                                     <div>
                                                         <label class="d-block hide-label-on-mobile"> &nbsp; </label>
@@ -1219,8 +1218,8 @@
                                         <label>Service Unit <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <sh-select id="select-service-unit" type="text" placeholder="Select Unit">
-                                        </sh-select>
+                                        <reactive-dropdown-field [name]="'select-service-unit'" [placeholder]="'Select Unit'">
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -1228,11 +1227,10 @@
                                         <label>Under Group <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <sh-select
-                                            id="select-service-under-group"
-                                            type="text"
-                                            placeholder="Select Group"
-                                        ></sh-select>
+                                        <reactive-dropdown-field
+                                            [name]="'select-service-under-group'"
+                                            [placeholder]="'Select Group'">
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -1362,8 +1360,8 @@
                                                         <label>Stock Unit <span class="red-text">*</span> </label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <sh-select id="stock-output-unit" placeholder="Enter Qty">
-                                                        </sh-select>
+                                                        <reactive-dropdown-field [name]="'stock-output-unit'" [placeholder]="'Enter Qty'">
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1392,7 +1390,7 @@
                                                     id="enter-qty"
                                                     placeholder="Enter Qty"
                                                 ></text-field>
-                                                <sh-select id="select-stock-unit" placeholder="Select Unit"></sh-select>
+                                                <reactive-dropdown-field [name]="'select-stock-unit'" [placeholder]="'Select Unit'"></reactive-dropdown-field>
                                                 <i class="icon-plus pd cp"></i>
                                             </div>
                                         </div>
@@ -1437,10 +1435,10 @@
                                                                 <label>Applicable Tax </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select
-                                                                    id="applicable-tax"
-                                                                    placeholder="Select Tax"
-                                                                ></sh-select>
+                                                                <reactive-dropdown-field
+                                                                    [name]="'applicable-tax'"
+                                                                    [placeholder]="'Select Tax'">
+                                                                </reactive-dropdown-field>
                                                                 <p class="mt-3">
                                                                     <mat-checkbox
                                                                         color="primary"
@@ -2113,7 +2111,7 @@
                                             <div class="col-xl-2 col-md-6">
                                                 <label> Available on variant </label>
                                                 <!-- All available variant list show with checkbox -->
-                                                <sh-select placeholder="" id="service-addon-available"></sh-select>
+                                                <reactive-dropdown-field [name]="'service-addon-available'" [placeholder]="''"></reactive-dropdown-field>
                                             </div>
                                         </div>
                                         <div>
@@ -2152,7 +2150,7 @@
                                                     <div class="variant-name-field mr-b15">
                                                         <label> Variant Name </label>
                                                         <!-- All variant list will show in dropdown -->
-                                                        <sh-select placeholder="" id="service-variant-name"></sh-select>
+                                                        <reactive-dropdown-field [name]="'service-variant-name'" [placeholder]="''"></reactive-dropdown-field>
                                                     </div>
                                                     <div>
                                                         <label class="d-block hide-label-on-mobile"> &nbsp; </label>
@@ -2349,7 +2347,7 @@
                                         <label>Unit<span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6">
-                                        <sh-select id="select-combo-unit" placeholder="Select Unit"></sh-select>
+                                        <reactive-dropdown-field [name]="'select-combo-unit'" [placeholder]="'Select Unit'"></reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div *ngIf="false" class="row mr-b15">
@@ -2357,7 +2355,7 @@
                                         <label>Under Group <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6">
-                                        <sh-select id="select-under-group" placeholder="Select Group"></sh-select>
+                                        <reactive-dropdown-field [name]="'select-under-group'" [placeholder]="'Select Group'"></reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -2616,16 +2614,15 @@
                                                         disabled
                                                     ></textarea>
                                                 </div>
-                                                <!-- <div class="col-sm-6 col-lg-6">
+                                                <div class="col-sm-6 col-lg-6">
                                                     <label>Applicable Tax </label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                    <sh-select
-                                                        id="sales-applicable-tax"
-                                                        placeholder="Select Tax"
-                                                        disabled
-                                                    >
-                                                    </sh-select>
+                                                    <reactive-dropdown-field
+                                                        [name]="'sales-applicable-tax'"
+                                                        [placeholder]="'Select Tax'"
+                                                        [disabled]="true">
+                                                    </reactive-dropdown-field>
                                                     <p class="mt-1 font-15">
                                                         <mat-checkbox
                                                             color="primary"

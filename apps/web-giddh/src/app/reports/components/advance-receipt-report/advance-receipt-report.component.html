@@ -29,46 +29,33 @@
                         class="input-group linked-entities mr-r15"
                         *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                     >
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="currentCompanyBranches"
                             [(ngModel)]="currentBranch.uniqueName"
-                            [showClear]="false"
-                            [ItemHeight]="33"
                             class="entity-dropdown"
-                            width="100%"
-                            (selected)="handleBranchChange($event)"
-                            [isFilterEnabled]="true"
+                            (selectedOption)="handleBranchChange($event)"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.name"
+                            [labelValue]="currentBranch?.name"
+                            [name]="'currentBranch'"
                         >
-                            <ng-template #optionTemplate let-option="option">
-                                <ng-container>
-                                    <a href="javascript:void(0)" class="list-item d-flex">
-                                        <span class="entity-icon">
-                                            <i
-                                             [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
-                                                class="pull-right"
-                                                *ngIf="!option.isCompany"
-                                                matTooltip="{{ commonLocaleData?.app_branch }}"
-                                            ></i>
-                                            <i
-                                                class="icon-company-profile pull-right"
-                                                *ngIf="option.isCompany"
-                                                matTooltip="{{ commonLocaleData?.app_company }}"
-                                            ></i>
-                                        </span>
-                                        <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">
-                                                {{ option.label || "-" }}
-                                            </div>
-                                            <div class="item-unique giddh-limit single-line-clamp">
-                                                {{ option.name || "-" }}
-                                            </div>
-                                        </span>
+                            <ng-template #optionTemplate let-option>
+                                <ng-container *ngIf="option.label">
+                                    <a
+                                        class="d-flex align-items-center text-decoration-none"
+                                        [title]="option.label"
+                                    >
+                                        <div
+                                            class="mr-2 branch-icon"
+                                            [innerHTML]="option?.additional?.entity === 'COMPANY' ? companyIcon : branchIcon"
+                                        ></div>
+                                        <div class="branch-info">
+                                            <div class="branch-name">{{ option.label }}</div>
+                                            <div class="branch-alias">{{ option?.additional?.alias }}</div>
+                                        </div>
                                     </a>
                                 </ng-container>
                             </ng-template>
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="d-flex">
                         <div 
