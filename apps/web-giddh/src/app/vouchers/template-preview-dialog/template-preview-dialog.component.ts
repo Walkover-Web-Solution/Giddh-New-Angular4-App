@@ -86,7 +86,9 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplatePreviewDialogComponent
    */
   public getTemplatePreview(): void {
-    this.invoiceTemplatesService.getTemplatePreview(this.data.type, this.data.uniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+    console.log(this.data.type, this.data.uniqueName);
+    this.invoiceTemplatesService.getTemplatePreview(this.data.type, false, null, this.data.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+      console.log(response);
       if (response?.status === 'success') {
         this.selectedInvoiceType = this.generalService.base64ToBlob(response?.body?.data, 'application/pdf', 512);
         const file = new Blob([this.selectedInvoiceType], { type: 'application/pdf' });
