@@ -10,8 +10,6 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
 import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
@@ -75,8 +73,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         ClickOutsideModule,
         ElementViewChildModule,
         ScrollingModule,
-        ShSelectModule,
-        SalesShSelectModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
         TaxControlModule,

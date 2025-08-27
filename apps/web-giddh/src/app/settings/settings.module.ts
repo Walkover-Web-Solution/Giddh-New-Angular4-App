@@ -22,13 +22,11 @@ import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-wa
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 import { AddressSettingsComponent } from './address-settings/address-settings.component';
 import { OtherSettingsComponent } from './other-settings/other-settings.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
-import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
@@ -120,8 +118,6 @@ import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replace
         CurrencyModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
-        ShSelectModule,
-        SalesShSelectModule,
         TaxSidebarModule,
         ReplacePipeModule,
         NoDataModule,

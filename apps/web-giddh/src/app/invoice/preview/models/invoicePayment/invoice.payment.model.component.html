@@ -39,43 +39,34 @@
 
             <div class="row">
                 <div class="col-6 form-group">
-                    <label>{{ commonLocaleData?.app_payment_mode }} <sup>*</sup></label>
-
-                    <sh-select
-                        name="accountUniqueName"
+                    <reactive-dropdown-field
+                        [name]="'accountUniqueName'"
                         [options]="paymentModes$ | async"
                         [(ngModel)]="paymentActionFormObj.accountUniqueName"
-                        (selected)="onSelectPaymentMode($event)"
+                        (selectedOption)="onSelectPaymentMode($event)"
                         [placeholder]="commonLocaleData?.app_select_account"
-                        [notFoundLink]="false"
-                        [multiple]="false"
-                        [ItemHeight]="33"
-                        [useInBuiltFilterForIOptionTypeItems]="true"
+                        [label]="commonLocaleData?.app_payment_mode + ' *'"
                         class="text-left"
-                        required
-                        [isRequired]="true"
+                        [required]="true"
                     >
-                        <ng-template #optionTemplate1 let-option="option">
+                        <ng-template #optionTemplate let-option="option">
                             <a href="javascript:void(0)" class="list-item bd-rb">
                                 <div class="item">{{ option.label }}</div>
                                 <div class="item-unique">{{ option?.value }}</div>
                             </a>
                         </ng-template>
-                    </sh-select>
+                    </reactive-dropdown-field>
                 </div>
 
                 <div class="col-6 form-group">
-                    <label>{{ commonLocaleData?.app_tag }}</label>
-
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="tags"
-                        name="selectedTag"
+                        [name]="'selectedTag'"
                         [(ngModel)]="paymentActionFormObj.tagUniqueName"
-                        [isFilterEnabled]="true"
+                        [enableDynamicSearch]="true"
                         [placeholder]="commonLocaleData?.app_select_tag"
-                        [ItemHeight]="33"
-                    >
-                    </sh-select>
+                        [label]="commonLocaleData?.app_tag"
+                    ></reactive-dropdown-field>
                 </div>
             </div>
 

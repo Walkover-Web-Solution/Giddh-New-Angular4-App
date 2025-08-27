@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
 import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'transfer-outward-note',

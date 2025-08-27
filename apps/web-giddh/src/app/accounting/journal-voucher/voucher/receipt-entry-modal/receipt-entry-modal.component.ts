@@ -10,7 +10,6 @@ import { adjustmentTypes, AdjustmentTypesEnum } from "../../../../shared/helpers
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { KEYS } from '../../journal-voucher.component';
 import { VOUCHERS } from '../../../constants/accounting.constant';
@@ -22,8 +21,6 @@ import { VOUCHERS } from '../../../constants/accounting.constant';
 })
 
 export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
-    /* Selector for adjustment type field */
-    @ViewChildren('adjustmentTypesField') public adjustmentTypesField: ShSelectComponent;
     /* Selected transaction for adjusment */
     @Input() public transaction: any;
     /* Active company object */

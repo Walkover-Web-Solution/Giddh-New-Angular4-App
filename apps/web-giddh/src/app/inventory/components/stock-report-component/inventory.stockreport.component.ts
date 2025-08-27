@@ -30,11 +30,9 @@ import { createSelector } from 'reselect';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { InvViewService } from '../../inv.view.service';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { IOption, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { KEYS } from '../../../accounting/journal-voucher/journal-voucher.component';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -63,9 +61,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     /** Dialog reference for advance search modal */
     private advanceSearchDialogRef: MatDialogRef<any>;
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
-    @ViewChild('shCategory', { static: true }) public shCategory: ShSelectComponent;
-    @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition', { static: true }) public shValueCondition: ShSelectComponent;
     /** Template reference */
     @ViewChild('template', { static: true }) public template: TemplateRef<any>;
 
@@ -790,11 +785,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 
     public clearModal() {
         if (this.stockReportRequest.param || this.stockReportRequest.val || this.stockReportRequest.expression) {
-            this.shCategory?.clear();
-            if (this.shCategoryType) {
-                this.shCategoryType.clear();
-            }
-            this.shValueCondition?.clear();
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
             this.getStockReport(true);
         }

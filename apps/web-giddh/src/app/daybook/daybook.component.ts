@@ -694,7 +694,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * This will be use for toggle aside pan from daybook
      *
      * @param {*} [event]
-     * @param {ShSelectComponent} [shSelectElement]
      * @memberof DaybookComponent
      */
     public toggleAsidePane(event?: any): void {

@@ -3,7 +3,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { INVALID_STOCK_ERROR_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
+import { INVALID_STOCK_ERROR_MESSAGE, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
@@ -19,7 +19,6 @@ import { IUnitRateItem } from 'apps/web-giddh/src/app/models/interfaces/stocks-i
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../helpers';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 

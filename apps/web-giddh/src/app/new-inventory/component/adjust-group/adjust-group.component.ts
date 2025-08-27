@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChildren, TemplateRef, Inject } from '@angular/core';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { ServiceConfig } from '../../../services/service.config';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 @Component({
@@ -16,9 +15,6 @@ export class AdjustGroupComponent implements OnInit {
     public modalRef: BsModalRef;
     /* this will store image path*/
     public imgPath: string = '';
-
-    /* sh-select view child */
-    @ViewChildren('selectAccount') public selectAccount: ShSelectComponent;
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig,

@@ -25,13 +25,12 @@ import { IEwayBillfilter, IEwayBillTransporter, IAllTransporterDetails } from ".
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { transporterModes } from "../../../shared/helpers/transporterModes";
 import { InventoryService } from "../../../services/inventory.service";
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { NgForm } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep, isEmpty } from '../../../lodash-optimized';
@@ -62,19 +61,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('productSkuCode', { static: true }) public productSkuCode;
     @ViewChild('productHsnNumber', { static: true }) public productHsnNumber;
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
-    @ViewChild('selectDropdown', { static: false }) public selectDropdown: ShSelectComponent;
-    @ViewChild('sourceWarehouse', { static: false }) public sourceWarehouse: ShSelectComponent;
-    @ViewChild('destinationWarehouse', { static: false }) public destinationWarehouse: ShSelectComponent;
     @ViewChild('productDescription', { static: true }) public productDescription;
-    @ViewChild('transMode', { static: true }) public transMode: ShSelectComponent;
     @ViewChild('vehicleNumber', { static: true }) public vehicleNumber;
-    @ViewChild('transCompany', { static: true }) public transCompany: ShSelectComponent;
-    @ViewChild('destinationWarehouseList', { static: false }) public destinationWarehouseList: ShSelectComponent;
-    @ViewChild('sourceWarehouses', { static: false }) public sourceWarehouseList: ShSelectComponent;
     @ViewChild('sourceQuantity', { static: false }) public sourceQuantity;
-    @ViewChild('defaultSource', { static: false }) public defaultSource: ShSelectComponent;
-    @ViewChild('defaultProduct', { static: false }) public defaultProduct: ShSelectComponent;
-    @ViewChild('destinationName', { static: false }) public destinationName: ShSelectComponent;
     @ViewChild('destinationQuantity', { static: false }) public destinationQuantity;
     @ViewChild('senderGstNumberField', { static: false }) public senderGstNumberField: HTMLInputElement;
     @ViewChild('receiverGstNumberField', { static: false }) public receiverGstNumberField: HTMLInputElement;
@@ -198,7 +187,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         if (!this.editBranchTransferUniqueName) {
             this.allowAutoFocusInField = true;
-            this.focusDefaultSource();
         } else {
             this.isDefaultLoad = true;
         }
@@ -244,16 +232,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.tempDateParams.dispatchedDate = "";
         this.assignCurrentCompany();
         this.calculateOverallTotal();
-
-        setTimeout(() => {
-            this.allowAutoFocusInField = true;
-
-            if (this.transferType === "products") {
-                this.focusDefaultSource();
-            } else {
-                this.focusDefaultProduct();
-            }
-        }, 200);
     }
 
     public initFormFields(): void {
@@ -449,7 +427,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
 
         let currentIndex = this.branchTransfer.destinations.length - 1;
-        this.focusSelectDropdown(currentIndex);
     }
 
     public addSender(): void {
@@ -472,7 +449,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
 
         let currentIndex = this.branchTransfer.sources.length - 1;
-        this.focusSelectDropdown(currentIndex);
     }
 
     public addProduct(): void {
@@ -494,7 +470,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
 
         let currentIndex = this.branchTransfer.products.length - 1;
-        this.focusSelectDropdown(currentIndex);
     }
 
     public removeProduct(i): void {
@@ -654,8 +629,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
                 this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
                 this.branchTransfer.sources[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
-
-                this.focusDefaultSource();
             }
 
             setTimeout(() => {
@@ -807,13 +780,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.senderWarehouses[this.branchTransfer.sources[index]?.uniqueName].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
-                    if (this.branchTransfer.sources[index].warehouse && this.branchTransfer.sources[index].warehouse?.uniqueName) {
-                        setTimeout(() => {
-                            if (this.sourceWarehouse) {
-                                this.sourceWarehouse.writeValue(this.branchTransfer.sources[index].warehouse?.uniqueName);
-                            }
-                        }, 100);
-                    }
                 }
             }
         } else {
@@ -847,13 +813,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.senderWarehouses[this.branchTransfer.sources[sourceIndex]?.uniqueName].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
-                    if (this.branchTransfer.sources[index].warehouse && this.branchTransfer.sources[index].warehouse?.uniqueName) {
-                        setTimeout(() => {
-                            if (this.sourceWarehouse) {
-                                this.sourceWarehouse.writeValue(this.branchTransfer.sources[index].warehouse?.uniqueName);
-                            }
-                        }, 100);
-                    }
                 }
             }
         }
@@ -898,13 +857,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         }
                     });
                 }
-                if (this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse?.uniqueName) {
-                    setTimeout(() => {
-                        if (this.destinationWarehouse) {
-                            this.destinationWarehouse.writeValue(this.branchTransfer.destinations[index].warehouse?.uniqueName);
-                        }
-                    }, 100);
-                }
             }
         } else {
             if (this.allWarehouses && this.branchTransfer.sources[0] && this.allWarehouses[this.branchTransfer.sources[0]?.uniqueName]) {
@@ -939,13 +891,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.destinationWarehouses[this.branchTransfer.destinations[destinationIndex]?.uniqueName].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
-                }
-                if (this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse?.uniqueName) {
-                    setTimeout(() => {
-                        if (this.destinationWarehouse) {
-                            this.destinationWarehouse.writeValue(this.branchTransfer.destinations[index].warehouse?.uniqueName);
-                        }
-                    }, 100);
                 }
             }
         }
@@ -1476,129 +1421,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
     }
 
-    public focusSelectDropdown(index: number, event?: any): void {
-        if (this.allowAutoFocusInField && (!event || event.value)) {
-            setTimeout(() => {
-                this.setActiveRow(index);
-                setTimeout(() => {
-                    this.selectDropdown?.show('');
-                }, 100);
-            }, 100);
-        }
-    }
-
-    /**
-     * Puts focus on source warehouse
-     *
-     * @param {*} event Event of selection, used to avoid focus when event.value is null
-     * @memberof NewBranchTransferAddComponent
-     */
-    public focusSourceWarehouse(event: any): void {
-        if (this.allowAutoFocusInField && event && event.value) {
-            setTimeout(() => {
-                this.sourceWarehouse?.show('');
-            }, 100);
-        }
-    }
-
-    /**
-     * Puts focus on destination warehouse
-     *
-     * @param {*} event Event of selection, used to avoid focus when event.value is null
-     * @memberof NewBranchTransferAddComponent
-     */
-    public focusDestinationWarehouse(event: any): void {
-        if (this.allowAutoFocusInField && event && event.value) {
-            setTimeout(() => {
-                this.destinationWarehouse?.show('');
-            }, 100);
-        }
-    }
-
-    public focusTransporterMode(): void {
-        if (this.allowAutoFocusInField) {
-            setTimeout(() => {
-                this.transMode?.show('');
-            }, 100);
-        }
-    }
-
     public focusVehicleNumber(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 if (this.vehicleNumber && this.vehicleNumber.nativeElement) {
                     this.vehicleNumber.nativeElement.focus();
-                }
-            }, 100);
-        }
-    }
-
-    public focusTransportCompany(): void {
-        if (this.allowAutoFocusInField) {
-            setTimeout(() => {
-                if (this.tempDateParams.dispatchedDate) {
-                    this.transCompany?.show('');
-                }
-            }, 100);
-        }
-    }
-
-    public focusDestinationWarehouses(): void {
-        if (this.allowAutoFocusInField) {
-            setTimeout(() => {
-                this.destinationWarehouseList?.show('');
-            }, 100);
-        }
-    }
-
-    public focusSourceWarehouses(): void {
-        if (this.allowAutoFocusInField) {
-            setTimeout(() => {
-                this.sourceWarehouseList?.show('');
-            }, 100);
-        }
-    }
-
-    public focusSourceQuantity(): void {
-        if (this.allowAutoFocusInField) {
-            setTimeout(() => {
-                if (this.sourceQuantity && this.sourceQuantity.nativeElement) {
-                    this.sourceQuantity.nativeElement.focus();
-                }
-            }, 100);
-        }
-    }
-
-    public focusDefaultSource(): void {
-        if (this.allowAutoFocusInField) {
-            setTimeout(() => {
-                if (this.defaultSource) {
-                    this.defaultSource.show('');
-                } else if (this.sourceWarehouse) {
-                    // Delivery challan, focus on source warehouse instead
-                    this.sourceWarehouse.show('');
-                }
-            }, 100);
-        }
-    }
-
-    public focusDefaultProduct(): void {
-        if (this.allowAutoFocusInField) {
-            setTimeout(() => {
-                if (this.defaultProduct) {
-                    this.defaultProduct.show('');
-                }
-            }, 100);
-        }
-    }
-
-    public focusDestinationName(): void {
-        if (this.allowAutoFocusInField) {
-            setTimeout(() => {
-                if (this.destinationName) {
-                    this.destinationName.show('');
-                } else {
-                    this.focusSelectDropdown(0);
                 }
             }, 100);
         }

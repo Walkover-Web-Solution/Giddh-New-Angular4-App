@@ -1422,10 +1422,7 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
 
     public resetAdvanceSearch(): void {
         this.showAdvanceSearchIcon = false;
-        if (this.advanceSearchComponent && this.advanceSearchComponent.allShSelect) {
-            this.advanceSearchComponent.allShSelect.forEach(f => {
-                f?.clear();
-            });
+        if (this.advanceSearchComponent) {
             this.voucherNumberInput.reset();
             this.invoiceSearchRequest.q = '';
             this.accountUniqueNameInput.reset();

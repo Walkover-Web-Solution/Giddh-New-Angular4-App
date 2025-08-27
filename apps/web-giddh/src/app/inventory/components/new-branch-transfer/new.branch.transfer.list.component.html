@@ -17,17 +17,14 @@
                             *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                             class="input-group form-group linked-entities mb-0 mr-r1"
                         >
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="currentCompanyBranches"
                                 [(ngModel)]="currentBranch.uniqueName"
-                                class="branch-dropdown"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
-                                (selected)="handleBranchChange($event)"
-                                [isFilterEnabled]="true"
-                                placeholder="Select Entity"
-                                [fixedValue]="currentBranch?.name"
+                                [cssClass]="'branch-dropdown'"
+                                (selectedOption)="handleBranchChange($event)"
+                                [enableDynamicSearch]="true"
+                                [placeholder]="'Select Entity'"
+                                [labelValue]="currentBranch?.name"
                             >
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
@@ -59,7 +56,7 @@
                                         </a>
                                     </ng-container>
                                 </ng-template>
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                         <div 
                             class="custom-datepicker" 
@@ -368,12 +365,11 @@
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
                 <div class="col-sm-8">
-                    <sh-select
-                        name="voucherType"
+                    <reactive-dropdown-field
+                        [name]="'voucherType'"
                         [(ngModel)]="branchTransferTempPostRequestParams.voucherType"
                         [options]="voucherTypes"
-                        [forceClearReactive]="forceClear$ | async"
-                    ></sh-select>
+                    ></reactive-dropdown-field>
                 </div>
             </div>
             <div class="row mt-2 mb-2">
@@ -381,13 +377,12 @@
                 <div class="col-sm-8">
                     <div class="row">
                         <div class="col-sm-8">
-                            <sh-select
-                                name="amountOperators"
+                            <reactive-dropdown-field
+                                [name]="'amountOperators'"
                                 [(ngModel)]="branchTransferTempPostRequestParams.amountOperator"
                                 [options]="amountOperators"
-                                (selected)="checkIfAmountEmpty()"
-                                [forceClearReactive]="forceClear$ | async"
-                            ></sh-select>
+                                (selectedOption)="checkIfAmountEmpty()"
+                            ></reactive-dropdown-field>
                         </div>
                         <div class="col-sm-4">
                             <input

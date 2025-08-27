@@ -14,7 +14,6 @@ import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { AccountOperationsComponent, ManageGroupsAccountsComponent } from './header/components';
@@ -105,7 +104,6 @@ export function provideConfig() {
             spinnerSize: 30
         }),
         ElementViewChildModule,
-        ShSelectModule,
         DecimalDigitsModule,
         DigitsOnlyModule,
         MatPaginatorModule,
@@ -147,7 +145,6 @@ export function provideConfig() {
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
-        ShSelectModule,
         ModalModule,
         ManageGroupsAccountsComponent,
         AccountFilterPipe,

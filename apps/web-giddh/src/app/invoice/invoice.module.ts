@@ -53,9 +53,7 @@ import { ConfirmModalModule } from '../theme';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -117,13 +115,11 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
             style: 'slide-left',
             spinnerSize: 30
         }),
-        ShSelectModule,
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
         BsDropdownModule.forRoot(),
         AsideMenuRecurringEntryModule,
-        SalesShSelectModule,
         Daterangepicker,
         AccountDetailModalModule,
         CurrencyModule,

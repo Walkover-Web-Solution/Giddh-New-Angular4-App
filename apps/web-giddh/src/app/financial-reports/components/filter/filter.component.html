@@ -76,8 +76,6 @@
                                 [placeholder]="commonLocaleData?.app_select_date_range"
                                 [labelValue]="selectedDateOption?.label"
                             >
-                                [ItemHeight]="33"
-                                width="100%"
                             </reactive-dropdown-field>
                         </div>
                     </div>
@@ -289,13 +287,9 @@
                             [options]="currentCompanyBranches"
                             formControlName="branchUniqueName"
                             class="company-branch-dropdown w-100"
-                            [showClear]="false"
-                            [ItemHeight]="33"
-                            width="100%"
-                            (selected)="handleBranchChange($event)"
-                            [isFilterEnabled]="true"
+                            (selectedOption)="handleBranchChange($event)"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.name"
+                            [labelValue]="currentBranch?.name"
                         >
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>

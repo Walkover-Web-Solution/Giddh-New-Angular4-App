@@ -8,17 +8,14 @@
                 >
                     <div class="linked-entities">
                         <div class="form-group">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="currentCompanyBranches"
-                                name="entity"
+                                [name]="'entity'"
                                 [(ngModel)]="currentBranch.uniqueName"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
-                                (selected)="handleBranchChange($event)"
-                                [isFilterEnabled]="true"
+                                (selectedOption)="handleBranchChange($event)"
+                                [enableDynamicSearch]="true"
                                 [placeholder]="commonLocaleData?.app_select_entity"
-                                [fixedValue]="currentBranch?.name"
+                                [labelValue]="currentBranch?.name"
                                 class="entity-dropdown"
                             >
                                 <ng-template #optionTemplate let-option="option">
@@ -53,7 +50,7 @@
                                         </a>
                                     </ng-container>
                                 </ng-template>
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                 </div>

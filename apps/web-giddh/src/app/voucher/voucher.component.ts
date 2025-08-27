@@ -1,7 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
@@ -14,7 +12,6 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { AccountDetailsClass, ActionTypeAfterVoucherGenerateOrUpdate, AmountClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, GenericRequestForGenerateSCD, GstDetailsClass, IForceClear, IStockUnit, PurchaseRecordRequest, SalesAddBulkStockItems, SalesEntryClass, SalesEntryClassMulticurrency, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, SalesTransactionItemClass, StateCode, TemplateDetailsClass, TransactionClassMulticurrency, VOUCHER_TYPE_LIST, VoucherClass, VoucherDetailsClass, VoucherTypeEnum } from '../models/api-models/Sales';
 import { auditTime, debounceTime, delay, filter, map, take, takeUntil } from 'rxjs/operators';
-import { IOption } from '../theme/ng-select/option.interface';
 import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UntypedFormControl, NgForm } from '@angular/forms';
@@ -29,7 +26,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, IOption } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -135,10 +132,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('inputCustomerName', { static: true }) public inputCustomerName: ElementRef;
     /** Customer billing address instance */
     @ViewChild('customerBillingAddress', { static: true }) public customerBillingAddress: ElementRef;
-    /** Datepicker instance */
-    @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
-    /** RCM popup instance */
-    @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
     /** Billing state instance */
     @ViewChild('billingState', { static: true }) billingState: ElementRef;
     /** Shipping state instance */
@@ -282,7 +275,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Hold country source */
     public countrySource: IOption[] = [];
     /** Hold state source array  */
-    public statesSource: IOption[] = [];
+    public statesSource: any[] = [];
     /** Hold active account observable */
     public activeAccount$: Observable<AccountResponseV2>;
     /** This will use for auto fill shipping */
@@ -555,7 +548,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /* This will hold autofill state of company billing/shipping */
     public autoFillCompanyShipping: boolean = true;
     /* This will hold company's country states */
-    public companyStatesSource: IOption[] = [];
+    public companyStatesSource: any[] = [];
     /* This will hold if copy purchase bill is done */
     public copyPurchaseBill: boolean = false;
     /* This will hold if PO linking is updated */
@@ -929,7 +922,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         });
 
-        this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales' && '/pages/purchase-management/purchase/bill');
+        this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales');
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
@@ -6120,7 +6113,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     private modifyStateResp(stateList: StateCode[], countryCode: string) {
-        let stateListRet: IOption[] = [];
+        let stateListRet: any[] = [];
         stateList?.forEach(stateR => {
             stateListRet.push({
                 label: stateR?.name,
@@ -6288,14 +6281,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * hsn/sac dropdown
      */
     public toggleHsnSacDropDown(transaction: any): void {
-        if (this.datePickers && this.datePickers.length) {
-            this.datePickers.forEach(datePicker => {
-                if (datePicker.isOpen) {
-                    datePicker.hide();
-                }
-            });
-        }
-
         if (transaction.showCodeType === "hsn") {
             this.editingHsnSac = transaction.hsnNumber;
         } else if (transaction.showCodeType === "sac") {

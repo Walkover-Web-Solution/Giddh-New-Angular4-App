@@ -3,7 +3,6 @@ import { NgModule } from "@angular/core";
 import { MatCardModule } from '@angular/material/card';
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { MatButtonModule } from "@angular/material/button";
-import { SalesShSelectModule } from "../theme/sales-ng-virtual-select/sh-select.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicker.module";
 import { MatSelectModule } from "@angular/material/select";
@@ -42,7 +41,6 @@ import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjust
         MatCardModule,
         FormFieldsModule,
         MatButtonModule,
-        SalesShSelectModule,
         FormsModule,
         GiddhDatepickerModule,
         MatSelectModule,

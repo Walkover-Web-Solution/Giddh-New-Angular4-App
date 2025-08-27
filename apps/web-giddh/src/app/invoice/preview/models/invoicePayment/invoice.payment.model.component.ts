@@ -1,13 +1,11 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ILedgersInvoiceResult, InvoicePaymentRequest } from '../../../../models/api-models/Invoice';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
-import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { cloneDeep, orderBy } from '../../../../lodash-optimized';
 import { LedgerService } from "../../../../services/ledger.service";
 import { ReceiptItem } from "../../../../models/api-models/recipt";
@@ -16,6 +14,7 @@ import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { SettingsTagService } from 'apps/web-giddh/src/app/services/settings.tag.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'invoice-payment-model',
@@ -27,7 +26,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
     @Output() public performActionPopup: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @Output() public closeModelEvent: EventEmitter<void> = new EventEmitter();
-    @ViewChildren(ShSelectComponent) public allShSelectComponents: QueryList<ShSelectComponent>;
     @ViewChild('amountField', { static: true }) amountField;
     @Input() public selectedInvoiceForPayment: ReceiptItem;
     /* This will hold local JSON data */
@@ -221,13 +219,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.paymentActionFormObj = new InvoicePaymentRequest();
         this.paymentActionFormObj.paymentDate = dayjs().toDate();
         this.paymentActionFormObj.uniqueName = this.selectedInvoiceForPayment?.uniqueName;
-
-        if (this.allShSelectComponents) {
-            this.allShSelectComponents.forEach(sh => {
-                sh.clear();
-            });
-        }
-
         this.isBankSelected = false;
     }
 

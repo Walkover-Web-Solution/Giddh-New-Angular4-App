@@ -363,18 +363,15 @@
                                 <label class="nowrap"> Sender's Warehouse <span class="red-text">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <sh-select
-                                    #sourceWarehouse
-                                    name="sourceWarehouse"
-                                    [isFilterEnabled]="true"
-                                    [forceClearReactive]="senderWarehouseClear$ | async"
+                                <reactive-dropdown-field
+                                    [name]="'sourceWarehouse'"
+                                    [enableDynamicSearch]="true"
                                     [options]="senderWarehouses[branchTransfer.sources[0]?.uniqueName]"
                                     [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName"
-                                    (selected)="focusDestinationWarehouse($event); getWarehouseDetails('sources', 0)"
-                                    required
-                                    [isRequired]="true"
+                                    (selectedOption)="getWarehouseDetails('sources', 0)"
+                                    [required]="true"
                                     (onClear)="resetWarehouse('sources', 0)"
-                                ></sh-select>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div
@@ -422,21 +419,18 @@
                                 <label> Receiver's Name <span class="red-text">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8 position-relative">
-                                <sh-select
+                                <reactive-dropdown-field
                                     *ngIf="isUpdateMode"
-                                    #destinationName
-                                    name="destinationName"
+                                    [name]="'destinationName'"
                                     [(ngModel)]="branchTransfer.destinations[0].uniqueName"
-                                    [isFilterEnabled]="true"
-                                    [forceClearReactive]="destinationBranchClear$ | async"
+                                    [enableDynamicSearch]="true"
                                     [options]="branches$ | async"
-                                    (selected)="
-                                        selectCompany($event, 'destinations', 0); focusDestinationWarehouse($event)
+                                    (selectedOption)="
+                                        selectCompany($event, 'destinations', 0)
                                     "
-                                    required
-                                    [isRequired]="true"
+                                    [required]="true"
                                     [disabled]="isUpdateMode"
-                                ></sh-select>
+                                ></reactive-dropdown-field>
                                 <input
                                     *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                     name="destinationName"
@@ -460,19 +454,15 @@
                                 <label class="nowrap"> Receiver's Warehouse <span class="red-text">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <sh-select
-                                    #destinationWarehouse
-                                    name="destinationWarehouse"
-                                    [isFilterEnabled]="true"
-                                    [forceClearReactive]="destinationWarehouseClear$ | async"
+                                <reactive-dropdown-field
+                                    [name]="'destinationWarehouse'"
+                                    [enableDynamicSearch]="true"
                                     [options]="destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
-                                    (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0, $event)"
+                                    (selectedOption)="getWarehouseDetails('destinations', 0);"
                                     (onClear)="resetWarehouse('destinations', 0)"
-                                    required
-                                    [isRequired]="true"
-                                >
-                                </sh-select>
+                                    [required]="true"
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div
@@ -511,7 +501,6 @@
                                     rows="3"
                                     name="destinationAddress"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.address"
-                                    (blur)="focusSelectDropdown(0)"
                                 ></textarea>
                             </div>
                         </div>
@@ -558,17 +547,15 @@
                                     <td>{{ i + 1 }}.</td>
                                     <td class="min-wid-product">
                                         <div *ngIf="activeRow === i">
-                                            <sh-select
-                                                name="productName{{ i }}"
-                                                #selectDropdown
-                                                [notFoundLink]="true"
-                                                (noResultsClicked)="onProductNoResultsClicked(i)"
-                                                [isFilterEnabled]="true"
-                                                [forceClearReactive]="forceClear$ | async"
+                                            <reactive-dropdown-field
+                                                [name]="'productName' + i"
+                                                [createNewText]="'Add New Product'"
+                                                (createNewClicked)="onProductNoResultsClicked(i)"
+                                                [enableDynamicSearch]="true"
                                                 [options]="stockList"
                                                 [(ngModel)]="product.uniqueName"
-                                                (selected)="selectProduct($event, product)"
-                                            ></sh-select>
+                                                (selectedOption)="selectProduct($event, product)"
+                                            ></reactive-dropdown-field>
                                             <div class="position-relative wrap-hsn-box">
                                                 <div
                                                     class="sku-code"
@@ -788,32 +775,25 @@
                                     <td>{{ i + 1 }}.</td>
                                     <td>
                                         <div *ngIf="activeRow === i">
-                                            <sh-select
-                                                name="destinationName{{ i }}"
-                                                #selectDropdown
-                                                [isFilterEnabled]="true"
-                                                [forceClearReactive]="branchClear$ | async"
+                                            <reactive-dropdown-field
+                                                [name]="'destinationName' + i"
+                                                [enableDynamicSearch]="true"
                                                 [(ngModel)]="destination.uniqueName"
                                                 [options]="branches$ | async"
-                                                (selected)="
-                                                    selectCompany($event, 'destinations', i);
-                                                    focusDestinationWarehouses()
+                                                (selectedOption)="
+                                                    selectCompany($event, 'destinations', i)
                                                 "
-                                            >
-                                            </sh-select>
-                                            <sh-select
-                                                #destinationWarehouseList
-                                                [isFilterEnabled]="true"
-                                                [forceClearReactive]="warehouseClear$ | async"
+                                            ></reactive-dropdown-field>
+                                            <reactive-dropdown-field
+                                                [enableDynamicSearch]="true"
                                                 *ngIf="destination?.uniqueName"
                                                 [options]="destinationWarehouses[destination?.uniqueName]"
                                                 [(ngModel)]="destination.warehouse.uniqueName"
-                                                name="destinationWarehouse{{ i }}"
-                                                (selected)="
+                                                [name]="'destinationWarehouse' + i"
+                                                (selectedOption)="
                                                     getWarehouseDetails('destinations', i); focusDestinationQuantity()
                                                 "
-                                            >
-                                            </sh-select>
+                                            ></reactive-dropdown-field>
                                             <input
                                                 [disabled]="destination?.warehouse?.uniqueName"
                                                 type="text"
@@ -955,29 +935,23 @@
                                     <td>{{ i + 1 }}.</td>
                                     <td>
                                         <div *ngIf="activeRow === i" class="fields-gap">
-                                            <sh-select
-                                                name="sourceName{{ i }}"
-                                                #selectDropdown
-                                                [isFilterEnabled]="true"
-                                                [forceClearReactive]="branchClear$ | async"
+                                            <reactive-dropdown-field
+                                                [name]="'sourceName' + i"
+                                                [enableDynamicSearch]="true"
                                                 [(ngModel)]="source.uniqueName"
                                                 [options]="branches$ | async"
-                                                (selected)="
-                                                    selectCompany($event, 'sources', i); focusSourceWarehouses()
+                                                (selectedOption)="
+                                                    selectCompany($event, 'sources', i)
                                                 "
-                                            >
-                                            </sh-select>
-                                            <sh-select
-                                                #sourceWarehouses
-                                                [isFilterEnabled]="true"
-                                                [forceClearReactive]="warehouseClear$ | async"
+                                            ></reactive-dropdown-field>
+                                            <reactive-dropdown-field
+                                                [enableDynamicSearch]="true"
                                                 *ngIf="source?.uniqueName"
                                                 [options]="senderWarehouses[source?.uniqueName]"
                                                 [(ngModel)]="source.warehouse.uniqueName"
-                                                name="sourceWarehouse{{ i }}"
-                                                (selected)="getWarehouseDetails('sources', i); focusSourceQuantity()"
-                                            >
-                                            </sh-select>
+                                                [name]="'sourceWarehouse' + i"
+                                                (selectedOption)="getWarehouseDetails('sources', i)"
+                                            ></reactive-dropdown-field>
                                             <input
                                                 [disabled]="source?.warehouse?.uniqueName"
                                                 type="text"
@@ -1157,52 +1131,29 @@
                                     [(ngModel)]="tempDateParams.dispatchedDate"
                                     [minDate]="tempDateParams.dateOfSupply"
                                     [disabled]="true"
-                                    (dateSelected)="focusTransportCompany()"
                                     [appearance]="'outline'"
                                 ></giddh-datepicker>
                             </div>
                             <div class="col-sm-6 mr-b2">
-                                <sh-select
-                                    #transCompany
-                                    placeholder="Transport Company"
-                                    name="transporterId"
-                                    [isFilterEnabled]="true"
-                                    (keydown)="keydownPressed($event)"
-                                    [forceClearReactive]="forceClear$ | async"
+                                <reactive-dropdown-field
+                                    [placeholder]="'Transport Company'"
+                                    [name]="'transporterId'"
+                                    [enableDynamicSearch]="true"
                                     [options]="transporterDropdown$ | async"
                                     [(ngModel)]="branchTransfer.transporterDetails.transporterId"
-                                    [notFoundLink]="true"
-                                    [multiple]="false"
-                                    [ItemHeight]="33"
-                                    (selected)="focusTransporterMode()"
-                                >
-                                    <ng-template #notFoundLinkTemplate>
-                                        <a
-                                            [ngClass]="{ 'active': keydownClassAdded }"
-                                            class="notfound-option"
-                                            [keyboardShortcut]="'alt+c'"
-                                            (onShortcutPress)="keydownPressed()"
-                                        >
-                                            <span
-                                                (click)="toggleTransporterModel()"
-                                                [ngClass]="{ 'active': keydownClassAdded }"
-                                                >Create New</span
-                                            >
-                                        </a>
-                                    </ng-template>
-                                </sh-select>
+                                    [createNewText]="'Create New'"
+                                    (createNewClicked)="toggleTransporterModel()"
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-sm-6 mr-b2">
-                                <sh-select
-                                    #transMode
-                                    placeholder="Transport Mode"
-                                    name="transportMode"
-                                    [isFilterEnabled]="true"
-                                    [forceClearReactive]="forceClear$ | async"
+                                <reactive-dropdown-field
+                                    [placeholder]="'Transport Mode'"
+                                    [name]="'transportMode'"
+                                    [enableDynamicSearch]="true"
                                     [options]="transporterMode"
                                     [(ngModel)]="branchTransfer.transporterDetails.transportMode"
-                                    (selected)="focusVehicleNumber()"
-                                ></sh-select>
+                                    (selectedOption)="focusVehicleNumber()"
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-sm-6 mr-b2">
                                 <input
