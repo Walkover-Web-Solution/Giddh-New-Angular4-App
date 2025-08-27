@@ -12,7 +12,6 @@ import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Led
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
@@ -26,19 +25,7 @@ import { ServiceConfig } from '../../../services/service.config';
 @Component({
     selector: 'app-expense-details',
     templateUrl: './expense-details.component.html',
-    styleUrls: ['./expense-details.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./expense-details.component.scss']
 })
 
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {

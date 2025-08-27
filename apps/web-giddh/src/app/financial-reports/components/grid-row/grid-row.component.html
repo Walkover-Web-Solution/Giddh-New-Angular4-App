@@ -81,7 +81,7 @@
         class="row-2 account overflow-visible"
         [ngClass]="{'tailed-row': account.checked}"
         *ngIf="account.isVisible"
-        (dblclick)="accountInfo(account, $event)"
+        (dblclick)="accountInfo(account, $event); menuTrigger.openMenu()"
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
@@ -97,7 +97,29 @@
                 <div
                     class="p-0 bd-r-right-none"
                     [innerHTML]="account.name | lowercase | highlight: search"
+                    #menuTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="accountDetailModalTemplate"
+                    (click)="$event.preventDefault(); $event.stopPropagation()"
                 ></div>
+                <!-- Material Menu -->
+                <mat-menu #accountDetailModalTemplate="matMenu">
+                    <ng-container *ngIf="modalUniqueName && modalUniqueName === account?.uniqueName">
+                        <span
+                            account-detail-modal-component
+                            [shouldShowGenerateInvoice]="false"
+                            [accountUniqueName]="account?.uniqueName"
+                            [isModalOpen]="account?.uniqueName === modalUniqueName"
+                            [accInfo]="false"
+                            [from]="from"
+                            [to]="to"
+                            [closeOnEdit]="true"
+                            (modalOpened)="handleModalOpened($event)"
+                            (modalClosed)="hideModal()"
+                            (modalClosedTemporary)="openAccountModal.emit($event); hideModal()"
+                        >
+                        </span>
+                    </ng-container>
+                </mat-menu>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">

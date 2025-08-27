@@ -61,19 +61,7 @@ interface SubscriptionErrorFlags {
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./header.component.scss']
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
@@ -87,8 +75,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLedgerAccSelected: boolean = false;
     /* This will hold the help popup dialog ref */
     public asideHelpSupportDialogRef: MatDialogRef<any>;
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideSettingMenuState: string = 'out';
+    /* This will hold the boolean value to open/close setting sidebar popup */
+    public asideSettingMenuState: boolean = false;
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
     /* Hold giddh logo source */
@@ -1005,20 +993,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (show) {
                 this.asideHelpSupportDialogRef?.close();
             }
-            this.asideSettingMenuState = (show) ? 'in' : 'out';
+            this.asideSettingMenuState = show;
 
-            if (this.asideSettingMenuState === "in") {
+            if (this.asideSettingMenuState) {
                 document.querySelector('body')?.classList?.add('aside-setting');
             } else {
                 document.querySelector('body')?.classList?.remove('aside-setting');
             }
 
-            if (this.asideSettingMenuState === "in") {
+            if (this.asideSettingMenuState) {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
             } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-        }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
+        }, ((this.asideSettingMenuState) ? 100 : 0));
     }
 
     /**
@@ -1924,7 +1912,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public toggleSidebar(isMobileSidebar: boolean): void {
-        if (this.asideSettingMenuState === "in") {
+        if (this.asideSettingMenuState) {
             this.toggleSidebarPane(false, isMobileSidebar);
         } else {
             this.toggleSidebarPane(true, isMobileSidebar);

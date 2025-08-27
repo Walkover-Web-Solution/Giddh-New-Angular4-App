@@ -20,7 +20,6 @@ import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LedgerVM } from '../ledger/ledger.vm';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -33,19 +32,7 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
-    styleUrls: [`./daybook.component.scss`],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ])
-    ]
+    styleUrls: [`./daybook.component.scss`]
 })
 
 export class DaybookComponent implements OnInit, OnDestroy {
@@ -110,8 +97,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    // aside menu properties
-    public asideMenuState: string = 'out';
     /** Ledger object */
     public lc: LedgerVM;
     /** Company taxes list */
