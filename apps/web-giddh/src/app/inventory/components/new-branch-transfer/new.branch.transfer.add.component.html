@@ -51,7 +51,7 @@
                                 <reactive-dropdown-field
                                     [name]="'productName'"
                                     [createNewText]="'Create New Product'"
-                                    (createNewClicked)="onProductNoResultsClicked(0)"
+                                   (createOption)="onProductNoResultsClicked(0)"
                                     [enableDynamicSearch]="true"
                                     [options]="stockList"
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
@@ -281,7 +281,7 @@
                                 <reactive-dropdown-field
                                     [name]="'productName'"
                                     [createNewText]="'Create New Product'"
-                                    (createNewClicked)="onProductNoResultsClicked(0)"
+                                   (createOption)="onProductNoResultsClicked(0)"
                                     [enableDynamicSearch]="true"
                                     [options]="stockList"
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
@@ -550,7 +550,7 @@
                                             <reactive-dropdown-field
                                                 [name]="'productName' + i"
                                                 [createNewText]="'Add New Product'"
-                                                (createNewClicked)="onProductNoResultsClicked(i)"
+                                               (createOption)="onProductNoResultsClicked(i)"
                                                 [enableDynamicSearch]="true"
                                                 [options]="stockList"
                                                 [(ngModel)]="product.uniqueName"
@@ -1142,7 +1142,7 @@
                                     [options]="transporterDropdown$ | async"
                                     [(ngModel)]="branchTransfer.transporterDetails.transporterId"
                                     [createNewText]="'Create New'"
-                                    (createNewClicked)="toggleTransporterModel()"
+                                   (createOption)="openTransporterPopupDialog()"
                                 ></reactive-dropdown-field>
                             </div>
                             <div class="col-sm-6 mr-b2">
@@ -1221,7 +1221,7 @@
         <div class="form-header">
             <h3 class="aside-title">Manage Transporter</h3>
         </div>
-        <button mat-stroked-button type="button" class="mr-t05" id="closedialog" (click)="toggleTransporterModel()">
+        <button mat-stroked-button type="button" class="mr-t05" id="closedialog" (click)="openTransporterPopupDialog()">
             <i class="icon-cross"></i>
         </button>
         <form #generateTransporterForm="ngForm" autocomplete="off">

@@ -19,7 +19,7 @@
                                     [placeholder]="'Select Group'"
                                     (selectedOption)="groupSelected($event)"
                                     [createNewText]="'+ Add New'"
-                                    (createNewClicked)="addNewGroupPane()"
+                                   (createOption)="addNewGroupPane()"
                                     [name]="'parentGroup'"
                                 ></reactive-dropdown-field>
                             </div>
@@ -355,7 +355,7 @@
                                                 [placeholder]="'Select Unit'"
                                                 [disabled]="!addStockForm.controls['enablePurchase']?.value"
                                                 [createNewText]="'+ Add New'"
-                                                (createNewClicked)="addNewStockUnit()"
+                                               (createOption)="addNewStockUnit()"
                                                 [name]="'stockUnitUniqueName'"
                                             ></reactive-dropdown-field>
                                         </div>
@@ -436,7 +436,7 @@
                                                 [disabled]="!addStockForm.controls['enableSales']?.value"
                                                 [placeholder]="'Select Unit'"
                                                 [createNewText]="'+ Add New'"
-                                                (createNewClicked)="addNewStockUnit()"
+                                               (createOption)="addNewStockUnit()"
                                                 [name]="'stockUnitUniqueName'"
                                             ></reactive-dropdown-field>
                                         </div>
