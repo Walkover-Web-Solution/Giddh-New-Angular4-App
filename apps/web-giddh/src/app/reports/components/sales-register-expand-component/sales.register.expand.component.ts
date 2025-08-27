@@ -7,7 +7,6 @@ import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../.
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
 import { ReplaySubject, Observable, combineLatest } from 'rxjs';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
@@ -45,7 +44,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
-    @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Directive to get reference of datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
 
@@ -339,11 +337,6 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     */
     public emitExpand() {
         this.expand = !this.expand;
-    }
-    public hideListItems() {
-        if (this.filterDropDownList.isOpen) {
-            this.filterDropDownList.hide();
-        }
     }
 
     public getDateToDMY(selecteddate) {

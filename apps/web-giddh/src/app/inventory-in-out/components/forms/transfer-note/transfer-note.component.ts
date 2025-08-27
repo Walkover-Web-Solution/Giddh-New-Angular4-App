@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -27,7 +26,6 @@ export class TransferNoteComponent implements OnChanges {
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
     public form: UntypedFormGroup;
-    public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public today = new Date();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;

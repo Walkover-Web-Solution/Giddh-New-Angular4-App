@@ -1,5 +1,4 @@
 import { NgModule } from "@angular/core";
-import { ModalModule } from "ngx-bootstrap/modal";
 import { NewInventoryComponent } from "./new-inventory.component";
 import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
 import { SharedModule } from "../shared/shared.module";
@@ -12,7 +11,6 @@ import { AboutGroupDetailComponent } from "./component/about-group-detail/about-
 import { InventoryGroupListSidebar } from "./component/inventory-group-list-sidebar/inventory-group-list-sidebar.component";
 import { StockGroupListComponent } from "./component/stock-group-list/stock-group-list.component";
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
-
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
@@ -141,7 +139,6 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
 
         
         CommonModule,
-        ModalModule.forRoot(),
         FormFieldsModule,
         TranslateDirectiveModule,
         DecimalDigitsModule,

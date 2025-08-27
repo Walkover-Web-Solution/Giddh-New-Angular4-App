@@ -6,7 +6,6 @@ import { DaybookComponent } from './daybook.component';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { DaybookAdvanceSearchModelComponent } from 'apps/web-giddh/src/app/daybook/advance-search/daybook-advance-search.component';
 import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -41,7 +40,6 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         ReactiveFormsModule, 
         DecimalDigitsModule,
         FormsModule,
-        ModalModule.forRoot(),
         Daterangepicker,
         DaybookRoutingModule,
         ElementViewChildModule,

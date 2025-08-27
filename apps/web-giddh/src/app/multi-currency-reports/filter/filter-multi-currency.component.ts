@@ -5,7 +5,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { TagRequest } from '../../models/api-models/settingsTags';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
@@ -19,8 +18,6 @@ import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.st
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
-    /** Reference to the modal used for creating tags */
-    @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** A boolean indicating whether all elements are expanded */
@@ -249,16 +246,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             data.reportCurrency = this.getForm('selectCurrency').value || this.activeCompany?.baseCurrency;
             this.filterValue.emit(data);
         }
-    }
-
-    /**
-     * Toggle the tags modal visibility
-     *
-     * @returns {void}
-     * @memberof FilterMultiCurrencyComponent
-     */
-    public toggleTagsModal(): void {
-        this.createTagModal.toggle();
     }
 
     /**

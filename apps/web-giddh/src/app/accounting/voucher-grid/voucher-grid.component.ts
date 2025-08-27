@@ -14,7 +14,6 @@ import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEm
 import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as dayjs from 'dayjs';
 import { Router } from '@angular/router';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
@@ -134,13 +133,10 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
         private fb: UntypedFormBuilder,
-        public bsConfig: BsDatepickerConfig,
         private generalService: GeneralService,
         private dialog: MatDialog) {
 
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
-
-        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.requestObj.transactions = [];
         this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
             this.watchKeyboardEvent(key);

@@ -43,8 +43,6 @@ import { IVariant, LedgerResponseDiscountClass } from '../../models/api-models/L
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
-import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { OrganizationType } from '../../models/user-login-state';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SearchService } from '../../services/search.service';
@@ -87,12 +85,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     @ViewChild('companyBillingState') companyBillingState: ElementRef;
     /* Shipping state instance */
     @ViewChild('companyShippingState') companyShippingState: ElementRef;
-    /* RCM popup instance */
-    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
     /* PO Form instance */
     @ViewChild('poForm', { read: NgForm }) public poForm: NgForm;
-    /* Bootstrap directive instance */
-    @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
     /* Entry description instance */
     @ViewChildren('description') public description: QueryList<ElementRef>;
     /* Discount component instance */
@@ -1521,14 +1515,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public toggleHsnSacDropDown(transaction: any): void {
-        if (this.datePickers && this.datePickers.length) {
-            this.datePickers.forEach(datePicker => {
-                if (datePicker.isOpen) {
-                    datePicker.hide();
-                }
-            });
-        }
-
         if (transaction.showCodeType === "hsn") {
             this.editingHsnSac = transaction.hsnNumber;
         } else if (transaction.showCodeType === "sac") {
@@ -2261,9 +2247,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (action === CONFIRMATION_ACTIONS.YES) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
-        }
-        if (this.rcmPopup) {
-            this.rcmPopup.hide();
         }
     }
 

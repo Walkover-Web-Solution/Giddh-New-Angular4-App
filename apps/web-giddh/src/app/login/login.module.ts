@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginRoutingModule } from './login.routing.module';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { LaddaModule } from 'angular2-ladda';
 import { SharedModule } from '../shared/shared.module';
 import { LoaderModule } from '../loader/loader.module';
@@ -17,7 +16,6 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         FormsModule,
         ReactiveFormsModule,
         LoginRoutingModule,
-        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

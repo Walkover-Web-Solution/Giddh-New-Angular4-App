@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -21,7 +20,6 @@ import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/vouc
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DeleteVoucherConfirmationModalModule } from '../shared/delete-voucher-confirmation-modal/delete-voucher-confirmation-modal.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
@@ -62,7 +60,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         MatButtonModule,
         PurchaseRoutingModule,
         InvoiceModule,
-        CollapseModule.forRoot(),
         MatPaginatorModule,
         
         LaddaModule.forRoot({
@@ -84,7 +81,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         TranslateDirectiveModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        ModalModule.forRoot(),
         HamburgerMenuModule,
         DeleteVoucherConfirmationModalModule,
         GiddhDatepickerModule,

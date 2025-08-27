@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
 import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
@@ -26,7 +25,6 @@ export class OutwardNoteComponent implements OnChanges {
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
     public form: UntypedFormGroup;
-    public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public mode: 'receiver' | 'product' = 'receiver';
     public today = new Date();
     /** This holds giddh date format */

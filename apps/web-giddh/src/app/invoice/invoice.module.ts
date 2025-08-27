@@ -21,7 +21,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatTabsModule } from '@angular/material/tabs';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
@@ -107,7 +106,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         MatDividerModule,
         MatTabsModule,
         ReactiveFormsModule,
-        ModalModule.forRoot(),
         KeyboardShortutModule,
         SelectModule,
         LaddaModule.forRoot({

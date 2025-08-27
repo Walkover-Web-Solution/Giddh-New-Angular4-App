@@ -11,7 +11,6 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTableModule } from "@angular/material/table";
 import { LaddaModule } from "angular2-ladda";
-import { ModalModule } from "ngx-bootstrap/modal";
 import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjustment/advance-receipt-adjustment.module";
 import { AsideMenuOtherTaxesModule } from "../shared/aside-menu-other-taxes/aside-menu-other-taxes.module";
 import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-service/aside-menu-product-service.module";
@@ -54,7 +53,6 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         DigitsOnlyModule,
         SharedModule,
         AsideMenuRecurringEntryModule,
-        ModalModule.forRoot(),
         TaxControlModule,
         DiscountControlModule,
         LaddaModule.forRoot({

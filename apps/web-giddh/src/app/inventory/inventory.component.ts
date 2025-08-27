@@ -3,8 +3,6 @@ import { CompanyResponse, BranchFilterRequest } from '../models/api-models/Compa
 import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material/tabs';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
@@ -43,14 +41,10 @@ export const IsyncData = [
 @Component({
     selector: 'inventory',
     templateUrl: './inventory.component.html',
-    styleUrls: ['./inventory.component.scss'],
-    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
+    styleUrls: ['./inventory.component.scss']
 })
 export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('branchModal', { static: true }) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: ModalDirective;
     @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
     /** Angular Material tab group reference for inventory navigation tabs */
     @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: MatTabGroup;
     /** Warehouse filter instance */
@@ -334,15 +328,10 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    public openAddBranchModal() {
-        this.branchModal?.show();
-    }
-
     public hideAddBranchModal() {
         this.isAllSelected$ = observableOf(false);
         this.selectedCompaniesUniquename = [];
         this.selectedCompaniesName = [];
-        this.branchModal.hide();
     }
 
     public selectAllCompanies(ev) {
@@ -385,7 +374,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public removeBranch(branchUniqueName, companyName) {
         this.selectedBranch = branchUniqueName;
         this.confirmationMessage = `Are you sure want to remove <b>${companyName}</b>?`;
-        this.confirmationModal?.show();
     }
 
     public onUserConfirmation(yesOrNo) {
@@ -394,7 +382,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.selectedBranch = null;
         }
-        this.confirmationModal.hide();
     }
 
     public getAllBranches() {

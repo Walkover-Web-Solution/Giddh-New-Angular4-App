@@ -6,8 +6,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { PopoverModule } from 'ngx-bootstrap/popover';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
@@ -93,9 +91,6 @@ export function provideConfig() {
         RouterModule,
         FormsModule,
         ReactiveFormsModule,
-        ModalModule.forRoot(),
-        
-        PopoverModule.forRoot(),
         SocialLoginModule,
         SelectModule,
         ClickOutsideModule,
@@ -144,11 +139,9 @@ export function provideConfig() {
     exports: [
         CommonModule,
         DecimalDigitsModule,
-        PopoverModule,
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
-        ModalModule,
         ManageGroupsAccountsComponent,
         AccountFilterPipe,
         SelectModule,
