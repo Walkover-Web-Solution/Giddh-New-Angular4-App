@@ -25,15 +25,15 @@
                 <div class="w-100">
                     <div class="mr-t2 payment-dropdown">
                         <div class="form-group">
-                            <dropdown-field
+                            <reactive-dropdown-field
                                 [label]="localeData?.export_type"
                                 [cssClass]="'theme-selection'"
                                 [options]="exportTypes"
-                                [defaultValue]="exportType"
+                                [labelValue]="exportType"
                                 [placeholder]="localeData?.select_export_type"
                                 [name]="'exportType'"
                                 (selectedOption)="setExportType($event)"
-                            ></dropdown-field>
+                            ></reactive-dropdown-field>
                         </div>
                     </div>
                 </div>

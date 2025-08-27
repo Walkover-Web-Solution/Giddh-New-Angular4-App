@@ -188,7 +188,7 @@
                                         "
                                         [cssClass]="'form-control mat-field-border text-left'"
                                         [name]="'voucherName' + entry?.uniqueName"
-                                        [defaultValue]="entry.voucherNumber"
+                                        [labelValue]="entry.voucherNumber"
                                         (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
                                         [required]="true"
                                         [placeholder]="localeData?.select_voucher"
@@ -388,7 +388,7 @@
                                                     (selectedOption)="tdsTaxSelected($event)"
                                                     [options]="availableTdsTaxes"
                                                     [name]="'tdsTaxUniqueName'"
-                                                    [defaultValue]="adjustVoucherForm.tdsTaxUniqueName"
+                                                    [labelValue]="adjustVoucherForm.tdsTaxUniqueName"
                                                 >
                                                 </select-field>
                                             </div>
