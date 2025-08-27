@@ -13,7 +13,6 @@ import { VoucherModule } from '../../voucher/voucher.module';
 import { DatepickerWrapperModule } from '../../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-section-permission/validate-section-permission.module';
 import { MatTableModule } from '@angular/material/table';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
     declarations: [
@@ -26,7 +25,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
         MatMenuModule,
         ClickOutsideModule,
         TranslateDirectiveModule,
-        BsDropdownModule.forRoot(),
         NoDataModule,
         VoucherModule,
         DatepickerWrapperModule,

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OutTemplateComponent } from './edit-template/out-tempate/out.template.component';
 import { ContentFilterComponent } from './edit-template/filters-container/content-filters/content.filters.component';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { GstTemplateAComponent } from './edit-template/out-tempate/templates/gst-template-a/gst-template-a.component';
 import { GstTemplateEComponent } from './edit-template/out-tempate/templates/gst-template-e/gst-template-e.component';
 import { HasFocusDirectiveModule } from '../../shared/helpers/directives/has-focus/has-focus.module';
@@ -12,8 +11,6 @@ import { EditInvoiceComponent } from './edit-template/edit.invoice.component';
 import { ValidateSectionPermissionDirectiveModule } from '../../shared/validate-section-permission/validate-section-permission.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { InvoiceTemplateModalComponent } from './edit-template/modals/template-modal/template-modal.component';
 import { EditFiltersContainersComponent } from './edit-template/filters-container/edit.filters.component';
 import { DeleteTemplateConfirmationModalModule } from './edit-template/modals/confirmation-modal/confirmation.modal.module';
@@ -30,10 +27,8 @@ import { TributeMentionModule } from '../../shared/helpers/directives/tributeMen
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        CollapseModule.forRoot(),
         HasFocusDirectiveModule,
         ShSelectModule,
-        ModalModule,
         ClickOutsideModule,
         DecimalDigitsModule,
         ValidateSectionPermissionDirectiveModule,

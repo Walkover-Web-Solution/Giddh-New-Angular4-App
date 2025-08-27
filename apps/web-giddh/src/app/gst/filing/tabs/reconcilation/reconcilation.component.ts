@@ -2,7 +2,6 @@ import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ReconcileActionState } from '../../../../store/gst-reconcile/GstReconcile.reducer';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from '../../../../models/api-models/GstReconcile';
 import { AppState } from '../../../../store';
 import { publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
@@ -17,11 +16,6 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
     selector: 'reconcile',
     templateUrl: './reconcilation.component.html',
     styleUrls: ['./reconcilation.component.scss'],
-    providers: [
-        {
-            provide: BsDropdownConfig, useValue: { autoClose: true },
-        }
-    ],
     animations: [
         trigger('slideInOut', [
             state('in', style({

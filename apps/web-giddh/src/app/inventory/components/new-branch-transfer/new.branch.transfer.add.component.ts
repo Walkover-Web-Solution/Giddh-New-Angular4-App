@@ -28,7 +28,6 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
 import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { NgForm } from '@angular/forms';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -141,8 +140,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
-    constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig, public dialog: MatDialog) {
-        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
+    constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public dialog: MatDialog) {
         this.getInventorySettings();
         this.initFormFields();
     }

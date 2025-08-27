@@ -5,8 +5,6 @@ import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
@@ -29,11 +27,6 @@ import { BreakpointObserver } from "@angular/cdk/layout";
     selector: 'filing-header',
     templateUrl: 'filing-header.component.html',
     styleUrls: ['filing-header.component.scss'],
-    providers: [
-        {
-            provide: BsDropdownConfig, useValue: { autoClose: true },
-        },
-    ],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -67,8 +60,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public cancelConfirmationDialogRef: MatDialogRef<any>;
     /** Holds cancel push to portal dialog template ref */
     @ViewChild("pushToPortalDialog") pushToPortalDialog: TemplateRef<any>;
-    /** Directive to get reference of element */
-    @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     /** Aside authentication dialog open */
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     public gstAuthenticated$: Observable<boolean>;

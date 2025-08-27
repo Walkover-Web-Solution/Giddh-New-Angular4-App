@@ -13,7 +13,6 @@ import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBill
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm, UntypedFormControl } from '@angular/forms';
 import { LocationService } from '../../../services/location.service';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
@@ -96,7 +95,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         transMode: null,
         vehicleType: null,
     };
-    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     public selectedEway: Result;
     public states: any[] = [];
     /** Reference to the universal datepicker menu trigger */

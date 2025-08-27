@@ -32,8 +32,6 @@ import { NewConfirmationModalModule } from "../theme/new-confirmation-modal/conf
 import { MatInputModule } from "@angular/material/input";
 import { MatPaginatorModule } from "@angular/material/paginator";
 
-import { ModalModule } from "ngx-bootstrap/modal";
-
 @NgModule({
     declarations: [
         VatReportComponent,
@@ -51,12 +49,9 @@ import { ModalModule } from "ngx-bootstrap/modal";
         VatReportRoutingModule,
         CommonModule,
         CurrencyModule,
-        
         ClickOutsideModule,
         FormsModule,
         Daterangepicker,
-
-        ModalModule.forRoot(),
         ElementViewChildModule,
         InvoiceModule,
         SharedModule,

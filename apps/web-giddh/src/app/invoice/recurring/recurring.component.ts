@@ -8,7 +8,6 @@ import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as dayjs from 'dayjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -47,7 +46,6 @@ export class RecurringComponent implements OnInit, OnDestroy {
         lastInvoiceDate: ''
     };
     @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
-    @ViewChild(BsDatepickerDirective, { static: true }) public bsd: BsDatepickerDirective;
 
     public showInvoiceNumberSearch = false;
     public showCustomerNameSearch = false;

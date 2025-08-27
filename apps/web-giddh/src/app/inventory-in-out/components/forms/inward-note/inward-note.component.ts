@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, OnDestroy } from '@angular/core';
 import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
 import * as dayjs from 'dayjs';
@@ -32,7 +31,6 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
     public form: UntypedFormGroup;
-    public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public mode: 'sender' | 'product' = 'sender';
     public today = new Date();
     public editLinkedStockIdx: any = null;

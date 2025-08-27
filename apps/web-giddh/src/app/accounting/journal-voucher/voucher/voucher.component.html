@@ -517,7 +517,7 @@
                     [placeholder]="localeData?.cheque_number"
                     [type]="'text'"
                     formControlName="chequeNumber"
-                    (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber', chequeClearanceDateInput)"
+                    (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber')"
                     [label]="localeData?.cheque_number"
                     (keydown.enter)="$event.preventDefault()"
                     #chequeNumberInput

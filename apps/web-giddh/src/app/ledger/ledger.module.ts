@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ClipboardModule } from 'ngx-clipboard';
 import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
@@ -94,7 +93,6 @@ import { MatDividerModule } from '@angular/material/divider';
         ReactiveFormsModule,
         TaxControlModule,
         LedgerRoutingModule,
-        ModalModule.forRoot(),
         MatPaginatorModule,
         ClipboardModule,
         LaddaModule.forRoot({

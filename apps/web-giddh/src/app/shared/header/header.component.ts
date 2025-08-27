@@ -5,8 +5,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaul
 import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -48,7 +46,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ServiceConfig } from '../../services/service.config';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -101,18 +98,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('addmanage', { static: true }) public addmanage: ElementViewContainerRef;
     /* This will hold the manage groups accounts dialog ref */
     public manageGroupsAccountsDialogRef: MatDialogRef<any>;
-    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
-    @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
     /** Switch branch dropdown */
-    @ViewChild('subBranchDropdown', { static: false }) public subBranchDropdown: BsDropdownDirective;
     @ViewChild('searchCmpTextBox', { static: true }) public searchCmpTextBox: ElementRef;
-    @ViewChild('expiredPlan', { static: true }) public expiredPlan: ModalDirective;
     @ViewChild('expiredPlanModel', { static: true }) public expiredPlanModel: TemplateRef<any>;
     @ViewChild('crossedTxLimitModel', { static: true }) public crossedTxLimitModel: TemplateRef<any>;
-    @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
-    /** All modules popover instance */
-    @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
     /** Instance of mat dialog */
     @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
     /** Instance of menu trigger */
@@ -344,9 +334,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 if (!event.url.includes("/pages/settings") && !event.url.includes("/gstfiling") && !event.url.includes("/billing-detail") && this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.removeSessionStorage("previousPage");
-                }
-                if (this.subBranchDropdown) {
-                    this.subBranchDropdown.hide();
                 }
                 this.addClassInBodyIfPageHasTabs();
             }
@@ -1037,14 +1024,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             e.preventDefault();
             e.stopPropagation();
         }
-        this.companyDropdown.isOpen = false;
-        if (this.subBranchDropdown) {
-            this.subBranchDropdown.hide();
-        }
         this.forceOpenNavigation = false;
-        if (this.companyDetailsDropDownWeb) {
-            this.companyDetailsDropDownWeb.hide();
-        }
 
         this.toggleBodyScroll();
 
@@ -1175,12 +1155,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isGoToBranch = false;
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
-        }
-        if (this.companyDropdown && !this.forceOpenNavigation) {
-            this.companyDropdown.isOpen = false;
-        }
-        if (this.companyDetailsDropDownWeb) {
-            this.companyDetailsDropDownWeb.hide();
         }
         if (event) {
             document.querySelector('body').classList.add('hide-scroll-body')
@@ -1397,10 +1371,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public handleAllModulesLeaveEvent(event: any): void {
         const menu = document.getElementById('other_sub_menu');
         const targetElement = event.toElement || event.relatedTarget;
-        if (menu && !menu.contains(targetElement)) {
-            // Hide 'All Modules' popover if the mouse points to any element other than sub menu as target
-            this.allModulesPopover.hide();
-        }
     }
 
     public onCompanyShown(sublist, navigator) {
@@ -1703,7 +1673,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleBodyScroll(): void {
-        if (this.companyDropdown.isOpen && !this.isMobileSite) {
+        if (!this.isMobileSite) {
             document.querySelector('body').classList.add('prevent-body-scroll');
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');

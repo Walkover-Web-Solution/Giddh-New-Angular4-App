@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
@@ -21,7 +20,6 @@ export class InventoryUserComponent implements OnChanges {
     public stockListOptions: IOption[];
     public userListOptions: IOption[];
     public form: UntypedFormGroup;
-    public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public today = new Date();
 
     constructor(private _fb: UntypedFormBuilder) {

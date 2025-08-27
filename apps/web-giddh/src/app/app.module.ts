@@ -10,7 +10,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { ActionModule } from './actions/action.module';
@@ -149,7 +148,6 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         FormFieldsModule,
         VerifySubscriptionTransferOwnershipModule,
         HttpClientModule,
-        ModalModule.forRoot(),
         ServiceModule.forRoot(),
         ActionModule.forRoot(),
         DecoratorsModule.forRoot(),

@@ -19,8 +19,6 @@ import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
-import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, BehaviorSubject } from 'rxjs';
 import { debounceTime, map, take, takeUntil, filter as rxjsFilter, tap } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
@@ -133,8 +131,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
-    @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
-    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     /** Element ref for mat menu **/
     @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
     /** Element ref for mat autocomplete **/
@@ -1074,12 +1070,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.openDropDown = false;
         if (!acc) {
             this.toaster.showSnackBar("error", this.localeData?.account_unchanged);
-            this.hideBaseAccountModal();
             return;
         }
         if (acc === this.baseAcc) {
             this.toaster.showSnackBar("error", this.localeData?.account_unchanged);
-            this.hideBaseAccountModal();
             return;
         }
 
@@ -1101,23 +1095,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // else {
         //     this.saveLedgerTransaction();
         // }
-
-        this.hideBaseAccountModal();
     }
 
     public openBaseAccountModal() {
         if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
             this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
             return;
-        }
-        if (this.updateBaseAccount) {
-            this.updateBaseAccount.show();
-        }
-    }
-
-    public hideBaseAccountModal() {
-        if (this.updateBaseAccount) {
-            this.updateBaseAccount.hide();
         }
     }
 

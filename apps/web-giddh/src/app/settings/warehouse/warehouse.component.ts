@@ -32,7 +32,6 @@ import { WarehouseState } from './reducer/warehouse.reducer';
 import { OrganizationType } from '../../models/user-login-state';
 import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 import { ServiceConfig } from '../../services/service.config';
-import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 
 /**
  * Warehouse component

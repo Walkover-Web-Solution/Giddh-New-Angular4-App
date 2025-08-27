@@ -4,8 +4,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -89,7 +87,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     providers: [ProjectAccountingService],
     imports: [
         CommonModule,
-        ModalModule.forRoot(),
         FormsModule,
         ReactiveFormsModule,
         Daterangepicker,
