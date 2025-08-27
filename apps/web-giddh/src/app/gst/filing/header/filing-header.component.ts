@@ -4,7 +4,6 @@ import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purcha
 import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrJsonDownloadRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -33,17 +32,6 @@ import { BreakpointObserver } from "@angular/cdk/layout";
         {
             provide: BsDropdownConfig, useValue: { autoClose: true },
         },
-    ],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in <=> out', animate('400ms ease-in-out')),
-        ])
     ]
 })
 export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {

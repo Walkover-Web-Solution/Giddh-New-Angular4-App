@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, HostListener, Input, OnInit, TemplateRef,
 import { OrganizationType } from '../../models/user-login-state';
 import { ReplaySubject, debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
@@ -23,19 +22,7 @@ const ELEMENT_DATA: GetDomainList[] = [];
 @Component({
     selector: 'portal-white-label',
     templateUrl: './portal-white-label.component.html',
-    styleUrls: ['./portal-white-label.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./portal-white-label.component.scss']
 })
 export class PortalWhiteLabelComponent implements OnInit {
     /** Stores the type of the organization (company or profile)  */

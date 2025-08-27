@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -81,18 +80,6 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
     selector: 'update-ledger-entry-panel',
     templateUrl: './update-ledger-entry-panel.component.html',
     styleUrls: ['./update-ledger-entry-panel.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ],
     providers: [VoucherComponentStore, SalesPersonComponentStore]
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -286,7 +273,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public condition2: boolean = false;
     /** Stores the multi-lingual label of current voucher */
     public currentVoucherLabel: string;
-    public asideMenuStateForOtherTaxes: string = 'out';
     public companyTaxesList: TaxResponse[] = [];
     public otherTaxDialogRef: any;
     public adjustmentDialogRef: any;

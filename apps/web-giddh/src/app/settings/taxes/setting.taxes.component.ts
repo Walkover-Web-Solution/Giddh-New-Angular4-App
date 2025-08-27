@@ -11,7 +11,6 @@ import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxe
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { IForceClear } from '../../models/api-models/Sales';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { cloneDeep, each, map } from '../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,19 +19,7 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 @Component({
     selector: 'setting-taxes',
     templateUrl: './setting.taxes.component.html',
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ],
-    styleUrls: ['./setting.taxes.component.scss'],
+    styleUrls: ['./setting.taxes.component.scss']
 })
 export class SettingTaxesComponent implements OnInit, OnDestroy {
     /** Holds template reference for create/update tax dialog */
