@@ -15,8 +15,8 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { InvoiceService } from '../../../services/invoice.service';
-import { BootstrapToggleSwitch, IOption } from '../../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { IOption } from '../../../app.constant';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
     selector: 'inventory-add-group',
     templateUrl: './inventory.addgroup.component.html',
@@ -50,17 +50,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public companyTaxesList$: Observable<TaxResponse[]>;
     /** This will hold inventory settings */
     public inventorySettings: any;
-    /** This will hold modal reference */
-    public modalRef: BsModalRef;
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold dialog reference */
+    public dialogRef: MatDialogRef<any>;
 
     /**
      * TypeScript public modifiers
      */
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
+        private dialog: MatDialog,
         private _fb: UntypedFormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
-        private router: Router, private invoiceService: InvoiceService, private modalService: BsModalService) {
+        private router: Router, private invoiceService: InvoiceService) {
         this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingGrpUniqueName), takeUntil(this.destroyed$));
         this.isGroupNameAvailable$ = this.store.pipe(select(state => state.inventory.isGroupNameAvailable), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.inventory.activeGroup), takeUntil(this.destroyed$));
@@ -525,13 +524,15 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     /**
-     * Opens the modal with the provided template
+     * open dialog
      *
      * @param {TemplateRef<any>} template
      * @memberof InventoryAddGroupComponent
      */
-    public openModal(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(template);
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
@@ -540,6 +541,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
      * @memberof InventoryAddGroupComponent
      */
     public hideModal(): void {
-        this.modalRef.hide();
+        this.dialogRef.close();
     }
 }

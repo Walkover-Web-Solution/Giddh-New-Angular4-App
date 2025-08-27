@@ -6,7 +6,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
@@ -59,6 +58,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -93,7 +94,7 @@ export function provideConfig() {
         FormsModule,
         ReactiveFormsModule,
         ModalModule.forRoot(),
-        BsDropdownModule.forRoot(),
+        
         PopoverModule.forRoot(),
         SocialLoginModule,
         SelectModule,
@@ -136,7 +137,9 @@ export function provideConfig() {
         SubscriptionUpgradeButtonModule,
         FormFieldsModule,
         MatMenuModule,
-        MatListModule
+        MatListModule,
+        MatExpansionModule,
+        OverlayModule
     ],
     exports: [
         CommonModule,
@@ -155,7 +158,6 @@ export function provideConfig() {
         TextCaseChangeModule,
         KeyboardShortutModule,
         MfReportComponent,
-        BsDropdownModule,
         ElementViewChildModule,
         NgxDaterangepickerMd,
         CurrencyModule,

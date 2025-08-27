@@ -472,21 +472,20 @@
     </div>
 </div>
 
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<generic-aside-menu-account
-    [allGroups]="allGroups"
-    [class]="accountAsideMenuState"
-    [@slideInOut]="accountAsideMenuState"
-    (closeAsideEvent)="toggleAccountAsidePane($event)"
-    [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
-    [selectedGrpUniqueName]="categoryOfAccounts"
-    *ngIf="accountAsideMenuState === 'in'"
-    [selectedAccountUniqueName]="null"
-    (onShortcutPress)="toggleAccountAsidePane()"
-    (addEvent)="addNewSidebarAccount($event)"
-    (updateEvent)="updateSidebarAccount($event)"
-    (updateViaPatchApi)="updateSidebarAccount($event, true)"
-></generic-aside-menu-account>
+<ng-template #genericAsideMenuAccountTemplate>
+    <generic-aside-menu-account
+        [allGroups]="allGroups"
+        [keyboardShortcut]="'esc'"
+        (closeAsideEvent)="closeAccountAsidePane()"
+        [selectedGrpUniqueName]="categoryOfAccounts"
+        [selectedAccountUniqueName]="null"
+        [createAccountFromCommandK]="true"
+        (onShortcutPress)="closeAccountAsidePane()"
+        (addEvent)="addNewSidebarAccount($event)"
+        (updateEvent)="updateSidebarAccount($event)"
+        (updateViaPatchApi)="updateSidebarAccount($event, true)"
+    ></generic-aside-menu-account>
+</ng-template>
 
 <!--Modal for All Items -->
 <ng-template #chequeEntryModal>

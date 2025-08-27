@@ -138,7 +138,7 @@
 <ng-template #template>
     <div class="modal-header">
         <h3 class="modal-title pull-left">{{ localeData?.add_eway }}</h3>
-        <span aria-hidden="true" (click)="modalRef.hide()" class="icon-cross text-right close-modal"></span>
+        <span aria-hidden="true" (click)="dialogRef?.close()" class="icon-cross text-right close-modal"></span>
     </div>
     <div class="modal-body pd-2">
         <form action="">

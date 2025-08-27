@@ -13892,3 +13892,10 @@ mat-list {
         }
     }
 }
+
+.custom-cdk-overlay-wrapper {
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-shadow: var(--mat-menu-box-shadow);
+    background-color: var(--color-dark-fog);
+}

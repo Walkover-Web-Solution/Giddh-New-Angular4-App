@@ -21,7 +21,8 @@ import { InvViewService } from '../../inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE, IOption } from '../../../app.constant';
 import { SalesService } from '../../../services/sales.service';
 import { InvoiceService } from '../../../services/invoice.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 @Component({
     selector: 'inventory-add-stock',
     templateUrl: './inventory.addstock.component.html',
@@ -32,6 +33,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     @Input() public addStock: boolean = false;
     @Input() public autoFocusInChild: boolean = false;
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
+    public dialogRef: MatDialogRef<any>;
 
     public stockListDropDown$: Observable<IOption[]>;
     public stockUnitsDropDown$: Observable<IOption[]> = of(null);
@@ -67,7 +69,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public forceClearStockUnit$: Observable<IForceClear> = of({ status: false });
     public disableStockButton: boolean = false;
     public createGroupSuccess$: Observable<boolean>;
-    public showOtherDetails: boolean;
     public addNewStock: boolean = false;
     public companyTaxesList$: Observable<TaxResponse[]>;
     public isManageInventory$: Observable<boolean>;
@@ -93,8 +94,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public inventorySettings: any;
     /** This will handle if we can reset sales/purchase account information */
     public allowReset: boolean = false;
-    /** This will hold modal reference */
-    public modalRef: BsModalRef;
     /** This will hold variants data from edit stock */
     public variants: any[] = [
         {
@@ -131,7 +130,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,
         private invoiceService: InvoiceService,
-        private modalService: BsModalService
+        private dialog: MatDialog
     ) {
         this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
         this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
@@ -326,7 +325,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             this.allowReset = false;
             if (a && !this.addStock) {
                 this.addStockForm.reset();
-                this.showOtherDetails = false;
                 this.stockUniqueName = a?.uniqueName;
                 this.isUpdatingStockForm = true;
                 this.addStockForm?.patchValue({
@@ -894,8 +892,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             });
         }
 
-        this.showOtherDetails = false;
-
         if (!formObj.parentGroup) {
             let stockRequest = {
                 name: 'Main Group',
@@ -1008,8 +1004,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         } else {
             stockObj.manufacturingDetails = null;
         }
-
-        this.showOtherDetails = false;
 
         this.store.dispatch(this.inventoryAction.updateStock(stockObj, this.groupUniqueName, this.stockUniqueName));
     }
@@ -1342,7 +1336,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public toggleOtherDetails(): void {
-        this.showOtherDetails = !this.showOtherDetails;
         this.updateHsnSac();
     }
 
@@ -1367,21 +1360,23 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Opens the modal with the provided template
+     * Opens the dialog with the provided template
      *
      * @param {TemplateRef<any>} template
      * @memberof InventoryAddStockComponent
      */
-    public openModal(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(template);
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
-     * Hides the current opened modal
+     * Hides the current opened dialog
      *
      * @memberof InventoryAddGroupComponent
      */
-    public hideModal(): void {
-        this.modalRef.hide();
+    public closeDialog(): void {
+        this.dialogRef.close();
     }
 }

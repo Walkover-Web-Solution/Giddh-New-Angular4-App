@@ -50,10 +50,9 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { SearchService } from '../../services/search.service';
 import { LedgerService } from '../../services/ledger.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { CommonService } from '../../services/common.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -106,8 +105,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
     /* Selector for bulk items  modal */
     @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: any;
-    /* Modal instance */
-    public modalRef: BsModalRef;
+    /* Dialog instance */
+    public dialogRef: MatDialogRef<any>;
     /* This will hold if it's multi currency account */
     public isMulticurrencyAccount: boolean = false;
     /* This will hold if it's mobile device*/
@@ -442,7 +441,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         private router: Router,
         private ledgerService: LedgerService,
         private invoiceService: InvoiceService,
-        private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
         private searchService: SearchService,
         private ngZone: NgZone,
@@ -3315,10 +3313,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
         this.purchaseOrderPreviewAccountUniqueName = accountUniqueName;
 
-        this.modalRef = this.modalService.show(
-            template,
-            Object.assign({}, { class: 'modal-xl' })
-        );
+        this.dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
@@ -3329,7 +3326,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public closePurchaseOrderPreviewPopup(event: any): void {
         if (event) {
-            this.modalRef.hide();
+            this.dialogRef.close();
         }
     }
 

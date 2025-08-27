@@ -8,7 +8,6 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTreeModule } from "@angular/material/tree";
 import { RouterModule } from "@angular/router";
 import { LaddaModule } from "angular2-ladda";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { ModalModule } from "ngx-bootstrap/modal";
 import { ConfirmModalModule } from "../../theme/confirm-modal/confirm-modal.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
@@ -43,7 +42,7 @@ import { TagsModule } from "../../settings/tags/tags.module";
         ElementViewChildModule,
         ScrollingModule,
         PrimarySidebarModule,
-        BsDropdownModule.forRoot(),
+        
         DatepickerWrapperModule,
         LaddaModule.forRoot({
             style: 'slide-left',

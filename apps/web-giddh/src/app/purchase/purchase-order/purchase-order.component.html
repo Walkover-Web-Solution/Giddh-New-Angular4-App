@@ -58,55 +58,42 @@
                     *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0"
                     class="more-toggle"
                 >
-                    <div *ngIf="!isCompany && !isConsolidatedBranch" class="btn-group" dropdown #dp="bs-dropdown">
+                    <div *ngIf="!isCompany && !isConsolidatedBranch">
                         <button
                             mat-raised-button color="primary"
-                            dropdownToggle
                             type="button"
-                            class="desktop-view-btn dropdown-toggle"
-                            aria-controls="dropdown-basic"
+                            [matMenuTriggerFor]="moreMenu1"
                         >
                             {{ commonLocaleData?.app_more }}
-                            <span class="caret"></span>
+                            <i class="caret"></i>
                         </button>
-                        <ul
-                            *dropdownMenu
-                            class="dropdown-menu fixed-dropdown-plus"
-                            role="menu"
-                            aria-labelledby="button-basic"
-                        >
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item cp"
-                                    href="javascript:void(0)"
-                                    (click)="openModalBulkUpdate(template)"
-                                    >{{ localeData?.bulk_update }}</a
-                                >
-                            </li>
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item cp"
-                                    href="javascript:void(0)"
-                                    (click)="
-                                        voucherApiVersion === 2
-                                            ? openBulkConvert(purchaseBulkConvert)
-                                            : bulkUpdate('create_purchase_bill')
-                                    "
-                                >
-                                    {{ localeData?.convert_tobill }}</a
-                                >
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
-                                    {{ localeData?.expired }}</a
-                                >
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="confirmBulkDelete()">{{
-                                    commonLocaleData?.app_delete
-                                }}</a>
-                            </li>
-                        </ul>
+                        <mat-menu #moreMenu1="matMenu" class="fixed-dropdown-plus">
+                            <button
+                                mat-menu-item
+                                (click)="openModalBulkUpdate(template)"
+                            >
+                                {{ localeData?.bulk_update }}
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="confirmBulkDelete()"
+                            >
+                               {{ commonLocaleData?.app_delete }}
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="voucherApiVersion === 2 ? openBulkConvert(purchaseBulkConvert)
+                                : bulkUpdate('create_purchase_bill')"
+                            >
+                                {{ localeData?.convert_tobill }}
+                            </button>
+                            <button
+                                mat-menu-item
+                                (click)="bulkUpdate('expire')"
+                            >
+                               {{ localeData?.expired }}
+                            </button>
+                        </mat-menu>
                     </div>
                 </div>
                 <div
@@ -127,54 +114,44 @@
                 </button>
             </div>
             <div>
-                <div *ngIf="!isCompany && !isConsolidatedBranch" class="btn-group" dropdown #dp="bs-dropdown">
+                <div *ngIf="(!isCompany && !isConsolidatedBranch)">
                     <button
-                        dropdownToggle
                         type="button"
-                        mat-raised-button color="primary"
-                        aria-controls="dropdown-basic"
+                        mat-raised-button 
+                        color="primary"
+                        [matMenuTriggerFor]="moreMenu2"
                     >
                         {{ commonLocaleData?.app_more }}
-                        <span class="caret"></span>
+                        <i class="caret"></i>
                     </button>
-                    <ul
-                        *dropdownMenu
-                        class="dropdown-menu fixed-dropdown-plus"
-                        role="menu"
-                        aria-labelledby="button-basic"
-                    >
-                        <li role="menuitem">
-                            <a
-                                class="dropdown-item cp"
-                                href="javascript:void(0)"
-                                (click)="openModalBulkUpdate(template)"
-                                >{{ localeData?.bulk_update }}</a
-                            >
-                        </li>
-                        <li role="menuitem">
-                            <a
-                                class="dropdown-item cp"
-                                href="javascript:void(0)"
-                                (click)="
-                                    voucherApiVersion === 2
-                                        ? openBulkConvert(purchaseBulkConvert)
-                                        : bulkUpdate('create_purchase_bill')
-                                "
-                            >
-                                {{ localeData?.convert_tobill }}</a
-                            >
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
-                                {{ localeData?.expired }}</a
-                            >
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="confirmBulkDelete()">{{
-                                commonLocaleData?.app_delete
-                            }}</a>
-                        </li>
-                    </ul>
+                    <mat-menu #moreMenu2="matMenu" class="fixed-dropdown-plus">
+                        <button
+                            mat-menu-item
+                            (click)="openModalBulkUpdate(template)"
+                        >
+                            {{ localeData?.bulk_update }}
+                        </button>
+                        <button
+                            mat-menu-item
+                            (click)="confirmBulkDelete()"
+                        >
+                           {{ commonLocaleData?.app_delete }}
+                        </button>
+                        <button
+                            mat-menu-item
+                            (click)="voucherApiVersion === 2
+                            ? openBulkConvert(purchaseBulkConvert)
+                            : bulkUpdate('create_purchase_bill')"
+                        >
+                            {{ localeData?.convert_tobill }}
+                        </button>
+                        <button
+                            mat-menu-item
+                            (click)="bulkUpdate('expire')"
+                        >
+                            {{ localeData?.expired }}
+                        </button>
+                    </mat-menu>
                 </div>
             </div>
             <div class="btn-wrapper">

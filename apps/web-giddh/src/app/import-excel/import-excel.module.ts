@@ -9,8 +9,6 @@ import { MapExcelDataComponent } from './map-excel-data/map-excel-data.component
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-
 import { UploadSuccessComponent } from './upload-success/upload-success.component';
 import { ImportReportComponent } from './import-report/import-report.component';
 import { SharedModule } from '../shared/shared.module';
@@ -24,7 +22,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
-        // Components / Directives/ Pipes
         ImportComponent,
         ImportTypeSelectComponent,
         ImportProcessComponent,
@@ -44,9 +41,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        BsDropdownModule.forRoot(),
         ScrollingModule,
-
         SharedModule,
         WatchVideoModule,
         MatSlideToggleModule,

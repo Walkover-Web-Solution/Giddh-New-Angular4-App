@@ -10,7 +10,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { ReplaySubject, fromEvent } from 'rxjs';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
-import { TRN_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, TRN_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { saveAs } from 'file-saver';
@@ -50,14 +50,14 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
+    /** This will hold state of activity history aside pan */
+    @ViewChild('revisionHistoryTemplate') public revisionHistoryTemplate: TemplateRef<any>;
+    /** Dialog reference for activity history modal */
+    public revisionHistoryDialogRef: MatDialogRef<any>;
     /** Instance of cdk scrollbar */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
-    /* Modal instance */
-    public modalRef: any;
-    /** Modal service reference */
-    public modalService: any;
-    /* This will hold state of activity history aside pan */
-    public revisionHistoryAsideState: string = 'out';
+    /* Dialog reference */
+    public dialogRef: MatDialogRef<any>;
     /* This will hold purchase order data */
     public purchaseOrder: any = {};
     /* Send email request params object */
@@ -272,30 +272,12 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     }
 
     /**
-     * This will toggle the activity history aside pan
-     *
-     * @param {*} [event]
-     * @memberof PurchaseOrderPreviewComponent
-     */
-    public toggleActivityHistoryAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.revisionHistoryAsideState = this.revisionHistoryAsideState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    /**
-     * This will toggle the fixed class on body
+     * This will open the activity history aside dialog
      *
      * @memberof PurchaseOrderPreviewComponent
      */
-    public toggleBodyClass(): void {
-        if (this.revisionHistoryAsideState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+    public openActivityHistoryAsidePaneDialog(): void {
+        this.revisionHistoryDialogRef = this.dialog.open(this.revisionHistoryTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -309,7 +291,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         this.sendEmailRequest.uniqueName = this.purchaseOrder?.uniqueName;
         this.sendEmailRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
-        this.modalRef = this.modalService.show(template);
+        this.dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
@@ -330,7 +314,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      */
     public closeSendMailPopup(event: any): void {
         if (event) {
-            this.modalRef.hide();
+            this.dialogRef.close();
         }
     }
 
@@ -594,10 +578,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public openBulkConvert(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(
-            template,
-            Object.assign({}, { class: 'modal-sm' })
-        );
+        this.dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     /**
@@ -607,7 +590,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public closeBulkConvertPopup(event: any): void {
-        this.modalRef?.hide();
+        this.dialogRef?.close();
         if (event) {
             this.getPurchaseOrder();
         }

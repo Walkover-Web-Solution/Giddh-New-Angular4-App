@@ -46,8 +46,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild("addVehicle") vehicleDialog: TemplateRef<any>;
     /** Holds cancellation dialog template reference */
     @ViewChild("cancellation") cancelDialog: TemplateRef<any>;
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /* This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
@@ -653,7 +653,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out';
+        this.asideGstSidebarMenuState = false;
     }
 
     /**

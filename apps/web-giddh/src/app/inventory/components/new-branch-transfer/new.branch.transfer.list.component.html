@@ -8,7 +8,7 @@
                         mat-raised-button color="primary"
                         class="mr-r1 pull-right mobile-none"
                         matTooltip="Alt+N"
-                        (click)="toggleTransferAsidePane()"
+                        (click)="openTransferAsidePaneDialog()"
                     >
                         + New Transfer
                     </button>
@@ -273,49 +273,27 @@
                             {{ activeCompany?.baseCurrencySymbol }} {{ item.totalAmount | giddhCurrency }}
                         </td>
                         <td data-title="Action">
-                            <div class="btn-group" container="body" dropdown [autoClose]="true">
-                                <button mat-stroked-button
-                                    id="button-basic"
-                                    dropdownToggle
+                            <div class="btn-group">
+                                <button
                                     type="button"
-                                    class="dropdown-toggle select-action-button"
-                                    aria-controls="dropdown-basic"
+                                    mat-stroked-button
+                                    class="select-action-button"
+                                    [matMenuTriggerFor]="actionMenu"
                                 >
                                     <span class="text-light-2">Select Action</span>
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
-                                <ul
-                                    id="dropdown-basic"
-                                    *dropdownMenu
-                                    class="dropdown-menu action-dropdown"
-                                    role="menu"
-                                    aria-labelledby="button-basic"
-                                >
-                                    <li role="menuitem">
-                                        <a
-                                            class="dropdown-item"
-                                            href="javascript:;"
-                                            (click)="downloadBranchTransfer(item)"
-                                            >Download</a
-                                        >
-                                    </li>
-                                    <li role="menuitem">
-                                        <a
-                                            class="dropdown-item"
-                                            href="javascript:;"
-                                            (click)="showEditBranchTransferPopup(item)"
-                                            >Edit</a
-                                        >
-                                    </li>
-                                    <li role="menuitem">
-                                        <a
-                                            class="dropdown-item"
-                                            href="javascript:;"
-                                            (click)="showDeleteBranchTransferModal(item)"
-                                            >Delete</a
-                                        >
-                                    </li>
-                                </ul>
+                                <mat-menu #actionMenu="matMenu" class="action-dropdown-menu" xPosition="before" yPosition="below">
+                                    <button mat-menu-item (click)="downloadBranchTransfer(item)">
+                                        Download
+                                    </button>
+                                    <button mat-menu-item (click)="showEditBranchTransferPopup(item)">
+                                        Edit
+                                    </button>
+                                    <button mat-menu-item (click)="showDeleteBranchTransferModal(item)">
+                                        Delete
+                                    </button>
+                                </mat-menu>
                             </div>
                         </td>
                     </tr>
@@ -413,14 +391,12 @@
 <!-- advance search end -->
 
 <!-- aside inwards/outwards/transfer pane -->
-<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-branch-transfer-pane
-    *ngIf="asideTransferPaneState === 'in'"
-    [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState"
-    (transferType)="openBranchTransferPopup($event)"
-    (closeAsideEvent)="toggleTransferAsidePane()"
-></aside-branch-transfer-pane>
+<ng-template #asideTransferPaneTemplate>
+    <aside-branch-transfer-pane
+        (transferType)="openBranchTransferPopup($event)"
+        (closeAsideEvent)="asideTransferPaneDialogRef?.close()"
+    ></aside-branch-transfer-pane>
+</ng-template>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- branch transfer modal -->

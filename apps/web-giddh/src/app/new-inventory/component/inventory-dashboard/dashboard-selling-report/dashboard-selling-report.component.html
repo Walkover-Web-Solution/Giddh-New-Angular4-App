@@ -16,28 +16,20 @@
                     </div>
                 </div>
                 <div class="select-top-selling">
-                    <div class="btn-group" dropdown>
+                    <div class="btn-group">
                         <button
-                            id="button-basic"
-                            dropdownToggle
                             type="button"
-                            class="btn font-15 top-selling-btn no-btn dropdown-toggle p-0 mr-0"
-                            aria-controls="dropdown-basic"
+                            class="btn font-15 top-selling-btn no-btn p-0 mr-0"
+                            [matMenuTriggerFor]="topSellingMenu"
                         >
-                            Top 5 Selling <span class="caret"></span>
+                            Top 5 Selling <i class="caret"></i>
                         </button>
-                        <ul
-                            id="dropdown-basic"
-                            *dropdownMenu
-                            class="dropdown-menu"
-                            role="menu"
-                            aria-labelledby="button-basic"
-                        >
-                            <li role="menuitem"><a class="dropdown-item" href="#">Top 5 Selling</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="#">Top 10 Selling</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="#">Top 5 Purchase</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="#">Top 10 Purchase</a></li>
-                        </ul>
+                        <mat-menu #topSellingMenu="matMenu">
+                            <a mat-menu-item href="#">Top 5 Selling</a>
+                            <a mat-menu-item href="#">Top 10 Selling</a>
+                            <a mat-menu-item href="#">Top 5 Purchase</a>
+                            <a mat-menu-item href="#">Top 10 Purchase</a>
+                        </mat-menu>
                     </div>
                 </div>
                 <div

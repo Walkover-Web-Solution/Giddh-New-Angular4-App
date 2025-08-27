@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
@@ -52,7 +52,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        BsDropdownModule.forRoot(),
+        
         Daterangepicker,
         CurrencyModule,
         SharedModule,

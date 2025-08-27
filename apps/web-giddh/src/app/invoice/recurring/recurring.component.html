@@ -224,68 +224,41 @@
                     </div>
                     <div class="d-flex mb-2">
                         <div class="more-dropdown" *ngIf="selectedItems?.length < 0">
-                            <div
-                                class="btn-group d-inline-block mr-b1"
-                                dropdown
-                                triggers="mouseover"
-                                #dp="bs-dropdown"
-                                (mouseleave)="dp.hide()"
-                            >
+                            <div class="btn-group d-inline-block">
                                 <button
-                                    dropdownToggle
+                                    type="button"
+                                    class="btn more-btn-dropdown"
+                                    [matMenuTriggerFor]="moreMenu"
                                     mat-raised-button
                                     color="primary"
-                                    type="button"
-                                    class="more-btn-dropdown dropdown-toggle"
-                                    aria-controls="dropdown-basic"
                                 >
                                     {{ commonLocaleData?.app_more }}
-                                    <span class="caret"></span>
+                                    <i class="caret"></i>
                                 </button>
 
-                                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                                    <li role="menuitem">
-                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
-                                            localeData?.bulk_note
-                                        }}</a>
-                                    </li>
-
-                                    <li role="menuitem">
-                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
-                                            commonLocaleData?.app_send_email
-                                        }}</a>
-                                    </li>
-
-                                    <li role="menuitem">
-                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
-                                            commonLocaleData?.app_print
-                                        }}</a>
-                                    </li>
-
-                                    <li role="menuitem">
-                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
-                                            commonLocaleData?.app_export_pdf
-                                        }}</a>
-                                    </li>
-
-                                    <li role="menuitem" *ngIf="!isMobileScreen">
-                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
-                                            localeData?.generate_eway_bill
-                                        }}</a>
-                                    </li>
-
-                                    <li role="menuitem">
-                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
-                                            commonLocaleData?.app_create_credit_note
-                                        }}</a>
-                                    </li>
-
-                                    <li role="menuitem">
-                                        <a class="dropdown-item cp" href="javascript:void(0)">{{
-                                            commonLocaleData?.app_delete
-                                        }}</a>
-                                    </li>
-                                </ul>
+                                <mat-menu #moreMenu="matMenu">
+                                    <button mat-menu-item>
+                                        {{ localeData?.bulk_note }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_print }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_export_pdf }}
+                                    </button>
+                                    <button mat-menu-item *ngIf="!isMobileScreen">
+                                        {{ localeData?.generate_eway_bill }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_create_credit_note }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_delete }}
+                                    </button>
+                                </mat-menu>
                             </div>
                         </div>
                     </div>
@@ -500,18 +473,16 @@
             </div>
         </div>
 
-        <div class="aside-overlay" *ngIf="asideMenuStateForRecurringEntry === 'in'"></div>
-        <app-aside-recurring-entry
-            *ngIf="asideMenuStateForRecurringEntry === 'in'"
-            [invoice]="selectedInvoice"
-            [class]="asideMenuStateForRecurringEntry"
-            [@slideInOut]="asideMenuStateForRecurringEntry"
-            [mode]="'update'"
-            [isCompany]="isCompany"
-            [isConsolidatedBranch]="isConsolidatedBranch"
-            (closeAsideEvent)="toggleRecurringAsidePane('out')"
-        >
-        </app-aside-recurring-entry>
+        <ng-template #asideMenuStateForRecurringEntryTemplate>
+            <app-aside-recurring-entry
+                [invoice]="selectedInvoice"
+                [mode]="'update'"
+                [isCompany]="isCompany"
+                [isConsolidatedBranch]="isConsolidatedBranch"
+                (closeAsideEvent)="asideMenuStateForRecurringEntryDialogRef.close()"
+            >
+            </app-aside-recurring-entry>
+        </ng-template>
 
         <!-- region search template -->
         <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">

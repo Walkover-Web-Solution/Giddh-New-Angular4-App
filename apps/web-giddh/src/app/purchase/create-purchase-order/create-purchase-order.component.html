@@ -8,7 +8,6 @@
     <hamburger-menu *ngIf="!isUpdateMode" [pageHeading]="localeData?.new_po"></hamburger-menu>
     <hamburger-menu *ngIf="isUpdateMode" [pageHeading]="localeData?.edit_po"></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-
     <form
         #poForm="ngForm"
         novalidate
@@ -143,45 +142,33 @@
                                                                 <span>
                                                                     <div
                                                                         class="btn-group"
-                                                                        dropdown
-                                                                        #billingAddressDropDownWeb="bs-dropdown"
                                                                         [attachOutsideOnClick]="true"
                                                                         (clickOutside)="
                                                                             billingAddressDropDownWeb.hide()
                                                                         "
                                                                         *ngIf="accountAddressList?.length > 1"
                                                                     >
-                                                                        <a
-                                                                            href="javascript:void(0);"
+                                                                        <button
+                                                                            mat-stroked-button
+                                                                            [matMenuTriggerFor]="billingAddressMenu"
                                                                             aria-label="change"
-                                                                            dropdownToggle
                                                                             type="button"
-                                                                            class="dropdown-toggle"
-                                                                            >{{ localeData?.change }}</a
                                                                         >
-                                                                        <ul
-                                                                            *dropdownMenu
-                                                                            class="dropdown-menu change-address-dropdown dropdown-menu-right"
-                                                                            role="menu"
-                                                                        >
-                                                                            <li
-                                                                                role="menuitem"
-                                                                                *ngFor="
-                                                                                    let address of accountAddressList
+                                                                            {{ localeData?.change }}
+                                                                        </button>
+                                                                        <mat-menu #billingAddressMenu="matMenu" class="change-address-dropdown">
+                                                                            <button
+                                                                                mat-menu-item
+                                                                                *ngFor="let address of accountAddressList"
+                                                                                (click)="
+                                                                                    selectAddress(
+                                                                                        purchaseOrder.account
+                                                                                            .billingDetails,
+                                                                                        address
+                                                                                    )
                                                                                 "
                                                                             >
-                                                                                <a
-                                                                                    href="javascript:void(0);"
-                                                                                    aria-label="address"
-                                                                                    class="dropdown-item"
-                                                                                    (click)="
-                                                                                        selectAddress(
-                                                                                            purchaseOrder.account
-                                                                                                .billingDetails,
-                                                                                            address
-                                                                                        )
-                                                                                    "
-                                                                                >
+                                                                                <span>
                                                                                     {{ address.address }}
                                                                                     {{
                                                                                         address.state?.name
@@ -200,9 +187,9 @@
                                                                                                 : ""
                                                                                         }}
                                                                                     </span>
-                                                                                </a>
-                                                                            </li>
-                                                                        </ul>
+                                                                                </span>
+                                                                            </button>
+                                                                        </mat-menu>
                                                                     </div>
                                                                 </span>
                                                             </div>
@@ -379,8 +366,6 @@
                                                                 </div>
                                                                 <span>
                                                                     <div
-                                                                        class="btn-group"
-                                                                        dropdown
                                                                         #shippingAddressDropDownWeb="bs-dropdown"
                                                                         [attachOutsideOnClick]="true"
                                                                         (clickOutside)="
@@ -391,37 +376,27 @@
                                                                             !autoFillVendorShipping
                                                                         "
                                                                     >
-                                                                        <a
-                                                                            dropdownToggle
-                                                                            href="javascript:void(0);"
+                                                                        <button
+                                                                            mat-stroked-button
+                                                                            [matMenuTriggerFor]="shippingAddressMenu"
                                                                             aria-label="change"
                                                                             type="button"
-                                                                            class="dropdown-toggle"
-                                                                            >{{ localeData?.change }}</a
                                                                         >
-                                                                        <ul
-                                                                            *dropdownMenu
-                                                                            class="dropdown-menu change-address-dropdown dropdown-menu-right"
-                                                                            role="menu"
-                                                                        >
-                                                                            <li
-                                                                                role="menuitem"
-                                                                                *ngFor="
-                                                                                    let address of accountAddressList
+                                                                            {{ localeData?.change }}
+                                                                        </button>
+                                                                        <mat-menu #shippingAddressMenu="matMenu" class="change-address-dropdown">
+                                                                            <button
+                                                                                mat-menu-item
+                                                                                *ngFor="let address of accountAddressList"
+                                                                                (click)="
+                                                                                    selectAddress(
+                                                                                        purchaseOrder.account
+                                                                                            .shippingDetails,
+                                                                                        address
+                                                                                    )
                                                                                 "
                                                                             >
-                                                                                <a
-                                                                                    href="javascript:void(0);"
-                                                                                    aria-label="address"
-                                                                                    class="dropdown-item"
-                                                                                    (click)="
-                                                                                        selectAddress(
-                                                                                            purchaseOrder.account
-                                                                                                .shippingDetails,
-                                                                                            address
-                                                                                        )
-                                                                                    "
-                                                                                >
+                                                                                <span>
                                                                                     {{ address.address }}
                                                                                     {{
                                                                                         address.state?.name
@@ -438,9 +413,9 @@
                                                                                               address.gstNumber
                                                                                             : ""
                                                                                     }}
-                                                                                </a>
-                                                                            </li>
-                                                                        </ul>
+                                                                                </span>
+                                                                            </button>
+                                                                        </mat-menu>
                                                                     </div>
                                                                 </span>
                                                             </div>
@@ -660,43 +635,32 @@
                                                         <span>
                                                             <div
                                                                 class="btn-group"
-                                                                container="body"
-                                                                dropdown
-                                                                #companyBillingAddressDropDownWeb="bs-dropdown"
                                                                 [attachOutsideOnClick]="true"
                                                                 (clickOutside)="companyBillingAddressDropDownWeb.hide()"
                                                                 *ngIf="companyAddressList?.length > 1"
                                                             >
-                                                                <a
-                                                                    href="javascript:void(0);"
+                                                                <button
+                                                                    mat-stroked-button
+                                                                    [matMenuTriggerFor]="companyBillingAddressMenu"
                                                                     aria-label="change"
-                                                                    dropdownToggle
                                                                     type="button"
-                                                                    class="dropdown-toggle"
-                                                                    >{{ localeData?.change }}</a
                                                                 >
-                                                                <ul
-                                                                    *dropdownMenu
-                                                                    class="dropdown-menu dropdown-menu-right change-address-dropdown"
-                                                                    role="menu"
-                                                                >
-                                                                    <li
-                                                                        role="menuitem"
+                                                                    {{ localeData?.change }}
+                                                                </button>
+                                                                <mat-menu #companyBillingAddressMenu="matMenu" class="change-address-dropdown">
+                                                                    <button
+                                                                        mat-menu-item
                                                                         *ngFor="let address of companyAddressList"
+                                                                        (click)="
+                                                                            selectAddress(
+                                                                                purchaseOrder.company
+                                                                                    .billingDetails,
+                                                                                address,
+                                                                                true
+                                                                            )
+                                                                        "
                                                                     >
-                                                                        <a
-                                                                            href="javascript:void(0);"
-                                                                            aria-label="address"
-                                                                            class="dropdown-item"
-                                                                            (click)="
-                                                                                selectAddress(
-                                                                                    purchaseOrder.company
-                                                                                        .billingDetails,
-                                                                                    address,
-                                                                                    true
-                                                                                )
-                                                                            "
-                                                                        >
+                                                                        <span>
                                                                             {{ address.address }}
                                                                             {{
                                                                                 address.state?.name
@@ -717,9 +681,9 @@
                                                                                         ) + address.gstNumber
                                                                                     : ""
                                                                             }}
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
+                                                                        </span>
+                                                                    </button>
+                                                                </mat-menu>
                                                             </div>
                                                         </span>
                                                     </div>
@@ -909,8 +873,6 @@
                                                         <span>
                                                             <div
                                                                 class="btn-group"
-                                                                dropdown
-                                                                #companyShippingAddressDropDownWeb="bs-dropdown"
                                                                 [attachOutsideOnClick]="true"
                                                                 (clickOutside)="
                                                                     companyShippingAddressDropDownWeb.hide()
@@ -920,36 +882,28 @@
                                                                     !autoFillCompanyShipping
                                                                 "
                                                             >
-                                                                <a
-                                                                    href="javascript:void(0);"
+                                                                <button
+                                                                    mat-stroked-button
+                                                                    [matMenuTriggerFor]="companyShippingAddressMenu"
                                                                     aria-label="change"
-                                                                    dropdownToggle
                                                                     type="button"
-                                                                    class="dropdown-toggle"
-                                                                    >{{ localeData?.change }}</a
                                                                 >
-                                                                <ul
-                                                                    *dropdownMenu
-                                                                    class="dropdown-menu change-address-dropdown dropdown-menu-right"
-                                                                    role="menu"
-                                                                >
-                                                                    <li
-                                                                        role="menuitem"
+                                                                    {{ localeData?.change }}
+                                                                </button>
+                                                                <mat-menu #companyShippingAddressMenu="matMenu" class="change-address-dropdown">
+                                                                    <button
+                                                                        mat-menu-item
                                                                         *ngFor="let address of companyAddressList"
+                                                                        (click)="
+                                                                            selectAddress(
+                                                                                purchaseOrder.company
+                                                                                    .shippingDetails,
+                                                                                address,
+                                                                                true
+                                                                            )
+                                                                        "
                                                                     >
-                                                                        <a
-                                                                            href="javascript:void(0);"
-                                                                            aria-label="address"
-                                                                            class="dropdown-item"
-                                                                            (click)="
-                                                                                selectAddress(
-                                                                                    purchaseOrder.company
-                                                                                        .shippingDetails,
-                                                                                    address,
-                                                                                    true
-                                                                                )
-                                                                            "
-                                                                        >
+                                                                        <span>
                                                                             {{ address.address }}
                                                                             {{
                                                                                 address.state?.name
@@ -970,9 +924,9 @@
                                                                                         ) + address.gstNumber
                                                                                     : ""
                                                                             }}
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
+                                                                        </span>
+                                                                    </button>
+                                                                </mat-menu>
                                                             </div>
                                                         </span>
                                                     </div>
@@ -3573,6 +3527,7 @@
         "
         (click)="closeAsideMenuStateForOtherTaxes()"
     ></div>
+    <!-- this component is not used -->
     <generic-aside-menu-account
         [class]="accountAsideMenuState"
         [@slideInOut]="accountAsideMenuState"

@@ -57,7 +57,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public selectedRowItem: any;
-    public modalRef: any;
+    public dialogRef: any;
     public approveEntryModalRef: any;
     public message: string;
     public actionPettyCashRequestBody: ExpenseActionRequest;
@@ -187,7 +187,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public openModal(rejectionReason: TemplateRef<any>): void {
-        this.modalRef = this.dialog.open(rejectionReason, {
+        this.dialogRef = this.dialog.open(rejectionReason, {
             width: '630px',
             disableClose: true
         });
@@ -922,7 +922,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     private processNextRecord(event?: any): void {
-        this.modalRef?.close();
+        this.dialogRef?.close();
         if (event) {
             this.previewNextItem.emit(true);
         }

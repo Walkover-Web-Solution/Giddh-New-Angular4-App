@@ -23,9 +23,9 @@ import { QuickAccountComponent } from '../../theme/quick-account-component/quick
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InventoryService } from '../../services/inventory.service';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 const TransactionsType = [
     { label: 'By', value: 'Debit' },
@@ -39,19 +39,7 @@ const CustomShortcode = [
 @Component({
     selector: 'invoice-grid',
     templateUrl: './invoice-grid.component.html',
-    styleUrls: ['./invoice-grid.component.scss', '../accounting.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ],
+    styleUrls: ['./invoice-grid.component.scss', '../accounting.component.scss']
 })
 
 export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
@@ -76,6 +64,10 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
     @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
     @ViewChild('narrationBox', { static: true }) public narrationBox: ElementRef;
+    /** Template reference for aside menu stock group modal */
+    @ViewChild('asideMenuStockGroupTemplate', { static: true }) public asideMenuStockGroupTemplate: TemplateRef<any>;
+    /** Dialog reference for aside menu stock group modal */
+    public asideMenuStockGroupDialogRef: MatDialogRef<any>;
 
     // public showAccountList: boolean = true;
     public TransactionType: 'by' | 'to' = 'by';
@@ -123,9 +115,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public invoiceNoHeading: string = 'Supplier Invoice No';
     public isSalesInvoiceSelected: boolean = false; // need to hide `invoice no.` field in sales
     public isPurchaseInvoiceSelected: boolean = false; // need to show `Ledger name` field in purchase
-    public asideMenuStateForProductService: string = 'out';
     public companyTaxesList$: Observable<TaxResponse[]>;
-    public autoFocusStockGroupField: boolean = false;
     public createStockSuccess$: Observable<boolean>;
     public isCustomInvoice: boolean = false;
 
@@ -273,8 +263,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 if (this.focusedField) {
                     this.showQuickAccountModal();
                 } else {
-                    this.asideMenuStateForProductService = 'in';
-                    this.autoFocusStockGroupField = true;
+                    this.openStockGroupAsidePane();
                 }
             }
         }
@@ -988,11 +977,19 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 disableClose: true
             });
         } else if (this.selectedField === 'stock') {
-            this.asideMenuStateForProductService = 'in'; // selectedEle.getAttribute('data-changed')
+            this.openStockGroupAsidePane();
             // let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
             // this.selectedStockInputField = selectedField;
-            this.autoFocusStockGroupField = true;
         }
+    }
+
+    /**
+     * Opens the aside menu stock group dialog
+     *
+     * @memberof InvoiceGridComponent
+     */
+    public openStockGroupAsidePane(): void {
+        this.asideMenuStockGroupDialogRef = this.dialog.open(this.asideMenuStockGroupTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -1050,8 +1047,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public closeCreateStock() {
-        this.asideMenuStateForProductService = 'out';
-        this.autoFocusStockGroupField = false;
+        this.asideMenuStockGroupDialogRef?.close();
         // after creating stock, get all stocks again
         this.selectedStockInputField.value = '';
         this.filterByText = '';

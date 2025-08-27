@@ -170,82 +170,91 @@
 <!-- Taxes collapse -->
 <div class="clearfix tax-operation horizontal-form manage-group-account-form" *ngIf="isTaxableGroup$ | async">
     <div class="col-xs-12 col-sm-12">
-        <div class="form-group toggle-btn mr-b05">
-            <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
-                <i
-                    class="cp collapse-icons"
-                    aria-hidden="true"
-                    [ngClass]="{ 'icon-minus': showTaxes, 'icon-plus': !showTaxes }"
-                ></i
-                >{{ commonLocaleData?.app_taxes }}
-            </label>
-        </div>
-    </div>
-    <!-- taxes container -->
-    <ng-container *ngIf="showTaxes">
-        <div class="col-xs-12 col-sm-12">
-            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
-                <div class="tax-label">
-                    <label>{{ localeData?.all_applicable_taxes_label }}</label>
-                </div>
-                <div class="d-flex justify-content-between align-items-center form-group">
-                    <select-multiple-fields
-                        [label]="localeData?.all_applicable_taxes_label"
-                        [commonLocaleData]="commonLocaleData"
-                        [selectedValues]="defaultTaxLabel"
-                        [placeholder]="commonLocaleData?.app_select"
-                        [options]="companyTaxDropDown"
-                        [chipListUniqueName]="taxGroupForm.get('taxes')?.value"
-                        (selectedOptionUniqueName)="taxesSelected($event)"
-                        (selectedOption)="defaultTaxLabel = $event"
-                        class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
-                    ></select-multiple-fields>
-                    <button
-                        [disabled]="isTaxesSaveDisable$ | async"
-                        type="submit"
-                        mat-raised-button
-                        color="primary"
-                        aria-label="save"
-                        [matTooltip]="commonLocaleData?.app_save"
-                        matTooltipPosition="above"
-                    >
-                        {{ commonLocaleData?.app_save }}
-                    </button>
-                </div>
-            </form>
-            <div class="edit-tax-section">
-                <div class="form-group">
+        <mat-expansion-panel class="mr-t1" (opened)="showTaxes && taxHierarchy()">
+            <mat-expansion-panel-header>
+                <mat-panel-title>{{ commonLocaleData?.app_taxes }}</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="col-xs-12 col-sm-12">
+                <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                     <div class="tax-label">
-                        <label>{{ localeData?.all_inherited_taxes }}</label>
+                        <label>{{ localeData?.all_applicable_taxes_label }}</label>
                     </div>
-                    <div *ngFor="let inTax of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes">
-                        <ng-template #popTemplate>
-                            <div
-                                *ngIf="taxPopOverTemplate"
-                                [innerHtml]="taxPopOverTemplate?.replace('@inTax.name', inTax.name)"
-                            ></div>
-                        </ng-template>
-                        <span
-                            class="tax-bullet"
-                            *ngFor="let inAppTax of inTax.applicableTaxes"
-                            [popover]="popTemplate"
-                            placement="right"
-                            triggers="mouseenter:mouseleave"
-                            >{{ inAppTax?.name }}
-                        </span>
+                    <div class="d-flex justify-content-between align-items-center form-group">
+                        <select-multiple-fields
+                            [label]="localeData?.all_applicable_taxes_label"
+                            [commonLocaleData]="commonLocaleData"
+                            [selectedValues]="defaultTaxLabel"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [options]="companyTaxDropDown"
+                            [chipListUniqueName]="taxGroupForm.get('taxes')?.value"
+                            (selectedOptionUniqueName)="taxesSelected($event)"
+                            (selectedOption)="defaultTaxLabel = $event"
+                            class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
+                        ></select-multiple-fields>
+                        <button
+                            [disabled]="isTaxesSaveDisable$ | async"
+                            type="submit"
+                            mat-raised-button
+                            color="primary"
+                            aria-label="save"
+                            [matTooltip]="commonLocaleData?.app_save"
+                            matTooltipPosition="above"
+                        >
+                            {{ commonLocaleData?.app_save }}
+                        </button>
                     </div>
-                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes?.length">
-                        {{ localeData?.no_inherited_taxes }}
-                    </p>
+                </form>
+                <div class="edit-tax-section">
+                    <div class="form-group">
+                        <div class="tax-label">
+                            <label>{{ localeData?.all_inherited_taxes }}</label>
+                        </div>
+                        <div *ngFor="let inTax of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes; let i = index">
+                            <ng-container *ngFor="let inAppTax of inTax.applicableTaxes; let j = index">
+                                <span
+                                    cdkOverlayOrigin
+                                    #taxTrigger="cdkOverlayOrigin"
+                                    class="tax-bullet"
+                                    (mouseenter)="currentTax = inAppTax"
+                                    (mouseleave)="currentTax = null"
+                                >
+                                    {{ inAppTax?.name }}
+                                </span>
+
+                                <ng-template
+                                    cdkConnectedOverlay
+                                    [cdkConnectedOverlayOrigin]="taxTrigger"
+                                    [cdkConnectedOverlayOpen]="currentTax === inAppTax"
+                                    [cdkConnectedOverlayPositions]="[
+                                        {
+                                            originX: 'end',
+                                            originY: 'center',
+                                            overlayX: 'start',
+                                            overlayY: 'center',
+                                            offsetX: 8
+                                        }
+                                    ]">
+                                    <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper">
+                                        <div>
+                                            <p>{{ localeData?.tax_inherited }}:</p>
+                                            <p>{{ inTax?.name }}</p>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ng-container>
+                        </div>
+                        <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes?.length">
+                            {{ localeData?.no_inherited_taxes }}
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </ng-container>
-    <!-- taxes container -->
+        </mat-expansion-panel>
+    </div>
 </div>
 <!-- commented for later use isDebtorCreditorGroups -->
 <div class="horizontal-form" *ngIf="isDebtorCreditorGroups">
-    <div class="mb-2 select-box container-fluid mt-1">
+    <div class="mb-2 select-box container-fluid mr-t2">
         <div class="form-group">
             <label>{{ localeData?.default_discounts }} <span class="primary-color"></span></label>
             <div class="d-flex justify-content-between align-items-center pd-t1">
@@ -280,22 +289,37 @@
                 <label>{{ localeData?.all_inherited_discounts }}</label>
             </div>
             <div *ngFor="let item of (activeGroup$ | async)?.inheritedDiscounts">
-                <ng-template #popTemplate>
-                    <div class="popover-content">
-                        <label>{{ localeData?.discounts_inherited_from }}:</label>
-                        <ul>
-                            <li>{{ item?.name }}</li>
-                        </ul>
-                    </div>
-                </ng-template>
-                <span
-                    class="tax-bullet"
-                    *ngFor="let inAppDiscount of item.applicableDiscounts"
-                    [popover]="popTemplate"
-                    placement="right"
-                    triggers="mouseenter:mouseleave"
-                    >{{ inAppDiscount.name }}
-                </span>
+                <ng-container *ngFor="let inAppDiscount of item.applicableDiscounts">
+                    <span
+                        cdkOverlayOrigin
+                        #discountTrigger="cdkOverlayOrigin"
+                        class="tax-bullet"
+                        (mouseenter)="currentDiscount = inAppDiscount"
+                        (mouseleave)="currentDiscount = null"
+                    >
+                        {{ inAppDiscount?.name }}
+                    </span>
+                    <ng-template
+                        cdkConnectedOverlay
+                        [cdkConnectedOverlayOrigin]="discountTrigger"
+                        [cdkConnectedOverlayOpen]="currentDiscount === inAppDiscount"
+                        [cdkConnectedOverlayPositions]="[
+                            {
+                                originX: 'end',
+                                originY: 'center',
+                                overlayX: 'start',
+                                overlayY: 'center',
+                                offsetX: 8
+                            }
+                        ]">
+                        <div class="tax-tooltip bg-gray font-14 custom-cdk-overlay-wrapper">
+                            <div>
+                                <p>{{ localeData?.discounts_inherited_from }}:</p>
+                                <p>{{ item?.name }}</p>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ng-container>
             </div>
             <p *ngIf="!(activeGroup$ | async)?.inheritedDiscounts?.length">{{ localeData?.no_inherited_discounts }}</p>
         </div>

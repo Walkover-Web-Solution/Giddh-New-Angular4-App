@@ -78,22 +78,14 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
     public imgPath2: string = '';
-    /** View container to carry out on boarding */
-    @ViewChild('onBoardingContainer', { static: true }) public onBoardingContainer: ElementViewContainerRef;
-    /** Welcome component template ref for second step of warehouse on boarding */
-    @ViewChild('welcomeComponent', { static: true }) public welcomeComponentTemplate: TemplateRef<any>;
     /** Warehouse search field instance */
     @ViewChild('searchWarehouse', { static: false }) public searchWarehouse: any;
     /** Aside Create Address Template Reference */
     @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
-    /** Warehouse on boarding modal viewchild */
-    @ViewChild('warehouseOnBoardingModal', { static: true }) public warehouseOnBoardingModal: any;
     /** Status Dialog Template Reference */
     @ViewChild('statusModal', { static: true }) public statusModal: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();
-    /** Stores the current visible on boarding modal instance */
-    private welcomePageModalInstance: BsModalRef;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold profile JSON data */
@@ -118,10 +110,13 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public isCompany: boolean;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** True if address info is open */
+    public isAddressInfoOpen: string = '';
+    /** True if last address info is open */
+    public isLastAddressInfoOpen: boolean = false;
 
     /** @ignore */
     constructor(
-        private bsModalService: BsModalService,
         private commonActions: CommonActions,
         private companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
@@ -183,60 +178,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public async ngOnDestroy(): Promise<any> {
         this.store.dispatch(this.itemOnBoardingActions.getOnBoardingResetAction());
-        await this.hideAddCompanyModal();
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * Displays the create warehouse modal
-     *
-     * @memberof WarehouseComponent
-     */
-
-    public openCreateWarehouseModal(): void {
-        this.startOnBoarding();
-        this.dialog.open(this.warehouseOnBoardingModal, {
-            panelClass: 'modal-dialog'
-        });
-    }
-
-    /**
-     * Hides the welcome page modal once the user presses 'back' button
-     * on Welcome page
-     *
-     * @returns {Promise<void>} Promise to indicate successful hiding of model
-     * @memberof WarehouseComponent
-     */
-    public hideWelcomePage(): Promise<void> {
-        return new Promise((resolve) => {
-            if (this.welcomePageModalInstance) {
-                this.welcomePageModalInstance.hide();
-                setTimeout(() => {
-                    resolve();
-                }, 500);
-            }
-        });
-    }
-
-    /**
-     * Handler for back button on on boarding step 2 (Welcome page)
-     *
-     * @returns {Promise<any>} Promise to carry out further operation
-     * @memberof WarehouseComponent
-     */
-    public async handleBackButtonClick(): Promise<any> {
-        await this.hideWelcomePage();
-        this.resetWelcomeForm();
-        if (this.itemOnBoardingDetails) {
-            if (!this.itemOnBoardingDetails.isItemUpdateInProgress) {
-                this.openCreateWarehouseModal();
-            } else {
-                // Warehouse (item) update process was in progress, end it
-                this.endOnBoarding();
-                this.selectedWarehouse = null;
-            }
-        }
     }
 
     /**
@@ -258,23 +201,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.store.dispatch(this.warehouseActions.createWarehouse(requestParamter));
                 }
             }
-        }
-    }
-
-    /**
-     * Handler to handle on boarding modal dismiss event
-     *
-     * @param {ModalDirective} event
-     * @memberof WarehouseComponent
-     */
-    public onBoardingModalDismiss(event: ModalDirective) {
-        if (event.dismissReason) {
-            /* dismissReason is null if modal is dismissed
-               with modal instance with hide() method (used in step 2 on Welcome page).
-               End on boarding only when user closes the modal from
-               step 1
-            */
-            this.endOnBoarding();
         }
     }
 
@@ -427,7 +353,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(state => state.warehouse), takeUntil(this.destroyed$)).subscribe(async (warehouseState: WarehouseState) => {
             if (warehouseState && (warehouseState.warehouseCreated || warehouseState.warehouseUpdated)) {
                 // Warehouse creation or updation is successful
-                await this.hideWelcomePage();
                 this.endOnBoarding();
                 this.store.dispatch(this.warehouseActions.resetCreateWarehouse());
                 this.store.dispatch(this.warehouseActions.resetUpdateWarehouse());
@@ -460,58 +385,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private endOnBoarding(): void {
         this.store.dispatch(this.itemOnBoardingActions.getOnBoardingResetAction());
-    }
-
-    /**
-     * Starts the on boarding process
-     *
-     * @private
-     * @memberof WarehouseComponent
-     */
-    private startOnBoarding(): void {
-        this.store.dispatch(this.itemOnBoardingActions.getOnBoardingStatusAction(true));
-        this.store.dispatch(this.itemOnBoardingActions.getOnBoardingTypeAction(OnBoardingType.Warehouse));
-    }
-
-    /**
-     * Hides the create company modal
-     *
-     * @private
-     * @returns {Promise<void>} Promise to carry out further operation
-     * @memberof WarehouseComponent
-     */
-    private hideAddCompanyModal(): Promise<void> {
-        return new Promise((resolve) => {
-            if (this.warehouseOnBoardingModal && this.warehouseOnBoardingModal.isShown) {
-                this.warehouseOnBoardingModal.hide();
-                setTimeout(() => {
-                    document.querySelectorAll('.modal-backdrop').forEach((backdrop: HTMLElement) => {
-                        backdrop.style.setProperty('display', 'none', 'important');
-                    });
-                    resolve();
-                }, 1000);
-            }
-        });
-    }
-
-    /**
-     * Displays the welcome page for second step of warehouse on boarding and for update
-     * warehouse flow
-     *
-     * @private
-     * @memberof WarehouseComponent
-     */
-    private showWelcomePage(): void {
-        if (this.itemOnBoardingDetails &&
-            (this.itemOnBoardingDetails.isOnBoardingInProgress || this.itemOnBoardingDetails.isItemUpdateInProgress)) {
-            const modalConfig: ModalOptions = {
-                class: 'warehouse-welcome-modal',
-                animated: false,
-                keyboard: false,
-                backdrop: false
-            };
-            this.welcomePageModalInstance = this.bsModalService.show(this.welcomeComponentTemplate, modalConfig);
-        }
     }
 
     /**
@@ -614,5 +487,25 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.statusModalRef?.close();
         });
+    }
+
+    /**
+     * Opens the address info
+     *
+     * @param {boolean} isOpen
+     * @param {string} [uniqueName='']
+     * @memberof BranchComponent
+     */
+    public openAddressInfo(isOpen: boolean, uniqueName: string = ''): void {
+        this.isLastAddressInfoOpen = isOpen;
+        if (isOpen) {
+            this.isAddressInfoOpen = uniqueName;
+        } else {
+            setTimeout(() => {
+                if (!this.isLastAddressInfoOpen) {
+                    this.isAddressInfoOpen = '';
+                }
+            }, 100);
+        }
     }
 }

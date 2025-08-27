@@ -363,12 +363,10 @@
     </div>
 </ng-template>
 
-<div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
-<aside-inventory-stock-group
-    *ngIf="asideMenuStateForProductService === 'in'"
-    [autoFocus]="autoFocusStockGroupField"
-    (closeAsideEvent)="closeCreateStock()"
-    [class]="asideMenuStateForProductService"
-    [@slideInOut]="asideMenuStateForProductService"
->
-</aside-inventory-stock-group>
+<ng-template #asideMenuStockGroupTemplate>
+    <aside-inventory-stock-group
+        [autoFocus]="true"
+        (closeAsideEvent)="closeCreateStock()"
+    >
+    </aside-inventory-stock-group>
+</ng-template>

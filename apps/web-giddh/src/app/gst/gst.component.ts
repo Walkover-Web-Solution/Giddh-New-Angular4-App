@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -22,24 +21,11 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './gst.component.html',
-    styleUrls: ['./gst.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in <=> out', animate('400ms ease-in-out')),
-        ])
-    ]
+    styleUrls: ['./gst.component.scss']
 })
 export class GstComponent implements OnInit, OnDestroy {
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
-    /** Aside pane state*/
-    public asideMenuState: string = 'out';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     public showCalendar: boolean = false;
     public period: any = null;
     public companies: CompanyResponse[] = [];
@@ -175,7 +161,6 @@ export class GstComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState = 'out';
     }
 
     /**

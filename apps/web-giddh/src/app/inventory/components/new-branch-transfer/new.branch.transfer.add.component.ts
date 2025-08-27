@@ -9,7 +9,6 @@ import {
 } from '../../../models/api-models/Company';
 import * as dayjs from 'dayjs';
 import { GeneralService } from '../../../services/general.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import {
     ILinkedStocksResult,
     LinkedStocksResponse, LinkedStocksVM,
@@ -27,31 +26,19 @@ import { transporterModes } from "../../../shared/helpers/transporterModes";
 import { InventoryService } from "../../../services/inventory.service";
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { NgForm } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep, isEmpty } from '../../../lodash-optimized';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'new-branch-transfer',
     templateUrl: './new.branch.transfer.add.component.html',
-    styleUrls: ['./new.branch.transfer.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./new.branch.transfer.component.scss']
 })
 
 export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestroy {
@@ -68,10 +55,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('senderGstNumberField', { static: false }) public senderGstNumberField: HTMLInputElement;
     @ViewChild('receiverGstNumberField', { static: false }) public receiverGstNumberField: HTMLInputElement;
     @ViewChild("asideMenuProductService") public asideMenuProductService: TemplateRef<any>;
+    /** Template reference for transporter popup */
+    @ViewChild("transporterPopupTemplate") public transporterPopupTemplate: TemplateRef<any>;
+    /** Dialog reference for transporter popup */
+    public transporterPopupDialogRef: MatDialogRef<any>;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
-    public asideMenuState: string = 'out';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public branchTransfer: NewBranchTransferRequest;
     public transferType: string = 'products';
@@ -207,22 +197,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public closeBranchTransferPopup(isNoteCreatedSuccessfully?: boolean): void {
         this.hideModal.emit(isNoteCreatedSuccessfully);
-    }
-
-    public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
-    }
-
-    public toggleAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
     }
 
     public changeTransferType(): void {
@@ -1331,14 +1305,19 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.keydownClassAdded = true;
         } else if (e.code === 'Enter' && this.keydownClassAdded) {
             this.keydownClassAdded = true;
-            this.toggleTransporterModel();
+            this.openTransporterPopupDialog();
         } else {
             this.keydownClassAdded = false;
         }
     }
 
-    public toggleTransporterModel(): void {
-        this.transporterPopupStatus = !this.transporterPopupStatus;
+    /**
+     * open transporter popup dialog
+     *
+     * @memberof NewBranchTransferAddComponent
+     */
+    public openTransporterPopupDialog(): void {
+        this.transporterPopupDialogRef = this.dialog.open(this.transporterPopupTemplate, ASIDE_PANE_CONFIG);
         this.generateNewTransporterForm?.reset();
         this.transportEditMode = false;
     }
@@ -1373,7 +1352,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public deleteTransporter(transporter: IEwayBillTransporter): void {
         this.store.dispatch(this.invoiceActions.deleteTransporter(transporter.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.toggleTransporterModel();
+        this.transporterPopupDialogRef?.close();
         this.detectChanges();
     }
 

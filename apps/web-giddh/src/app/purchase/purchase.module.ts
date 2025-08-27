@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -65,7 +64,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         InvoiceModule,
         CollapseModule.forRoot(),
         MatPaginatorModule,
-        BsDropdownModule.forRoot(),
+        
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

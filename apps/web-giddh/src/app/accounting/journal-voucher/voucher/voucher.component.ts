@@ -1,5 +1,3 @@
-
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
     TemplateRef,
@@ -44,9 +42,10 @@ import { PAGINATION_LIMIT } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { VOUCHERS } from '../../constants/accounting.constant';
 import { GeneralService } from '../../../services/general.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { CompanyActions } from '../../../actions/company.actions';
+import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 
 const CustomShortcode = [
@@ -56,19 +55,7 @@ const CustomShortcode = [
 @Component({
     selector: 'account-as-voucher',
     templateUrl: './voucher.component.html',
-    styleUrls: ['../../accounting.component.scss', './voucher.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['../../accounting.component.scss', './voucher.component.scss']
 })
 
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
@@ -111,6 +98,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     /** List of all 'CREDIT' amount fields when 'To' entries are made  */
     @ViewChildren('toAmountField') public toAmountFields: QueryList<ElementRef>;
+    /** Template reference for aside menu account modal */
+    @ViewChild('genericAsideMenuAccountTemplate', { static: true }) public genericAsideMenuAccountTemplate: TemplateRef<any>;
+    /** Dialog reference for aside menu account modal */
+    public genericAsideMenuAccountDialogRef: MatDialogRef<any>;
     /** List of both date picker used (one in voucher date and other in check clearance date) */
     @ViewChildren(BsDatepickerDirective) bsDatePickers: QueryList<BsDatepickerDirective>;
     public showLedgerAccountList: boolean = false;
@@ -149,9 +140,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public selectedField: 'account' | 'stock';
 
     public chequeDetailForm: UntypedFormGroup;
-    public asideMenuStateForProductService: string = 'out';
     public isFirstRowDeleted: boolean = false;
-    public autoFocusStockGroupField: boolean = false;
     public createStockSuccess$: Observable<boolean>;
     /** Observable to listen for new account creation */
     private createdAccountDetails$: Observable<any>;
@@ -173,8 +162,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public universalDate: any = '';
 
     public activeCompany: any;
-    /* Variable to store if modal is out/in */
-    public accountAsideMenuState: string = 'out';
     /** Category of accounts to display based on voucher type */
     public categoryOfAccounts: string = 'currentassets';
     /* This will hold the transaction details to use in adjustment popup */
@@ -475,9 +462,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.createStockSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(yesOrNo => {
             if (yesOrNo) {
-                this.asideMenuStateForProductService = 'out';
-                this.autoFocusStockGroupField = false;
-                // this.getStock(null, null, true);
+                this.genericAsideMenuAccountDialogRef?.close();
                 setTimeout(() => {
                     this.dateField?.nativeElement?.focus();
                 }, 1000);
@@ -489,8 +474,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (accountDetails) {
                 const isAccountSuccessfullyCreated = accountDetails[0];
                 const createdAccountDetails = accountDetails[1];
-                if (isAccountSuccessfullyCreated && this.accountAsideMenuState === 'in') {
-                    this.toggleAccountAsidePane();
+                if (isAccountSuccessfullyCreated) {
+                    this.closeAccountAsidePane();
                 }
                 if (createdAccountDetails) {
                     this.setAccount(createdAccountDetails);
@@ -2232,17 +2217,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * Aside pane togglere
+     * Opens the account aside pane dialog
      *
-     * @param {*} [event] Toggle event
      * @memberof AccountAsVoucherComponent
      */
-    public toggleAccountAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    public openAccountAsidePaneDialog(): void {
+        this.genericAsideMenuAccountDialogRef = this.dialog.open(this.genericAsideMenuAccountTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -2250,15 +2230,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      *
      * @memberof AccountAsVoucherComponent
      */
-    public toggleBodyClass(): void {
-        if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            this.showLedgerAccountList = false;
-            this.closeDiscountSidebar();
-            this.closeTaxSidebar();
-            document.querySelector('body').classList.remove('fixed');
-        }
+    public closeAccountAsidePane(): void {
+        this.genericAsideMenuAccountDialogRef.close();
+        this.showLedgerAccountList = false;
+        this.closeDiscountSidebar();
+        this.closeTaxSidebar();
     }
 
     /**
@@ -2288,7 +2264,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public addNewAccount(): void {
-        this.toggleAccountAsidePane();
+        this.openAccountAsidePaneDialog();
     }
 
     /**

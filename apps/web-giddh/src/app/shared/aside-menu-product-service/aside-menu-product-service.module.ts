@@ -1,7 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { StockCreateEditModule } from "../../new-inventory/component/stock-create-edit/stock-create-edit.module";
 import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
@@ -10,15 +9,13 @@ import { DecimalDigitsModule } from "../helpers/directives/decimalDigits/decimal
 import { TextCaseChangeModule } from "../helpers/directives/textCaseChange/textCaseChange.module";
 import { UniqueNameModule } from "../helpers/directives/uniqueName/uniqueName.module";
 import { AsideMenuProductServiceComponent } from "./aside-menu-product-service.component";
-import { SalesAddStockComponent } from "./components/create-stock/sales.create.stock.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRadioModule } from "@angular/material/radio";
 
 @NgModule({
     declarations: [
-        AsideMenuProductServiceComponent,
-        SalesAddStockComponent
+        AsideMenuProductServiceComponent
     ],
     imports: [
         CommonModule,
@@ -30,15 +27,13 @@ import { MatRadioModule } from "@angular/material/radio";
         UniqueNameModule,
         TextCaseChangeModule,
         DecimalDigitsModule,
-        BsDropdownModule.forRoot(),
         StockCreateEditModule,
         MatButtonModule,
         MatCheckboxModule,
         MatRadioModule 
     ],
     exports: [
-        AsideMenuProductServiceComponent,
-        SalesAddStockComponent
+        AsideMenuProductServiceComponent
     ]
 })
 export class AsideMenuProductServiceModule {

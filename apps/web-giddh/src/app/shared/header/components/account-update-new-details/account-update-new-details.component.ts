@@ -290,6 +290,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public contactPreview: boolean = false;
     /** True if action menu is open */
     @Input() public isActionMenu: boolean = false;
+    /** Stores the current tax to display in the UI. */
+    public currentTax: any;
+    /** Stores the current discount to display in the UI. */
+    public currentDiscount: any;
 
     constructor(
         private _fb: FormBuilder,
