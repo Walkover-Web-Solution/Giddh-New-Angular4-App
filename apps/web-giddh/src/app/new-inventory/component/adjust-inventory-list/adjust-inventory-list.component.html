@@ -16,15 +16,15 @@
                 "
                 class="branch-width mr-0"
             >
-                <dropdown-field
+                <reactive-dropdown-field
                     [label]="commonLocaleData?.app_select_entity"
                     [options]="currentCompanyBranches"
                     class="w-100"
                     (selectedOption)="handleBranchChange($event)"
                     [placeholder]="commonLocaleData?.app_select_entity"
-                    [defaultValue]="currentBranch?.name"
+                    [labelValue]="currentBranch?.name"
                 >
-                </dropdown-field>
+                </reactive-dropdown-field>
             </div>
             <div 
                 class="custom-datepicker"

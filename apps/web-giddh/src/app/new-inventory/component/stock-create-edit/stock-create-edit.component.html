@@ -71,7 +71,7 @@
                                             </input-field>
                                         </div>
                                         <div class="col-sm-6 col-lg-6">
-                                            <dropdown-field
+                                            <reactive-dropdown-field
                                                 [name]="'stockUnitGroup'"
                                                 [placeholder]="localeData?.select_unit_group"
                                                 [label]="localeData?.unit_group"
@@ -83,13 +83,13 @@
                                                     stockUnitName = '';
                                                     getStockUnits()
                                                 "
-                                                [defaultValue]="stockForm.stockUnitGroup?.name"
+                                                [labelValue]="stockForm.stockUnitGroup?.name"
                                                 [readonly]="queryParams?.stockUniqueName"
                                             >
-                                            </dropdown-field>
+                                            </reactive-dropdown-field>
                                         </div>
                                         <div class="col-sm-6 col-lg-6">
-                                            <dropdown-field
+                                            <reactive-dropdown-field
                                                 [name]="'stockUnitCode'"
                                                 [placeholder]="localeData?.select_unit"
                                                 [label]="commonLocaleData?.app_unit"
@@ -99,11 +99,11 @@
                                                     stockUnitName = $event.label;
                                                     getStockLinkedUnits()
                                                 "
-                                                [defaultValue]="stockUnitName"
+                                                [labelValue]="stockUnitName"
                                                 [showError]="isFormSubmitted && !stockForm.stockUnitUniqueName"
                                                 [readonly]="queryParams?.stockUniqueName"
                                             >
-                                            </dropdown-field>
+                                            </reactive-dropdown-field>
                                         </div>
                                     </div>
                                     <div class="row mr-b1 mr-t15">
@@ -179,7 +179,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
-                                            <dropdown-field
+                                            <reactive-dropdown-field
                                                 [name]="'discounts'"
                                                 [placeholder]="localeData?.select_discounts"
                                                 [label]="commonLocaleData?.app_discount"
@@ -187,11 +187,10 @@
                                                 (selectedOption)="
                                                     stockForm.discounts = [$event?.value];
                                                 "
-                                                [allowValueReset]="true"
                                                 (onClear)="stockForm.discounts = []"
-                                                [defaultValue]="stockForm.discountLabel ?? ''"
+                                                [labelValue]="stockForm.discountLabel ?? ''"
                                             >
-                                            </dropdown-field>
+                                            </reactive-dropdown-field>
                                         </div>
                                         <div class="col-6" *ngIf="!isVariantAvailable">
                                             <div class="variant-image">
@@ -286,7 +285,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-12 pt-3">
-                                                                        <dropdown-field
+                                                                        <reactive-dropdown-field
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
                                                                             [options]="fixedAssetsAccounts"
@@ -298,9 +297,9 @@
                                                                                 fixedAssetsAccountName = $event?.label;
                                                                                 prefillUnits()
                                                                             "
-                                                                            [defaultValue]="fixedAssetsAccountName"
+                                                                            [labelValue]="fixedAssetsAccountName"
                                                                         >
-                                                                        </dropdown-field>
+                                                                        </reactive-dropdown-field>
                                                                     </div>
                                                                     <div
                                                                         class="col-lg-12 col-sm-6 mr-b15"
@@ -354,7 +353,7 @@
                                                                                             ?.length > 1
                                                                                 }"
                                                                             >
-                                                                                <dropdown-field
+                                                                                <reactive-dropdown-field
                                                                                     [cssClass]="
                                                                                         (!variantFixedAssetsUnitRate?.stockUnitName &&
                                                                                         checkUnitRateValidation[0]
@@ -378,10 +377,10 @@
                                                                                             $event
                                                                                         )
                                                                                     "
-                                                                                    [defaultValue]="
+                                                                                    [labelValue]="
                                                                                         variantFixedAssetsUnitRate?.stockUnitName
                                                                                     "
-                                                                                ></dropdown-field>
+                                                                                ></reactive-dropdown-field>
                                                                             </div>
                                                                             <button
                                                                                 aria-label="delete icon"
@@ -484,7 +483,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 pt-3 which-tab">
-                                                                            <dropdown-field
+                                                                            <reactive-dropdown-field
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
                                                                                     localeData?.linked_purchase_accounts
@@ -498,9 +497,9 @@
                                                                                     purchaseAccountName = $event?.label;
                                                                                     prefillUnits()
                                                                                 "
-                                                                                [defaultValue]="purchaseAccountName"
+                                                                                [labelValue]="purchaseAccountName"
                                                                             >
-                                                                            </dropdown-field>
+                                                                            </reactive-dropdown-field>
                                                                         </div>
                                                                         <div
                                                                             class="col-12 which-tab-3"
@@ -555,7 +554,7 @@
                                                                                                 ?.length > 1
                                                                                     }"
                                                                                 >
-                                                                                    <dropdown-field
+                                                                                    <reactive-dropdown-field
                                                                                         [cssClass]="'unit-rates'"
                                                                                         [name]="
                                                                                             'variantPurchaseUnit' + j
@@ -570,7 +569,7 @@
                                                                                                 $event
                                                                                             )
                                                                                         "
-                                                                                        [defaultValue]="
+                                                                                        [labelValue]="
                                                                                             variantPurchaseUnitRate?.stockUnitName
                                                                                         "
                                                                                         [cssClass]="
@@ -581,7 +580,7 @@
                                                                                                 : 'unit-rates'
                                                                                         "
                                                                                     >
-                                                                                    </dropdown-field>
+                                                                                    </reactive-dropdown-field>
                                                                                 </div>
                                                                                 <button
                                                                                     aria-label="delete icon"
@@ -689,7 +688,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 pt-3">
-                                                                            <dropdown-field
+                                                                            <reactive-dropdown-field
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
                                                                                     localeData?.linked_sales_accounts
@@ -703,9 +702,9 @@
                                                                                     salesAccountName = $event?.label;
                                                                                     prefillUnits()
                                                                                 "
-                                                                                [defaultValue]="salesAccountName"
+                                                                                [labelValue]="salesAccountName"
                                                                             >
-                                                                            </dropdown-field>
+                                                                            </reactive-dropdown-field>
                                                                         </div>
                                                                         <div
                                                                             class="col-12"
@@ -756,7 +755,7 @@
                                                                                                 ?.length > 1
                                                                                     }"
                                                                                 >
-                                                                                    <dropdown-field
+                                                                                    <reactive-dropdown-field
                                                                                         [name]="'variantSalesUnit' + j"
                                                                                         [placeholder]="
                                                                                             commonLocaleData?.app_unit
@@ -768,7 +767,7 @@
                                                                                                 $event
                                                                                             )
                                                                                         "
-                                                                                        [defaultValue]="
+                                                                                        [labelValue]="
                                                                                             variantSalesUnitRate?.stockUnitName
                                                                                         "
                                                                                         [cssClass]="
@@ -779,7 +778,7 @@
                                                                                                 : ''
                                                                                         "
                                                                                     >
-                                                                                    </dropdown-field>
+                                                                                    </reactive-dropdown-field>
                                                                                 </div>
                                                                                 <button
                                                                                     aria-label="delete icon"

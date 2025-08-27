@@ -24,14 +24,14 @@
             <div *ngIf="!gstAuthenticated && !gspSessionOtpAuthorized">
                 <!-- Choose Provider -->
                 <div class="form-group">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="localeData?.aside_menu?.select_platform"
                         (selectedOption)="taxProForm.gsp = $event?.value; changeProvider()"
                         [readonly]="otpSentSuccessFully"
                         [options]="providerOptions"
                         [placeholder]="commonLocaleData?.app_select"
-                        [defaultValue]="providerOptions[0].label ?? ''"
-                    ></dropdown-field>
+                        [labelValue]="providerOptions[0].label ?? ''"
+                    ></reactive-dropdown-field>
                 </div>
 
                 <!-- TAX PRO || VYANA-->

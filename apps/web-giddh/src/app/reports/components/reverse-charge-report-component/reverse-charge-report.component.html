@@ -27,13 +27,13 @@
                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                             "
                         >
-                            <dropdown-field
+                            <reactive-dropdown-field
                                 [label]="commonLocaleData?.app_entity"
-                                [defaultValue]="currentBranch?.name ?? ''"
+                                [labelValue]="currentBranch?.name ?? ''"
                                 [options]="currentCompanyBranches"
                                 (selectedOption)="currentBranch.uniqueName = $event.value; handleBranchChange($event)"
                                 [placeholder]="commonLocaleData?.app_select_entity"
-                            ></dropdown-field>
+                            ></reactive-dropdown-field>
                         </div>
                         <div class="input-grp-date-range-picker d-flex">
                             <div class="custom-datepicker"

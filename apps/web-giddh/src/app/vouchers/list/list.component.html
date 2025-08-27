@@ -2427,7 +2427,7 @@
                     <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                         <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                             <div class="d-flex align-items-center column-gap1">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     *ngIf="
                                         voucherType === voucherTypeEnum.creditNote ||
                                         voucherType === voucherTypeEnum.debitNote
@@ -2435,10 +2435,10 @@
                                     [name]="'invoiceType'"
                                     [options]="voucherTypes"
                                     (selectedOption)="voucherType = $event.value; getLedgersOfInvoice()"
-                                    [defaultValue]="voucherType | titlecase"
+                                    [labelValue]="voucherType | titlecase"
                                     [label]="commonLocaleData?.app_voucher_type"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                                 <div class="custom-datepicker-wrapper">
                                     <div 
                                         class="custom-datepicker" 
@@ -5868,9 +5868,9 @@
                     <edit-invoice></edit-invoice>
                 </div>
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
-                    <dropdown-field [name]="'design'" [label]="localeData?.select_design_for" [placeholder]="commonLocaleData?.app_select"
+                    <reactive-dropdown-field [name]="'design'" [label]="localeData?.select_design_for" [placeholder]="commonLocaleData?.app_select"
                         class="w-50 template-design d-block">
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">

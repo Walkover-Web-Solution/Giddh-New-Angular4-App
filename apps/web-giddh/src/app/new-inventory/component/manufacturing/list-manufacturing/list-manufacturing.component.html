@@ -32,29 +32,29 @@
                                 </div>
                             </div>
                             <div class="list-header" *ngIf="(isCompany || isConsolidatedBranch)">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     class="max-width-230"
                                     [name]="'branch'"
                                     [placeholder]="commonLocaleData?.app_select_branch"
                                     [options]="currentCompanyBranches"
                                     (selectedOption)="handleBranchChange($event)"
-                                    [defaultValue]="selectedBranchName"
+                                    [labelValue]="selectedBranchName"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <div class="list-header" *ngIf="warehouses?.length > 1">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     class="max-width-230"
                                     [name]="'warehouse'"
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"
-                                    [defaultValue]="selectedWarehouseName"
+                                    [labelValue]="selectedWarehouseName"
                                     (selectedOption)="
                                         selectedWarehouseName = $event.label;
                                         manufacturingSearchRequest.warehouseUniqueName = $event.value
                                     "
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
 
                             <div>
@@ -215,24 +215,24 @@
                     <form class="col-md-12 pl-0 pr-0 mr-b05">
                         <div class="row mt-2 mr-b15">
                             <div class="col-md-12 col-sm-12">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'inventoryType'"
                                     [placeholder]="commonLocaleData?.app_select_inventory_type"
                                     [label]="commonLocaleData?.app_inventory_type"
                                     [options]="inventoryTypeFilters"
-                                    [defaultValue]="selectedInventoryTypeName"
+                                    [labelValue]="selectedInventoryTypeName"
                                     (selectedOption)="
                                         manufacturingSearchRequest.inventoryType = $event.value;
                                         selectedInventoryTypeName = $event.label
                                     "
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
                                 <div class="list-header">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         class="max-width-230"
                                         [name]="'stock'"
                                         [placeholder]="commonLocaleData?.app_select_stock"
@@ -243,16 +243,16 @@
                                             manufacturingSearchRequest.product = $event.value;
                                             getVariants()
                                         "
-                                        [defaultValue]="selectedStockName"
+                                        [labelValue]="selectedStockName"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
                                 <div class="list-header">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         class="max-width-230"
                                         [name]="'variant'"
                                         [placeholder]="commonLocaleData?.app_select_variant"
@@ -262,42 +262,42 @@
                                             selectedVariantName = $event.label;
                                             manufacturingSearchRequest.productVariant = $event.value
                                         "
-                                        [defaultValue]="selectedVariantName"
+                                        [labelValue]="selectedVariantName"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'searchBy'"
                                     [placeholder]="localeData?.select_search_by"
                                     [label]="localeData?.search_by"
                                     [options]="searchByFilters"
-                                    [defaultValue]="selectedOperationName"
+                                    [labelValue]="selectedOperationName"
                                     (selectedOption)="
                                         manufacturingSearchRequest.searchBy = $event.value;
                                         selectedOperationName = $event.label
                                     "
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'searchOperation'"
                                     [placeholder]="localeData?.select_operation"
                                     [label]="localeData?.operation"
                                     [options]="operatorFilters"
-                                    [defaultValue]="selectedFilterByName"
+                                    [labelValue]="selectedFilterByName"
                                     (selectedOption)="
                                         manufacturingSearchRequest.searchOperation = $event.value;
                                         selectedFilterByName = $event.label
                                     "
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mr-b15">

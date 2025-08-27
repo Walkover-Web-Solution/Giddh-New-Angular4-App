@@ -782,20 +782,20 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="width-100">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [name]="'subscriptionCountry' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_country + '*'"
                                                         [placeholder]="commonLocaleData?.app_country"
                                                         class="mb-3 d-block"
                                                         [options]="commonCountrySource"
                                                         (selectedOption)="selectCountry($event)"
-                                                        [defaultValue]="selectedCountry"
+                                                        [labelValue]="selectedCountry"
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('country')?.value
                                                         "
                                                         [autocomplete]="'subscriptionCountry' + currentTimeStamp"
                                                     >
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -819,7 +819,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div *ngIf="!countyList?.length">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [name]="'subscriptionState' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_state + '*'"
                                                         [placeholder]="commonLocaleData?.app_state"
@@ -828,15 +828,15 @@
                                                             isFormSubmitted && !secondStepForm.get('state')?.value
                                                         "
                                                         [readonly]="disabledState"
-                                                        [defaultValue]="selectedState"
+                                                        [labelValue]="selectedState"
                                                         (selectedOption)="selectState($event)"
                                                         [ngClass]="{ 'readonly-field': disabledState }"
                                                         [autocomplete]="'subscriptionState' + currentTimeStamp"
                                                     >
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                 </div>
                                                 <div *ngIf="countyList?.length">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [name]="'subscriptionCounty' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_region + '*'"
                                                         [placeholder]="commonLocaleData?.app_select_region"
@@ -844,11 +844,11 @@
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('state')?.value
                                                         "
-                                                        [defaultValue]="selectedState"
+                                                        [labelValue]="selectedState"
                                                         (selectedOption)="selectState($event)"
                                                         [autocomplete]="'subscriptionCounty' + currentTimeStamp"
                                                     >
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                 </div>
                                             </div>
                                             <div class="form-group">

@@ -166,14 +166,14 @@
                                                                             </div>
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount position-relative">
-                                                                            <dropdown-field
+                                                                            <reactive-dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
                                                                                 [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"
                                                                                 (selectedOption)="updateDiscountInVariant(variant, $event)"
-                                                                                [defaultValue]="variant?.get('discountName')?.value">
-                                                                            </dropdown-field>
+                                                                                [labelValue]="variant?.get('discountName')?.value">
+                                                                            </reactive-dropdown-field>
                                                                         </td>
                                                                         <td class="variant-delete">
                                                                             <div class="delete-show">
@@ -193,14 +193,14 @@
                                                                 <tr>
                                                                     <td colspan="100%">
                                                                         <div class="add-variant">
-                                                                            <dropdown-field
+                                                                            <reactive-dropdown-field
                                                                                 [name]="'variantsWithoutDiscount' + i"
                                                                                 [label]="commonLocaleData?.app_variant"
                                                                                 [placeholder]="commonLocaleData?.app_select_variant"
                                                                                 [options]="variantsWithoutDiscount[i]"
                                                                                 (selectedOption)="selectVariant($event, i)"
-                                                                                [defaultValue]="variantsDropdownDefaultValue">
-                                                                            </dropdown-field>
+                                                                                [labelValue]="variantsDropdownDefaultValue">
+                                                                            </reactive-dropdown-field>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -253,14 +253,14 @@
                                                                             </div>
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount position-relative">
-                                                                            <dropdown-field
+                                                                            <reactive-dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
                                                                                 [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"
                                                                                 (selectedOption)="updateDiscountInVariant(variant, $event)"
-                                                                                [defaultValue]="variant?.get('discountName')?.value">
-                                                                            </dropdown-field>
+                                                                                [labelValue]="variant?.get('discountName')?.value">
+                                                                            </reactive-dropdown-field>
                                                                         </td>
                                                                         <td class="variant-delete">
                                                                             <div class="delete-show">

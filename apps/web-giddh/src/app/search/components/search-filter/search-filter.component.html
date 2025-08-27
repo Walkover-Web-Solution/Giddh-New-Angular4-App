@@ -27,12 +27,12 @@
                         *ngFor="let item of searchQueryForm.get('searchQuery')['controls']; let i = index; let l = last"
                     >
                         <div [formGroupName]="i" class="d-flex">
-                            <dropdown-field
+                            <reactive-dropdown-field
                                 class="width-query-types mr-3"
                                 [options]="queryTypes"
                                 [required]="true"
                                 (selectedOption)="item?.get('queryType').patchValue($event.value)"
-                                [defaultValue]="
+                                [labelValue]="
                                     resetValues
                                         ? item?.get('queryType').value === 'closingBalance'
                                             ? 'Closing Balance'
@@ -42,17 +42,17 @@
                                 [placeholder]="commonLocaleData?.app_select_type"
                                 [label]="localeData?.whose"
                             >
-                            </dropdown-field>
-                            <dropdown-field
+                            </reactive-dropdown-field>
+                            <reactive-dropdown-field
                                 class="width-query-differs mr-3"
                                 [options]="queryDiffers"
                                 (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
-                                [defaultValue]="resetValues ? item?.get('queryDiffer').value : ''"
+                                [labelValue]="resetValues ? item?.get('queryDiffer').value : ''"
                                 [required]="true"
                                 [placeholder]="localeData?.select_query"
                                 [label]="localeData?.is"
                             >
-                            </dropdown-field>
+                            </reactive-dropdown-field>
                             <input-field
                                 class="width-query-differs mr-3"
                                 *ngIf="
