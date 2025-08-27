@@ -1128,7 +1128,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, AfterViewInit, On
      * Scrolls to active item in the list
      *
      * @private
-     * @memberof PurchaseOrderPreviewComponent
+     * @memberof InvoicePreviewDetailsComponent
      */
     private scrollToActiveItem(): void {
         setTimeout(() => {

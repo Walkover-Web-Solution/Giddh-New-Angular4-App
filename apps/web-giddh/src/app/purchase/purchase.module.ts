@@ -12,10 +12,7 @@ import { DiscountControlModule } from '../theme/discount-control/discount-contro
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
-import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
 import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
-import { PurchaseOrderPreviewComponent } from './purchase-order-preview/purchase-order-preview.component';
-import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
@@ -28,7 +25,6 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
 import { DeleteVoucherConfirmationModalModule } from '../shared/delete-voucher-confirmation-modal/delete-voucher-confirmation-modal.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-send-email.module';
-import { RevisionHistoryModule } from '../shared/revision-history/revision-history.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
@@ -52,9 +48,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
 
 @NgModule({
     declarations: [
-        PurchaseOrderComponent,
-        CreatePurchaseOrderComponent,
-        PurchaseOrderPreviewComponent,
         PurchaseComponent,
         PurchaseRecordComponent,
         PurchaseAdvanceSearchComponent,
@@ -93,7 +86,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         DeleteVoucherConfirmationModalModule,
         GiddhDatepickerModule,
         PurchaseSendEmailModule,
-        RevisionHistoryModule,
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
