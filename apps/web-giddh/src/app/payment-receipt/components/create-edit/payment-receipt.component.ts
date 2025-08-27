@@ -13,7 +13,7 @@ import { CompanyActions } from "../../../actions/company.actions";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { InvoiceReceiptActions } from "../../../actions/invoice/receipt/receipt.actions";
 import { SalesActions } from "../../../actions/sales/sales.action";
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, SearchResultText, SubVoucher } from "../../../app.constant";
+import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, IOption, SearchResultText, SubVoucher } from "../../../app.constant";
 import { cloneDeep, find, isEqual, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
@@ -29,8 +29,6 @@ import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import { AppState } from "../../../store";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
-import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
-import { SalesShSelectComponent } from "../../../theme/sales-ng-virtual-select/sh-select.component";
 import { ServiceConfig } from "../../../services/service.config";
 
 @Component({
@@ -52,8 +50,6 @@ import { ServiceConfig } from "../../../services/service.config";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaymentReceiptComponent implements OnInit, OnDestroy {
-    /** Customer name dropdown instance */
-    @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: SalesShSelectComponent;
     /** Billing state instance */
     @ViewChild('billingState', { static: true }) billingState: ElementRef;
     /** Shipping state instance */
@@ -844,9 +840,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
             if (firstElementToFocus[0]) {
                 firstElementToFocus[0].focus();
-                if (this.customerNameDropDown && !this.isUpdateMode) {
-                    this.customerNameDropDown.show();
-                }
             }
         }, 200);
     }
@@ -1606,10 +1599,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * get state code using Tax number to prefill state
      *
      * @param {string} type billingDetails || shipping
-     * @param {SalesShSelectComponent} statesElement state input box
      * @memberof PaymentReceiptComponent
      */
-    public getStateCode(type: string, statesElement: SalesShSelectComponent): void {
+    public getStateCode(type: string, statesElement: any): void {
         let gstVal = cloneDeep(this.voucherFormData.account[type].taxNumber)?.toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.additional?.stateGstCode === gstVal.substring(0, 2));

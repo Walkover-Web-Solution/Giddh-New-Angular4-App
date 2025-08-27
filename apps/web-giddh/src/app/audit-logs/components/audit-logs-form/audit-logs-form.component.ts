@@ -4,7 +4,7 @@ import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
-import { API_COUNT_LIMIT } from '../../../app.constant';
+import { API_COUNT_LIMIT, IOption } from '../../../app.constant';
 import { cloneDeep, flatten, map, omit, union } from '../../../lodash-optimized';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { IForceClear } from '../../../models/api-models/Sales';
@@ -14,9 +14,8 @@ import { LogsService } from '../../../services/logs.service';
 import { SearchService } from '../../../services/search.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { AuditLogsSidebarVM } from './Vm';
+import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 
 @Component({
     selector: 'audit-logs-form',
@@ -97,7 +96,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     /** To date value of parent datepicker */
     @Input() public toDate: string;
     /** Entity sh-selct refence */
-    @ViewChild('selectEntity') public shSelectEntityReference: ShSelectComponent;
+    @ViewChild('selectEntity') public dropdownRef: ReactiveDropdownFieldComponent;
 
     constructor(private store: Store<AppState>,
         private companyService: CompanyService,
@@ -326,11 +325,9 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public focusOnEntity(): void {
-        if (this.shSelectEntityReference) {
+        if (this.dropdownRef) {
             setTimeout(() => {
-                if (this.shSelectEntityReference) {
-                    this.shSelectEntityReference.show('');
-                }
+                this.dropdownRef.openDropdownPanel();
             }, 1000);
         }
     }

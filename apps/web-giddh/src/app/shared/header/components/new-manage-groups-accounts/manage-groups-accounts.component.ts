@@ -10,8 +10,7 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 import { MasterComponent } from '../master/master.component';
 import { PageLeaveUtilityService } from 'apps/web-giddh/src/app/services/page-leave-utility.service';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { AccountArchivedStatusEnum } from '../../../Enums/common.enum';
+import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'app-manage-groups-accounts',

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
@@ -31,7 +30,6 @@ import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
     /** Instance of mat accordion */
     @ViewChild(MatAccordion) accordion: MatAccordion;
-    @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     /** Universal datepicker trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     public bsRangeValue: string[];
@@ -251,11 +249,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     public resetAdvanceSearchModal() {
         this.advanceSearchRequest.dataToSend.bsRangeValue = this.advanceSearchRequestClone.dataToSend.bsRangeValue;
-        if (this.dropDowns) {
-            this.dropDowns.forEach((el) => {
-                el.clear();
-            });
-        }
         let f: any = dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT);
         let t: any = dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT);
         this.bsRangeValue = [];

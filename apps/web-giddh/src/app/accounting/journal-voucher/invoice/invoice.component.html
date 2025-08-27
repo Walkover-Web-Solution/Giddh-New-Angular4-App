@@ -332,7 +332,7 @@
         <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
         <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
-        <accounting-virtual-list
+        <!-- <accounting-virtual-list
             [keydownUpInput]="keyUpDownEvent"
             [filterText]="filterByText"
             [options]="inputForList"
@@ -345,7 +345,7 @@
             (noResultsClicked)="showQuickAccountModal()"
             [multiple]="false"
             [ItemHeight]="33"
-        ></accounting-virtual-list>
+        ></accounting-virtual-list> -->
     </div>
 </div>
 

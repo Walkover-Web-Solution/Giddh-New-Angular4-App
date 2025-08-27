@@ -1,12 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone, AfterViewInit, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone, ChangeDetectorRef, HostListener } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf, combineLatest, BehaviorSubject } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { takeUntil, filter, take, delay, distinctUntilChanged, map } from 'rxjs/operators';
+import { takeUntil, filter, take, delay, map } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { PurchaseOrder, StateCode, Address } from '../../models/api-models/Purchase';
@@ -49,13 +48,11 @@ import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { OrganizationType } from '../../models/user-login-state';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SearchService } from '../../services/search.service';
-import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { CommonService } from '../../services/common.service';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -81,8 +78,7 @@ const SEARCH_TYPE = {
     ]
 })
 
-export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('vendorNameDropDown', { static: false }) public vendorNameDropDown: SalesShSelectComponent;
+export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     /* Billing state instance */
     @ViewChild('vendorBillingState') vendorBillingState: ElementRef;
     /* Shipping state instance */
@@ -97,14 +93,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     @ViewChild('poForm', { read: NgForm }) public poForm: NgForm;
     /* Bootstrap directive instance */
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
-    /* Select account instance */
-    @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
     /* Entry description instance */
     @ViewChildren('description') public description: QueryList<ElementRef>;
     /* Discount component instance */
     @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
-    /* Discount component instance */
-    @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
     /* Tax Control instance */
     @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
     /** Container element for all the entries */
@@ -592,7 +584,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.copiedAccountDetails = true;
                 }
                 this.loadTaxesAndDiscounts(0);
-                this.openProductDropdown();
             }
         });
 
@@ -728,16 +719,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
             }
             this.currentlyLoadedStockVariantIndex = null;
-        });
-    }
-
-    public ngAfterViewInit(): void {
-        this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
-            return firstItem?.first?.filter === nextItem?.first?.filter;
-        }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
-            if (this.purchaseOrder?.account?.uniqueName) {
-                queryChanges?.first?.show();
-            }
         });
     }
 
@@ -2191,7 +2172,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }, 200);
         }
         this.createEmbeddedViewAtIndex(this.purchaseOrder.entries?.length - 1);
-        this.openProductDropdown();
     }
 
     /**
@@ -2743,9 +2723,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.purchaseOrder = new PurchaseOrder();
         this.resetVendor();
-        if (this.vendorNameDropDown) {
-            this.vendorNameDropDown.clear();
-        }
         this.purchaseOrders = [];
         this.activeIndex = 0;
         this.isRcmEntry = false;
@@ -2808,9 +2785,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
             if (firstElementToFocus[0]) {
                 firstElementToFocus[0].focus();
-                if (this.vendorNameDropDown && !this.isUpdateMode) {
-                    this.vendorNameDropDown.show();
-                }
             }
         }, 200);
     }
@@ -3968,23 +3942,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (this.template) {
             const view = this.template.createEmbeddedView(context);
             this.container.insert(view);
-        }
-    }
-
-    /**
-     * Opens product dropdown
-     *
-     * @private
-     * @memberof CreatePurchaseOrderComponent
-     */
-    private openProductDropdown(): void {
-        if (this.purchaseOrder?.account?.uniqueName) {
-            setTimeout(() => {
-                const shSelectField: ShSelectComponent = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
-                if (shSelectField) {
-                    shSelectField.show();
-                }
-            }, 200);
         }
     }
 

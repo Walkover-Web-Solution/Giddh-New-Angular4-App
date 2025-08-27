@@ -17,15 +17,12 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, On
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IAccountsInfo } from '../../../../models/interfaces/account-info.interface';
 import { ToasterService } from '../../../../services/toaster.service';
-import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
 import { DaybookQueryRequest, ExportBodyRequest } from '../../../../models/api-models/DaybookRequest';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
-import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { differenceBy, each, flatten, flattenDeep, map, omit, union } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
@@ -35,6 +32,7 @@ import { PermissionActions } from 'apps/web-giddh/src/app/actions/permission/per
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ExportMasterDialogComponent } from '../export-master-dialog/export-master-dialog.component';
+import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'account-operations',
@@ -142,7 +140,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public flatGroupsOptions: IOption[];
     public isDebtorCreditor: boolean = false;
     public accountDetails: any = '';
-    @ViewChild('discountShSelect', { static: true }) public discountShSelect: ShSelectComponent;
     public selectedCompany: Observable<CompanyResponse>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public dropdownList = [];

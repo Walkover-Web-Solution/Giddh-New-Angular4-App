@@ -2837,11 +2837,12 @@
                                                                 </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
-                                                                <sh-select
-                                                                    id="stock-output-unit"
+                                                                <reactive-dropdown-field
+                                                                    [name]="'stockOutputUnit'"
                                                                     placeholder="Enter Qty"
+                                                                    [label]="'Combo Unit *'"
                                                                 >
-                                                                </sh-select>
+                                                                </reactive-dropdown-field>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -2869,12 +2870,12 @@
                                                             id="enter-qty"
                                                             placeholder="Enter Qty"
                                                         ></text-field>
-                                                        <sh-select
-                                                            id="select-stock-unit"
+                                                        <reactive-dropdown-field
+                                                            [name]="'selectStockUnit'"
                                                             class="ml-3"
                                                             placeholder="Select Unit"
                                                         >
-                                                        </sh-select>
+                                                        </reactive-dropdown-field>
                                                         <button mat-icon-button role="button" type="button">
                                                             <i class="icon-plus pd cp"></i>
                                                         </button>
@@ -2913,12 +2914,13 @@
                                                                     placeholder="All Accounts Selected"
                                                                 ></textarea>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6">
-                                                                <label>Applicable Tax </label>
-                                                            </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select id="applicable-tax" placeholder="Select Tax">
-                                                                </sh-select>
+                                                                <reactive-dropdown-field 
+                                                                    [name]="'applicableTax'" 
+                                                                    placeholder="Select Tax"
+                                                                    [label]="'Applicable Tax'"
+                                                                >
+                                                                </reactive-dropdown-field>
                                                                 <p class="mt-1 font-15">
                                                                     <mat-checkbox
                                                                         color="primary"
@@ -3015,16 +3017,14 @@
                                                                     disabled
                                                                 ></textarea>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6">
-                                                                <label>Applicable Tax </label>
-                                                            </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select
-                                                                    id="sales-applicable-tax"
+                                                                <reactive-dropdown-field
+                                                                    [name]="'salesApplicableTax'"
                                                                     placeholder="Select Tax"
-                                                                    disabled
+                                                                    [label]="'Applicable Tax'"
+                                                                    [disabled]="true"
                                                                 >
-                                                                </sh-select>
+                                                                </reactive-dropdown-field>
                                                                 <p class="mt-1 font-15">
                                                                     <mat-checkbox
                                                                         color="primary"
@@ -3465,7 +3465,11 @@
                                             <div class="col-xl-2 col-md-6">
                                                 <label> Available on variant </label>
                                                 <!-- All available variant list show with checkbox -->
-                                                <sh-select placeholder="" id="combo-addon-available"></sh-select>
+                                                <reactive-dropdown-field 
+                                                    [name]="'comboAddonAvailable'"
+                                                    placeholder=""
+                                                    [label]="'Available on variant'"
+                                                ></reactive-dropdown-field>
                                             </div>
                                         </div>
                                         <div>
@@ -3503,7 +3507,11 @@
                                                     <div class="variant-name-field mr-b15">
                                                         <label> Variant Name </label>
                                                         <!-- All variant list will show in dropdown -->
-                                                        <sh-select placeholder="" id="combo-variant-name"></sh-select>
+                                                        <reactive-dropdown-field 
+                                                            [name]="'comboVariantName'"
+                                                            placeholder=""
+                                                            [label]="'Variant Name'"
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                     <div>
                                                         <label class="d-block hide-label-on-mobile"> &nbsp; </label>
@@ -3776,22 +3784,22 @@
                                     ></text-field>
                                 </td>
                                 <td data-title="Inventory Type">
-                                    <sh-select placeholder="Select" readonly></sh-select>
+                                    <reactive-dropdown-field [name]="'inventoryType'" placeholder="Select" [disabled]="true"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Inventory Unit">
-                                    <sh-select placeholder="Select"></sh-select>
+                                    <reactive-dropdown-field [name]="'inventoryUnit'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Parent Group">
-                                    <sh-select placeholder="Select"></sh-select>
+                                    <reactive-dropdown-field [name]="'parentGroup'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Inventory Account">
-                                    <sh-select placeholder="Select"></sh-select>
+                                    <reactive-dropdown-field [name]="'inventoryAccount'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Low Stock Alert">
-                                    <sh-select placeholder="Select"></sh-select>
+                                    <reactive-dropdown-field [name]="'lowStockAlert'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Opening Qty">
-                                    <sh-select placeholder="Select"></sh-select>
+                                    <reactive-dropdown-field [name]="'openingQty'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Opening Amount">
                                     <text-field
@@ -3802,28 +3810,28 @@
                                     ></text-field>
                                 </td>
                                 <td data-title="Purchase Account Name">
-                                    <sh-select placeholder="Select" id="purchase-account-name"></sh-select>
+                                    <reactive-dropdown-field [name]="'purchaseAccountName'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Linked Tax">
-                                    <sh-select placeholder="Select" id="purchase-linked-tax"></sh-select>
+                                    <reactive-dropdown-field [name]="'purchaseLinkedTax'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Purchase Unit">
-                                    <sh-select placeholder="Select" id="purchase-unit"></sh-select>
+                                    <reactive-dropdown-field [name]="'purchaseUnit'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Purchase Rate">
-                                    <sh-select placeholder="Select" id="purchase-rate"></sh-select>
+                                    <reactive-dropdown-field [name]="'purchaseRate'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Sales Account Name">
-                                    <sh-select placeholder="Select" id="sales-account-name"></sh-select>
+                                    <reactive-dropdown-field [name]="'salesAccountName'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Linked Tax">
-                                    <sh-select placeholder="Select" id="sales-linked-tax"></sh-select>
+                                    <reactive-dropdown-field [name]="'salesLinkedTax'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Sales unit">
-                                    <sh-select placeholder="Select" id="sales-unit"></sh-select>
+                                    <reactive-dropdown-field [name]="'salesUnit'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="Sales Rate">
-                                    <sh-select placeholder="Select" id="sales-rate"></sh-select>
+                                    <reactive-dropdown-field [name]="'salesRate'" placeholder="Select"></reactive-dropdown-field>
                                 </td>
                                 <td data-title="HSN/SAC Code">
                                     <text-field

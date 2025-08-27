@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChildren, TemplateRef, Inject, ViewChild } from '@angular/core';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { ServiceConfig } from '../../../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ASIDE_PANE_CONFIG } from '../../../app.constant';
@@ -19,8 +18,6 @@ export class AdjustGroupComponent implements OnInit {
     public asideMenuStateForInventoryAdjustmentDialogRef: MatDialogRef<any>;
     /* This will store modal reference */
     public dialogRef: MatDialogRef<any>;
-    /* sh-select view child */
-    @ViewChildren('selectAccount') public selectAccount: ShSelectComponent;
 
     constructor(
         @Inject(ServiceConfig) private serviceConfig,

@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChildren, EventEmitter, Output, Inject } from '@angular/core';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { Component, OnInit, EventEmitter, Output, Inject } from '@angular/core';
 import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
@@ -19,8 +18,6 @@ export class CreateComboComponent implements OnInit {
     }
     /* this will store image path*/
     public imgPath: string = '';
-
-    @ViewChildren('unitNameType') public unitNameType: ShSelectComponent;
     constructor(@Inject(ServiceConfig) private serviceConfig ){}
     public ngOnInit() {
         /* added image path */

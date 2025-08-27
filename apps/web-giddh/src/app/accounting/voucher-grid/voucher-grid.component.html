@@ -291,7 +291,7 @@
     <div class="sidebar-list form-control" [hidden]="!showLedgerAccountList">
         <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
         <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
-        <accounting-virtual-list
+        <!-- <accounting-virtual-list
             [keydownUpInput]="keyUpDownEvent"
             [filterText]="filterByText"
             [options]="inputForList"
@@ -305,7 +305,7 @@
             [multiple]="false"
             [ItemHeight]="33"
             (noOptionsFound)="onNoAccountFound($event)"
-        ></accounting-virtual-list>
+        ></accounting-virtual-list> -->
     </div>
 </div>
 

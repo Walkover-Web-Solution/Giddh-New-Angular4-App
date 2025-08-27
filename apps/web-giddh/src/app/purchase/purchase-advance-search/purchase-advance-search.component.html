@@ -56,15 +56,15 @@
                     <div class="col-sm-8 col-12">
                         <div class="total-amount row">
                             <div class="col-sm-8 col-12 mr-b15">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [placeholder]="commonLocaleData?.app_select_range"
-                                    name="grandTotal"
+                                    [name]="'grandTotal'"
                                     [options]="filtersForAmount"
                                     [(ngModel)]="purchaseOrderPostRequest.grandTotalOperation"
-                                    [ItemHeight]="33"
-                                    [defaultValue]="selectedGrandTotalOperator"
+                                    [labelValue]="selectedGrandTotalOperator"
+                                    [label]="localeData?.grand_total"
                                 >
-                                </sh-select>
+                                </reactive-dropdown-field>
                             </div>
                             <div class="col-sm-4 col-12 mr-b15">
                                 <input
@@ -81,19 +81,15 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4 col-12">
-                        <label>{{ localeData?.select_status }}</label>
-                    </div>
                     <div class="col-sm-8 col-12">
-                        <sh-select
+                        <reactive-dropdown-field
                             [placeholder]="localeData?.select_status"
-                            name="statuses"
+                            [name]="'statuses'"
                             [options]="filtersForStatus"
-                            [multiple]="true"
                             [(ngModel)]="purchaseOrderPostRequest.statuses"
-                            [ItemHeight]="33"
+                            [label]="localeData?.select_status"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                 </div>
             </div>

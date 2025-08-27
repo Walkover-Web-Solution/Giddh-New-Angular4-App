@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { Observable, ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityLogsService } from '../services/activity-logs.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS } from '../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { takeUntil } from 'rxjs/operators';
 import { ActivityLogsJsonComponent } from './components/activity-logs-json/activity-logs-json.component';
@@ -10,7 +10,6 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../services/general.service';
 import { Router } from '@angular/router';
-import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LogsService } from '../services/logs.service';
 import { CompanyService } from '../services/company.service';
 import { select, Store } from '@ngrx/store';

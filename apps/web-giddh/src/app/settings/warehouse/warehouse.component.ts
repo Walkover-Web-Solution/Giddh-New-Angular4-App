@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { PageChangedEvent, PaginationComponent } from 'ngx-bootstrap/pagination';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CommonActions } from '../../actions/common.actions';
@@ -79,8 +78,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
     public imgPath2: string = '';
-    /** Warehouse pagination instance */
-    @ViewChild('warehousePagination', { static: true }) warehousePagination: PaginationComponent;
     /** Warehouse search field instance */
     @ViewChild('searchWarehouse', { static: false }) public searchWarehouse: any;
     /** Aside Create Address Template Reference */
@@ -376,11 +373,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     totalPages: warehouseData.totalPages,
                 }
                 this.showLoader = false;
-                setTimeout(() => {
-                    if (this.warehousePagination) {
-                        this.warehousePagination.writeValue(warehouseData.page);
-                    }
-                });
             }
         });
     }

@@ -14,7 +14,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
@@ -41,7 +41,6 @@ import { SettingsUtilityService } from '../../../settings/services/settings-util
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
 import { UpdateLedgerVm } from './update-ledger.vm';

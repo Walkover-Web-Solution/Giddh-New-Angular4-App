@@ -9,11 +9,11 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { GroupsWithAccountsResponse } from 'apps/web-giddh/src/app/models/api-models/GroupsWithAccounts';
 import { LedgerActions } from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
 import { States } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flatten-groups-accounts-detail.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
+import { IOption } from '../../app.constant';
+import { ReactiveDropdownFieldComponent } from '../form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 
 @Component({
     selector: 'quickAccount',
@@ -122,7 +122,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    public getStateCode(gstForm: UntypedFormGroup, statesEle: ShSelectComponent) {
+    public getStateCode(gstForm: UntypedFormGroup, statesEle: ReactiveDropdownFieldComponent) {
         let gstVal: string = gstForm.get('gstNumber')?.value;
         if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {

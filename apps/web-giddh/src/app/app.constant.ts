@@ -720,3 +720,13 @@ export const Configuration = {
     'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
     'RAZORPAY_KEY': RAZORPAY_KEY
 };
+
+/** Holds Dropdown label value interface */
+export interface IOption {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    isHilighted?: boolean;
+    additional?: any;
+    subVoucher?: string;
+}

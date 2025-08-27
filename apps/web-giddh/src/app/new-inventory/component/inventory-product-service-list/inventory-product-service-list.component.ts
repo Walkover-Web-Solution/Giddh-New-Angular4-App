@@ -1,5 +1,4 @@
-import { Component, Inject, OnInit, ViewChildren } from "@angular/core";
-import { ShSelectComponent } from "../../../theme/ng-virtual-select/sh-select.component";
+import { Component, Inject, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";

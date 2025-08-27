@@ -649,11 +649,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     public resetAdvanceSearch() {
         this.showResetAdvanceSearchIcon = false;
-        if (this.advanceSearchComponent && this.advanceSearchComponent.allShSelect) {
-            this.advanceSearchComponent.allShSelect.forEach(f => {
-                f.clear();
-            });
-        }
         if (window.localStorage) {
             localStorage.removeItem(this.localStorageSelectedDate);
         }

@@ -13,20 +13,17 @@
     <div class="modal-body font-15">
         <div class="clearfix pd-1">
             <div class="row">
-                <label class="col-md-3">{{ commonLocaleData?.app_total_amount }}</label>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <sh-select
+                        <reactive-dropdown-field
                             class="text-left dropdown-arrow"
-                            name="totalAmount"
+                            [name]="'totalAmount'"
                             [(ngModel)]="searchModel.totalAmountFilter.selectedValue"
                             [placeholder]="commonLocaleData?.app_select"
-                            [notFoundLink]="false"
-                            [multiple]="false"
-                            [ItemHeight]="33"
+                            [label]="commonLocaleData?.app_total_amount"
                             [options]="searchModel.totalAmountFilter.filterValues"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -42,20 +39,17 @@
             </div>
 
             <div class="row">
-                <label class="col-md-3">{{ localeData?.unused_amount }}</label>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <sh-select
+                        <reactive-dropdown-field
                             class="text-left dropdown-arrow"
-                            name="unusedAmount"
+                            [name]="'unusedAmount'"
                             [(ngModel)]="searchModel.unusedAmountFilter.selectedValue"
                             [placeholder]="commonLocaleData?.app_select"
-                            [notFoundLink]="false"
-                            [multiple]="false"
-                            [ItemHeight]="33"
+                            [label]="localeData?.unused_amount"
                             [options]="searchModel.unusedAmountFilter.filterValues"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="col-sm-4">

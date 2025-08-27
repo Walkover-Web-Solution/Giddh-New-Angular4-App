@@ -26,7 +26,6 @@ import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { ServiceModule } from './services/service.module';
 import { WindowRef } from './shared/helpers/window.object';
 import { reducers } from './store';
-import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarModule } from './theme/snackbar/snackbar.module';
@@ -154,7 +153,6 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         ServiceModule.forRoot(),
         ActionModule.forRoot(),
         DecoratorsModule.forRoot(),
-        ShSelectModule,
         ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
         StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
         ScrollingModule,
