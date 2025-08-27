@@ -4,7 +4,6 @@ import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purcha
 import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrJsonDownloadRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
@@ -26,18 +25,7 @@ import { BreakpointObserver } from "@angular/cdk/layout";
     // tslint:disable-next-line:component-selector
     selector: 'filing-header',
     templateUrl: 'filing-header.component.html',
-    styleUrls: ['filing-header.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in <=> out', animate('400ms ease-in-out')),
-        ])
-    ]
+    styleUrls: ['filing-header.component.scss']
 })
 export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public currentPeriod: any = null;

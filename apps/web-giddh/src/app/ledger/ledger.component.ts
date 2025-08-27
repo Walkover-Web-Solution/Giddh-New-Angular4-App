@@ -1,5 +1,4 @@
 import { BankIntegrationDialogComponent } from './../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -70,18 +69,6 @@ import { IOption } from '../theme/ng-select/option.interface';
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
     providers: [LedgerComponentStore, BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -134,8 +121,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = true;
     public closingBalanceBeforeReconcile: { amount: number, type: string };
     public reconcileClosingBalanceForBank: { amount: number, type: string };
-    // aside menu properties
-    public asideMenuState: string = 'out';
     public needToShowLoader: boolean = true;
     public entryUniqueNamesForBulkAction: string[] = [];
     public searchText: string = '';

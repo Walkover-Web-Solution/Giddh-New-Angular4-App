@@ -1,6 +1,5 @@
 import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ReconcileActionState } from '../../../../store/gst-reconcile/GstReconcile.reducer';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from '../../../../models/api-models/GstReconcile';
 import { AppState } from '../../../../store';
@@ -15,18 +14,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 @Component({
     selector: 'reconcile',
     templateUrl: './reconcilation.component.html',
-    styleUrls: ['./reconcilation.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in <=> out', animate('400ms ease-in-out')),
-        ])
-    ]
+    styleUrls: ['./reconcilation.component.scss']
 })
 export class ReconcileComponent implements OnInit, OnDestroy {
     @Input() public data: GstReconcileInvoiceDetails = null;
