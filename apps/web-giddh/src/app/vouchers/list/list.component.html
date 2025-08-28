@@ -5845,7 +5845,8 @@
             <!-- setting-content-end -->
 
             <!-- template-content-start -->
-            <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
+            <!-- <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1"> -->
+                <mat-tab [label]="localeData?.tabs?.templates" *ngIf="false">
                 <div class="pd-t15" *ngIf="activeModule === 'templates'">
                     <edit-invoice></edit-invoice>
                 </div>
