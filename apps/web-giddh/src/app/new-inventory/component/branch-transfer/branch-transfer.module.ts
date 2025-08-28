@@ -45,7 +45,6 @@ import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-
         ClickOutsideModule,
         MatFormFieldModule,
         MatInputModule,
-
         GiddhPageLoaderModule,
         CurrencyModule,
         MatSortModule,

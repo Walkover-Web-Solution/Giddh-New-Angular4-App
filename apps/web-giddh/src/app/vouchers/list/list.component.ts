@@ -1447,7 +1447,7 @@ constructor(
      *
      * @param {*} days
      * @returns {string}
-     * @memberof InvoicePreviewComponent
+     * @memberof VoucherListComponent
      */
     public getOverdueDaysText(days: any): string {
         let overdueDays = this.localeData?.overdue_days;
@@ -2102,7 +2102,7 @@ constructor(
     * To get all advance adjusted data
     *
     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
-    * @memberof InvoicePreviewComponent
+    * @memberof VoucherListComponent
     */
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         this.closeAdvanceReceiptDialog();

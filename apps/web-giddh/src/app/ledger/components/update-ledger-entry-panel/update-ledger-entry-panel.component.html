@@ -2001,28 +2001,6 @@
                                                     ></input-field>
                                                 </div>
                                             </div>
-                                            <!-- <div
-                                            *ngIf="
-                                                item.voucherType === 'receipt' &&
-                                                item.subVoucher === 'ADVANCE_RECEIPT' &&
-                                                voucherApiVersion !== 2
-                                            "
-                                        >
-                                            <div class="form-group tax-width">
-                                                <label>{{ commonLocaleData?.app_tax }}</label>
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    id="update-ledger-voucher-tax"
-                                                    class="form-control mr-b1 mat-field-border"
-                                                    decimalDigitsDirective
-                                                    [mask]="vm.inputMaskFormat"
-                                                    [prefix]="item.accountCurrency?.symbol"
-                                                    [(ngModel)]="item.calculatedTaxAmount"
-                                                    disabled
-                                                />
-                                            </div>
-                                        </div> -->
                                         </div>
                                     </div>
                                     <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">
@@ -2167,71 +2145,6 @@
                                                                 </a>
                                                             </ng-template>
                                                         </reactive-dropdown-field>
-                                                        <!-- <sh-select
-                                                        *ngIf="voucherApiVersion !== 2"
-                                                        id="update-ledger-invoice-voucher-number"
-                                                        [options]="invoiceList"
-                                                        [placeholder]="commonLocaleData?.app_select_accounts"
-                                                        [(ngModel)]="selectedInvoice"
-                                                        [notFoundLink]="false"
-                                                        [forceClearReactive]="forceClear$ | async"
-                                                        [class.disabled-ledger]="
-                                                            !isPettyCash &&
-                                                            (currentOrganizationType === 'COMPANY' ||
-                                                                isConsolidatedBranch) &&
-                                                            branches?.length > 1
-                                                        "
-                                                        (selected)="creditNoteInvoiceSelected($event)"
-                                                        [multiple]="false"
-                                                        [disabled]="
-                                                            isEinvoiceGenerated ||
-                                                            (!isPettyCash &&
-                                                                (currentOrganizationType === 'COMPANY' ||
-                                                                    isConsolidatedBranch) &&
-                                                                branches?.length > 1)
-                                                        "
-                                                        [ItemHeight]="67"
-                                                        [showClear]="false"
-                                                    >
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <a href="javascript:void(0)" class="list-item sh-template">
-                                                                <div class="item">
-                                                                    {{
-                                                                        (vm.selectedLedger?.voucher?.shortCode ===
-                                                                            "pur" ||
-                                                                            vm.selectedLedger?.voucher?.shortCode ===
-                                                                                "purchase") &&
-                                                                        !option.label
-                                                                            ? commonLocaleData?.app_not_available
-                                                                            : option.label
-                                                                    }}
-                                                                </div>
-                                                                <div class="item-unique">
-                                                                    ({{ localeData?.dated }}:
-                                                                    {{
-                                                                        option.additional?.date ??
-                                                                            option.additional?.voucherDate
-                                                                    }})
-                                                                </div>
-                                                                <div class="item-unique">
-                                                                    ({{ commonLocaleData?.app_amount }}:
-                                                                    <span class="d-inline-flex">
-                                                                        <amount-field
-                                                                            [amount]="
-                                                                                voucherApiVersion === 2
-                                                                                    ? option.additional
-                                                                                          ?.unadjustedAmount
-                                                                                          ?.amountForAccount
-                                                                                    : option.additional?.balanceDue
-                                                                                          ?.amountForAccount
-                                                                            "
-                                                                        >
-                                                                        </amount-field>
-                                                                    </span>
-                                                                </div>
-                                                            </a>
-                                                        </ng-template>
-                                                    </sh-select> -->
                                                     </div>
                                                 </td>
                                                 <td
