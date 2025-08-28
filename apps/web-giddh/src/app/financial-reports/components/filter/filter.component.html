@@ -25,18 +25,14 @@
                         "
                     >
                         <div class="form-group">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="currentCompanyBranches"
                                 formControlName="branchUniqueName"
                                 class="company-branch-dropdown"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
-                                (selected)="handleBranchChange($event)"
-                                [isFilterEnabled]="true"
+                                (selectedOption)="handleBranchChange($event)"
+                                [enableDynamicSearch]="true"
                                 [placeholder]="commonLocaleData?.app_select_entity"
-                                [fixedValue]="currentBranch?.name"
-                                [forceClearReactive]="forceClear$ | async"
+                                [labelValue]="currentBranch?.name"
                             >
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
@@ -68,36 +64,30 @@
                                         </a>
                                     </ng-container>
                                 </ng-template>
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="form-group" *ngIf="showLabels">
                         <div class="form-group">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="dateOptions"
-                                (selected)="dateOptionIsSelected($event)"
+                                (selectedOption)="dateOptionIsSelected($event)"
                                 class="company-branch-dropdown"
-                                formControlName="selectedDateOption"
-                                [isFilterEnabled]="true"
-                                [placeholder]="commonLocaleData?.app_select_option"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
+                                [placeholder]="commonLocaleData?.app_select_date_range"
+                                [labelValue]="selectedDateOption?.label"
                             >
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="form-group" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
                         <div class="form-group">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="financialOptions"
                                 formControlName="selectedFinancialYearOption"
-                                [isFilterEnabled]="true"
-                                [placeholder]="commonLocaleData?.app_select_option"
-                                [showClear]="false"
-                                (selected)="selectFinancialYearOption($event)"
-                                [ItemHeight]="33"
-                            ></sh-select>
+                                [enableDynamicSearch]="true"
+                                class="company-branch-dropdown"
+                                [placeholder]="commonLocaleData?.app_select_financial_year"
+                            ></reactive-dropdown-field>
                         </div>
                     </div>
                     <div
@@ -160,20 +150,14 @@
                             *ngIf="!isProjectWiseAccounting && tags?.length"
                         >
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="tags"
-                                name="selectedTag"
+                                [name]="'selectedTag'"
                                 formControlName="tagName"
-                                [isFilterEnabled]="true"
-                                (selected)="onTagSelected($event)"
-                                [placeholder]="commonLocaleData?.app_select_tag"
-                                [ItemHeight]="35"
-                                [notFoundLink]="false"
-                                (noResultsClicked)="toggleTagsModal()"
-                                [showNotFoundLinkAsDefault]="false"
-                                [width]="'170px'"
+                                class="company-branch-dropdown"
+                                [placeholder]="localeData?.select_tag"
                             >
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                         <!-- Filter by Tag -->
                         <div class="form-group pull-left">
@@ -299,17 +283,13 @@
                     "
                 >
                     <div class="form-group mb-0">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="currentCompanyBranches"
                             formControlName="branchUniqueName"
                             class="company-branch-dropdown w-100"
-                            [showClear]="false"
-                            [ItemHeight]="33"
-                            width="100%"
-                            (selected)="handleBranchChange($event)"
-                            [isFilterEnabled]="true"
+                            (selectedOption)="handleBranchChange($event)"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.name"
+                            [labelValue]="currentBranch?.name"
                         >
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
@@ -342,38 +322,33 @@
                                     </a>
                                 </ng-container>
                             </ng-template>
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="form-group mr-0 mb-0" *ngIf="showLabels">
                     <div class="form-group">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="dateOptions"
-                            (selected)="dateOptionIsSelected($event)"
+                            (selectedOption)="dateOptionIsSelected($event)"
                             class="company-branch-dropdown w-100"
                             formControlName="selectedDateOption"
-                            [isFilterEnabled]="true"
+                            [enableDynamicSearch]="true"
                             [placeholder]="commonLocaleData?.app_select_option"
-                            [showClear]="false"
-                            [ItemHeight]="33"
-                            width="100%"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                 </div>
 
                 <div class="form-group mb-0" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
                     <div class="form-group">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="financialOptions"
                             formControlName="selectedFinancialYearOption"
-                            [isFilterEnabled]="true"
+                            [enableDynamicSearch]="true"
                             [placeholder]="commonLocaleData?.app_select_option"
-                            [showClear]="false"
-                            (selected)="selectFinancialYearOption($event)"
-                            [ItemHeight]="33"
+                            (selectedOption)="selectFinancialYearOption($event)"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                 </div>
                 <div
@@ -402,20 +377,18 @@
             <div class="form-group" *ngIf="!showLoader">
                 <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
                     <i class="glyphicon glyphicon-triangle-bottom"></i>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="tags"
-                        name="selectedTag"
+                        [name]="'selectedTag'"
                         formControlName="tagName"
-                        [isFilterEnabled]="true"
-                        (selected)="onTagSelected($event)"
+                        [enableDynamicSearch]="true"
+                        (selectedOption)="onTagSelected($event)"
                         [placeholder]="commonLocaleData?.app_select_tag"
-                        [ItemHeight]="35"
-                        [notFoundLink]="false"
-                        (noResultsClicked)="toggleTagsModal()"
-                        [showNotFoundLinkAsDefault]="false"
-                        [width]="'170px'"
+                        [createNewText]="false"
+                       (createOption)="toggleTagsModal()"
+                        class="w-170"
                     >
-                    </sh-select>
+                    </reactive-dropdown-field>
                 </div>
                 <!-- Filter by Tag -->
                 <div class="form-group pull-left d-flex">

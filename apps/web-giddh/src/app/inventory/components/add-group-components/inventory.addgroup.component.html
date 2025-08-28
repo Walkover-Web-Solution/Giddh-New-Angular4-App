@@ -78,17 +78,16 @@
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="form-group">
                                         <label>Parent Group</label>
-                                        <sh-select
+                                        <reactive-dropdown-field
                                             [options]="groupsData$ | async"
                                             formControlName="parentStockGroupUniqueName"
                                             [disabled]="!addGroupForm.get('isSubGroup')?.value"
                                             [placeholder]="'Select Parent Group'"
-                                            [multiple]="false"
-                                            (selected)="groupSelected($event)"
-                                            [ItemHeight]="33"
-                                            [forceClearReactive]="forceClear$ | async"
-                                            [isRequired]="true"
-                                        ></sh-select>
+                                            (selectedOption)="groupSelected($event)"
+                                            [labelValue]="selectedGroup?.label"
+                                            [required]="true"
+                                            [name]="'parentStockGroupUniqueName'"
+                                        ></reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="form-group col-xs-6 col-sm-6">

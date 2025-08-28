@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import * as dayjs from 'dayjs';
@@ -13,8 +12,6 @@ import * as dayjs from 'dayjs';
 export class NewInventoryComponent {
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideInventorySidebarMenuState: boolean = true;
-    /* More button dropdown */
-    public moreBtnDropwon: BsDropdownDirective;
     /* show search input field full width */
     public inputFullWidth: boolean = true;
     /* show search input field full width */

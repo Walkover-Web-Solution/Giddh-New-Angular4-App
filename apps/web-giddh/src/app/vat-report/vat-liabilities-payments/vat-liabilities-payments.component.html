@@ -35,21 +35,21 @@
                     </div>
                 </div>
                 <div class="col flex-grow-0" *ngIf="taxesList?.length > 1">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="commonLocaleData?.app_vat"
                         [options]="taxesList"
                         (selectedOption)="taxNumberSelected($event)"
                         [placeholder]="commonLocaleData?.app_enter_vat"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0" *ngIf="(isCompanyMode || isConsolidatedBranch) && isMultipleBranch">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="commonLocaleData?.app_branch"
                         [options]="branchList"
                         (selectedOption)="branchSelected($event)"
                         [placeholder]="commonLocaleData?.app_select_branch"
-                    ></dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
                     <button mat-raised-button color="primary" (click)="getLiabilitiesPayment()">

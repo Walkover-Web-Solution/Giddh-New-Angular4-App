@@ -16,7 +16,6 @@ import {
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
 import { combineLatest, BehaviorSubject, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
@@ -27,7 +26,7 @@ import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,

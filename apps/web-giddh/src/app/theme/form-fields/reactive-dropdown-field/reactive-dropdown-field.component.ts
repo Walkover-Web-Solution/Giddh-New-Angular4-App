@@ -1,8 +1,8 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
-import { IOption } from "../../ng-virtual-select/sh-options.interface";
 import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, of, skip, takeUntil } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { IOption } from "../../../app.constant";
 
 @Component({
     selector: "reactive-dropdown-field",

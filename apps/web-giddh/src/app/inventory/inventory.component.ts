@@ -3,13 +3,11 @@ import { CompanyResponse, BranchFilterRequest } from '../models/api-models/Compa
 import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material/tabs';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, TemplateRef, AfterViewInit, ElementRef } from '@angular/core';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -24,7 +22,6 @@ import { IGroupsWithStocksHierarchyMinItem } from "../models/interfaces/groups-w
 import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
-import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
@@ -44,18 +41,14 @@ export const IsyncData = [
 @Component({
     selector: 'inventory',
     templateUrl: './inventory.component.html',
-    styleUrls: ['./inventory.component.scss'],
-    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
+    styleUrls: ['./inventory.component.scss']
 })
 export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('branchModal', { static: true }) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: ModalDirective;
     @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
     /** Angular Material tab group reference for inventory navigation tabs */
     @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: MatTabGroup;
     /** Warehouse filter instance */
-    @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
+    @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ElementRef;
     /** Instance of branch transfer template */
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
     /** Dialog reference */
@@ -335,15 +328,10 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    public openAddBranchModal() {
-        this.branchModal?.show();
-    }
-
     public hideAddBranchModal() {
         this.isAllSelected$ = observableOf(false);
         this.selectedCompaniesUniquename = [];
         this.selectedCompaniesName = [];
-        this.branchModal.hide();
     }
 
     public selectAllCompanies(ev) {
@@ -386,7 +374,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public removeBranch(branchUniqueName, companyName) {
         this.selectedBranch = branchUniqueName;
         this.confirmationMessage = `Are you sure want to remove <b>${companyName}</b>?`;
-        this.confirmationModal?.show();
     }
 
     public onUserConfirmation(yesOrNo) {
@@ -395,7 +382,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.selectedBranch = null;
         }
-        this.confirmationModal.hide();
     }
 
     public getAllBranches() {
@@ -518,9 +504,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     warehouse = warehouseData.formattedWarehouses[0]?.uniqueName;
                 }
                 const currentWarehouse = warehouseData.formattedWarehouses.find((data) => data?.uniqueName === warehouse || data?.value === warehouse);
-                if (currentWarehouse && this.warehouseFilter) {
-                    this.warehouseFilter.filter = currentWarehouse.label;
-                }
                 this.currentBranchAndWarehouseFilterValues = { warehouse, branch: branchDetails?.uniqueName, isCompany: branchDetails.isCompany };
             }
             this.warehouses = warehouseData.formattedWarehouses;

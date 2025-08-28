@@ -29,16 +29,16 @@
                     "
                     class="mr-r15"
                 >
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [name]="'branchName'"
                         [label]="commonLocaleData?.app_entity"
                         [placeholder]="commonLocaleData?.app_select_entity"
                         [options]="currentCompanyBranches"
                         (selectedOption)="currentBranch.uniqueName = $event?.value; handleBranchChange($event)"
-                        [defaultValue]="currentBranch?.name"
+                        [labelValue]="currentBranch?.name"
                         [required]="true"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                 </div>
                 <div> 
                     <reactive-dropdown-field
@@ -55,16 +55,16 @@
                 </div>
                 <ng-container *ngIf="reportForm?.get('groupBy')?.value === groupByEnum.Duration; else salesPersonBlock">
                     <div class="mr-r15 dropdown-width">
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [name]="'financialYear'"
                             [label]="commonLocaleData?.app_financial_year"
                             [placeholder]="activeFinacialYr?.uniqueName"
                             [options]="financialOptions"
                             (selectedOption)="currentActiveFinacialYear.value =  $event?.value; selectFinancialYearOption($event)"
-                            [defaultValue]="activeFinacialYr?.uniqueName"
+                            [labelValue]="activeFinacialYr?.uniqueName"
                             [required]="true"
                         >
-                        </dropdown-field>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="mr-r15 custom-mat-form-field">
                         <mat-form-field appearance="outline" class="duration-dropdown">

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmModalModule } from '../../../theme';
-import { ShSelectModule } from '../../../theme/ng-virtual-select/sh-select.module';
+import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
 import { InventoryAddStockComponent } from './inventory.addstock.component';
 import { DecimalDigitsModule } from '../../../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { LaddaModule } from 'angular2-ladda';
@@ -18,7 +18,7 @@ import { MatRadioModule } from '@angular/material/radio';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        ShSelectModule,
+        FormFieldsModule,
         ConfirmModalModule,
         DecimalDigitsModule,
         MatSlideToggleModule,

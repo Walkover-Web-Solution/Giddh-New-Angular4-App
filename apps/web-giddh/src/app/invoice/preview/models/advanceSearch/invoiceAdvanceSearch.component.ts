@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { MatMenuTrigger } from '@angular/material/menu';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { InvoiceFilterClassForInvoicePreview } from '../../../../models/api-models/Invoice';
-import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../../shared/helpers/defaultDateFormat';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -27,7 +26,6 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
 
     @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChildren(ShSelectComponent) public allShSelect: ShSelectComponent[];
 
     public filtersForEntryTotal: IOption[] = [];
     public filtersForAmount: IOption[] = [];

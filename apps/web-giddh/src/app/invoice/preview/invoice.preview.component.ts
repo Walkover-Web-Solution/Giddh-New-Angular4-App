@@ -28,7 +28,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../services/invoice.service';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -95,13 +94,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public resetRefreshPurchaseBill: EventEmitter<any> = new EventEmitter();
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
-    public bsConfig: Partial<BsDatepickerConfig> = {
-        showWeekNumbers: false,
-        dateInputFormat: GIDDH_DATE_FORMAT,
-        rangeInputFormat: GIDDH_DATE_FORMAT,
-        containerClass: 'theme-green myDpClass'
-    };
+    public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public base64Data: string;
     public selectedInvoice: ReceiptItem;
     public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
@@ -1422,10 +1415,7 @@ public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFil
 
     public resetAdvanceSearch(): void {
         this.showAdvanceSearchIcon = false;
-        if (this.advanceSearchComponent && this.advanceSearchComponent.allShSelect) {
-            this.advanceSearchComponent.allShSelect.forEach(f => {
-                f?.clear();
-            });
+        if (this.advanceSearchComponent) {
             this.voucherNumberInput.reset();
             this.invoiceSearchRequest.q = '';
             this.accountUniqueNameInput.reset();

@@ -83,7 +83,7 @@
                                 <div class="row row-gap">
                                     <div class="col-lg-6">
                                         <div *ngIf="transferType === 'senders'">
-                                            <dropdown-field
+                                            <reactive-dropdown-field
                                                 (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
                                                 [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
@@ -109,7 +109,7 @@
                                                 "
                                                 [required]="true"
                                             >
-                                            </dropdown-field>
+                                            </reactive-dropdown-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
@@ -118,7 +118,7 @@
                                                             class="w-100"
                                                             *ngIf="stockVariants[0]?.length > 1"
                                                         >
-                                                            <dropdown-field
+                                                            <reactive-dropdown-field
                                                                 *ngIf="
                                                                     branchTransferCreateEditForm?.get(
                                                                         'products.0.uniqueName'
@@ -139,13 +139,13 @@
                                                                 "
                                                                 [options]="stockVariants[0]"
                                                                 [name]="'variantName'"
-                                                                [defaultValue]="
+                                                                [labelValue]="
                                                                     branchTransferCreateEditForm?.get(
                                                                         'products.0.variant.name'
                                                                     ).value
                                                                 "
                                                             >
-                                                            </dropdown-field>
+                                                            </reactive-dropdown-field>
                                                         </span>
                                                     </div>
                                                     <div class="mr-b15 mr-t15">
@@ -236,7 +236,7 @@
                                         <ng-container *ngIf="transferType === 'products'">
                                             <div>
                                                 <div class="mr-b15 position-relative info-field receipt-note">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [name]="'senderName'"
                                                         [label]="localeData?.sender_name"
                                                         [placeholder]="localeData?.select_sender_name"
@@ -244,7 +244,7 @@
                                                         (selectedOption)="selectSenderName($event, 0)"
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
-                                                        [defaultValue]="
+                                                        [labelValue]="
                                                             isUpdateMode && branchTransferCreateEditForm.get('sources.0.name')?.value
                                                                 ? branchTransferCreateEditForm.get('sources.0.name')
                                                                       ?.value
@@ -255,9 +255,8 @@
                                                             !branchTransferCreateEditForm?.get('sources.0.uniqueName')
                                                                 ?.value
                                                         "
-                                                        [allowValueReset]="true"
                                                     >
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                     <i
                                                         *ngIf="
                                                             senderWarehouses[
@@ -278,7 +277,7 @@
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 four">
-                                                        <dropdown-field
+                                                        <reactive-dropdown-field
                                                             [label]="localeData?.senders_warehouse"
                                                             [placeholder]="localeData?.select_senders_warehouse"
                                                             (selectedOption)="selectSenderWarehouse($event, 0)"
@@ -296,7 +295,7 @@
                                                                     'sources.0.warehouse.uniqueName'
                                                                 )?.value
                                                             "
-                                                            [defaultValue]="
+                                                            [labelValue]="
                                                                 isUpdateMode && branchTransferCreateEditForm.get('sources.0.warehouse.name')?.value
                                                                 ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value : 
                                                                     senderWarehouses[
@@ -309,10 +308,9 @@
                                                                         ).value
                                                                         : ''
                                                             "
-                                                            [allowValueReset]="true"
                                                             (onClear)="resetWarehouse('sources', 0)"
                                                         >
-                                                        </dropdown-field>
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                     <div formGroupName="warehouse">
                                                         <div
@@ -414,7 +412,7 @@
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
                                                 <div *ngIf="isUpdateMode" class="mr-b15 position-relative info-field">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [name]="'receiverName'"
                                                         [label]="localeData?.receiver_name"
                                                         [placeholder]="localeData?.select_receiver_name"
@@ -428,7 +426,7 @@
                                                                 'destinations.0.warehouse.uniqueName'
                                                             )?.value
                                                         "
-                                                        [defaultValue]="
+                                                        [labelValue]="
                                                             isUpdateMode && branchTransferCreateEditForm.get('destinations.0.name')?.value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.name'
@@ -436,7 +434,7 @@
                                                                 : ''
                                                         "
                                                     >
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                     <i
                                                         *ngIf="
                                                             destinationWarehouses[
@@ -456,7 +454,7 @@
                                                     </i>
                                                 </div>
                                                 <div class="mr-b15">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [name]="'receiverWarehouse'"
                                                         [label]="localeData?.receiver_warehouse"
                                                         [placeholder]="localeData?.select_receiver_warehouse"
@@ -471,7 +469,6 @@
                                                             selectReceiverWarehouse($event, 0);
                                                             openDropdown('first', 'destinations')
                                                         "
-                                                        [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
                                                         [showError]="
@@ -480,7 +477,7 @@
                                                                 'destinations.0.warehouse.uniqueName'
                                                             )?.value
                                                         "
-                                                        [defaultValue]="
+                                                        [labelValue]="
                                                             isUpdateMode && branchTransferCreateEditForm.get('destinations.0.warehouse.name').value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.warehouse.name'
@@ -488,7 +485,7 @@
                                                                 : ''
                                                         "
                                                     >
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                 </div>
                                                 <div formGroupName="warehouse">
                                                     <div
@@ -600,7 +597,7 @@
                                 <div class="row row-gap">
                                     <div class="col-lg-6">
                                         <div *ngIf="transferType === 'senders'">
-                                            <dropdown-field
+                                            <reactive-dropdown-field
                                                 [showError]="
                                                     !isValidForm &&
                                                     !branchTransferCreateEditForm?.get('products.0.uniqueName')?.value
@@ -626,13 +623,13 @@
                                                         0
                                                     )
                                                 "
-                                                [defaultValue]="
+                                                [labelValue]="
                                                     isUpdateMode && branchTransferCreateEditForm.get('products.0.name').value
                                                         ? branchTransferCreateEditForm.get('products.0.name').value
                                                         : ''
                                                 "
                                             >
-                                            </dropdown-field>
+                                            </reactive-dropdown-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
@@ -641,7 +638,7 @@
                                                             class="w-100"
                                                             *ngIf="stockVariants[0]?.length > 1"
                                                         >
-                                                            <dropdown-field
+                                                            <reactive-dropdown-field
                                                                 *ngIf="
                                                                     branchTransferCreateEditForm?.get(
                                                                         'products.0.uniqueName'
@@ -662,13 +659,13 @@
                                                                 "
                                                                 [options]="stockVariants[0]"
                                                                 [name]="'variantName'"
-                                                                [defaultValue]="
+                                                                [labelValue]="
                                                                     branchTransferCreateEditForm?.get(
                                                                         'products.0.variant.name'
                                                                     ).value
                                                                 "
                                                             >
-                                                            </dropdown-field>
+                                                            </reactive-dropdown-field>
                                                         </span>
                                                     </div>
                                                     <div class="mr-b15 mr-t15">
@@ -792,7 +789,7 @@
                                                     </i>
                                                 </div>
                                                 <div class="position-relative info-field" *ngIf="isUpdateMode">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [name]="'senderName0'"
                                                         [label]="localeData?.sender_name"
                                                         [placeholder]="localeData?.select_sender_name"
@@ -800,7 +797,7 @@
                                                         (selectedOption)="selectSenderName($event, 0)"
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
-                                                        [defaultValue]="
+                                                        [labelValue]="
                                                             branchTransferCreateEditForm.get('sources.0.name')?.value
                                                         "
                                                         [showError]="
@@ -808,7 +805,7 @@
                                                             !branchTransferCreateEditForm?.get('sources.0.name')?.value
                                                         "
                                                     >
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                     <i
                                                         *ngIf="
                                                             senderWarehouses[
@@ -831,7 +828,7 @@
                                         <div *ngIf="transferType === 'products'" formArrayName="sources">
                                             <div [formGroupName]="0">
                                                 <div class="mr-b15 one">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [name]="'senderWarehouse'"
                                                         [label]="localeData?.senders_warehouse"
                                                         [placeholder]="localeData?.select_senders_warehouse"
@@ -842,11 +839,10 @@
                                                                     ?.value
                                                             ]
                                                         "
-                                                        [defaultValue]=" isUpdateMode && branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
+                                                        [labelValue]=" isUpdateMode && branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
                                                             ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
                                                             : ''
                                                         "
-                                                        [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('sources', 0)"
                                                         [showError]="
                                                             !isValidForm &&
@@ -855,7 +851,7 @@
                                                             )?.value
                                                         "
                                                     >
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                 </div>
                                                 <div formGroupName="warehouse">
                                                     <div
@@ -924,7 +920,7 @@
                                             <div [formGroupName]="0">
                                                 <div class="mr-b15">
                                                     <div class="position-relative info-field">
-                                                        <dropdown-field
+                                                        <reactive-dropdown-field
                                                             [name]="'receiverName'"
                                                             [label]="localeData?.receiver_name"
                                                             [placeholder]="localeData?.select_receiver_name"
@@ -938,12 +934,12 @@
                                                                     'destinations.0.uniqueName'
                                                                 )?.value
                                                             "
-                                                            [defaultValue]="
+                                                            [labelValue]="
                                                                 branchTransferCreateEditForm?.get('destinations.0.name')
                                                                     ?.value
                                                             "
                                                         >
-                                                        </dropdown-field>
+                                                        </reactive-dropdown-field>
                                                         <i
                                                             *ngIf="
                                                                 destinationWarehouses[
@@ -964,7 +960,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mr-b15">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         #destinationWarehouse
                                                         [name]="'receiverWarehouse'"
                                                         [label]="localeData?.receiver_warehouse"
@@ -980,7 +976,6 @@
                                                             selectReceiverWarehouse($event, 0);
                                                             openDropdown('first', 'destinations')
                                                         "
-                                                        [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
                                                         [showError]="
@@ -989,7 +984,7 @@
                                                                 'destinations.0.uniqueName'
                                                             )?.value
                                                         "
-                                                        [defaultValue]="
+                                                        [labelValue]="
                                                             isUpdateMode && branchTransferCreateEditForm.get('destinations.0.warehouse.name')?.value
                                                                 ? branchTransferCreateEditForm.get('destinations.0.warehouse.name').value : 
                                                                 destinationWarehouses[
@@ -1003,7 +998,7 @@
                                                                     : ''
                                                         "
                                                     >
-                                                    </dropdown-field>
+                                                    </reactive-dropdown-field>
                                                 </div>
                                                 <div formGroupName="warehouse">
                                                     <div
@@ -1101,7 +1096,7 @@
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15">
-                                                        <dropdown-field
+                                                        <reactive-dropdown-field
                                                             *ngIf="isUpdateMode"
                                                             [name]="'senderWarehouse'"
                                                             [label]="localeData?.senders_warehouse"
@@ -1116,16 +1111,16 @@
                                                                     'sources.0.uniqueName'
                                                                 )?.value
                                                             "
-                                                            [defaultValue]="
+                                                            [labelValue]="
                                                                 branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.name'
                                                                 ).value
                                                             "
                                                         >
-                                                        </dropdown-field>
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                     <div class="mr-b15 thrree">
-                                                        <dropdown-field
+                                                        <reactive-dropdown-field
                                                             [name]="'senderWarehouse'"
                                                             [placeholder]="localeData?.select_senders_warehouse"
                                                             [options]="
@@ -1135,7 +1130,7 @@
                                                                     )?.value
                                                                 ]
                                                             "
-                                                            [defaultValue]="
+                                                            [labelValue]="
                                                                 senderWarehouses[
                                                                     branchTransferCreateEditForm.get(
                                                                         'sources.0.uniqueName'
@@ -1150,7 +1145,6 @@
                                                                 selectSenderWarehouse($event, 0);
                                                                 openDropdown('first', 'destinations')
                                                             "
-                                                            [allowValueReset]="true"
                                                             (onClear)="resetWarehouse('sources', 0)"
                                                             [required]="true"
                                                             [showError]="
@@ -1160,7 +1154,7 @@
                                                                 )?.value
                                                             "
                                                         >
-                                                        </dropdown-field>
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                     <div formGroupName="warehouse">
                                                         <div
@@ -2279,32 +2273,32 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6 pr-0">
-                                        <dropdown-field
+                                        <reactive-dropdown-field
                                             (createOption)="toggleTransporterModel()"
                                             [showCreateNew]="true"
                                             [name]="'transporterCompany'"
                                             [placeholder]="localeData?.transport_company"
                                             [options]="transporterDropdown"
                                             (selectedOption)="onSelectTransportCompany($event)"
-                                            [defaultValue]="
+                                            [labelValue]="
                                                 branchTransferCreateEditForm.get('transporterDetails.transporterName')
                                                     ?.value
                                             "
                                         >
-                                        </dropdown-field>
+                                        </reactive-dropdown-field>
                                     </div>
                                     <div class="col-sm-6 pl-0 mr-b15">
-                                        <dropdown-field
+                                        <reactive-dropdown-field
                                             [name]="'transporterMode'"
                                             [placeholder]="commonLocaleData?.app_transport_mode"
                                             [options]="transporterMode"
                                             (selectedOption)="onSelectTransportMode($event)"
-                                            [defaultValue]="
+                                            [labelValue]="
                                                 branchTransferCreateEditForm.get('transporterDetails.transportMode')
                                                     ?.value
                                             "
                                         >
-                                        </dropdown-field>
+                                        </reactive-dropdown-field>
                                     </div>
                                     <div class="col-sm-6 pr-0 mr-b15">
                                         <input-field

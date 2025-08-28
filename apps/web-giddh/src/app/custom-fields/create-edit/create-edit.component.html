@@ -35,16 +35,16 @@
                             </div>
                             <div class="row mr-b15">
                                 <div class="col-8">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         [name]="'fieldType'"
                                         [placeholder]="localeData?.field_type_placeholder"
                                         [options]="fieldTypes"
                                         (selectedOption)="selectFieldType($event)"
-                                        [defaultValue]="customFieldRequest?.fieldType?.name"
+                                        [labelValue]="customFieldRequest?.fieldType?.name"
                                         [required]="true"
                                         [label]="localeData?.field_type"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                             <div class="row mr-b15" *ngIf="visibleFields.fieldInfo">

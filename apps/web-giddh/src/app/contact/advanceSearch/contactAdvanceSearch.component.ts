@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { ContactAdvanceSearchCommonModal } from '../../models/api-models/Contact';
 
 @Component({
@@ -19,12 +19,15 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter();
     @Input() public advanceSearch4: 'customer' | 'agingReport' = 'customer';
     @Input() public request: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
-    @ViewChildren(ShSelectComponent) public allSelects: QueryList<ShSelectComponent>;
 
+    /** Filter options for entry total comparison */
     public filtersForEntryTotal: IOption[];
+    /** Category options based on search type */
     public categoryOptions: IOption[];
 
-    constructor() {
+    constructor(
+        private dialogRef: MatDialogRef<ContactAdvanceSearchComponent>
+    ) {
 
     }
 
@@ -37,6 +40,11 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
         ];
     }
 
+    /**
+     * Handles changes to input properties and updates category options
+     *
+     * @memberof ContactAdvanceSearchComponent
+     */
     public ngOnChanges() {
         if (this.advanceSearch4 === 'customer') {
             this.categoryOptions = [
@@ -52,21 +60,32 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Resets all form fields and clears selections
+     *
+     * @memberof ContactAdvanceSearchComponent
+     */
     public reset() {
-        if (this.allSelects) {
-            this.allSelects.forEach(sh => {
-                sh.clear();
-            })
-        }
         this.request = new ContactAdvanceSearchCommonModal();
     }
 
+    /**
+     * Saves the search criteria and closes the dialog
+     *
+     * @memberof ContactAdvanceSearchComponent
+     */
     public save() {
         this.applyAdvanceSearchEvent.emit(this.request);
-        this.closeModelEvent.emit();
+        this.dialogRef.close(this.request);
     }
 
+    /**
+     * Cancels the search operation and closes the dialog
+     *
+     * @memberof ContactAdvanceSearchComponent
+     */
     public onCancel() {
         this.closeModelEvent.emit(true);
+        this.dialogRef.close();
     }
 }

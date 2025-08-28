@@ -6,20 +6,16 @@
     <div *ngIf="step === 1">
         <div class="form-group">
             <label>{{ localeData?.search_provider_label }} <sup>*</sup></label>
-            <sh-select
+            <reactive-dropdown-field
                 [options]="searchResults"
                 [(ngModel)]="selectedProvider.name"
                 [isPaginationEnabled]="true"
-                [forceClearReactive]="forceClearReactive$ | async"
                 (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                 [enableDynamicSearch]="true"
-                (selected)="typeaheadOnSelect($event)"
+                (selectedOption)="typeaheadOnSelect($event)"
                 [placeholder]="localeData?.search_provider_placeholder"
-                [showClear]="false"
-                [multiple]="false"
-                [ItemHeight]="67"
             >
-            </sh-select>
+            </reactive-dropdown-field>
         </div>
         <button mat-raised-button color="primary" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">
             {{ commonLocaleData?.app_next }}

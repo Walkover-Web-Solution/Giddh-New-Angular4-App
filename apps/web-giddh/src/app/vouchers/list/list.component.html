@@ -2440,7 +2440,7 @@
                     <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                         <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                             <div class="d-flex align-items-center column-gap1">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     *ngIf="
                                         voucherType === voucherTypeEnum.creditNote ||
                                         voucherType === voucherTypeEnum.debitNote
@@ -2448,10 +2448,10 @@
                                     [name]="'invoiceType'"
                                     [options]="voucherTypes"
                                     (selectedOption)="voucherType = $event.value; getLedgersOfInvoice()"
-                                    [defaultValue]="voucherType | titlecase"
+                                    [labelValue]="voucherType | titlecase"
                                     [label]="commonLocaleData?.app_voucher_type"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                                 <div class="custom-datepicker-wrapper">
                                     <div 
                                         class="custom-datepicker" 

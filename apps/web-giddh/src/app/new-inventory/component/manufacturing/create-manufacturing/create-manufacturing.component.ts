@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
+import { BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
@@ -19,7 +19,6 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';

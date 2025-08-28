@@ -450,13 +450,12 @@
                     <div class="d-flex flex-column">
                         <p class="mb-3">{{ localeData?.bulk_update_header }}</p>
                         <div class="d-flex justify-content-between mb-3 modal-form">
-                            <sh-select
+                            <reactive-dropdown-field
                                 class="mr-r15"
-                                name="bulkUpdate"
+                                [name]="'bulkUpdate'"
                                 [(ngModel)]="bulkUpdateGetParams.action"
                                 [options]="bulkUpdateFields"
-                                [ItemHeight]="33"
-                            ></sh-select>
+                            ></reactive-dropdown-field>
                             <div
                                 class="select-date"
                                 *ngIf="
@@ -490,13 +489,13 @@
                                         "
                                     >
                                     </span>
-                                    <sh-select
-                                        name="warehouse"
+                                    <reactive-dropdown-field
+                                        [name]="'warehouse'"
                                         [placeholder]="localeData?.select_warehouse"
                                         [(ngModel)]="bulkUpdatePostParams.warehouseUniqueName"
                                         [options]="warehouses"
                                         *ngIf="bulkUpdateGetParams.action === 'warehouse'"
-                                    ></sh-select>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>

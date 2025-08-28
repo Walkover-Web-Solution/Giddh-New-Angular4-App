@@ -91,7 +91,6 @@
         "jsrsasign": "^10.9.0",
         "ng-click-outside": "^9.0.0",
         "ngrx-store-localstorage": "^16.0.0",
-        "ngx-bootstrap": "^11.0.2",
         "ngx-clipboard": "^16.0.0",
         "ngx-lightbox": "^3.0.0",
         "ngx-mat-select-search": "^7.0.2",

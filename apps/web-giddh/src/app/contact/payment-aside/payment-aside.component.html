@@ -30,23 +30,18 @@
                                     src="{{ imgPath }}loader.gif"
                                     alt=""
                                 />
-                                <sh-select
+                                <reactive-dropdown-field
                                     [options]="selectIntegratedBankList"
                                     [disabled]="isPayClicked"
                                     #selectBankEle
-                                    [multiple]="false"
-                                    [ItemHeight]="33"
-                                    [fixedValue]="selectedBankName"
-                                    [isFilterEnabled]="true"
+                                    [labelValue]="selectedBankName"
+                                    [enableDynamicSearch]="true"
                                     class="text-left"
                                     [(ngModel)]="selectedBankUniqueName"
-                                    name="selectedBankUniqueName"
-                                    required
-                                    [isRequired]="true"
+                                    [name]="'selectedBankUniqueName'"
+                                    [required]="true"
                                     [placeholder]="localeData?.select_bank"
-                                    (click)="setBankName($event, selectBankEle)"
-                                    (selected)="selectBank($event)"
-                                    [multiple]="false"
+                                    (selectedOption)="selectBank($event)"
                                 >
                                     <ng-template #optionTemplate let-option="option">
                                         <a href="javascript:void(0)" class="list-item">
@@ -65,7 +60,7 @@
                                             </div>
                                         </a>
                                     </ng-template>
-                                </sh-select>
+                                </reactive-dropdown-field>
                             </div>
                             <div>
                                 <p *ngIf="totalAvailableBalance" class="total-balance">
@@ -100,16 +95,14 @@
                                     src="{{ imgPath }}loader.gif"
                                     alt=""
                                 />
-                                <sh-select
-                                    required
+                                <reactive-dropdown-field
                                     [disabled]="isPayClicked"
-                                    [isRequired]="isPayorRequired"
+                                    [required]="isPayorRequired"
                                     [placeholder]="localeData?.select_payor"
                                     [options]="payorsList"
-                                    (selected)="selectPayor($event)"
-                                    name="bankUserId"
-                                    [forceClearReactive]="forceClear$ | async"
-                                ></sh-select>
+                                    (selectedOption)="selectPayor($event)"
+                                    [name]="'bankUserId'"
+                                ></reactive-dropdown-field>
                             </div>
                             <div>
                                 <p

@@ -8,12 +8,10 @@ import {
 } from 'apps/web-giddh/src/app/accounting/accouting-sidebar/accounting-sidebar.component';
 import { KeyboardService } from 'apps/web-giddh/src/app/accounting/keyboard.service';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { VirtualScrollModule } from '../theme/ng-virtual-select/virtual-scroll';
 import { QuickAccountModule } from '../theme/quick-account-component/quickAccount.module';
 import { InventoryModule } from './../inventory/inventory.module';
 import { SharedModule } from './../shared/shared.module';
@@ -22,7 +20,6 @@ import { AccountingComponent } from './accounting.component';
 import { JournalVoucherComponent } from './journal-voucher/journal-voucher.component';
 import { AccountAsVoucherComponent } from './journal-voucher/voucher/voucher.component';
 import { OnReturnDirective } from './keyboard.directive';
-import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { TallyModuleService } from './tally-service';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -31,6 +28,8 @@ import { MatInputModule } from '@angular/material/input';
 import { A11yModule } from '@angular/cdk/a11y';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -49,16 +48,13 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
         CurrencyModule,
         FormsModule,
         ReactiveFormsModule,
-        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
         DecimalDigitsModule,
-        AVShSelectModule,
         SharedModule,
         ClickOutsideModule,
-        VirtualScrollModule,
         ElementViewChildModule,
         QuickAccountModule,
         InventoryModule,
@@ -70,7 +66,9 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
         MatInputModule,
         A11yModule,
         GiddhDatepickerModule,
-        KeyboardShortutModule
+        KeyboardShortutModule,
+        ScrollingModule,
+        MatTooltipModule
     ],
 })
 export class AccountingModule {

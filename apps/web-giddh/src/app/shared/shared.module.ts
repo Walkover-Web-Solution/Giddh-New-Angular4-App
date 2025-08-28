@@ -6,14 +6,11 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { PopoverModule } from 'ngx-bootstrap/popover';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { AccountOperationsComponent, ManageGroupsAccountsComponent } from './header/components';
@@ -94,9 +91,6 @@ export function provideConfig() {
         RouterModule,
         FormsModule,
         ReactiveFormsModule,
-        ModalModule.forRoot(),
-        
-        PopoverModule.forRoot(),
         SocialLoginModule,
         SelectModule,
         ClickOutsideModule,
@@ -106,7 +100,6 @@ export function provideConfig() {
             spinnerSize: 30
         }),
         ElementViewChildModule,
-        ShSelectModule,
         DecimalDigitsModule,
         DigitsOnlyModule,
         MatPaginatorModule,
@@ -146,12 +139,9 @@ export function provideConfig() {
     exports: [
         CommonModule,
         DecimalDigitsModule,
-        PopoverModule,
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
-        ShSelectModule,
-        ModalModule,
         ManageGroupsAccountsComponent,
         AccountFilterPipe,
         SelectModule,
