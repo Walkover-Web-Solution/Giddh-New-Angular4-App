@@ -8,9 +8,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTreeModule } from "@angular/material/tree";
 import { RouterModule } from "@angular/router";
 import { LaddaModule } from "angular2-ladda";
-import { ModalModule } from "ngx-bootstrap/modal";
 import { ConfirmModalModule } from "../../theme/confirm-modal/confirm-modal.module";
-import { ShSelectModule } from "../../theme/ng-virtual-select/sh-select.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 import { DatepickerWrapperModule } from "../datepicker-wrapper/datepicker.wrapper.module";
 import { ElementViewChildModule } from "../helpers/directives/elementViewChild/elementViewChild.module";
@@ -39,13 +37,11 @@ import { TagsModule } from "../../settings/tags/tags.module";
         ReactiveFormsModule,
         TranslateDirectiveModule,
         MatTooltipModule,
-        ModalModule.forRoot(),
         ElementViewChildModule,
         ScrollingModule,
         PrimarySidebarModule,
         
         DatepickerWrapperModule,
-        ShSelectModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

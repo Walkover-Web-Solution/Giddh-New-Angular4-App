@@ -8,7 +8,6 @@ import * as dayjs from 'dayjs';
 import { CompanyActions } from '../../actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { IForceClear } from '../../models/api-models/Sales';
 import { cloneDeep, each, map } from '../../lodash-optimized';

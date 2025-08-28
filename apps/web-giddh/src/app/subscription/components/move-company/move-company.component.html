@@ -12,7 +12,7 @@
             <div class="row mb-3">
                 <div class="col-md-12 move-wrapper">
                     <div>
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [label]="localeData?.subscription?.select_plan"
                             [placeholder]="localeData?.subscription?.select_plan"
                             [name]="'availablePlans'"
@@ -20,10 +20,9 @@
                             (selectedOption)="selectedPlan = $event.value"
                             [required]="true"
                             (onClear)="onSearchClear()"
-                            [allowValueReset]="true"
                             (dynamicSearchedQuery)="onSearchQueryChange($event)"
                             [enableDynamicSearch]="true"
-                        ></dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
             </div>

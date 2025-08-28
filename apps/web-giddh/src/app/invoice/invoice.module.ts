@@ -14,7 +14,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatTabsModule } from '@angular/material/tabs';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
@@ -44,9 +43,7 @@ import { ConfirmModalModule } from '../theme';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -91,20 +88,17 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         MatDividerModule,
         MatTabsModule,
         ReactiveFormsModule,
-        ModalModule.forRoot(),
         KeyboardShortutModule,
         SelectModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
-        ShSelectModule,
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
         
         AsideMenuRecurringEntryModule,
-        SalesShSelectModule,
         Daterangepicker,
         AccountDetailModalModule,
         CurrencyModule,

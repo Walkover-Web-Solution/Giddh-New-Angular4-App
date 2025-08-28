@@ -22,7 +22,6 @@ import { AppState } from "../../store";
 import { AgingReportActions } from "../../actions/aging-report.actions";
 import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
-import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as dayjs from "dayjs";
@@ -82,7 +81,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
     @ViewChild("advanceSearch") advanceSearchTemplate: TemplateRef<any>;
-    @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Holds Template Reference for Unpaid Invoice Asidepane */
     @ViewChild("unpaidInvoice") public unpaidInvoice: TemplateRef<any>;
     /** Advance search component instance */
@@ -314,10 +312,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
 
     public openAgingDropDown() {
         this.store.dispatch(this.agingReportActions.OpenDueRange());
-    }
-
-    public hideListItems() {
-        this.filterDropDownList.hide();
     }
 
     /**

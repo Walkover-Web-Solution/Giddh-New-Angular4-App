@@ -223,29 +223,27 @@
                 ></input-field>
             </div>
             <div class="trigger-input mr-t15">
-                <dropdown-field
+                <reactive-dropdown-field
                     [label]="localeData?.communication?.condition"
                     [placeholder]="localeData?.communication?.select_condition"
                     [options]="triggerCondition"
                     (selectedOption)="selectConditions($event?.value)"
-                    [defaultValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
+                    [labelValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
                     [ngClass]="{ 'fields-error': mandatoryFields.condition }"
-                    [allowValueReset]="true"
                     (onClear)="createTrigger.condition.action[0] = ''"
-                ></dropdown-field>
+                ></reactive-dropdown-field>
             </div>
             <div class="trigger-input mr-t15">
-                <dropdown-field
+                <reactive-dropdown-field
                     [label]="localeData?.communication?.entity"
                     [placeholder]="localeData?.communication?.select_entity"
                     [options]="triggerEntity"
                     (selectedOption)="selectEntity($event?.value)"
-                    [defaultValue]="createTrigger.condition.entity"
+                    [labelValue]="createTrigger.condition.entity"
                     [ngClass]="{ 'fields-error': mandatoryFields.entity }"
-                    [allowValueReset]="true"
                     (onClear)="createTrigger.condition.entity = ''"
                     [required]="true"
-                ></dropdown-field>
+                ></reactive-dropdown-field>
             </div>
             <div class="trigger-input mr-t15">
                 <mat-form-field appearance="outline" class="w-100">
@@ -273,17 +271,16 @@
                 </mat-form-field>
             </div>
             <div class="trigger-input mr-t15">
-                <dropdown-field
+                <reactive-dropdown-field
                     [label]="localeData?.communication?.campaign"
                     [placeholder]="localeData?.communication?.select_campaign"
                     [options]="campaignList"
                     (selectedOption)="selectCampaign($event, true)"
-                    [defaultValue]="createTrigger.campaignDetails.campaignName"
+                    [labelValue]="createTrigger.campaignDetails.campaignName"
                     [ngClass]="{ 'fields-error': mandatoryFields.campaignSlug }"
-                    [allowValueReset]="true"
                     (onClear)="createTrigger.campaignDetails.campaignName = ''"
                     [required]="true"
-                ></dropdown-field>
+                ></reactive-dropdown-field>
             </div>
             <button
                 *ngIf="triggerMode === 'create' || triggerMode === 'copy'"

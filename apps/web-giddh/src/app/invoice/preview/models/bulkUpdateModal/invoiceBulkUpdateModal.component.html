@@ -9,33 +9,27 @@
             <div class="row mr-b1 mt-2">
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group">
-                        <sh-select
+                        <reactive-dropdown-field
                             [placeholder]="commonLocaleData?.app_select"
                             [options]="fieldOptions"
-                            [isFilterEnabled]="true"
+                            [enableDynamicSearch]="true"
                             [ngModelOptions]="{ standalone: true }"
                             [(ngModel)]="selectedField"
-                            [forceClearReactive]="forceClear$ | async"
-                            [ItemHeight]="33"
-                            (selected)="onSelectEntryField($event)"
-                        ></sh-select>
+                            (selectedOption)="onSelectEntryField($event)"
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group" *ngIf="selectedField === 'pdfTemplate'">
-                        <sh-select
+                        <reactive-dropdown-field
                             [placeholder]="commonLocaleData?.app_select"
                             [options]="allTemplatesOptions"
-                            autocomplete="off"
-                            required
-                            [isRequired]="true"
-                            [isFilterEnabled]="true"
-                            [ItemHeight]="33"
-                            name="templateUniqueName"
+                            [required]="true"
+                            [enableDynamicSearch]="true"
+                            [name]="'templateUniqueName'"
                             [(ngModel)]="updateTemplatesRequest.templateUniqueName"
-                        >
-                        </sh-select>
+                        ></reactive-dropdown-field>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'notes'">
@@ -56,17 +50,14 @@
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'signature'">
-                        <sh-select
+                        <reactive-dropdown-field
                             [placeholder]="commonLocaleData?.app_select_option"
                             [options]="templateSignaturesOptions"
-                            autocomplete="off"
-                            required
-                            [isRequired]="true"
-                            [isFilterEnabled]="true"
-                            name="signatureOptions"
+                            [required]="true"
+                            [enableDynamicSearch]="true"
+                            [name]="'signatureOptions'"
                             [(ngModel)]="signatureOptions"
-                            [ItemHeight]="33"
-                        ></sh-select>
+                        ></reactive-dropdown-field>
                     </div>
 
                     <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
@@ -128,17 +119,13 @@
 
                         <div class="col-md-6">
                             <div class="relative form-group">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [placeholder]="commonLocaleData?.app_state"
                                     [options]="allTemplatesOptions"
-                                    autocomplete="off"
-                                    required
-                                    [isRequired]="true"
-                                    [isFilterEnabled]="true"
-                                    [ItemHeight]="33"
-                                    name="templateUniqueName"
-                                >
-                                </sh-select>
+                                    [required]="true"
+                                    [enableDynamicSearch]="true"
+                                    [name]="'templateUniqueName'"
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                     </div>

@@ -127,17 +127,16 @@
                                 </small>
                                 <div class="select-account form-group" *ngIf="card.showAccList">
                                     <div class="ng-select-wrap">
-                                        <sh-select
+                                        <reactive-dropdown-field
                                             [options]="accounts"
-                                            (selected)="onAccountSelect(card, $event)"
+                                            (selectedOption)="onAccountSelect(card, $event)"
                                             [placeholder]="commonLocaleData?.app_select_account"
-                                            [ItemHeight]="33"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
                                             (scrollEnd)="handleScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                         >
-                                        </sh-select>
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="clearfix">

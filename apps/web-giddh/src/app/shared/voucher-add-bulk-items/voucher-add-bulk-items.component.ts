@@ -6,10 +6,9 @@ import { SearchService } from '../../services/search.service';
 import { ToasterService } from '../../services/toaster.service';
 import { LedgerService } from '../../services/ledger.service';
 import { IVariant } from '../../models/api-models/Ledger';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
 import { cloneDeep } from '../../lodash-optimized';
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { IOption, PAGINATION_LIMIT } from '../../app.constant';
 import { FormControl } from '@angular/forms';
 
 @Component({

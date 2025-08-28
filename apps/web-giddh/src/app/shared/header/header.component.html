@@ -674,20 +674,6 @@
             <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isLiabilitiesExpired = false"></i>
         </div>
     </div>
-    <!--add and manage group account modal -->
-    <div
-        bsModal
-        #manageGroupsAccountsModal="bs-modal"
-        [config]="{ keyboard: false }"
-        class="modal fade full-screen-modal manage-account-popup"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-xl modal-liq-90 mr-0 width-100 h-100">
-            <div class="modal-content full-screen-modal">
-                <ng-template element-view-container-ref #addmanage="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </div>
     <ng-template #expiredPlanModel>
         <div class="modal-header">
             <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>

@@ -53,14 +53,14 @@
                             </input-field>
                         </div>
                         <div class="clearfix mr-t1">
-                            <dropdown-field
+                            <reactive-dropdown-field
                                 (selectedOption)="accountUserForm.get('userUniqueName').patchValue($event.value)"
                                 [label]="localeData?.payment?.user"
                                 [name]="'userUniqueName'"
                                 [placeholder]="localeData?.payment?.select_user"
                                 [options]="usersList"
                                 [required]="true"
-                            ></dropdown-field>
+                            ></reactive-dropdown-field>
                         </div>
                         <div class="clearfix mr-t1">
                             <div class="clearfix">
@@ -75,14 +75,14 @@
                                     ></input-field>
                                 </div>
                                 <div class="inline col-md-6 pr-0">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         (selectedOption)="accountUserForm.get('duration').patchValue($event.value)"
                                         [label]="localeData?.payment?.limit_upto"
                                         [name]="'duration'"
                                         [placeholder]="localeData?.payment?.duration"
                                         [options]="amountLimitDurations"
                                         
-                                    ></dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>

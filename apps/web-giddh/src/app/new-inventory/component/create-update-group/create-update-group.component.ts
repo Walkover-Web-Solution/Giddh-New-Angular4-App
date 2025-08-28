@@ -13,12 +13,12 @@ import { ToasterService } from "../../../services/toaster.service";
 import { uniqueNameInvalidStringReplace } from "../../../shared/helpers/helperFunctions";
 import { AppState } from "../../../store";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
-import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { Location } from '@angular/common';
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 import { InventoryComponentStore } from "../inventory.store";
 import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 import { ServiceConfig } from "../../../services/service.config";
+import { IOption } from "../../../app.constant";
 
 @Component({
     selector: 'create-update-group',

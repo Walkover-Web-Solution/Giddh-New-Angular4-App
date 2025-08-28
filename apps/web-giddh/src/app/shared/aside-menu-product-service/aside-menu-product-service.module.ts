@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { StockCreateEditModule } from "../../new-inventory/component/stock-create-edit/stock-create-edit.module";
-import { ShSelectModule } from "../../theme/ng-virtual-select/sh-select.module";
+import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
 import { DecimalDigitsModule } from "../helpers/directives/decimalDigits/decimalDigits.module";
@@ -23,7 +23,7 @@ import { MatRadioModule } from "@angular/material/radio";
         GenericAsideMenuAccountModule,
         ReactiveFormsModule,
         FormsModule,
-        ShSelectModule,
+        FormFieldsModule,
         UniqueNameModule,
         TextCaseChangeModule,
         DecimalDigitsModule,

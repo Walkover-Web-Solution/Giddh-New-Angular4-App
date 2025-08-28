@@ -25,43 +25,36 @@
                 </div>
 
                 <div class="col-6 form-group">
-                    <label>Product Name <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="stockListOptions"
-                        [multiple]="false"
+                        [label]="'Product Name'"
                         [placeholder]="'Select Product'"
-                        (selected)="stockChanged($event)"
-                        [ItemHeight]="'33'"
+                        (selectedOption)="stockChanged($event)"
                         formControlName="stock"
-                        [isRequired]="true"
-                    ></sh-select>
+                        [required]="true"
+                    ></reactive-dropdown-field>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-6 form-group">
-                    <label>Sender's Name <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="userListOptions"
-                        [multiple]="false"
+                        [label]="'Sender\'s Name'"
                         [placeholder]="'Select Sender'"
                         formControlName="inventoryUser"
-                        [ItemHeight]="'33'"
-                        [isRequired]="true"
-                    ></sh-select>
+                        [required]="true"
+                    ></reactive-dropdown-field>
                 </div>
 
                 <div class="col-6 form-group">
-                    <label>Receiver's Name <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="userListOptions"
-                        [multiple]="false"
+                        [label]="'Receiver\'s Name'"
                         [placeholder]="'Select Receiver'"
-                        (selected)="recieverUniqueName = $event.value"
-                        [ItemHeight]="'33'"
-                        [isRequired]="true"
-                    >
-                    </sh-select>
+                        (selectedOption)="recieverUniqueName = $event.value"
+                        [required]="true"
+                    ></reactive-dropdown-field>
                 </div>
             </div>
 
@@ -78,15 +71,13 @@
                 </div>
 
                 <div class="col-6 form-group">
-                    <label>Unit <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="stockUnitsOptions"
+                        [label]="'Unit'"
                         [placeholder]="'Choose unit'"
                         formControlName="stockUnit"
-                        [multiple]="false"
-                        [ItemHeight]="33"
-                        [isRequired]="true"
-                    ></sh-select>
+                        [required]="true"
+                    ></reactive-dropdown-field>
                 </div>
             </div>
 

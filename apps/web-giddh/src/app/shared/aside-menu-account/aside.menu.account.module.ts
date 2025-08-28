@@ -4,7 +4,6 @@ import { AccountAddNewDetailsModule } from "../header/components/account-add-new
 import { AccountUpdateNewDetailsModule } from "../header/components/account-update-new-details/account-update-new-details.module";
 import { ConfirmModalModule } from "../../theme/confirm-modal/confirm-modal.module";
 import { AsideMenuAccountInContactComponent } from "./aside.menu.account.component";
-import { ModalModule } from "ngx-bootstrap/modal";
 import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
@@ -16,7 +15,6 @@ import { MatDialogModule } from "@angular/material/dialog";
         AccountAddNewDetailsModule,
         AccountUpdateNewDetailsModule,
         ConfirmModalModule,
-        ModalModule.forRoot(),
         MatDialogModule
     ],
     exports: [

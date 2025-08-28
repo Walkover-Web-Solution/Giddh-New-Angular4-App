@@ -9,57 +9,51 @@
         <div class="container-fluid font-15">
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-xs-12 mr-b15">
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="selectYear"
-                        [fixedValue]="activeFinancialYearLabel"
+                        [labelValue]="activeFinancialYearLabel"
                         [placeholder]="localeData?.select_year"
-                        name="financialYear"
-                        (selected)="selectFinancialYear($event)"
-                        [forceClearReactive]="forceClear$ | async"
-                    >
-                    </sh-select>
+                        [name]="'financialYear'"
+                        (selectedOption)="selectFinancialYear($event)">
+                    </reactive-dropdown-field>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-12 mr-b15">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="fromMonthNames"
                                 [placeholder]="localeData?.from_month"
-                                name="fromMonth"
+                                [name]="'fromMonth'"
                                 [(ngModel)]="fromMonth"
-                                [forceClearReactive]="forceClearMonths$ | async"
-                                (selected)="selectFromMonth($event)"
-                            >
-                            </sh-select>
+                                (selectedOption)="selectFromMonth($event)">
+                            </reactive-dropdown-field>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 col-12 mr-b15">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="toMonthNames"
                                 [placeholder]="localeData?.to_month"
-                                name="toMonth"
+                                [name]="'toMonth'"
                                 [(ngModel)]="toMonth"
-                                [forceClearReactive]="forceClearMonths$ | async"
-                                (selected)="selectToMonth($event)"
-                            ></sh-select>
+                                (selectedOption)="selectToMonth($event)">                           
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="flatGroupsOptions"
                         [placeholder]="localeData?.group"
-                        name="group"
-                        (selected)="selectGroup($event)"
-                        [forceClearReactive]="forceClear$ | async"
+                        [name]="'group'"
+                        (selectedOption)="selectGroup($event)"
                         [enableDynamicSearch]="true"
                         [isPaginationEnabled]="true"
                         (scrollEnd)="handleGroupScrollEnd()"
-                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-                    ></sh-select>
+                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
+                    </reactive-dropdown-field>
                 </div>
             </div>
             <div class="row">
@@ -89,24 +83,22 @@
                     &nbsp;<label class="custom-mat-label" for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-12 col-xs-12 mr-b15 clear-both">
-                    <button
-                        mat-raised-button color="primary"
-                        [disabled]="!isFormValid() || isLoading"
-                        (click)="exportReport(false)"
-                    >
-                        {{ commonLocaleData?.app_export }}
-                    </button>
-                    <button
-                        mat-raised-button color="primary"
-                        [disabled]="!isFormValid() || isLoading"
-                        (click)="exportReport(true)"
-                    >
-                        {{ commonLocaleData?.app_show }}
-                    </button>
-                    <button mat-stroked-button (click)="clearFilter()">{{ commonLocaleData?.app_reset }}</button>
-                </div>
+            <div class="d-flex column-gap1 mt-3">
+                <button
+                    mat-raised-button color="primary"
+                    [disabled]="!isFormValid() || isLoading"
+                    (click)="exportReport(false)"
+                >
+                    {{ commonLocaleData?.app_export }}
+                </button>
+                <button
+                    mat-raised-button color="primary"
+                    [disabled]="!isFormValid() || isLoading"
+                    (click)="exportReport(true)"
+                >
+                    {{ commonLocaleData?.app_show }}
+                </button>
+                <button mat-stroked-button (click)="clearFilter()">{{ commonLocaleData?.app_reset }}</button>
             </div>
         </div>
     </div>

@@ -1,14 +1,13 @@
 <h1 class="page-title ml-0 mr-b15">{{ localeData?.filter_heading }}</h1>
 <div class="clearfix mr-t15">
     <label>{{ localeData?.filter_by_label }}</label>
-    <sh-select
+    <reactive-dropdown-field
         [options]="vm.dateOptions"
-        [isFilterEnabled]="true"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedDateOption"
-        [forceClearReactive]="forceClearFilterBy$ | async"
-        (onClear)="resetFilterBy()"
-    ></sh-select>
+        [name]="'selectedDateOption'"
+        (onClear)="resetFilterBy()">
+    </reactive-dropdown-field>
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '1'">
     <label>{{ localeData?.from_date }}</label>
@@ -55,69 +54,64 @@
 
 <div class="clearfix mr-t15">
     <label>{{ localeData?.select_operation_label }}</label>
-    <sh-select
+    <reactive-dropdown-field
         [options]="vm.filters"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedOperation"
-        [forceClearReactive]="forceClearOperations$ | async"
-        (onClear)="resetOperation()"
-    ></sh-select>
+        [name]="'selectedOperation'"
+        (onClear)="resetOperation()">
+    </reactive-dropdown-field>
 </div>
 
 <div class="clearfix mr-t15">
     <label>{{ commonLocaleData?.app_select_entity }}</label>
-    <sh-select
+    <reactive-dropdown-field
         [options]="vm.entities"
-        [isFilterEnabled]="true"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedEntity"
-        [forceClearReactive]="forceClearEntity$ | async"
-        (onClear)="resetEntity()"
-    ></sh-select>
+        [name]="'selectedEntity'"
+        (onClear)="resetEntity()">
+    </reactive-dropdown-field>
 </div>
 
 <div class="clearfix mr-t15">
     <label>{{ commonLocaleData?.app_select_account }}</label>
-    <sh-select
+    <reactive-dropdown-field
         [options]="vm.accounts$ | async"
-        [isFilterEnabled]="true"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedAccountUnq"
         [enableDynamicSearch]="true"
         [isPaginationEnabled]="true"
         (scrollEnd)="handleScrollEnd()"
         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-        [forceClearReactive]="forceClearAccount$ | async"
-        (onClear)="resetAccount()"
-    ></sh-select>
+        [name]="'selectedAccountUnq'"
+        (onClear)="resetAccount()">
+    </reactive-dropdown-field>
 </div>
 
 <div class="clearfix mr-t15">
     <label>{{ localeData?.select_group_label }}</label>
-    <sh-select
+    <reactive-dropdown-field
         [options]="vm.groups$ | async"
-        [isFilterEnabled]="true"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedGroupUnq"
         [enableDynamicSearch]="true"
         [isPaginationEnabled]="true"
         (scrollEnd)="handleGroupScrollEnd()"
         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-        [forceClearReactive]="forceClearGroup$ | async"
-        (onClear)="resetGroup()"
-    ></sh-select>
+        [name]="'selectedGroupUnq'"
+        (onClear)="resetGroup()">
+    </reactive-dropdown-field>
 </div>
 <div class="clearfix mr-t15">
     <label>{{ localeData?.select_user_label }}</label>
-    <sh-select
+    <reactive-dropdown-field
         [options]="vm.users$ | async"
-        [customFilter]="customUserFilter"
-        [isFilterEnabled]="true"
         [placeholder]="commonLocaleData?.app_select_option"
         [(ngModel)]="vm.selectedUserUnq"
-        [forceClearReactive]="forceClearUser$ | async"
-        (onClear)="resetUser()"
-    ></sh-select>
+        [name]="'selectedUserUnq'"
+        (onClear)="resetUser()">
+    </reactive-dropdown-field>
 </div>
 <button mat-raised-button color="primary" class="pull-left mr-t15" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
     {{ localeData?.get_logs }}

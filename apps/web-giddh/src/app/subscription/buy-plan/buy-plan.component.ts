@@ -6,7 +6,6 @@ import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.comp
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
 import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
@@ -24,7 +23,7 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { Configuration, PaymentProvider } from '../../app.constant';
+import { Configuration, IOption, PaymentProvider } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 
 @Component({

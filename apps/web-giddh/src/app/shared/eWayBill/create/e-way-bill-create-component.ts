@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
@@ -11,6 +10,7 @@ import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '.
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
 import { EWayBillComponentStore } from '../eWayBill.store';
+import { IOption } from '../../../app.constant';
 
 @Component({
     selector: 'app-e-way-bill-create',
