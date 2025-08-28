@@ -52,7 +52,6 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        
         InventoryModule,
         MatTabsModule,
         MatMenuModule,

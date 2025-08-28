@@ -1,656 +1,663 @@
 <form #formDiv name="addEditStockForm" class="row" [formGroup]="addStockForm" novalidate="" autocomplete="off">
-    <div class="dialog-header">
-        <span>{{ isUpdatingStockForm ? 'Update Stock' : 'Create Stock' }}</span>
-        <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
-            <i class="icon-cross"></i>
-        </button>
-    </div>
+    <section class="w-100">
+        <div class="dialog-header">
+            <span>{{ isUpdatingStockForm ? 'Update Stock' : 'Create Stock' }}</span>
+            <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
 
-    <div class="aside-body">
-        <section class="aside-pane-form clearfix margin-child-label">
-            <div class="clearfix">
-                <div class="row">
-                    <div class="form-group col-sm-5 col-12">
-                        <label>Under Group</label>
-                        <reactive-dropdown-field
-                            [options]="groupsData$ | async"
-                            formControlName="parentGroup"
-                            [placeholder]="'Select Group'"
-                            (selectedOption)="groupSelected($event)"
-                            [createNewText]="'+ Add New'"
-                            (createOption)="addNewGroupPane()"
-                            [name]="'parentGroup'"
-                        ></reactive-dropdown-field>
+        <div class="aside-body">
+            <section class="aside-pane-form clearfix margin-child-label">
+                <div class="clearfix">
+                    <div class="row">
+                        <div class="form-group col-sm-5 col-12">
+                            <label>Under Group</label>
+                            <reactive-dropdown-field
+                                [options]="groupsData$ | async"
+                                formControlName="parentGroup"
+                                [placeholder]="'Select Group'"
+                                (selectedOption)="groupSelected($event)"
+                                [createNewText]="'+ Add New'"
+                                (createOption)="addNewGroupPane()"
+                                [name]="'parentGroup'"
+                            ></reactive-dropdown-field>
+                        </div>
+                        <div class="form-group col-sm-5 col-12" *ngIf="isUpdatingStockForm">
+                            <label class="d-block">&nbsp;</label>
+                            <button
+                                type="button"
+                                mat-stroked-button
+                                (click)="moveStock()"
+                                [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
+                            >
+                                Move
+                            </button>
+                        </div>
                     </div>
-                    <div class="form-group col-sm-5 col-12" *ngIf="isUpdatingStockForm">
-                        <label class="d-block">&nbsp;</label>
-                        <button
-                            type="button"
-                            mat-stroked-button
-                            (click)="moveStock()"
-                            [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
-                        >
-                            Move
-                        </button>
-                    </div>
-                </div>
 
-                <div class="clearfix row">
-                    <div class="form-group col-sm-5 col-12">
-                        <label>Stock Name <sup>*</sup></label>
-                        <input type="text" name="name" class="form-control" formControlName="name" />
+                    <div class="clearfix row">
+                        <div class="form-group col-sm-5 col-12">
+                            <label>Stock Name <sup>*</sup></label>
+                            <input type="text" name="name" class="form-control" formControlName="name" />
+                        </div>
+                        <div class="form-group col-sm-5 col-12">
+                            <label>Stock Unit <sup>*</sup></label>
+                            <reactive-dropdown-field
+                                [options]="stockUnitsDropDown$ | async"
+                                formControlName="stockUnitUniqueName"
+                                [placeholder]="'Choose a parent unit'"
+                                [required]="true"
+                                [name]="'stockUnitUniqueName'"
+                            ></reactive-dropdown-field>
+                        </div>
                     </div>
-                    <div class="form-group col-sm-5 col-12">
-                        <label>Stock Unit <sup>*</sup></label>
-                        <reactive-dropdown-field
-                            [options]="stockUnitsDropDown$ | async"
-                            formControlName="stockUnitUniqueName"
-                            [placeholder]="'Choose a parent unit'"
-                            [required]="true"
-                            [name]="'stockUnitUniqueName'"
-                        ></reactive-dropdown-field>
-                    </div>
-                </div>
-                <!-- other details -->
-                <div class="row mr-b1">
-                    <div class="col-12 col-sm-12">
-                        <mat-expansion-panel class="mr-t1" (opened)="toggleOtherDetails()">
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>Other Details</mat-panel-title>
-                            </mat-expansion-panel-header>
-                            <div class="pd-1">
-                                <div class="row">
-                                    <div class="form-group col-sm-4 col-12">
-                                        <label>Unique Name</label>
-                                        <input
-                                            type="text"
-                                            name="uniqueName"
-                                            UniqueNameDirective
-                                            textCaseChangeDirective
-                                            class="form-control"
-                                            formControlName="uniqueName"
-                                        />
-                                    </div>
-                                    <div class="form-group col-sm-4 col-12">
-                                        <span>
+                    <!-- other details -->
+                    <div class="row mr-b1">
+                        <div class="col-12 col-sm-12">
+                            <mat-expansion-panel class="mr-t1" (opened)="toggleOtherDetails()">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>Other Details</mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="pd-1">
+                                    <div class="row">
+                                        <div class="form-group col-sm-4 col-12">
+                                            <label>Unique Name</label>
                                             <input
-                                                type="radio"
-                                                class="radio-custom radio-theme"
-                                                name="showCodeType"
-                                                id="hsnCodeType"
-                                                formControlName="showCodeType"
-                                                value="hsn"
+                                                type="text"
+                                                name="uniqueName"
+                                                UniqueNameDirective
+                                                textCaseChangeDirective
+                                                class="form-control"
+                                                formControlName="uniqueName"
                                             />
-                                            <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
-                                        </span>
-                                        <span class="pull-right">
+                                        </div>
+                                        <div class="form-group col-sm-4 col-12">
+                                            <span>
+                                                <input
+                                                    type="radio"
+                                                    class="radio-custom radio-theme"
+                                                    name="showCodeType"
+                                                    id="hsnCodeType"
+                                                    formControlName="showCodeType"
+                                                    value="hsn"
+                                                />
+                                                <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
+                                            </span>
+                                            <span class="pull-right">
+                                                <input
+                                                    type="radio"
+                                                    class="radio-custom radio-theme"
+                                                    name="showCodeType"
+                                                    id="sacCodeType"
+                                                    formControlName="showCodeType"
+                                                    value="sac"
+                                                />
+                                                <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
+                                            </span>
                                             <input
-                                                type="radio"
-                                                class="radio-custom radio-theme"
-                                                name="showCodeType"
-                                                id="sacCodeType"
-                                                formControlName="showCodeType"
-                                                value="sac"
+                                                type="text"
+                                                class="form-control"
+                                                maxlength="10"
+                                                decimalDigitsDirective
+                                                formControlName="hsnNumber"
+                                                *ngIf="addStockForm.get('showCodeType')?.value === 'hsn'"
                                             />
-                                            <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
-                                        </span>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            maxlength="10"
-                                            decimalDigitsDirective
-                                            formControlName="hsnNumber"
-                                            *ngIf="addStockForm.get('showCodeType')?.value === 'hsn'"
-                                        />
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            maxlength="10"
-                                            formControlName="sacNumber"
-                                            decimalDigitsDirective
-                                            *ngIf="addStockForm.get('showCodeType')?.value === 'sac'"
-                                        />
-                                    </div>
-    
-                                    <div class="form-group col-sm-4 col-12">
-                                        <label>Tax</label>
-                                        <button
-                                            type="button"
-                                            class="form-control text-left"
-                                            [matMenuTriggerFor]="taxMenu"
-                                            mat-button
-                                        >
-                                            Selected ({{ taxTempArray?.length }})
-                                            <span class="pull-right"><span class="caret"></span></span>
-                                        </button>
-                                        <mat-menu #taxMenu="matMenu" class="tax-selection-menu">
-                                            <div
-                                                *ngFor="let tax of companyTaxesList$ | async"
-                                                [ngClass]="{ 'opacity': tax.isDisabled }"
-                                                mat-menu-item
-                                                (click)="$event.stopPropagation()"
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                maxlength="10"
+                                                formControlName="sacNumber"
+                                                decimalDigitsDirective
+                                                *ngIf="addStockForm.get('showCodeType')?.value === 'sac'"
+                                            />
+                                        </div>
+        
+                                        <div class="form-group col-sm-4 col-12">
+                                            <label>Tax</label>
+                                            <button
+                                                type="button"
+                                                class="form-control text-left"
+                                                [matMenuTriggerFor]="taxMenu"
+                                                mat-button
                                             >
-                                                <mat-checkbox
-                                                    [disabled]="tax.isDisabled"
-                                                    [checked]="tax.isChecked"
-                                                    (click)="selectTax($event, tax)"
-                                                    color="primary"
+                                                Selected ({{ taxTempArray?.length }})
+                                                <span class="pull-right"><span class="caret"></span></span>
+                                            </button>
+                                            <mat-menu #taxMenu="matMenu" class="tax-selection-menu">
+                                                <div
+                                                    *ngFor="let tax of companyTaxesList$ | async"
+                                                    [ngClass]="{ 'opacity': tax.isDisabled }"
+                                                    mat-menu-item
+                                                    (click)="$event.stopPropagation()"
                                                 >
-                                                    {{ tax.name }}
-                                                </mat-checkbox>
-                                            </div>
-                                            <div *ngIf="(companyTaxesList$ | async)?.length < 1" mat-menu-item>
-                                                No Tax Found
-                                            </div>
-                                        </mat-menu>
+                                                    <mat-checkbox
+                                                        [disabled]="tax.isDisabled"
+                                                        [checked]="tax.isChecked"
+                                                        (click)="selectTax($event, tax)"
+                                                        color="primary"
+                                                    >
+                                                        {{ tax.name }}
+                                                    </mat-checkbox>
+                                                </div>
+                                                <div *ngIf="(companyTaxesList$ | async)?.length < 1" mat-menu-item>
+                                                    No Tax Found
+                                                </div>
+                                            </mat-menu>
+                                        </div>
                                     </div>
-                                </div>
-    
-                                <div class="row">
-                                    <div class="form-group col-sm-4 col-12">
-                                        <label>Open. Qty</label>
-                                        <input
-                                            type="text"
-                                            name="openingQuantity"
-                                            decimalDigitsDirective
-                                            [DecimalPlaces]="4"
-                                            (change)="calCulateRate()"
-                                            class="form-control"
-                                            formControlName="openingQuantity"
-                                        />
-                                    </div>
-    
-                                    <div class="form-group col-sm-4 col-12">
-                                        <label>Amount</label>
-                                        <input
-                                            type="text"
-                                            name="openingAmount"
-                                            (change)="calCulateRate()"
-                                            decimalDigitsDirective
-                                            [DecimalPlaces]="2"
-                                            class="form-control"
-                                            formControlName="openingAmount"
-                                        />
-                                    </div>
-    
-                                    <div class="form-group col-sm-4 col-12">
-                                        <label>Rate</label>
-                                        <input
-                                            type="text"
-                                            name="stockRate"
-                                            formControlName="stockRate"
-                                            class="form-control"
-                                            placeholder="Auto calculate"
-                                        />
-                                    </div>
-                                </div>
-    
-                                <div class="row sku-row">
-                                    <!-- SKU Code -->
-                                    <div class="form-group col-sm-4 col-12">
-                                        <label>SKU Code</label>
-                                        <input
-                                            type="text"
-                                            name="skuCode"
-                                            class="form-control"
-                                            maxlength="20"
-                                            formControlName="skuCode"
-                                            (keyup)="validateSKU($event)"
-                                        />
-                                    </div>
-    
-                                    <!-- field 1 -->
-                                    <div
-                                        class="form-group col-sm-4 col-12"
-                                        *ngIf="customField1 || addStockForm.controls['customField1Heading']?.value"
-                                    >
-                                        <label>
-                                            <span
-                                                *ngIf="
-                                                    !customField1HeadingEditing &&
-                                                    !addStockForm.controls['customField1Heading']?.value
-                                                "
-                                                >Custom field 1</span
-                                            >
-                                            <span *ngIf="!customField1HeadingEditing">{{
-                                                addStockForm.controls["customField1Heading"]?.value
-                                            }}</span>
+        
+                                    <div class="row">
+                                        <div class="form-group col-sm-4 col-12">
+                                            <label>Open. Qty</label>
                                             <input
                                                 type="text"
-                                                placeholder="Custom field 1"
-                                                class="label-input"
-                                                *ngIf="customField1HeadingEditing"
-                                                formControlName="customField1Heading"
-                                                (blur)="customField1HeadingEditing = !customField1HeadingEditing"
+                                                name="openingQuantity"
+                                                decimalDigitsDirective
+                                                [DecimalPlaces]="4"
+                                                (change)="calCulateRate()"
+                                                class="form-control"
+                                                formControlName="openingQuantity"
                                             />
-    
-                                            <span class="pull-right">
-                                                <i
-                                                    *ngIf="!customField1HeadingEditing"
-                                                    class="icon-edit-pencil"
-                                                    (click)="customField1HeadingEditing = !customField1HeadingEditing"
-                                                ></i>
-                                                <i
-                                                    class="icon-cross text-danger"
-                                                    (click)="removeCustomField('remove', 1)"
-                                                ></i>
-                                            </span>
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="customField1Value"
-                                            class="form-control"
-                                            maxlength="30"
-                                            formControlName="customField1Value"
-                                        />
-                                    </div>
-                                    <!-- field 2 -->
-                                    <div
-                                        class="form-group col-sm-4 col-12"
-                                        *ngIf="customField2 || addStockForm.controls['customField2Heading']?.value"
-                                    >
-                                        <label>
-                                            <span
-                                                *ngIf="
-                                                    !customField2HeadingEditing &&
-                                                    !addStockForm.controls['customField2Heading']?.value
-                                                "
-                                                >Custom field 2</span
-                                            >
-                                            <span *ngIf="!customField2HeadingEditing">{{
-                                                addStockForm.controls["customField2Heading"]?.value
-                                            }}</span>
+                                        </div>
+        
+                                        <div class="form-group col-sm-4 col-12">
+                                            <label>Amount</label>
                                             <input
                                                 type="text"
-                                                placeholder="Custom field 2"
-                                                class="label-input"
-                                                *ngIf="customField2HeadingEditing"
-                                                formControlName="customField2Heading"
-                                                (blur)="customField2HeadingEditing = !customField2HeadingEditing"
+                                                name="openingAmount"
+                                                (change)="calCulateRate()"
+                                                decimalDigitsDirective
+                                                [DecimalPlaces]="2"
+                                                class="form-control"
+                                                formControlName="openingAmount"
                                             />
-    
-                                            <span class="pull-right">
-                                                <i
-                                                    *ngIf="!customField2HeadingEditing"
-                                                    class="icon-edit-pencil"
-                                                    (click)="customField2HeadingEditing = !customField2HeadingEditing"
-                                                ></i>
-                                                <i
-                                                    class="icon-cross text-danger"
-                                                    (click)="removeCustomField('remove', 2)"
-                                                ></i>
-                                            </span>
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="customField2Value"
-                                            class="form-control"
-                                            maxlength="30"
-                                            formControlName="customField2Value"
-                                        />
+                                        </div>
+        
+                                        <div class="form-group col-sm-4 col-12">
+                                            <label>Rate</label>
+                                            <input
+                                                type="text"
+                                                name="stockRate"
+                                                formControlName="stockRate"
+                                                class="form-control"
+                                                placeholder="Auto calculate"
+                                            />
+                                        </div>
                                     </div>
-                                    <!-- field 2 end -->
-                                    <div class="form-group col-sm-4 col-12">
+        
+                                    <div class="row sku-row">
+                                        <!-- SKU Code -->
+                                        <div class="form-group col-sm-4 col-12">
+                                            <label>SKU Code</label>
+                                            <input
+                                                type="text"
+                                                name="skuCode"
+                                                class="form-control"
+                                                maxlength="20"
+                                                formControlName="skuCode"
+                                                (keyup)="validateSKU($event)"
+                                            />
+                                        </div>
+        
+                                        <!-- field 1 -->
                                         <div
-                                            class="new-custom-btn"
-                                            (click)="addCustomField()"
-                                            *ngIf="!customField2 || !customField1"
+                                            class="form-group col-sm-4 col-12"
+                                            *ngIf="customField1 || addStockForm.controls['customField1Heading']?.value"
                                         >
-                                            + Custom field
+                                            <label>
+                                                <span
+                                                    *ngIf="
+                                                        !customField1HeadingEditing &&
+                                                        !addStockForm.controls['customField1Heading']?.value
+                                                    "
+                                                    >Custom field 1</span
+                                                >
+                                                <span *ngIf="!customField1HeadingEditing">{{
+                                                    addStockForm.controls["customField1Heading"]?.value
+                                                }}</span>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Custom field 1"
+                                                    class="label-input"
+                                                    *ngIf="customField1HeadingEditing"
+                                                    formControlName="customField1Heading"
+                                                    (blur)="customField1HeadingEditing = !customField1HeadingEditing"
+                                                />
+        
+                                                <span class="pull-right">
+                                                    <i
+                                                        *ngIf="!customField1HeadingEditing"
+                                                        class="icon-edit-pencil"
+                                                        (click)="customField1HeadingEditing = !customField1HeadingEditing"
+                                                    ></i>
+                                                    <i
+                                                        class="icon-cross text-danger"
+                                                        (click)="removeCustomField('remove', 1)"
+                                                    ></i>
+                                                </span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="customField1Value"
+                                                class="form-control"
+                                                maxlength="30"
+                                                formControlName="customField1Value"
+                                            />
+                                        </div>
+                                        <!-- field 2 -->
+                                        <div
+                                            class="form-group col-sm-4 col-12"
+                                            *ngIf="customField2 || addStockForm.controls['customField2Heading']?.value"
+                                        >
+                                            <label>
+                                                <span
+                                                    *ngIf="
+                                                        !customField2HeadingEditing &&
+                                                        !addStockForm.controls['customField2Heading']?.value
+                                                    "
+                                                    >Custom field 2</span
+                                                >
+                                                <span *ngIf="!customField2HeadingEditing">{{
+                                                    addStockForm.controls["customField2Heading"]?.value
+                                                }}</span>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Custom field 2"
+                                                    class="label-input"
+                                                    *ngIf="customField2HeadingEditing"
+                                                    formControlName="customField2Heading"
+                                                    (blur)="customField2HeadingEditing = !customField2HeadingEditing"
+                                                />
+        
+                                                <span class="pull-right">
+                                                    <i
+                                                        *ngIf="!customField2HeadingEditing"
+                                                        class="icon-edit-pencil"
+                                                        (click)="customField2HeadingEditing = !customField2HeadingEditing"
+                                                    ></i>
+                                                    <i
+                                                        class="icon-cross text-danger"
+                                                        (click)="removeCustomField('remove', 2)"
+                                                    ></i>
+                                                </span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="customField2Value"
+                                                class="form-control"
+                                                maxlength="30"
+                                                formControlName="customField2Value"
+                                            />
+                                        </div>
+                                        <!-- field 2 end -->
+                                        <div class="form-group col-sm-4 col-12">
+                                            <div
+                                                class="new-custom-btn"
+                                                (click)="addCustomField()"
+                                                *ngIf="!customField2 || !customField1"
+                                            >
+                                                + Custom field
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </mat-expansion-panel>
+                            </mat-expansion-panel>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-sm-6 col-12">
-                    <div class="checkbox">
-                        <mat-checkbox
-                            formControlName="enablePurchase"
-                            color="primary"
-                        >
-                            Purchase Information
-                        </mat-checkbox
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label class="bold-head">Account Name</label>
-                        <reactive-dropdown-field
-                            [options]="purchaseAccountsDropDown$ | async"
-                            formControlName="purchaseAccountUniqueName"
-                            [placeholder]="'select purchase account'"
-                            [disabled]="!addStockForm.controls['enablePurchase']?.value"
-                            [name]="'purchaseAccountUniqueName'"
-                        ></reactive-dropdown-field>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-7 col-sm-7">
-                            <label>Unit</label>
+                <div class="row">
+                    <div class="col-sm-6 col-12">
+                        <div class="checkbox">
+                            <mat-checkbox
+                                formControlName="enablePurchase"
+                                color="primary"
+                            >
+                                Purchase Information
+                            </mat-checkbox
+                            >
                         </div>
-                        <div class="col-4 col-sm-4 row">
-                            <label>Rate</label>
+                        <div class="form-group">
+                            <label class="bold-head">Account Name</label>
+                            <reactive-dropdown-field
+                                [options]="purchaseAccountsDropDown$ | async"
+                                formControlName="purchaseAccountUniqueName"
+                                [placeholder]="'select purchase account'"
+                                [disabled]="!addStockForm.controls['enablePurchase']?.value"
+                                [name]="'purchaseAccountUniqueName'"
+                            ></reactive-dropdown-field>
                         </div>
-                    </div>
 
-                    <div formArrayName="purchaseUnitRates">
-                        <div
-                            *ngFor="
-                                let item of addStockForm.get('purchaseUnitRates')['controls'];
-                                let i = index;
-                                let f = first;
-                                let l = last
-                            "
-                        >
-                            <div [formGroupName]="i" class="row">
-                                <div class="form-group col-7 col-sm-7">
-                                    <reactive-dropdown-field
-                                        [options]="stockUnitsDropDown$ | async"
-                                        formControlName="stockUnitUniqueName"
-                                        [placeholder]="'Select Unit'"
-                                        [disabled]="!addStockForm.controls['enablePurchase']?.value"
-                                        [createNewText]="'+ Add New'"
-                                        (createOption)="addNewStockUnit()"
-                                        [name]="'stockUnitUniqueName'"
-                                    ></reactive-dropdown-field>
-                                </div>
-                                <div class="form-group row col-4 col-sm-4">
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        decimalDigitsDirective
-                                        [DecimalPlaces]="4"
-                                        formControlName="rate"
-                                    />
-                                </div>
-                                <div class="pull-right unit-add">
-                                    <button
-                                        mat-stroked-button
-                                        class="mr-0"
-                                        (click)="addPurchaseUnitRates(i)"
-                                        *ngIf="l"
-                                    >
-                                        <i class="icon-plus add-row"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        (click)="removePurchaseUnitRates(i)"
-                                        *ngIf="!l"
-                                    >
-                                        <i class="icon-cross delete"></i>
-                                    </button>
-                                </div>
+                        <div class="row">
+                            <div class="col-7 col-sm-7">
+                                <label>Unit</label>
+                            </div>
+                            <div class="col-4 col-sm-4 row">
+                                <label>Rate</label>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-sm-6 col-12">
-                    <div class="checkbox">
-                        <mat-checkbox
-                            formControlName="enableSales"
-                            color="primary"
-                        >
-                            Sales Information
-                        </mat-checkbox
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label >Account Name</label>
-                        <reactive-dropdown-field
-                            [options]="salesAccountsDropDown$ | async"
-                            formControlName="salesAccountUniqueName"
-                            [disabled]="!addStockForm.controls['enableSales']?.value"
-                            [placeholder]="'select sales account'"
-                            [name]="'salesAccountUniqueName'"
-                        ></reactive-dropdown-field>
-                    </div>
-                    <div class="row">
-                        <div class="col-7 col-sm-7">
-                            <label>Unit</label>
-                        </div>
-                        <div class="col-4 col-sm-4 row">
-                            <label>Rate</label>
-                        </div>
-                    </div>
-
-                    <div formArrayName="saleUnitRates">
-                        <div
-                            *ngFor="
-                                let item of addStockForm.get('saleUnitRates')['controls'];
-                                let i = index;
-                                let f = first;
-                                let l = last
-                            "
-                        >
-                            <div [formGroupName]="i" class="row">
-                                <div class="form-group col-7 col-sm-7">
-                                    <reactive-dropdown-field
-                                        [options]="stockUnitsDropDown$ | async"
-                                        formControlName="stockUnitUniqueName"
-                                        [disabled]="!addStockForm.controls['enableSales']?.value"
-                                        [placeholder]="'Select Unit'"
-                                        [createNewText]="'+ Add New'"
-                                        (createOption)="addNewStockUnit()"
-                                        [name]="'stockUnitUniqueName'"
-                                    ></reactive-dropdown-field>
-                                </div>
-                                <div class="form-group row col-4 col-sm-4">
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        decimalDigitsDirective
-                                        [DecimalPlaces]="4"
-                                        formControlName="rate"
-                                    />
-                                </div>
-                                <div class="pull-right unit-add">
-                                    <button mat-stroked-button class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
-                                        <i class="icon-plus add-row"></i>
-                                    </button>
-                                    <button mat-stroked-button (click)="removeSaleUnitRates(i)" *ngIf="!l">
-                                        <i class="icon-cross delete"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row pd-l05 pd-r05">
-                <div class="col-12 col-sm-12">
-                    <div class="checkbox">
-                        <mat-checkbox
-                            formControlName="isFsStock"
-                            [disabled]=""
-                            color="primary"
-                        >
-                            Is it a finished stock? (Manufacturing/Combo)
-                        </mat-checkbox
-                        >
-                    </div>
-                </div>
-            </div>
-
-            <section class="mr-t2 row mr-b3 col-12 col-sm-12" *ngIf="addStockForm?.value.isFsStock">
-                <div class="pd-l05 pd-r05">
-                    <h1 class="section-head bd-rb">
-                        <strong>{{ addStockForm.controls["name"]?.value }} (Made with)</strong>
-                    </h1>
-                    <table class="no-hover width-100">
-                        <tbody formGroupName="manufacturingDetails">
-                            <tr class="output-row">
-                                <td class="form-group">
-                                    <label>Output Qty <sup>*</sup></label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        decimalDigitsDirective
-                                        [DecimalPlaces]="4"
-                                        name="manufacturingQuantity"
-                                        placeholder="Quantity"
-                                        formControlName="manufacturingQuantity"
-                                    />
-                                </td>
-                                <td class="form-group">
-                                    <label>Stock Unit <sup>*</sup></label>
-                                    <reactive-dropdown-field
-                                        [options]="stockUnitsDropDown$ | async"
-                                        formControlName="manufacturingUnitUniqueName"
-                                        [placeholder]="'Select Unit'"
-                                        [name]="'manufacturingUnitUniqueName'"
-                                    ></reactive-dropdown-field>
-                                </td>
-                                <td
-                                    *ngIf="
-                                        addStockForm.controls['manufacturingDetails'].controls[
-                                            'manufacturingQuantity'
-                                        ]?.value
-                                    "
-                                    colspan="2"
-                                >
-                                    <label class="d-block">&nbsp;</label>
-                                    <span class="width-100"
-                                        ><strong
-                                            >= (
-                                            {{
-                                                addStockForm.controls["manufacturingDetails"].controls[
-                                                    "manufacturingQuantity"
-                                                ]?.value
-                                            }}
-                                            {{
-                                                addStockForm.controls["manufacturingDetails"].controls[
-                                                    "manufacturingUnitCode"
-                                                ]?.value
-                                            }}
-                                            {{ addStockForm.controls["name"]?.value }} )</strong
-                                        ></span
-                                    >
-                                </td>
-                            </tr>
-                            <tr class="no-hover table-label">
-                                <td [style.width.px]="200"><strong>Input Stock Name</strong></td>
-                                <td><strong>Stock Qty</strong></td>
-                                <td><strong>Stock Unit</strong></td>
-                                <td colspan="1"></td>
-                            </tr>
-
-                            <ng-container formArrayName="linkedStocks">
-                                <tr
-                                    *ngFor="
-                                        let list of addStockForm.get('manufacturingDetails')['controls'][
-                                            'linkedStocks'
-                                        ].controls;
-                                        let i = index;
-                                        let l = last
-                                    "
-                                    [formGroupName]="i"
-                                    class="fsstock"
-                                >
-                                    <td>
-                                        <label class="input-label-stock">Input Stock Name</label>
-                                        <reactive-dropdown-field
-                                            [options]="stockListDropDown$ | async"
-                                            formControlName="stockUniqueName"
-                                            [placeholder]="'Select Stock'"
-                                            (selectedOption)="findAddedStock($event?.value, i)"
-                                            [name]="'stockUniqueName'"
-                                        ></reactive-dropdown-field>
-                                    </td>
-
-                                    <td>
-                                        <label class="input-label-stock">Stock Qty</label>
-                                        <input
-                                            type="text"
-                                            formControlName="quantity"
-                                            decimalDigitsDirective
-                                            [DecimalPlaces]="4"
-                                            name="quantity"
-                                            placeholder="Enter Quantity"
-                                            class="form-control"
-                                        />
-                                    </td>
-                                    <td>
-                                        <label class="input-label-stock">Stock Unit</label>
+                        <div formArrayName="purchaseUnitRates">
+                            <div
+                                *ngFor="
+                                    let item of addStockForm.get('purchaseUnitRates')['controls'];
+                                    let i = index;
+                                    let f = first;
+                                    let l = last
+                                "
+                            >
+                                <div [formGroupName]="i" class="row">
+                                    <div class="form-group col-7 col-sm-7">
                                         <reactive-dropdown-field
                                             [options]="stockUnitsDropDown$ | async"
                                             formControlName="stockUnitUniqueName"
                                             [placeholder]="'Select Unit'"
+                                            [disabled]="!addStockForm.controls['enablePurchase']?.value"
+                                            [createNewText]="'+ Add New'"
+                                            (createOption)="addNewStockUnit()"
                                             [name]="'stockUnitUniqueName'"
                                         ></reactive-dropdown-field>
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div class="form-group row col-4 col-sm-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            decimalDigitsDirective
+                                            [DecimalPlaces]="4"
+                                            formControlName="rate"
+                                        />
+                                    </div>
+                                    <div class="pull-right unit-add">
                                         <button
                                             mat-stroked-button
-                                            (click)="addItemInLinkedStocks(list, i, i)"
+                                            class="mr-0"
+                                            (click)="addPurchaseUnitRates(i)"
                                             *ngIf="l"
-                                            [disabled]="disableStockButton"
                                         >
                                             <i class="icon-plus add-row"></i>
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            (click)="removeItemInLinkedStocks(i)"
+                                            (click)="removePurchaseUnitRates(i)"
                                             *ngIf="!l"
                                         >
                                             <i class="icon-cross delete"></i>
                                         </button>
-                                    </td>
-                                </tr>
-                            </ng-container>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="row">
-                <div class="col-12 col-sm-12 text-left">
-                    <div class="mt-5 pd-l05 pd-r05">
-                        <button
-                            type="submit"
-                            *ngIf="!isUpdatingStockForm"
-                            [ladda]="isStockAddInProcess$ | async"
-                            (click)="submit()"
-                            mat-raised-button color="primary"
-                            [disabled]="addStockForm.invalid || disableStockButton"
-                        >
-                            Save
-                        </button>
-                        <button
-                            type="button"
-                            *ngIf="isUpdatingStockForm"
-                            [ladda]="isStockUpdateInProcess$ | async"
-                            mat-raised-button color="primary"
-                            (click)="update()"
-                            [disabled]="addStockForm.invalid || disableStockButton"
-                        >
-                            Update
-                        </button>
-                        <button
-                            *ngIf="isUpdatingStockForm"
-                            [ladda]="isStockDeleteInProcess$ | async"
-                            mat-stroked-button
-                            (click)="openModal(deleteGroupStockTemplate)"
-                        >
-                            Delete Stock
-                        </button>
-                        <button
-                            type="button"
-                            *ngIf="!isUpdatingStockForm"
-                            (click)="resetStockForm()"
-                            mat-stroked-button
-                        >
-                            Reset
-                        </button>
+                    <div class="col-sm-6 col-12">
+                        <div class="checkbox">
+                            <mat-checkbox
+                                formControlName="enableSales"
+                                color="primary"
+                            >
+                                Sales Information
+                            </mat-checkbox
+                            >
+                        </div>
+                        <div class="form-group">
+                            <label >Account Name</label>
+                            <reactive-dropdown-field
+                                [options]="salesAccountsDropDown$ | async"
+                                formControlName="salesAccountUniqueName"
+                                [disabled]="!addStockForm.controls['enableSales']?.value"
+                                [placeholder]="'select sales account'"
+                                [name]="'salesAccountUniqueName'"
+                            ></reactive-dropdown-field>
+                        </div>
+                        <div class="row">
+                            <div class="col-7 col-sm-7">
+                                <label>Unit</label>
+                            </div>
+                            <div class="col-4 col-sm-4 row">
+                                <label>Rate</label>
+                            </div>
+                        </div>
+
+                        <div formArrayName="saleUnitRates">
+                            <div
+                                *ngFor="
+                                    let item of addStockForm.get('saleUnitRates')['controls'];
+                                    let i = index;
+                                    let f = first;
+                                    let l = last
+                                "
+                            >
+                                <div [formGroupName]="i" class="row">
+                                    <div class="form-group col-7 col-sm-7">
+                                        <reactive-dropdown-field
+                                            [options]="stockUnitsDropDown$ | async"
+                                            formControlName="stockUnitUniqueName"
+                                            [disabled]="!addStockForm.controls['enableSales']?.value"
+                                            [placeholder]="'Select Unit'"
+                                            [createNewText]="'+ Add New'"
+                                            (createOption)="addNewStockUnit()"
+                                            [name]="'stockUnitUniqueName'"
+                                        ></reactive-dropdown-field>
+                                    </div>
+                                    <div class="form-group row col-4 col-sm-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            decimalDigitsDirective
+                                            [DecimalPlaces]="4"
+                                            formControlName="rate"
+                                        />
+                                    </div>
+                                    <div class="pull-right unit-add">
+                                        <button mat-stroked-button class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
+                                            <i class="icon-plus add-row"></i>
+                                        </button>
+                                        <button mat-stroked-button (click)="removeSaleUnitRates(i)" *ngIf="!l">
+                                            <i class="icon-cross delete"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    </div>
+                <div class="row pd-l05 pd-r05">
+                    <div class="col-12 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox
+                                formControlName="isFsStock"
+                                [disabled]=""
+                                color="primary"
+                            >
+                                Is it a finished stock? (Manufacturing/Combo)
+                            </mat-checkbox
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <section class="mr-t2 row mr-b3 col-12 col-sm-12" *ngIf="addStockForm?.value.isFsStock">
+                    <div class="pd-l05 pd-r05">
+                        <h1 class="section-head bd-rb">
+                            <strong>{{ addStockForm.controls["name"]?.value }} (Made with)</strong>
+                        </h1>
+                        <table class="no-hover width-100">
+                            <tbody formGroupName="manufacturingDetails">
+                                <tr class="output-row">
+                                    <td class="form-group">
+                                        <label>Output Qty <sup>*</sup></label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            decimalDigitsDirective
+                                            [DecimalPlaces]="4"
+                                            name="manufacturingQuantity"
+                                            placeholder="Quantity"
+                                            formControlName="manufacturingQuantity"
+                                        />
+                                    </td>
+                                    <td class="form-group">
+                                        <label>Stock Unit <sup>*</sup></label>
+                                        <reactive-dropdown-field
+                                            [options]="stockUnitsDropDown$ | async"
+                                            formControlName="manufacturingUnitUniqueName"
+                                            [placeholder]="'Select Unit'"
+                                            [name]="'manufacturingUnitUniqueName'"
+                                        ></reactive-dropdown-field>
+                                    </td>
+                                    <td
+                                        *ngIf="
+                                            addStockForm.controls['manufacturingDetails'].controls[
+                                                'manufacturingQuantity'
+                                            ]?.value
+                                        "
+                                        colspan="2"
+                                    >
+                                        <label class="d-block">&nbsp;</label>
+                                        <span class="width-100"
+                                            ><strong
+                                                >= (
+                                                {{
+                                                    addStockForm.controls["manufacturingDetails"].controls[
+                                                        "manufacturingQuantity"
+                                                    ]?.value
+                                                }}
+                                                {{
+                                                    addStockForm.controls["manufacturingDetails"].controls[
+                                                        "manufacturingUnitCode"
+                                                    ]?.value
+                                                }}
+                                                {{ addStockForm.controls["name"]?.value }} )</strong
+                                            ></span
+                                        >
+                                    </td>
+                                    <!-- <td colspan="1">&nbsp;</td> -->
+                                </tr>
+                                <tr class="no-hover table-label">
+                                    <td [style.width.px]="200"><strong>Input Stock Name</strong></td>
+                                    <td><strong>Stock Qty</strong></td>
+                                    <td><strong>Stock Unit</strong></td>
+                                    <td colspan="1"></td>
+                                </tr>
+
+                                <ng-container formArrayName="linkedStocks">
+                                    <tr
+                                        *ngFor="
+                                            let list of addStockForm.get('manufacturingDetails')['controls'][
+                                                'linkedStocks'
+                                            ].controls;
+                                            let i = index;
+                                            let l = last
+                                        "
+                                        [formGroupName]="i"
+                                        class="fsstock"
+                                    >
+                                        <td>
+                                            <label class="input-label-stock">Input Stock Name</label>
+                                            <reactive-dropdown-field
+                                                [options]="stockListDropDown$ | async"
+                                                formControlName="stockUniqueName"
+                                                [placeholder]="'Select Stock'"
+                                                (selectedOption)="findAddedStock($event?.value, i)"
+                                                [name]="'stockUniqueName'"
+                                            ></reactive-dropdown-field>
+                                        </td>
+
+                                        <td>
+                                            <label class="input-label-stock">Stock Qty</label>
+                                            <input
+                                                type="text"
+                                                formControlName="quantity"
+                                                decimalDigitsDirective
+                                                [DecimalPlaces]="4"
+                                                name="quantity"
+                                                placeholder="Enter Quantity"
+                                                class="form-control"
+                                            />
+                                        </td>
+                                        <td>
+                                            <label class="input-label-stock">Stock Unit</label>
+                                            <reactive-dropdown-field
+                                                [options]="stockUnitsDropDown$ | async"
+                                                formControlName="stockUnitUniqueName"
+                                                [placeholder]="'Select Unit'"
+                                                [name]="'stockUnitUniqueName'"
+                                            ></reactive-dropdown-field>
+                                        </td>
+                                        <td>
+                                            <button
+                                                mat-stroked-button
+                                                (click)="addItemInLinkedStocks(list, i, i)"
+                                                *ngIf="l"
+                                                [disabled]="disableStockButton"
+                                            >
+                                                <i class="icon-plus add-row"></i>
+                                            </button>
+                                            <button
+                                                mat-stroked-button
+                                                (click)="removeItemInLinkedStocks(i)"
+                                                *ngIf="!l"
+                                            >
+                                                <i class="icon-cross delete"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="row">
+                    <div class="col-12 col-sm-12 text-left">
+                        <div class="mt-5 pd-l05 pd-r05">
+                            <button
+                                type="submit"
+                                *ngIf="!isUpdatingStockForm"
+                                [ladda]="isStockAddInProcess$ | async"
+                                (click)="submit()"
+                                mat-raised-button color="primary"
+                                [disabled]="addStockForm.invalid || disableStockButton"
+                            >
+                                Save
+                            </button>
+                            <button
+                                type="button"
+                                *ngIf="isUpdatingStockForm"
+                                [ladda]="isStockUpdateInProcess$ | async"
+                                mat-raised-button color="primary"
+                                (click)="update()"
+                                [disabled]="addStockForm.invalid || disableStockButton"
+                            >
+                                Update
+                            </button>
+                            <button
+                                *ngIf="isUpdatingStockForm"
+                                [ladda]="isStockDeleteInProcess$ | async"
+                                mat-stroked-button
+                                (click)="openModal(deleteGroupStockTemplate)"
+                            >
+                                Delete Stock
+                            </button>
+                            <button
+                                type="button"
+                                *ngIf="!isUpdatingStockForm"
+                                (click)="resetStockForm()"
+                                mat-stroked-button
+                            >
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <div class="clearfix"></div>
+    <!--manufactre details  -->
+    <div class="clearfix"></div>
 </form>
 <!-- popup for the delete group -->
 <ng-template #deleteGroupStockTemplate>
