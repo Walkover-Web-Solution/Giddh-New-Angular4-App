@@ -97,10 +97,8 @@
                 <div
                     class="p-0 bd-r-right-none"
                     [innerHTML]="account.name | lowercase | highlight: search"
-                    #menuTrigger="matMenuTrigger"
-                    [matMenuTriggerFor]="accountDetailModalTemplate"
-                    (click)="$event.preventDefault(); $event.stopPropagation()"
                 ></div>
+                <span class="position-absolute" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="accountDetailModalTemplate">&nbsp;</span>
                 <!-- Material Menu -->
                 <mat-menu #accountDetailModalTemplate="matMenu">
                     <ng-container *ngIf="modalUniqueName && modalUniqueName === account?.uniqueName">

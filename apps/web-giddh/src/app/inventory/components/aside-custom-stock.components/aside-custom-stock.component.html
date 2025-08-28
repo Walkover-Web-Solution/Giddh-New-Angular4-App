@@ -1,5 +1,7 @@
 <div class="aside-pane">
-    <button mat-raised-button color="primary" id="close" (click)="closeAsidePane($event)">X</button>
+    <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
+        <i class="icon-cross"></i>
+    </button>
     <div class="aside-body row">
         <inventory-custom-stock
             #customStock
