@@ -1,10 +1,11 @@
 <div class="aside-pane">
-    <div class="form-header" *ngIf="!hideFirstScreen">
-        <h3>Create</h3>
+    <div class="dialog-header">
+        <span *ngIf="!hideFirstScreen">Create</span>
+        <button mat-icon-button aria-label="close" (click)="closeAsidePane()" *ngIf="!hideFirstScreen">
+            <i class="icon-cross"></i>
+        </button>
+        <button mat-stroked-button (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
     </div>
-
-    <button mat-stroked-button id="close" (click)="closeAsidePane()" *ngIf="!hideFirstScreen"><i class="icon-cross"></i></button>
-    <button mat-stroked-button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
 
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen" vr-item>
         <div class="pb-3 text-center">

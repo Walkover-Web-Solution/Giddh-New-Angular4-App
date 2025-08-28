@@ -2,7 +2,7 @@
     <div class="form-header" *ngIf="selectedAsideView == 'mainview'">
         <h3>Create</h3>
     </div>
-    <button mat-stroked-button id="close" (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
+    <button mat-stroked-button (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
         <i class="icon-cross"></i>
     </button>
     <button mat-stroked-button id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView != 'mainview'">Back</button>

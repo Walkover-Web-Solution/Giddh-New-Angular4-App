@@ -1,16 +1,22 @@
 <div class="aside-wrapper">
     <div class="aside-pane" [ngClass]="{ 'text-left': isActionMenu }">
-        <div class="form-header">
+        <!-- <div class="form-header">
             <div>
                 <h3>
                     <span>{{ isUpdateAccount ? commonLocaleData?.app_account_details : commonLocaleData?.app_create_account}}</span>
                 </h3>
             </div>
             <div>
-                <button mat-icon-button id="close" aria-label="close" (click)="closeAsidePane($event)">
+                <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
                     <i class="icon-cross"></i>
                 </button>
             </div>
+        </div> -->
+        <div class="dialog-header">
+            <span>{{ isUpdateAccount ? commonLocaleData?.app_account_details : commonLocaleData?.app_create_account}}</span>
+            <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
+                <i class="icon-cross"></i>
+            </button>
         </div>
 
         <mat-dialog-content>

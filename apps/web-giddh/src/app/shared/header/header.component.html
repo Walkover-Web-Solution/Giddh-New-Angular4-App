@@ -37,7 +37,7 @@
         (clickOutside)="closeSidebarMobile($event)"
     >
         <div class="menu-wrapper">
-            <primary-sidebar [isOpen]="sideMenu?.isopen" [isSidebarExpanded]="isSidebarExpanded" [apiMenuItems]="apiMenuItems" [isGoToBranch]="isGoToBranch">
+            <primary-sidebar [isOpen]="sideMenu?.isopen" [isSidebarExpanded]="isSidebarExpanded" [apiMenuItems]="apiMenuItems" [isGoToBranch]="isGoToBranch" [showCommandDialog]="showCommandDialog">
             </primary-sidebar>
         </div>
         <div class="mobile-menu-icon" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
@@ -791,7 +791,7 @@
     <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
-                <button mat-stroked-button id="closedialog" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
+                <button mat-stroked-button class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
                     <i class="icon-cross"></i>
                 </button>
                 <object [data]="calendlyUrl" title="calendar"></object>

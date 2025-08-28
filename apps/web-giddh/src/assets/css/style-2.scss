@@ -1813,20 +1813,6 @@ giddh-page-loader {
     }
 }
 
-.on-setting-page.setting-sidebar-open {
-    .settings-profile-tabs {
-        .profile-tab-container {
-            .account-aside-menu-state {
-                .aside-pane {
-                    #closedialog {
-                        top: 18px;
-                    }
-                }
-            }
-        }
-    }
-}
-
 .invoice-preview-page,
 .update-ledger-entry-panel-popup,
 .page-has-tabs,
@@ -7873,16 +7859,6 @@ app-header {
     border-radius: 0;
 }
 
-.account-aside-menu-state #closedialog {
-    display: block;
-    position: fixed;
-    right: 472px;
-    top: var(--top-distance);
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-}
-
 .contact-main .ps-content {
     padding-bottom: 260px;
 }
@@ -8795,18 +8771,6 @@ button.ladda-button,
 button.ladda-button .ladda-spinner,
 button.ladda-button .ladda-label {
     transition: none !important;
-}
-
-.account-aside-menu-state #closedialog {
-    display: block;
-    position: absolute;
-    right: 10px;
-    top: 17px;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    color: var(--color-primary-right-side-popup-header-text);
 }
 
 .ng-select-wrap.select-list.select-group .below {
