@@ -1,0 +1,98 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{ localeData?.receipt_entry }}</h4>
+    <button
+        type="button"
+        mat-stroked-button
+        class="close pull-right"
+        [attr.aria-label]="commonLocaleData?.app_close"
+        (click)="closePopup()"
+    >
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="receipt-entry-content">
+        <div class="receipt-entry-top-detail">
+            <h5 class="mr-b05">{{ localeData?.bill_wise_details }}: {{ transaction?.selectedAccount?.name }}</h5>
+            <p>{{ localeData?.upto }}: {{ transaction?.amount | giddhCurrency }} {{ localeData?.cr }}</p>
+        </div>
+        <div class="receipt-entry-form">
+            <div class="form-fields" *ngFor="let entry of receiptEntries; let i = index">
+                <div class="single-field relative">
+                    <reactive-dropdown-field
+                        [options]="entry.allowedTypes"
+                        [label]="commonLocaleData?.app_type"
+                        [placeholder]="commonLocaleData?.app_type" 
+                        [(ngModel)]="entry.type"
+                        class="receipt-type"
+                        (selectedOption)="onSelectAdjustmentType($event, entry)">
+                    </reactive-dropdown-field>
+                </div>
+                <!-- <div class="single-field" *ngIf="entry.type !== 'againstReference'">
+                    <label *ngIf="i === 0">Note</label>
+                    <input type="text" class="form-control" placeholder="Notes" name="notes" [(ngModel)]="entry.note">
+                </div> -->
+                <div class="single-field relative" *ngIf="entry.type !== 'againstReference'">
+                    <reactive-dropdown-field
+                        [options]="taxListSource$ | async"
+                        [label]="commonLocaleData?.app_tax + ' (' + commonLocaleData?.app_optional + ')'"
+                        [name]="'tax'"
+                        [placeholder]="commonLocaleData?.app_select_tax" 
+                        [(ngModel)]="entry.tax.uniqueName"
+                        [disabled]="entry.type === 'receipt'"
+                        (selectedOption)="onSelectTax($event, entry)"
+                        class="select-tax"
+                        >
+                    </reactive-dropdown-field>
+                </div>
+                <!-- [ngClass]="{'set-width': entry.type === 'againstReference'}"  it will used on version -2  -->
+                <div class="single-field relative" *ngIf="entry.type === 'againstReference'">
+                    <reactive-dropdown-field
+                        class="about-invoice-detail"
+                        [options]="pendingInvoiceListSource$ | async"
+                        [label]="localeData?.against_reference_placeholder"
+                        [name]="'invoiceNo'"
+                        [placeholder]="localeData?.against_reference_placeholder"
+                        [(ngModel)]="entry.invoice.uniqueName"
+                        (selectedOption)="onSelectInvoice($event, entry)">
+                    </reactive-dropdown-field>
+                </div>
+                <div class="single-field relative">
+                    <label *ngIf="i === 0">{{ commonLocaleData?.app_amount }}</label>
+                    <input
+                        type="tel"
+                        class="form-control"
+                        [placeholder]="localeData?.enter_amount"
+                        name="amount"
+                        [(ngModel)]="entry.amount"
+                        (keydown)="validateAmount($event, entry)"
+                        (blur)="validateEntries(false)"
+                        decimalDigitsDirective
+                        [DecimalPlaces]="2"
+                        (ngModelChange)="formatAmount(entry)"
+                    />
+                </div>
+                <div class="single-field to-cr-field">
+                    <p>
+                        <label class="d-block">&nbsp;</label>
+                        {{ localeData?.to_cr }}
+                    </p>
+                </div>
+                <div class="single-field delete-row">
+                    <p>
+                        <label class="d-block">&nbsp;</label>
+                        <a href="javascript:;" (click)="removeReceiptEntry(i)" *ngIf="i > 0"
+                            ><i class="icon-cross"></i
+                        ></a>
+                        <a *ngIf="i === 0">&nbsp;</a>
+                    </p>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button mat-raised-button color="primary" [disabled]="!isValidForm" (click)="emitEntries()">
+                    {{ commonLocaleData?.app_save }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

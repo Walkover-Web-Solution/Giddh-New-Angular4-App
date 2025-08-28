@@ -1,0 +1,146 @@
+<div class="relative adjust-group-page">
+    <hamburger-menu [pageHeading]="'Adjust group'"></hamburger-menu>
+    <span class="pull-right pd cursor-pointer back-to-page" [routerLink]="['/pages/inventory/v2/adjust-inventory']"
+        >Back</span
+    >
+    <div class="adjust-field-wrapper mt-2 relative">
+        <div>
+            <form>
+                <p class="text-gray mx-3 my-3 font-15">
+                    Note: All the items or sub-groups under the selected Group will be revalued.
+                </p>
+                <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Mode of Adjustment <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <mat-radio-group name="modeOfadjustment" class="d-flex">
+                                <mat-radio-button color="primary" value="quantity" class="mr-3">
+                                    Quantity
+                                </mat-radio-button>
+                                <mat-radio-button color="primary" value="value">
+                                    Value
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Reference No. <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <input
+                                type="text"
+                                id="reference-no"
+                                class="form-control"
+                                placeholder="Enter Reference Number"
+                            />
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Date <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <giddh-datepicker name="adjustGroupDate"></giddh-datepicker>
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Account <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <reactive-dropdown-field [name]="'accountNo'" [placeholder]="'Select Account'"></reactive-dropdown-field>
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Reason <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <reactive-dropdown-field [name]="'reason'" [placeholder]="'Select Reason'"></reactive-dropdown-field>
+                            <!-- button for add new reason aside pane, button is show in sh-select option
+                                <button mat-stroked-button (click)="addAdjustment()">add reason</button> -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="bg-white px-3 py-3 mt-4 mb-4">
+            <div class="table-responsive">
+                <table class="table giddh-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product/Service/Group</th>
+                            <th>Method</th>
+                            <th>Sub-Group</th>
+                            <th>Product/Service</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <div class="d-flex mb-2">
+                                    <span>
+                                        <img src="{{ imgPath }}Login-Page-Image.png" width="36" height="36" />
+                                    </span>
+                                    <reactive-dropdown-field
+                                        [name]="'selectGroupProductService'"
+                                        [placeholder]="'Select Name'"
+                                        class="mr-l15 w-100"
+                                    ></reactive-dropdown-field>
+                                </div>
+                                <textarea placeholder="Add Description" class="form-control"></textarea>
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    id="percentage"
+                                    class="form-control mb-2"
+                                    value="Percentage"
+                                    disabled
+                                />
+                                <input type="text" id="percent-value" value="0%" class="form-control" />
+                            </td>
+                            <td>
+                                <reactive-dropdown-field [name]="'selectSubgroup'" class="mb-2" [labelValue]="'12 Selected'"></reactive-dropdown-field>
+                            </td>
+                            <td>
+                                <reactive-dropdown-field [name]="'selectProductService'" class="mb-2" [labelValue]="'212 Selected'"></reactive-dropdown-field>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="add-line-bulk-item font-15">
+                <a href="javascript:void(0)">+ Add New Line</a> |
+                <a href="javascript:void(0)" (click)="openDialog(template)">+ Add Bulk Entries</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="inventory-footer sticky-footer">
+    <div class="inner-content-footer">
+        <div class="d-flex">
+            <div class="button-group">
+                <button id="adjust-group-btn" mat-stroked-button class="min-width-100 bdr-radius-50">Clear</button>
+                <button id="adjust-group-convert-btn" mat-raised-button color="primary" class="min-width-100 bdr-radius-50" disabled>
+                    Convert to Adjust
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- adjust inventory aside pane -->
+<ng-template #asideMenuStateForInventoryAdjustmentTemplate>
+    <inventory-adjustment-aside (closeAsideEvent)="asideMenuStateForInventoryAdjustmentDialogRef.close()">
+    </inventory-adjustment-aside>
+</ng-template>
+
+<!-- adjust bulk entry modal -->
+<ng-template #template>
+    <inventory-adjust-bulk-entry></inventory-adjust-bulk-entry>
+</ng-template>

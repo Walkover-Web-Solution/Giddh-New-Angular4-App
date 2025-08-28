@@ -1,0 +1,531 @@
+<ng-container
+    appTranslate
+    [file]="'invoice/recurring'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div validateSectionPermission [hasPermission]="hasRecurringVoucherListPermissions">
+        <div class="recurring-container">
+            <form
+                #recurringForm="ngForm"
+                novalidate
+                class="form-inline input-grp-date-range-picker position-relative"
+                (ngSubmit)="submit()"
+            >
+                <div class="d-flex search-icon-block mr-b15" *ngIf="isMobileScreen">
+                    <div (click)="openDialog(searchTemplate)">
+                        <i class="icon-search"></i>
+                    </div>
+                    <ng-template #searchTemplate>
+                        <div class="modal-header">
+                            <h4 class="modal-title bg pull-left">{{ localeData?.search_here }}</h4>
+                            <button mat-stroked-button
+                                type="button"
+                                class="close pull-right"
+                                [attr.aria-label]="commonLocaleData?.app_close"
+                                mat-dialog-close
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-view">
+                                <div class="form-group">
+                                    <div class="ng-select-wrap">
+                                        <reactive-dropdown-field
+                                            [name]="'invoiceType'"
+                                            [placeholder]="commonLocaleData?.app_select_account"
+                                            [(ngModel)]="filter.status"
+                                            [options]="invoiceTypeOptions"
+                                            [label]="localeData?.invoice_type"
+                                        >
+                                            <ng-template #optionTemplate let-option="option">
+                                                <a href="javascript:void(0)" class="list-item">
+                                                    <div class="item">{{ option.label }}</div>
+                                                </a>
+                                            </ng-template>
+                                        </reactive-dropdown-field>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="ng-select-wrap">
+                                        <reactive-dropdown-field
+                                            [name]="'interval'"
+                                            [placeholder]="commonLocaleData?.app_select_account"
+                                            [options]="intervalOptions"
+                                            [(ngModel)]="filter.duration"
+                                            [label]="localeData?.interval"
+                                        >
+                                            <ng-template #optionTemplate let-option="option">
+                                                <a href="javascript:void(0)" class="list-item">
+                                                    <div class="item">{{ option.label }}</div>
+                                                </a>
+                                            </ng-template>
+                                        </reactive-dropdown-field>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">{{ localeData?.last_invoice_date }}</label>
+                                    <div>
+                                        <giddh-datepicker
+                                            name="lastInvoiceDate"
+                                            [(ngModel)]="filter.lastInvoiceDate"
+                                            [placeholder]="commonLocaleData?.app_select_date"
+                                            [showToggleIcon]="false"
+                                        ></giddh-datepicker>
+                                    </div>
+                                </div>
+                                <div class="form-group search-invoice-filed">
+                                    <div class="search-invoice-no">
+                                        <label class="d-block">{{ localeData?.search_invoice_no }}</label>
+                                        <div class="input-group">
+                                            <input
+                                                type="text"
+                                                [placeholder]="localeData?.search_invoice_no"
+                                                class="w100"
+                                                [formControl]="invoiceNumberInput"
+                                                #invoiceSearch
+                                                class="form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group search-invoice-filed">
+                                    <div class="search-customer-no">
+                                        <div class="input-container">
+                                            <label class="d-block">{{ localeData?.search_customer_name }}</label>
+                                            <input
+                                                type="text"
+                                                [placeholder]="localeData?.search_customer_name"
+                                                class="w100"
+                                                name="customerName"
+                                                [formControl]="customerNameInput"
+                                                #customerSearch
+                                                class="form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button mat-raised-button color="primary">{{ commonLocaleData?.app_search }}</button>
+                                    <button 
+                                        mat-stroked-button
+                                        *ngIf="showResetFilterButton"
+                                        [matTooltip]="commonLocaleData?.app_reset_filter"
+                                        matTooltipPosition="above"
+                                        (click)="resetFilter()"
+                                    >
+                                        <i
+                                            aria-hidden="true"
+                                            class="icon-refresh"
+                                        ></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+                <div class="recurring-form-wrapper">
+                    <div class="recurring-form" *ngIf="!isMobileScreen">
+                        <div class="form-group mr-r1">
+                            <div class="ng-select-wrap input-group">
+                                <reactive-dropdown-field
+                                    [name]="'invoiceType'"
+                                    [placeholder]="commonLocaleData?.app_select_account"
+                                    [(ngModel)]="filter.status"
+                                    [options]="invoiceTypeOptions"
+                                    [label]="localeData?.invoice_type"
+                                >
+                                    <ng-template #optionTemplate let-option="option">
+                                        <a href="javascript:void(0)" class="list-item">
+                                            <div class="item">{{ option.label }}</div>
+                                        </a>
+                                    </ng-template>
+                                </reactive-dropdown-field>
+                            </div>
+                        </div>
+                        <div class="form-group mr-r1">
+                            <div class="ng-select-wrap input-group">
+                                <reactive-dropdown-field
+                                    [name]="'interval'"
+                                    [placeholder]="commonLocaleData?.app_select_account"
+                                    [options]="intervalOptions"
+                                    [(ngModel)]="filter.duration"
+                                    [label]="localeData?.interval"
+                                >
+                                    <ng-template #optionTemplate let-option="option">
+                                        <a href="javascript:void(0)" class="list-item">
+                                            <div class="item">{{ option.label }}</div>
+                                        </a>
+                                    </ng-template>
+                                </reactive-dropdown-field>
+                            </div>
+                        </div>
+
+                        <div class="form-group mr-r1">
+                            <label class="d-block mr-r15">{{ localeData?.last_invoice_date }}</label>
+                            <div class="input-group">
+                                <giddh-datepicker
+                                    name="lastInvoiceDate"
+                                    [(ngModel)]="filter.lastInvoiceDate"
+                                    [placeholder]="commonLocaleData?.app_select_date"
+                                    [showToggleIcon]="false"
+                                ></giddh-datepicker>
+                            </div>
+                        </div>
+
+                        <div class="form-group mr-r1" *ngIf="isMobileScreen">
+                            <div class="search-invoice-no">
+                                <label class="d-block">{{ localeData?.search_invoice_no }}</label>
+                                <div class="input-group">
+                                    <input
+                                        type="text"
+                                        [placeholder]="localeData?.search_invoice_no"
+                                        class="w100"
+                                        [formControl]="invoiceNumberInput"
+                                        #invoiceSearch
+                                        class="form-control"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mr-r1" *ngIf="isMobileScreen">
+                            <div class="search-customer-no">
+                                <div class="input-container">
+                                    <label class="d-block">{{ localeData?.search_customer_name }}</label>
+                                    <input
+                                        type="text"
+                                        [placeholder]="localeData?.search_customer_name"
+                                        class="w100"
+                                        name="customerName"
+                                        [formControl]="customerNameInput"
+                                        #customerSearch
+                                        class="form-control"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mr-r1">
+                            <label class="d-block">&nbsp;</label>
+                            <button mat-raised-button color="primary">{{ commonLocaleData?.app_search }}</button>
+                            <a class="cp" href="javascript:;">
+                                <i
+                                    aria-hidden="true"
+                                    class="icon-refresh"
+                                    [matTooltip]="commonLocaleData?.app_reset_filter"
+                                    matTooltipPosition="above"
+                                    *ngIf="showResetFilterButton"
+                                    (click)="resetFilter()"
+                                ></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-2">
+                        <div class="more-dropdown" *ngIf="selectedItems?.length < 0">
+                            <div class="btn-group d-inline-block">
+                                <button
+                                    type="button"
+                                    class="btn more-btn-dropdown"
+                                    [matMenuTriggerFor]="moreMenu"
+                                    mat-raised-button
+                                    color="primary"
+                                >
+                                    {{ commonLocaleData?.app_more }}
+                                    <i class="caret"></i>
+                                </button>
+
+                                <mat-menu #moreMenu="matMenu">
+                                    <button mat-menu-item>
+                                        {{ localeData?.bulk_note }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_send_email }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_print }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_export_pdf }}
+                                    </button>
+                                    <button mat-menu-item *ngIf="!isMobileScreen">
+                                        {{ localeData?.generate_eway_bill }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_create_credit_note }}
+                                    </button>
+                                    <button mat-menu-item>
+                                        {{ commonLocaleData?.app_delete }}
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div
+                class="table-responsive"
+                [hidden]="!(recurringData$ | async)?.totalItems && !filter?.voucherNumber && !filter?.customerName"
+            >
+                <table mat-table [dataSource]="recurringDataSource" class="basic giddh-table table-bordered on-mobile-view">
+                    <!-- Serial Number Column -->
+                    <ng-container matColumnDef="serialNumber">
+                       <th *matHeaderCellDef width="4%">
+                            <div class="check-image d-flex justify-content-center">#</div>
+                        </th>
+                        <td *matCellDef="let element; let i = index" width="4%" data-title="#">
+                            <div class="justify-content-sm d-flex justify-content-center">{{ i + 1 }}</div>
+                        </td>
+                    </ng-container>
+
+                    <!-- Invoice Number Column -->
+                    <ng-container matColumnDef="invoiceNumber">
+                        <th
+                            *matHeaderCellDef
+                            width="20%"
+                            class="td-search-box"
+                            #searchInvoiceContainer
+                            (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')"
+                        >
+                            <div [hidden]="showInvoiceNumberSearch">
+                                <i
+                                    class="icon-search"
+                                    (click)="showInvoiceNumberSearch = true; showCustomerNameSearch = false"
+                                ></i>
+                                <span> {{ commonLocaleData?.app_invoice_number }}</span>
+                            </div>
+
+                            <div class="input-container" [hidden]="!showInvoiceNumberSearch">
+                                <input
+                                    type="text"
+                                    [placeholder]="localeData?.search_invoice_no"
+                                    class="w100"
+                                    [formControl]="invoiceNumberInput"
+                                    #invoiceSearch
+                                />
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" width="20%" [attr.data-title]="commonLocaleData?.app_invoice_number">
+                            <a
+                                *ngIf="!isMobileScreen"
+                                class="cp btn-link-2"
+                                (click)="element?.status !== 'inactive' && openUpdatePanel(element)"
+                                >{{ element.voucherNumber || "-" }}</a
+                            >
+                            <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ element.voucherNumber || "-" }}</a>
+                        </td>
+                    </ng-container>
+
+                    <!-- Customer Name Column -->
+                    <ng-container matColumnDef="customerName">
+                        <th
+                            *matHeaderCellDef
+                            width="20%"
+                            class="td-search-box"
+                            #searchCustomerContainer
+                            (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showCustomerNameSearch,
+                                        title: commonLocaleData?.app_customer_name,
+                                        fieldName: 'customerName',
+                                        formControl: customerNameInput
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td *matCellDef="let element" width="20%" [attr.data-title]="commonLocaleData?.app_customer_name">
+                            {{ element.customerName || "-" }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Interval Column -->
+                    <ng-container matColumnDef="interval">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex">
+                                <div>{{ localeData?.interval }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'duration' }">
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="localeData?.interval">
+                            {{ element.duration || "-" }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Last Invoice Date Column -->
+                    <ng-container matColumnDef="lastInvoiceDate">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex">
+                                <div>{{ localeData?.last_invoice_date }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container
+                                        *ngTemplateOutlet="sortTemplate; context: { column: 'lastinvoicedate' }"
+                                    >
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="localeData?.last_invoice_date">
+                            {{ element.lastInvoiceDate || "-" }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Next Invoice Date Column -->
+                    <ng-container matColumnDef="nextInvoiceDate">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex">
+                                <div>{{ localeData?.next_invoice_date }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container
+                                        *ngTemplateOutlet="sortTemplate; context: { column: 'nextcrondate' }"
+                                    >
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="localeData?.next_invoice_date">
+                            {{ element.nextCronDate || "-" }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex">
+                                <div>{{ commonLocaleData?.app_status }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'status' }">
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_status">
+                            {{ element?.status || "-" | titlecase }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Invoice Amount Column -->
+                    <ng-container matColumnDef="invoiceAmount">
+                       <th *matHeaderCellDef>
+                            <div class="d-flex text-right">
+                                <div class="flex-fill">{{ localeData?.invoice_amount }}</div>
+                                <div class="icon-pointer">
+                                    <ng-container
+                                        *ngTemplateOutlet="sortTemplate; context: { column: 'vouchertotal' }"
+                                    >
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </th>
+                        <td *matCellDef="let element" [attr.data-title]="localeData?.invoice_amount" class="text-right">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="element.voucherTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="recurringDisplayedColumns"></tr>
+                    <tr mat-row 
+                        *matRowDef="let row; columns: recurringDisplayedColumns;"
+                        (mouseover)="hoveredItemForAction = row?.uniqueName"
+                        (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                        (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                    ></tr>
+
+                    <!-- Loading Row -->
+                    <tr mat-row *matNoDataRow class="loading-row">
+                        <td mat-cell colspan="8" *ngIf="isLoading">
+                            <giddh-page-loader></giddh-page-loader>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mt-4">
+                <ng-container *ngIf="(recurringData$ | async)?.totalItems > pageSizeOptions[1] && !isLoading">
+                    <mat-paginator
+                        [length]="(recurringData$ | async)?.totalItems"
+                        [pageSize]="pageSizeOptions[1]"
+                        [pageIndex]="currentPage - 1"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                        (page)="handlePageEvent($event)">
+                    </mat-paginator>
+                </ng-container>
+            </div>
+
+            <div class="no-data mr-t2" *ngIf="(recurringData$ | async)?.totalItems === 0">
+                <no-data></no-data>
+            </div>
+        </div>
+
+        <ng-template #asideMenuStateForRecurringEntryTemplate>
+            <app-aside-recurring-entry
+                [invoice]="selectedInvoice"
+                [mode]="'update'"
+                [isCompany]="isCompany"
+                [isConsolidatedBranch]="isConsolidatedBranch"
+                (closeAsideEvent)="asideMenuStateForRecurringEntryDialogRef.close()"
+            >
+            </app-aside-recurring-entry>
+        </ng-template>
+
+        <!-- region search template -->
+        <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+            <div [hidden]="show">
+                <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
+                <span> {{ title }}</span>
+            </div>
+
+            <div class="input-container" [hidden]="!show">
+                <input
+                    type="text"
+                    [placeholder]="getSearchFieldText(title)"
+                    class="w100"
+                    #searchBox
+                    [formControl]="formControl"
+                />
+            </div>
+        </ng-template>
+        <!-- endregion -->
+
+        <!-- region sort icon template -->
+        <ng-template #sortTemplate let-column="column">
+            <div
+                class="icon-sort-asc"
+                *ngIf="filter.sortBy !== column"
+                (click)="sortButtonClicked('asc', column)"
+                [ngClass]="{ 'active-text-color': filter.sortBy === column && filter.sort === 'asc' }"
+            ></div>
+
+            <div
+                class="icon-sort-asc"
+                *ngIf="filter.sortBy === column && filter.sort === 'asc'"
+                (click)="sortButtonClicked('desc', column)"
+                [ngClass]="{ 'active-text-color': filter.sortBy === column && filter.sort === 'asc' }"
+            ></div>
+
+            <div
+                class="icon-sort-asc"
+                *ngIf="filter.sortBy === column && filter.sort === 'desc'"
+                (click)="sortButtonClicked('asc', column)"
+                [ngClass]="{ 'active-text-color': filter.sortBy === column && filter.sort === 'desc' }"
+            ></div>
+        </ng-template>
+        <!-- endregion -->
+    </div>
+</ng-container>
