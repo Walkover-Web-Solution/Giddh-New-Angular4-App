@@ -234,10 +234,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         this.handleMultipleFilterKeydown(event);
     }
 
-    public onMultipleFilterKeyup(event: any) {
-        this.handleMultipleFilterKeyup(event);
-    }
-
     public onMultipleFilterFocus(event: any) {
         this._focus();
     }
@@ -254,10 +250,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
     public onTypeAheadFilterKeydown(event: any) {
         this.handleMultipleFilterKeydown(event);
-    }
-
-    public onTypeAheadFilterKeyup(event: any) {
-        this.handleMultipleFilterKeyup(event);
     }
 
     public onClearSelectionClick(event: any) {
@@ -582,16 +574,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
                 this.clearSelectionManually();
             }
         }
-    }
-
-    private handleMultipleFilterKeyup(event: any) {
-        // let key = event.which;
-        // if (key === this.KEYS.BACKSPACE) {
-        //   if (this.optionList.hasSelected && this.filterEnabled &&
-        //     (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value?.length === 1 && this.isTypeAheadMode))) {
-        //     this.deselectLast();
-        //   }
-        // }
     }
 
     private handleSingleFilterKeydown(event: any) {

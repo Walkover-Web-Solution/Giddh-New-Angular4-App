@@ -219,13 +219,6 @@
                                             <span class="icon-arrow-down"></span>
                                         </button>
                                         <mat-menu #downloadCsvEmail="matMenu">
-                                            <!-- <button
-                                                mat-menu-item
-                                                *ngIf="selectedCheckedContacts?.length"
-                                                (click)="openEmailDialog()"
-                                            >
-                                                {{ commonLocaleData?.app_email }}
-                                            </button> -->
                                             <button mat-menu-item (click)="downloadCSV()" aria-label="download csv">
                                                 {{ commonLocaleData?.app_download_csv }}
                                             </button>
@@ -648,35 +641,28 @@
                                         class="menu-table-item"
                                         (click)="performActions(1, account)"
                                         aria-label="ledger"
-                                    >
-                                        {{ commonLocaleData?.app_goto_ledger }}
-                                    </button>
-                                    <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(2, account)"
-                                        aria-label="generate invoice"
-                                    >
-                                        {{ commonLocaleData?.app_generate_invoice }}
-                                    </button>
-                                    <!-- <button
-                                    mat-menu-item
-                                    class="menu-table-item"
-                                    (click)="performActions(4, account, $event)"
-                                    >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
-                                    <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="openCustomEmailDialog(account, activeTab, false)"
-                                        aria-label="send email"
-                                    >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button>
-                                </mat-menu>
-                            </div>
-                        </td>
+                                        >
+                                            {{ commonLocaleData?.app_goto_ledger }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            class="menu-table-item"
+                                            (click)="performActions(2, account)"
+                                            aria-label="generate invoice"
+                                        >
+                                            {{ commonLocaleData?.app_generate_invoice }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            class="menu-table-item"
+                                            (click)="openCustomEmailDialog(account, activeTab, false)"
+                                            aria-label="send email"
+                                        >
+                                            {{ commonLocaleData?.app_send_email }}
+                                        </button>
+                                    </mat-menu>
+                                </div>
+                            </td>
                         </ng-container>
 
                         <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.PARENT_GROUP" [matColumnDef]="customerColumn.value">
@@ -1081,13 +1067,6 @@
                                         >
                                             {{ commonLocaleData?.app_send_email }}
                                         </button>
-                                        <!-- <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(4, account, $event)"
-                                    >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
                                     </mat-menu>
 
                                     <!--Modal for Mail/SMS-->

@@ -43,7 +43,6 @@ import { InventoryRoutingModule } from './inventory.routing.module';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
-import { VoucherModule } from '../voucher/voucher.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -134,7 +133,6 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         ConfirmModalModule,
         ScrollingModule,
         AsideMenuProductServiceModule,
-        VoucherModule,
         FormFieldsModule,
         MatSlideToggleModule,
         MatDialogModule,
