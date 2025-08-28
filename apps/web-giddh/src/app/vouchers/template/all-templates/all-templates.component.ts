@@ -46,15 +46,17 @@ export class AllTemplatesComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.invoiceUiDataService.customTemplate.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
-            if (template && template.uniqueName) {
+            if (template?.uniqueName) {
                 this.inputTemplate = cloneDeep(template);
                 // Attached file type is PDF
-                const setting = this.generalService.base64ToBlob(this.bs, 'application/pdf', 512);
-                const file = new Blob([setting], { type: 'application/pdf' });
-                URL.revokeObjectURL(this.pdfFileURL);
-                this.pdfFileURL = URL.createObjectURL(file);
-                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                this.isFileUploading = false;
+                const setting = this.generalService?.base64ToBlob(this.bs, 'application/pdf', 512);
+                if (setting) {
+                    const file = new Blob([setting], { type: 'application/pdf' });
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.domSanitizer?.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    this.isFileUploading = false;
+                }
                 // this.invoiceTemplatesService.getTemplatePreview(this.inputTemplate.templateType, true, this.inputTemplate).subscribe((response) => {
                 //     if (response && response?.status === 'success') {
                 //         // Attached file type is PDF
