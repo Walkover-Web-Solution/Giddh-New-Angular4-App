@@ -8,7 +8,6 @@ import { AppState } from '../../../store';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
-import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -48,7 +47,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public reverseChargeReportResults: any = {};
     public timeout: any;
-    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
     public universalDate: any[] = [];
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;

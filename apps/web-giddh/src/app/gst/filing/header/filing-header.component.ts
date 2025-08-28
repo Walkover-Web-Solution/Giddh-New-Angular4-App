@@ -4,8 +4,6 @@ import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purcha
 import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrJsonDownloadRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
@@ -27,12 +25,7 @@ import { BreakpointObserver } from "@angular/cdk/layout";
     // tslint:disable-next-line:component-selector
     selector: 'filing-header',
     templateUrl: 'filing-header.component.html',
-    styleUrls: ['filing-header.component.scss'],
-    providers: [
-        {
-            provide: BsDropdownConfig, useValue: { autoClose: true },
-        },
-    ]
+    styleUrls: ['filing-header.component.scss']
 })
 export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -55,8 +48,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public cancelConfirmationDialogRef: MatDialogRef<any>;
     /** Holds cancel push to portal dialog template ref */
     @ViewChild("pushToPortalDialog") pushToPortalDialog: TemplateRef<any>;
-    /** Directive to get reference of element */
-    @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     /** Aside authentication dialog open */
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     public gstAuthenticated$: Observable<boolean>;

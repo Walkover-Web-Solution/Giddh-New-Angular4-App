@@ -28,13 +28,13 @@
             <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of unitsArray">
                 <div class="unit-value overflow-hidden pd-l1">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
                 <div class="map-unit-value pd-r1">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="commonLocaleData?.app_unit"
                         [placeholder]="localeData?.select_unit"
                         [options]="units"
-                        [defaultValue]="unit?.mappedGstUnit ?? ''"
+                        [labelValue]="unit?.mappedGstUnit ?? ''"
                         (selectedOption)="unit.mappedGstUnit = $event?.value"
-                    ></dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
             </mat-grid-tile>
         </form>

@@ -826,28 +826,24 @@
                         <div class="col-sm-4">Select Category</div>
                         <div class="col-sm-4">
                             <div class="select-style middle">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [options]="CategoryOptions"
                                     (onClear)="clearShSelect('filterCategory')"
-                                    [multiple]="false"
                                     [placeholder]="'Select Category'"
-                                    #shCategory
                                     formControlName="filterCategory"
-                                    (selected)="onDDElementSelect($event, 'filterCategory')"
-                                ></sh-select>
+                                    (selectedOption)="onDDElementSelect($event, 'filterCategory')"
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="select-style middle">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [options]="CategoryTypeOptions"
                                     (onClear)="clearShSelect('filterCategoryType')"
-                                    [multiple]="false"
                                     [placeholder]="'Select Type'"
-                                    #shCategoryType
                                     formControlName="filterCategoryType"
-                                    (selected)="onDDElementSelect($event, 'filterCategoryType')"
-                                ></sh-select>
+                                    (selectedOption)="onDDElementSelect($event, 'filterCategoryType')"
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                     </div>
@@ -855,16 +851,13 @@
                         <div class="col-sm-4">Value</div>
                         <div class="col-sm-4">
                             <div class="select-style middle">
-                                <sh-select
+                                <reactive-dropdown-field
                                     [options]="FilterValueCondition"
                                     (onClear)="clearShSelect('filterValueCondition')"
-                                    [multiple]="false"
                                     [placeholder]="'Select Type'"
-                                    #shValueCondition
                                     formControlName="filterValueCondition"
-                                    (selected)="onDDElementSelect($event, 'filterValueCondition')"
-                                >
-                                </sh-select>
+                                    (selectedOption)="onDDElementSelect($event, 'filterValueCondition')"
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="col-sm-4">

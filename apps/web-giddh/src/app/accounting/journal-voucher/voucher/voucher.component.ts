@@ -22,8 +22,6 @@ import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
 import { cloneDeep, isEqual, find, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as dayjs from 'dayjs';
-import { BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
@@ -37,7 +35,6 @@ import { IOption } from '../../../theme/ng-select/option.interface';
 import { KeyboardService } from '../../keyboard.service';
 import { KEYS } from '../journal-voucher.component';
 import { AdjustmentTypesEnum } from "../../../shared/helpers/adjustmentTypes";
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
@@ -47,6 +44,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { CompanyActions } from '../../../actions/company.actions';
 import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -77,8 +75,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
-
     /** Instance of all items dialog */
     @ViewChild("chequeEntryModal") public dialogBox: TemplateRef<any>;
     @ViewChild('particular', { static: false }) public accountField: ElementRef;
@@ -90,11 +86,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
     /* Instance of narration box */
     @ViewChild('narrationBox') public narrationBox: any;
-    @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
     /* Selector for receipt entry modal */
     @ViewChild('receiptEntry', { static: true }) public receiptEntry: TemplateRef<any>;
-    /* Selector for adjustment type field */
-    @ViewChildren('adjustmentTypesField') public adjustmentTypesField: ShSelectComponent;
     /** List of all 'DEBIT' amount fields when 'By' entries are made  */
     @ViewChildren('byAmountField') public byAmountFields: QueryList<ElementRef>;
 
@@ -104,8 +97,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('genericAsideMenuAccountTemplate', { static: true }) public genericAsideMenuAccountTemplate: TemplateRef<any>;
     /** Dialog reference for aside menu account modal */
     public genericAsideMenuAccountDialogRef: MatDialogRef<any>;
-    /** List of both date picker used (one in voucher date and other in check clearance date) */
-    @ViewChildren(BsDatepickerDirective) bsDatePickers: QueryList<BsDatepickerDirective>;
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
 
@@ -239,8 +230,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public giddhBalanceDecimalPlaces: number = 2;
     /** From Group for jv */
     public journalVoucherForm: FormGroup;
-    /** Config for bs datepicker */
-    public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     /** From Group for jv */
     public mergedFormGroup: FormGroup
     /** False if you want particular group*/
@@ -287,7 +276,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public isSalesEntry: boolean = false;
     /** Emits the value if it is sales entry */
     @Output() public salesEntry: EventEmitter<boolean> = new EventEmitter();
-
+    /** True if api call in progress  */
+    public loadMoreInProgress: boolean = false;
+  
     constructor(
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
@@ -298,13 +289,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private tallyModuleService: TallyModuleService,
         private formBuilder: UntypedFormBuilder,
         private settingsDiscountService: SettingsDiscountService,
-        public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private searchService: SearchService,
         private changeDetectionRef: ChangeDetectorRef,
         public dialog: MatDialog,
         private generalService: GeneralService,
-        private eleRef: ElementRef) {
+        private eleRef: ElementRef,
+        private scrollDispatcher: ScrollDispatcher) {
         this.initJournalVoucherForm();
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
 
@@ -318,7 +309,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
         });
-        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
         this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
             this.watchKeyboardEvent(key);
@@ -387,6 +377,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public ngOnInit(): void {
+        this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20 && !this.loadMoreInProgress) {
+                this.loadMoreInProgress = true;
+               this.handleScrollEnd();
+                this.changeDetectionRef.detectChanges();
+            }
+        });
         this.activeRow(true, 0);
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         voucherTypeControl.setValue(this.currentVoucher);
@@ -480,9 +477,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 return;
             } else if (event?.target?.value === 'ð') {
                 this.showDiscountSidebar = true;
+                this.selectedIndex = 0;
                 return;
             } else if (event?.target?.value === 'þ') {
                 this.showTaxSidebar = true;
+                this.selectedIndex = 0;
                 return;
             } else {
                 this.searchAccount(event, event.target?.value);
@@ -562,6 +561,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public customFunctionForDiscountSidebar(): void {
         if (this.isSalesEntry) {
             this.showDiscountSidebar = true;
+            this.selectedIndex = 0;
             this.showLedgerAccountList = false;
             this.closeTaxSidebar();
         }
@@ -575,6 +575,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public customFunctionForTaxSidebar(): void {
         if (this.isSalesEntry) {
             this.showTaxSidebar = true;
+            this.selectedIndex = 0;
             this.showLedgerAccountList = false;
             this.closeDiscountSidebar();
         }
@@ -641,9 +642,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public ngOnChanges(changes: SimpleChanges): void {
         if ('openDatePicker' in changes && changes.openDatePicker.currentValue !== changes.openDatePicker.previousValue) {
             this.showFromDatePicker = changes.openDatePicker.currentValue;
-            if (this.bsDatePickers) {
-                this.bsDatePickers.first?.show();
-            }
         }
         if ('openCreateAccountPopup' in changes && changes.openCreateAccountPopup.currentValue !== changes.openCreateAccountPopup.previousValue) {
             if (changes.openCreateAccountPopup.currentValue) {
@@ -1263,6 +1261,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (event && accountName) {
             this.filterByText = accountName;
             this.showLedgerAccountList = true;
+            this.selectedIndex = 0;
             this.onAccountSearchQueryChanged(this.filterByText);
         }
     }
@@ -1957,6 +1956,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public detectKey(ev: KeyboardEvent): void {
         this.keyUpDownEvent = ev;
+        this.keydownUp(ev);
         //  if (ev.keyCode === 27) {
         //   this.deleteRow(this.selectedIdx);
         //  }
@@ -2066,24 +2066,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      *
      * @param {*} event
      * @param {string} fieldType
-     * @param {BsDatepickerDirective} datePickerField
      * @return {*}
      * @memberof AccountAsVoucherComponent
      */
-    public onCheckNumberFieldKeyDown(event: any, fieldType: string, datePickerField: BsDatepickerDirective) {
+    public onCheckNumberFieldKeyDown(event: any, fieldType: string) {
         if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB || event.key === KEYS.ESC)) {
             if (event.key === KEYS.ESC) {
-                datePickerField.hide();
                 this.closeChequeDetailForm();
                 this.focusDebitCreditAmount();
                 return;
             }
             return setTimeout(() => {
                 if (fieldType === 'chqNumber') {
-                    datePickerField?.show();
                     this.chequeClearanceInputField?.nativeElement?.focus();
                 } else if (fieldType === 'chqDate') {
-                    datePickerField.hide();
                     this.chqFormSubmitBtn?.nativeElement?.focus();
                 }
             }, 100);
@@ -2532,7 +2528,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public keydownUp(event): void {
         const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
         let key = event.which;
-        if (this.showDiscountSidebar || this.showTaxSidebar) {
+        if (this.showDiscountSidebar || this.showTaxSidebar || this.showLedgerAccountList) {
             if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
                 this.closeDiscountSidebar();
                 this.closeTaxSidebar();

@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@an
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
 import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { Observable, takeUntil, of as observableOf, ReplaySubject, delay } from 'rxjs';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
@@ -15,6 +14,7 @@ import { SubscriptionsService } from '../../services/subscriptions.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GeneralService } from '../../services/general.service';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'change-billing',

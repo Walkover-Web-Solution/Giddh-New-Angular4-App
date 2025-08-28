@@ -7,7 +7,6 @@ import { PersonListComponent } from './components/sidebar-components/person-list
 import { InventoryHeaderComponent } from './components/header-components/inventory-header-component';
 import { CommonModule } from '@angular/common';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { AsideMenuComponent } from './components/aside-menu/aside-menu.component';
 import { TransferNoteComponent } from './components/forms/transfer-note/transfer-note.component';
 import { InwardNoteComponent } from './components/forms/inward-note/inward-note.component';
@@ -24,6 +23,7 @@ import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [
@@ -43,7 +43,6 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
     imports: [InventoryInOutRoutingModule,
         CommonModule,
         MatButtonModule,
-        ShSelectModule,
         Daterangepicker,
         ReactiveFormsModule,
         FormsModule,
@@ -60,7 +59,8 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         MatIconModule,
         DecimalDigitsModule,
         MatCheckboxModule,
-        GiddhDatepickerModule
+        GiddhDatepickerModule,
+        FormFieldsModule
     ],
 })
 export class InventoryInOutModule {

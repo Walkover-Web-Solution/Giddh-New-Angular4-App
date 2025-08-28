@@ -12,31 +12,28 @@
                 <form #carried="ngForm" (ngSubmit)="getSalesBifurcation()">
                     <div class="pull-left d-flex align-start select-fields">
                         <div class="form-group mr-r1 max-width-500 d-initial">
-                            <label>{{ localeData?.select_year_label }}</label>
-                            <sh-select
+                            <reactive-dropdown-field
                                 [placeholder]="localeData?.select_year_placeholder"
-                                [multiple]="false"
-                                name="selectedYear"
+                                [label]="localeData?.select_year_label"
+                                [name]="'selectedYear'"
                                 [(ngModel)]="selectedYear"
                                 #SelectYear="ngModel"
                                 [options]="yearOptions"
-                                [fixedValue]="selectedYear"
-                                required
-                            >
-                            </sh-select>
+                                [labelValue]="selectedYear"
+                                [required]="true">
+                            </reactive-dropdown-field>
                         </div>
                         <div class="form-group mr-r1 max-width-500 d-initial">
-                            <label>{{ localeData?.select_type_label }}</label>
-                            <sh-select
+                            <reactive-dropdown-field
                                 [placeholder]="localeData?.select_type_placeholder"
-                                [multiple]="false"
-                                name="selectedType"
+                                [label]="localeData?.select_type_label"
+                                [name]="'selectedType'"
                                 [(ngModel)]="selectedType"
                                 #SelectType="ngModel"
                                 [options]="GetTypeOptions"
-                                required
-                                (selected)="resetData()"
-                            ></sh-select>
+                                [required]="true"
+                                (selectedOption)="resetData()">
+                            </reactive-dropdown-field>
                             <div class="height-25px" *ngIf="SelectType.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_type }}</div>
                             </div>
@@ -45,17 +42,15 @@
                             class="form-group mr-r1 max-width-500 d-initial flex-column"
                             *ngIf="selectedType === selectedTypeEnum.MONTH"
                         >
-                            <label>{{ localeData?.select_month_label }}</label>
-                            <sh-select
+                            <reactive-dropdown-field
                                 [placeholder]="localeData?.select_month_placeholder"
-                                [multiple]="false"
-                                name="selectedmonth"
+                                [label]="localeData?.select_month_label"
+                                [name]="'selectedmonth'"
                                 [(ngModel)]="selectedmonth"
                                 #SelectMonth="ngModel"
                                 [options]="monthOptions"
-                                required
-                                [customSorting]="customMonthSorting"
-                            ></sh-select>
+                                [required]="true">
+                            </reactive-dropdown-field>
                             <div class="height-25px" *ngIf="SelectMonth.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_month }}</div>
                             </div>
@@ -65,30 +60,23 @@
                             class="form-group mr-r1 max-width-500 d-initial flex-column"
                             *ngIf="selectedType === selectedTypeEnum.QUATER"
                         >
-                            <label>{{ localeData?.select_quarter_label }}</label>
-                            <sh-select
+                            <reactive-dropdown-field
                                 [placeholder]="localeData?.select_quarter_placeholder"
-                                [multiple]="false"
-                                name="selectedQuater"
+                                [label]="localeData?.select_quarter_label"
+                                [name]="'selectedQuater'"
                                 [(ngModel)]="selectedQuater"
                                 #SelectQuater="ngModel"
                                 [options]="quaterOptions"
-                                required
-                            >
-                            </sh-select>
+                                [required]="true">
+                            </reactive-dropdown-field>
                             <div class="height-25px" *ngIf="SelectQuater.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_quarter }}</div>
                             </div>
                         </div>
                         <div class="btn-group">
-                            <div>
-                                <label class="empty-label d-block">&nbsp;</label>
-                                <div>
-                                    <button mat-raised-button color="primary" type="submit" [disabled]="carried.invalid">
-                                        {{ commonLocaleData?.app_go }}
-                                    </button>
-                                </div>
-                            </div>
+                            <button mat-raised-button color="primary" type="submit" [disabled]="carried.invalid">
+                                {{ commonLocaleData?.app_go }}
+                            </button>
                         </div>
                     </div>
                 </form>

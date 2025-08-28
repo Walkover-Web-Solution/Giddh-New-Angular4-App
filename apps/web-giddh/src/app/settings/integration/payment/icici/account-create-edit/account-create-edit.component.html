@@ -57,24 +57,24 @@
                         ></input-field>
                     </div>
                     <div class="mr-t1">
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [label]="localeData?.payment?.link_account_label"
                             [name]="'accountUniqueName'"
                             [placeholder]="localeData?.payment?.link_account_placeholder"
                             [options]="bankAccounts$ | async"
                             [required]="true"
                             (selectedOption)="accountForm?.get('accountUniqueName').patchValue($event.value)"
-                        ></dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="mr-t1" *ngIf="!activeBankAccount">
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [label]="localeData?.payment?.user"
                             [name]="'userUniqueName'"
                             [placeholder]="localeData?.payment?.select_user"
                             [options]="usersList"
                             [required]="true"
                             (selectedOption)="accountForm?.get('userUniqueName').patchValue($event.value)"
-                        ></dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="mr-t1 custom-mat-form-field">
                         <mat-form-field class="w-100" appearance="outline">

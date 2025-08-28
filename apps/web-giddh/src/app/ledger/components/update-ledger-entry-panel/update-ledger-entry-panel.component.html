@@ -1389,31 +1389,31 @@
                         <div class="d-flex justify-content-between w-100">
                             <ng-container *ngIf="isStockPresent && stockVariants | async as stockVariants">
                                 <div class="col-sm-3 pd-r1" *ngIf="stockVariants.length > 1">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         [id]="'update-ledger-select-variant'"
                                         [name]="'stockVariants'"
                                         [label]="localeData?.select_variant"
                                         (selectedOption)="variantChanged($event)"
                                         [placeholder]="localeData?.select_variant"
-                                        [defaultValue]="selectedStockVariant.name"
+                                        [labelValue]="selectedStockVariant.name"
                                         [options]="stockVariants"
                                         [required]="true"
                                         [showError]="!selectedStockVariant.uniqueName"
-                                    ></dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="isStockPresent && warehouses?.length > 1">
                                 <div class="col-sm-3 pd-r1">
                                     <div class="select-warehouse">
-                                        <dropdown-field
+                                        <reactive-dropdown-field
                                             id="update-ledger-select-warehouse"
-                                            [defaultValue]="selectedWarehouseName"
+                                            [labelValue]="selectedWarehouseName"
                                             [placeholder]="localeData?.select_warehouse"
                                             [options]="warehouses"
                                             (selectedOption)="selectWarehouse($event)"
                                             [label]="localeData?.select_warehouse"
                                         >
-                                        </dropdown-field>
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                             </ng-container>
@@ -1843,15 +1843,15 @@
                             </ng-container>
                             <ng-container *ngIf="shouldShowItcSection">
                                 <div class="taxable-amount-section">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         [id]="'update-ledger-itc-type'"
-                                        [defaultValue]="vm.selectedLedger.itcAvailable"
+                                        [labelValue]="vm.selectedLedger.itcAvailable"
                                         [placeholder]="localeData?.itc_type"
                                         [name]="'itcType'"
                                         [label]="localeData?.itc_type"
                                         [options]="availableItcList"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                 </div>
                             </ng-container>
 
@@ -2035,16 +2035,16 @@
                                             <tr class="d-flex align-items-center flex-wrap">
                                                 <td class="select2-parent pd-r1">
                                                     <div class="form-group mr-b15">
-                                                        <dropdown-field
+                                                        <reactive-dropdown-field
                                                             [label]="commonLocaleData?.app_voucher_type"
                                                             [id]="'update-ledger-voucher-type-default'"
                                                             [options]="vm.voucherTypeList"
-                                                            [defaultValue]="vm.selectedLedger.voucher.name | titlecase"
+                                                            [labelValue]="vm.selectedLedger.voucher.name | titlecase"
                                                             [ngClass]="{'read-only': isEinvoiceGenerated}"
                                                             (selectedOption)="getInvoiceListsData($event)"
                                                             [readonly]="isEinvoiceGenerated"
                                                             [cssClass]="'width-115'"
-                                                        ></dropdown-field>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
 

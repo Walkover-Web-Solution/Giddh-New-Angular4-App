@@ -85,22 +85,18 @@
                                     </div>
                                     <div class="col-6 col-sm-6">
                                         <div class="form-group">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="accounts$ | async"
-                                                name="particulars"
+                                                [name]="'particulars'"
                                                 formControlName="particulars"
                                                 (onClear)="onDDClear('particulars')"
-                                                (selected)="onDDElementSelect('particulars', $event)"
-                                                [isFilterEnabled]="true"
-                                                [multiple]="true"
+                                                (selectedOption)="onDDElementSelect('particulars', $event)"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
-                                                [doNotResetSelectedValues]="true"
                                                 [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleScrollEnd()"
                                                 (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                                [ItemHeight]="33"
-                                            ></sh-select>
+                                            ></reactive-dropdown-field>
                                         </div>
                                     </div>
                                 </div>
@@ -138,18 +134,15 @@
                                     </div>
                                     <div class="col-6 col-sm-6">
                                         <div class="form-group">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="voucherTypeList | async"
-                                                name="vouchers"
+                                                [name]="'vouchers'"
                                                 formControlName="vouchers"
                                                 (onClear)="onDDClear('vouchers')"
-                                                (selected)="onDDElementSelect('vouchers', $event)"
-                                                [isFilterEnabled]="true"
-                                                [multiple]="true"
+                                                (selectedOption)="onDDElementSelect('vouchers', $event)"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
-                                                [ItemHeight]="33"
                                             >
-                                            </sh-select>
+                                            </reactive-dropdown-field>
                                         </div>
                                     </div>
                                 </div>
@@ -184,17 +177,14 @@
                                     </div>
                                     <div class="col-6 col-sm-6">
                                         <div class="form-group">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="tags$ | async"
-                                                name="tags"
+                                                [name]="'tags'"
                                                 formControlName="tags"
                                                 (onClear)="onDDClear('tags')"
-                                                (selected)="onDDElementSelect('tags', $event)"
-                                                [isFilterEnabled]="true"
-                                                [multiple]="true"
+                                                (selectedOption)="onDDElementSelect('tags', $event)"
                                                 [placeholder]="localeData?.select_tags"
-                                                [ItemHeight]="33"
-                                            ></sh-select>
+                                            ></reactive-dropdown-field>
                                         </div>
                                     </div>
                                 </div>
@@ -235,8 +225,7 @@
                                                 <mat-select
                                                     panelClass="py-0"
                                                     name="salesPerson"
-                                                    [multiple]="true"
-                                                    [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
+                                                        [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
                                                 >
                                                     <mat-option class="mt-0">
                                                         <ngx-mat-select-search
@@ -268,17 +257,14 @@
                                 <div class="row">
                                     <div class="col-6 col-sm-6">
                                         <div class="form-group">
-                                            <sh-select
-                                                [showClear]="false"
-                                                [width]="'100%'"
-                                                (selected)="onRangeSelect('amount', $event)"
+                                            <reactive-dropdown-field
+                                                (selectedOption)="onRangeSelect('amount', $event)"
                                                 [options]="comparisonFilterDropDown$ | async"
-                                                name="amountRange"
+                                                [name]="'amountRange'"
                                                 formControlName="amountRange"
                                                 [placeholder]="commonLocaleData?.app_select_range"
-                                                [ItemHeight]="33"
                                             >
-                                            </sh-select>
+                                            </reactive-dropdown-field>
                                         </div>
                                     </div>
                                     <div class="col-6 col-sm-6">
@@ -339,39 +325,32 @@
                                                 </div>
                                                 <div class="col-sm-9 col-12">
                                                     <div class="form-group">
-                                                        <sh-select
+                                                        <reactive-dropdown-field
                                                             [options]="stockListDropDown$ | async"
-                                                            name="inventory"
+                                                            [name]="'inventory'"
                                                             formControlName="inventories"
                                                             (onClear)="onDDClear('inventory')"
-                                                            (selected)="onDDElementSelect('inventory', $event)"
-                                                            [isFilterEnabled]="true"
-                                                            [multiple]="true"
-                                                            [placeholder]="commonLocaleData?.app_select_accounts"
-                                                            [ItemHeight]="33"
-                                                            [doNotResetSelectedValues]="true"
+                                                            (selectedOption)="onDDElementSelect('inventory', $event)"
+                                                                        [placeholder]="commonLocaleData?.app_select_accounts"
                                                             [enableDynamicSearch]="true"
                                                             [isPaginationEnabled]="true"
                                                             (scrollEnd)="handleStockScrollEnd()"
                                                             (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
                                                         >
-                                                        </sh-select>
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group custom-input-field">
-                                                        <sh-select
-                                                            [showClear]="false"
-                                                            [width]="'100%'"
-                                                            (selected)="onRangeSelect('inventoryQty', $event)"
+                                                        <reactive-dropdown-field
+                                                            (selectedOption)="onRangeSelect('inventoryQty', $event)"
                                                             [options]="comparisonFilterDropDown$ | async"
-                                                            name="inventoryQuantity"
+                                                            [name]="'inventoryQuantity'"
                                                             formControlName="inventoryQuantity"
                                                             [placeholder]="commonLocaleData?.app_select_range"
-                                                            [ItemHeight]="33"
-                                                        ></sh-select>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
@@ -394,16 +373,13 @@
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group custom-input-field">
-                                                        <sh-select
-                                                            [showClear]="false"
-                                                            [width]="'100%'"
-                                                            (selected)="onRangeSelect('inventoryVal', $event)"
+                                                        <reactive-dropdown-field
+                                                            (selectedOption)="onRangeSelect('inventoryVal', $event)"
                                                             [options]="comparisonFilterDropDown$ | async"
-                                                            name="inventoryValue"
+                                                            [name]="'inventoryValue'"
                                                             formControlName="inventoryValue"
                                                             [placeholder]="commonLocaleData?.app_select_range"
-                                                            [ItemHeight]="33"
-                                                        ></sh-select>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">

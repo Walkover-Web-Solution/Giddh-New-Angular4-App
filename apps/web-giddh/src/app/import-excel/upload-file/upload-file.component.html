@@ -17,16 +17,13 @@
         <label class="mt-4 mb-8">{{ localeData?.select_branch_headquarter }} <sup>*</sup></label>
         <div class="form-group linked-entities">
             <div class="form-group">
-                <sh-select
+                <reactive-dropdown-field
                     [options]="currentCompanyBranches"
                     [(ngModel)]="currentBranch.uniqueName"
-                    [showClear]="false"
-                    [ItemHeight]="33"
-                    width="100%"
-                    (selected)="handleBranchChange($event)"
-                    [isFilterEnabled]="true"
+                    (selectedOption)="handleBranchChange($event)"
                     [placeholder]="localeData?.select_branch"
-                    [fixedValue]="currentBranch?.name"
+                    [labelValue]="currentBranch?.name"
+                    [name]="'currentBranch'"
                 >
                     <ng-template #optionTemplate let-option="option">
                         <ng-container>
@@ -39,12 +36,12 @@
                                         }"
                                         class="pull-right"
                                         *ngIf="!option.isCompany"
-                                        matTooltip="{{ commonLocaleData?.app_branch }}"
+                                        [matTooltip]="commonLocaleData?.app_branch"
                                     ></i>
                                     <i
                                         class="icon-company-profile pull-right"
                                         *ngIf="option.isCompany"
-                                        matTooltip="{{ commonLocaleData?.app_company }}"
+                                        [matTooltip]="commonLocaleData?.app_company"
                                     ></i>
                                 </span>
                                 <span class="entity-details">
@@ -56,7 +53,7 @@
                             </a>
                         </ng-container>
                     </ng-template>
-                </sh-select>
+                </reactive-dropdown-field>
             </div>
         </div>
     </div>
