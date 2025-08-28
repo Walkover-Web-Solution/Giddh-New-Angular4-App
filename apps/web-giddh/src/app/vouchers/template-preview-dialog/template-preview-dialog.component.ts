@@ -86,7 +86,7 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplatePreviewDialogComponent
    */
   public getTemplatePreview(): void {
-    this.invoiceTemplatesService.getTemplatePreview(this.data.type, false, null, this.data.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+    this.invoiceTemplatesService.getTemplatePreview(this.data?.type, false, null, this.data?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
       if (response?.status === 'success') {
         this.selectedInvoiceType = this.generalService.base64ToBlob(response?.body?.data, 'application/pdf', 512);
         const file = new Blob([this.selectedInvoiceType], { type: 'application/pdf' });
@@ -97,7 +97,7 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
       } else {
         this.isFileUploading = false;
         this.sanitizedPdfFileUrl = null;
-        this.toasterService.showSnackBar('error', this.localeData?.failed_to_get_template_preview);
+        this.toasterService.showSnackBar('error', this.localeData?.failed_to_get_template_preview || 'Failed to get template preview');
       }
     });
   }

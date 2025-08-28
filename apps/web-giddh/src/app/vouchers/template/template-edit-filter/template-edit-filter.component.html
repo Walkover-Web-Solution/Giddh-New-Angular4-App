@@ -49,12 +49,12 @@
                                         "
                                     >
                                         <img
-                                            src="./assets/images/templates/{{ template.templateType }}.png"
+                                            src="./assets/images/templates/{{ template?.templateType }}.png"
                                             alt="template"
                                             class="view-img w-100 h-100 border-radius-5"
                                         />
 
-                                        <div class="beta-img position-absolute" *ngIf="template.templateType !== templateTypeEnum.GstTemplateA" >
+                                        <div class="beta-img position-absolute" *ngIf="template?.templateType !== templateTypeEnum.GstTemplateA" >
                                             <img src="./assets/images/templates/beta.png" alt="beta" />
                                         </div>
                                     </div>
@@ -64,7 +64,7 @@
                         <!-- logo-expansion -->
                         <mat-expansion-panel
                             class="mb-2"
-                            *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
+                            *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                         >
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
@@ -157,8 +157,8 @@
                             </mat-expansion-panel-header>
                             <div class="swatch text-center">
                                 <span class="swatch-preview mr-b3"
-                                    ><span [ngStyle]="{ 'background-color': customTemplate.templateColor }"></span>
-                                    <span class="mr-t05"> {{ customTemplate.templateColor }}</span>
+                                    ><span [ngStyle]="{ 'background-color': customTemplate?.templateColor }"></span>
+                                    <span class="mr-t05"> {{ customTemplate?.templateColor }}</span>
                                 </span>
                                 <div class="mr-l1 pull-left">
                                     <ul>
@@ -187,7 +187,7 @@
                         <!-- font-family-expansion -->
                         <mat-expansion-panel
                             class="mb-2"
-                            *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
+                            *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                         >
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
@@ -209,7 +209,7 @@
                         <!-- font-size-expansion -->
                         <mat-expansion-panel
                             class="mb-2"
-                            *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
+                            *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                         >
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
@@ -250,7 +250,7 @@
                                         [(ngModel)]="customTemplate.topMargin"
                                         (keyup)="
                                             onValueChange(null, null);
-                                            validatePrintSetting(customTemplate.topMargin, 0, 'topMargin')
+                                            validatePrintSetting(customTemplate?.topMargin, 0, 'topMargin')
                                         "
                                         [type]="'number'"
                                         [name]="'topMargin'"
@@ -264,7 +264,7 @@
                                         [customDecimalPlaces]="1"
                                         (keyup)="
                                             onValueChange(null, null);
-                                            validatePrintSetting(customTemplate.leftMargin, 0, 'leftMargin')
+                                            validatePrintSetting(customTemplate?.leftMargin, 0, 'leftMargin')
                                         "
                                         [(ngModel)]="customTemplate.leftMargin"
                                         [type]="'number'"
@@ -279,7 +279,7 @@
                                         [customDecimalPlaces]="1"
                                         (keyup)="
                                             onValueChange(null, null);
-                                            validatePrintSetting(customTemplate.bottomMargin, 0, 'bottomMargin')
+                                            validatePrintSetting(customTemplate?.bottomMargin, 0, 'bottomMargin')
                                         "
                                         [(ngModel)]="customTemplate.bottomMargin"
                                         [type]="'text'"
@@ -294,7 +294,7 @@
                                         [customDecimalPlaces]="1"
                                         (keyup)="
                                             onValueChange(null, null);
-                                            validatePrintSetting(customTemplate.rightMargin, 0, 'rightMargin')
+                                            validatePrintSetting(customTemplate?.rightMargin, 0, 'rightMargin')
                                         "
                                         [(ngModel)]="customTemplate.rightMargin"
                                         [type]="'number'"
@@ -312,7 +312,7 @@
                         <!-- Show sections inline settings -->
                         <mat-expansion-panel
                             class="mb-2"
-                            *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
+                            *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                         >
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
@@ -329,7 +329,7 @@
                                     (ngModelChange)="
                                         onChangeDesignFieldVisibility(
                                             'showSectionsInline',
-                                            customTemplate.showSectionsInline
+                                            customTemplate?.showSectionsInline
                                         )
                                     "
                                 >
@@ -364,9 +364,9 @@
                                                         color="primary"
                                                         name="companyNameCheckbox"
                                                         [(ngModel)]="
-                                                            customTemplate.sections['header'].data['companyName']
-                                                                .display
-                                                        "
+                                            customTemplate.sections['header'].data['companyName']
+                                                .display
+                                        "
                                                         (ngModelChange)="onChangeFieldVisibility()"
                                                     >
                                                         <span
@@ -402,9 +402,9 @@
                                                                 "
                                                                 (ngModelChange)="onFieldChange(null, null, null)"
                                                                 [readonly]="
-                                                                    !customTemplate.sections['header'].data[
+                                                                    !customTemplate?.sections?.['header']?.data?.[
                                                                         'companyName'
-                                                                    ].display
+                                                                    ]?.display
                                                                 "
                                                             ></input-field>
                                                         </div>
@@ -414,9 +414,9 @@
                                                             }}</span>
                                                             {{
                                                                 50 -
-                                                                    customTemplate.sections["header"].data[
-                                                                        "companyName"
-                                                                    ].label?.length
+                                                                    customTemplate?.sections?.['header']?.data?.[
+                                                                        'companyName'
+                                                                    ]?.label?.length
                                                             }}
                                                         </p>
                                                     </div>
@@ -434,8 +434,9 @@
                                                     color="primary"
                                                     name="exchangeRateCheckbox"
                                                     [(ngModel)]="
-                                                        customTemplate.sections['header'].data['displayExchangeRate']
-                                                            .display
+                                                        customTemplate.sections['header'].data[
+                                                            'displayExchangeRate'
+                                                        ].display
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     >{{ localeData?.exchange_conversion_rate }}</mat-checkbox
@@ -452,8 +453,9 @@
                                                     color="primary"
                                                     name="placeOfSupplyCheckbox"
                                                     [(ngModel)]="
-                                                        customTemplate.sections['header'].data['displayPlaceOfSupply']
-                                                            .display
+                                                        customTemplate.sections['header'].data[
+                                                            'displayPlaceOfSupply'
+                                                        ].display
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
@@ -472,8 +474,9 @@
                                                     color="primary"
                                                     name="countryOfSupplyfCheckbox"
                                                     [(ngModel)]="
-                                                        customTemplate.sections['header'].data['displayPlaceOfCountry']
-                                                            .display
+                                                        customTemplate.sections['header'].data[
+                                                            'displayPlaceOfCountry'
+                                                        ].display
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
@@ -493,9 +496,10 @@
                                                     color="primary"
                                                     name="lutNumberCheckbox"
                                                     [(ngModel)]="
-                                                        customTemplate.sections['header'].data['displayLutNumber']
-                                                            .display
-                                                    "
+                                                    customTemplate.sections['header'].data[
+                                                        'companyName'
+                                                    ].label
+                                                "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
                                                     {{ localeData?.lut_number }}</mat-checkbox
@@ -505,7 +509,7 @@
                                             <div
                                                 *ngIf="
                                                     customTemplate?.templateType === templateTypeEnum.TallyTemplate &&
-                                                    customTemplate.sections['footer'].data['displayExportMessage']
+                                                    customTemplate?.sections?.['footer']?.data?.['displayExportMessage']
                                                 "
                                             >
                                                 <mat-checkbox
@@ -532,7 +536,7 @@
                                                         customTemplate?.templateType ===
                                                             templateTypeEnum.TallyTemplate) &&
                                                     showGstComposition &&
-                                                    customTemplate.sections['header'].data['showEInvoiceDetails']
+                                                    customTemplate?.sections?.['header']?.data?.['showEInvoiceDetails']
                                                 "
                                             >
                                                 <mat-checkbox
@@ -577,7 +581,7 @@
                                                         customTemplate?.templateType ===
                                                             templateTypeEnum.ThermalTemplate) &&
                                                         voucherType === voucherTypeEnum.sales &&
-                                                        customTemplate.sections['header'].data['showCompanyAddress']) ||
+                                                        customTemplate?.sections?.['header']?.data?.['showCompanyAddress']) ||
                                                     customTemplate?.templateType === templateTypeEnum.TallyTemplate
                                                 "
                                             >
@@ -622,19 +626,20 @@
                                                     color="primary"
                                                     name="gstinCheckbox"
                                                     [(ngModel)]="
-                                                        customTemplate.sections['header'].data['gstin'].display
-                                                    "
+                                                customTemplate.sections['header'].data['gstin'].display
+                                            "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     class="d-block"
                                                 >
-                                                    {{ customTemplate.sections["header"].data["gstin"].label }}
+                                                    {{ customTemplate?.sections?.["header"]?.data?.["gstin"]?.label }}
                                                 </mat-checkbox>
                                             </div>
                                             <!-- gst composition -->
                                             <div
                                                 class="mr-t1"
                                                 *ngIf="
-                                                    showGstComposition === true &&
+                                                    sectionSettings?.header.gstComposition &&
+                                                    showGstComposition &&
                                                     customTemplate?.templateType === templateTypeEnum.GstTemplateA &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
                                                     voucherType === voucherTypeEnum.sales
@@ -867,10 +872,7 @@
                                                         <mat-checkbox
                                                             color="primary"
                                                             name="voucherDateCheckbox"
-                                                            [(ngModel)]="
-                                                                customTemplate.sections['header'].data['voucherDate']
-                                                                    .display
-                                                            "
+                                                            [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].display"
                                                             (ngModelChange)="onChangeFieldVisibility()"
                                                             class="d-block"
                                                         >
@@ -928,10 +930,10 @@
                                                                 maxlength="15"
                                                                 name="voucherNo"
                                                                 [(ngModel)]="
-                                                                    customTemplate.sections['header'].data[
-                                                                        'voucherNumber'
-                                                                    ].label
-                                                                "
+                                                                customTemplate.sections['header'].data[
+                                                                    'invoiceNumber'
+                                                                ].label
+                                                            "
                                                                 (ngModelChange)="onFieldChange()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['header'].data[
@@ -1977,7 +1979,7 @@
                                         </div>
                                         <div *ngIf="sectionSettings?.table.item" class="mr-t1">
                                             <div
-                                                *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
+                                                *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -2145,7 +2147,7 @@
                                         </div>
                                         <div *ngIf="sectionSettings?.table.quantity" class="mr-t1">
                                             <div
-                                                *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
+                                                *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -2293,7 +2295,7 @@
                                         </div>
                                         <div *ngIf="sectionSettings?.table.rate" class="mr-t1">
                                             <div
-                                                *ngIf="customTemplate.templateType !== templateTypeEnum.ThermalTemplate"
+                                                *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox

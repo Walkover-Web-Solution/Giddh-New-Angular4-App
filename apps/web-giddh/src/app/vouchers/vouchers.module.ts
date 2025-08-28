@@ -92,9 +92,6 @@ import { SalesPersonService } from "../shared/sales-person/utility/sales-person.
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { TributeMentionModule } from "../shared/helpers/directives/tributeMention/tributeMention.module";
 import { AllTemplatesComponent } from "./template/all-templates/all-templates.component";
-import { GstTemplateAComponent } from "./template/all-templates/templates/gst-template-a/gst-template-a.component";
-import { ThermalTemplateComponent } from "./template/all-templates/templates/thermal-template/thermal-template.component";
-import { TallyTemplateComponent } from "./template/all-templates/templates/tally-template/tally-template.component";
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 
 @NgModule({
@@ -119,9 +116,6 @@ import { TemplateEditFilterComponent } from "./template/template-edit-filter/tem
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
         AllTemplatesComponent,
-        GstTemplateAComponent,
-        ThermalTemplateComponent,
-        TallyTemplateComponent
     ],
     imports: [
         CommonModule,
