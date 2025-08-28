@@ -4,7 +4,7 @@
             <h3 *ngIf="!editMode">Create Unit</h3>
             <h3 *ngIf="editMode">Modify Unit</h3>
         </div>
-        <button mat-stroked-button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+        <button mat-stroked-button (click)="closeAsidePane()"><i class="icon-cross"></i></button>
         <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
             <div class="aside-pane-form">
                 <form #customUnitForm="ngForm" name="customUnitForm" class="form-body" novalidate>

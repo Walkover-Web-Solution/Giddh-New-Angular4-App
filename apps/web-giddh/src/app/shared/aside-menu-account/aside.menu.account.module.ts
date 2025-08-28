@@ -5,6 +5,7 @@ import { AccountUpdateNewDetailsModule } from "../header/components/account-upda
 import { ConfirmModalModule } from "../../theme/confirm-modal/confirm-modal.module";
 import { AsideMenuAccountInContactComponent } from "./aside.menu.account.component";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { MatDialogModule } from "@angular/material/dialog";
         AccountAddNewDetailsModule,
         AccountUpdateNewDetailsModule,
         ConfirmModalModule,
-        MatDialogModule
+        MatDialogModule,
+        MatButtonModule
     ],
     exports: [
         AsideMenuAccountInContactComponent

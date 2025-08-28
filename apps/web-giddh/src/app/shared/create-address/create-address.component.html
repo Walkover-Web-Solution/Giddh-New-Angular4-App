@@ -16,7 +16,7 @@
                         <h3 *ngIf="addressConfiguration?.type === 'editAddress'">{{ localeData?.update_address }}</h3>
                         <h3 *ngIf="addressConfiguration?.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
                         <h3 *ngIf="addressConfiguration?.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
-                        <button mat-stroked-button id="close" aria-label="close" type="button" (click)="closeAsidePane($event)">
+                        <button mat-stroked-button aria-label="close" type="button" (click)="closeAsidePane($event)">
                             <i class="icon-cross"></i>
                         </button>
                     </div>
