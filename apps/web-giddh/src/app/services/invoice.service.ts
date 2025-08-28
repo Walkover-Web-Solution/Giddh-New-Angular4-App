@@ -618,7 +618,6 @@ export class InvoiceService {
             map((res) => {
                 let data: BaseResponse<string, UpdateEwayVehicle> = res;
                 data.request = model;
-                // data.queryString = {};
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, UpdateEwayVehicle>(e, model)));
