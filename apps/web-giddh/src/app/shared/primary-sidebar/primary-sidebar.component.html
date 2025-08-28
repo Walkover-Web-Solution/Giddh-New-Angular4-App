@@ -63,6 +63,79 @@
         </div>
         <div>
             <div class="wrap-menus mr-t15">
+                   <!-- 
+                    Note: Account list is hide from design for now as we deploy on production remove all related code also
+                    <div class="account-block mr-b2 pd-l2 pd-r2">
+                    <div class="account-collapse">
+                        <p class="font-12 d-flex justify-content-between">
+                            {{ localeData?.accounts }}
+                            <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i>
+                        </p>
+                        <ul class="left-fixed-header list-style-none font-15 lh33 mr-t05">
+                            <li *ngFor="let acc of accountItemsFromIndexDB">
+                                <a
+                                    aria-label="account"
+                                    [routerLinkActive]="['active']"
+                                    class="cursor-pointer"
+                                    [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
+                                    (click)="
+                                        analyzeAccounts($event, acc);
+                                        $event.stopPropagation()
+                                    "
+                                    >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="javascript:void(0);"
+                                    aria-label="show more"
+                                    (click)="showNavigationModal()"
+                                    class="show-more cursor-pointer"
+                                    >{{ localeData?.show_more }}</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div
+                        class="account-dropdown btn-group"
+                        [attr.container]="!isOpen ? 'body' : ''"
+                    >
+                        <a
+                            href="javascript:void(0);"
+                            aria-label="account-icon"
+                            id="button-basic-01"
+                            type="button"
+                            class="dropdown-toggle"
+                        >
+                            <span [matTooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
+                            <i class="icon-right mr-l1 font-15"></i>
+                        </a>
+                        <ul
+                            class="dropdown-menu account-dropdown-collapse list-style-none sub-menu"
+                            role="menu"
+                            aria-labelledby="button-basic-01"
+                        >
+                            <li *ngFor="let acc of accountItemsFromIndexDB" role="menuitem">
+                                <a
+                                    href="javascript:void(0);"
+                                    aria-label="account item"
+                                    routerLink="ledger/{{ acc?.uniqueName }}"
+                                    (click)="analyzeAccounts($event, acc)"
+                                    >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
+                                >
+                            </li>
+                            <li role="menuitem">
+                                <a
+                                    href="javascript:void(0);"
+                                    aria-label="Show more"
+                                    (click)="showNavigationModal()"
+                                    class="show-more cursor-pointer"
+                                    >{{ localeData?.show_more }}</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div> -->
                 <div class="menu-block">
                     <div class="menu-item-wrapper font-15">
                         <div class="menu-item pd-l2 pd-r2">

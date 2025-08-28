@@ -64,7 +64,6 @@
                 [value]="optionList.hasSelected ? optionList.selection[0].label : ''"
                 (input)="onFilterInput($event.target?.value)"
                 (keydown)="onTypeAheadFilterKeydown($event)"
-                (keyup)="onTypeAheadFilterKeyup($event)"
                 (focus)="onTypeAheadFilterFocus()"
                 class="form-control"
             />
