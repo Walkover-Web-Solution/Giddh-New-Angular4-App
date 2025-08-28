@@ -326,11 +326,9 @@
                 <div class="col-md-4">
                     <reactive-dropdown-field
                         [name]="'entity'"
-                        (onClear)="clearShSelect('comparisionFilter')"
                         [options]="COMPARISON_FILTER"
                         (selectedOption)="compareChanged($event)"
                         [placeholder]="'Select'"
-                        #comparisionFilter
                         [multiple]="false"
                     >
                     </reactive-dropdown-field>

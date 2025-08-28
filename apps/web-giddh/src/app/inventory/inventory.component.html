@@ -42,7 +42,7 @@
                                                 branches &&
                                                 branches.length > 2
                                             "
-                                            class="multi-select branch-filter sh-select-border"
+                                            class="multi-select branch-filter"
                                             (ngModelChange)="loadReportByBranch($event)"
                                             [options]="branches"
                                             [placeholder]="'Select Branch'"
@@ -51,8 +51,7 @@
                                         ></reactive-dropdown-field>
                                         <reactive-dropdown-field
                                             *ngIf="warehouses && warehouses.length > 1"
-                                            class="multi-select sh-select-border warehouse-filter"
-                                            #warehouseFilter
+                                            class="multi-select warehouse-filter"
                                             (ngModelChange)="loadReportByWarehouse($event)"
                                             [options]="warehouses"
                                             [placeholder]="'Select Warehouse'"

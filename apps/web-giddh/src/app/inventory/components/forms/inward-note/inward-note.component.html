@@ -48,7 +48,6 @@
                     <label>Product Name <sup>*</sup></label>
                     <reactive-dropdown-field
                         [options]="stockListOptions"
-                        [isMultiSelect]="false"
                         [placeholder]="'Select Product'"
                         [disabled]="stock?.disabled"
                         formControlName="stock"
@@ -61,7 +60,6 @@
                     <label>Sender <sup>*</sup></label>
                     <reactive-dropdown-field
                         [options]="userListOptions"
-                        [isMultiSelect]="false"
                         [placeholder]="'Select Sender'"
                         formControlName="inventoryUser"
                         (selectedOption)="userChanged($event)"
@@ -95,7 +93,6 @@
                     <div class="col-4 form-group" *ngIf="mode === 'sender'">
                         <reactive-dropdown-field
                             [options]="userListOptions"
-                            [isMultiSelect]="false"
                             [placeholder]="'Select Sender'"
                             (selectedOption)="userChanged($event, i)"
                             formControlName="inventoryUser"
@@ -105,7 +102,6 @@
                     <div class="col-4 form-group" *ngIf="mode === 'product'">
                         <reactive-dropdown-field
                             [options]="stockListOptions"
-                            [isMultiSelect]="false"
                             [placeholder]="'Select Product'"
                             (selectedOption)="stockChanged($event, i)"
                             formControlName="stock"
@@ -117,7 +113,6 @@
                             [options]="stockUnitsOptions"
                             [placeholder]="'Choose unit'"
                             formControlName="stockUnit"
-                            [isMultiSelect]="false"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -194,7 +189,6 @@
                                             [options]="stockUnitsOptions"
                                             formControlName="manufacturingUnitCode"
                                             [placeholder]="'Select Unit'"
-                                            [isMultiSelect]="false"
                                         ></reactive-dropdown-field>
                                     </div>
 
@@ -240,7 +234,6 @@
                                             <reactive-dropdown-field
                                                 [options]="stockListOptions"
                                                 formControlName="stockUniqueName"
-                                                [isMultiSelect]="false"
                                                 [placeholder]="'Select Stock Name'"
                                                 (selectedOption)="findAddedStock($event?.value, i)"
                                             ></reactive-dropdown-field>
@@ -260,7 +253,6 @@
                                             <reactive-dropdown-field
                                                 [options]="stockUnitsOptions"
                                                 formControlName="stockUnitCode"
-                                                [isMultiSelect]="false"
                                                 [placeholder]="'Select Unit'"
                                             >
                                             </reactive-dropdown-field>

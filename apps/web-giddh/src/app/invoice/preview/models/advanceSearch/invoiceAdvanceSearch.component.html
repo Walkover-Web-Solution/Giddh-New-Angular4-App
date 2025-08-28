@@ -152,7 +152,6 @@
                                 <reactive-dropdown-field
                                     *ngIf="voucherApiVersion === 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
-                                    [isMultiSelect]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
                                     [name]="'eInvoiceStatus'"
                                     [(ngModel)]="request.eInvoiceStatus"
@@ -160,7 +159,6 @@
                                 <reactive-dropdown-field
                                     *ngIf="voucherApiVersion !== 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
-                                    [isMultiSelect]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
                                     [name]="'eInvoiceStatus'"
                                     [(ngModel)]="request.status"
@@ -261,7 +259,6 @@
                                 <reactive-dropdown-field
                                     *ngIf="voucherApiVersion === 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
-                                    [isMultiSelect]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
                                     [name]="'eInvoiceStatus'"
                                     [(ngModel)]="request.eInvoiceStatus"
@@ -269,7 +266,6 @@
                                 <reactive-dropdown-field
                                     *ngIf="voucherApiVersion !== 2"
                                     [placeholder]="commonLocaleData?.app_select_action"
-                                    [isMultiSelect]="true"
                                     [options]="eInvoiceStatusDropdownOptions"
                                     [name]="'eInvoiceStatus'"
                                     [(ngModel)]="request.status"
