@@ -46,29 +46,25 @@
 
                 <div class="col-6 form-group" *ngIf="mode === 'sender'">
                     <label>Product Name <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="stockListOptions"
-                        [multiple]="false"
                         [placeholder]="'Select Product'"
                         [disabled]="stock?.disabled"
                         formControlName="stock"
-                        (selected)="stockChanged($event)"
-                        [isRequired]="true"
+                        (selectedOption)="stockChanged($event)"
                     >
-                    </sh-select>
+                    </reactive-dropdown-field>
                 </div>
 
                 <div class="col-6 form-group" *ngIf="mode === 'product'">
                     <label>Sender <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="userListOptions"
-                        [multiple]="false"
                         [placeholder]="'Select Sender'"
                         formControlName="inventoryUser"
-                        (selected)="userChanged($event)"
-                        [isRequired]="true"
+                        (selectedOption)="userChanged($event)"
                     >
-                    </sh-select>
+                    </reactive-dropdown-field>
                 </div>
             </div>
 
@@ -95,39 +91,30 @@
             >
                 <div [formGroupName]="i">
                     <div class="col-4 form-group" *ngIf="mode === 'sender'">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="userListOptions"
-                            [multiple]="false"
                             [placeholder]="'Select Sender'"
-                            (selected)="userChanged($event, i)"
+                            (selectedOption)="userChanged($event, i)"
                             formControlName="inventoryUser"
-                            [ItemHeight]="'33'"
-                            [isRequired]="true"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="col-4 form-group" *ngIf="mode === 'product'">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="stockListOptions"
-                            [multiple]="false"
                             [placeholder]="'Select Product'"
-                            (selected)="stockChanged($event, i)"
-                            [ItemHeight]="'33'"
+                            (selectedOption)="stockChanged($event, i)"
                             formControlName="stock"
-                            [isRequired]="true"
-                        ></sh-select>
+                        ></reactive-dropdown-field>
                     </div>
 
                     <div class="col-4 form-group">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="stockUnitsOptions"
                             [placeholder]="'Choose unit'"
                             formControlName="stockUnit"
-                            [multiple]="false"
-                            [ItemHeight]="33"
-                            [isRequired]="true"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
 
                     <div class="col-4 form-group">
@@ -198,14 +185,11 @@
                                     </div>
 
                                     <div class="col-5 form-group">
-                                        <sh-select
+                                        <reactive-dropdown-field
                                             [options]="stockUnitsOptions"
                                             formControlName="manufacturingUnitCode"
                                             [placeholder]="'Select Unit'"
-                                            [multiple]="false"
-                                            [ItemHeight]="33"
-                                            [isRequired]="true"
-                                        ></sh-select>
+                                        ></reactive-dropdown-field>
                                     </div>
 
                                     <div
@@ -247,14 +231,12 @@
                                         [formGroupName]="i"
                                     >
                                         <div class="col-4 form-group">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="stockListOptions"
                                                 formControlName="stockUniqueName"
-                                                [multiple]="false"
                                                 [placeholder]="'Select Stock Name'"
-                                                [ItemHeight]="33"
-                                                (selected)="findAddedStock($event?.value, i)"
-                                            ></sh-select>
+                                                (selectedOption)="findAddedStock($event?.value, i)"
+                                            ></reactive-dropdown-field>
                                         </div>
                                         <div class="col-3 form-group">
                                             <input
@@ -268,14 +250,12 @@
                                             />
                                         </div>
                                         <div class="col-4 form-group">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="stockUnitsOptions"
                                                 formControlName="stockUnitCode"
-                                                [multiple]="false"
                                                 [placeholder]="'Select Unit'"
-                                                [ItemHeight]="33"
                                             >
-                                            </sh-select>
+                                            </reactive-dropdown-field>
                                         </div>
                                         <div class="pull-right mr-t05 unit-add">
                                             <button

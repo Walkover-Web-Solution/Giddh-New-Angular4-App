@@ -8,12 +8,11 @@ import * as dayjs from 'dayjs';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { API_COUNT_LIMIT, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { API_COUNT_LIMIT, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GroupService } from '../../../services/group.service';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({

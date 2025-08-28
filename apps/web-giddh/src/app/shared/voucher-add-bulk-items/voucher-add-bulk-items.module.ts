@@ -5,7 +5,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 import { VoucherAddBulkItemsComponent } from "./voucher-add-bulk-items.component";
-import { ShSelectModule } from "../../theme/ng-virtual-select/sh-select.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -30,7 +29,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         FormsModule,
         ReactiveFormsModule,
         TranslateDirectiveModule,
-        ShSelectModule
+        MatInputModule,
+        MatFormFieldModule
     ],
     exports: [
         VoucherAddBulkItemsComponent

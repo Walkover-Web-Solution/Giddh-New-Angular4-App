@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -9,8 +8,6 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
 import { PurchaseComponent } from './purchase.component';
@@ -19,7 +16,6 @@ import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/vouc
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DeleteVoucherConfirmationModalModule } from '../shared/delete-voucher-confirmation-modal/delete-voucher-confirmation-modal.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
@@ -52,7 +48,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         MatButtonModule,
         PurchaseRoutingModule,
         InvoiceModule,
-        CollapseModule.forRoot(),
         MatPaginatorModule,
         
         LaddaModule.forRoot({
@@ -62,8 +57,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         ClickOutsideModule,
         ElementViewChildModule,
         ScrollingModule,
-        ShSelectModule,
-        SalesShSelectModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
         TaxControlModule,
@@ -76,7 +69,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         TranslateDirectiveModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        ModalModule.forRoot(),
         HamburgerMenuModule,
         DeleteVoucherConfirmationModalModule,
         GiddhDatepickerModule,

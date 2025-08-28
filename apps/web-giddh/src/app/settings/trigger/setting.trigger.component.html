@@ -27,32 +27,25 @@
                         />
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                        <label>{{ localeData?.select_entity_type }}</label
-                        ><br />
-                        <sh-select
+                        <reactive-dropdown-field
                             (onClear)="onResetEntityType()"
-                            (selected)="onEntityTypeSelected($event)"
-                            [forceClearReactive]="forceClear$ | async"
+                            (selectedOption)="onEntityTypeSelected($event)"
                             [options]="entityList"
-                            [isFilterEnabled]="false"
-                            name="entityType"
+                            [name]="'entityType'"
                             [(ngModel)]="newTriggerObj.entity"
                             [placeholder]="localeData?.select_entity_type"
-                            [ItemHeight]="33"
+                            [label]="localeData?.select_entity_type"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                        <label>{{ commonLocaleData?.app_select_entity }}</label
-                        ><br />
-                        <sh-select
+                        <reactive-dropdown-field
                             [disabled]="!newTriggerObj.entity"
-                            [forceClearReactive]="forceClearEntityList$ | async"
                             [options]="entityOptions$ | async"
-                            name="entityOptions"
+                            [name]="'entityOptions'"
                             [(ngModel)]="newTriggerObj.entityUniqueName"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [ItemHeight]="33"
+                            [label]="commonLocaleData?.app_select_entity"
                             [enableDynamicSearch]="true"
                             [isPaginationEnabled]="true"
                             (scrollEnd)="
@@ -64,36 +57,28 @@
                                     : onGroupSearchQueryChanged($event)
                             "
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                        <label>{{ commonLocaleData?.app_filter }}</label
-                        ><br />
-                        <sh-select
-                            [forceClearReactive]="forceClearFilterList$ | async"
+                        <reactive-dropdown-field
                             [options]="filterList"
-                            [isFilterEnabled]="true"
-                            name="filter"
+                            [name]="'filter'"
                             [(ngModel)]="newTriggerObj.filter"
                             [placeholder]="localeData?.filter_placeholder"
-                            [ItemHeight]="33"
+                            [label]="commonLocaleData?.app_filter"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                        <label>{{ localeData?.scope_label }}</label
-                        ><br />
-                        <sh-select
-                            [forceClearReactive]="forceClear$ | async"
-                            [isFilterEnabled]="true"
+                        <reactive-dropdown-field
                             [placeholder]="localeData?.scope_placeholder"
-                            name="scope"
+                            [name]="'scope'"
                             [(ngModel)]="newTriggerObj.scope"
                             [options]="scopeList"
-                            (selected)="onSelectScope($event)"
+                            [label]="localeData?.scope_label"
+                            (selectedOption)="onSelectScope($event)"
                         >
-                            <option>selected</option>
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-xs-12">
                         <label>{{ localeData?.url }}</label

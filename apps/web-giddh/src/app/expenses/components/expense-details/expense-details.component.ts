@@ -6,14 +6,11 @@ import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Ledger';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,23 +19,12 @@ import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 import { ServiceConfig } from '../../../services/service.config';
+import { IOption } from '../../../app.constant';
 
 @Component({
     selector: 'app-expense-details',
     templateUrl: './expense-details.component.html',
-    styleUrls: ['./expense-details.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./expense-details.component.scss']
 })
 
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
@@ -49,7 +35,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of approve confirm dialog */
     @ViewChild("rejectionReason") public rejectionReason;
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-    @ViewChild('entryAgainstAccountDropDown', { static: false }) public entryAgainstAccountDropDown: ShSelectComponent;
     @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     /** This will emit true if we need to show next record in preview */
@@ -269,9 +254,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.loadDefaultCashBankAccountsSuggestions();
                 break;
 
-        }
-        if (this.entryAgainstAccountDropDown) {
-            this.entryAgainstAccountDropDown.clear();
         }
         this.entryAgainstObject.model = null;
     }

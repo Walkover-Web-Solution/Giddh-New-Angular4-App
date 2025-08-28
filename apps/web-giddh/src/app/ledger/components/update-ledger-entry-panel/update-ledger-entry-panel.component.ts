@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -16,12 +15,10 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
-import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, BehaviorSubject } from 'rxjs';
 import { debounceTime, map, take, takeUntil, filter as rxjsFilter, tap } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
@@ -43,7 +40,6 @@ import { SettingsUtilityService } from '../../../settings/services/settings-util
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
 import { UpdateLedgerVm } from './update-ledger.vm';
@@ -83,18 +79,6 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
     selector: 'update-ledger-entry-panel',
     templateUrl: './update-ledger-entry-panel.component.html',
     styleUrls: ['./update-ledger-entry-panel.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ],
     providers: [VoucherComponentStore, SalesPersonComponentStore]
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -136,8 +120,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
-    @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
-    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     /** Element ref for mat menu **/
     @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
     /** Element ref for mat autocomplete **/
@@ -288,7 +270,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public condition2: boolean = false;
     /** Stores the multi-lingual label of current voucher */
     public currentVoucherLabel: string;
-    public asideMenuStateForOtherTaxes: string = 'out';
     public companyTaxesList: TaxResponse[] = [];
     public otherTaxDialogRef: any;
     public adjustmentDialogRef: any;
@@ -1077,12 +1058,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.openDropDown = false;
         if (!acc) {
             this.toaster.showSnackBar("error", this.localeData?.account_unchanged);
-            this.hideBaseAccountModal();
             return;
         }
         if (acc === this.baseAcc) {
             this.toaster.showSnackBar("error", this.localeData?.account_unchanged);
-            this.hideBaseAccountModal();
             return;
         }
 
@@ -1104,23 +1083,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // else {
         //     this.saveLedgerTransaction();
         // }
-
-        this.hideBaseAccountModal();
     }
 
     public openBaseAccountModal() {
-        // if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
-        //     this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
-        //     return;
-        // }
-        if (this.updateBaseAccount) {
-            this.updateBaseAccount.show();
-        }
-    }
-
-    public hideBaseAccountModal() {
-        if (this.updateBaseAccount) {
-            this.updateBaseAccount.hide();
+        if (this.voucherApiVersion !== 2 && this.vm.selectedLedger.voucherGenerated) {
+            this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
+            return;
         }
     }
 

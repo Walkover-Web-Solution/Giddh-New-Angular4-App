@@ -3,7 +3,6 @@ import { ReplaySubject, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
-import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from "../../shared/helpers/defaultDateFormat";
@@ -13,6 +12,7 @@ import { ToasterService } from "../../services/toaster.service";
 import { cloneDeep } from "../../lodash-optimized";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { MatDialog } from "@angular/material/dialog";
+import { IOption } from "../../app.constant";
 
 @Component({
     selector: 'gst-setting',

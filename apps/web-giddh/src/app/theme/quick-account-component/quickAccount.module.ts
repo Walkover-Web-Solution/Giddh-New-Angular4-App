@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { SharedModule } from 'apps/web-giddh/src/app/shared/shared.module';
 import { QuickAccountComponent } from './quickAccount.component';
-import { ShSelectModule } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LaddaModule } from 'angular2-ladda';
 
@@ -15,7 +14,6 @@ import { LaddaModule } from 'angular2-ladda';
         ReactiveFormsModule,
         ClickOutsideModule,
         SharedModule,
-        ShSelectModule,
         MatTooltipModule,
         LaddaModule.forRoot({
             style: 'slide-left',

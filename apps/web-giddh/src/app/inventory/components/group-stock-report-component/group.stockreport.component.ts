@@ -19,13 +19,11 @@ import {
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
@@ -46,9 +44,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     @ViewChild("productName", { static: true }) productName: ElementRef;
     @ViewChild("sourceName", { static: true }) sourceName: ElementRef;
     @ViewChild('advanceSearchForm', { static: true }) formValues;
-    @ViewChild('shCategory', { static: false }) public shCategory: ShSelectComponent;
-    @ViewChild('shCategoryType', { static: false }) public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition', { static: false }) public shValueCondition: ShSelectComponent;
     @ViewChild('template', { static: true }) public template: TemplateRef<any>;
     /** Reference to aside pane template */
     @ViewChild('asidePaneTemplate', { static: true }) public asidePaneTemplate: TemplateRef<any>;
@@ -711,9 +706,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     public clearModal() {
         if (this.GroupStockReportRequest.number || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.entity) {
-            this.shCategory?.clear();
-            this.shCategoryType?.clear();
-            this.shValueCondition?.clear();
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
 
             this.GroupStockReportRequest.number = null;

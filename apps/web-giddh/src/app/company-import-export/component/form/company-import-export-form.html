@@ -8,16 +8,13 @@
                 >
                     <label class="d-block">{{commonLocaleData?.app_entity}}</label>
                     <div class="form-group">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="currentCompanyBranches"
                             [(ngModel)]="currentBranch.uniqueName"
-                            [showClear]="false"
-                            [ItemHeight]="33"
-                            width="100%"
-                            (selected)="handleBranchChange($event)"
-                            [isFilterEnabled]="true"
+                            (selectedOption)="handleBranchChange($event)"
+                            [enableDynamicSearch]="true"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.name"
+                            [labelValue]="currentBranch?.name"
                         >
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
@@ -46,18 +43,17 @@
                                     </a>
                                 </ng-container>
                             </ng-template>
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="mr-r15 file-type-label">
                     <label class="d-block">{{localeData?.file_type}}</label>
-                    <sh-select
-                        placeholder="Select"
-                        name="file-type"
+                    <reactive-dropdown-field
+                        [placeholder]="'Select'"
+                        [name]="'file-type'"
                         [(ngModel)]="fileType"
                         [options]="fileTypes"
-                        [ItemHeight]="33"
-                    ></sh-select>
+                    ></reactive-dropdown-field>
                 </div>
                 <div class="mr-r15" *ngIf="mode === 'export' && fileType === '0'">
                     <label class="d-block">{{localeData?.data_range}}</label>

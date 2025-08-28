@@ -4,7 +4,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InventoryReportActions } from '../../actions/inventory/inventory.report.actions';
 import { InventoryFilter, InventoryReport, InventoryUser } from '../../models/api-models/Inventory-in-out';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
@@ -12,12 +11,11 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InvViewService } from '../inv.view.service';
-import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { IStocksItem } from "../../models/interfaces/stocks-item.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -34,7 +32,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
     @ViewChild('senderName', { static: false }) public senderName: ElementRef;
     @ViewChild('receiverName', { static: false }) public receiverName: ElementRef;
     @ViewChild('productName', { static: false }) public productName: ElementRef;
-    @ViewChild('comparisionFilter', { static: true }) public comparisionFilter: ShSelectComponent;
     @ViewChild(DaterangePickerComponent, { static: true }) public datePicker: DaterangePickerComponent;
     /** Template reference for aside menu */
     @ViewChild('asideMenuTemplate', { static: true }) public asideMenuTemplate: TemplateRef<any>;
@@ -487,7 +484,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
         }
 
         //advanceSearchAction modal filter
-        this.comparisionFilter?.clear();
         this.advanceSearchForm.controls['filterAmount'].setValue(null);
 
         this.filter.sort = null;
@@ -527,7 +523,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
     public advanceSearchAction(type: string) {
         if (type === 'clear') {
-            this.comparisionFilter?.clear();
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
             if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
                 || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {

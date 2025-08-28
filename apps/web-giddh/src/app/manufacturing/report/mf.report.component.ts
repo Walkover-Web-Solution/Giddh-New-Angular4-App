@@ -3,7 +3,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 import { createSelector } from 'reselect';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { distinct, filter, take, takeUntil } from 'rxjs/operators';
@@ -119,13 +118,11 @@ constructor(
         private manufacturingActions: ManufacturingActions,
         private inventoryAction: InventoryAction,
         private router: Router,
-        public bsConfig: BsDatepickerConfig,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private breakPointObservar: BreakpointObserver,
         private warehouseActions: WarehouseActions
     ) {
-        this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.mfStockSearchRequest.product = '';
         this.mfStockSearchRequest.searchBy = '';
         this.mfStockSearchRequest.searchOperation = '';

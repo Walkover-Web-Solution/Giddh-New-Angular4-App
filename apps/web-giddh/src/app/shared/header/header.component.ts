@@ -5,8 +5,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaul
 import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -48,7 +46,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ServiceConfig } from '../../services/service.config';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -61,19 +58,7 @@ interface SubscriptionErrorFlags {
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./header.component.scss']
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
@@ -87,8 +72,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLedgerAccSelected: boolean = false;
     /* This will hold the help popup dialog ref */
     public asideHelpSupportDialogRef: MatDialogRef<any>;
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideSettingMenuState: string = 'out';
+    /* This will hold the boolean value to open/close setting sidebar popup */
+    public asideSettingMenuState: boolean = false;
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
     /* Hold giddh logo source */
@@ -102,16 +87,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* This will hold the manage groups accounts dialog ref */
     public manageGroupsAccountsDialogRef: MatDialogRef<any>;
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
-    @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
     /** Switch branch dropdown */
-    @ViewChild('subBranchDropdown', { static: false }) public subBranchDropdown: BsDropdownDirective;
     @ViewChild('searchCmpTextBox', { static: true }) public searchCmpTextBox: ElementRef;
-    @ViewChild('expiredPlan', { static: true }) public expiredPlan: ModalDirective;
     @ViewChild('expiredPlanModel', { static: true }) public expiredPlanModel: TemplateRef<any>;
     @ViewChild('crossedTxLimitModel', { static: true }) public crossedTxLimitModel: TemplateRef<any>;
-    @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
-    /** All modules popover instance */
-    @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
     /** Instance of mat dialog */
     @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
     /** Instance of menu trigger */
@@ -345,9 +324,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 if (!event.url.includes("/pages/settings") && !event.url.includes("/gstfiling") && !event.url.includes("/billing-detail") && this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.removeSessionStorage("previousPage");
-                }
-                if (this.subBranchDropdown) {
-                    this.subBranchDropdown.hide();
                 }
                 this.addClassInBodyIfPageHasTabs();
             }
@@ -1006,20 +982,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (show) {
                 this.asideHelpSupportDialogRef?.close();
             }
-            this.asideSettingMenuState = (show) ? 'in' : 'out';
+            this.asideSettingMenuState = show;
 
-            if (this.asideSettingMenuState === "in") {
+            if (this.asideSettingMenuState) {
                 document.querySelector('body')?.classList?.add('aside-setting');
             } else {
                 document.querySelector('body')?.classList?.remove('aside-setting');
             }
 
-            if (this.asideSettingMenuState === "in") {
+            if (this.asideSettingMenuState) {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
             } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-        }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
+        }, ((this.asideSettingMenuState) ? 100 : 0));
     }
 
     /**
@@ -1038,14 +1014,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             e.preventDefault();
             e.stopPropagation();
         }
-        this.companyDropdown.isOpen = false;
-        if (this.subBranchDropdown) {
-            this.subBranchDropdown.hide();
-        }
         this.forceOpenNavigation = false;
-        if (this.companyDetailsDropDownWeb) {
-            this.companyDetailsDropDownWeb.hide();
-        }
 
         this.toggleBodyScroll();
 
@@ -1176,12 +1145,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isGoToBranch = false;
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
-        }
-        if (this.companyDropdown && !this.forceOpenNavigation) {
-            this.companyDropdown.isOpen = false;
-        }
-        if (this.companyDetailsDropDownWeb) {
-            this.companyDetailsDropDownWeb.hide();
         }
         if (event) {
             document.querySelector('body').classList.add('hide-scroll-body')
@@ -1398,10 +1361,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public handleAllModulesLeaveEvent(event: any): void {
         const menu = document.getElementById('other_sub_menu');
         const targetElement = event.toElement || event.relatedTarget;
-        if (menu && !menu.contains(targetElement)) {
-            // Hide 'All Modules' popover if the mouse points to any element other than sub menu as target
-            this.allModulesPopover.hide();
-        }
     }
 
     public onCompanyShown(sublist, navigator) {
@@ -1704,7 +1663,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleBodyScroll(): void {
-        if (this.companyDropdown.isOpen && !this.isMobileSite) {
+        if (!this.isMobileSite) {
             document.querySelector('body').classList.add('prevent-body-scroll');
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');
@@ -1925,7 +1884,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public toggleSidebar(isMobileSidebar: boolean): void {
-        if (this.asideSettingMenuState === "in") {
+        if (this.asideSettingMenuState) {
             this.toggleSidebarPane(false, isMobileSidebar);
         } else {
             this.toggleSidebarPane(true, isMobileSidebar);

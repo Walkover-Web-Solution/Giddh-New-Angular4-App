@@ -1,5 +1,4 @@
 import { NgModule } from "@angular/core";
-import { ModalModule } from "ngx-bootstrap/modal";
 import { NewInventoryComponent } from "./new-inventory.component";
 import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
 import { SharedModule } from "../shared/shared.module";
@@ -91,7 +90,6 @@ import { PreviewVariantImageComponent } from "./component/preview-variant-image/
         NewInventoryRoutingModule,
         SharedModule,
         CommonModule,
-        ModalModule.forRoot(),
         FormFieldsModule,
         TranslateDirectiveModule,
         DecimalDigitsModule,

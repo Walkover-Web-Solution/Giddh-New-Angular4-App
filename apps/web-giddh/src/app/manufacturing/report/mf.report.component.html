@@ -25,18 +25,14 @@
                     >
                         <div class="link-entity-dropdown">
                             <label class="d-block pb-1 font-15">Entity</label>
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="currentCompanyBranches"
                                 [(ngModel)]="currentBranch.uniqueName"
                                 class="branch-dropdown"
-                                name="entityDropdown"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
-                                (selected)="handleBranchChange($event)"
-                                [isFilterEnabled]="true"
-                                placeholder="Select Entity"
-                                [fixedValue]="currentBranch?.name"
+                                [name]="'entityDropdown'"
+                                (selectedOption)="handleBranchChange($event)"
+                                [placeholder]="'Select Entity'"
+                                [labelValue]="currentBranch?.name"
                             >
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
@@ -68,7 +64,7 @@
                                         </a>
                                     </ng-container>
                                 </ng-template>
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div
@@ -169,53 +165,47 @@
                 <div class="row">
                     <div class="form-group col-xl-2 col-lg-2 col-md-6">
                         <label class="d-block">Final Product</label>
-                        <sh-select
-                            placeholder="--Select Product--"
-                            name="product"
+                        <reactive-dropdown-field
+                            [placeholder]="'--Select Product--'"
+                            [name]="'product'"
                             #productList="ngModel"
-                            required
+                            [required]="true"
                             [(ngModel)]="mfStockSearchRequest.product"
                             [options]="stockListDropDown"
-                            [ItemHeight]="33"
-                            (selected)="setActiveStockGroup($event)"
-                            [forceClearReactive]="forceClear$ | async"
+                            (selectedOption)="setActiveStockGroup($event)"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-xl-2 col-lg-3 col-md-6 col-12">
                         <label class="d-block">Warehouse</label>
-                        <sh-select
-                            placeholder="--Select Warehouse--"
-                            name="warehouse"
+                        <reactive-dropdown-field
+                            [placeholder]="'--Select Warehouse--'"
+                            [name]="'warehouse'"
                             [options]="warehouses"
                             [(ngModel)]="mfStockSearchRequest.warehouseUniqueName"
                             (onClear)="clearWarehouse()"
-                            [forceClearReactive]="forceClearWarehouse$ | async"
-                        ></sh-select>
+                        ></reactive-dropdown-field>
                     </div>
 
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Search By</label>
-                        <sh-select
-                            placeholder="--Select--"
-                            name="searchBy"
+                        <reactive-dropdown-field
+                            [placeholder]="'--Select--'"
+                            [name]="'searchBy'"
                             [(ngModel)]="mfStockSearchRequest.searchBy"
                             [options]="filtersForSearchBy"
-                            [ItemHeight]="33"
-                            [forceClearReactive]="forceClear$ | async"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Operation</label>
-                        <sh-select
-                            placeholder="--Select--"
-                            name="searchOperation"
+                        <reactive-dropdown-field
+                            [placeholder]="'--Select--'"
+                            [name]="'searchOperation'"
                             [(ngModel)]="mfStockSearchRequest.searchOperation"
                             [options]="filtersForSearchOperation"
-                            [ItemHeight]="33"
-                            [forceClearReactive]="forceClear$ | async"
-                        ></sh-select>
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Value</label>

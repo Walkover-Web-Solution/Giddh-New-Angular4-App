@@ -15,12 +15,11 @@ import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { API_COUNT_LIMIT, IOption, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',

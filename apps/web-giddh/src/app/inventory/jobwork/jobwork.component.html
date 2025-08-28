@@ -324,16 +324,14 @@
             <div class="row mr-t2">
                 <div class="col-md-4">Trading Qty.</div>
                 <div class="col-md-4">
-                    <sh-select
-                        name="entity"
-                        (onClear)="clearShSelect('comparisionFilter')"
+                    <reactive-dropdown-field
+                        [name]="'entity'"
                         [options]="COMPARISON_FILTER"
-                        (selected)="compareChanged($event)"
+                        (selectedOption)="compareChanged($event)"
                         [placeholder]="'Select'"
-                        #comparisionFilter
                         [multiple]="false"
                     >
-                    </sh-select>
+                    </reactive-dropdown-field>
                 </div>
                 <div class="col-md-4">
                     <input

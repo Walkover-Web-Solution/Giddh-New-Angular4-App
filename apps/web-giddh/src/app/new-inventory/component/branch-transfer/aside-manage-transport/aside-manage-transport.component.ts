@@ -1,13 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { IAllTransporterDetails } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 
 export interface transporterDetails {

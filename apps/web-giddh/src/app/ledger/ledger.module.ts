@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ClipboardModule } from 'ngx-clipboard';
 import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
@@ -20,7 +19,6 @@ import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.modul
 import { ValidateSectionPermissionDirectiveModule } from '../shared/validate-section-permission/validate-section-permission.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -95,7 +93,6 @@ import { MatDividerModule } from '@angular/material/divider';
         ReactiveFormsModule,
         TaxControlModule,
         LedgerRoutingModule,
-        ModalModule.forRoot(),
         MatPaginatorModule,
         ClipboardModule,
         LaddaModule.forRoot({
@@ -104,7 +101,6 @@ import { MatDividerModule } from '@angular/material/divider';
         }),
         NumberToWordsModule,
         ConfirmModalModule,
-        ShSelectModule,
         DecimalDigitsModule,
         ClickOutsideModule,
         SelectModule.forRoot(),

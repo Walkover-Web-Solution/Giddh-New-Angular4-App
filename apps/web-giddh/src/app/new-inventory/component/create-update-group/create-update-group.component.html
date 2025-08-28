@@ -178,7 +178,7 @@
                                                     <label>{{ localeData?.is_it_childgroup }}</label>
                                                 </div>
                                                 <div class="input-min-width" *ngIf="groupForm.get('isSubGroup')?.value">
-                                                    <dropdown-field
+                                                    <reactive-dropdown-field
                                                         [name]="'parentStockGroupUniqueName'"
                                                         [placeholder]="commonLocaleData?.app_select_parent_group"
                                                         [options]="stockGroups"
@@ -186,8 +186,8 @@
                                                             stockGroupUniqueName = $event?.value;
                                                             stockGroupName = $event?.label
                                                         "
-                                                        [defaultValue]="stockGroupName"
-                                                    ></dropdown-field>
+                                                        [labelValue]="stockGroupName"
+                                                    ></reactive-dropdown-field>
                                                 </div>
                                             </div>
                                             <div class="d-flex toggle-childgroup pd-t05 mt-1">
