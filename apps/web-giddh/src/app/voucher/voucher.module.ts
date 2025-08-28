@@ -30,7 +30,6 @@ import { DiscountControlModule } from "../theme/discount-control/discount-contro
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { SelectModule } from "../theme/ng-select/ng-select";
 import { TaxControlModule } from "../theme/tax-control/tax-control.module";
-import { VoucherPrintInPlaceComponent } from "./components/voucher-print-inplace/voucher-print-in-place.component";
 import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
 import { VoucherRoutingModule } from "./voucher.routing.module";
@@ -89,7 +88,7 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         OnloadDirectiveModule,
     ],
     exports: [VoucherComponent],
-    declarations: [VoucherRendererComponent, VoucherComponent, VoucherPrintInPlaceComponent],
+    declarations: [VoucherRendererComponent, VoucherComponent],
     providers: [TitleCasePipe],
 })
 export class VoucherModule {}

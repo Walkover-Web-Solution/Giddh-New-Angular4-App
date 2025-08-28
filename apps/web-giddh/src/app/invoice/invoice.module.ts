@@ -4,18 +4,11 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
-import { InvoiceComponent } from './invoice.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
-import { InvoicePreviewComponent } from './preview/invoice.preview.component';
 import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
-import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
-import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
-import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
-import { ProformaListComponent } from './proforma/proforma-list.component';
-import { RecurringComponent } from './recurring/recurring.component';
 import { WebviewDirective } from './webview.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -42,7 +35,6 @@ import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { PurchaseOrderPreviewModule } from '../shared/purchase-order-preview/purchase-order-preview.module';
 import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-send-email.module';
-import { RevisionHistoryModule } from '../shared/revision-history/revision-history.module';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { ValidateSectionPermissionDirectiveModule } from '../shared/validate-section-permission/validate-section-permission.module';
@@ -53,7 +45,6 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -61,7 +52,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
-import { InvoiceGenerateModule } from './generate/invoice-generate.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -80,26 +70,18 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
 
 @NgModule({
     declarations: [
-        InvoiceComponent,
-        InvoicePreviewComponent,
-        InvoicePaymentModelComponent,
         DownloadOrSendInvoiceOnMailComponent,
         EsignModalComponent,
-        RecurringComponent,
         WebviewDirective,
         InvoiceAdvanceSearchComponent,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,
         EWayBillCreateComponent,
         EWayBillComponent,
-        EWayBillCredentialsComponent,
-        InvoicePreviewDetailsComponent,
-        ProformaListComponent,
-        DownloadVoucherComponent
+        EWayBillCredentialsComponent
     ],
     imports: [
         InvoiceRoutingModule,
-        VoucherModule,
         DigitsOnlyModule,
         FormsModule,
         CommonModule,
@@ -121,7 +103,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         AccountDetailModalModule,
         CurrencyModule,
         ScrollingModule,
-        VoucherModule,
         DigitsOnlyModule,
         UniqueNameModule,
         ConfirmModalModule,
@@ -137,7 +118,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         ValidateSubscriptionDirectiveModule,
         DeleteVoucherConfirmationModalModule,
         PurchaseSendEmailModule,
-        RevisionHistoryModule,
         PurchaseOrderPreviewModule,
         TranslateDirectiveModule,
         ValidateSectionPermissionDirectiveModule,
@@ -159,7 +139,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         MatButtonModule,
         GenerateEWayBillModule,
         InvoiceSettingModule,
-        InvoiceGenerateModule,
         MatMenuModule,
         MatTooltipModule,
         MatCheckboxModule,
@@ -169,8 +148,7 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
     ],
     exports: [
         InvoiceRoutingModule,
-        DownloadOrSendInvoiceOnMailComponent,
-        InvoicePreviewComponent
+        DownloadOrSendInvoiceOnMailComponent
     ],
     providers: [
         InvoiceUiDataService

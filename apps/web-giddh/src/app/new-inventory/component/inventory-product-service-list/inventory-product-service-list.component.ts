@@ -117,12 +117,6 @@ export class ProductServiceListComponent implements OnInit {
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
 
-    // @ViewChild(MatSort) sort: MatSort;
-    //
-    // // tslint:disable-next-line:use-life-cycle-interface
-    // ngAfterViewInit() {
-    //     this.dataSource.sort = this.sort;
-    // }
 
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {

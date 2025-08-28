@@ -29,11 +29,9 @@
         </div>
         <div class="toggle" *ngIf="isOpen">
             <span class="select-drop"><i class="fa fa-caret-up"></i></span>
-            <!-- <span class="glyphicon glyphicon-triangle-top"></span> -->
         </div>
         <div class="toggle" *ngIf="!isOpen">
             <span class="select-drop"><i class="fa fa-caret-down"></i></span>
-            <!-- <span class="glyphicon glyphicon-triangle-bottom"></span> -->
         </div>
     </div>
 
@@ -66,7 +64,6 @@
                 [value]="optionList.hasSelected ? optionList.selection[0].label : ''"
                 (input)="onFilterInput($event.target?.value)"
                 (keydown)="onTypeAheadFilterKeydown($event)"
-                (keyup)="onTypeAheadFilterKeyup($event)"
                 (focus)="onTypeAheadFilterFocus()"
                 class="form-control"
             />

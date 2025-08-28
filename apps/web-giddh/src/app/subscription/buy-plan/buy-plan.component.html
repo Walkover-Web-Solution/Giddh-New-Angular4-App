@@ -85,10 +85,6 @@
                                         class="d-flex column-gap15 align-items-center ml-auto"
                                         *ngIf="inputData?.length"
                                     >
-                                        <!-- <button mat-raised-button color="primary" class="w-100" (click)="activateDialog()">
-                                        Activate Via Key
-                                    </button> -->
-                                        <!-- <div class="form-group col-md-2" *ngIf="isNewUserLoggedIn"> -->
                                         <div class="custom-tab w-100">
                                             <mat-button-toggle-group
                                                 *ngIf="monthlyPlans?.length && yearlyPlans?.length"
@@ -112,16 +108,6 @@
                                     </div>
                                 </div>
                                 <ng-container *ngIf="!(planListInProgress$ | async) && !isLoading && inputData?.length">
-                                    <!-- <div class="scroll-left">
-                                        <button mat-stroked-button (click)="scrollLeft()">
-                                            <i class="icon-left"></i>
-                                        </button>
-                                    </div>
-                                    <div class="scroll-right">
-                                        <button mat-stroked-button (click)="scrollRight()">
-                                            <i class="icon-right"></i>
-                                        </button>
-                                    </div> -->
                                     <div #tableContent class="plan-table">
                                         <div class="grid-list-div top-heading">
                                             <div class="grid-title-left grid-title-left-top">

@@ -4483,14 +4483,6 @@
                                                             >{{ commonLocaleData?.app_goto_ledger }}</a
                                                         >
                                                     </li>
-                                                    <!-- <li class="text-left mr-t1">
-                                                        <a
-                                                            href="javascript:;"
-                                                            class="default-color"
-                                                            (click)="generateVoucher(element)"
-                                                            >{{ commonLocaleData?.app_generate_invoice }}</a
-                                                        >
-                                                    </li> -->
                                                 </ul>
                                             </mat-card-content>
                                         </mat-card>
@@ -5840,16 +5832,6 @@
                                             >
                                                 {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.payment) }}
                                             </mat-slide-toggle>
-                                            <!--  Confirmed with Kriti that she was not aware of this setting due to the comment.
-                                            <mat-slide-toggle
-                                                name="createPaymentEntry"
-                                                class="disable-toggle slide-toggle d-block mb-3"
-                                                color="primary"
-                                                aria-label="auto create payment entry"
-                                                formControlName="createPaymentEntry"
-                                            >
-                                                Create payment entry
-                                            </mat-slide-toggle> -->
                                             <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                         </div>
                                     </ng-container>
@@ -5863,7 +5845,8 @@
             <!-- setting-content-end -->
 
             <!-- template-content-start -->
-            <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
+            <!-- <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1"> -->
+                <mat-tab [label]="localeData?.tabs?.templates" *ngIf="false">
                 <div class="pd-t15" *ngIf="activeModule === 'templates'">
                     <edit-invoice></edit-invoice>
                 </div>

@@ -213,43 +213,6 @@
                 {{ localeData?.subscription?.per_transaction }}</span
             >
         </p>
-        <!-- extra addons :  | 2000 per branch | 1000 per warehous -->
-
-        <!-- Default Active Company Start -->
-        <!-- <div class="no-plan col-md-3">
-         <div class="renewal-data">
-             <mat-card class="renewal-card">
-                <mat-card-subtitle [ngClass]="{ 'skeleton-common-class': showLoader , 'renewal-card-subtitle-loading': showLoader}" class="renewal-card-subtitle">{{ this.activeCompany?.subscription?.planDetails?.name }}
-                </mat-card-subtitle>
-                <mat-card-title [ngClass]="{ 'skeleton-common-class': showLoader, 'renewal-card-title-loading': showLoader}" class="renewal-card-title">
-                    ₹{{ this.activeCompany?.subscription?.planDetails?.amount | number }}
-                    <span class="year">/{{ this.activeCompany?.subscription?.planDetails?.duration }} {{ this.activeCompany?.subscription?.planDetails?.durationUnit }} {{ this.activeCompany?.subscription?.planDetails?.duration !== 1 ? "(s)" : "" }}
-                       </span></mat-card-title>
-        <p [ngClass]="{ 'skeleton-common-class': showLoader}" class="renewal-off">₹15000 <span class="discount-off" *ngIf="!showLoader">20% off</span></p>
-        <mat-card-content class="renewal-card-content">
-                    <ul class="renewal-list" [ngClass]="{ 'renewal-list-loading': showLoader}">
-                        <li [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">
-                            {{ this.activeCompany?.subscription?.planDetails?.transactionLimit | number }}  Transactions
-                        </li>
-                        <li  [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">
-                            {{ this.activeCompany?.subscription?.planDetails?.companiesLimit | number }}  Companies
-                        </li>
-        <li  [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li>
-       <li [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.unlimited_users }}</li>
-                        <li [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.unlimited_contacts }}</li>
-                        <li  [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.desktop_mobile_app }}</li>
-                    </ul>
-                    <a [ngClass]="{ 'skeleton-common-class': showLoader, 'button-loading': showLoader}" (click)="openDialog()" href="javascript:void(0)">{{ localeData?.subscription?.check_all_features }}</a>
-                    <div [ngClass]="{ 'skeleton-common-class': showLoader,'formgroup-div': showLoader}" class="form-group" >
-                        <button  [ngClass]="{ 'formgroup-button': showLoader}"  *ngIf="this.activeCompany?.subscription?.planDetails?.uniqueName !== defaultTrialPlan" class="pay-now" mat-raised-button color="primary"
-                            (click)="renewPlan()">
-                            {{ commonLocaleData?.app_renew }}
-                        </button>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-        </div>
-    </div>-->
         <!-- Default Active Company End  -->
 
         <div class="activation-key-wrapper">
@@ -306,7 +269,6 @@
                 </div>
             </div>
         </div>
-        <!-- <a class="font-15 explore-other">Explore Other Plans</a> -->
     </ng-container>
     <div *ngIf="isSwitchPlanInProcess">
         <giddh-page-loader></giddh-page-loader>

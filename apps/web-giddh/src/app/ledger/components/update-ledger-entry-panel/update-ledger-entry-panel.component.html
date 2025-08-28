@@ -2001,28 +2001,6 @@
                                                     ></input-field>
                                                 </div>
                                             </div>
-                                            <!-- <div
-                                            *ngIf="
-                                                item.voucherType === 'receipt' &&
-                                                item.subVoucher === 'ADVANCE_RECEIPT' &&
-                                                voucherApiVersion !== 2
-                                            "
-                                        >
-                                            <div class="form-group tax-width">
-                                                <label>{{ commonLocaleData?.app_tax }}</label>
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    id="update-ledger-voucher-tax"
-                                                    class="form-control mr-b1 mat-field-border"
-                                                    decimalDigitsDirective
-                                                    [mask]="vm.inputMaskFormat"
-                                                    [prefix]="item.accountCurrency?.symbol"
-                                                    [(ngModel)]="item.calculatedTaxAmount"
-                                                    disabled
-                                                />
-                                            </div>
-                                        </div> -->
                                         </div>
                                     </div>
                                     <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">

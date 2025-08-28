@@ -63,9 +63,8 @@
         </div>
         <div>
             <div class="wrap-menus mr-t15">
-                <!-- 
+                   <!-- 
                     Note: Account list is hide from design for now as we deploy on production remove all related code also
-
                     <div class="account-block mr-b2 pd-l2 pd-r2">
                     <div class="account-collapse">
                         <p class="font-12 d-flex justify-content-between">
@@ -202,7 +201,7 @@
                                     </a>
                                 </div>
                                 <!-- Child menu without link -->
-                                <div class="main-item-wrapper pr-0" *ngIf="isSidebarExpanded && node?.level === 1 && !node?.link">
+                                <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && !node?.link">
                                     <a
                                         href="javascript:;"
                                         class="main-item"
@@ -216,7 +215,7 @@
                                     </a>
                                 </div>
                                 <!-- Child menu with link -->
-                                <div class="main-item-wrapper pr-0" *ngIf="isSidebarExpanded && node?.level === 1 && node?.link">
+                                <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && node?.link">
                                     <div
                                         aria-label="menu"
                                         class="main-item"

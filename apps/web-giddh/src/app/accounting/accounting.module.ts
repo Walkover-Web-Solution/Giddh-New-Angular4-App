@@ -17,14 +17,10 @@ import { InventoryModule } from './../inventory/inventory.module';
 import { SharedModule } from './../shared/shared.module';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
-import { InvoiceGridComponent } from './invoice-grid/invoice-grid.component';
-import { AccountAsInvoiceComponent } from './journal-voucher/invoice/invoice.component';
 import { JournalVoucherComponent } from './journal-voucher/journal-voucher.component';
-import { ReceiptEntryModalComponent } from './journal-voucher/voucher/receipt-entry-modal/receipt-entry-modal.component';
 import { AccountAsVoucherComponent } from './journal-voucher/voucher/voucher.component';
 import { OnReturnDirective } from './keyboard.directive';
 import { TallyModuleService } from './tally-service';
-import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -38,14 +34,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
     declarations: [
         JournalVoucherComponent,
-        AccountAsInvoiceComponent,
         AccountingSidebarComponent,
         AccountAsVoucherComponent,
         OnReturnDirective,
-        AccountingComponent, // TODO: Deprecated, remove it
-        InvoiceGridComponent, // TODO: Deprecated, remove it
-        VoucherGridComponent, // TODO: Deprecated, remove it
-        ReceiptEntryModalComponent
+        AccountingComponent,
     ],
     exports: [RouterModule, AccountingSidebarComponent],
     providers: [KeyboardService, TallyModuleService],
