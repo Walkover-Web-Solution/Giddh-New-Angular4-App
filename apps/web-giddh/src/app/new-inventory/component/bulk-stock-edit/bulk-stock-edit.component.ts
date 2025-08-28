@@ -312,7 +312,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @memberof BulkStockEditComponent
      */
     onFormSubmit(): void {
-        // console.log(this.bulkStockEditForm.value);
     }
 
     /**
@@ -414,7 +413,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @memberof BulkStockEditComponent
      */
     public getInputIndex(index: number, key: string): void {
-        // console.log(`At index - ${index} and key is '${key}'`);
     }
 
     /**
@@ -616,21 +614,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     */
     // public getTaxes(): void {
     //     this.store.dispatch(this.companyAction.getTax());
-    //     this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
-    //         if (response?.length > 0 && !this.processedTaxes?.length) {
-    //             this.taxes = response || [];
-    //             console.log("Taxes: ", this.taxes);
-    //         }
-    //         this.changeDetection.detectChanges();
-    //     });
-    // }
-    // public openedSelectTax(event:any): void {
-    //     console.log("Selected Tax : ", event)
-    // }
-
-    // public selectTax(tax): void {
-    //     console.log("OnTaxSelection Change : ", tax)
-    // }
 
     /**
      * Open advance search Dialog

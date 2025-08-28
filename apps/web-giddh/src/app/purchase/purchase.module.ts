@@ -12,11 +12,7 @@ import { DiscountControlModule } from '../theme/discount-control/discount-contro
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
-import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
 import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
-import { PurchaseOrderPreviewComponent } from './purchase-order-preview/purchase-order-preview.component';
-import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
-import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
@@ -28,7 +24,6 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
 import { DeleteVoucherConfirmationModalModule } from '../shared/delete-voucher-confirmation-modal/delete-voucher-confirmation-modal.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-send-email.module';
-import { RevisionHistoryModule } from '../shared/revision-history/revision-history.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
@@ -40,7 +35,6 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
-import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -52,13 +46,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
 
 @NgModule({
     declarations: [
-        PurchaseOrderComponent,
-        CreatePurchaseOrderComponent,
-        PurchaseOrderPreviewComponent,
-        PurchaseComponent,
-        PurchaseRecordComponent,
-        PurchaseAdvanceSearchComponent,
-        BulkConvertComponent
+        PurchaseComponent
     ],
     imports: [
         MatButtonModule,
@@ -93,7 +81,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         DeleteVoucherConfirmationModalModule,
         GiddhDatepickerModule,
         PurchaseSendEmailModule,
-        RevisionHistoryModule,
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,

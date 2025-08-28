@@ -24,15 +24,6 @@
             <button mat-raised-button color="primary" class="mb-2" (click)="toggleAccountPane()">
                 {{ commonLocaleData?.app_add_account }}
             </button>
-            <!-- <button
-                *ngIf="voucherApiVersion !== 2"
-                mat-raised-button
-                color="primary"
-                class="mb-2"
-                (click)="toggleStockPane()"
-            >
-                {{ localeData?.add_stock }}
-            </button> -->
             <button
                 *ngIf="voucherApiVersion === 2"
                 mat-raised-button
@@ -77,7 +68,4 @@
         </div>
     </div>
 
-    <!-- <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">
-        <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
-    </div> -->
 </div>

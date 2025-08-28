@@ -103,7 +103,6 @@ export class ManufacturingService {
             url = url + 'count=' + model.count;
         }
         if (this.generalService.currentBranchUniqueName) {
-            // model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(this.generalService.currentBranchUniqueName)}`)
         }
 
