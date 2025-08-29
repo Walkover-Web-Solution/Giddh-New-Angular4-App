@@ -87,12 +87,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public selectedInvoices: any[] = [];
     public supplyType: any = [{}];
     public isTransModeRoad: boolean = false;
-    public modalConfig = {
-        animated: true,
-        keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     public SubsupplyTypesList: IOption[] = [];
     public SupplyTypesList: IOption[] = [];
     public ModifiedTransporterDocType: IOption[] = [];

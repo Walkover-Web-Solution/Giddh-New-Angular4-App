@@ -25,7 +25,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../services/invoice.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'advance-receipt-report',

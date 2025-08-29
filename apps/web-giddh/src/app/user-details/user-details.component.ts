@@ -15,10 +15,8 @@ import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
 dayjs.extend(duration)
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
-import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
+import { API_POSTMAN_DOC_URL } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ClipboardService } from 'ngx-clipboard';
@@ -69,7 +67,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public dayjs = dayjs;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public userSessionId: any = null;
-    public modalRef: BsModalRef;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
     public isMobileScreen: boolean = true;
@@ -79,8 +76,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /* Holds Mat Table Columns*/
     public displayedColumns: string[] = ['ipaddress', 'signindate', 'signintime', 'duration', 'agent', 'action'];
     /** Holds Active Tab Index */
