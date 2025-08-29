@@ -14,7 +14,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../../models/user-login-state';
 import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -44,7 +44,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
         customerName: '',
         voucherNumber: '',
         duration: '',
-        lastInvoiceDate: ''
+        lastInvoiceDate: '',
+        count: PAGINATION_LIMIT
     };
     @ViewChild('customerSearch', { static: true }) public customerSearch: ElementRef;
     @ViewChild(BsDatepickerDirective, { static: true }) public bsd: BsDatepickerDirective;
@@ -177,7 +178,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         // For recurring invoices, we always use event.pageIndex + 1 since page size is fixed at 20
         this.currentPage = event.pageIndex + 1;
-        this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, this.currentPage));
+        this.filter.count = event.pageSize;
+        this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, this.currentPage, this.filter.count));
     }
 
     /**
@@ -268,7 +270,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
             customerName: '',
             voucherNumber: '',
             duration: '',
-            lastInvoiceDate: ''
+            lastInvoiceDate: '',
+            count: PAGINATION_LIMIT
         };
         this.submit();
     }

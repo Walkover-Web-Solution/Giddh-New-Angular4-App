@@ -36,8 +36,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public getDetailedPurchaseRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
     public selectedMonth: string;
     public showSearchInvoiceNo: boolean = false;
-    /** Pagination limit for records */
-    public paginationLimit: number = PAGINATION_LIMIT;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
 
@@ -135,7 +133,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/icon/";
         this.getDetailedPurchaseRequestFilter.page = 1;
-        this.getDetailedPurchaseRequestFilter.count = this.paginationLimit;
+        this.getDetailedPurchaseRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedPurchaseRequestFilter.q = "";
         this.store
             .pipe(
@@ -488,7 +486,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.voucherNumberInput?.reset();
         this.showSearchInvoiceNo = false;
         this.getDetailedPurchaseRequestFilter.page = 1;
-        this.getDetailedPurchaseRequestFilter.count = this.paginationLimit;
+        this.getDetailedPurchaseRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedPurchaseRequestFilter.q = "";
         this.getDetailedPurchaseRequestFilter.sort = null;
         this.getDetailedPurchaseRequestFilter.sortBy = null;

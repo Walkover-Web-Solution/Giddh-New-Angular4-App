@@ -224,14 +224,16 @@
         <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
     </div>
 </section>
-<div class="mt-4" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
+<div class="mt-4" *ngIf="importRequest?.totalItems > pageSizeOptions[0] && !isLoading">
     <mat-paginator
         [length]="importRequest?.totalItems"
         [pageSize]="importRequest.count"
         [pageSizeOptions]="pageSizeOptions"
         [pageIndex]="importRequest.page - 1"
         (page)="handlePageEvent($event)"
-        [showFirstLastButtons]="true">
+        [showFirstLastButtons]="true"
+        [hidePageSize]="false"
+    >
     </mat-paginator>
 </div>
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

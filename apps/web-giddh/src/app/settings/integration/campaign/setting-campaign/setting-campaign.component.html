@@ -178,7 +178,7 @@
         <div
             class="mt-3"
             *ngIf="
-                triggerObj?.totalPages > 1 &&
+                triggerObj?.totalItems > pageSizeOptions[0] &&
                 !isActiveTriggersLoading &&
                 !showTriggerForm &&
                 activeTriggersDataSource?.length &&
@@ -191,6 +191,7 @@
                 [pageSizeOptions]="pageSizeOptions"
                 [pageIndex]="triggerObj.page - 1"
                 [showFirstLastButtons]="true"
+                [hidePageSize]="false"
                 (page)="handlePageEvent($event)"
                 aria-label="Select page of campaigns"
             ></mat-paginator>

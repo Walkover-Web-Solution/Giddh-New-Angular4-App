@@ -231,10 +231,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    /** This will hold bank transactions api response */
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    public bankTransactionsResponse: any = { totalItems: 0, totalPages: 0, page: 1, countPerPage: this.pageSizeOptions[2] };
+    /** This will hold bank transactions api response */
+    public bankTransactionsResponse: any = { totalItems: 0, totalPages: 0, page: 1, countPerPage: PAGINATION_LIMIT };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -3843,6 +3843,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
             },
             disableClose: true
         });
+    }
+
+    /**
+     * To change pagination page number
+     *
+     * @param {*} event Pagination change event
+     * @memberof LedgerComponent
+     */
+    public pageChanged(event: any): void {
+        if (typeof event === 'string') {
+            if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
+                this.advanceSearchRequest.paginationToken = event;
+                this.getAdvanceSearchTxn();
+            } else {
+                this.trxRequest.paginationToken = event;
+                this.getTransactionData();
+            }
+        }
     }
 
     /** 

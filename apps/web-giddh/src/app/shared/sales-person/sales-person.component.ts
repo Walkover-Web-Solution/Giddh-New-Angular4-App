@@ -19,7 +19,7 @@ import { NewConfirmationModalComponent } from '../../theme/new-confirmation-moda
 import { GeneralService } from '../../services/general.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 
 @Component({
     selector: 'app-sales-person',
@@ -85,7 +85,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds advance Filters keys */
     public requestParams: any = {
         page: 1,
-        count: this.pageSizeOptions[0]
+        count: PAGINATION_LIMIT
     };
 
     constructor(

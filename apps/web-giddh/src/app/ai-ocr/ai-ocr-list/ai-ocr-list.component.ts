@@ -11,7 +11,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
-import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { MatSort, Sort } from "@angular/material/sort";
 import { AiOcrStore } from "../utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
@@ -53,7 +53,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         page: 1,
         totalPages: 0,
         totalItems: 0,
-        count: API_COUNT_LIMIT,
+        count: PAGINATION_LIMIT,
         from: "",
         to: "",
         sort: "desc",

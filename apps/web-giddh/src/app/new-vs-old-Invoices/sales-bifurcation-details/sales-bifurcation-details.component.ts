@@ -2,7 +2,7 @@ import { Component, Inject, OnDestroy, OnInit, TemplateRef } from '@angular/core
 import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@angular/forms';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { SalesBifurcationDetailsStore } from './utility/sales-bifurcation-details.store';
 import { SalesBifurcationDetailsService } from './utility/sales-bifurcation-details.service';
 import { SalesBifurcationDetailsActionEnum } from './utility/sales-bifurcation-details.constant';
@@ -34,7 +34,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
     /** Holds advance Filters keys */
     public requestParams: any = {
         page: 1,
-        count: this.pageSizeOptions[2],
+        count: PAGINATION_LIMIT,
         value: '',
         type: '',
         dataType: '',
@@ -113,13 +113,13 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
                 this.showClearFilter = true;
                 this.requestParams.q = searchedText;
                 this.requestParams.page = 1;
-                this.requestParams.count = this.pageSizeOptions[2];
+                this.requestParams.count = PAGINATION_LIMIT;
                 this.initApiCall();
             } else if (searchedText === '') {
                 this.showClearFilter = false;
                 this.requestParams.q = '';
                 this.requestParams.page = 1;
-                this.requestParams.count = this.pageSizeOptions[2];
+                this.requestParams.count = PAGINATION_LIMIT;
                 this.initApiCall();
             }
         });
@@ -222,7 +222,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         if (event) {
             this.requestParams.q = '';
             this.requestParams.page = 1;
-            this.requestParams.count = this.pageSizeOptions[2];
+            this.requestParams.count = PAGINATION_LIMIT;
             this.initApiCall();
         }
     }

@@ -9,7 +9,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil, filter } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import * as dayjs from 'dayjs';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -81,7 +81,7 @@ export class PurchaseOrderComponent implements OnDestroy {
         from: '',
         to: '',
         page: 1,
-        count: this.pageSizeOptions[2],
+        count: PAGINATION_LIMIT,
         sort: 'DESC',
         sortBy: 'purchaseDate'
     };

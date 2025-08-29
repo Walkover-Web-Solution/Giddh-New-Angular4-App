@@ -471,10 +471,10 @@
             </div>
 
             <div class="mt-4">
-                <ng-container *ngIf="(recurringData$ | async)?.totalItems > pageSizeOptions[1] && !isLoading">
+                <ng-container *ngIf="(recurringData$ | async)?.totalItems > pageSizeOptions[0] && !isLoading">
                     <mat-paginator
                         [length]="(recurringData$ | async)?.totalItems"
-                        [pageSize]="pageSizeOptions[1]"
+                        [pageSize]="filter.count"
                         [pageIndex]="currentPage - 1"
                         [pageSizeOptions]="pageSizeOptions"
                         [showFirstLastButtons]="true"

@@ -353,7 +353,7 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="row-gray-background"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-                <div *ngIf="reportData?.totalPages > 1" class="mt-4">
+                <div *ngIf="reportData?.totalItems > pageSizeOptions[0]" class="mt-4">
                     <div class="text-center">
                         <mat-paginator
                             [length]="reportData.totalItems"

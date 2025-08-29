@@ -37,8 +37,7 @@
                                 class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstNotFoundOnPortalData$ | async)?.data?.totalItems >
-                                        (gstNotFoundOnPortalData$ | async)?.data?.count
+                                    (gstNotFoundOnPortalData$ | async)?.data?.totalItems > pageSizeOptions[0]
                                 "
                             >
                                 <mat-paginator
@@ -83,8 +82,7 @@
                                 class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstNotFoundOnGiddhData$ | async)?.data?.totalItems >
-                                        (gstNotFoundOnGiddhData$ | async)?.data?.count
+                                    (gstNotFoundOnGiddhData$ | async)?.data?.totalItems > pageSizeOptions[0]
                                 "
                             >
                                 <mat-paginator
@@ -130,8 +128,7 @@
                                 class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstPartiallyMatchedData$ | async)?.data?.totalItems >
-                                        (gstPartiallyMatchedData$ | async)?.data?.count
+                                    (gstPartiallyMatchedData$ | async)?.data?.totalItems > pageSizeOptions[0]
                                 "
                             >
                                 <mat-paginator
@@ -180,7 +177,7 @@
                                 class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstMatchedData$ | async)?.data?.totalItems > (gstMatchedData$ | async)?.data?.count
+                                    (gstMatchedData$ | async)?.data?.totalItems > pageSizeOptions[0]
                                 "
                             >
                             <mat-paginator

@@ -296,7 +296,7 @@
                 </table>
                 <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
             </div>
-            <div [hidden]="isLoading" *ngIf="!isLoading && reverseChargeReportResults.totalPages > 1">
+            <div [hidden]="isLoading" *ngIf="!isLoading && reverseChargeReportResults.totalItems > pageSizeOptions[0]">
                 <mat-paginator
                     (page)="pageChanged($event)"
                     [length]="reverseChargeReportResults.totalItems"

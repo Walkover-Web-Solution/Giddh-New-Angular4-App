@@ -8,7 +8,7 @@ import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PaymentSummaryRequest } from '../../../models/api-models/Reports';
@@ -70,7 +70,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         receiptNumber: '',  // Receipt Number
         baseAccountName: '',  // Vendor Name
         sortBy: '',  // Sort by
-        count: this.pageSizeOptions[2],
+        count: PAGINATION_LIMIT,
         page: 1,
         sort: '',
         q: ''

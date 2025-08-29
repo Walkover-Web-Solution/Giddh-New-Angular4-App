@@ -491,7 +491,7 @@
             </div>
 
             <div class="mt-2">
-                <ng-container *ngIf="pageConfiguration.totalItems > paginationLimit">
+                <ng-container *ngIf="pageConfiguration.totalItems > pageSizeOptions[0]">
                     <mat-paginator
                         [length]="pageConfiguration.totalItems"
                         [pageSize]="searchQueryParams.count"

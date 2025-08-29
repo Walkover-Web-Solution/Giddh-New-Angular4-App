@@ -16,7 +16,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -160,7 +160,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.transporterFilterRequest.page = 1;
-        this.transporterFilterRequest.count = this.pageSizeOptions[0];
+        this.transporterFilterRequest.count = PAGINATION_LIMIT;
         this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.isUserlogedIn = true;

@@ -27,7 +27,7 @@ import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,
@@ -160,7 +160,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Pagination count */
-    public paginationLimit: number = this.pageSizeOptions[2]; // 50
+    public paginationLimit: number = PAGINATION_LIMIT; // 50
     /** Giddh decimal places set by user */
     public giddhDecimalPlaces = 2;
     private checkboxInfo: any = {
@@ -251,7 +251,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Holds advance Filters keys */
     public advanceFilters: any = {
         page: 1,
-        count: this.pageSizeOptions[2],
+        count: PAGINATION_LIMIT,
         q: '',
         from: '',
         to: '',
@@ -423,7 +423,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-                        this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                        this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
             }
@@ -432,13 +432,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.accountAsideMenuDialogRef?.close();
-                this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
 
         this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
 
@@ -449,7 +449,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if (!this.defaultLoad) {
                     this.searchStr = term;
                     this.advanceFilters.q = term;
-                    this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                    this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
 
                 this.defaultLoad = false;
@@ -514,7 +514,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
         this.isAddAndManageOpenedFromOutside$.pipe(filter(event => !event)).subscribe(response => {
             if (response) {
-                this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
 
@@ -643,7 +643,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
 
             if (this.activeTab !== "aging-report") {
-                this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
             if (!this.hasNavigated) {
@@ -708,7 +708,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$)).subscribe(response => {
                 if (!response) {
                     this.accountAsideMenuDialogRef?.close();
-                    this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                    this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
             });
         }
@@ -997,7 +997,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+            this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             this.detectChanges();
         }
     }
@@ -1063,7 +1063,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.order = (this.activeTab === "vendor") ? "desc" : "asc";
         if (!this.searchedName?.value) {
             this.getAccounts(this.fromDate, this.toDate,
-                null, "true", this.pageSizeOptions[2], "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         }
         this.searchedName?.reset();
         this.searchStr = "";
@@ -1119,7 +1119,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         this.isAdvanceSearchApplied = true;
         this.getAccounts(this.fromDate, this.toDate,
-            null, "true", this.pageSizeOptions[2], "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+            null, "true", PAGINATION_LIMIT, "", this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
     public setAmountType(category: string, amountType: string) {
@@ -1176,14 +1176,14 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {string} groupUniqueName Group unique name ('sundrycreditors' or 'sundrydebtors')
      * @param {number} [pageNumber] Page number of the data to be fetched
      * @param {string} [refresh] If true, then fetch the most refreshed data instead of cached data
-     * @param {number} [count=20] Page size
+     * @param {number} [count=PAGINATION_LIMIT] Page size
      * @param {string} [query] Query string to be searched such as customer name
      * @param {string} [sortBy=''] Sorting entity by which we need to sort such as debitTotal, creditTotal or name
      * @param {string} [order='asc'] Order of sorting (asc or desc)
      * @param {string} [branchUniqueName] Current branch selected
      * @memberof ContactComponent
      */
-    private getAccounts(fromDate: string, toDate: string, pageNumber?: number, refresh?: string, count: number = this.pageSizeOptions[2], query?: string,
+    private getAccounts(fromDate: string, toDate: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
         sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
         this.isGetAccountsInProcess = true;
         pageNumber = pageNumber ? pageNumber : 1;
@@ -1415,7 +1415,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.allSelectionModel = false;
         }
 
-        this.getAccounts(this.fromDate, this.toDate, this.checkboxInfo.selectedPage, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        this.getAccounts(this.fromDate, this.toDate, this.checkboxInfo.selectedPage, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
     /**
@@ -1444,7 +1444,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
-        this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
     /**
@@ -1623,7 +1623,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.order = ord;
         this.advanceFilters.sort = ord;
         this.advanceFilters.sortBy = key;
-        this.getAccounts(this.fromDate, this.toDate, null, "false", this.pageSizeOptions[2], this.searchStr, key, ord, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        this.getAccounts(this.fromDate, this.toDate, null, "false", PAGINATION_LIMIT, this.searchStr, key, ord, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
     /**

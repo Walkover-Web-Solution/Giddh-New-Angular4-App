@@ -430,8 +430,15 @@
                 </tbody>
             </table>
         </div>
-        <ng-container *ngIf="purchaseOrders?.totalPages > 1 && !isLoading">
-            <mat-paginator [length]="purchaseOrders?.totalItems" [pageSize]="purchaseOrderGetRequest.count" [pageSizeOptions]="pageSizeOptions" [pageIndex]="purchaseOrderGetRequest.page - 1" (page)="handlePageEvent($event)" [showFirstLastButtons]="true"></mat-paginator>
+        <ng-container *ngIf="purchaseOrders?.totalPages > pageSizeOptions[0] && !isLoading">
+            <mat-paginator 
+                [length]="purchaseOrders?.totalItems" 
+                [pageSize]="purchaseOrderGetRequest.count"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="purchaseOrderGetRequest.page - 1"
+                (page)="handlePageEvent($event)"
+                [showFirstLastButtons]="true"
+            ></mat-paginator>
         </ng-container>
         <div class="no-data" *ngIf="!isLoading && !purchaseOrders.totalItems">
             <no-data [secondaryMessageClass]="'p-0'"></no-data>

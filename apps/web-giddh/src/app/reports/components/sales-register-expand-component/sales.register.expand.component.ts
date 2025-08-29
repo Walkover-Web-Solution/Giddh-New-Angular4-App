@@ -37,8 +37,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public selectedMonth: string;
     // public showSearchCustomer: boolean = false;
     public showSearchInvoiceNo: boolean = false;
-    /** Pagination limit for records */
-    public paginationLimit: number = PAGINATION_LIMIT;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
 
@@ -127,7 +125,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
-        this.getDetailedsalesRequestFilter.count = this.paginationLimit;
+        this.getDetailedsalesRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedsalesRequestFilter.q = '';
 
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
@@ -454,7 +452,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         this.voucherNumberInput?.reset();
         this.showSearchInvoiceNo = false;
         this.getDetailedsalesRequestFilter.page = 1;
-        this.getDetailedsalesRequestFilter.count = this.paginationLimit;
+        this.getDetailedsalesRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedsalesRequestFilter.q = '';
         this.getDetailedsalesRequestFilter.sort = null;
         this.getDetailedsalesRequestFilter.sortBy = null;

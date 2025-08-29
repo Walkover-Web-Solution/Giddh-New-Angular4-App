@@ -108,7 +108,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
-        this.getColumnarRequestModel.count = this.paginationCount;
+        this.getColumnarRequestModel.count = PAGINATION_LIMIT;
         this.columnarReportResponse = null;
         this.getFinancialYears();
         this.loadDefaultGroupsSuggestions();

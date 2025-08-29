@@ -15,7 +15,7 @@ import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/datera
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralActions } from '../../actions/general/general.actions';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 import { cloneDeep, find, forEach, groupBy, indexOf, map, orderBy, uniq } from '../../lodash-optimized';
@@ -162,7 +162,7 @@ constructor(
     ) {
         // set initial values
         this.ledgerSearchRequest.page = 1;
-        this.ledgerSearchRequest.count = 20;
+        this.ledgerSearchRequest.count = PAGINATION_LIMIT;
         this.isBulkInvoiceGenerated$ = this.store.pipe(select(p => p.invoice.isBulkInvoiceGenerated), takeUntil(this.destroyed$));
         this.isBulkInvoiceGeneratedWithoutErr$ = this.store.pipe(select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));

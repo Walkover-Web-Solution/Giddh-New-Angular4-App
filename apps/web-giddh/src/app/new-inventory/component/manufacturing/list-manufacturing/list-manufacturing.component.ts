@@ -51,8 +51,6 @@ export class ListManufacturingComponent implements OnInit {
     public selectedRangeLabel: any = "";
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-/** Pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Manufacturing search request */
@@ -155,7 +153,7 @@ export class ListManufacturingComponent implements OnInit {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.getWarehouses();
 
-        this.manufacturingSearchRequest.count = this.paginationLimit;
+        this.manufacturingSearchRequest.count = PAGINATION_LIMIT;
         this.manufacturingSearchRequest.page = this.currentPage;
 
         if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
@@ -347,7 +345,7 @@ export class ListManufacturingComponent implements OnInit {
         this.totalItems = 0;
 
         this.manufacturingSearchRequest.page = 1;
-        this.manufacturingSearchRequest.count = this.paginationLimit;
+        this.manufacturingSearchRequest.count = PAGINATION_LIMIT;
         this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
         this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.manufacturingSearchRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -569,14 +567,13 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (this.paginationLimit !== event.pageSize) {
+        if (PAGINATION_LIMIT !== event.pageSize) {
             this.currentPage = 1;
             this.manufacturingSearchRequest.page = 1;
         } else {
             this.currentPage = event.pageIndex + 1;
             this.manufacturingSearchRequest.page = event.pageIndex + 1;
         }
-        this.paginationLimit = event.pageSize;
         this.manufacturingSearchRequest.count = event.pageSize;
         this.getReport();
     }

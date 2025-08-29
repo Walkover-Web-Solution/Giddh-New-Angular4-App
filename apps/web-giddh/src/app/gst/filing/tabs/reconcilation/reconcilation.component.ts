@@ -9,7 +9,7 @@ import { GstReconcileActions } from '../../../../actions/gst-reconcile/gst-recon
 import { Observable, ReplaySubject } from 'rxjs';
 import { GstReport } from '../../../constants/gst.constant';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
@@ -113,7 +113,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
      * @param count
      * @returns
      */
-    public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false, count: number = this.pageSizeOptions[2]) {
+    public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false, count: number = PAGINATION_LIMIT) {
         if (!this.currentPeriod) {
             return;
         }
@@ -143,7 +143,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     public getPageInfo(): { pageNumber: number, count: number } {
         const page = {
             pageNumber: 1,
-            count: this.pageSizeOptions[2]
+            count: PAGINATION_LIMIT
         }
 
         switch (this.reconcileActiveTab) {

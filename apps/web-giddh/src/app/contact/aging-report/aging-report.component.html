@@ -591,7 +591,7 @@
     </div>
 
     <div
-        *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
+        *ngIf="(dueAmountReportData$ | async)?.totalPages > pageSizeOptions[0]"
         class="mt-4"
         [hidden]="getAgingReportRequestInProcess$ | async"
     >

@@ -718,7 +718,7 @@
                 <!-- pagination -->
                 <div
                     class="mt-1"
-                    [hidden]="!daybookData?.entries?.length || daybookData?.totalItems <= daybookData?.count"
+                    [hidden]="!daybookData?.entries?.length || daybookData?.totalItems > pageSizeOptions[0]"
                 >
                     <mat-paginator
                         [length]="daybookData?.totalItems"
@@ -726,6 +726,7 @@
                         [pageSizeOptions]="pageSizeOptions"
                         [pageIndex]="daybookData?.page - 1"
                         (page)="handlePageEvent($event)"
+                        [hidePageSize]="false"
                         [showFirstLastButtons]="true">
                     </mat-paginator>
                 </div>

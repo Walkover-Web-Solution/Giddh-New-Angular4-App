@@ -36,7 +36,7 @@
                     </p>
                 </div>
             </ng-container>
-            <ng-container *ngIf="purchaseVersions.totalPages > 1">
+            <ng-container *ngIf="purchaseVersions.totalItems > pageSizeOptions[0]">
                 <mat-paginator
                     [length]="purchaseVersions.totalItems"
                     [pageSize]="purchaseVersions.count"

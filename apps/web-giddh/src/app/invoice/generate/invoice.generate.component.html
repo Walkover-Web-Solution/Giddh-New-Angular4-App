@@ -370,7 +370,7 @@
                 class="mt-4"
             >
                 <div class="mt-4">
-                    <ng-container *ngIf="ledgersData.totalItems > pageSizeOptions[1]">
+                    <ng-container *ngIf="ledgersData.totalItems > pageSizeOptions[0]">
                         <mat-paginator
                             [length]="ledgersData.totalItems"
                             [pageSize]="ledgerSearchRequest.count"

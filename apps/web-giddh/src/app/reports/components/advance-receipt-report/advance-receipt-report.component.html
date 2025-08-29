@@ -632,20 +632,18 @@
             </div>
 
             <div
-                *ngIf="pageConfiguration.totalItems > paginationLimit && !isLoading"
+                *ngIf="pageConfiguration.totalItems > pageSizeOptions[0] && !isLoading"
                 class="mt-4"
             >
-                <ng-container>
-                    <mat-paginator
-                        [length]="pageConfiguration.totalItems"
-                        [pageSize]="paginationLimit"
-                        [pageIndex]="pageConfiguration.currentPage - 1"
-                        [pageSizeOptions]="pageSizeOptions"
-                        [showFirstLastButtons]="true"
-                        [hidePageSize]="false"
-                        (page)="handlePageEvent($event)">
-                    </mat-paginator>
-                </ng-container>
+                <mat-paginator
+                    [length]="pageConfiguration.totalItems"
+                    [pageSize]="pageConfiguration.count"
+                    [pageIndex]="pageConfiguration.currentPage - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)">
+                </mat-paginator>
             </div>
             <div class="no-data" *ngIf="!allReceipts?.length && !isLoading">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>

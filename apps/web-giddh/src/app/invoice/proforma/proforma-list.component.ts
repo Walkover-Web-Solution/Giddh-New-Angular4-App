@@ -24,7 +24,7 @@ import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operat
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -199,7 +199,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private dialog: MatDialog, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
-        this.advanceSearchFilter.count = this.pageSizeOptions[2]; // 50
+        this.advanceSearchFilter.count = PAGINATION_LIMIT;
         this.advanceSearchFilter.from = dayjs(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
         this.advanceSearchFilter.to = dayjs(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
 
@@ -666,7 +666,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
         this.advanceSearchFilter = new ProformaFilter();
         this.advanceSearchFilter.page = 1;
-        this.advanceSearchFilter.count = this.pageSizeOptions[2]; // 50
+        this.advanceSearchFilter.count = PAGINATION_LIMIT;
 
         // set date picker date as application date
         if (universalDate?.length > 1) {

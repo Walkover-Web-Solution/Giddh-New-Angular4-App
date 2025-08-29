@@ -555,13 +555,13 @@
                         </tbody>
 
                         <tfoot
-                            *ngIf="voucherData && voucherData?.totalItems > advanceSearchFilter.count"
+                            *ngIf="voucherData && voucherData?.totalItems > pageSizeOptions[0]"
                             [hidden]="isGetAllInProcess$ | async"
                         >
                             <tr>
                                 <td colspan="100%" class="border-none mt-4">
                                     <div class="mt-4">
-                                        <ng-container *ngIf="voucherData.totalItems > advanceSearchFilter.count">
+                                        <ng-container>
                                             <mat-paginator
                                                 [length]="voucherData.totalItems"
                                                 [pageSize]="advanceSearchFilter.count"

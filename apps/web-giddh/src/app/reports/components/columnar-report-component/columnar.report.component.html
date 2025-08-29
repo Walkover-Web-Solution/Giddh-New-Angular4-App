@@ -118,10 +118,10 @@
     >
     </columnar-report-table-component>
     <div class="mt-2">
-        <ng-container *ngIf="columnarReportResponse && columnarReportResponse?.totalPages > 1">
+        <ng-container *ngIf="columnarReportResponse?.totalItems > pageSizeOptions[0]">
             <mat-paginator
                 [length]="columnarReportResponse.totalItems"
-                [pageSize]="getColumnarRequestModel.count || paginationCount"
+                [pageSize]="getColumnarRequestModel.count"
                 [pageIndex]="getColumnarRequestModel.page - 1"
                 [pageSizeOptions]="pageSizeOptions"
                 [showFirstLastButtons]="true"

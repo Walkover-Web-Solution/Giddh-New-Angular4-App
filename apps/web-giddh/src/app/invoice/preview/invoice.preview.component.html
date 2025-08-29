@@ -1438,7 +1438,7 @@
                     </table>
                 </div>
                 <div class="mt-4">
-                    <ng-container *ngIf="voucherData && voucherData?.totalItems > paginationLimit && !(isGetAllRequestInProcess$ | async)">
+                    <ng-container *ngIf="voucherData && voucherData?.totalItems > pageSizeOptions[0] && !(isGetAllRequestInProcess$ | async)">
                         <mat-paginator
                             [length]="voucherData.totalItems"
                             [pageSize]="invoiceSearchRequest.count || paginationLimit"

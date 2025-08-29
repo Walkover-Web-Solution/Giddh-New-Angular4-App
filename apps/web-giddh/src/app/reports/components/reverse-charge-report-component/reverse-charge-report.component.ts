@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../../../models/api-models/ReverseCharge';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -37,7 +37,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         sort: '',
         sortBy: '',
         page: 1,
-        count: this.pageSizeOptions[2]
+        count: PAGINATION_LIMIT
     };
     public reverseChargeReportPostRequest: ReverseChargeReportPostRequest = {
         supplierName: '',

@@ -18,7 +18,7 @@ import { IOption } from '../../../theme/ng-select/ng-select';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
@@ -93,7 +93,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         from: '',
         to: '',
         page: 1,
-        count: 50,
+        count: PAGINATION_LIMIT,
         sort: '',
         sortBy: '',
         branchUniqueName: ''

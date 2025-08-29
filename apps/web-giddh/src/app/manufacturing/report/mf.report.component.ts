@@ -9,7 +9,7 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { distinct, filter, take, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../models/user-login-state';
 import { StocksResponse } from '../../models/api-models/Inventory';
@@ -250,7 +250,7 @@ constructor(
         this.mfStockSearchRequest.searchBy = '';
         this.mfStockSearchRequest.searchOperation = '';
         this.mfStockSearchRequest.page = 1;
-        this.mfStockSearchRequest.count = this.pageSizeOptions[2];
+        this.mfStockSearchRequest.count = PAGINATION_LIMIT;
     }
 
     public goToCreateNewPage() {
