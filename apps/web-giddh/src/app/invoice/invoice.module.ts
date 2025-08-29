@@ -97,13 +97,11 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
-        
         AsideMenuRecurringEntryModule,
         Daterangepicker,
         AccountDetailModalModule,
         CurrencyModule,
         ScrollingModule,
-        VoucherModule,
         DigitsOnlyModule,
         UniqueNameModule,
         ConfirmModalModule,
