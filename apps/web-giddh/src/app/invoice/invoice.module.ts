@@ -5,7 +5,6 @@ import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.compo
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
-import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
@@ -35,7 +34,6 @@ import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { PurchaseOrderPreviewModule } from '../shared/purchase-order-preview/purchase-order-preview.module';
 import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-send-email.module';
-import { RevisionHistoryModule } from '../shared/revision-history/revision-history.module';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { ValidateSectionPermissionDirectiveModule } from '../shared/validate-section-permission/validate-section-permission.module';
@@ -74,7 +72,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         DownloadOrSendInvoiceOnMailComponent,	
         EsignModalComponent,	
         WebviewDirective,
-        InvoiceAdvanceSearchComponent,	
         InvoiceRendererComponent,	
         InvoiceBulkUpdateModalComponent,	
         EWayBillCreateComponent,	
@@ -99,14 +96,12 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
-        
         AsideMenuRecurringEntryModule,
         Daterangepicker,
         AccountDetailModalModule,
         CurrencyModule,
         ScrollingModule,
         VoucherModule,
-        DigitsOnlyModule,
         UniqueNameModule,
         ConfirmModalModule,
         VoucherTypeToNamePipeModule,
@@ -121,7 +116,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         ValidateSubscriptionDirectiveModule,
         DeleteVoucherConfirmationModalModule,
         PurchaseSendEmailModule,
-        RevisionHistoryModule,
         PurchaseOrderPreviewModule,
         TranslateDirectiveModule,
         ValidateSectionPermissionDirectiveModule,
