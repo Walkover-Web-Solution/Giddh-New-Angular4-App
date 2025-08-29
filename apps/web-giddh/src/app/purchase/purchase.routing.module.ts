@@ -4,8 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { PurchaseComponent } from './purchase.component';
-import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
-import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 
 const INVOICE_ROUTES: Routes = [
     {
@@ -13,11 +11,7 @@ const INVOICE_ROUTES: Routes = [
         canActivate: [NeedsAuthentication],
         component: PurchaseComponent,
         children: [
-            { path: '', redirectTo: 'purchase', pathMatch: 'full' },
-            { path: 'purchase-orders/preview/:purchaseOrderUniqueName', component: PurchaseOrderComponent },
-            { path: 'purchase', component: PurchaseRecordComponent },
-            { path: 'purchase/:accountUniqueName/:purchaseRecordUniqueName', component: PurchaseRecordComponent },
-            { path: 'purchase/:type', component: PurchaseRecordComponent },
+            { path: '', redirectTo: 'purchase', pathMatch: 'full' }
         ]
     }
 ];
