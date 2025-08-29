@@ -166,7 +166,9 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public ngOnInit(): void {
+        console.log('ngOnInit-in', 'froalaEditor', this.froalaEditor);
         this.froalaOptions = this.getFroalaOptions();
+        console.log('ngOnInit-out', 'froalaEditor', this.froalaEditor);
         document.querySelector('body').classList.add('hide-chat-widget');
         this.isTrigger = this.inputData?.isTrigger;
         this.initializeForm();
@@ -392,8 +394,9 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     public ngAfterViewInit(): void {
-        console.log('ngAfterViewInit', 'froalaOptions', this.froalaOptions);
+        console.log('ngAfterViewInit-in', 'froalaEditor', this.froalaEditor);
         this.froalaOptions = this.getFroalaOptions();
+        console.log('ngAfterViewInit-out', 'froalaEditor', this.froalaEditor);
     }
 
     /**
