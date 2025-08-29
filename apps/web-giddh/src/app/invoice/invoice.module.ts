@@ -101,7 +101,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         AccountDetailModalModule,
         CurrencyModule,
         ScrollingModule,
-        VoucherModule,
         UniqueNameModule,
         ConfirmModalModule,
         VoucherTypeToNamePipeModule,
