@@ -18,7 +18,6 @@ import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-orde
 import { DomSanitizer } from '@angular/platform-browser';
 import { GeneralService } from '../../services/general.service';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'purchase-order-preview',

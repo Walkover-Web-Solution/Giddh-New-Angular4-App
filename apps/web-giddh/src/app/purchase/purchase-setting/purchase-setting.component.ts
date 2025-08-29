@@ -6,7 +6,6 @@ import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import { BootstrapToggleSwitch } from '../../app.constant';
 import { AuthenticationService } from '../../services/authentication.service';
 import { InvoiceService } from '../../services/invoice.service';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
@@ -53,8 +52,6 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
 

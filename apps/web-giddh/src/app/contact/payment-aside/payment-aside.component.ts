@@ -16,8 +16,8 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { IForceClear } from '../../models/api-models/Sales';
 import { ServiceConfig } from '../../services/service.config';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog'
-import { IOption } from '../../app.constant';;
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'payment-aside',

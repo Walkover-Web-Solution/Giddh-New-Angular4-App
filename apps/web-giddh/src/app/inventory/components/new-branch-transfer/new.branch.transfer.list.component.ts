@@ -51,8 +51,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public asideTransferPaneDialogRef: MatDialogRef<any>;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-
-    // modalRef removed as part of Angular Material dialog migration
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeCompany: any = {};
     public voucherTypes: IOption[] = [];
@@ -128,7 +126,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     constructor(
         private _generalService: GeneralService,
-        private dialog: MatDialog, // Replaced modalService with MatDialog
+        private dialog: MatDialog,
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,

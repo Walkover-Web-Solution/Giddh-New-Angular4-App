@@ -5,7 +5,6 @@ import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.compo
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
-import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
@@ -45,6 +44,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -69,18 +69,18 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
 
 @NgModule({
     declarations: [
-        DownloadOrSendInvoiceOnMailComponent,
-        EsignModalComponent,
+        DownloadOrSendInvoiceOnMailComponent,	
+        EsignModalComponent,	
         WebviewDirective,
-        InvoiceAdvanceSearchComponent,
-        InvoiceRendererComponent,
-        InvoiceBulkUpdateModalComponent,
-        EWayBillCreateComponent,
-        EWayBillComponent,
+        InvoiceRendererComponent,	
+        InvoiceBulkUpdateModalComponent,	
+        EWayBillCreateComponent,	
+        EWayBillComponent,	
         EWayBillCredentialsComponent
     ],
     imports: [
         InvoiceRoutingModule,
+        VoucherModule,
         DigitsOnlyModule,
         FormsModule,
         CommonModule,
@@ -96,7 +96,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
-        
         AsideMenuRecurringEntryModule,
         Daterangepicker,
         AccountDetailModalModule,
@@ -129,14 +128,14 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         MatTabsModule,
         BulkExportVoucherModule,
         FroalaTemplateEditorModule,
-        GenerateEWayBillModule,
-        InvoiceSettingModule,
         MatTableModule,
         MatFormFieldModule,
         FormFieldsModule,
         MatInputModule,
         MatRadioModule,
         MatButtonModule,
+        GenerateEWayBillModule,
+        InvoiceSettingModule,
         MatMenuModule,
         MatTooltipModule,
         MatCheckboxModule,

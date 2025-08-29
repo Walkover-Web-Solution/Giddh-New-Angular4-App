@@ -578,19 +578,6 @@ export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'whozzat.com',
 ];
 
-
-/**
- * Enum for switching toggle button On and Off and changing its size
- *
- * @export
- * @enum {string}
- */
-export enum BootstrapToggleSwitch {
-    On = 'blue',
-    Off = 'gray',
-    Size = 'mini'
-}
-
 export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
 export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];

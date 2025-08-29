@@ -2323,7 +2323,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * get state code using Tax number to prefill state
      *
      * @param {string} type billingDetails || shipping
-     * @param {SalesShSelectComponent} statesEle state input box
      * @memberof VoucherComponent
      */
     public getStateCode(type: string) {

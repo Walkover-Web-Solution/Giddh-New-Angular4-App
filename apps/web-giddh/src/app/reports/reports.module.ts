@@ -67,8 +67,6 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         ReportsRoutingModule,
         CommonModule,
         Daterangepicker,
-        
-
         FormsModule,
         CurrencyModule,
         AccountDetailModalModule,
