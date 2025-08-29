@@ -19,11 +19,9 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
 import { DeleteVoucherConfirmationModalModule } from '../shared/delete-voucher-confirmation-modal/delete-voucher-confirmation-modal.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-send-email.module';
-import { RevisionHistoryModule } from '../shared/revision-history/revision-history.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
-import { PurchaseOrderPreviewModule } from '../shared/purchase-order-preview/purchase-order-preview.module';
 import { InvoiceModule } from '../invoice/invoice.module';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
@@ -73,11 +71,9 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         DeleteVoucherConfirmationModalModule,
         GiddhDatepickerModule,
         PurchaseSendEmailModule,
-        RevisionHistoryModule,
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PurchaseOrderPreviewModule,
         GenericAsideMenuAccountModule,
         AsideMenuOtherTaxesModule,
         AsideMenuProductServiceModule,

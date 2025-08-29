@@ -33,9 +33,7 @@ import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/unique
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
-import { PurchaseOrderPreviewModule } from '../shared/purchase-order-preview/purchase-order-preview.module';
 import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-send-email.module';
-import { RevisionHistoryModule } from '../shared/revision-history/revision-history.module';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { ValidateSectionPermissionDirectiveModule } from '../shared/validate-section-permission/validate-section-permission.module';
@@ -121,8 +119,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         ValidateSubscriptionDirectiveModule,
         DeleteVoucherConfirmationModalModule,
         PurchaseSendEmailModule,
-        RevisionHistoryModule,
-        PurchaseOrderPreviewModule,
         TranslateDirectiveModule,
         ValidateSectionPermissionDirectiveModule,
         AmountFieldComponentModule,

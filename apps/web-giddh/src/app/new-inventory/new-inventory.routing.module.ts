@@ -5,7 +5,6 @@ import { AboutGroupDetailComponent } from "./component/about-group-detail/about-
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { CreateCustomFieldComponent } from "./component/create-custom-field/create-custom-field.component";
-import { AdjustGroupComponent } from "./component/adjust-group/adjust-group.component";
 import { AdjustProductServiceComponent } from "./component/adjust-product-service/adjust-product-service.component";
 import { InventoryDashboardComponent } from "./component/inventory-dashboard/inventory-dashboard.component";
 import { DashboardSellingReport } from "./component/inventory-dashboard/dashboard-selling-report/dashboard-selling-report.component";
@@ -100,10 +99,6 @@ const routes: Routes = [
     {
         path: "create-custom-field",
         component: CreateCustomFieldComponent,
-    },
-    {
-        path: "adjust-inventory-group",
-        component: AdjustGroupComponent,
     },
     {
         path: "adjust-product-and-service",
