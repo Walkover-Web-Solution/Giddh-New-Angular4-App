@@ -163,15 +163,15 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </div>
-        <ng-container *ngIf="(searchResponseFiltered$ | async)?.length && totalPages > 1">
+        <ng-container *ngIf="(searchResponseFiltered$ | async)?.length && totalItems > pageSizeOptions[0]">
             <div class="d-flex align-items-center justify-content-center mt-4 mb-5">
                 <mat-paginator
-                    [length]="totalPages"
-                    [pageSize]="1"
+                    [length]="totalItems"
+                    [pageSize]="countPerPage"
                     [pageIndex]="page - 1"
-                    [pageSizeOptions]="[1]"
+                    [pageSizeOptions]="pageSizeOptions"
                     [showFirstLastButtons]="true"
-                    [hidePageSize]="true"
+                    [hidePageSize]="false"
                     (page)="handlePageEvent($event)">
                 </mat-paginator>
             </div>

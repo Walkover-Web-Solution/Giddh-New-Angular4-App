@@ -1202,13 +1202,14 @@
                                     <span class="black"
                                         >{{ bankTransactionsResponse?.totalPages }} {{ localeData?.pages }}</span
                                     >
-                                    <ng-container *ngIf="bankTransactionsResponse?.totalPages > 1">
+                                    <ng-container *ngIf="bankTransactionsResponse?.totalItems > pageSizeOptions[0]">
                                         <mat-paginator 
                                             [length]="bankTransactionsResponse?.totalItems" 
                                             [pageSize]="bankTransactionsResponse.countPerPage" 
                                             [pageSizeOptions]="pageSizeOptions" 
                                             [pageIndex]="bankTransactionsResponse.page - 1" 
-                                            (page)="handlePageEvent($event)" 
+                                            (page)="handlePageEvent($event)"
+                                            [hidePageSize]="false"
                                             [showFirstLastButtons]="true">
                                         </mat-paginator>
                                     </ng-container>

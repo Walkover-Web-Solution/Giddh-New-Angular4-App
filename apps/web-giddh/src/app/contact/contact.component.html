@@ -1531,7 +1531,7 @@
                     activeTab === 'customer' &&
                     sundryDebtorsAccountsBackup.results &&
                     sundryDebtorsAccountsBackup.results.length &&
-                    totalCustomers >= paginationLimit
+                    totalCustomers > pageSizeOptions[0]
                 "
             >
                 <mat-paginator
@@ -1550,7 +1550,7 @@
                     activeTab === 'vendor' &&
                     sundryCreditorsAccountsBackup.results &&
                     sundryCreditorsAccountsBackup.results.length &&
-                    totalVendors >= paginationLimit
+                    totalVendors > pageSizeOptions[0]
                 "
             >
                 <mat-paginator
