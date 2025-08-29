@@ -2,7 +2,7 @@ import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { PAGE_SIZE_OPTIONS } from '../../../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
 import { CreateDiscount } from "apps/web-giddh/src/app/models/api-models/Inventory";
@@ -202,7 +202,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         let model: CustomerVendorDiscountBasic = {
             page: this.pagination.user.page,
-            count: this.pageSizeOptions[2],
+            count: this.pagination.user.count,
             group: this.groupUniqueName,
             userType: this.userFilterType,
             query: this.userSearchQuery
@@ -354,7 +354,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     private getAllDiscount(userData: any, query: string = ''): void {
         let model = {
             page: this.pagination.stock.page,
-            count: this.pageSizeOptions[2],
+            count: this.pagination.stock.count,
             uniqueName: userData?.uniqueName,
             query: query
         };
@@ -820,7 +820,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             type: type,
             group: this.groupUniqueName,
             page: 1,
-            count: this.pageSizeOptions[2]
+            count: PAGINATION_LIMIT
         }
         this.dialogRef = this.dialog.open(this.addSearchModal, {
             width: '580px',
@@ -905,6 +905,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         if (this.pagination.stock.page !== event.pageIndex + 1) {
             this.pagination.stock.page = event.pageIndex + 1;
         }
+        this.pagination.stock.count = event.pageSize;
         this.getAllDiscount(this.currentUser, this.stockSearchQuery);
     }
 

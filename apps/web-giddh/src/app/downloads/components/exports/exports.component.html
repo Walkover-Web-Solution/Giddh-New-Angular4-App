@@ -118,7 +118,7 @@
         <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
     </div>
 </section>
-<div class="mt-4" *ngIf="downloadRequest?.totalItems > downloadRequest.count && !isLoading">
+<div class="mt-4" *ngIf="downloadRequest?.totalItems > pageSizeOptions[0] && !isLoading">
     <ng-container>
         <mat-paginator
             [length]="downloadRequest?.totalItems"

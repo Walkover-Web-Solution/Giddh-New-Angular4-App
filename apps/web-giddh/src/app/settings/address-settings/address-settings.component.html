@@ -309,12 +309,13 @@
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center mt-4 mb-5">
             <mat-paginator
-                *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
+                *ngIf="!shouldShowLoader && paginationConfig?.totalItems > pageSizeOptions[0]"
                 [length]="paginationConfig?.totalItems"
-                [pageSize]="paginationConfig?.count"
+                [pageSize]="paginationConfig?.count || paginationLimit"
                 [pageSizeOptions]="pageSizeOptions"
                 [pageIndex]="paginationConfig.page - 1"
                 [showFirstLastButtons]="true"
+                [hidePageSize]="false"
                 (page)="handlePageEvent($event)"
                 aria-label="Select page of addresses"
             ></mat-paginator>

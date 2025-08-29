@@ -1144,7 +1144,7 @@
                             </form>
                         </div>
 
-                        <div class="mt-3" *ngIf="pagination?.totalItems > pagination?.itemsPerPage && !isLoading">
+                        <div class="mt-3" *ngIf="pagination?.totalItems > pageSizeOptions[0] && !isLoading">
                             <mat-paginator
                                 [length]="pagination?.totalItems"
                                 [pageSize]="pageCount"

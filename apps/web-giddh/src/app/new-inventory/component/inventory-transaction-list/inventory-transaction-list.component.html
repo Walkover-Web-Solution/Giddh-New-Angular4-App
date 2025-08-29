@@ -575,7 +575,7 @@
                     <div class="mt-4">
                         <mat-paginator
                             *ngIf="
-                                stockReportRequest?.totalItems > stockReportRequest?.count &&
+                                stockReportRequest?.totalItems > pageSizeOptions[0] &&
                                 !isLoading &&
                                 displayedColumns?.length
                             "

@@ -1378,7 +1378,7 @@
                 </tr>
             </table>
         </div>
-        <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalPages > 1">
+        <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalPages > pageSizeOptions[0]">
             <mat-paginator
                 [length]="transporterListDetails.totalPages"
                 [pageSize]="transporterFilterRequest.count"

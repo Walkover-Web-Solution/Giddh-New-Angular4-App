@@ -14,7 +14,7 @@ dayjs.extend(utc) // use plugin
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../../services/general.service';
 import { ImportExcelService } from '../../services/import-excel.service';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 
 @Component({
     selector: 'import-report',
@@ -44,7 +44,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         private importExcelService: ImportExcelService
     ) {
         this.importPaginatedRequest.page = 1;
-        this.importPaginatedRequest.count = 10;
+        this.importPaginatedRequest.count = PAGINATION_LIMIT;
     }
 
     public ngOnInit() {
