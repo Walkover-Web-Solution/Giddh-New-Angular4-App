@@ -52,7 +52,6 @@ import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-acco
 import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MatBadgeModule } from '@angular/material/badge';
-import { DesignFilterComponent } from "./template/design-filter/design-filter.component";
 import { ContentFilterComponent } from "./template/content-filter/content-filter.component";
 import { CreateDiscountModule } from "../theme/create-discount/create-discount.module";
 import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-menu-create-tax.module";
@@ -111,7 +110,6 @@ import { TributeMentionModule } from "../shared/helpers/directives/tributeMentio
         TemplateEditDialogComponent,
         PrintVoucherComponent,
         TemplateEditFilterComponent,
-        DesignFilterComponent,
         ContentFilterComponent,
         ConvertBillDialogComponent,
         FullAddressComponent,
