@@ -1698,8 +1698,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
-            this.toggleGiddhDatepicker(false);
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);

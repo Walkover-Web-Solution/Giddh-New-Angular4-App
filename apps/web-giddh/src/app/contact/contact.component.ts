@@ -1014,7 +1014,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         this.toggleGiddhDatepicker(false);
-
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };

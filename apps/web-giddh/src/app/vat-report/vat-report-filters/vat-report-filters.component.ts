@@ -520,7 +520,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
