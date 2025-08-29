@@ -1,0 +1,60 @@
+<div
+    class="aside-pane"
+    appTranslate
+    [file]="'invoice/revision-history'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="form-header">
+        <div>
+            <h3>
+                <span>{{ localeData?.page_heading }}</span>
+            </h3>
+        </div>
+    </div>
+    <button mat-stroked-button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+    <div class="aside-body">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading || !translationLoaded"></giddh-page-loader>
+        <div
+            class="aside-pane-form"
+            *ngIf="
+                !isLoading &&
+                translationLoaded &&
+                purchaseVersions &&
+                purchaseVersions.results &&
+                purchaseVersions.results.length > 0
+            "
+        >
+            <ng-container *ngFor="let result of purchaseVersions.results">
+                <div class="single-history-block" *ngFor="let change of result.changes">
+                    <p>
+                        <span class="text-gray">{{ result.versionTime | date: "dd/MM/yyyy, hh:mm aa" }}</span>
+                    </p>
+                    <p>
+                        {{ change.message }} <span class="text-gray">{{ getByUserText(result.user?.name) }}</span>
+                    </p>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="purchaseVersions.totalPages > 1">
+                <mat-paginator
+                    [length]="purchaseVersions.totalItems"
+                    [pageSize]="purchaseVersions.count"
+                    [pageIndex]="purchaseVersions.page - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)">
+                </mat-paginator>
+            </ng-container>
+        </div>
+        <div
+            class="aside-pane-form"
+            *ngIf="
+                !isLoading && (!purchaseVersions || !purchaseVersions.results || purchaseVersions.results?.length === 0)
+            "
+        >
+            {{ commonLocaleData?.app_no_result_found }}
+        </div>
+    </div>
+</div>

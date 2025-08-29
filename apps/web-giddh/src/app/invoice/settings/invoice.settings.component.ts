@@ -17,7 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { BootstrapToggleSwitch, RestrictedModules } from '../../app.constant';
+import { RestrictedModules } from '../../app.constant';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
@@ -83,8 +83,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public hasInvoiceSettingPermissions: boolean = true;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Active tab name */
     public activeTab: string;
     /** Active company details */

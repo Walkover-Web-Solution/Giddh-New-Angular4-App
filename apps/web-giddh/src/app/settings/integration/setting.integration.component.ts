@@ -10,7 +10,7 @@ import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, PayPalCl
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { CompanyActions } from "../../actions/company.actions";
-import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS, SYNC_TALLY_HELP_DOC_URL } from "../../app.constant";
+import { BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS, SYNC_TALLY_HELP_DOC_URL } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -160,8 +160,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public apiUrl: string = '';
     /** This will hold isCopied */
     public isCopied: boolean = false;
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** List of icici bank supported countries */
