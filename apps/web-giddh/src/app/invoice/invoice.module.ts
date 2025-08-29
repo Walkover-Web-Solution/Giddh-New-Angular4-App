@@ -4,18 +4,11 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
-import { InvoiceComponent } from './invoice.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
-import { InvoicePreviewComponent } from './preview/invoice.preview.component';
 import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
-import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
-import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
-import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
-import { ProformaListComponent } from './proforma/proforma-list.component';
-import { RecurringComponent } from './recurring/recurring.component';
 import { WebviewDirective } from './webview.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -61,7 +54,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
-import { InvoiceGenerateModule } from './generate/invoice-generate.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -77,25 +69,17 @@ import { MatSortModule } from '@angular/material/sort';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 
-
 @NgModule({
     declarations: [
-        InvoiceComponent,
-        InvoicePreviewComponent,
-        InvoicePaymentModelComponent,
-        DownloadOrSendInvoiceOnMailComponent,
-        EsignModalComponent,
-        RecurringComponent,
+        DownloadOrSendInvoiceOnMailComponent,	
+        EsignModalComponent,	
         WebviewDirective,
-        InvoiceAdvanceSearchComponent,
-        InvoiceRendererComponent,
-        InvoiceBulkUpdateModalComponent,
-        EWayBillCreateComponent,
-        EWayBillComponent,
-        EWayBillCredentialsComponent,
-        InvoicePreviewDetailsComponent,
-        ProformaListComponent,
-        DownloadVoucherComponent
+        InvoiceAdvanceSearchComponent,	
+        InvoiceRendererComponent,	
+        InvoiceBulkUpdateModalComponent,	
+        EWayBillCreateComponent,	
+        EWayBillComponent,	
+        EWayBillCredentialsComponent
     ],
     imports: [
         InvoiceRoutingModule,
@@ -159,7 +143,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         MatButtonModule,
         GenerateEWayBillModule,
         InvoiceSettingModule,
-        InvoiceGenerateModule,
         MatMenuModule,
         MatTooltipModule,
         MatCheckboxModule,
@@ -169,8 +152,7 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
     ],
     exports: [
         InvoiceRoutingModule,
-        DownloadOrSendInvoiceOnMailComponent,
-        InvoicePreviewComponent
+        DownloadOrSendInvoiceOnMailComponent
     ],
     providers: [
         InvoiceUiDataService

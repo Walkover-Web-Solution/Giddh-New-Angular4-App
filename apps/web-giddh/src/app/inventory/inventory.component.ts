@@ -47,8 +47,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
     /** Angular Material tab group reference for inventory navigation tabs */
     @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: MatTabGroup;
-    /** Warehouse filter instance */
-    @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ElementRef;
     /** Instance of branch transfer template */
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
     /** Dialog reference */

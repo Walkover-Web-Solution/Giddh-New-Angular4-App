@@ -94,8 +94,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public nameStockOrPerson: string;
     public universalDate$: Observable<any>;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Modal service reference */
-    public modalService: any;
     private inventoryReport$: Observable<InventoryReport>;
     /** Directive to get reference of element */
     /* This will store selected date range to use in api */

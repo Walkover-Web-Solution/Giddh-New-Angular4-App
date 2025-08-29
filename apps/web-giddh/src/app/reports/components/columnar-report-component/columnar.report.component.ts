@@ -12,7 +12,7 @@ import * as dayjs from 'dayjs';
 import { saveAs } from "file-saver";
 import { IForceClear } from '../../../models/api-models/Sales';
 import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
-import { API_COUNT_LIMIT, BootstrapToggleSwitch, IOption, PAGINATION_LIMIT } from '../../../app.constant';
+import { API_COUNT_LIMIT, IOption, PAGINATION_LIMIT } from '../../../app.constant';
 import { GroupService } from '../../../services/group.service';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
@@ -73,8 +73,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,

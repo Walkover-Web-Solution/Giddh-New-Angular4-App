@@ -55,12 +55,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public gstr2entityType = [];
     public filterParam: GStTransactionRequest = new GStTransactionRequest();
     public imgPath: string = '';
-    public modalConfig = {
-        animated: true,
-        keyboard: false,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     public viewTransactionInProgress$: Observable<boolean> = of(null);
     public selectedFilter: any = filterTransaction;
     /** PDF base 64date */

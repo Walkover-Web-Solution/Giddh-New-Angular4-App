@@ -15,7 +15,7 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { InvoiceService } from '../../../services/invoice.service';
-import { BootstrapToggleSwitch, IOption } from '../../../app.constant';
+import { IOption } from '../../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
     selector: 'inventory-add-group',
@@ -52,8 +52,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public inventorySettings: any;
     /** This will hold dialog reference */
     public dialogRef: MatDialogRef<any>;
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     /**
      * TypeScript public modifiers

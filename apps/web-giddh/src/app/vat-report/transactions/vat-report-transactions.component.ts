@@ -43,12 +43,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         section: ''
     };
     public isLoading: boolean = false;
-    public modalConfig = {
-        animated: true,
-        keyboard: false,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     public selectedInvoice: any;
     public base64Data: string;
     /* This will hold local JSON data */

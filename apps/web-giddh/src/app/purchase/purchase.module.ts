@@ -9,11 +9,6 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
-import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
-import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
-import { PurchaseOrderPreviewComponent } from './purchase-order-preview/purchase-order-preview.component';
-import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
-import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
@@ -36,7 +31,6 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
-import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -48,13 +42,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
 
 @NgModule({
     declarations: [
-        PurchaseOrderComponent,
-        CreatePurchaseOrderComponent,
-        PurchaseOrderPreviewComponent,
         PurchaseComponent,
-        PurchaseRecordComponent,
-        PurchaseAdvanceSearchComponent,
-        BulkConvertComponent
     ],
     imports: [
         MatButtonModule,
