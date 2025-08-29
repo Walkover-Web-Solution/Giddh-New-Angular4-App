@@ -9,7 +9,7 @@
         <div class="header-create-unit">
             <div class="form-header">
                 <h3 mat-dialog-title>{{ commonLocaleData?.app_manage_transporter }}</h3>
-                <button id="close" mat-dialog-close>
+                <button mat-dialog-close>
                     <i class="icon-cross"></i>
                 </button>
             </div>
@@ -84,7 +84,7 @@
                         <giddh-page-loader></giddh-page-loader>
                     </div>
                     <div class="table-responsive manage-table" *ngIf="!isLoading">
-                        <table mat-table [dataSource]="transporterListDetails" class="mat-elevation-z8">
+                        <table mat-table [dataSource]="transporterListDetails">
                             <!-- Name Column -->
                             <ng-container matColumnDef="name">
                                 <th mat-header-cell *matHeaderCellDef class="mat-table-name">{{commonLocaleData?.app_name}}</th>

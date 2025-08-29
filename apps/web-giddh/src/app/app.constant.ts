@@ -669,11 +669,12 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 
 /** Config for aside pane */
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
-    height: '100vh',
+    height: 'calc(100vh - var(--top-distance, 0px))',
     width: 'var(--aside-pane-width)',
     position: {
         right: '0',
-        bottom: '0'
+        bottom: '0',
+        top: 'var(--top-distance, 0px)'
     },
     disableClose: true
 };
@@ -718,3 +719,13 @@ export const Configuration = {
     'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
     'RAZORPAY_KEY': RAZORPAY_KEY
 };
+
+/** Holds Dropdown label value interface */
+export interface IOption {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    isHilighted?: boolean;
+    additional?: any;
+    subVoucher?: string;
+}

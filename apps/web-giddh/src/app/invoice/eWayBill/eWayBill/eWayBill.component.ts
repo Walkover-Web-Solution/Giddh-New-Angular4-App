@@ -13,11 +13,9 @@ import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBill
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm, UntypedFormControl } from '@angular/forms';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -47,8 +45,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild("addVehicle") vehicleDialog: TemplateRef<any>;
     /** Holds cancellation dialog template reference */
     @ViewChild("cancellation") cancelDialog: TemplateRef<any>;
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /* This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
@@ -97,7 +95,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         transMode: null,
         vehicleType: null,
     };
-    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     public selectedEway: Result;
     public states: any[] = [];
     /** Reference to the universal datepicker menu trigger */
@@ -654,7 +651,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out';
+        this.asideGstSidebarMenuState = false;
     }
 
     /**

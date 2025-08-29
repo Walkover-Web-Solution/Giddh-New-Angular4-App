@@ -9,34 +9,34 @@
         <form autocomplete="off" novalidate name="unitForm" [formGroup]="unitForm" class="container">
             <div class="row mr-b15">
                 <div class="col-xl-5 col-lg-5 col-sm-5">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="localeData?.unit_group + '*'"
                         [placeholder]="localeData?.select_unit_group"
                         [name]="'unitGroupName'"
                         [options]="groupList"
                         (selectedOption)="selectUnitGroup($event)"
-                        [defaultValue]="unitForm?.get('group')?.get('name')?.value"
+                        [labelValue]="unitForm?.get('group')?.get('name')?.value"
                         [showError]="!isValidForm && !unitForm?.get('group')?.get('uniqueName')?.value"
                         [readonly]="unitDetails?.uniqueName"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                 </div>
             </div>
             <div class="row mr-b15">
                 <div class="col-xl-5 col-lg-5 col-sm-5">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="commonLocaleData?.app_name + '*'"
                         [placeholder]="localeData?.select_unit"
                         [name]="'unitName'"
                         [options]="unitList"
                         (selectedOption)="selectUnit($event)"
-                        [defaultValue]="unitForm.get('name')?.value"
+                        [labelValue]="unitForm.get('name')?.value"
                         [showError]="!isValidForm && !unitForm?.get('name')?.value"
                         [allowCustomDropdownValue]="true"
                         [noResultsFoundMessage]="localeData?.create_unit"
                         [readonly]="unitDetails?.uniqueName"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                 </div>
                 <div class="col-xl-7 col-lg-7 col-sm-7">
                     <input-field
@@ -58,13 +58,13 @@
                     [formGroupName]="i"
                 >
                     <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6 unit-equal">
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [name]="'xcode' + i"
                             [label]="localeData?.unit_name"
                             [placeholder]="localeData?.select_unit"
                             [options]="mappedUnitList"
                             (selectedOption)="selectXUnit(mapping, $event)"
-                            [defaultValue]="mapping?.get('stockUnitX')?.get('name')?.value"
+                            [labelValue]="mapping?.get('stockUnitX')?.get('name')?.value"
                             [showError]="!isValidFormMappings && !mapping?.get('stockUnitX')?.get('code')?.value"
                             [hasMoreValue]="true"
                         >
@@ -87,7 +87,7 @@
                                     </a>
                                 </ng-container>
                             </ng-template>
-                        </dropdown-field>
+                        </reactive-dropdown-field>
                         <span class="equal-sign">=</span>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-2 pr-0 unit-responsive">
@@ -104,13 +104,13 @@
                         </input-field>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pr-0">
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [name]="'ycode' + i"
                             [label]="localeData?.mapped_unit_label"
                             [placeholder]="localeData?.select_unit"
                             [options]="mappedUnitList"
                             (selectedOption)="selectYUnit(mapping, $event)"
-                            [defaultValue]="mapping?.get('stockUnitY')?.get('name')?.value"
+                            [labelValue]="mapping?.get('stockUnitY')?.get('name')?.value"
                             [showError]="!isValidFormMappings && !mapping?.get('stockUnitY')?.get('code')?.value"
                             [hasMoreValue]="true"
                         >
@@ -133,12 +133,12 @@
                                     </a>
                                 </ng-container>
                             </ng-template>
-                        </dropdown-field>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
                         <div class="inc-dec">
                             <div class="plus-minus">
-                                <button class="btn mr-0" aria-label="delete icon" (click)="removeMappedUnit(i)">
+                                <button mat-stroked-button class="mr-0" aria-label="delete icon" (click)="removeMappedUnit(i)">
                                     <i class="icon-trash delete"></i>
                                 </button>
                             </div>
@@ -147,7 +147,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <button class="btn mr-0 add-new" aria-label="add new" (click)="addNewMappedUnit()">
+                        <button mat-raised-button color="primary" class="mr-0 add-new" aria-label="add new" (click)="addNewMappedUnit()">
                             {{ localeData?.add_new }}
                         </button>
                     </div>
@@ -203,7 +203,6 @@
                         <button
                             aria-label="delete"
                             mat-stroked-button
-                            color="warn"
                             type="button"
                             class="btn-sm mr-0"
                             (click)="deleteUnit()"

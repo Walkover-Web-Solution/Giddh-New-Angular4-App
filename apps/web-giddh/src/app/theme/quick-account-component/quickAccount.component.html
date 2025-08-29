@@ -5,14 +5,13 @@
     <div class="modal-body">
         <div class="clearfix" *ngIf="!comingFromDiscountList">
             <label>Select Group</label>
-            <sh-select
+            <reactive-dropdown-field
                 #groupDDList
                 [options]="flattenGroupsArray"
-                [isFilterEnabled]="true"
                 formControlName="groupUniqueName"
-                (selected)="checkSelectedGroup($event)"
+                (selectedOption)="checkSelectedGroup($event)"
                 [placeholder]="'Select Group'"
-            ></sh-select>
+            ></reactive-dropdown-field>
         </div>
         <div class="clearfix" *ngIf="comingFromDiscountList">
             <label>Selected Group: Discount</label>
@@ -67,13 +66,12 @@
                 <div class="row mr-t1">
                     <div class="col-12">
                         <label>State code</label>
-                        <sh-select
+                        <reactive-dropdown-field
                             #states
-                            [isFilterEnabled]="true"
                             [options]="statesSource$ | async"
                             [placeholder]="'Select State'"
                             formControlName="stateCode"
-                        ></sh-select>
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
             </div>
@@ -81,13 +79,14 @@
     </div>
     <div class="modal-footer">
         <button
-            class="btn btn-success"
+            mat-raised-button
+            color="primary"
             [ladda]="isQuickAccountInProcess$ | async"
             (click)="submit()"
             [disabled]="newAccountForm.invalid"
         >
             Create
         </button>
-        <button class="btn btn-default" (click)="closeQuickAccountModal.emit(true)">Cancel</button>
+        <button mat-stroked-button (click)="closeQuickAccountModal.emit(true)">Cancel</button>
     </div>
 </form>

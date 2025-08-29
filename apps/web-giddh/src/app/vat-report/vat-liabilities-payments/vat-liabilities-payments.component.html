@@ -8,7 +8,7 @@
     <div class="relative w-100">
         <div
             class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState === 'in'"
+            *ngIf="asideGstSidebarMenuState"
         >
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
@@ -35,21 +35,21 @@
                     </div>
                 </div>
                 <div class="col flex-grow-0" *ngIf="taxesList?.length > 1">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="commonLocaleData?.app_vat"
                         [options]="taxesList"
                         (selectedOption)="taxNumberSelected($event)"
                         [placeholder]="commonLocaleData?.app_enter_vat"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0" *ngIf="(isCompanyMode || isConsolidatedBranch) && isMultipleBranch">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="commonLocaleData?.app_branch"
                         [options]="branchList"
                         (selectedOption)="branchSelected($event)"
                         [placeholder]="commonLocaleData?.app_select_branch"
-                    ></dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
                     <button mat-raised-button color="primary" (click)="getLiabilitiesPayment()">

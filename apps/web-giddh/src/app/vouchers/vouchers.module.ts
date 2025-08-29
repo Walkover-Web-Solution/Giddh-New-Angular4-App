@@ -75,7 +75,6 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-setting.module";
 import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module";
-import { InvoiceGenerateModule } from "../invoice/generate/invoice-generate.module";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
 import { CancelEInvoiceDialogComponent } from "./cancel-einvoice-dialog/cancel-einvoice-dialog.component";
@@ -91,9 +90,6 @@ import { SalesPersonService } from "../shared/sales-person/utility/sales-person.
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { TributeMentionModule } from "../shared/helpers/directives/tributeMention/tributeMention.module";
 import { AllTemplatesComponent } from "./template/all-templates/all-templates.component";
-import { GstTemplateAComponent } from "./template/all-templates/templates/gst-template-a/gst-template-a.component";
-import { ThermalTemplateComponent } from "./template/all-templates/templates/thermal-template/thermal-template.component";
-import { TallyTemplateComponent } from "./template/all-templates/templates/tally-template/tally-template.component";
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 
 @NgModule({
@@ -118,9 +114,6 @@ import { TemplateEditFilterComponent } from "./template/template-edit-filter/tem
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
         AllTemplatesComponent,
-        GstTemplateAComponent,
-        ThermalTemplateComponent,
-        TallyTemplateComponent
     ],
     imports: [
         CommonModule,
@@ -185,7 +178,6 @@ import { TemplateEditFilterComponent } from "./template/template-edit-filter/tem
         MatNativeDateModule,
         PurchaseSettingModule,
         InvoiceSettingModule,
-        InvoiceGenerateModule,
         CdkScrollModule,
         TrimPipeModule,
         A11yModule,

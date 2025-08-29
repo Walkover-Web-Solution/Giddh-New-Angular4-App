@@ -10,15 +10,14 @@ import { AccountResponseV2 } from "../../models/api-models/Account";
 import { CompanyService } from "../../services/company.service";
 import { IRegistration, IntegratedBankList, BankTransactionForOTP, GetOTPRequest, BulkPaymentConfirmRequest } from "../../models/interfaces/registration.interface";
 import { ToasterService } from "../../services/toaster.service";
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { UntypedFormGroup, UntypedFormBuilder, UntypedFormArray, Validators } from '@angular/forms';
 import { cloneDeep } from '../../lodash-optimized';
-import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { GeneralService } from '../../services/general.service';
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { IForceClear } from '../../models/api-models/Sales';
 import { ServiceConfig } from '../../services/service.config';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog'
+import { IOption } from '../../app.constant';;
 
 @Component({
     selector: 'payment-aside',
@@ -30,6 +29,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Dialog reference */
+    public successDialogRef: MatDialogRef<any>;
     /** variable that holds registered account information */
     public registeredAccounts: any;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -79,8 +80,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public receivedOtp: any;
     /** remark for payment */
     public remarks: string = '';
-    /** Model reference */
-    public successModalRef: BsModalRef;
     /** total selected account's amount sum */
     public totalSelectedAccountAmount: number;
     /** to check count down timer on */
@@ -138,7 +137,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
     constructor(
         private formBuilder: UntypedFormBuilder,
-        private modalService: BsModalService,
         private store: Store<AppState>,
         private companyActions: CompanyActions,
         private accountsAction: AccountsAction,
@@ -146,7 +144,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         private toaster: ToasterService,
         private generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig,
-        private settingsIntegrationService: SettingsIntegrationService
+        private settingsIntegrationService: SettingsIntegrationService,
+        private dialog: MatDialog
     ) {
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
@@ -162,11 +161,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @param {TemplateRef<any>} template
      * @memberof PaymentAsideComponent
      */
-    public openModalWithClass(template: TemplateRef<any>): void {
-        this.successModalRef = this.modalService.show(
-            template,
-            Object.assign({}, { class: 'payment-success-modal' })
-        );
+    public openDialog(template: TemplateRef<any>): void {
+        this.successDialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md'
+        });
     }
 
     public ngOnInit() {
@@ -343,7 +341,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             if (res && res.status === 'success') {
                 this.paymentSuccessfulMessage = res.body?.Message;
                 this.closePaymentModel(true);
-                this.openModalWithClass(this.successTemplate);
+                this.openDialog(this.successTemplate);
             } else {
                 if (res?.status === 'error' && res?.code === 'BANK_ERROR') {
                     this.toaster.showSnackBar("warning", res?.message);
@@ -410,7 +408,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * To select bank event
      *
      * @param {IOption} event Selected bank object
-     * @param {ShSelectComponent} selectBabkEle Sh-select reference element
      * @memberof PaymentAsideComponent
      */
     public selectBank(event: IOption): void {
@@ -477,15 +474,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     /**
-     * set Bank name for bydefault set bank name if only single bank integrated to prevent 'bank user id ' displayed this was incorrect
+     * Set bank name for default display when only single bank is integrated
      *
      * @param {*} event Click event
-     * @param {ShSelectComponent} selectBankEle Sh-select reference
      * @memberof PaymentAsideComponent
      */
-    public setBankName(event: any, selectBankEle: ShSelectComponent): void {
-        selectBankEle.filter = event.target?.value !== undefined ? event.target?.value : selectBankEle.fixedValue;
-        this.selectedBankName = event.target?.value !== undefined ? event.target?.value : selectBankEle.fixedValue;
+    public setBankName(event: any): void {
+        this.selectedBankName = event.target?.value || this.selectedBankName;
     }
 
     /**

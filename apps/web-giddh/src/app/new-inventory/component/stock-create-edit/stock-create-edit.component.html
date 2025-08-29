@@ -71,7 +71,7 @@
                                             </input-field>
                                         </div>
                                         <div class="col-sm-6 col-lg-6">
-                                            <dropdown-field
+                                            <reactive-dropdown-field
                                                 [name]="'stockUnitGroup'"
                                                 [placeholder]="localeData?.select_unit_group"
                                                 [label]="localeData?.unit_group"
@@ -83,13 +83,13 @@
                                                     stockUnitName = '';
                                                     getStockUnits()
                                                 "
-                                                [defaultValue]="stockForm.stockUnitGroup?.name"
+                                                [labelValue]="stockForm.stockUnitGroup?.name"
                                                 [readonly]="queryParams?.stockUniqueName"
                                             >
-                                            </dropdown-field>
+                                            </reactive-dropdown-field>
                                         </div>
                                         <div class="col-sm-6 col-lg-6">
-                                            <dropdown-field
+                                            <reactive-dropdown-field
                                                 [name]="'stockUnitCode'"
                                                 [placeholder]="localeData?.select_unit"
                                                 [label]="commonLocaleData?.app_unit"
@@ -99,11 +99,11 @@
                                                     stockUnitName = $event.label;
                                                     getStockLinkedUnits()
                                                 "
-                                                [defaultValue]="stockUnitName"
+                                                [labelValue]="stockUnitName"
                                                 [showError]="isFormSubmitted && !stockForm.stockUnitUniqueName"
                                                 [readonly]="queryParams?.stockUniqueName"
                                             >
-                                            </dropdown-field>
+                                            </reactive-dropdown-field>
                                         </div>
                                     </div>
                                     <div class="row mr-b1 mr-t15">
@@ -163,7 +163,7 @@
                                                     </div>
                                                 </mat-select>
                                             </mat-form-field>
-                                            <button
+                                            <button 
                                                 aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
                                                 mat-raised-button
@@ -179,7 +179,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
-                                            <dropdown-field
+                                            <reactive-dropdown-field
                                                 [name]="'discounts'"
                                                 [placeholder]="localeData?.select_discounts"
                                                 [label]="commonLocaleData?.app_discount"
@@ -187,11 +187,10 @@
                                                 (selectedOption)="
                                                     stockForm.discounts = [$event?.value];
                                                 "
-                                                [allowValueReset]="true"
                                                 (onClear)="stockForm.discounts = []"
-                                                [defaultValue]="stockForm.discountLabel ?? ''"
+                                                [labelValue]="stockForm.discountLabel ?? ''"
                                             >
-                                            </dropdown-field>
+                                            </reactive-dropdown-field>
                                         </div>
                                         <div class="col-6" *ngIf="!isVariantAvailable">
                                             <div class="variant-image">
@@ -286,7 +285,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-12 pt-3">
-                                                                        <dropdown-field
+                                                                        <reactive-dropdown-field
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
                                                                             [options]="fixedAssetsAccounts"
@@ -298,9 +297,9 @@
                                                                                 fixedAssetsAccountName = $event?.label;
                                                                                 prefillUnits()
                                                                             "
-                                                                            [defaultValue]="fixedAssetsAccountName"
+                                                                            [labelValue]="fixedAssetsAccountName"
                                                                         >
-                                                                        </dropdown-field>
+                                                                        </reactive-dropdown-field>
                                                                     </div>
                                                                     <div
                                                                         class="col-lg-12 col-sm-6 mr-b15"
@@ -354,7 +353,7 @@
                                                                                             ?.length > 1
                                                                                 }"
                                                                             >
-                                                                                <dropdown-field
+                                                                                <reactive-dropdown-field
                                                                                     [cssClass]="
                                                                                         (!variantFixedAssetsUnitRate?.stockUnitName &&
                                                                                         checkUnitRateValidation[0]
@@ -378,10 +377,10 @@
                                                                                             $event
                                                                                         )
                                                                                     "
-                                                                                    [defaultValue]="
+                                                                                    [labelValue]="
                                                                                         variantFixedAssetsUnitRate?.stockUnitName
                                                                                     "
-                                                                                ></dropdown-field>
+                                                                                ></reactive-dropdown-field>
                                                                             </div>
                                                                             <button
                                                                                 aria-label="delete icon"
@@ -407,40 +406,6 @@
                                                                             >
                                                                                 <i class="icon-trash"></i>
                                                                             </button>
-                                                                            <!-- <div class="col-sm-10 col-10 mr-t15">
-                                                                                <a
-                                                                                    href="javascript:;"
-                                                                                    disableRipple
-                                                                                    (click)="
-                                                                                        addNewVariantFixedAssetsUnitPrice(
-                                                                                            stockForm.variants[0]
-                                                                                        )
-                                                                                    "
-                                                                                    *ngIf="
-                                                                                        j ===
-                                                                                        stockForm.variants[0]
-                                                                                            .fixedAssetsInformation
-                                                                                            ?.length -
-                                                                                            1
-                                                                                    "
-                                                                                    [disabled]="
-                                                                                        !stockForm
-                                                                                            ?.fixedAssetAccountDetails
-                                                                                            .accountUniqueName
-                                                                                    "
-                                                                                >
-                                                                                    <span
-                                                                                        *ngIf="
-                                                                                            stockForm
-                                                                                                ?.fixedAssetAccountDetails
-                                                                                                .accountUniqueName
-                                                                                        "
-                                                                                        class="add-new-text-container"
-                                                                                    >
-                                                                                        {{ localeData?.add_new }}
-                                                                                    </span>
-                                                                                </a>
-                                                                            </div> -->
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -484,7 +449,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 pt-3 which-tab">
-                                                                            <dropdown-field
+                                                                            <reactive-dropdown-field
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
                                                                                     localeData?.linked_purchase_accounts
@@ -498,9 +463,9 @@
                                                                                     purchaseAccountName = $event?.label;
                                                                                     prefillUnits()
                                                                                 "
-                                                                                [defaultValue]="purchaseAccountName"
+                                                                                [labelValue]="purchaseAccountName"
                                                                             >
-                                                                            </dropdown-field>
+                                                                            </reactive-dropdown-field>
                                                                         </div>
                                                                         <div
                                                                             class="col-12 which-tab-3"
@@ -555,7 +520,7 @@
                                                                                                 ?.length > 1
                                                                                     }"
                                                                                 >
-                                                                                    <dropdown-field
+                                                                                    <reactive-dropdown-field
                                                                                         [cssClass]="'unit-rates'"
                                                                                         [name]="
                                                                                             'variantPurchaseUnit' + j
@@ -570,7 +535,7 @@
                                                                                                 $event
                                                                                             )
                                                                                         "
-                                                                                        [defaultValue]="
+                                                                                        [labelValue]="
                                                                                             variantPurchaseUnitRate?.stockUnitName
                                                                                         "
                                                                                         [cssClass]="
@@ -581,7 +546,7 @@
                                                                                                 : 'unit-rates'
                                                                                         "
                                                                                     >
-                                                                                    </dropdown-field>
+                                                                                    </reactive-dropdown-field>
                                                                                 </div>
                                                                                 <button
                                                                                     aria-label="delete icon"
@@ -608,44 +573,6 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-                                                                                <!-- <div class="col-sm-10 col-10 mr-t15">
-                                                                                    <a
-                                                                                        href="javascript:void(0);"
-                                                                                        class="bg-transparent px-0 pt-2"
-                                                                                        disableRipple
-                                                                                        (click)="
-                                                                                            addNewVariantPurchaseUnitPrice(
-                                                                                                stockForm.variants[0]
-                                                                                            )
-                                                                                        "
-                                                                                        *ngIf="
-                                                                                            j ===
-                                                                                            stockForm.variants[0]
-                                                                                                ?.purchaseInformation
-                                                                                                ?.length -
-                                                                                                1
-                                                                                        "
-                                                                                        [disabled]="
-                                                                                            !stockForm
-                                                                                                ?.purchaseAccountDetails
-                                                                                                .accountUniqueName
-                                                                                        "
-                                                                                    >
-                                                                                        <span
-                                                                                            *ngIf="
-                                                                                                stockForm
-                                                                                                    ?.purchaseAccountDetails
-                                                                                                    .accountUniqueName
-                                                                                            "
-                                                                                            class="
-                                                                                                add-new-text-container
-                                                                                                font-15
-                                                                                            "
-                                                                                        >
-                                                                                            {{ localeData?.add_new }}
-                                                                                        </span>
-                                                                                    </a>
-                                                                                </div> -->
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -689,7 +616,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 pt-3">
-                                                                            <dropdown-field
+                                                                            <reactive-dropdown-field
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
                                                                                     localeData?.linked_sales_accounts
@@ -703,9 +630,9 @@
                                                                                     salesAccountName = $event?.label;
                                                                                     prefillUnits()
                                                                                 "
-                                                                                [defaultValue]="salesAccountName"
+                                                                                [labelValue]="salesAccountName"
                                                                             >
-                                                                            </dropdown-field>
+                                                                            </reactive-dropdown-field>
                                                                         </div>
                                                                         <div
                                                                             class="col-12"
@@ -756,7 +683,7 @@
                                                                                                 ?.length > 1
                                                                                     }"
                                                                                 >
-                                                                                    <dropdown-field
+                                                                                    <reactive-dropdown-field
                                                                                         [name]="'variantSalesUnit' + j"
                                                                                         [placeholder]="
                                                                                             commonLocaleData?.app_unit
@@ -768,7 +695,7 @@
                                                                                                 $event
                                                                                             )
                                                                                         "
-                                                                                        [defaultValue]="
+                                                                                        [labelValue]="
                                                                                             variantSalesUnitRate?.stockUnitName
                                                                                         "
                                                                                         [cssClass]="
@@ -779,7 +706,7 @@
                                                                                                 : ''
                                                                                         "
                                                                                     >
-                                                                                    </dropdown-field>
+                                                                                    </reactive-dropdown-field>
                                                                                 </div>
                                                                                 <button
                                                                                     aria-label="delete icon"
@@ -806,43 +733,6 @@
                                                                                 >
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
-                                                                                <!-- <div class="col-sm-10 col-10 mr-t15">
-                                                                                    <a
-                                                                                        href="javascript:void(0);"
-                                                                                        class="bg-transparent px-0 pt-2"
-                                                                                        disableRipple
-                                                                                        (click)="
-                                                                                            addNewVariantSalesUnitPrice(
-                                                                                                (stockForm?.variants)[0]
-                                                                                            )
-                                                                                        "
-                                                                                        *ngIf="
-                                                                                            j ===
-                                                                                            (stockForm?.variants)[0]
-                                                                                                ?.salesInformation
-                                                                                                ?.length -
-                                                                                                1
-                                                                                        "
-                                                                                        [disabled]="
-                                                                                            !stockForm
-                                                                                                ?.salesAccountDetails
-                                                                                                .accountUniqueName
-                                                                                        "
-                                                                                    >
-                                                                                        <span
-                                                                                            *ngIf="
-                                                                                                stockForm
-                                                                                                    ?.salesAccountDetails
-                                                                                                    .accountUniqueName
-                                                                                            "
-                                                                                            class="
-                                                                                                add-new-text-container
-                                                                                            "
-                                                                                        >
-                                                                                            {{ localeData?.add_new }}
-                                                                                        </span>
-                                                                                    </a>
-                                                                                </div> -->
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -939,18 +829,6 @@
                                                                                     class="inventory-category-field-input"
                                                                                     [type]="'text'"
                                                                                 ></text-field>
-                                                                                <!-- <input-field
-                                                                                    [name]="
-                                                                                        'option-value-' + i + '-' + j
-                                                                                    "
-                                                                                    [(ngModel)]="optionValue.value"
-                                                                                    (ngModelChange)="
-                                                                                        validateOptionValue(i, j)
-                                                                                    "
-                                                                                    class="inventory-category-field-input"
-                                                                                    [type]="'text'"
-                                                                                >
-                                                                                </input-field> -->
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-lg-2">
@@ -1111,18 +989,6 @@
                                                                 >
                                                                     {{ localeData?.fixed_assets_unit }}
                                                                 </th>
-                                                                <!-- <th
-                                                                    class="is-rate-inclusive table-heading-color"
-                                                                    *ngIf="
-                                                                        stockForm?.fixedAssetAccountDetails
-                                                                            .accountUniqueName ||
-                                                                        stockForm?.purchaseAccountDetails
-                                                                            .accountUniqueName ||
-                                                                        stockForm?.salesAccountDetails.accountUniqueName
-                                                                    "
-                                                                >
-                                                                    {{ localeData?.is_rate_inclusive }}
-                                                                </th> -->
                                                                 <ng-container
                                                                     *ngFor="let customField of variantCustomFields"
                                                                 >
@@ -1258,48 +1124,6 @@
                                                                                                                                                         ' unit-rates form-control'
                                                                                                                                                     ">
                                                                                 </select-field>
-                                                                                <!-- <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    role="button"
-                                                                                                                                                    class="icon-remove-sales"
-                                                                                                                                                    type="button"
-                                                                                                                                                    (click)="
-                                                                                                                                                        deleteVariantPurchaseUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            j
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        variant.purchaseInformation
-                                                                                                                                                            ?.length > 1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <i class="icon-trash"></i>
-                                                                                                                                                </button>
-
-                                                                                                                                                <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    class="icon-button-add-sales"
-                                                                                                                                                    role="button"
-                                                                                                                                                    type="button"
-                                                                                                                                                    disableRipple
-                                                                                                                                                    (click)="
-                                                                                                                                                        addNewVariantPurchaseUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            i
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        j ===
-                                                                                                                                                        variant.purchaseInformation
-                                                                                                                                                            ?.length -
-                                                                                                                                                            1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <span class="add-new-text-container">
-                                                                                                                                                        <i class="icon-plus"></i>
-                                                                                                                                                    </span>
-                                                                                                                                                </button> -->
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
@@ -1344,45 +1168,6 @@
                                                                                                                                                             : '') +
                                                                                                                                                         'unit-rates form-control'
                                                                                                                                                     "></select-field>
-                                                                                <!-- <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    role="button"
-                                                                                                                                                    class="icon-remove-sales"
-                                                                                                                                                    type="button"
-                                                                                                                                                    (click)="
-                                                                                                                                                        deleteVariantSalesUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            j
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        variant.salesInformation?.length > 1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <i class="icon-trash"></i>
-                                                                                                                                                </button>
-
-                                                                                                                                                <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    class="icon-button-add-sales"
-                                                                                                                                                    role="button"
-                                                                                                                                                    type="button"
-                                                                                                                                                    disableRipple
-                                                                                                                                                    (click)="
-                                                                                                                                                        addNewVariantSalesUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            i
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        j ===
-                                                                                                                                                        variant.salesInformation?.length - 1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <span class="add-new-text-container">
-                                                                                                                                                        <i class="icon-plus"></i>
-                                                                                                                                                    </span>
-                                                                                                                                                </button> -->
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
@@ -1430,139 +1215,9 @@
                                                                                                                                                             : '') +
                                                                                                                                                         ' unit-rates form-control'
                                                                                                                                                     "></select-field>
-                                                                                <!-- <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    role="button"
-                                                                                                                                                    class="icon-remove-sales"
-                                                                                                                                                    type="button"
-                                                                                                                                                    (click)="
-                                                                                                                                                        deleteVariantFixedAssetsUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            j
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        variant.fixedAssetsInformation
-                                                                                                                                                            ?.length > 1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <i class="icon-trash"></i>
-                                                                                                                                                </button>
-
-                                                                                                                                                <button
-                                                                                                                                                    mat-icon-button
-                                                                                                                                                    class="icon-button-add-sales"
-                                                                                                                                                    role="button"
-                                                                                                                                                    type="button"
-                                                                                                                                                    disableRipple
-                                                                                                                                                    (click)="
-                                                                                                                                                        addNewVariantFixedAssetsUnitPrice(
-                                                                                                                                                            variant,
-                                                                                                                                                            i
-                                                                                                                                                        )
-                                                                                                                                                    "
-                                                                                                                                                    *ngIf="
-                                                                                                                                                        j ===
-                                                                                                                                                        variant.fixedAssetsInformation
-                                                                                                                                                            ?.length -
-                                                                                                                                                            1
-                                                                                                                                                    "
-                                                                                                                                                >
-                                                                                                                                                    <span class="add-new-text-container">
-                                                                                                                                                        <i class="icon-plus"></i>
-                                                                                                                                                    </span>
-                                                                                                                                                </button> -->
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
-                                                                    <!-- <td
-                                                                                                                                        class="text-center is-rate-inclusive"
-                                                                                                                                        *ngIf="
-                                                                                                                                            stockForm?.salesAccountDetails
-                                                                                                                                                .accountUniqueName ||
-                                                                                                                                            stockForm?.purchaseAccountDetails
-                                                                                                                                                .accountUniqueName ||
-                                                                                                                                            stockForm?.fixedAssetAccountDetails
-                                                                                                                                                .accountUniqueName
-                                                                                                                                        "
-                                                                                                                                    >
-                                                                                                                                        <mat-checkbox
-                                                                                                                                            *ngIf="
-                                                                                                                                                stockForm?.salesAccountDetails
-                                                                                                                                                    .accountUniqueName
-                                                                                                                                            "
-                                                                                                                                            color="primary"
-                                                                                                                                            name="variantSalesTaxInclusive{{ i }}"
-                                                                                                                                            [(ngModel)]="variant.salesTaxInclusive"
-                                                                                                                                            [matTooltip]="localeData?.is_sales_inclusive"
-                                                                                                                                            matTooltipPosition="above"
-                                                                                                                                        ></mat-checkbox>
-                                                                                                                                        <mat-checkbox
-                                                                                                                                            *ngIf="
-                                                                                                                                                stockForm?.purchaseAccountDetails
-                                                                                                                                                    .accountUniqueName
-                                                                                                                                            "
-                                                                                                                                            class="mr-l2"
-                                                                                                                                            color="primary"
-                                                                                                                                            name="variantPurchaseTaxInclusive{{ i }}"
-                                                                                                                                            [(ngModel)]="variant.purchaseTaxInclusive"
-                                                                                                                                            [matTooltip]="localeData?.is_purchase_inclusive"
-                                                                                                                                            matTooltipPosition="above"
-                                                                                                                                        ></mat-checkbox>
-                                                                                                                                        <ng-container
-                                                                                                                                            *ngIf="
-                                                                                                                                                stockForm.type === 'FIXED_ASSETS' &&
-                                                                                                                                                stockForm?.fixedAssetAccountDetails
-                                                                                                                                                    .accountUniqueName
-                                                                                                                                            "
-                                                                                                                                        >
-                                                                                                                                            <mat-checkbox
-                                                                                                                                                *ngIf="
-                                                                                                                                                    stockForm?.salesAccountDetails
-                                                                                                                                                        .accountUniqueName
-                                                                                                                                                "
-                                                                                                                                                color="primary"
-                                                                                                                                                name="variantSalesTaxInclusive{{ i }}"
-                                                                                                                                                [(ngModel)]="variant.salesTaxInclusive"
-                                                                                                                                                [matTooltip]="
-                                                                                                                                                    localeData?.is_sales_inclusive
-                                                                                                                                                "
-                                                                                                                                                matTooltipPosition="above"
-                                                                                                                                            ></mat-checkbox>
-                                                                                                                                            <mat-checkbox
-                                                                                                                                                *ngIf="
-                                                                                                                                                    stockForm?.purchaseAccountDetails
-                                                                                                                                                        .accountUniqueName
-                                                                                                                                                "
-                                                                                                                                                class="mr-l2"
-                                                                                                                                                color="primary"
-                                                                                                                                                name="variantPurchaseTaxInclusive{{ i }}"
-                                                                                                                                                [(ngModel)]="variant.purchaseTaxInclusive"
-                                                                                                                                                [matTooltip]="
-                                                                                                                                                    localeData?.is_purchase_inclusive
-                                                                                                                                                "
-                                                                                                                                                matTooltipPosition="above"
-                                                                                                                                            ></mat-checkbox>
-                                                                                                                                        </ng-container>
-                                                                                                                                        <ng-container
-                                                                                                                                            *ngIf="
-                                                                                                                                                stockForm.type === 'FIXED_ASSETS' &&
-                                                                                                                                                stockForm?.fixedAssetAccountDetails
-                                                                                                                                                    .accountUniqueName
-                                                                                                                                            "
-                                                                                                                                        >
-                                                                                                                                            <mat-checkbox
-                                                                                                                                                color="primary"
-                                                                                                                                                name="variantFixedAssetsTaxInclusive{{ i }}"
-                                                                                                                                                [(ngModel)]="variant.fixedAssetTaxInclusive"
-                                                                                                                                                [checked]="variant.fixedAssetTaxInclusive"
-                                                                                                                                                [matTooltip]="
-                                                                                                                                                    localeData?.is_fixed_assets_inclusive
-                                                                                                                                                "
-                                                                                                                                                matTooltipPosition="above"
-                                                                                                                                            ></mat-checkbox>
-                                                                                                                                        </ng-container>
-                                                                                                                                    </td> -->
                                                                     <ng-container *ngFor="
                                                                                                                                             let customField of variant?.customFields;
                                                                                                                                             let k = index
@@ -2047,7 +1702,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.avail_on_variant }} </label>
                                                             <!-- All available variant list show with checkbox -->
-                                                            <sh-select placeholder="" id="addon-available"></sh-select>
+                                                            <reactive-dropdown-field placeholder="" id="addon-available"></reactive-dropdown-field>
                                                         </div>
                                                     </div>
                                                     <div>
@@ -2086,8 +1741,8 @@
                                                                 <div class="variant-name-field mr-b15">
                                                                     <label> {{ localeData?.variant_name }}</label>
                                                                     <!-- All variant list will show in dropdown -->
-                                                                    <sh-select placeholder="" id="variant-name">
-                                                                    </sh-select>
+                                                                    <reactive-dropdown-field placeholder="" id="variant-name">
+                                                                    </reactive-dropdown-field>
                                                                 </div>
                                                                 <div>
                                                                     <label class="d-block hide-label-on-mobile">
@@ -2308,10 +1963,10 @@
                                                 >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <sh-select
+                                                <reactive-dropdown-field
                                                     id="select-combo-unit"
                                                     [placeholder]="localeData?.select_unit"
-                                                ></sh-select>
+                                                ></reactive-dropdown-field>
                                             </div>
                                         </div>
                                         <div *ngIf="false" class="row mr-b15">
@@ -2322,10 +1977,10 @@
                                                 >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <sh-select
+                                                <reactive-dropdown-field
                                                     id="select-under-group"
                                                     [placeholder]="commonLocaleData?.app_select_group"
-                                                ></sh-select>
+                                                ></reactive-dropdown-field>
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
@@ -2369,13 +2024,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
-                                        <div class="add-image-button">
-                                            <button mat-button role="button" type="button">
-                                                <img src="{{ imgPath }}add-image.svg" />
-                                            </button>
-                                        </div>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -2425,7 +2073,6 @@
                                                     aria-label="delete icon"
                                                     class="delete-tb-tr-icon"
                                                     mat-icon-button
-                                                    color="warn"
                                                     role="button"
                                                     type="button"
                                                 >
@@ -2467,7 +2114,6 @@
                                                     aria-label="delete icon"
                                                     class="delete-tb-tr-icon"
                                                     mat-icon-button
-                                                    color="warn"
                                                     role="button"
                                                     type="button"
                                                 >
@@ -2497,7 +2143,6 @@
                                                         <mat-checkbox
                                                             color="primary"
                                                             id="purchase-info-check"
-                                                            type="checkbox"
                                                             checked="true"
                                                             >Purchase Information
                                                         </mat-checkbox>
@@ -2514,21 +2159,6 @@
                                                                 [placeholder]="localeData?.all_accounts"
                                                             ></textarea>
                                                         </div>
-                                                        <!-- <div class="col-sm-6 col-lg-6">
-                                                                <label>Applicable Tax </label>
-                                                            </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select id="applicable-tax" placeholder="Select Tax">
-                                                                </sh-select>
-                                                                <p class="mt-1 font-15">
-                                                                    <mat-checkbox
-                                                                        color="primary"
-                                                                        id="purchase-price-tax"
-                                                                        type="checkbox"
-                                                                        >Price Inclusive of Tax ?
-                                                                    </mat-checkbox>
-                                                                </p>
-                                                            </div> -->
                                                         <div class="col-sm-6 col-lg-5">
                                                             <label>{{ localeData?.unit_price }} </label>
                                                         </div>
@@ -2597,7 +2227,6 @@
                                                         <mat-checkbox
                                                             color="primary"
                                                             id="sales-info-check"
-                                                            type="checkbox"
                                                         >
                                                             Sales Information
                                                         </mat-checkbox>
@@ -2616,25 +2245,6 @@
                                                                 disabled
                                                             ></textarea>
                                                         </div>
-                                                        <!-- <div class="col-sm-6 col-lg-6">
-                                                                <label>Applicable Tax </label>
-                                                            </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select
-                                                                    id="sales-applicable-tax"
-                                                                    placeholder="Select Tax"
-                                                                    disabled
-                                                                >
-                                                                </sh-select>
-                                                                <p class="mt-1 font-15">
-                                                                    <mat-checkbox
-                                                                        color="primary"
-                                                                        id="sales-price-tax"
-                                                                        type="checkbox"
-                                                                        >Price Inclusive of Tax ?
-                                                                    </mat-checkbox>
-                                                                </p>
-                                                            </div> -->
                                                         <div class="col-sm-6 col-lg-5">
                                                             <label>{{ localeData?.unit_price }} </label>
                                                         </div>
@@ -2845,11 +2455,11 @@
                                                                         </label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
-                                                                        <sh-select
+                                                                        <reactive-dropdown-field
                                                                             id="stock-output-unit"
                                                                             [placeholder]="localeData?.enter_qty"
                                                                         >
-                                                                        </sh-select>
+                                                                        </reactive-dropdown-field>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2876,12 +2486,12 @@
                                                                     id="enter-qty"
                                                                     [placeholder]="localeData?.enter_qty"
                                                                 ></input-field>
-                                                                <sh-select
+                                                                <reactive-dropdown-field
                                                                     id="select-stock-unit"
                                                                     class="ml-3"
                                                                     [placeholder]="localeData?.select_unit"
                                                                 >
-                                                                </sh-select>
+                                                                </reactive-dropdown-field>
                                                                 <button aria-label="add icon" mat-icon-button role="button" type="button">
                                                                     <i class="icon-plus pd cp"></i>
                                                                 </button>
@@ -2899,7 +2509,6 @@
                                                             <mat-checkbox
                                                                 color="primary"
                                                                 id="purchase-info-check"
-                                                                type="checkbox"
                                                                 checked="true"
                                                                 >Purchase Information
                                                             </mat-checkbox>
@@ -2920,16 +2529,15 @@
                                                                 <label>Applicable Tax </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select
+                                                                <reactive-dropdown-field
                                                                     id="applicable-tax"
                                                                     [placeholder]="commonLocaleData?.app_select_tax"
                                                                 >
-                                                                </sh-select>
+                                                                </reactive-dropdown-field>
                                                                 <p class="mt-1 font-15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="purchase-price-tax"
-                                                                        type="checkbox"
                                                                     >
                                                                         Price Inclusive of Tax ?
                                                                     </mat-checkbox>
@@ -3001,7 +2609,6 @@
                                                             <mat-checkbox
                                                                 color="primary"
                                                                 id="sales-info-check"
-                                                                type="checkbox"
                                                             >
                                                                 Sales Information
                                                             </mat-checkbox>
@@ -3024,17 +2631,16 @@
                                                                 <label>Applicable Tax </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select
+                                                                <reactive-dropdown-field
                                                                     id="sales-applicable-tax"
                                                                     [placeholder]="commonLocaleData?.app_select_tax"
                                                                     disabled
                                                                 >
-                                                                </sh-select>
+                                                                </reactive-dropdown-field>
                                                                 <p class="mt-1 font-15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="sales-price-tax"
-                                                                        type="checkbox"
                                                                     >
                                                                         Price Inclusive of Tax ?
                                                                     </mat-checkbox>
@@ -3097,7 +2703,6 @@
                                             <span>
                                                 <mat-checkbox
                                                     color="primary"
-                                                    type="checkbox"
                                                     checked
                                                     name="product-service"
                                                     id="product-service"
@@ -3179,7 +2784,7 @@
                                         </div>
                                         <p class="mr-b15 font-15">
                                             <span>
-                                                <mat-checkbox color="primary" type="checkbox" name="stock" id="stock">
+                                                <mat-checkbox color="primary" name="stock" id="stock">
                                                     Continue selling when out of Combo?</mat-checkbox
                                                 >>
                                             </span>
@@ -3288,29 +2893,6 @@
                                                                 >SAC Code
                                                             </mat-radio-button>
                                                         </mat-radio-group>
-                                                        <!--                                                <span class="p-0 mr-3" (click)="selectCode(true)">-->
-                                                        <!--                                                <input-->
-                                                        <!--                                                    id="combo-hsn-code-option"-->
-                                                        <!--                                                    class="radio-custom cp ml-0"-->
-                                                        <!--                                                    type="radio"-->
-
-                                                        <!--                                                    [value]=""-->
-                                                        <!--                                                />-->
-                                                        <!--                                                <label for="combo-hsn-code-option" class="radio-custom-label"-->
-                                                        <!--                                                >HSN Code</label-->
-                                                        <!--                                                >-->
-                                                        <!--                                            </span>-->
-                                                        <!--                                                <span class="p-0" (click)="selectCode(false)">-->
-                                                        <!--                                                <input-->
-                                                        <!--                                                    id="combo-sac-code-option"-->
-                                                        <!--                                                    class="radio-custom cp ml-0"-->
-                                                        <!--                                                    type="radio"-->
-                                                        <!--                                                    c-->
-                                                        <!--                                                />-->
-                                                        <!--                                                <label for="combo-sac-code-option" class="radio-custom-label"-->
-                                                        <!--                                                >SAC Code</label-->
-                                                        <!--                                                >-->
-                                                        <!--                                            </span>-->
                                                     </div>
 
                                                     <div class="col-sm-6 col-lg-6" *ngIf="isHSN">
@@ -3472,8 +3054,8 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Available on variant </label>
                                                             <!-- All available variant list show with checkbox -->
-                                                            <sh-select placeholder="" id="combo-addon-available">
-                                                            </sh-select>
+                                                            <reactive-dropdown-field placeholder="" id="combo-addon-available">
+                                                            </reactive-dropdown-field>
                                                         </div>
                                                     </div>
                                                     <div>
@@ -3511,8 +3093,8 @@
                                                                 <div class="variant-name-field mr-b15">
                                                                     <label> Variant Name </label>
                                                                     <!-- All variant list will show in dropdown -->
-                                                                    <sh-select placeholder="" id="combo-variant-name">
-                                                                    </sh-select>
+                                                                    <reactive-dropdown-field placeholder="" id="combo-variant-name">
+                                                                    </reactive-dropdown-field>
                                                                 </div>
                                                                 <div>
                                                                     <label class="d-block hide-label-on-mobile">
@@ -3809,22 +3391,22 @@
                                                 ></input-field>
                                             </td>
                                             <td data-title="Inventory Type">
-                                                <sh-select placeholder="Select" readonly></sh-select>
+                                                <reactive-dropdown-field placeholder="Select" readonly></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Inventory Unit">
-                                                <sh-select placeholder="Select"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Parent Group">
-                                                <sh-select placeholder="Select"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Inventory Account">
-                                                <sh-select placeholder="Select"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Low Stock Alert">
-                                                <sh-select placeholder="Select"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Opening Qty">
-                                                <sh-select placeholder="Select"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Opening Amount">
                                                 <input-field
@@ -3834,28 +3416,28 @@
                                                 ></input-field>
                                             </td>
                                             <td data-title="Purchase Account Name">
-                                                <sh-select placeholder="Select" id="purchase-account-name"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select" id="purchase-account-name"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Linked Tax">
-                                                <sh-select placeholder="Select" id="purchase-linked-tax"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select" id="purchase-linked-tax"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Purchase Unit">
-                                                <sh-select placeholder="Select" id="purchase-unit"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select" id="purchase-unit"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Purchase Rate">
-                                                <sh-select placeholder="Select" id="purchase-rate"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select" id="purchase-rate"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Sales Account Name">
-                                                <sh-select placeholder="Select" id="sales-account-name"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select" id="sales-account-name"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Linked Tax">
-                                                <sh-select placeholder="Select" id="sales-linked-tax"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select" id="sales-linked-tax"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Sales unit">
-                                                <sh-select placeholder="Select" id="sales-unit"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select" id="sales-unit"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Sales Rate">
-                                                <sh-select placeholder="Select" id="sales-rate"></sh-select>
+                                                <reactive-dropdown-field placeholder="Select" id="sales-rate"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="HSN/SAC Code">
                                                 <input-field
@@ -3879,7 +3461,6 @@
                                                 ></input-field>
                                             </td>
                                             <td data-title="Expiry Date">
-                                                <!-- <input type="text" placeholder="Enter" class="from-control" id="expiry-date"> -->
                                                 <giddh-datepicker name="invoiceLockDate"></giddh-datepicker>
                                             </td>
                                         </tr>
@@ -3916,7 +3497,6 @@
                     aria-label="clear"
                     *ngIf="!queryParams?.stockUniqueName"
                     mat-stroked-button
-                    color="warn"
                     (click)="resetForm(stockCreateEditForm)"
                 >
                     {{ commonLocaleData?.app_clear }}
@@ -3945,7 +3525,6 @@
                     aria-label="delete icon"
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
-                    color="warn"
                     class="min-width-100"
                     (click)="deleteStock()"
                     [disabled]="uploadAttachmentInProgress$ | async"

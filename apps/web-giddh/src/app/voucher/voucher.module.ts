@@ -11,8 +11,6 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTableModule } from "@angular/material/table";
 import { LaddaModule } from "angular2-ladda";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
-import { ModalModule } from "ngx-bootstrap/modal";
 import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjustment/advance-receipt-adjustment.module";
 import { AsideMenuOtherTaxesModule } from "../shared/aside-menu-other-taxes/aside-menu-other-taxes.module";
 import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-service/aside-menu-product-service.module";
@@ -32,7 +30,6 @@ import { DiscountControlModule } from "../theme/discount-control/discount-contro
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { SelectModule } from "../theme/ng-select/ng-select";
 import { TaxControlModule } from "../theme/tax-control/tax-control.module";
-import { VoucherPrintInPlaceComponent } from "./components/voucher-print-inplace/voucher-print-in-place.component";
 import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
 import { VoucherRoutingModule } from "./voucher.routing.module";
@@ -51,11 +48,10 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         ReactiveFormsModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        BsDropdownModule.forRoot(),
+        
         DigitsOnlyModule,
         SharedModule,
         AsideMenuRecurringEntryModule,
-        ModalModule.forRoot(),
         TaxControlModule,
         DiscountControlModule,
         LaddaModule.forRoot({
@@ -92,7 +88,7 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         OnloadDirectiveModule,
     ],
     exports: [VoucherComponent],
-    declarations: [VoucherRendererComponent, VoucherComponent, VoucherPrintInPlaceComponent],
+    declarations: [VoucherRendererComponent, VoucherComponent],
     providers: [TitleCasePipe],
 })
 export class VoucherModule {}

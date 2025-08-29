@@ -17,7 +17,6 @@
                     </button>
                     <button
                         mat-stroked-button
-                        color="warn"
                         class="mr-b05"
                         type="button"
                         (click)="openModal(rejectionReason)"
@@ -79,35 +78,28 @@
                                         {{ entryAgainstObject.base }}<span class="text-danger">*</span>
                                     </label>
                                     <div class="clearfix">
-                                        <sh-select
+                                        <reactive-dropdown-field
                                             [ngClass]="{ 'error-box': showEntryAgainstRequired }"
                                             class="text-left multi-select entry-against"
-                                            name="depositAccountUniqueName"
-                                            #entryAgainstAccountDropDown
+                                            [name]="'depositAccountUniqueName'"
                                             [options]="entryAgainstObject.dropDownOption"
                                             [(ngModel)]="entryAgainstObject.model"
-                                            (selected)="onSelectEntryAgainstAccount($event)"
+                                            (selectedOption)="onSelectEntryAgainstAccount($event)"
                                             (onClear)="onClearEntryAgainstAccount()"
                                             [placeholder]="commonLocaleData?.app_select_account"
-                                            [notFoundLink]="false"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
                                             (scrollEnd)="handleAccountScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                            [defaultValue]="entryAgainstObject?.name"
-                                            [fixedValue]="entryAgainstObject?.name"
-                                            [forceClearReactive]="forceClear$ | async"
-                                            [multiple]="false"
-                                            [ItemHeight]="33"
-                                            [useInBuiltFilterForIOptionTypeItems]="true"
+                                            [labelValue]="entryAgainstObject?.name"
                                         >
-                                            <ng-template #optionTemplate1 let-option="option">
+                                            <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">{{ option?.value }}</div>
                                                 </a>
                                             </ng-template>
-                                        </sh-select>
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                             </div>

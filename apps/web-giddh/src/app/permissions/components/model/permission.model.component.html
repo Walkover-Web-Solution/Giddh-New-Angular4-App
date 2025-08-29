@@ -18,13 +18,13 @@
                     ></input-field>
                 </div>
                 <div class="form-group custom-select position-relative bg-transparent">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="localeData?.role_type_label"
                         [required]="true"
                         (selectedOption)="newRoleObj.isFresh = $event?.value"
                         [name]="'isFresh'"
                         [options]="isFreshOptions"
-                    ></dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
                 <div class="form-group" *ngIf="newRoleObj.isFresh">
                     <mat-form-field class="w-100" appearance="outline">

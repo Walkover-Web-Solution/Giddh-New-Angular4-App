@@ -8,7 +8,7 @@
     <div
         *ngIf="isModalOpen"
         class="p-modal-tooltip"
-        (clickOutside)="accountAsideMenuState === 'out' ? getUpdatedList(false) : ''"
+        (clickOutside)="getUpdatedList(false)"
     >
         <div class="tb-pl-modal-header p-0">
             <div class="account-detail-modal-header-div" >
@@ -54,18 +54,15 @@
         </div>
     </div>
 
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-    <div *ngIf="accountAsideMenuState === 'in'">
+    <ng-template #asideMenuTemplate>
         <aside-menu-account
             [activeGroupUniqueName]="activeGroupUniqueName"
             [activeAccountDetails]="accInfo"
             [isUpdateAccount]="true"
-            class="account-aside-menu-state transform-inherit"
-            [@slideInOut]="accountAsideMenuState"
             [commonLocaleData]="commonLocaleData"
             (closeAsideEvent)="getUpdatedList(false)"
             (getUpdateList)="getUpdatedList(true)"
         >
         </aside-menu-account>
-    </div>
+    </ng-template>
 </ng-container>

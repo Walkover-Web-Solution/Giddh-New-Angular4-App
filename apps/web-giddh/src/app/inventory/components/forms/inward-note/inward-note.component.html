@@ -27,15 +27,12 @@
             <div class="row">
                 <div class="col-6 form-group">
                     <label>Date <sup>*</sup></label>
-                    <input
-                        name="dateRange"
+                    <giddh-datepicker
+                        name="entryDate"
                         formControlName="inventoryEntryDate"
-                        type="text"
-                        autocomplete="off"
+                        [appearance]="'outline'"
                         class="form-control"
-                        bsDatepicker
-                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                    />
+                    ></giddh-datepicker>
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
                     >
@@ -49,29 +46,25 @@
 
                 <div class="col-6 form-group" *ngIf="mode === 'sender'">
                     <label>Product Name <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="stockListOptions"
-                        [multiple]="false"
                         [placeholder]="'Select Product'"
                         [disabled]="stock?.disabled"
                         formControlName="stock"
-                        (selected)="stockChanged($event)"
-                        [isRequired]="true"
+                        (selectedOption)="stockChanged($event)"
                     >
-                    </sh-select>
+                    </reactive-dropdown-field>
                 </div>
 
                 <div class="col-6 form-group" *ngIf="mode === 'product'">
                     <label>Sender <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="userListOptions"
-                        [multiple]="false"
                         [placeholder]="'Select Sender'"
                         formControlName="inventoryUser"
-                        (selected)="userChanged($event)"
-                        [isRequired]="true"
+                        (selectedOption)="userChanged($event)"
                     >
-                    </sh-select>
+                    </reactive-dropdown-field>
                 </div>
             </div>
 
@@ -98,39 +91,30 @@
             >
                 <div [formGroupName]="i">
                     <div class="col-4 form-group" *ngIf="mode === 'sender'">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="userListOptions"
-                            [multiple]="false"
                             [placeholder]="'Select Sender'"
-                            (selected)="userChanged($event, i)"
+                            (selectedOption)="userChanged($event, i)"
                             formControlName="inventoryUser"
-                            [ItemHeight]="'33'"
-                            [isRequired]="true"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                     <div class="col-4 form-group" *ngIf="mode === 'product'">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="stockListOptions"
-                            [multiple]="false"
                             [placeholder]="'Select Product'"
-                            (selected)="stockChanged($event, i)"
-                            [ItemHeight]="'33'"
+                            (selectedOption)="stockChanged($event, i)"
                             formControlName="stock"
-                            [isRequired]="true"
-                        ></sh-select>
+                        ></reactive-dropdown-field>
                     </div>
 
                     <div class="col-4 form-group">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="stockUnitsOptions"
                             [placeholder]="'Choose unit'"
                             formControlName="stockUnit"
-                            [multiple]="false"
-                            [ItemHeight]="33"
-                            [isRequired]="true"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
 
                     <div class="col-4 form-group">
@@ -141,13 +125,13 @@
 
                             <div class="pull-right mr-t05 unit-add">
                                 <button
-                                    class="btn-link"
+                                    mat-stroked-button
                                     (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last"
                                 >
                                     <i class="icon-plus add-row"></i>
                                 </button>
-                                <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
+                                <button mat-stroked-button (click)="deleteTransactionItem(i)" *ngIf="!last">
                                     <i class="icon-cross delete"></i>
                                 </button>
                             </div>
@@ -161,15 +145,12 @@
                     <div class="mr-t1 pd-l05 pd-r05">
                         <div class="col-12">
                             <div class="checkbox">
-                                <label for="isManufactured">
-                                    <input
-                                        type="checkbox"
-                                        formControlName="isManufactured"
-                                        id="isManufactured"
-                                        name="isManufactured"
-                                    />
-                                    Is it a finished stock? (Manufacturing/Combo)</label
+                                <mat-checkbox
+                                    formControlName="isManufactured"
+                                    color="primary"
                                 >
+                                    Is it a finished stock? (Manufacturing/Combo)
+                                </mat-checkbox>
                             </div>
                         </div>
                     </div>
@@ -204,14 +185,11 @@
                                     </div>
 
                                     <div class="col-5 form-group">
-                                        <sh-select
+                                        <reactive-dropdown-field
                                             [options]="stockUnitsOptions"
                                             formControlName="manufacturingUnitCode"
                                             [placeholder]="'Select Unit'"
-                                            [multiple]="false"
-                                            [ItemHeight]="33"
-                                            [isRequired]="true"
-                                        ></sh-select>
+                                        ></reactive-dropdown-field>
                                     </div>
 
                                     <div
@@ -253,14 +231,12 @@
                                         [formGroupName]="i"
                                     >
                                         <div class="col-4 form-group">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="stockListOptions"
                                                 formControlName="stockUniqueName"
-                                                [multiple]="false"
                                                 [placeholder]="'Select Stock Name'"
-                                                [ItemHeight]="33"
-                                                (selected)="findAddedStock($event?.value, i)"
-                                            ></sh-select>
+                                                (selectedOption)="findAddedStock($event?.value, i)"
+                                            ></reactive-dropdown-field>
                                         </div>
                                         <div class="col-3 form-group">
                                             <input
@@ -274,25 +250,23 @@
                                             />
                                         </div>
                                         <div class="col-4 form-group">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="stockUnitsOptions"
                                                 formControlName="stockUnitCode"
-                                                [multiple]="false"
                                                 [placeholder]="'Select Unit'"
-                                                [ItemHeight]="33"
                                             >
-                                            </sh-select>
+                                            </reactive-dropdown-field>
                                         </div>
                                         <div class="pull-right mr-t05 unit-add">
                                             <button
-                                                class="btn-link"
+                                                mat-stroked-button
                                                 (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l"
                                                 [disabled]="disableStockButton"
                                             >
                                                 <i class="icon-plus add-row"></i>
                                             </button>
-                                            <button class="btn-link" (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
+                                            <button mat-stroked-button (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
                                                 <i class="icon-cross delete"></i>
                                             </button>
                                         </div>
@@ -313,8 +287,8 @@
 
             <div class="row">
                 <div class="col-12 text-left mr-t1">
-                    <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
-                    <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                    <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
+                    <button mat-stroked-button [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save
                     </button>
                 </div>

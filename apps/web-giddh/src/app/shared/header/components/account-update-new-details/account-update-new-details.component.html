@@ -391,30 +391,10 @@
                                     >
                                     </reactive-dropdown-field>
                                 </div>
-
-                                <!-- <div
-                                    class="col-sm-4"
-                                    *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
-                                >
-                                    <div class="form-group">
-                                        <label class="d-block">&nbsp;</label>
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                name="isComposite"
-                                                formControlName="isComposite"
-                                            /><label
-                                                >&nbsp;
-                                                {{ localeData?.is_composite }}
-                                            </label></label
-                                        >
-                                    </div>
-                                </div> -->
                             </ng-container>
                             <div class="col-sm-12 mr-b2" *ngIf="!firstItem">
                                 <button
                                     mat-stroked-button
-                                    color="warn"
                                     (click)="removeGstDetailsForm(i)"
                                     class="grey-color btn-danger text-left"
                                 >
@@ -1067,7 +1047,7 @@
                                         offsetX: 8
                                     }
                                 ]">
-                                <div class="tax-tooltip bg-gray font-14 overlay">
+                                <div class="tax-tooltip bg-gray font-14 custom-cdk-overlay-wrapper">
                                     <div>
                                         <p>{{ localeData?.discounts_inherited_from }}:</p>
                                         <p>{{ item?.name }}</p>
@@ -1144,7 +1124,7 @@
                                                 offsetX: 8
                                             }
                                         ]">
-                                        <div class="tax-tooltip font-14 overlay">
+                                        <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper">
                                             <div>
                                                 <p>{{ localeData?.tax_inherited }}:</p>
                                                 <p>{{ inTax?.name }}</p>

@@ -49,7 +49,7 @@
                                     />
                                 </div>
                             </div>
-                        </div>
+                    </div>
                         <button
                             mat-stroked-button
                             (click)="setInitialAdvanceFilter()"
@@ -1984,14 +1984,24 @@
                             >
                                 <span>{{ localeData?.new_cr_note }}</span>
                             </button>
-                            <div class="custom-datepicker">
-                                <input
-                                    matInput
-                                    type="text"
-                                    name="selectedDateRange"
-                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker"
-                                />
+                            <div class="custom-datepicker-wrapper">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
+                                    <input
+                                        matInput
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
+                                    />
+                                </div>
                             </div>
                         </div>
                         <button
@@ -2430,7 +2440,7 @@
                     <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                         <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                             <div class="d-flex align-items-center column-gap1">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     *ngIf="
                                         voucherType === voucherTypeEnum.creditNote ||
                                         voucherType === voucherTypeEnum.debitNote
@@ -2438,10 +2448,10 @@
                                     [name]="'invoiceType'"
                                     [options]="voucherTypes"
                                     (selectedOption)="voucherType = $event.value; getLedgersOfInvoice()"
-                                    [defaultValue]="voucherType | titlecase"
+                                    [labelValue]="voucherType | titlecase"
                                     [label]="commonLocaleData?.app_voucher_type"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                                 <div class="custom-datepicker-wrapper">
                                     <div 
                                         class="custom-datepicker" 
@@ -4486,14 +4496,6 @@
                                                             >{{ commonLocaleData?.app_goto_ledger }}</a
                                                         >
                                                     </li>
-                                                    <!-- <li class="text-left mr-t1">
-                                                        <a
-                                                            href="javascript:;"
-                                                            class="default-color"
-                                                            (click)="generateVoucher(element)"
-                                                            >{{ commonLocaleData?.app_generate_invoice }}</a
-                                                        >
-                                                    </li> -->
                                                 </ul>
                                             </mat-card-content>
                                         </mat-card>
@@ -5843,16 +5845,6 @@
                                             >
                                                 {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.payment) }}
                                             </mat-slide-toggle>
-                                            <!--  Confirmed with Kriti that she was not aware of this setting due to the comment.
-                                            <mat-slide-toggle
-                                                name="createPaymentEntry"
-                                                class="disable-toggle slide-toggle d-block mb-3"
-                                                color="primary"
-                                                aria-label="auto create payment entry"
-                                                formControlName="createPaymentEntry"
-                                            >
-                                                Create payment entry
-                                            </mat-slide-toggle> -->
                                             <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                         </div>
                                     </ng-container>

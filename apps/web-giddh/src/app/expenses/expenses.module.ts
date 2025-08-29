@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
 import { LedgerModule } from '../ledger/ledger.module';
@@ -13,7 +11,6 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SharedModule } from '../shared/shared.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { ApprovePettyCashEntryConfirmDialogComponent } from './components/approve-petty-cash-entry-confirm-dialog/approve-petty-cash-entry-confirm-dialog.component';
 import { ExpenseDetailsComponent } from './components/expense-details/expense-details.component';
@@ -32,6 +29,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { LightboxModule } from 'ngx-lightbox';
 import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [
@@ -49,13 +47,10 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
         FormsModule,
         Daterangepicker,
         ExpensesRoutingModule,
-        TabsModule.forRoot(),
         LedgerModule,
         CurrencyModule,
         MatPaginatorModule,
         SharedModule,
-        ShSelectModule,
-        ModalModule.forRoot(),
         ElementViewChildModule,
         SalesModule,
         UpdateLedgerEntryPanelModule,
@@ -70,7 +65,8 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
         MatDividerModule,
         MatInputModule,
         LightboxModule,
-        MatMenuModule
+        MatMenuModule,
+        FormFieldsModule
     ],
     exports: [
         ExpensesComponent,

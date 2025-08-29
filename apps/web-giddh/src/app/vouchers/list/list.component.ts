@@ -24,7 +24,6 @@ import { InvoiceService } from "../../services/invoice.service";
 import { InvoiceTemplatesService } from "../../services/invoice.templates.service";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
-import { trigger, state, style, transition, animate } from "@angular/animations";
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
@@ -63,19 +62,7 @@ interface IReportFilterTableColumn {
     selector: "list",
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
-    providers: [VoucherComponentStore],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    providers: [VoucherComponentStore]
 })
 export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold all voucher list data source for table */
@@ -1504,7 +1491,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      *
      * @param {*} days
      * @returns {string}
-     * @memberof InvoicePreviewComponent
+     * @memberof VoucherListComponent
      */
     public getOverdueDaysText(days: any): string {
         let overdueDays = this.localeData?.overdue_days;
@@ -2137,7 +2124,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     * To get all advance adjusted data
     *
     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
-    * @memberof InvoicePreviewComponent
+    * @memberof VoucherListComponent
     */
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         this.closeAdvanceReceiptDialog();
@@ -3480,14 +3467,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-    * This will show the datepicker
-    *
-    * @param {boolean} isOpen
-    * @memberof VoucherListComponent
-    */
-    public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
+     /**
+     * This will show the datepicker
+     *
+     * @param {boolean} isOpen
+     * @memberof VoucherListComponent
+     */
+     public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();

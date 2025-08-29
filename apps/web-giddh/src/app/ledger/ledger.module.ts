@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ClipboardModule } from 'ngx-clipboard';
 import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
@@ -20,7 +19,6 @@ import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.modul
 import { ValidateSectionPermissionDirectiveModule } from '../shared/validate-section-permission/validate-section-permission.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -64,10 +62,10 @@ import { BankIntegrationModule } from '../shared/bank-integration/bank-integrati
 import { CarouselComponent } from '../shared/carousel/carousel.component';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
-import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
-import { MatDividerModule } from '@angular/material/divider';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
     declarations: [
@@ -95,7 +93,6 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         ReactiveFormsModule,
         TaxControlModule,
         LedgerRoutingModule,
-        ModalModule.forRoot(),
         MatPaginatorModule,
         ClipboardModule,
         LaddaModule.forRoot({
@@ -104,7 +101,6 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         }),
         NumberToWordsModule,
         ConfirmModalModule,
-        ShSelectModule,
         DecimalDigitsModule,
         ClickOutsideModule,
         SelectModule.forRoot(),
@@ -151,6 +147,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         CarouselComponent,
         AsideMenuCreateTaxModule,
         AsideMenuAccountModule,
+        NgxMatSelectSearchModule,
         TributeMentionModule,
         MatDividerModule,
         NgxMatSelectSearchModule

@@ -19,17 +19,14 @@
                             <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
                                 <div class="input-group flex-nowrap mr-b15">
                                     <div class="form-group linked-entities mr-r15 mb-0">
-                                        <sh-select
+                                        <reactive-dropdown-field
                                             [options]="currentCompanyBranches"
                                             [(ngModel)]="currentBranch.uniqueName"
-                                            [showClear]="false"
-                                            [ItemHeight]="33"
-                                            width="100%"
-                                            (selected)="handleBranchChange($event)"
-                                            [isFilterEnabled]="true"
+                                            (selectedOption)="handleBranchChange($event)"
                                             [placeholder]="commonLocaleData?.app_select_entity"
-                                            [fixedValue]="currentBranch?.name"
+                                            [labelValue]="currentBranch?.name"
                                             class="entity-dropdown"
+                                            [name]="'currentBranch'"
                                         >
                                             <ng-template #optionTemplate let-option="option">
                                                 <ng-container>
@@ -42,12 +39,12 @@
                                                                     'icon-branch-icon': !option.consolidatedBranch
                                                                 }"
                                                                 *ngIf="!option.isCompany"
-                                                                matTooltip="{{ commonLocaleData?.app_branch }}"
+                                                                [matTooltip]="commonLocaleData?.app_branch"
                                                             ></i>
                                                             <i
                                                                 class="icon-company-profile pull-right"
                                                                 *ngIf="option.isCompany"
-                                                                matTooltip="{{ commonLocaleData?.app_company }}"
+                                                                [matTooltip]="commonLocaleData?.app_company"
                                                             ></i>
                                                         </span>
                                                         <span class="entity-details">
@@ -61,7 +58,7 @@
                                                     </a>
                                                 </ng-container>
                                             </ng-template>
-                                        </sh-select>
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +82,6 @@
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                             readonly
                         />
-                        <i class="fa fa-calendar"></i>
                     </div>
                     <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
                         <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
@@ -103,7 +99,7 @@
                 >
                     <span class="icon-refresh"></span>
                 </a>
-        </div>
+            </div>
         </div>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>

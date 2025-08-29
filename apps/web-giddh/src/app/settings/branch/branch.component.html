@@ -106,10 +106,12 @@
                                                             <button
                                                                 mat-button
                                                                 [matMenuTriggerFor]="menu"
-                                                                class="icon-dots-three-vertical dropdown-toggle cursor-pointer mr-0 min-width-unset"
+                                                                class="cursor-pointer mr-0 min-width-unset"
                                                                 role="button"
                                                                 aria-label="dropdown button"
-                                                            ></button>
+                                                            >
+                                                                <span class="icon-dots-three-vertical"></span>
+                                                            </button>
                                                             <mat-menu #menu="matMenu">
                                                                 <button mat-menu-item (click)="updateBranch(branch)">
                                                                     {{ commonLocaleData?.app_edit }}
@@ -185,7 +187,7 @@
                                                                                 offsetX: 8
                                                                             }
                                                                         ]">
-                                                                        <div class="tax-tooltip font-14 overlay " (mouseenter)="openAddressInfo(true, address?.uniqueName + branch.uniqueName)"
+                                                                        <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper " (mouseenter)="openAddressInfo(true, address?.uniqueName + branch.uniqueName)"
                                                                         (mouseleave)="openAddressInfo(false)">
                                                                             {{ address?.address }} {{ address?.stateCode }}
                                                                             <p
@@ -270,6 +272,7 @@
                                         <div class="modal-header clearfix">
                                             <h3>{{ commonLocaleData?.app_confirmation }}</h3>
                                             <button
+                                                mat-stroked-button
                                                 aria-hidden="true"
                                                 class="close"
                                                 (click)="onUserConfirmation(false)"
@@ -284,14 +287,12 @@
                                                 mat-raised-button
                                                 color="primary"
                                                 (click)="onUserConfirmation(true)"
-                                                class="btn btn-sm btn-success"
                                             >
                                                 {{ commonLocaleData?.app_yes }}
                                             </button>
                                             <button
                                                 mat-stroked-button
                                                 (click)="onUserConfirmation(false)"
-                                                class="btn btn-sm btn-danger"
                                             >
                                                 {{ commonLocaleData?.app_no }}
                                             </button>

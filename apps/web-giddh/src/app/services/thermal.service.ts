@@ -166,22 +166,6 @@ export class ThermalService {
         let accountAddress = "";
         let accountGstNumberField = "";
         let billingGstinNumber = "";
-        // if (defaultTemplate?.sections?.header?.data?.billingGstin?.display && defaultTemplate?.sections?.header?.data?.billingAddress?.display) {
-        //     accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
-        //     accountAddress = request?.account?.billingDetails?.address.join(" ");
-        //     billingGstinNumber = request?.account?.billingDetails?.taxNumber;
-        //     if (request?.account?.billingDetails?.taxNumber) {
-        //         billingGstinNumber = request?.account?.billingDetails?.taxNumber;
-        //         accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
-        //     } else {
-        //         billingGstinNumber = '';
-        //         accountGstNumberField = '';
-        //     }
-        // } else {
-        //     accountGstNumberField = "";
-        //     accountAddress = "";
-        //     billingGstinNumber = "";
-        // }
 
         /**
          * This will use for hide/show for company GST number

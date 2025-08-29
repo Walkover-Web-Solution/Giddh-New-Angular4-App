@@ -3,7 +3,6 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, StatesRequest, SubscriptionRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
-import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
@@ -17,7 +16,7 @@ import { SettingsProfileActions } from '../actions/settings/profile/settings.pro
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import { CommonActions } from '../actions/common.actions';
 import { SettingsProfileService } from '../services/settings.profile.service';
-import { EMAIL_VALIDATION_REGEX } from '../app.constant';
+import { EMAIL_VALIDATION_REGEX, IOption } from '../app.constant';
 import { SalesService } from '../services/sales.service';
 import { StateCode } from '../models/api-models/Sales';
 import { ServiceConfig } from '../services/service.config';

@@ -11,8 +11,6 @@ import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { digitsOnly } from '../../../helpers';
 import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
 import { cloneDeep, difference, differenceBy, flatten, flattenDeep, map, omit, union, uniq } from '../../../../lodash-optimized';
@@ -20,7 +18,7 @@ import { LedgerDiscountComponent } from '../../../../ledger/components/ledger-di
 import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, IOption, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'group-update',
@@ -64,10 +62,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public showEditTaxSection: boolean = false;
     public accountList: any[];
     public showTaxes: boolean = true;
-    @ViewChild('deleteGroupTemplate', { static: true }) public deleteGroupTemplate: TemplateRef<any>;
-    /** Dialog reference for delete group modal */
-    private deleteGroupDialogRef: MatDialogRef<any>;
-    @ViewChild('moveToGroupDropDown', { static: true }) public moveToGroupDropDown: ShSelectComponent;
+    @ViewChild('deleteGroupModal', { static: true }) public deleteGroupConfirmationDialog: TemplateRef<any>;
+    public deleteGroupConfirmationDialogRef: MatDialogRef<any>;
     /** To check is groups belongs to debtor or creditors type  */
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
@@ -379,24 +375,24 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Shows the delete group modal dialog
-     *
+     * Open delete group dialog
+     * @returns void
      * @memberof GroupUpdateComponent
      */
-    public showDeleteGroupModal() {
-        this.deleteGroupDialogRef = this.dialog.open(this.deleteGroupTemplate, {
-            panelClass: 'mat-dialog-md',
+    public openDeleteGroupDialog(): void {
+        this.deleteGroupConfirmationDialogRef = this.dialog.open(this.deleteGroupConfirmationDialog, {
+            panelClass: ['mat-dialog-md'],
             disableClose: true
         });
     }
 
     /**
-     * Hides the delete group modal dialog
-     *
+     * Close delete group dialog
+     * @returns void
      * @memberof GroupUpdateComponent
      */
-    public hideDeleteGroupModal() {
-        this.deleteGroupDialogRef?.close();
+    public closeDeleteGroupDialog(): void {
+        this.deleteGroupConfirmationDialogRef?.close();
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
@@ -453,7 +449,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let activeGroupUniqueName: string;
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGroupUniqueName));
-        this.hideDeleteGroupModal();
+        this.closeDeleteGroupDialog();
     }
 
     public updateGroup() {

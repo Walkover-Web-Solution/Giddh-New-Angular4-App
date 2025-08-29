@@ -27,12 +27,12 @@
                         *ngFor="let item of searchQueryForm.get('searchQuery')['controls']; let i = index; let l = last"
                     >
                         <div [formGroupName]="i" class="d-flex">
-                            <dropdown-field
+                            <reactive-dropdown-field
                                 class="width-query-types mr-3"
                                 [options]="queryTypes"
                                 [required]="true"
                                 (selectedOption)="item?.get('queryType').patchValue($event.value)"
-                                [defaultValue]="
+                                [labelValue]="
                                     resetValues
                                         ? item?.get('queryType').value === 'closingBalance'
                                             ? 'Closing Balance'
@@ -42,17 +42,17 @@
                                 [placeholder]="commonLocaleData?.app_select_type"
                                 [label]="localeData?.whose"
                             >
-                            </dropdown-field>
-                            <dropdown-field
+                            </reactive-dropdown-field>
+                            <reactive-dropdown-field
                                 class="width-query-differs mr-3"
                                 [options]="queryDiffers"
                                 (selectedOption)="item?.get('queryDiffer').patchValue($event.value)"
-                                [defaultValue]="resetValues ? item?.get('queryDiffer').value : ''"
+                                [labelValue]="resetValues ? item?.get('queryDiffer').value : ''"
                                 [required]="true"
                                 [placeholder]="localeData?.select_query"
                                 [label]="localeData?.is"
                             >
-                            </dropdown-field>
+                            </reactive-dropdown-field>
                             <input-field
                                 class="width-query-differs mr-3"
                                 *ngIf="
@@ -132,7 +132,7 @@
                         <button mat-stroked-button (click)="addSearchRow()">
                             {{ localeData?.add_new_query }}
                         </button>
-                        <button
+                        <button mat-stroked-button
                             *ngIf="searchDataSet?.controls?.length > 1"
                             mat-stroked-button
                             class="mr-r1"
@@ -151,16 +151,6 @@
         </button>
     </div>
     <div class="pull-right d-flex column-gap15">
-        <!-- <div class="btn-group" *ngIf="showSendButton">
-            <button type="button" mat-stroked-button [matMenuTriggerFor]="sendAsMenu">
-                {{ localeData?.send_as }}
-                <span class="caret"></span>
-            </button>
-            <mat-menu #sendAsMenu="matMenu">
-                <button mat-menu-item (click)="openEmailDialog.emit()">{{ commonLocaleData?.app_email }}</button>
-                 <button mat-menu-item (click)="openSmsDialog.emit()">{{ commonLocaleData?.app_sms }}</button>
-            </mat-menu>
-        </div> -->
         <button type="button" mat-raised-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
             {{ commonLocaleData?.app_download_csv }}
         </button>

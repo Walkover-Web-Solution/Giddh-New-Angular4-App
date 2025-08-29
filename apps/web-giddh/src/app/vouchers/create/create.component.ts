@@ -65,7 +65,6 @@ import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-mod
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
 import { AddAccountRequest, UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
-import { animate, state, style, transition, trigger } from "@angular/animations";
 import { CreateDiscountComponent } from "../../theme/create-discount/create-discount.component";
 import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/confirmation-modal.interface";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
@@ -112,25 +111,7 @@ import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill
     selector: "create",
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
-    providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore],
-    animations: [
-        trigger("slideInOut", [
-            state(
-                "in",
-                style({
-                    transform: "translate3d(0, 0, 0)",
-                })
-            ),
-            state(
-                "out",
-                style({
-                    transform: "translate3d(100%, 0, 0)",
-                })
-            ),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
+    providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore]
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Instance of RCM checkbox */

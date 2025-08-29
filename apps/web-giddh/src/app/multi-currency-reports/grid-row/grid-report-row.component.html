@@ -68,24 +68,17 @@
     <section
         class="account overflow-visible"
         *ngIf="account.isVisible"
-        (dblclick)="accountInfo(account, $event)"
+        (dblclick)="accountInfo(account, $event); menuTrigger.openMenu()"
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
             <div class="col-4 account no-select" [style.padding-left]="padding + 20 + 'px !important'">
-                <!-- under working -->
-                <!-- <div
+                <div
                     class="p-0 bd-r-right-none text-danger"
                     [innerHTML]="account.name | lowercase | highlight: search"
-                    [popover]="accountDetailModalTemplate"
-                    #accountDetailPopup="bs-popover"
-                    triggers=""
-                    container="body"
-                    containerClass="financial-report-account-detail-container"
-                    placement="bottom"
-                    [isOpen]="modalUniqueName && modalUniqueName === account?.uniqueName"
                 ></div>
-                <ng-template #accountDetailModalTemplate>
+                <span class="position-absolute" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="accountDetailModalTemplate">&nbsp;</span>
+                <mat-menu #accountDetailModalTemplate>
                     <span
                         account-detail-modal-component
                         *ngIf="modalUniqueName && modalUniqueName === account?.uniqueName"
@@ -95,11 +88,11 @@
                         [accInfo]="false"
                         [closeOnEdit]="true"
                         (modalOpened)="handleModalOpened($event)"
-                        (modalClosed)="hideModal(); accountDetailPopup?.hide()"
-                        (modalClosedTemporary)="openAccountModal.emit($event); hideModal(); accountDetailPopup?.hide()"
+                        (modalClosed)="hideModal()"
+                        (modalClosedTemporary)="openAccountModal.emit($event); hideModal()"
                     >
                     </span>
-                </ng-template> -->
+                </mat-menu>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">

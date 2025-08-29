@@ -7,11 +7,11 @@
 >
     <div
         class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState === 'in'"
+        *ngIf="asideGstSidebarMenuState"
     >
         <div
             class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState === 'in'"
+            *ngIf="asideGstSidebarMenuState"
         >
             <tax-sidebar
                 (navigateEvent)="handleNavigation()"
@@ -25,15 +25,15 @@
                 <div class="w-100">
                     <div class="mr-t2 payment-dropdown">
                         <div class="form-group">
-                            <dropdown-field
+                            <reactive-dropdown-field
                                 [label]="localeData?.export_type"
                                 [cssClass]="'theme-selection'"
                                 [options]="exportTypes"
-                                [defaultValue]="exportType"
+                                [labelValue]="exportType"
                                 [placeholder]="localeData?.select_export_type"
                                 [name]="'exportType'"
                                 (selectedOption)="setExportType($event)"
-                            ></dropdown-field>
+                            ></reactive-dropdown-field>
                         </div>
                     </div>
                 </div>

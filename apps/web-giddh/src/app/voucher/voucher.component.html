@@ -47,7 +47,7 @@
                                             (onShortcutPress)="addAccountFromShortcut()"
                                         >
                                             <ng-container *ngIf="!isCashInvoice">
-                                                <dropdown-field
+                                                <reactive-dropdown-field
                                                     #openAccountSelectionDropdown
                                                     [customPanelClass]="'panel-cl customer-dropdown-panel'"
                                                     [name]="'voucherDetails.customerName'"
@@ -66,14 +66,13 @@
                                                               invoiceType !== 'debit note' &&
                                                               invoiceType !== 'credit note'))
                                                     "
-                                                    [defaultValue]="invFormData.voucherDetails.customerName"
+                                                    [labelValue]="invFormData.voucherDetails.customerName"
                                                     [createNewText]="customerNotFoundText"
                                                     [enableDynamicSearch]="true"
                                                     (dynamicSearchedQuery)="
                                                         isAccountSearchData = true;
                                                         onSearchQueryChanged($event, 1, 'customer')
                                                     "
-                                                    [allowValueReset]="true"
                                                     (onClear)="resetCustomerName($event)"
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('customer')"
@@ -90,7 +89,7 @@
                                                             </div>
                                                         </span>
                                                     </ng-template>
-                                                </dropdown-field>
+                                                </reactive-dropdown-field>
                                             </ng-container>
                                             <ng-container *ngIf="isCashInvoice">
                                                 <input-field
@@ -1012,18 +1011,17 @@
                                         class="col-6 mr-t15"
                                         *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1"
                                     >
-                                        <dropdown-field
+                                        <reactive-dropdown-field
                                             #selectWarehouse
                                             [cssClass]="'multi-select'"
                                             [name]="'warehouse'"
                                             [placeholder]="localeData?.select_warehouse_placeholder"
                                             [options]="warehouses"
                                             (selectedOption)="onSelectWarehouse($event)"
-                                            [allowValueReset]="true"
                                             (onClear)="onSelectWarehouse($event)"
-                                            [defaultValue]="selectedWarehouseName"
+                                            [labelValue]="selectedWarehouseName"
                                         >
-                                        </dropdown-field>
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="row" *ngIf="isPurchaseInvoice">
@@ -1496,7 +1494,7 @@
                                     <div class="col-6" *ngIf="isCreditNote || isDebitNote">
                                         <div>
                                             <div class="w-100 position-relative">
-                                                <dropdown-field
+                                                <reactive-dropdown-field
                                                     #linkingDropdown
                                                     *ngIf="voucherApiVersion === 2"
                                                     [cssClass]="'linking-dropdown'"
@@ -1504,7 +1502,7 @@
                                                     [placeholder]="commonLocaleData?.app_select_voucher"
                                                     [options]="invoiceList$ | async"
                                                     (selectedOption)="creditNoteInvoiceSelected($event)"
-                                                    [defaultValue]="selectedInvoiceLabel"
+                                                    [labelValue]="selectedInvoiceLabel"
                                                     [hasMoreValue]="true"
                                                     [enableDynamicSearch]="true"
                                                     (dynamicSearchedQuery)="
@@ -1543,15 +1541,15 @@
                                                             </div>
                                                         </a>
                                                     </ng-template>
-                                                </dropdown-field>
-                                                <dropdown-field
+                                                </reactive-dropdown-field>
+                                                <reactive-dropdown-field
                                                     #invoiceListDropdown
                                                     *ngIf="voucherApiVersion !== 2"
                                                     [name]="'invoiceLinking'"
                                                     [placeholder]="commonLocaleData?.app_select_voucher"
                                                     [options]="invoiceList"
                                                     (selectedOption)="creditNoteInvoiceSelected($event)"
-                                                    [defaultValue]="invoiceSelectedLabel"
+                                                    [labelValue]="invoiceSelectedLabel"
                                                     [hasMoreValue]="true"
                                                     [readonly]="isEinvoiceGenerated"
                                                 >
@@ -1576,7 +1574,7 @@
                                                             </div>
                                                         </a>
                                                     </ng-template>
-                                                </dropdown-field>
+                                                </reactive-dropdown-field>
                                             </div>
                                             <div
                                                 *ngIf="selectedInvoice && !isEinvoiceGenerated"
@@ -1626,8 +1624,6 @@
                                         </div>
                                     </ng-container>
                                     <!-- For Tourist Scheme end -->
-                                    <!-- <div class="col-12"
-                *ngIf="!isCreditNote && !isDebitNote || companyCountryCode === 'AE'"></div> -->
                                 </div>
                                 <div
                                     class="row mr-t15 pb-1"
@@ -2261,15 +2257,15 @@
                                                         "
                                                     >
                                                         <div *ngIf="variants?.length > 1" class="variant-name mt-2">
-                                                            <sh-select
+                                                            <reactive-dropdown-field
                                                                 [placeholder]="localeData?.select_variant"
                                                                 [options]="variants"
                                                                 [cssClass]="'cursor-pointer'"
-                                                                (selected)="variantChanged($event, transaction, entry)"
-                                                                [isRequired]="true"
-                                                                name="{{ 'variant' + entryIdx }}"
+                                                                (selectedOption)="variantChanged($event, transaction, entry)"
+                                                                [required]="true"
+                                                                [name]="'variant' + entryIdx"
                                                                 [(ngModel)]="transaction.variant.uniqueName"
-                                                            ></sh-select>
+                                                            ></reactive-dropdown-field>
                                                         </div>
                                                     </ng-container>
                                                     <div *ngIf="transaction.fakeAccForSelect2">
@@ -2855,7 +2851,6 @@
                                                 </td>
                                             </tr>
                                             <!-- endregion -->
-                                            <!-- </ng-container> -->
                                         </ng-template>
                                     </table>
                                 </div>
@@ -2934,7 +2929,7 @@
                                                                                         }"
                                                                                     >
                                                                                         <div class="payment-mode">
-                                                                                            <dropdown-field
+                                                                                            <reactive-dropdown-field
                                                                                                 #depositDropdown
                                                                                                 [cssClass]="
                                                                                                     'pull-right'
@@ -2962,14 +2957,14 @@
                                                                                                         true
                                                                                                     )
                                                                                                 "
-                                                                                                [defaultValue]="
+                                                                                                [labelValue]="
                                                                                                     isCashInvoice
                                                                                                         ? selectedBankAccount
                                                                                                         : selectPaymentValue
                                                                                                 "
                                                                                                 class="w-100"
                                                                                             >
-                                                                                            </dropdown-field>
+                                                                                            </reactive-dropdown-field>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div
@@ -3645,7 +3640,6 @@
                                     >
                                         <button
                                             mat-stroked-button
-                                            color="warn"
                                             (click)="resetInvoiceForm(invoiceForm)"
                                             class="d-inline-block"
                                         >
@@ -3873,6 +3867,7 @@
         "
         (click)="closeAsideMenuStateForOtherTaxes()"
     ></div>
+    <!-- this component not used -->
     <generic-aside-menu-account
         [class]="accountAsideMenuState"
         [@slideInOut]="accountAsideMenuState"

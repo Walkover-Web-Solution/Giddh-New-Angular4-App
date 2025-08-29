@@ -8,7 +8,6 @@ import { AppState } from '../../../store';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
-import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -24,10 +23,8 @@ import { FormControl } from "@angular/forms";
 })
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
-    /* Aside pane state*/
-    public asideMenuState: string = 'out';
+    /* This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     public showEntryDate = true;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -50,7 +47,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public reverseChargeReportResults: any = {};
     public timeout: any;
-    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
     public universalDate: any[] = [];
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -250,7 +246,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out';
+        this.asideGstSidebarMenuState = false;
     }
 
 

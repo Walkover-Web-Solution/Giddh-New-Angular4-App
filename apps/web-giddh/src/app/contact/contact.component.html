@@ -219,13 +219,6 @@
                                             <span class="icon-arrow-down"></span>
                                         </button>
                                         <mat-menu #downloadCsvEmail="matMenu">
-                                            <!-- <button
-                                                mat-menu-item
-                                                *ngIf="selectedCheckedContacts?.length"
-                                                (click)="openEmailDialog()"
-                                            >
-                                                {{ commonLocaleData?.app_email }}
-                                            </button> -->
                                             <button mat-menu-item (click)="downloadCSV()" aria-label="download csv">
                                                 {{ commonLocaleData?.app_download_csv }}
                                             </button>
@@ -509,32 +502,26 @@
     </ng-template>
     <!--endregion-->
 
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-
-    <div *ngIf="accountAsideMenuState === 'in'">
+    <ng-template #accountAsideMenuTemplate>
         <aside-menu-account
             [activeGroupUniqueName]="selectedGroupForCreateAcc"
             [activeAccountDetails]="activeAccountDetails"
             [isUpdateAccount]="isUpdateAccount"
-            class="account-aside-menu-state transform-inherit"
-            [@slideInOut]="accountAsideMenuState"
             [commonLocaleData]="commonLocaleData"
-            (closeAsideEvent)="toggleAccountAsidePane($event)"
+            (closeAsideEvent)="accountAsideMenuDialogRef?.close()"
             (getUpdateList)="getUpdatedList($event)"
         >
         </aside-menu-account>
-    </div>
+    </ng-template>
 
-    <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-    <div class="vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
+    <ng-template #paymentAsideMenuTemplate>
         <payment-aside
-            class="account-aside-menu-state transform-inherit"
             [selectedAccForPayment]="selectedAccForPayment"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
         >
         </payment-aside>
-    </div>
+    </ng-template>
 
     <ng-template #mainTable>
         <div class="table-responsive vendor-page all-table overflow-visible">
@@ -601,7 +588,6 @@
                                             color="primary"
                                             class="mr-2 checkbox-left-side-in-table"
                                             [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
-                                            type="checkbox"
                                             [(ngModel)]="account.isSelected"
                                             (change)="selectAccount($event, account)"
                                         >
@@ -655,35 +641,28 @@
                                         class="menu-table-item"
                                         (click)="performActions(1, account)"
                                         aria-label="ledger"
-                                    >
-                                        {{ commonLocaleData?.app_goto_ledger }}
-                                    </button>
-                                    <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(2, account)"
-                                        aria-label="generate invoice"
-                                    >
-                                        {{ commonLocaleData?.app_generate_invoice }}
-                                    </button>
-                                    <!-- <button
-                                    mat-menu-item
-                                    class="menu-table-item"
-                                    (click)="performActions(4, account, $event)"
-                                    >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
-                                    <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="openCustomEmailDialog(account, activeTab, false)"
-                                        aria-label="send email"
-                                    >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button>
-                                </mat-menu>
-                            </div>
-                        </td>
+                                        >
+                                            {{ commonLocaleData?.app_goto_ledger }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            class="menu-table-item"
+                                            (click)="performActions(2, account)"
+                                            aria-label="generate invoice"
+                                        >
+                                            {{ commonLocaleData?.app_generate_invoice }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            class="menu-table-item"
+                                            (click)="openCustomEmailDialog(account, activeTab, false)"
+                                            aria-label="send email"
+                                        >
+                                            {{ commonLocaleData?.app_send_email }}
+                                        </button>
+                                    </mat-menu>
+                                </div>
+                            </td>
                         </ng-container>
 
                         <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.PARENT_GROUP" [matColumnDef]="customerColumn.value">
@@ -1015,7 +994,6 @@
                                     <div class="select-single-checkbox-wrapper">
                                         <mat-checkbox
                                             [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
-                                            type="checkbox"
                                             color="primary"
                                             class="mr-2 checkbox-left-side-in-table"
                                             (change)="selectAccount($event, account)"
@@ -1089,13 +1067,6 @@
                                         >
                                             {{ commonLocaleData?.app_send_email }}
                                         </button>
-                                        <!-- <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(4, account, $event)"
-                                    >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
                                     </mat-menu>
 
                                     <!--Modal for Mail/SMS-->

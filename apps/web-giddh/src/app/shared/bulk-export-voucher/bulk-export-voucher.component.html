@@ -5,7 +5,7 @@
         <h4 class="modal-title pull-left">
             {{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ totalItems }}
         </h4>
-        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
+        <button mat-stroked-button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
             (click)="closeModal()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -17,31 +17,20 @@
         <div class="export-modal-wrapper" *ngIf="!isLoading">
             <ng-container *ngIf="type === 'sales'">
                 <div class="row mr-b1">
-                    <div class="col-sm-4">
-                        <label>{{ localeData?.select_copy }}</label>
-                    </div>
-                    <div class="col-sm-8">
-                        <sh-select [options]="downloadCopyOptions" [placeholder]="localeData?.select_order"
-                            [multiple]="true" name="downloadCopy" [(ngModel)]="copyTypes" [isFilterEnabled]="true"
-                            [useInBuiltFilterForIOptionTypeItems]="true">
-                            <ng-template #optionTemplate let-option="option">
-                                <ng-container>
-                                    <a href="javascript:void(0)" class="list-item d-flex">
-                                        <span class="min-width-auto"><input type="checkbox"
-                                                [checked]="copyTypes.includes(option?.value)"
-                                                [value]="option?.value" /></span>&nbsp;
-                                        <span>
-                                            <div class="item">{{ option.label }}</div>
-                                        </span>
-                                    </a>
-                                </ng-container>
-                            </ng-template>
-                        </sh-select>
+                    <div class="col-sm-12">
+                        <reactive-dropdown-field 
+                            [options]="downloadCopyOptions" 
+                            [placeholder]="localeData?.select_order"
+                            [name]="'downloadCopy'" 
+                            [(ngModel)]="copyTypes" 
+                            [label]="localeData?.select_copy"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="row mr-b15">
                     <div class="col-sm-12">
-                        <button class="btn btn-success"
+                        <button mat-raised-button color="primary"
                             [disabled]="(type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading"
                             (click)="exportVouchers(false)">
                             {{ commonLocaleData?.app_download }}
@@ -62,13 +51,13 @@
                     <textarea type="text" [placeholder]="localeData?.recipients_email"
                         class="form-control mr-b15 multiple-email" name="recipients"
                         [(ngModel)]="recipients"></textarea>
-                    <button class="btn btn-success" [disabled]="
+                    <button mat-raised-button color="primary" [disabled]="
                         !recipients || recipients?.length === 0 || (type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading
                     " (click)="exportVouchers(true)">
                         {{ commonLocaleData?.app_send_email }}
                     </button>
 
-                    <button *ngIf="type !== 'sales'" class="btn btn-success" (click)="exportVouchers(false)">
+                    <button *ngIf="type !== 'sales'" mat-raised-button color="primary" (click)="exportVouchers(false)">
                         {{ commonLocaleData?.app_download }}
                     </button>
                 </div>

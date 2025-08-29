@@ -1,5 +1,4 @@
 import { takeUntil } from 'rxjs/operators';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store/roots';
@@ -11,6 +10,7 @@ import { ActiveFinancialYear } from '../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { cloneDeep, isNull, range } from '../../lodash-optimized';
+import { IOption } from '../../app.constant';
 
 export interface IGstObj {
     newGstNumber: string;

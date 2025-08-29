@@ -1,27 +1,23 @@
 <div class="modal-header d-flex align-items-center flex-row-reverse">
     <h3>{{ localeData?.connect_banks }}</h3>
-    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
+    <button mat-stroked-button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
 </div>
 <div id="my-frame" class="modal-body clearfix">
     <div *ngIf="step === 1">
         <div class="form-group">
             <label>{{ localeData?.search_provider_label }} <sup>*</sup></label>
-            <sh-select
+            <reactive-dropdown-field
                 [options]="searchResults"
                 [(ngModel)]="selectedProvider.name"
                 [isPaginationEnabled]="true"
-                [forceClearReactive]="forceClearReactive$ | async"
                 (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                 [enableDynamicSearch]="true"
-                (selected)="typeaheadOnSelect($event)"
+                (selectedOption)="typeaheadOnSelect($event)"
                 [placeholder]="localeData?.search_provider_placeholder"
-                [showClear]="false"
-                [multiple]="false"
-                [ItemHeight]="67"
             >
-            </sh-select>
+            </reactive-dropdown-field>
         </div>
-        <button class="btn btn-success btn-sm" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">
+        <button mat-raised-button color="primary" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">
             {{ commonLocaleData?.app_next }}
         </button>
     </div>
@@ -95,7 +91,7 @@
             </div>
 
             <button
-                class="btn btn-default btn-sm"
+                mat-stroked-button
                 type="button"
                 (click)="resetBankForm()"
                 [disabled]="bankSyncInProgress"
@@ -104,7 +100,7 @@
                 {{ commonLocaleData?.app_back }}
             </button>
             <button
-                class="btn btn-success btn-sm"
+                mat-raised-button color="primary"
                 type="submit"
                 *ngIf="isRefreshWithCredentials"
                 [disabled]="bankSyncInProgress"
@@ -112,7 +108,7 @@
                 {{ commonLocaleData?.app_submit }}
             </button>
             <button
-                class="btn btn-success btn-sm"
+                mat-raised-button color="primary"
                 type="button"
                 *ngIf="!isRefreshWithCredentials"
                 (click)="refreshAccount(loginForm)"

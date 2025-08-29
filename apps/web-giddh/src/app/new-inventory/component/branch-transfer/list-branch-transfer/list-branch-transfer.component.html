@@ -21,7 +21,7 @@
                                 "
                                 class="branch-width"
                             >
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [label]="commonLocaleData?.app_select_entity"
                                     [options]="currentCompanyBranches"
                                     width="100%"
@@ -29,8 +29,8 @@
                                         currentBranch.uniqueName = $event?.value; handleBranchChange($event)
                                     "
                                     [placeholder]="commonLocaleData?.app_select_entity"
-                                    [defaultValue]="currentBranch?.name"
-                                ></dropdown-field>
+                                    [labelValue]="currentBranch?.name"
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
                                 <input
@@ -44,7 +44,7 @@
                             </div>
                             <div class="text-center d-lg-flex d-none" *ngIf="showClearFilter">
                                 <div class="clear-filter">
-                                    <button class="btn btn-filter mr-0" (click)="clearFilters()">
+                                    <button mat-stroked-button class="mr-0" (click)="clearFilters()">
                                         <span class="icon-cross"></span>{{ commonLocaleData?.app_clear_filter }}
                                     </button>
                                 </div>
@@ -315,16 +315,15 @@
                         <div class="col-lg-12">
                             <div class="row">
                                 <div class="col-12 mr-b15">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         [placeholder]="commonLocaleData?.app_select_voucher + commonLocaleData.app_type"
                                         [options]="voucherTypes"
                                         (selectedOption)="selectVoucherType($event)"
-                                        [defaultValue]="branchTransferAdvanceSearchFormObj?.voucherType"
-                                        [allowValueReset]="true"
+                                        [labelValue]="branchTransferAdvanceSearchFormObj?.voucherType"
                                         (onClear)="branchTransferAdvanceSearchFormObj.voucherType = ''"
                                         [label]="commonLocaleData?.app_voucher_type"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>
@@ -333,16 +332,15 @@
                         <div class="col-lg-12">
                             <div class="row">
                                 <div class="col-12 mr-b15">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         [placeholder]="localeData?.select_condition"
                                         [options]="amountOperators"
                                         (selectedOption)="selectOperator($event)"
-                                        [defaultValue]="branchTransferAdvanceSearchFormObj?.amountOperator"
-                                        [allowValueReset]="true"
+                                        [labelValue]="branchTransferAdvanceSearchFormObj?.amountOperator"
                                         (onClear)="branchTransferAdvanceSearchFormObj.amountOperator = ''"
                                         [label]="commonLocaleData?.app_select_category"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>

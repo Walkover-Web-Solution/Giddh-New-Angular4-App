@@ -1,4 +1,3 @@
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -6,9 +5,7 @@ import { DaybookRoutingModule } from './daybook.routing.module';
 import { DaybookComponent } from './daybook.component';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { DaybookAdvanceSearchModelComponent } from 'apps/web-giddh/src/app/daybook/advance-search/daybook-advance-search.component';
-import { ShSelectModule } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -33,6 +30,7 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -42,11 +40,8 @@ import { MatMenuModule } from '@angular/material/menu';
         ReactiveFormsModule, 
         DecimalDigitsModule,
         FormsModule,
-        ModalModule.forRoot(),
-        BsDatepickerModule.forRoot(),
         Daterangepicker,
         DaybookRoutingModule,
-        ShSelectModule,
         ElementViewChildModule,
         CurrencyModule,
         SharedModule,
@@ -69,7 +64,8 @@ import { MatMenuModule } from '@angular/material/menu';
         WatchVideoModule,
         NgxMatSelectSearchModule,
         MatSelectModule,
-        MatMenuModule
+        MatMenuModule,
+        FormFieldsModule
     ]
 })
 export class DaybookModule {

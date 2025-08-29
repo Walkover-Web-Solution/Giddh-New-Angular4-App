@@ -7,7 +7,7 @@
 >
     <div class="subscription-container mx-auto pd-15 overflow-visible">
         <div class="button-wrapper d-flex w-100 pd-l1 justify-content-between pd-t1">
-            <button
+            <button mat-stroked-button
                 *ngIf="
                     showClearFilter ||
                     subscriptionListForm?.controls['companyName']?.value ||
@@ -26,15 +26,15 @@
             </button>
             <div class="min160 mr-l1" *ngIf="!showClearFilter"></div>
             <div class="d-flex align-items-baseline">
-                <dropdown-field
+                <reactive-dropdown-field
                     [name]="'status'"
                     [autocomplete]="'disabled'"
                     [label]="commonLocaleData?.app_status"
                     [options]="statusOptions"
                     (selectedOption)="selectStatus($event)"
-                    [defaultValue]="selectedStatus"
+                    [labelValue]="selectedStatus"
                 >
-                </dropdown-field>
+                </reactive-dropdown-field>
                 <button mat-raised-button class="min160 mr-l1" color="primary" (click)="createSubscription()">
                     + {{ commonLocaleData?.app_add }} {{ localeData?.tab_heading }}
                 </button>

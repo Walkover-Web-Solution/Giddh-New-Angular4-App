@@ -28,15 +28,12 @@
             <div class="row">
                 <div class="col-6 form-group">
                     <label>Date <sup>*</sup></label>
-                    <input
-                        name="dateRange"
+                    <giddh-datepicker
+                        name="entryDate"
                         formControlName="inventoryEntryDate"
-                        type="text"
-                        autocomplete="off"
+                        [appearance]="'outline'"
                         class="form-control"
-                        bsDatepicker
-                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                    />
+                    ></giddh-datepicker>
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
                     >
@@ -50,27 +47,23 @@
 
                 <div class="col-6 form-group" *ngIf="mode === 'receiver'">
                     <label class="mr-b1">Product Name <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="stockListOptions"
-                        [multiple]="false"
                         [placeholder]="'Select Product'"
                         formControlName="stock"
-                        (selected)="stockChanged($event)"
-                        [isRequired]="true"
-                    ></sh-select>
+                        (selectedOption)="stockChanged($event)"
+                    ></reactive-dropdown-field>
                 </div>
 
                 <div class="col-6 form-group" *ngIf="mode === 'product'">
                     <label class="mr-b1">Receiver <sup>*</sup></label>
-                    <sh-select
+                    <reactive-dropdown-field
                         [options]="userListOptions"
-                        [multiple]="false"
                         [placeholder]="'Select Receiver'"
                         formControlName="inventoryUser"
-                        (selected)="userChanged($event)"
-                        [isRequired]="true"
+                        (selectedOption)="userChanged($event)"
                     >
-                    </sh-select>
+                    </reactive-dropdown-field>
                 </div>
             </div>
 
@@ -98,40 +91,31 @@
             >
                 <div [formGroupName]="i">
                     <div class="col-4 form-group" *ngIf="mode === 'receiver'">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="userListOptions"
-                            [multiple]="false"
                             [placeholder]="'Select Receiver'"
-                            (selected)="userChanged($event, i)"
+                            (selectedOption)="userChanged($event, i)"
                             formControlName="inventoryUser"
-                            [ItemHeight]="'33'"
-                            [isRequired]="true"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
 
                     <div class="col-4 form-group" *ngIf="mode === 'product'">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="stockListOptions"
-                            [multiple]="false"
                             [placeholder]="'Select Product'"
-                            (selected)="stockChanged($event, i)"
-                            [ItemHeight]="'33'"
+                            (selectedOption)="stockChanged($event, i)"
                             formControlName="stock"
-                            [isRequired]="true"
-                        ></sh-select>
+                        ></reactive-dropdown-field>
                     </div>
 
                     <div class="col-4 form-group">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="stockUnitsOptions"
                             [placeholder]="'Choose unit'"
                             formControlName="stockUnit"
-                            [multiple]="false"
-                            [ItemHeight]="33"
-                            [isRequired]="true"
                         >
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
 
                     <div class="col-4 form-group">
@@ -142,13 +126,13 @@
 
                             <div class="pull-right mr-t05 unit-add">
                                 <button
-                                    class="btn-link"
+                                    mat-stroked-button
                                     (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last"
                                 >
                                     <i class="icon-plus add-row"></i>
                                 </button>
-                                <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
+                                <button mat-stroked-button (click)="deleteTransactionItem(i)" *ngIf="!last">
                                     <i class="icon-cross delete"></i>
                                 </button>
                             </div>
@@ -166,8 +150,8 @@
 
             <div class="row">
                 <div class="col-md-12 text-left mr-t1">
-                    <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
-                    <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                    <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
+                    <button mat-raised-button color="primary" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save
                     </button>
                 </div>

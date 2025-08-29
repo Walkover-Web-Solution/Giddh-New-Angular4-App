@@ -1213,6 +1213,20 @@ body {
     }
 }
 
+.custom-giddh-datepicker {
+    .mat-datepicker-toggle {
+        position: absolute;
+        right: -11%;
+        top: 0px;
+    }
+}
+
+body {
+    div > a[href*="froala.com/wysiwyg-editor"] {
+        display: none !important;
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -1792,20 +1806,6 @@ giddh-page-loader {
         .from-or-to-acc[type="text"],
         .form-control.debit-credit[type="text"] {
             border: 1px solid var(--color-secondary-input-bar-border) !important;
-        }
-    }
-}
-
-.on-setting-page.setting-sidebar-open {
-    .settings-profile-tabs {
-        .profile-tab-container {
-            .account-aside-menu-state {
-                .aside-pane {
-                    #closedialog {
-                        top: 18px;
-                    }
-                }
-            }
         }
     }
 }
@@ -2831,10 +2831,6 @@ modal-container.modal {
     width: 150px;
 }
 
-.sh-select-border .menu .scrollable-content > .item {
-    border-bottom: 1px solid var(--color-common-primary-border);
-    height: initial !important;
-}
 
 /* my css end */
 
@@ -7855,16 +7851,6 @@ app-header {
     border-radius: 0;
 }
 
-.account-aside-menu-state #closedialog {
-    display: block;
-    position: fixed;
-    right: 472px;
-    top: var(--top-distance);
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-}
-
 .contact-main .ps-content {
     padding-bottom: 260px;
 }
@@ -8777,18 +8763,6 @@ button.ladda-button,
 button.ladda-button .ladda-spinner,
 button.ladda-button .ladda-label {
     transition: none !important;
-}
-
-.account-aside-menu-state #closedialog {
-    display: block;
-    position: absolute;
-    right: 10px;
-    top: 17px;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    color: var(--color-primary-right-side-popup-header-text);
 }
 
 .ng-select-wrap.select-list.select-group .below {
@@ -13819,6 +13793,11 @@ mat-list {
     background: var(--color-white) !important;
 }
 
+.only-right-radius {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
+
 .template-froala-wrapper {
     .balance-options {
         height: auto !important;
@@ -13887,11 +13866,9 @@ mat-list {
     }
 }
 
-.overlay {
+.custom-cdk-overlay-wrapper {
     padding: 4px 8px;
     border-radius: 4px;
     box-shadow: var(--mat-menu-box-shadow);
-    max-width: 300px;
-    z-index: 1000;
     background-color: var(--color-dark-fog);
 }

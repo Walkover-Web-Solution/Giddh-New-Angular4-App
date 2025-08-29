@@ -10,7 +10,6 @@ import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, PayPalCl
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { CompanyActions } from "../../actions/company.actions";
-import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS, SYNC_TALLY_HELP_DOC_URL } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
@@ -23,7 +22,6 @@ import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationT
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
-import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonActions } from '../../actions/common.actions';
@@ -72,7 +70,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @Input() public selectedTabParent: number;
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: TemplateRef<any>;
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
-    @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
     /** Instance of create new account modal */
     @ViewChild('createNewAccountModal', { static: true }) public createNewAccountModal: TemplateRef<any>;
     /** Instance of edit account modal */

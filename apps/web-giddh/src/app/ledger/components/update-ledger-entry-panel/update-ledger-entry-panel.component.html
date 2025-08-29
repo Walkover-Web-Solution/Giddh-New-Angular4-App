@@ -1389,31 +1389,31 @@
                         <div class="d-flex justify-content-between w-100">
                             <ng-container *ngIf="isStockPresent && stockVariants | async as stockVariants">
                                 <div class="col-sm-3 pd-r1" *ngIf="stockVariants.length > 1">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         [id]="'update-ledger-select-variant'"
                                         [name]="'stockVariants'"
                                         [label]="localeData?.select_variant"
                                         (selectedOption)="variantChanged($event)"
                                         [placeholder]="localeData?.select_variant"
-                                        [defaultValue]="selectedStockVariant.name"
+                                        [labelValue]="selectedStockVariant.name"
                                         [options]="stockVariants"
                                         [required]="true"
                                         [showError]="!selectedStockVariant.uniqueName"
-                                    ></dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </ng-container>
                             <ng-container *ngIf="isStockPresent && warehouses?.length > 1">
                                 <div class="col-sm-3 pd-r1">
                                     <div class="select-warehouse">
-                                        <dropdown-field
+                                        <reactive-dropdown-field
                                             id="update-ledger-select-warehouse"
-                                            [defaultValue]="selectedWarehouseName"
+                                            [labelValue]="selectedWarehouseName"
                                             [placeholder]="localeData?.select_warehouse"
                                             [options]="warehouses"
                                             (selectedOption)="selectWarehouse($event)"
                                             [label]="localeData?.select_warehouse"
                                         >
-                                        </dropdown-field>
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                             </ng-container>
@@ -1801,7 +1801,7 @@
                                     <span class="font-12 pull-right pd-t05">{{ vm.selectedLedger?.otherTaxModal?.appliedOtherTax?.name }}</span>
                                 </div>
                             </div>
-                            <div class="clearfix pd-r1 pd-l1 pd-b1 text-right bd-rb pr-0 pd-t05">
+                            <div class="clearfix pd-r1 pd-l1 pd-b1 text-right bd-rb pr-0">
                                 <span class="in-words font-15">
                                     {{ vm.grandTotal | myNumberToWordsPipe | lowercase }}
                                 </span>
@@ -1843,15 +1843,15 @@
                             </ng-container>
                             <ng-container *ngIf="shouldShowItcSection">
                                 <div class="taxable-amount-section">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         [id]="'update-ledger-itc-type'"
-                                        [defaultValue]="vm.selectedLedger.itcAvailable"
+                                        [labelValue]="vm.selectedLedger.itcAvailable"
                                         [placeholder]="localeData?.itc_type"
                                         [name]="'itcType'"
                                         [label]="localeData?.itc_type"
                                         [options]="availableItcList"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                 </div>
                             </ng-container>
 
@@ -1913,7 +1913,7 @@
                                                     offsetX: 8
                                                 }
                                             ]">
-                                            <div class="tax-tooltip font-14 overlay" (mouseenter)="openAdjustmentInfo(true)"
+                                            <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper" (mouseenter)="openAdjustmentInfo(true)"
                                             (mouseleave)="openAdjustmentInfo(false)">
                                                 <p class="mr-b1">
                                                     <strong>{{ localeData?.adjustment }}</strong>
@@ -2001,28 +2001,6 @@
                                                     ></input-field>
                                                 </div>
                                             </div>
-                                            <!-- <div
-                                            *ngIf="
-                                                item.voucherType === 'receipt' &&
-                                                item.subVoucher === 'ADVANCE_RECEIPT' &&
-                                                voucherApiVersion !== 2
-                                            "
-                                        >
-                                            <div class="form-group tax-width">
-                                                <label>{{ commonLocaleData?.app_tax }}</label>
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    id="update-ledger-voucher-tax"
-                                                    class="form-control mr-b1 mat-field-border"
-                                                    decimalDigitsDirective
-                                                    [mask]="vm.inputMaskFormat"
-                                                    [prefix]="item.accountCurrency?.symbol"
-                                                    [(ngModel)]="item.calculatedTaxAmount"
-                                                    disabled
-                                                />
-                                            </div>
-                                        </div> -->
                                         </div>
                                     </div>
                                     <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">
@@ -2057,16 +2035,16 @@
                                             <tr class="d-flex align-items-center flex-wrap">
                                                 <td class="select2-parent pd-r1">
                                                     <div class="form-group mr-b15">
-                                                        <dropdown-field
+                                                        <reactive-dropdown-field
                                                             [label]="commonLocaleData?.app_voucher_type"
                                                             [id]="'update-ledger-voucher-type-default'"
                                                             [options]="vm.voucherTypeList"
-                                                            [defaultValue]="vm.selectedLedger.voucher.name | titlecase"
+                                                            [labelValue]="vm.selectedLedger.voucher.name | titlecase"
                                                             [ngClass]="{'read-only': isEinvoiceGenerated}"
                                                             (selectedOption)="getInvoiceListsData($event)"
                                                             [readonly]="isEinvoiceGenerated"
                                                             [cssClass]="'width-115'"
-                                                        ></dropdown-field>
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
 
@@ -2153,7 +2131,7 @@
                                                                         }})
                                                                     </div>
                                                                     <div class="option-value">
-                                                                        ({{ commonLocaleData?.app_amount }}:
+                                                                        {{ commonLocaleData?.app_amount }}:
                                                                         <span class="d-inline-flex">
                                                                             <amount-field
                                                                                 [amount]="
@@ -2167,71 +2145,6 @@
                                                                 </a>
                                                             </ng-template>
                                                         </reactive-dropdown-field>
-                                    <!-- <sh-select
-                                                        *ngIf="voucherApiVersion !== 2"
-                                                        id="update-ledger-invoice-voucher-number"
-                                                        [options]="invoiceList"
-                                                        [placeholder]="commonLocaleData?.app_select_accounts"
-                                                        [(ngModel)]="selectedInvoice"
-                                                        [notFoundLink]="false"
-                                                        [forceClearReactive]="forceClear$ | async"
-                                                        [class.disabled-ledger]="
-                                                            !isPettyCash &&
-                                                            (currentOrganizationType === 'COMPANY' ||
-                                                                isConsolidatedBranch) &&
-                                                            branches?.length > 1
-                                                        "
-                                                        (selected)="creditNoteInvoiceSelected($event)"
-                                                        [multiple]="false"
-                                                        [disabled]="
-                                                            isEinvoiceGenerated ||
-                                                            (!isPettyCash &&
-                                                                (currentOrganizationType === 'COMPANY' ||
-                                                                    isConsolidatedBranch) &&
-                                                                branches?.length > 1)
-                                                        "
-                                                        [ItemHeight]="67"
-                                                        [showClear]="false"
-                                                    >
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <a href="javascript:void(0)" class="list-item sh-template">
-                                                                <div class="item">
-                                                                    {{
-                                                                        (vm.selectedLedger?.voucher?.shortCode ===
-                                                                            "pur" ||
-                                                                            vm.selectedLedger?.voucher?.shortCode ===
-                                                                                "purchase") &&
-                                                                        !option.label
-                                                                            ? commonLocaleData?.app_not_available
-                                                                            : option.label
-                                                                    }}
-                                                                </div>
-                                                                <div class="item-unique">
-                                                                    ({{ localeData?.dated }}:
-                                                                    {{
-                                                                        option.additional?.date ??
-                                                                            option.additional?.voucherDate
-                                                                    }})
-                                                                </div>
-                                                                <div class="item-unique">
-                                                                    ({{ commonLocaleData?.app_amount }}:
-                                                                    <span class="d-inline-flex">
-                                                                        <amount-field
-                                                                            [amount]="
-                                                                                voucherApiVersion === 2
-                                                                                    ? option.additional
-                                                                                          ?.unadjustedAmount
-                                                                                          ?.amountForAccount
-                                                                                    : option.additional?.balanceDue
-                                                                                          ?.amountForAccount
-                                                                            "
-                                                                        >
-                                                                        </amount-field>
-                                                                    </span>
-                                                                </div>
-                                                            </a>
-                                                        </ng-template>
-                                                    </sh-select> -->
                                                     </div>
                                                 </td>
                                                 <td
@@ -2557,13 +2470,14 @@
                                             >
                                                 {{ commonLocaleData?.app_update }}
                                             </button>
-                                            <button
+                                            <button 
                                                 *ngIf="
                                                     !isDaybook &&
                                                     !((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && branches?.length > 1)
                                                 "
                                                 aria-label="Duplicate entry button"
-                                                mat-stroked-button
+                                                mat-raised-button
+                                                color="primary"
                                                 (click)="duplicateEntry()"
                                             >
                                                 {{ localeData?.duplicate }}
@@ -2571,8 +2485,8 @@
 
                                             <button
                                                 class="ml-auto"
-                                                mat-stroked-button
-                                                color="warn"
+                                                mat-raised-button
+                                                color="primary"
                                                 id="update-ledger-delete-button"
                                                 (click)="showDeleteEntryModal()"
                                             >

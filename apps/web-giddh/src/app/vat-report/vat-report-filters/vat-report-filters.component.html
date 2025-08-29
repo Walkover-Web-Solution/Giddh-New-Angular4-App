@@ -1,11 +1,11 @@
 <div class="advance-search-by-date date-advance-search d-flex justify-content-center row-gap column-gap15">
     <div class="input-width">
-        <dropdown-field [options]="financialYears" (selectedOption)="getYearStartAndEndDate($event)"
-            [placeholder]="commonLocaleData?.app_select_year" [defaultValue]="selectedYear"></dropdown-field>
+        <reactive-dropdown-field [options]="financialYears" (selectedOption)="getYearStartAndEndDate($event)"
+            [placeholder]="commonLocaleData?.app_select_year" [labelValue]="selectedYear"></reactive-dropdown-field>
     </div>
     <div class="input-width" *ngIf="year && selectedYear">
-        <dropdown-field [options]="months" (selectedOption)="getMonthStartAndEndDate($event)"
-            [placeholder]="commonLocaleData?.app_select_month" [defaultValue]="selectedMonth?.label"></dropdown-field>
+        <reactive-dropdown-field [options]="months" (selectedOption)="getMonthStartAndEndDate($event)"
+            [placeholder]="commonLocaleData?.app_select_month" [labelValue]="selectedMonth?.label"></reactive-dropdown-field>
     </div>
     <div class="custom-datepicker-wrapper">
         <div 
@@ -29,38 +29,38 @@
     <div *ngIf="
             currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
         " class="input-width">
-        <dropdown-field [label]="commonLocaleData?.app_entity" [options]="currentCompanyBranches" width="100%"
+        <reactive-dropdown-field [label]="commonLocaleData?.app_entity" [options]="currentCompanyBranches" width="100%"
             (selectedOption)="
                 currentBranch.uniqueName = $event.value; handleBranchChange($event)
-            " [placeholder]="commonLocaleData?.app_select_entity"></dropdown-field>
+            " [placeholder]="commonLocaleData?.app_select_entity"></reactive-dropdown-field>
     </div>
     <div *ngIf="taxes?.length > 1" class="input-width">
-        <dropdown-field
+        <reactive-dropdown-field
             [label]="taxType.label"
             [options]="taxes" (selectedOption)="getVatReport($event)" [placeholder]="taxType.placeholder"
-            [defaultValue]="taxes[0]?.label" [required]="true">
-        </dropdown-field>
+            [labelValue]="taxes[0]?.label" [required]="true">
+        </reactive-dropdown-field>
     </div>
 
     <div class="ml-auto d-flex justify-content-center column-gap1 align-items-center">
         <div *ngIf="isZimbabweCompany && taxNumber" class="input-width">
-            <dropdown-field [label]="commonLocaleData?.app_currency" [options]="vatReportCurrencyList"
+            <reactive-dropdown-field [label]="commonLocaleData?.app_currency" [options]="vatReportCurrencyList"
                 (selectedOption)="onCurrencyChange($event)" [placeholder]="commonLocaleData?.app_select"
-                [defaultValue]="vatReportCurrencyCode" [required]="true">
-            </dropdown-field>
+                [labelValue]="vatReportCurrencyCode" [required]="true">
+            </reactive-dropdown-field>
         </div>
         <ng-container *ngIf="isUSCompany && taxNumber">
             <div *ngIf="isSalesTaxRateWise || isSalesTaxAccountWise" class="input-width">
-                <dropdown-field [label]="commonLocaleData?.app_tax_authority" [options]="taxAuthorityList"
+                <reactive-dropdown-field [label]="commonLocaleData?.app_tax_authority" [options]="taxAuthorityList"
                     (selectedOption)="onTaxAuthorityChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority"
-                    [defaultValue]="taxAuthority.taxAuthorityName" [required]="true">
-                </dropdown-field>
+                    [labelValue]="taxAuthority.taxAuthorityName" [required]="true">
+                </reactive-dropdown-field>
             </div>
             <div *ngIf="isSalesTaxAccountWise" class="input-width">
-                <dropdown-field [label]="commonLocaleData?.app_tax" [options]="taxList"
+                <reactive-dropdown-field [label]="commonLocaleData?.app_tax" [options]="taxList"
                     (selectedOption)="onTaxChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax"
-                    [defaultValue]="taxAuthority.taxName" [required]="true">
-                </dropdown-field>
+                    [labelValue]="taxAuthority.taxName" [required]="true">
+                </reactive-dropdown-field>
             </div>
         </ng-container>
         <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany || isUSCompany)" class="export-btn d-flex justify-content-end w100">

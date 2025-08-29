@@ -4,13 +4,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
@@ -21,7 +18,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { BalanceSheetComponent } from './components/balance-sheet/balance-sheet.component';
@@ -91,7 +88,6 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
 
     imports: [
         CommonModule,
-        ModalModule.forRoot(),
         FormsModule,
         ReactiveFormsModule,
         Daterangepicker,
@@ -103,9 +99,9 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         }),
         HighlightModule,
         RecTypeModule,
-        ShSelectModule,
+        FormFieldsModule,
         ClickOutsideModule,
-        BsDropdownModule.forRoot(),
+        
         CurrencyModule,
         AccountDetailModalModule,
         ScrollingModule,

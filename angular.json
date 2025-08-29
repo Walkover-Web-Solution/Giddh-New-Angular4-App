@@ -47,39 +47,13 @@
                             "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
                             "node_modules/froala-editor/css/froala_style.min.css",
                             "node_modules/tributejs/dist/tribute.css",
-                            "node_modules/froala-editor/css/themes/gray.min.css",
-                            "node_modules/tinymce/skins/ui/oxide/skin.min.css",
-                            "node_modules/tinymce/skins/content/default/content.min.css"    
+                            "node_modules/froala-editor/css/themes/gray.min.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",
                             "apps/web-giddh/src/assets/js/intl-tel-input.js",
                             "node_modules/froala-editor/js/froala_editor.pkgd.min.js",
-                            "node_modules/tributejs/dist/tribute.js",
-                            "node_modules/tinymce/tinymce.min.js",
-                            "node_modules/tinymce/plugins/advlist/plugin.min.js",
-                            "node_modules/tinymce/plugins/autolink/plugin.min.js",
-                            "node_modules/tinymce/plugins/lists/plugin.min.js",
-                            "node_modules/tinymce/plugins/link/plugin.min.js",
-                            "node_modules/tinymce/plugins/image/plugin.min.js",
-                            "node_modules/tinymce/plugins/charmap/plugin.min.js",
-                            "node_modules/tinymce/plugins/preview/plugin.min.js",
-                            "node_modules/tinymce/plugins/anchor/plugin.min.js",
-                            "node_modules/tinymce/plugins/searchreplace/plugin.min.js",
-                            "node_modules/tinymce/plugins/visualblocks/plugin.min.js",
-                            "node_modules/tinymce/plugins/code/plugin.min.js",
-                            "node_modules/tinymce/plugins/fullscreen/plugin.min.js",
-                            "node_modules/tinymce/plugins/insertdatetime/plugin.min.js",
-                            "node_modules/tinymce/plugins/media/plugin.min.js",
-                            "node_modules/tinymce/plugins/table/plugin.min.js",
-                            "node_modules/tinymce/plugins/codesample/plugin.min.js",
-                            "node_modules/tinymce/plugins/help/plugin.min.js",
-                            "node_modules/tinymce/plugins/wordcount/plugin.min.js",
-                            "node_modules/tinymce/plugins/emoticons/plugin.min.js",
-                            "node_modules/tinymce/plugins/pagebreak/plugin.min.js",
-                            "node_modules/tinymce/plugins/nonbreaking/plugin.min.js",
-                            "node_modules/tinymce/plugins/save/plugin.min.js",
-                            "node_modules/tinymce/plugins/directionality/plugin.min.js"
+                            "node_modules/tributejs/dist/tribute.js"
                         ]
                     },
                     "configurations": {

@@ -104,7 +104,9 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     }
 
     data = this.newLineToBR(data);
-    data.sections['footer'].data['grandTotal'].field = 'grandTotal';
+    if (data?.sections?.footer?.data?.['grandTotal']) {
+      data.sections['footer'].data['grandTotal'].field = 'grandTotal';
+    }
     data.copyFrom = copiedTemplate?.uniqueName;
     this.setFontSizes(data);
     this.ensureTextUnderSlogan(data);
@@ -113,12 +115,16 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     this.syncVoucherLabels(data);
 
     this.store.pipe(select(state => state.session), take(1)).subscribe(session => {
-      const companyName = session.companies.find((company) => company?.uniqueName === session.companyUniqueName)?.name;
-      if (!data?.sections?.header?.data['companyName']?.label) {
-        data.sections['header'].data['companyName'].label = companyName;
+      const companyName = session?.companies?.find((company) => company?.uniqueName === session?.companyUniqueName)?.name;
+      if (!data?.sections?.header?.data?.['companyName']?.label) {
+        if (data?.sections?.header?.data?.['companyName']) {
+          data.sections['header'].data['companyName'].label = companyName;
+        }
       }
-      if (!data?.sections?.footer?.data['companyName']?.label) {
-        data.sections['footer'].data['companyName'].label = companyName;
+      if (!data?.sections?.footer?.data?.['companyName']?.label) {
+        if (data?.sections?.footer?.data?.['companyName']) {
+          data.sections['footer'].data['companyName'].label = companyName;
+        }
       }
     });
     this.invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -127,7 +133,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
         this.dialogRef.close(true);
       } else {
         this.toasty.errorToast(res?.message, res?.code);
-        this.dialogRef.close(false);
       }
     });
   }
@@ -140,7 +145,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   private setFontSizes(data: any): void {
-    if (data.fontSize) {
+    if (data?.fontSize) {
       data.fontSmall = data.fontSize - 4;
       data.fontDefault = data.fontSize;
       data.fontMedium = data.fontSize - 2;
@@ -155,11 +160,11 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   private ensureTextUnderSlogan(data: any): void {
-    const tus = data.sections['footer'].data['textUnderSlogan'];
+    const tus = data?.sections?.['footer']?.data?.['textUnderSlogan'];
     if (!tus?.display || !tus?.label) {
-      if (!tus) {
+      if (!tus && data?.sections?.['footer']?.data) {
         data.sections['footer'].data['textUnderSlogan'] = { label: '', display: false };
-      } else {
+      } else if (tus) {
         tus.display = false;
         tus.label = '';
       }
@@ -175,7 +180,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    */
   private cleanTemplateFields(data: any): void {
     const specialTypes = [TemplateTypeEnum.GstTemplateA, TemplateTypeEnum.ThermalTemplate, TemplateTypeEnum.TallyTemplate];
-    if (!specialTypes.includes((data.templateType || '').toLowerCase())) {
+    if (!specialTypes.includes((data?.templateType || '').toLowerCase())) {
       delete data?.sections?.header?.data?.showCompanyAddress;
       delete data?.sections?.header?.data?.showQrCode;
       delete data?.sections?.header?.data?.showEInvoiceDetails;
@@ -194,12 +199,20 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   private syncVoucherLabels(data: any): void {
-    if (this.inputData.templateType === 'voucher') {
-      data.sections['header'].data['invoiceDate'].label = data.sections['header'].data['voucherDate'].label;
-      data.sections['header'].data['invoiceNumber'].label = data.sections['header'].data['voucherNumber'].label;
+    if (this.inputData?.templateType === 'voucher') {
+      if (data?.sections?.header?.data?.['invoiceDate'] && data?.sections?.header?.data?.['voucherDate']) {
+        data.sections['header'].data['invoiceDate'].label = data.sections['header'].data['voucherDate'].label;
+      }
+      if (data?.sections?.header?.data?.['invoiceNumber'] && data?.sections?.header?.data?.['voucherNumber']) {
+        data.sections['header'].data['invoiceNumber'].label = data.sections['header'].data['voucherNumber'].label;
+      }
     } else {
-      data.sections['header'].data['voucherDate'].label = data.sections['header'].data['invoiceDate'].label;
-      data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
+      if (data?.sections?.header?.data?.['voucherDate'] && data?.sections?.header?.data?.['invoiceDate']) {
+        data.sections['header'].data['voucherDate'].label = data.sections['header'].data['invoiceDate'].label;
+      }
+      if (data?.sections?.header?.data?.['voucherNumber'] && data?.sections?.header?.data?.['invoiceNumber']) {
+        data.sections['header'].data['voucherNumber'].label = data.sections['header'].data['invoiceNumber'].label;
+      }
     }
   }
 
@@ -216,9 +229,15 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     }
     data.updatedAt = null;
     data.updatedBy = null;
-    data.sections['header'].data['address'].label = '';
-    data.sections['table'].data['taxes'].field = 'taxes';
-    data.sections['footer'].data['grandTotal'].field = 'grandTotal';
+    if (data?.sections?.header?.data?.['address']) {
+      data.sections['header'].data['address'].label = '';
+    }
+    if (data?.sections?.table?.data?.['taxes']) {
+      data.sections['table'].data['taxes'].field = 'taxes';
+    }
+    if (data?.sections?.footer?.data?.['grandTotal']) {
+      data.sections['footer'].data['grandTotal'].field = 'grandTotal';
+    }
     this.setFontSizesUpdate(data);
     this.ensureMessage1(data);
     this.ensureTextUnderSloganUpdate(data);
@@ -244,7 +263,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   private setFontSizesUpdate(data: any): void {
-    if (data.fontSize) {
+    if (data?.fontSize) {
       data.fontSize = Number(data.fontSize);
       data.fontSmall = data.fontSize - 4;
       data.fontDefault = data.fontSize;
@@ -260,8 +279,8 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   private ensureMessage1(data: any): void {
-    const msg1 = data.sections['footer'].data['message1'];
-    if (!msg1?.display || !msg1?.label) {
+    const msg1 = data?.sections?.['footer']?.data?.['message1'];
+    if (msg1 && (!msg1?.display || !msg1?.label)) {
       msg1.display = false;
       msg1.label = '';
     }
@@ -275,8 +294,8 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   private ensureTextUnderSloganUpdate(data: any): void {
-    const tus = data.sections['footer'].data['textUnderSlogan'];
-    if (!tus?.display || !tus?.label) {
+    const tus = data?.sections?.['footer']?.data?.['textUnderSlogan'];
+    if (tus && (!tus?.display || !tus?.label)) {
       tus.display = false;
       tus.label = '';
     }
@@ -290,18 +309,18 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   public newLineToBR(template: any): any {
-    const footerData = template.sections['footer'].data;
-    if (footerData['message1'] && typeof footerData['message1'].label === 'string') {
+    const footerData = template?.sections?.['footer']?.data;
+    if (footerData?.['message1'] && typeof footerData['message1']?.label === 'string') {
       footerData['message1'].label = footerData['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    } else if (footerData['message1']) {
+    } else if (footerData?.['message1']) {
       footerData['message1'].label = '';
     }
-    if (footerData['companyAddress'] && typeof footerData['companyAddress'].label === 'string') {
+    if (footerData?.['companyAddress'] && typeof footerData['companyAddress']?.label === 'string') {
       footerData['companyAddress'].label = footerData['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    } else if (footerData['companyAddress']) {
+    } else if (footerData?.['companyAddress']) {
       footerData['companyAddress'].label = '';
     }
-    if (footerData['slogan'] && typeof footerData['slogan'].label === 'string') {
+    if (footerData?.['slogan'] && typeof footerData['slogan']?.label === 'string') {
       footerData['slogan'].label = footerData['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     }
     return template;

@@ -18,6 +18,7 @@ import { DownloadsComponent } from "./downloads.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatInputModule } from "@angular/material/input";
+import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { MatInputModule } from "@angular/material/input";
         SharedModule,
         MatTabsModule,
         MatTooltipModule,
-        MatInputModule
+        MatInputModule,
+        FormFieldsModule
     ]
 })
 

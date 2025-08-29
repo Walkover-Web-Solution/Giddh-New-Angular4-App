@@ -1,5 +1,4 @@
 import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
-import { animate, state, style, transition, trigger } from "@angular/animations";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import {
     ChangeDetectorRef,
@@ -17,7 +16,6 @@ import {
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
 import { combineLatest, BehaviorSubject, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
@@ -28,7 +26,7 @@ import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,
@@ -52,7 +50,7 @@ import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
@@ -64,18 +62,6 @@ import { ContactsTab, ContactsColumn } from './contacts.enum';
     selector: "contact-detail",
     templateUrl: "./contact.component.html",
     styleUrls: ["./contact.component.scss"],
-    animations: [
-        trigger("slideInOut", [
-            state("in", style({
-                transform: "translate3d(0, 0, 0)",
-            })),
-            state("out", style({
-                transform: "translate3d(100%, 0, 0)",
-            })),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
     providers: [ContactComponentStore]
 })
 export class ContactComponent implements OnInit, OnDestroy {
@@ -92,8 +78,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public sundryCreditorsAccounts: any[] = [];
     public activeTab: any = "";
     public groupUniqueName: any;
-    public accountAsideMenuState: string = "out";
-    public paymentAsideMenuState: string = "out";
     public selectedAccForPayment: any;
     public dueAmountReportRequest: DueAmountReportQueryRequest;
     public selectedGroupForCreateAcc: "sundrydebtors" | "sundrycreditors" = "sundrydebtors";
@@ -124,6 +108,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
     @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
+    /** Template reference for aside menu account modal */
+    @ViewChild("accountAsideMenuTemplate", { static: true }) public accountAsideMenuTemplate: TemplateRef<any>;
+    /** Template reference for aside menu payment modal */
+    @ViewChild("paymentAsideMenuTemplate", { static: true }) public paymentAsideMenuTemplate: TemplateRef<any>;
+    /** Reference for account aside menu dialog */
+    public accountAsideMenuDialogRef: MatDialogRef<any>;
+    /** Reference for payment aside menu dialog */
+    public paymentAsideMenuDialogRef: MatDialogRef<any>;
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
@@ -438,9 +430,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.accountAsideMenuState === "in") {
-                    this.toggleAccountAsidePane();
-                }
+                this.accountAsideMenuDialogRef?.close();
                 this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -695,40 +685,31 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.activeAccountDetails = account;
         this.isUpdateAccount = true;
         this.selectedGroupForCreateAcc = account ? account.groupUniqueName : openFor === "customer" ? "sundrydebtors" : "sundrycreditors";
-        this.toggleAccountAsidePane();
+        this.openAccountAsidePaneDialog();
     }
 
     public openAddAndManage(openFor: "customer" | "vendor") {
         this.isUpdateAccount = false;
         this.selectedGroupForCreateAcc = openFor === "customer" ? "sundrydebtors" : "sundrycreditors";
-        this.toggleAccountAsidePane();
+        this.openAccountAsidePaneDialog();
     }
 
-    public toggleAccountAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
-
-        this.toggleBodyClass();
+    /**
+     * Opens account aside menu dialog
+     * @memberof ContactComponent
+     */
+    public openAccountAsidePaneDialog(): void {
+        this.accountAsideMenuDialogRef = this.dialog.open(this.accountAsideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     public getUpdatedList(grpName?: any): void {
         if (grpName) {
             this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$)).subscribe(response => {
-                if (!response && this.accountAsideMenuState === "in") {
-                    this.toggleAccountAsidePane();
+                if (!response) {
+                    this.accountAsideMenuDialogRef?.close();
                     this.getAccounts(this.fromDate, this.toDate, null, "true", this.pageSizeOptions[2], this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
             });
-        }
-    }
-
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === "in") {
-            document.querySelector("body").classList.add("fixed");
-        } else {
-            document.querySelector("body").classList.remove("fixed");
         }
     }
 

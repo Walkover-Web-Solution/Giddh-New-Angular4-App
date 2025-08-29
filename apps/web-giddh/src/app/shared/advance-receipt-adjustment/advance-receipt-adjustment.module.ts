@@ -7,7 +7,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { LaddaModule } from 'angular2-ladda';
 import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
 import { SelectModule } from '../../theme/ng-select/ng-select';
-import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { AmountFieldComponentModule } from '../amount-field/amount-field.module';
 import { NgxMaskModule } from '../helpers/directives/ngx-mask';
@@ -30,7 +29,6 @@ import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.
         NgxMaskModule.forRoot(),
         CurrencyModule,
         TranslateDirectiveModule,
-        ShSelectModule,
         ReplacePipeModule,
         MatButtonModule,
         MatInputModule,

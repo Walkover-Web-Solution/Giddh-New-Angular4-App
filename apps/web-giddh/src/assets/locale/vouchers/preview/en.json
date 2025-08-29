@@ -34,7 +34,6 @@
     "send_invoice": "Send Invoice",
     "less_details": "Less Details",
     "more_details": "More Details",
-    "estimate": "estimate",
     "voucher_log": "[ACTION] for [TOTAL] by [USER]",
     "linked_po": "Linked Purchase Order(s):",
     "invoice_preview_unavailable": "Invoice Preview is not available right now! Please try again...",

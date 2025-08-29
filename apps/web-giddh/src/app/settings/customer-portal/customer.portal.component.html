@@ -87,25 +87,23 @@
                         <div class="row">
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                 <div class="input-group align-items-center column-gap1 flex-nowrap">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         class="linked-account"
                                         [name]="'account'"
-                                        [scrollableElementId]="'linkedAccount'"
                                         [label]="localeData?.collection?.link_account_label"
                                         [placeholder]="localeData?.collection?.link_account_placeholder"
                                         [options]="accounts"
                                         (selectedOption)="selectAccount($event)"
-                                        [defaultValue]="razorPayObj?.account?.name"
+                                        [labelValue]="razorPayObj?.account?.name"
                                         [enableDynamicSearch]="true"
                                         [isPaginationEnabled]="true"
                                         (scrollEnd)="handleScrollEnd()"
                                         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                        [allowValueReset]="true"
                                         (onClear)="
                                             razorPayObj.account.name = null; razorPayObj.account.uniqueName = null
                                         "
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                     <div
                                         class="input-group-addon cursor-pointer"
                                         *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name"
@@ -180,23 +178,21 @@
                             </div>
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                 <div class="d-flex align-items-center column-gap15">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         class="linked-account"
                                         [name]="'paypalAccount'"
-                                        [scrollableElementId]="'paypalLinkedAccount'"
                                         [label]="localeData?.collection?.link_account_label"
                                         [placeholder]="localeData?.collection?.link_account_placeholder"
                                         [options]="paypalAccounts"
                                         (selectedOption)="selectLinkedAccount($event)"
-                                        [defaultValue]="linkedAccountLabel"
+                                        [labelValue]="linkedAccountLabel"
                                         [enableDynamicSearch]="true"
                                         [isPaginationEnabled]="true"
                                         (scrollEnd)="paypalHandleScrollEnd()"
                                         (dynamicSearchedQuery)="paypalOnAccountSearchQueryChanged($event)"
-                                        [allowValueReset]="true"
                                         (onClear)="paypalObj.account.name = null; paypalObj.account.uniqueName = null"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                     <button
                                         mat-stroked-button
                                         class="min-width-unset"
@@ -237,7 +233,6 @@
                                         aria-label="delete"
                                         *ngIf="updatePaypal"
                                         mat-stroked-button
-                                        color="warn"
                                         type="button"
                                         (click)="deletePaypalDetails()"
                                     >
@@ -297,14 +292,6 @@
                                         [showError]="isFormSubmitted"
                                     >
                                     </reactive-dropdown-field>
-                                    <!-- <button
-                                        mat-stroked-button
-                                        class="min-width-unset"
-                                        (click)="unlinkAccountFromPayu()"
-                                        *ngIf="payuForm.get('accountUniqueName')?.value"
-                                    >
-                                        <i class="icon-trash"></i>
-                                    </button> -->
                                 </div>
                             </div>
                         </div>

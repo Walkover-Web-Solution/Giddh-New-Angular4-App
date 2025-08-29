@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
@@ -11,33 +10,25 @@ import { CompanyService } from '../../services/company.service';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 import { Router } from '@angular/router';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: '[account-detail-modal-component]',
     templateUrl: './account-detail-modal.component.html',
-    styleUrls: ['./account-detail-modal.component.scss'],
-    animations: [
-        trigger("slideInOut", [
-            state("in", style({
-                transform: "translate3d(0, 0, 0)",
-            })),
-            state("out", style({
-                transform: "translate3d(100%, 0, 0)",
-            })),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
+    styleUrls: ['./account-detail-modal.component.scss']
 })
 
 export class AccountDetailModalComponent implements OnChanges, OnDestroy {
+    /** Template reference for aside menu */
+    @ViewChild('asideMenuTemplate') public asideMenuTemplate: TemplateRef<any>;
+    /** Reference to aside menu dialog */
+    public asideMenuDialogRef: MatDialogRef<any>;
     @Input() public isModalOpen: boolean = false;
     @Input() public accountUniqueName: string;
     @Input() public from: string;
     @Input() public to: string;
     /** Required to hide generate invoice from modules that don't support it, for eg. Trial balance */
     @Input() public shouldShowGenerateInvoice: boolean = true;
-
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
     /** Emits when modal needs to be opened */
@@ -54,8 +45,6 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Account update modal state */
-    public accountAsideMenuState: string = "out";
     /** Account group unique name */
     public activeGroupUniqueName: string = "";
     /** True if api call in progress */
@@ -68,7 +57,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         private _accountService: AccountService,
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private router: Router
+        private router: Router,
+        private dialog: MatDialog
     ) {
         this.currentUrl = this.router.url;
     }
@@ -106,7 +96,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             case 0: // go to add and manage
                 if (!this.closeOnEdit) {
                     this.activeGroupUniqueName = this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]?.uniqueName;
-                    this.toggleAccountAsidePane();
+                    this.openAccountAsidePaneDialog();
                     event.stopPropagation();
                 } else {
                     this.modalClosedTemporary.emit(this.accInfo);
@@ -185,26 +175,12 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     }
 
     /**
-     * Toggle's account update modal
+     * Opens account aside pane dialog
      *
      * @memberof AccountDetailModalComponent
      */
-    public toggleAccountAsidePane(): void {
-        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
-        this.toggleBodyClass();
-    }
-
-    /**
-     * Toggle's fixed class in body
-     *
-     * @memberof AccountDetailModalComponent
-     */
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === "in") {
-            document.querySelector("body").classList.add("fixed");
-        } else {
-            document.querySelector("body").classList.remove("fixed");
-        }
+    public openAccountAsidePaneDialog(): void {
+        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -214,9 +190,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      * @memberof AccountDetailModalComponent
      */
     public getUpdatedList(event: any): void {
-        if (this.accountAsideMenuState === "in") {
-            this.toggleAccountAsidePane();
-        }
+        this.asideMenuDialogRef?.close();
         this.modalClosed.emit(event);
     }
 }

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
@@ -72,16 +71,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isGoToBranch: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
-    /** True if command dialog is open */
-    @Input() public showCommandDialog: boolean = false;
     /** True, if sidebar needs to be expanded */
     @Input() public isSidebarExpanded: boolean = false;
+    /** True if command dialog is open */
+    @Input() public showCommandDialog: boolean = false;
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Holds the template reference of generic aside menu account */
     @ViewChild('genericAsideMenuAccountTemplate', { static: true }) public genericAsideMenuAccountTemplate: TemplateRef<any>;
-    /** Stores the dropdown instances as querylist */
-    @ViewChildren('dropdown') itemDropdown: QueryList<BsDropdownDirective>;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -401,9 +398,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} e Create new group event
      * @memberof PrimarySidebarComponent
      */
-    public handleNewTeamCreationEmitter(e: any): void {
-        console.log("Trap 1");
-        
+    public handleNewTeamCreationEmitter(e: any): void {        
         if (e[0] === "group") {
             this.genericAsideMenuAccountDialogRef?.close();
             this.showManageGroupsModal(e[1]?.name);

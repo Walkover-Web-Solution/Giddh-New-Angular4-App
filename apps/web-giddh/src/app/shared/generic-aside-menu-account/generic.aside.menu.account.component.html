@@ -4,14 +4,12 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="form-header">
-        <div>
-            <h2>
-                <span>{{ actionAccount }}</span>
-            </h2>
-        </div>
+    <div class="dialog-header">
+        <span>{{ actionAccount }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <button id="closedialog" aria-label="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
     <div class="aside-body">
         <div class="aside-pane-form">
             <ng-container *ngIf="!selectedAccountUniqueName && (activeGroupUniqueName || allGroups) && !createAccountFromCommandK">
