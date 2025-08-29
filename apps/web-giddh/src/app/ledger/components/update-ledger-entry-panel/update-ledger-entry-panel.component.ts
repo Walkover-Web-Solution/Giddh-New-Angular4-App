@@ -810,8 +810,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.confirm_delete_file,
                 ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: this.localeData?.delete_entries_content
+                cancel: this.commonLocaleData?.app_no
             }
         });
 
