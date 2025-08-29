@@ -26,7 +26,7 @@ import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, IOption } from "../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,

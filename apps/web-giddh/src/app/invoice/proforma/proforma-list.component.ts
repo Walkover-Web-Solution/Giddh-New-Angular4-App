@@ -28,7 +28,6 @@ import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
-import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
@@ -54,7 +53,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
     /** Holds the reference of delete confirmation modal */
     @ViewChild('deleteConfirmationTemplate', { static: true }) public deleteConfirmationTemplate: TemplateRef<any>;
-    @ViewChild(InvoiceAdvanceSearchComponent, { static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
     public selectedDateRange: any;

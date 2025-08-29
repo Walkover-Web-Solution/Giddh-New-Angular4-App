@@ -5,10 +5,6 @@ import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.compo
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
-import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
-import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
-import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
-import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
 import { WebviewDirective } from './webview.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -50,7 +46,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
-import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
@@ -69,12 +64,8 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
 
 @NgModule({
     declarations: [
-        DownloadOrSendInvoiceOnMailComponent,
-        EsignModalComponent,
         WebviewDirective,
-        InvoiceAdvanceSearchComponent,
         InvoiceRendererComponent,
-        InvoiceBulkUpdateModalComponent,
         EWayBillCreateComponent,
         EWayBillComponent,
         EWayBillCredentialsComponent
@@ -96,7 +87,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
-        
         AsideMenuRecurringEntryModule,
         Daterangepicker,
         AccountDetailModalModule,
@@ -129,7 +119,6 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         MatTabsModule,
         BulkExportVoucherModule,
         FroalaTemplateEditorModule,
-        GenerateEWayBillModule,
         InvoiceSettingModule,
         MatTableModule,
         MatFormFieldModule,
@@ -145,8 +134,7 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         NewConfirmationModalModule
     ],
     exports: [
-        InvoiceRoutingModule,
-        DownloadOrSendInvoiceOnMailComponent
+        InvoiceRoutingModule
     ],
     providers: [
         InvoiceUiDataService

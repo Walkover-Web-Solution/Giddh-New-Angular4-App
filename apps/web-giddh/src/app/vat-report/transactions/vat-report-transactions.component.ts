@@ -10,12 +10,10 @@ import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
 import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InvoiceService } from '../../services/invoice.service';
 import { GeneralService } from '../../services/general.service';
-import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { ReceiptService } from '../../services/receipt.service';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -193,26 +191,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 });
             }
         // }
-    }
-
-    /**
-     * This will open the download/send email popup
-     *
-     * @memberof VatReportTransactionsComponent
-     */
-    public loadDownloadOrSendMailComponent(): void {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
-        let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
-        viewContainerRef.remove();
-
-        let componentInstanceView = componentFactory.create(viewContainerRef.injector);
-        viewContainerRef.insert(componentInstanceView.hostView);
-
-        let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
-        componentInstance.selectedVoucher = this.selectedInvoice;
-        componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
-        componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
-        componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
     }
 
     /**
