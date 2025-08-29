@@ -9,7 +9,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import { download } from '@giddh-workspaces/utils';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep } from '../../../lodash-optimized';
 import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../../models/api-models/imports';
@@ -69,7 +69,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will use for import object */
     public importRequest: ImportsRequest = {
-        count: this.pageSizeOptions[1],
+        count: PAGINATION_LIMIT,
         page: 1,
         totalItems: 0,
         from: "",

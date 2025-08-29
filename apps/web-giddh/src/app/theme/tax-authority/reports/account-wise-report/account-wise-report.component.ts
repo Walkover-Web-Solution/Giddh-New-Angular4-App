@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { saveAs } from "file-saver";
 import { SalesTaxReport } from '../../utility/tax-authority.const';
 import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-response.interface';
-import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class AccountWiseReportComponent implements OnInit {
     /** Holds pagination request  */
     public pagination: IPagination = {
         page: 1,
-        count: this.pageSizeOptions[2],
+        count: PAGINATION_LIMIT,
         totalItems: null,
         totalPages: null
     };

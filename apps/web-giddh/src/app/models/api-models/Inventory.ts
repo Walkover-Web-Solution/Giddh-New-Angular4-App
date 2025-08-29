@@ -650,7 +650,7 @@ export class InventorytAdjustReportQueryRequest {
     public from?: string = '';
     public to?: string = '';
     public page: number = 1;
-    public count: number = API_COUNT_LIMIT;
+    public count: number = PAGINATION_LIMIT;
     public totalPages: number = 0;
     public totalItems: number = 0;
     public sortBy: string = '';

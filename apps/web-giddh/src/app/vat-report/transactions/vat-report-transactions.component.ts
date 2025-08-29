@@ -8,7 +8,7 @@ import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
 import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -16,6 +16,7 @@ import { InvoiceService } from '../../services/invoice.service';
 import { GeneralService } from '../../services/general.service';
 import { ReceiptService } from '../../services/receipt.service';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -37,7 +38,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         to: '',
         taxNumber: '',
         page: 1,
-        count: this.pageSizeOptions[2],
+        count: PAGINATION_LIMIT,
         section: ''
     };
     public isLoading: boolean = false;
@@ -316,5 +317,17 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public handleNavigation(): void {
         this.router.navigate(['pages', 'gstfiling']);
+    }
+
+    /**
+     * This will use for page change
+     *
+     * @param {*} event
+     * @memberof VatReportTransactionsComponent
+     */
+    public pageChanged(event: PageEvent): void {
+        this.vatReportTransactionsRequest.page = this.vatReportTransactionsRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.vatReportTransactionsRequest.count = event.pageSize;
+        this.getVatReportTransactions(false);
     }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Observable, take } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { NewConfirmationModalComponent } from "apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component";
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from "apps/web-giddh/src/app/app.constant";
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 import { ITriggerList } from "../../uitilty/trigger.const";
 import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 import { TriggerComponentStore } from "../../uitilty/trigger.store";
@@ -43,7 +43,7 @@ export class BasicTriggerComponent implements OnInit {
     /** Holds the request parameters from the URL */
     public triggerListRequest: any = {
         page: 1,
-        count: this.pageSizeOptions[0]
+        count: PAGINATION_LIMIT
     };
 
     constructor(

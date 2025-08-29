@@ -147,12 +147,13 @@
         </div>
         <div class="warehouse-pagination mt-4">
             <mat-paginator
-                *ngIf="warehouses?.length && paginationConfig?.totalItems > paginationLimit"
+                *ngIf="warehouses?.length && paginationConfig?.totalItems > pageSizeOptions[0]"
                 [length]="paginationConfig?.totalItems"
                 [pageSize]="paginationConfig?.count"
                 [pageSizeOptions]="pageSizeOptions"
                 [pageIndex]="currentPage - 1"
                 [showFirstLastButtons]="true"
+                [hidePageSize]="false"
                 (page)="handlePageEvent($event)"
                 aria-label="Select page of warehouses"
             ></mat-paginator>

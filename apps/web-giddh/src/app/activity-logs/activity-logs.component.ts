@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { Observable, ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityLogsService } from '../services/activity-logs.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS } from '../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { takeUntil } from 'rxjs/operators';
 import { ActivityLogsJsonComponent } from './components/activity-logs-json/activity-logs-json.component';
@@ -51,7 +51,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     @ViewChild('entryDatepickerTrigger', { read: MatMenuTrigger }) public entryDatepickerTrigger: MatMenuTrigger;
     /** Instance of voucher datepicker menu trigger */
     @ViewChild('voucherDatepickerTrigger', { read: MatMenuTrigger }) public voucherDatepickerTrigger: MatMenuTrigger;
-/** This will use for table heading */
+    /** This will use for table heading */
     public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation', 'history'];
     /** Hold the data of activity logs */
     public dataSource = ELEMENT_DATA;
@@ -59,7 +59,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will use for activity logs object */
     public activityObj = {
-        count: PAGE_SIZE_OPTIONS[1],
+        count: PAGINATION_LIMIT,
         page: 1,
         totalPages: 0,
         totalItems: 0,
@@ -78,7 +78,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
     /** This will use for activity fields object */
     public activityFieldsObj = {
-        count: PAGE_SIZE_OPTIONS[1],
+        count: PAGINATION_LIMIT,
         page: 1,
         entity: undefined,
         operation: undefined,
