@@ -141,7 +141,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
      * @memberof SalesBifurcationDetailsComponent
      */
     public handlePageChange(event: any): void {
-        this.requestParams.page = event.pageIndex + 1;
+        this.requestParams.page = this.requestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.requestParams.count = event.pageSize;
         this.initApiCall();
     }

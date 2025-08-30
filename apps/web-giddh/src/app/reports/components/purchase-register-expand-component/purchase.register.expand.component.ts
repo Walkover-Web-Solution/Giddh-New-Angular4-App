@@ -597,8 +597,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      */
     public handlePageChange(event: any): void {
         if (event) {
+            this.getDetailedPurchaseRequestFilter.page = this.getDetailedPurchaseRequestFilter.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.getDetailedPurchaseRequestFilter.count = event.pageSize;
-            this.getDetailedPurchaseRequestFilter.page = event.pageIndex + 1
             this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         }
     }

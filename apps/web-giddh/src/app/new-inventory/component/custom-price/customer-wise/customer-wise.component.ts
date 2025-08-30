@@ -902,9 +902,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @memberof CustomerWiseComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (this.pagination.stock.page !== event.pageIndex + 1) {
-            this.pagination.stock.page = event.pageIndex + 1;
-        }
+        this.pagination.stock.page = this.pagination.stock.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.pagination.stock.count = event.pageSize;
         this.getAllDiscount(this.currentUser, this.stockSearchQuery);
     }

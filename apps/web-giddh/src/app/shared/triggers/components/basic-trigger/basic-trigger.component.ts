@@ -77,8 +77,8 @@ export class BasicTriggerComponent implements OnInit {
      * @memberof BasicTriggerComponent
      */
     public handlePageChange(event: any): void {
+        this.triggerListRequest.page = this.triggerListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.triggerListRequest.count = event.pageSize;
-        this.triggerListRequest.page = event.pageIndex + 1;
         this.getTriggerList();
     }
 

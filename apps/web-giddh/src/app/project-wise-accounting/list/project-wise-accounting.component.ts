@@ -336,8 +336,8 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public handlePageChange(event: PageEvent): void {
+        this.projectListRequest.page = this.projectListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.projectListRequest.count = event.pageSize;
-        this.projectListRequest.page = event.pageIndex + 1;
         this.getAllProjectList();
     }
 

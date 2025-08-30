@@ -354,8 +354,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public handlePageChange(event: PageEvent): void {
+        this.getProjectEntryListRequest.page = this.getProjectEntryListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.getProjectEntryListRequest.count = event.pageSize;
-        this.getProjectEntryListRequest.page = event.pageIndex + 1;
         this.getEntryList();
     }
 

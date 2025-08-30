@@ -471,7 +471,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public handlePageChange(event: any): void {
         this.pageIndex = event.pageIndex;
         this.adjustInventoryListRequest.count = event.pageSize;
-        this.adjustInventoryListRequest.page = event.pageIndex + 1;
+        this.adjustInventoryListRequest.page = this.adjustInventoryListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.getAllAdjustReports(false);
     }
 

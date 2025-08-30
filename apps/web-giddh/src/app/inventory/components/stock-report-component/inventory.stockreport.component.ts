@@ -31,7 +31,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { InvViewService } from '../../inv.view.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { KEYS } from '../../../accounting/journal-voucher/journal-voucher.component';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -570,7 +570,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.stockReportRequest.count = event.pageSize;
         this.getStockReport(false);
     }
-    
 
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {

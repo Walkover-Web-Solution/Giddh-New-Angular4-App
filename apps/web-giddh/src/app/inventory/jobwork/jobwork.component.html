@@ -285,7 +285,7 @@
                         </table>
 
                         <!-- Pagination -->
-                        <div class="text-center" *ngIf="inventoryReport?.totalPages > pageSizeOptions[0]">
+                        <div class="text-center" *ngIf="inventoryReport?.totalItems > pageSizeOptions[0]">
                             <mat-paginator
                                 [length]="inventoryReport.totalItems"
                                 [pageSize]="inventoryReport.count"

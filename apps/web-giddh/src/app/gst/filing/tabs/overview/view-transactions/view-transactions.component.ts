@@ -89,7 +89,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         'totalInvoiceValue'
     ];
     /** Hold table page index number */
-    public pageIndex: number = 1;
+    public pageIndex: number = 0;
     /** Holds page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds download or send mail dialog reference */
@@ -392,11 +392,11 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      * This will use for page change
      *
      * @param {*} event
-     * @memberof LiabilityDetailedReportComponent
+     * @memberof ViewTransactionsComponent
      */
     public pageChanged(event: PageEvent): void {
-        this.pageIndex = this.filterParam.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.pageIndex = this.filterParam.count !== event.pageSize ? 0 : event.pageIndex;
         this.filterParam.count = event.pageSize;
-        this.viewFilteredTxn('page', this.pageIndex);
+        this.viewFilteredTxn('page', this.pageIndex + 1);
     }
 }
