@@ -358,6 +358,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public paymentTableColumnsEnum: typeof PaymentTableColumnsEnum = PaymentTableColumnsEnum;
     /** True if columns loading */
     public isColumnsLoading: boolean = true;
+    /** True if columns loading */
+    public showContent: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -475,6 +477,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
+                this.showContent = false;
+                setTimeout(() => {
+                    this.showContent = true;
+                }, 50);
                 this.isColumnsLoading = true;
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
@@ -867,6 +873,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const broadcast = new BroadcastChannel("settings");
         broadcast.onmessage = (event) => {
             if (event?.data?.form !== undefined && event?.data?.form !== null) {
+                this.isSettingUpdateMode = false;
                 let formValues = event?.data?.form;
                 this.settingForm.patchValue({
                     purchaseBillSettings: formValues.purchaseBillSettings || {},
@@ -1035,7 +1042,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getSelectedTabIndex(): void {
-
         if (!this.isCompany && !this.isConsolidatedBranch) {
             if (this.activeTabGroup === 0) {
                 if (this.voucherType === 'estimates' && this.activeModule === 'list') {
@@ -1277,7 +1283,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         }
-
         if (this.queryParams.page) {
             this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
                 queryParams: {
