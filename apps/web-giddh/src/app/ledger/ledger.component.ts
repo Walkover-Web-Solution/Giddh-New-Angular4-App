@@ -3867,24 +3867,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * To change pagination page number
-     *
-     * @param {*} event Pagination change event
-     * @memberof LedgerComponent
-     */
-    public pageChanged(event: any): void {
-        if (typeof event === 'string') {
-            if (this.isAdvanceSearchImplemented && !this.trxRequest.q?.length) {
-                this.advanceSearchRequest.paginationToken = event;
-                this.getAdvanceSearchTxn();
-            } else {
-                this.trxRequest.paginationToken = event;
-                this.getTransactionData();
-            }
-        }
-    }
-
     /** 
      * Prepare duplicate transaction
      *
