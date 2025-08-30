@@ -1,7 +1,7 @@
 export const INVOICE_API = {
     GET_USER_TEMPLATES: 'v2/company/:companyUniqueName/sample-templates?type=:voucherType',
     CREATE_NEW_TEMPLATE: 'v2/company/:companyUniqueName/templates', // POST
-    SAVE_TEMPLATE_SETTINGS: 'v2/company/:companyUniqueName/templates/settings/save', // POST
+    SAVE_TEMPLATE_SETTINGS: 'v2/company/:companyUniqueName/template-preview?voucherVersion=2', // POST
     UPDATE_TEMPLATE: 'v2/company/:companyUniqueName/templates/:templateUniqueName', // PUT
     GET_CREATED_TEMPLATES: 'v2/company/:companyUniqueName/templates?type=:voucherType', // GET
     GET_TEMPLATE_PREVIEW: 'v2/company/:companyUniqueName/templates/:templateUniqueName?type=:voucherType&voucherVersion=2', // GET
