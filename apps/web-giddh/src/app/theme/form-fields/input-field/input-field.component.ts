@@ -46,6 +46,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public id: any = "";
     /** Max length of input field */
     @Input() public maxlength: number;
+    /** Min length of input field */
+    @Input() public minlength: number;
     /** True if field is read only */
     @Input() public readonly: boolean;
     /** True if field is disabled */

@@ -7,9 +7,14 @@
     color: var(--color-toast-primary-text);
     background-color: var(--color-primary-header-background);
 
-    .icon-cross{
-        color: var(--color-primary-header-icons) !important;
-        font-size: var(--font-size-16);
+    button {
+        &.mdc-icon-button {
+            padding: 0 !important;
+            .icon-cross{
+                color: var(--color-primary-header-icons) !important;
+                font-size: var(--font-size-16);
+            }
+        }
     }
 }
 .dialog-body{
