@@ -2386,12 +2386,24 @@ constructor(
      * @memberof VoucherListComponent
      */
     public copyVoucher(voucher: any): void {
+        const queryParams = {
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
+            page: this.advanceFilters.page,
+            count: this.advanceFilters.count ?? PAGINATION_LIMIT
+        }
+
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (searchString?.length) {
+            queryParams['search'] = searchString;
+        }
+
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-            this.router.navigate([`/pages/vouchers/estimates/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+            this.router.navigate([`/pages/vouchers/estimates/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`], { queryParams: queryParams });
         } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            this.router.navigate([`/pages/vouchers/proformas/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+            this.router.navigate([`/pages/vouchers/proformas/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`], { queryParams: queryParams });
         } else {
-            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
+            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`], { queryParams: queryParams });
         }
     }
 
@@ -3300,4 +3312,5 @@ constructor(
             this.universalDatepickerTrigger?.closeMenu();
         }
     }
+    
 }
