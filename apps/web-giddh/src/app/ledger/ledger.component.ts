@@ -232,7 +232,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will hold bank transactions api response */
-    public bankTransactionsResponse: any = { totalItems: 0, totalPages: 0, page: 1, countPerPage: PAGINATION_LIMIT };
+    public bankTransactionsResponse: any = {
+        totalItems: 0,
+        totalPages: 0,
+        page: 1,
+        countPerPage: PAGINATION_LIMIT
+    };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */

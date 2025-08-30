@@ -23,7 +23,7 @@ import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, IOption } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';

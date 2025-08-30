@@ -713,7 +713,7 @@
                 <!-- pagination -->
                 <div
                     class="mt-1"
-                    [hidden]="!daybookData?.entries?.length || daybookData?.totalItems > pageSizeOptions[0]"
+                    *ngIf="daybookData?.totalItems > pageSizeOptions[0]"
                 >
                     <mat-paginator
                         [length]="daybookData?.totalItems"

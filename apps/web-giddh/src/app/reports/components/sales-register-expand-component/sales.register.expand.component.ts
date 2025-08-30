@@ -564,8 +564,8 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
       */
     public handlePageChange(event: any): void {
         if (event) {
+            this.getDetailedsalesRequestFilter.page = this.getDetailedsalesRequestFilter.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.getDetailedsalesRequestFilter.count = event.pageSize;
-            this.getDetailedsalesRequestFilter.page = event.pageIndex + 1;
             this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
         }
     }

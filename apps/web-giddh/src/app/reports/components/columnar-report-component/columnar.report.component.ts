@@ -47,8 +47,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public columnarReportResponse: any;
     /** Columnar report table request params object */
     public getColumnarRequestModel: ReportsDetailedRequestFilter;
-    /** report table pagination count constant */
-    public paginationCount: number = PAGINATION_LIMIT;
     /** True, if request for show report  */
     public isShowColumnarReport: boolean = false;
     /** To check cr/dr or +/- checked */

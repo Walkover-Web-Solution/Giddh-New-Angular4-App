@@ -954,6 +954,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private handleGetAllVoucherResponse(response: any): void {
         if (response && response.voucherType === this.voucherType) {
+            if (response.totalItems > 0 && response.totalPages < response.page) {
+                this.advanceFilters.page = response.totalPages;
+                this.getAllVouchers();
+                return;
+            }
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             this.selectAllVouchers({ checked: false });
@@ -1408,7 +1413,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.getLedgersOfInvoice();
         } else {
             this.advanceFilters.count = event.pageSize;
-            this.advanceFilters.page = event.pageIndex + 1;
+            this.advanceFilters.page = this.advanceFilters.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.getVouchers(false);
         }
     }
