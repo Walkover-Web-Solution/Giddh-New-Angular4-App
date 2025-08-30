@@ -46,7 +46,7 @@ export class AllTemplatesComponent implements OnInit {
                 this.inputTemplate = cloneDeep(template);
                 this.invoiceTemplatesService.saveTemplateSettings(this.inputTemplate).subscribe((response) => {
                     if (response && response?.status === 'success') {
-                        const setting = this.generalService.base64ToBlob(response?.body?.encodedData || response, 'application/pdf', 512);
+                        const setting = this.generalService.base64ToBlob(response?.body?.data || response, 'application/pdf', 512);
                         const file = new Blob([setting], { type: 'application/pdf' });
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
