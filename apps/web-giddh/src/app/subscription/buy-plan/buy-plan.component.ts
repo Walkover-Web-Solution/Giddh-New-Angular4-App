@@ -235,8 +235,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public removePromoCode: boolean = false;
     /** Hold true in production environment */
     public isProdMode: boolean = PRODUCTION_ENV;
-    /** True if promo code is removed */
-    public removePromoCode: boolean = false;
 
     constructor(
         public dialog: MatDialog,
