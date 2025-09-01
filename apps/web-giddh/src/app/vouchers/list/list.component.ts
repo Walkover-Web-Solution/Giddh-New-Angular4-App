@@ -361,6 +361,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public selectedTemplate: any;
     /** True if columns loading */
     public showContent: boolean = true;
+    /** Show invoice lock date */
+    public showInvoiceDate: boolean = true;
+    /** Show purchase lock date */
+    public showPurchaseDate: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -3139,6 +3143,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('invoiceSettings.purchaseRoundOff').patchValue(false);
                         }
 
+                        const lockDateValue = this.settingForm.get('purchaseBillSettings.lockDate').value;
+                        if (lockDateValue === null || lockDateValue === '') {
+                            this.showPurchaseDate = false;
+                            setTimeout(() => {
+                               this.showPurchaseDate = true;
+                            }, 0);
+                        }
+
                         if (!this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').value) {
                             this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').patchValue(false);
                         }
@@ -3150,6 +3162,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
                         );
 
+
+                        const invoiceLockDateValue = this.settingForm.get('invoiceSettings.lockDate').value;
+                        if (invoiceLockDateValue === null || invoiceLockDateValue === '') {
+                            this.showInvoiceDate = false;
+                            setTimeout(() => {
+                               this.showInvoiceDate = true;
+                            }, 0);
+                        }
+
                         if (setting.companyEmailSettings) {
                             this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(
                                 cloneDeep(setting.companyEmailSettings.sendThroughGmail)
@@ -3158,6 +3179,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(false);
                         }
                     }
+
                     if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                         this.applyRoundOff = setting.invoiceSettings.salesRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.purchase) {
