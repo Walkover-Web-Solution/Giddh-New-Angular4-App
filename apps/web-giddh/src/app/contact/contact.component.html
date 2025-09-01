@@ -1557,8 +1557,8 @@
             >
                 <mat-paginator
                     [length]="sundryDebtorsAccountsBackup.totalItems"
-                    [pageSize]="sundryDebtorsAccountsBackup.count"
-                    [pageIndex]="sundryDebtorsAccountsBackup.page - 1"
+                    [pageSize]="advanceFilters.count"
+                    [pageIndex]="advanceFilters.page - 1"
                     [pageSizeOptions]="pageSizeOptions"
                     [showFirstLastButtons]="true"
                     [hidePageSize]="false"
@@ -1576,8 +1576,8 @@
             >
                 <mat-paginator
                     [length]="sundryCreditorsAccountsBackup.totalItems"
-                    [pageSize]="sundryCreditorsAccountsBackup.count"
-                    [pageIndex]="pageIndex"
+                    [pageSize]="advanceFilters.count"
+                    [pageIndex]="advanceFilters.page - 1"
                     [pageSizeOptions]="pageSizeOptions"
                     [showFirstLastButtons]="true"
                     [hidePageSize]="false"
