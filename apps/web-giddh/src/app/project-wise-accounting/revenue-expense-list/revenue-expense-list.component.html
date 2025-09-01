@@ -41,10 +41,10 @@
                 />
             </div>
             <div>
-                <span *ngIf="totalRevenueAndExpense$ | async as tre">
-                    <span>{{ defaultParamsValue.category === projectWiseAccountingType.Income ? localeData?.total_revenue : localeData?.total_expense }} : {{ tre.nonAssetsTotal }}</span>
+                <span *ngIf="totalRevenueAndExpense$ | async as totalRevenueExpense">
+                    <span>{{ defaultParamsValue.category === projectWiseAccountingType.Income ? localeData?.total_revenue : localeData?.total_expense }} : {{ totalRevenueExpense.nonAssetsTotal }}</span>
                     <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>
-                    <span>{{ localeData?.total_fixed_asset }} : {{ tre.assetsTotal }}</span>&nbsp;&nbsp;
+                    <span>{{ localeData?.total_fixed_asset }} : {{ totalRevenueExpense.assetsTotal }}</span>&nbsp;&nbsp;
                 </span>
                 <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
                     {{ commonLocaleData?.app_back }}
