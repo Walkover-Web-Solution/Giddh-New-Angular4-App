@@ -67,7 +67,7 @@ export class TemplateFroalaComponent implements OnInit {
     /** Hold email suggestion suffix */
     public emailSuggestionSuffix: string = '}';
     /** Hold froala editor options */
-    public froalaOptions: any;
+    public froalaOptions: any = this.getFroalaOptions();
     /** Hold to email options */
     public toEmails: any[] = [];
     /** Hold selected to email options */
@@ -166,9 +166,6 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public ngOnInit(): void {
-        console.log('ngOnInit-in', 'froalaEditor', this.froalaEditor);
-        this.froalaOptions = this.getFroalaOptions();
-        console.log('ngOnInit-out', 'froalaEditor', this.froalaEditor);
         document.querySelector('body').classList.add('hide-chat-widget');
         this.isTrigger = this.inputData?.isTrigger;
         this.initializeForm();
@@ -243,7 +240,12 @@ export class TemplateFroalaComponent implements OnInit {
                     key: item
                 }));
 
+                console.log('froalaEditor-in', this.froalaEditor);
+                if (!this.froalaEditor) {
+                    this.froalaOptions = this.getFroalaOptions();
+                }
                 setTimeout(() => {
+                    console.log('initializeFroalaEditor', 'froalaEditor-set', this.froalaEditor);
                     this.initializeTribute(tributeSuggestions);
                 }, 300);
 
@@ -389,14 +391,6 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private updateFormControl(): void {
         this.emailForm.get('html')?.patchValue(this.froalaEditor.html.get());
-        console.log('updateFormControl', 'html', this.emailForm.get('html')?.value);
-        console.log('updateFormControl', 'this.froalaEditor.html.get()', this.froalaEditor.html.get());
-    }
-
-    public ngAfterViewInit(): void {
-        console.log('ngAfterViewInit-in', 'froalaEditor', this.froalaEditor);
-        this.froalaOptions = this.getFroalaOptions();
-        console.log('ngAfterViewInit-out', 'froalaEditor', this.froalaEditor);
     }
 
     /**
@@ -423,6 +417,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private initializeTribute(tributeSuggestions: any[]): void {
+        console.log('initializeTribute', 'tributeSuggestions', tributeSuggestions);
         if (this.froalaTribute) {
             this.froalaTribute.detach(this.froalaEditor.el);
         }
@@ -442,7 +437,7 @@ export class TemplateFroalaComponent implements OnInit {
             values: tributeSuggestions,
             selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
         });
-
+        console.log('froalaEditor', 'froalaEditor', this.froalaEditor);
         if (this.froalaEditor) {
             this.froalaTribute.attach(this.froalaEditor.el);
         }
