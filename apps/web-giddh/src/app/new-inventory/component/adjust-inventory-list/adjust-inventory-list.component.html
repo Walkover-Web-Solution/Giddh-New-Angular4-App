@@ -327,7 +327,7 @@
                 <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
             </div>
             <div
-                *ngIf="adjustInventoryListRequest.totalItems > 20 && showData && !(adjustInventoryInProgress$ | async)"
+                *ngIf="adjustInventoryListRequest.totalItems > pageSizeOptions[0] && showData && !(adjustInventoryInProgress$ | async)"
             >
                 <mat-paginator
                     (page)="handlePageChange($event)"

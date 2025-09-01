@@ -183,8 +183,8 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     public handlePageChange(event: any): void {
         if (event) {
             this.pageIndex = event.pageIndex;
+            this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.pagination.count = event.pageSize;
-            this.pagination.page = event.pageIndex + 1;
             this.getSalesTaxReport();
         }
     }

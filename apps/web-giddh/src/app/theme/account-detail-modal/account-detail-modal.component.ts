@@ -190,7 +190,6 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      * @memberof AccountDetailModalComponent
      */
     public getUpdatedList(event: any): void {
-        this.asideMenuDialogRef?.close();
         this.modalClosed.emit(event);
     }
 }

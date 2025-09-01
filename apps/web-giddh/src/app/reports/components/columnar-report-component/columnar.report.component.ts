@@ -47,8 +47,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public columnarReportResponse: any;
     /** Columnar report table request params object */
     public getColumnarRequestModel: ReportsDetailedRequestFilter;
-    /** report table pagination count constant */
-    public paginationCount: number = PAGINATION_LIMIT;
     /** True, if request for show report  */
     public isShowColumnarReport: boolean = false;
     /** To check cr/dr or +/- checked */
@@ -105,7 +103,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
-        this.getColumnarRequestModel.count = this.paginationCount;
+        this.getColumnarRequestModel.count = PAGINATION_LIMIT;
         this.columnarReportResponse = null;
         this.getFinancialYears();
         this.loadDefaultGroupsSuggestions();

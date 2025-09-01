@@ -235,11 +235,11 @@
             </table>
         </div>
         <!-- pagination -->
-        <div *ngIf="(viewTransaction$ | async)?.totalPages > 1">
+        <div *ngIf="(viewTransaction$ | async)?.totalItems > pageSizeOptions[0]">
             <mat-paginator
                 (page)="pageChanged($event)"
                 [length]="(viewTransaction$ | async)?.totalItems"
-                [pageSize]="(viewTransaction$ | async)?.count"
+                [pageSize]="filterParam?.count"
                 [showFirstLastButtons]="true"
                 [pageSizeOptions]="pageSizeOptions"
                 [hidePageSize]="false"

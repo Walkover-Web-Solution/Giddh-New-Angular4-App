@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div class="mt-4">
-                <ng-container *ngIf="importStatusResponse?.totalItems > importStatusResponse?.count">
+                <ng-container *ngIf="importStatusResponse?.totalItems > pageSizeOptions[0]">
                     <mat-paginator
                         [length]="importStatusResponse?.totalItems"
                         [pageSize]="importPaginatedRequest.count || importStatusResponse?.count"

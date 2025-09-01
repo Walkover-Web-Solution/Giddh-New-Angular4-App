@@ -310,7 +310,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4" *ngIf="branchTransferResponse.totalPages > 1">
+        <div class="mt-4" *ngIf="branchTransferResponse.totalItems > pageSizeOptions[0]">
             <mat-paginator
                 [length]="branchTransferResponse.totalPages"
                 [pageSize]="branchTransferGetRequestParams.count"

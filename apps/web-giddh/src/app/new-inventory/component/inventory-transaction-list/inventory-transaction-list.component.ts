@@ -4,7 +4,7 @@ import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { ReplaySubject } from "rxjs";
 import { select, Store } from "@ngrx/store";
-import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { AppState } from '../../../store';
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
@@ -447,7 +447,7 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.stockReportRequest.count = this.pageSizeOptions[2];
+            this.stockReportRequest.count = PAGINATION_LIMIT;
             this.translationLoaded = true;
             this.voucherTypes = [
                 {

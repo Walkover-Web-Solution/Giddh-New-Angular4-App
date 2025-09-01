@@ -24,6 +24,7 @@ import { SettingIntegrationComponentStore } from "../../settings/integration/uti
 import { ICurrencyResponse } from "../../models/api-models/Company";
 import { AccountResponse, AccountResponseV2 } from "../../models/api-models/Account";
 import { LedgerService } from "../../services/ledger.service";
+import { PageEvent } from "@angular/material/paginator";
 @Component({
     selector: 'ledger-statement',
     templateUrl: './ledger-statement.component.html',
@@ -494,6 +495,19 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             }, (error => {
                 this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
             }));
+        }
+    }
+
+    /**
+     * To change pagination page number
+     *
+     * @param {*} event Pagination change event
+     * @memberof LedgerStatementComponent
+     */
+    public pageChanged(event: any): void {
+        if (typeof event === 'string') {
+            this.trxRequest.paginationToken = event;
+            this.getTransactionData();
         }
     }
 
