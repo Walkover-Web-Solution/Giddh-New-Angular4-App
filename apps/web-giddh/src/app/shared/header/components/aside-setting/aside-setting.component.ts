@@ -53,7 +53,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     /** True if we should set language */
     public setLanguage: boolean = false;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
+
     }
 
     /**
