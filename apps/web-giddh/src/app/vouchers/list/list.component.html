@@ -5863,7 +5863,7 @@
                 *ngIf="activeTabGroup === 0 || activeTabGroup === 1 || activeTabGroup === 2"
             >
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="activeModule === 'templates'">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [name]="'design'"
                         *ngIf="voucherType === voucherTypeEnum.purchase"
                         [label]="localeData?.select_design_for"
@@ -5873,7 +5873,7 @@
                         (selectedOption)="templateSelect($event)"
                         [defaultValue]="selectedTemplate.label"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">
