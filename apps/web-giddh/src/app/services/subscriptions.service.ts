@@ -597,8 +597,8 @@ export class SubscriptionsService {
      */
     public activatePlan(req: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.ACTIVATE_PLAN
-            ?.replace(':subscriptionId', encodeURIComponent(req?.subscriptionId)
-                ?.replace(':billingRequestId', encodeURIComponent(req?.billingRequestId))))
+            ?.replace(':subscriptionId', encodeURIComponent(req?.subscriptionId))
+            ?.replace(':billingRequestId', encodeURIComponent(req?.billingRequestId)))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
