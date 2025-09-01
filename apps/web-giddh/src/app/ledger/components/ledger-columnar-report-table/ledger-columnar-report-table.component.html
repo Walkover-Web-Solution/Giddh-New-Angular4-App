@@ -194,9 +194,9 @@
             <div class="mt-4" *ngIf="reportResponse && reportResponse?.totalItems > pageSizeOptions[0]">
                 <mat-paginator
                     [length]="reportResponse.totalItems"
-                    [pageSize]="reportResponse.count"
+                    [pageSize]="columnarReportExportRequest.count"
                     [pageSizeOptions]="pageSizeOptions"
-                    [pageIndex]="reportResponse.page - 1"
+                    [pageIndex]="columnarReportExportRequest.page - 1"
                     [showFirstLastButtons]="true"
                     [hidePageSize]="false"
                     (page)="handlePageEvent($event)"

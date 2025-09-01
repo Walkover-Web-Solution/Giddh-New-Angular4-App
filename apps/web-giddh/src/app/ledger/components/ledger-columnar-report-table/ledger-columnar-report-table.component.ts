@@ -187,12 +187,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      */
     public handlePageEvent(event: PageEvent): void {
         if (this.columnarReportExportRequest) {
-            if (this.getColumnarRequestModel.count !== event.pageSize) {
-                this.getColumnarRequestModel.count = event.pageSize;
-                this.getColumnarRequestModel.page = 1;
-            } else {
-                this.getColumnarRequestModel.page = event.pageIndex + 1;
-            }
+            this.columnarReportExportRequest.page = this.columnarReportExportRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
+            this.columnarReportExportRequest.count = event.pageSize;
             this.getColumnarReportTable(this.columnarReportExportRequest);
         }
     }
