@@ -4,7 +4,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VatDetailedReportRequest } from '../../models/api-models/Vat';
 import { ReplaySubject, takeUntil } from 'rxjs';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'liability-detailed-report',
@@ -24,7 +25,7 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         to: '',
         taxNumber: '',
         page: 1,
-        count: this.pageSizeOptions[2],
+        count: PAGINATION_LIMIT,
         section: '',
         currencyCode: 'BWP'
     };
@@ -130,5 +131,17 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState = false;
+    }
+
+    /**
+     * This will use for page change
+     *
+     * @param {*} event
+     * @memberof LiabilityDetailedReportComponent
+     */
+    public pageChanged(event: PageEvent): void {
+        this.vatLiabilityReportRequest.page = this.vatLiabilityReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.vatLiabilityReportRequest.count = event.pageSize;
+        this.getVatLiabilityReport();
     }
 }

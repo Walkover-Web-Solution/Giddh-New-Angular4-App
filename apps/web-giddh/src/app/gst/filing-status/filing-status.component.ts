@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 import { ToasterService } from "../../services/toaster.service";
-import { PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { saveAs } from 'file-saver';
 import { GstReconcileService } from "../../services/gst-reconcile.service";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
@@ -67,7 +67,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     /** Holds pagination data */
     private pagination: any = {
         "page": 1,
-        "count": this.pageSizeOptions[2],
+        "count": PAGINATION_LIMIT,
         "totalPages": 1,
         "totalItems": 1
     }

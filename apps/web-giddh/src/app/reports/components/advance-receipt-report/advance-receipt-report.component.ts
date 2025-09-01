@@ -8,7 +8,7 @@ import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, SubVoucher } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -71,13 +71,12 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public receiptsSummaryData: any;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    /** Stores the value of pagination limit for template use */
-    public paginationLimit: number = PAGE_SIZE_OPTIONS[1];
     /** Stores the current page number */
-    public pageConfiguration: { currentPage: number, totalPages: number, totalItems: number } = {
+    public pageConfiguration: { currentPage: number, totalPages: number, totalItems: number, count: number } = {
         currentPage: 1,
         totalPages: 1,
-        totalItems: 1
+        totalItems: 1,
+        count: PAGINATION_LIMIT
     };
     /** Stores the search query params for API call */
     public searchQueryParams: any = {
@@ -411,8 +410,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        this.pageConfiguration.currentPage = this.paginationLimit !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.paginationLimit = event.pageSize;
+        this.pageConfiguration.currentPage = this.pageConfiguration.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.pageConfiguration.count = event.pageSize;
         this.fetchAllReceipts({ page: this.pageConfiguration.currentPage, count: event.pageSize, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
 
@@ -538,7 +537,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 companyUniqueName: this.activeCompanyUniqueName,
                 from: this.fromDate,
                 to: this.toDate,
-                count: this.paginationLimit,
+                count: PAGINATION_LIMIT,
                 q: this.searchQueryParams.q,
                 total: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
                 balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
@@ -597,7 +596,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 companyUniqueName: this.activeCompanyUniqueName,
                 from: this.fromDate,
                 to: this.toDate,
-                count: this.paginationLimit,
+                count: PAGINATION_LIMIT,
                 receiptTypes: this.searchQueryParams.receiptTypes,
                 receiptNumber: this.searchQueryParams.receiptNumber,
                 baseAccountName: this.searchQueryParams.baseAccountName,

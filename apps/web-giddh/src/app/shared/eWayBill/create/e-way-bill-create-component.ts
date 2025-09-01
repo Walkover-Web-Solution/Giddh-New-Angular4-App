@@ -11,6 +11,8 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import * as dayjs from 'dayjs';
 import { EWayBillComponentStore } from '../eWayBill.store';
 import { IOption } from '../../../app.constant';
+import { PAGINATION_LIMIT } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -83,7 +85,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.initGenerateEwayBillForm();
         this.initGenerateNewTransporterForm();
         this.transporterFilterRequest.page = 1;
-        this.transporterFilterRequest.count = 10;
+        this.transporterFilterRequest.count = PAGINATION_LIMIT;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
 
         this.componentStore.transporterListDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -339,6 +341,19 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public updateField(field: string, value: number | string): void {
         this.generateEwayBillform.get(field).patchValue(value);
+    }
+
+
+    /**
+     * This will use for page change
+     *
+     * @param {*} event
+     * @memberof LiabilityDetailedReportComponent
+     */
+    public pageChanged(event: PageEvent): void {
+        this.transporterFilterRequest.page = this.transporterFilterRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.transporterFilterRequest.count = event.pageSize;
+        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
 
 }
