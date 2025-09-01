@@ -3496,7 +3496,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @private
      * @memberof VoucherListComponent
      */
-    private templateSelect(template: any): void {
+    public templateSelect(template: any): void {
         this.selectedTemplate = template;
         this.fetchAllCreatedTemplates(template.value);
         this.fetchTemplates(template.value);
