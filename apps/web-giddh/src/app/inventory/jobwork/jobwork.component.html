@@ -285,10 +285,10 @@
                         </table>
 
                         <!-- Pagination -->
-                        <div class="text-center" *ngIf="inventoryReport?.totalPages > 1">
+                        <div class="text-center" *ngIf="inventoryReport?.totalItems > pageSizeOptions[0]">
                             <mat-paginator
                                 [length]="inventoryReport.totalItems"
-                                [pageSize]="6"
+                                [pageSize]="inventoryReport.count"
                                 [pageIndex]="inventoryReport.page - 1"
                                 [pageSizeOptions]="pageSizeOptions"
                                 [showFirstLastButtons]="true"

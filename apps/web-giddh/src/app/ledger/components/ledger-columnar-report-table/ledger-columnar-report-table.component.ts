@@ -8,7 +8,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ReportsDetailedRequestFilter, ColumnarResponseResult } from '../../../models/api-models/Reports';
-import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -73,7 +73,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public ngOnInit(): void {
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
-        this.getColumnarRequestModel.count = this.pageSizeOptions[2];
+        this.getColumnarRequestModel.count = PAGINATION_LIMIT;
         this.getColumnarReportTable(this.columnarReportExportRequest);
     }
 
@@ -187,12 +187,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      */
     public handlePageEvent(event: PageEvent): void {
         if (this.columnarReportExportRequest) {
-            if (this.getColumnarRequestModel.count !== event.pageSize) {
-                this.getColumnarRequestModel.count = event.pageSize;
-                this.getColumnarRequestModel.page = 1;
-            } else {
-                this.getColumnarRequestModel.page = event.pageIndex + 1;
-            }
+            this.columnarReportExportRequest.page = this.columnarReportExportRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
+            this.columnarReportExportRequest.count = event.pageSize;
             this.getColumnarReportTable(this.columnarReportExportRequest);
         }
     }

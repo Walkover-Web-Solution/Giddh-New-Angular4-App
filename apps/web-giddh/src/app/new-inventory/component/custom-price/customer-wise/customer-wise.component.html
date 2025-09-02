@@ -282,10 +282,10 @@
                                         </ng-container>
                                     </ng-container>
                                 </div>
-                                <div *ngIf="pagination.stock.totalPages > 1">
+                                <div *ngIf="pagination.stock.totalItems > pageSizeOptions[0]">
                                     <mat-paginator
                                         [length]="pagination.stock.totalItems"
-                                        [pageSize]="paginationLimit"
+                                        [pageSize]="pagination.stock.count"
                                         [pageIndex]="pagination.stock.page - 1"
                                         [pageSizeOptions]="pageSizeOptions"
                                         [showFirstLastButtons]="true"

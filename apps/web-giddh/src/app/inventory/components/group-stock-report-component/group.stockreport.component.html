@@ -621,7 +621,7 @@
                     </tr>
                 </tbody>
 
-                <tfoot *ngIf="groupStockReport && groupStockReport.totalPages > 1">
+                <tfoot *ngIf="groupStockReport && groupStockReport.totalItems > pageSizeOptions[0]">
                     <tr>
                         <td colspan="10" class="text-center">
                             <mat-paginator

@@ -142,7 +142,7 @@
                             </div>
                         </ng-template>
                         <!-- Pagination  -->
-                        <div *ngIf="pagination?.totalPages > 1">
+                        <div *ngIf="pagination?.totalItems > pageSizeOptions[0]">
                             <mat-paginator
                                 (page)="handlePageChange($event)"
                                 [length]="pagination?.totalItems"

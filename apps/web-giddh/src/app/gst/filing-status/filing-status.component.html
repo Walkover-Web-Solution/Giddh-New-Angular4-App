@@ -60,7 +60,7 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
-                    <div class="d-flex justify-content-end" *ngIf="pagination.totalPages > 1 && !isLoading">
+                    <div class="d-flex justify-content-end" *ngIf="pagination.totalItems > pageSizeOptions[0] && !isLoading">
                         <mat-paginator
                             class="mt-3"
                             [showFirstLastButtons]="true"

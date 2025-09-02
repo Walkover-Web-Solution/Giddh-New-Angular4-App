@@ -7,7 +7,7 @@ import { debounceTime, delay, distinctUntilChanged, skip, takeUntil } from "rxjs
 import * as dayjs from 'dayjs';
 import { ContactComponentStore } from "../utility/contact.store";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from "../../services/general.service";
 import { FormControl } from "@angular/forms";
@@ -57,7 +57,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public accountListRequest: any = {
         accountUniqueName: '',
         page: 1,
-        count: '',
+        count: PAGINATION_LIMIT,
         sortBy: 'date',
         sort: '',
         q: '',
@@ -181,7 +181,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             from: this.from ?? '',
             to: this.to ?? '',
             page: 1,
-            count: this.pageSizeOptions[2], // Set default Count 50
+            count: PAGINATION_LIMIT,
             q: ''
         };
         this.transactionInput.patchValue(null, { emitEvent: false });
@@ -226,7 +226,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.clearFilter = false;
             this.isSearching = false;
             this.accountListRequest.accountUniqueName = this.activeAccountUniqueName;
-            this.accountListRequest.count = this.pageSizeOptions[1];
+            this.accountListRequest.count = PAGINATION_LIMIT;
             this.accountListRequest.page = 1;
             this.accountListRequest.q = '';
             this.accountListRequest.sort = 'asc';

@@ -277,7 +277,7 @@
 
             <div
                 class="mt-4"
-                *ngIf="branchTransferPaginationObject?.totalItems > branchTransferPaginationObject?.count && !isLoading"
+                *ngIf="branchTransferPaginationObject?.totalItems > pageSizeOptions[0] && !isLoading"
             >
                 <mat-paginator
                     [length]="branchTransferPaginationObject?.totalItems"
