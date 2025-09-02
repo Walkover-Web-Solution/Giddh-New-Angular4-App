@@ -8,7 +8,7 @@
     <div class="relative white-bg">
         <hamburger-menu *ngIf="activeTab !== 'vendor'" [pageHeading]="getPageHeading()"></hamburger-menu>
         <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="activeTab === 'vendor'"></hamburger-menu>
-
+        
         <mat-tab-group
             #staticTabs
             class="custom-mat-tabs customer-aging table-header-sticky"
@@ -19,6 +19,8 @@
         >
             <mat-tab
                 [label]="activeTab === 'customer' ? localeData?.customer : localeData?.vendor"
+                [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
+                *ngIf="activeTab !== 'aging-report'"
             >
                 <div class="container-fluid">
                     <div class="header-content-sticky vendor-z-index">
