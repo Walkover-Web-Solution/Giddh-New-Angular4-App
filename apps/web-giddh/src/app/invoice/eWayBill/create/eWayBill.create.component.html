@@ -21,7 +21,6 @@
                             <div class="col-6">
                                 <reactive-dropdown-field
                                     class="input"
-                                    #subgrp="ngModel"
                                     [options]="SubsupplyTypesList"
                                     (selectedOption)="subTypeElementSelected($event)"
                                     [required]="true"
@@ -36,7 +35,6 @@
                             <div class="col-6">
                                 <reactive-dropdown-field
                                     class="input"
-                                    #doctypes="ngModel"
                                     [options]="TransporterDocType"
                                     [required]="true"
                                     [label]="localeData?.document_type"
@@ -80,7 +78,6 @@
                             <div class="col-6">
                                 <reactive-dropdown-field
                                     class="input"
-                                    #transSubType="ngModel"
                                     [options]="transactionSubType"
                                     [label]="localeData?.transaction_sub_type_label"
                                     [placeholder]="localeData?.transaction_type_placeholder"
@@ -97,7 +94,6 @@
                             <div class="col-6">
                                 <reactive-dropdown-field
                                     class="input"
-                                    #trans="ngModel"
                                     [options]="transporterDropdown$ | async"
                                     (selectedOption)="selectTransporter($event)"
                                     [label]="commonLocaleData?.app_transporter"
@@ -184,9 +180,14 @@
                                     [pattern]="'[a-zA-Z0-9]{7,11}'"
                                     [maxlength]="11"
                                     [minlength]="7"
+                                    #name="ngModel"
                                     [(ngModel)]="generateEwayBillform.vehicleNo"
                                 >
                                 </input-field>
+
+                                <small class="text-danger" *ngIf="name.value && name.invalid && name.touched && name.dirty">{{
+                                    localeData?.vehicle_no_format
+                                }}</small>
                             </div>
                             <div class="col-6">
                                 <input-field
