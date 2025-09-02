@@ -150,9 +150,10 @@
                                                 [labelValue]="groupForm?.get('discountLabel')?.value ?? ''"
                                                 (onClear)="groupForm.get('discounts')?.patchValue(null)"
                                                 [options]="discountsList$ | async"
+                                                (selectedOption)="groupForm.get('discountLabel')?.patchValue($event?.label)"
                                                 formControlName="discounts"
                                             >
-                                            </reactive-dropdown-field>
+                                        </reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="row mr-t15">

@@ -1196,12 +1196,6 @@
                                     </div>
                                 </div>
                                 <div class="text-center mr-t2 page-count position-absolute">
-                                    <span class="grey"
-                                        >{{ bankTransactionsResponse?.totalItems }} {{ localeData?.transactions }},
-                                    </span>
-                                    <span class="black"
-                                        >{{ bankTransactionsResponse?.totalPages }} {{ localeData?.pages }}</span
-                                    >
                                     <ng-container *ngIf="bankTransactionsResponse?.totalItems > pageSizeOptions[0]">
                                         <mat-paginator 
                                             [length]="bankTransactionsResponse?.totalItems" 

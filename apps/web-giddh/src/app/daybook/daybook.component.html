@@ -699,20 +699,9 @@
                     </table>
                 </div>
 
-                <div class="mt-5 text-center" [hidden]="!daybookData?.entries?.length">
-                    <small class="grey" *ngIf="daybookData?.totalItems"
-                        >{{ daybookData?.totalItems }}
-                        {{ commonLocaleData?.app_transactions }}
-                        | {{ daybookData?.totalPages }} {{ commonLocaleData?.app_pages }}
-                    </small>
-                    <small class="grey" *ngIf="!daybookData?.totalItems"
-                        >0 {{ commonLocaleData?.app_transactions }} | 0 {{ commonLocaleData?.app_pages }}</small
-                    >
-                </div>
-
                 <!-- pagination -->
                 <div
-                    class="mt-1"
+                    class="mt-2"
                     *ngIf="daybookData?.totalItems > pageSizeOptions[0]"
                 >
                     <mat-paginator
