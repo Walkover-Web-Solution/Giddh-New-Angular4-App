@@ -40,12 +40,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Pagination limit */
-
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Pagination Information of (Account & Group) and Stocks  */
-    public pagination: any;
+    public pagination: any = this.paginationInit();
     /** Holds Mat Dailog Reference*/
     public dialogRef: MatDialogRef<any>;
     /* Observable to unsubscribe all the store listeners */
@@ -181,12 +179,14 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             user: {
                 page: 1,
                 totalPages: null,
-                totalItems: null
+                totalItems: null,
+                count: PAGINATION_LIMIT
             },
             stock: {
                 page: 1,
                 totalPages: null,
-                totalItems: null
+                totalItems: null,
+                count: PAGINATION_LIMIT
             }
         }
     }
