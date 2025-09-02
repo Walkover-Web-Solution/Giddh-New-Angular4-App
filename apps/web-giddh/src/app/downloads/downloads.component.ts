@@ -37,7 +37,6 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.activeTab = params['type'];
-
                 this.selectedTabIndex = (this.activeTab === "imports") ? 1 : 0;
             }
         });
@@ -50,10 +49,8 @@ export class DownloadsComponent implements OnInit, OnDestroy {
      */
     public tabChanged(event: any): void {
         if (event?.index === 0) {
-            this.activeTab = 'exports';
             this.router.navigate(['/pages/downloads/exports']);
         } else if (event?.index === 1) {
-            this.activeTab = 'imports';
             this.router.navigate(['/pages/downloads/imports']);
         }
     }
