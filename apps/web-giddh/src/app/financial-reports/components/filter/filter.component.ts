@@ -698,6 +698,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.cd.detectChanges();
+            this.dateOptions = [
+                { label: this.commonLocaleData?.app_date_range, value: '1' },
+                { label: this.commonLocaleData?.app_financial_year, value: '0' }
+            ];
         }
     }
 }

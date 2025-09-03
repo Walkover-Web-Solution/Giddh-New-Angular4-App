@@ -8,7 +8,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
 import { TaxResponse } from '../models/api-models/Company';
-import { DaybookQueryRequest, ExportBodyRequest } from '../models/api-models/DaybookRequest';
+import { DaybookQueryRequest, DayBookRequestModel, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
@@ -273,9 +273,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param {*} [withFilters=null]
      * @memberof DaybookComponent
      */
-    public getDaybook(withFilters = null): void {
+    public getDaybook(withFilters: DayBookRequestModel = null): void {
         this.showLoader = true;
-        this.daybookService.GetDaybook(withFilters, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let daybookRequest = cloneDeep(withFilters);
+        if (withFilters) {
+            daybookRequest.defaultVouchersLabel = null;
+            daybookRequest.defaultTagsLabel = null;
+            daybookRequest.defaultParticularsLabel = null;
+            daybookRequest.inventory.defaultInventoriesLabel = null;
+        }
+        this.daybookService.GetDaybook(daybookRequest, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response?.body?.entries?.length > 0) {
                     this.daybookQueryRequest.page = response?.body?.page;
