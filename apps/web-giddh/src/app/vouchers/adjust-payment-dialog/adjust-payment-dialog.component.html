@@ -117,7 +117,7 @@
                     </div>
                 </div>
                 <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
-                    <div class="row voucher-form">
+                    <!-- <div class="row voucher-form">
                         <div class="col-5">
                             <div class="form-group">
                                 <strong>
@@ -134,7 +134,7 @@
                                 </strong>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <ng-container
                         *ngFor="
                             let entry of adjustVoucherForm?.adjustments;
@@ -146,77 +146,76 @@
                         <div class="row voucher-form pb-1 align-items-start mb-1">
                             <div class="col-5">
                                 <div class="form-group mb-0">
-                                    <div class="select-error select-caret relative">
-                                        <select-field
-                                            [autocomplete]="'off'"
-                                            [readonly]="
-                                                shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
-                                            "
-                                            [cssClass]="'form-control mat-field-border text-left'"
-                                            [name]="'voucherName' + entry?.uniqueName"
-                                            [placeholder]="localeData?.select_voucher"
-                                            [options]="adjustVoucherOptions$ | async"
-                                            (selectedOption)="selectVoucher($event, entry, entryIdx)"
-                                            [defaultValue]="entry.voucherNumber"
-                                            [enableDynamicSearch]="true"
-                                            (dynamicSearchedQuery)="
-                                                searchReferenceVoucher = $event; resetInvoiceList(); loadVouchers()
-                                            "
-                                            (onClear)="onClearSalesAccount(transaction)"
-                                            (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
-                                            [hasMoreValue]="true"
-                                            [required]="true"
-                                            [isPaginationEnabled]="true"
-                                            (scrollEnd)="!searchReferenceVoucher ? loadVouchers() : ''"
-                                            [scrollableElementId]="'adjustVoucherOptions'"
-                                        >
-                                            <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)" aria-label="label">
-                                                    <div class="option-label">
-                                                        {{ option?.label }}
-                                                    </div>
-                                                    <div class="item-unique">
-                                                        <p class="option-value">
-                                                            ({{ commonLocaleData?.app_dated }}:
-                                                            {{ option?.additional.voucherDate }})
-                                                        </p>
-                                                        <p class="option-value-more">
-                                                            {{ commonLocaleData?.app_amount }}:
-                                                            {{ option?.additional?.currency?.symbol }}
-                                                            <span class="d-inline-flex">
-                                                                <amount-field
-                                                                    [amount]="
-                                                                        option?.additional?.balanceDue?.amountForAccount
-                                                                    "
-                                                                    [currencySymbol]="false"
-                                                                    [currencyCode]="false"
-                                                                >
-                                                                </amount-field>
-                                                            </span>
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </ng-template>
-                                        </select-field>
-                                    </div>
+                                    <reactive-dropdown-field
+                                        [autocomplete]="'off'"
+                                        [readonly]="
+                                            shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
+                                        "
+                                        [cssClass]="'text-left'"
+                                        [name]="'voucherName' + entry?.uniqueName"
+                                        [label]="localeData?.adjustment_voucher"
+                                        [placeholder]="localeData?.select_voucher"
+                                        [options]="adjustVoucherOptions$ | async"
+                                        (selectedOption)="selectVoucher($event, entry, entryIdx)"
+                                        [labelValue]="entry.voucherNumber"
+                                        [enableDynamicSearch]="true"
+                                        (dynamicSearchedQuery)="
+                                            searchReferenceVoucher = $event; resetInvoiceList(); loadVouchers()
+                                        "
+                                        (onClear)="onClearSalesAccount(transaction)"
+                                        (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
+                                        [required]="true"
+                                        [isPaginationEnabled]="true"
+                                        (scrollEnd)="!searchReferenceVoucher ? loadVouchers() : ''"
+                                    >
+                                        <ng-template #optionTemplate let-option="option">
+                                            <a href="javascript:void(0)" aria-label="label">
+                                                <p class="text-black">
+                                                    {{ option?.label }}
+                                                </p>
+                                                <div class="text-gray">
+                                                    <p>
+                                                        ({{ commonLocaleData?.app_dated }}:
+                                                        {{ option?.additional.voucherDate }})
+                                                    </p>
+                                                    <p class="font-12">
+                                                        {{ commonLocaleData?.app_amount }}:
+                                                        {{ option?.additional?.currency?.symbol }}
+                                                        <span class="d-inline-flex">
+                                                            <amount-field
+                                                                [amount]="
+                                                                    option?.additional?.balanceDue?.amountForAccount
+                                                                "
+                                                                [currencySymbol]="false"
+                                                                [currencyCode]="false"
+                                                            >
+                                                            </amount-field>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </a>
+                                        </ng-template>
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                             <div class="col-5">
                                 <div class="form-group mb-0 text-right">
-                                    <text-field
+                                    <input-field
                                         [readonly]="
                                             shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
                                         "
+                                        [label]="commonLocaleData?.app_amount"
                                         [placeholder]="localeData?.enter_amount"
                                         [type]="'text'"
-                                        [cssClass]="'form-control mat-field-border text-right'"
+                                        [cssClass]="'text-right'"
                                         [name]="'amount' + entry?.uniqueName"
                                         [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat"
                                         [useMask]="true"
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
-                                        (change)="calculateTax(entry, entryIdx)"
-                                    ></text-field>
+                                        (ngModelChange)="calculateTax(entry, entryIdx)"
+                                        [required]="true"
+                                    ></input-field>
                                     <span
                                         *ngIf="
                                             enableVoucherAdjustmentMultiCurrency &&
