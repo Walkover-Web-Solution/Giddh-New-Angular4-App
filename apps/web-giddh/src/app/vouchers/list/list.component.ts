@@ -3118,10 +3118,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public initSettingObj(): void {
-        console.log(!this.isSettingUpdateMode);
         if (!this.isSettingUpdateMode) {
             this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(setting => {
-                console.log('setting', setting);
                 if (setting && setting.invoiceSettings) {
                     this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
                     this.setEInvoiceColumns();
