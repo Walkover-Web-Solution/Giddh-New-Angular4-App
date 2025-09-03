@@ -40,7 +40,7 @@
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
                                         [options]="advanceSearchCategoryTransaction"
                                         (selectedOption)="selectCategory($event?.value)"
-                                        [labelValue]="advanceSearchFormObj.param1"
+                                        [labelValue]="advanceSearchFormObj.param1 ?? ''"
                                         (onClear)="advanceSearchFormObj.param1 = ''"
                                         [label]="localeData?.advance_search_filter?.category"
                                     >
@@ -51,7 +51,7 @@
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
                                         [options]="advanceSearchCategory"
                                         (selectedOption)="selectCategory($event?.value)"
-                                        [labelValue]="advanceSearchFormObj.param1"
+                                        [labelValue]="advanceSearchFormObj.param1 ?? ''"
                                         (onClear)="advanceSearchFormObj.param1 = ''"
                                         [label]="localeData?.advance_search_filter?.category"
                                     ></reactive-dropdown-field>
@@ -62,7 +62,7 @@
                                     [placeholder]="localeData?.advance_search_filter?.select_type"
                                     [options]="advanceSearchCategoryOptions"
                                     (selectedOption)="selectCategoryOptions($event?.value)"
-                                    [labelValue]="advanceSearchFormObj.param2"
+                                    [labelValue]="advanceSearchFormObj.param2 ?? ''"
                                     (onClear)="advanceSearchFormObj.param2 = ''"
                                     [label]="localeData?.advance_search_filter?.type"
                                 ></reactive-dropdown-field>
@@ -78,7 +78,7 @@
                                     [placeholder]="localeData?.advance_search_filter?.select_value"
                                     [options]="advanceSearchValue"
                                     (selectedOption)="selectValueType($event?.value)"
-                                    [labelValue]="advanceSearchFormObj.expression"
+                                    [labelValue]="advanceSearchFormObj.expression ?? ''"
                                     (onClear)="advanceSearchFormObj.expression = ''"
                                     [label]="localeData?.advance_search_filter?.value"
                                 ></reactive-dropdown-field>
