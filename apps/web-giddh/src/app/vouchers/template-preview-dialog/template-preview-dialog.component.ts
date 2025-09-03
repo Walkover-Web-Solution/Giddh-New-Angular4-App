@@ -57,27 +57,29 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
    */
   private setTemplatePreviewTitle(): void {
     let templateType = '';
-    
     // Map template types to display names
     switch (this.data?.type?.toLowerCase()) {
       case 'sales':
       case 'invoice':
-        templateType = 'Invoice';
+        templateType = this.data?.localeData?.invoice;
+        break;
+      case 'voucher':
+        templateType = this.data?.localeData?.voucher;
         break;
       case 'purchase':
       case 'purchase_bill':
-        templateType = 'Purchase Bill';
+        templateType = this.data?.localeData?.purchase_bill;
         break;
       case 'purchase_order':
-        templateType = 'Purchase Order';
+        templateType = this.data?.localeData?.purchase_order;
         break;
       default:
-        templateType = 'Invoice';
+        templateType = this.data?.localeData?.invoice;
         break;
     }
     
     // Replace [TEMPLATE_TYPE] placeholder with actual template type
-    this.templatePreviewTitle = this.localeData?.template_preview?.replace('[TEMPLATE_TYPE]', templateType) || `${templateType} Template Preview`;
+    this.templatePreviewTitle = this.data?.localeData?.template_preview?.replace('[TEMPLATE_TYPE]', templateType) || `${templateType} Template Preview`;
   }
 
   /**

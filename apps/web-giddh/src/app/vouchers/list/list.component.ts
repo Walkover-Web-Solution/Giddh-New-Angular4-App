@@ -3442,10 +3442,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public templateDialog(template: any): void {
+        const reqObj = {
+            ...template,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
         this.dialog.open(TemplatePreviewDialogComponent, {
             width: '980px',
             height: '90vh',
-            data: template
+            data: reqObj
         });
     }
 
