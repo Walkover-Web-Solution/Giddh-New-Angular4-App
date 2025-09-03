@@ -508,5 +508,9 @@
     "customer_details": "ग्राहकाचे तपशील",
     "shipping_details": "शिपिंग तपशील",
     "billing_details": "बिलिंग तपशील",
-    "tax_rate": "कराचे दर"
+    "tax_rate": "कराचे दर",
+    "bill_from": "बिल फ्रॉम",
+    "ship_from": "शिप फ्रॉम",
+    "invoice": "चलन",
+    "voucher": "वाउचर"
 }

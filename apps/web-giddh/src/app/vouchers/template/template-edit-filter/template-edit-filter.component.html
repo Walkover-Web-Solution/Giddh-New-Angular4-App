@@ -54,7 +54,10 @@
                                             class="view-img w-100 h-100 border-radius-5"
                                         />
 
-                                        <div class="beta-img position-absolute" *ngIf="template?.templateType !== templateTypeEnum.GstTemplateA" >
+                                        <div
+                                            class="beta-img position-absolute"
+                                            *ngIf="template?.templateType !== templateTypeEnum.GstTemplateA"
+                                        >
                                             <img src="./assets/images/templates/beta.png" alt="beta" />
                                         </div>
                                     </div>
@@ -364,9 +367,9 @@
                                                         color="primary"
                                                         name="companyNameCheckbox"
                                                         [(ngModel)]="
-                                            customTemplate.sections['header'].data['companyName']
-                                                .display
-                                        "
+                                                            customTemplate.sections['header'].data['companyName']
+                                                                .display
+                                                        "
                                                         (ngModelChange)="onChangeFieldVisibility()"
                                                     >
                                                         <span
@@ -434,9 +437,8 @@
                                                     color="primary"
                                                     name="exchangeRateCheckbox"
                                                     [(ngModel)]="
-                                                        customTemplate.sections['header'].data[
-                                                            'displayExchangeRate'
-                                                        ].display
+                                                        customTemplate.sections['header'].data['displayExchangeRate']
+                                                            .display
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     >{{ localeData?.exchange_conversion_rate }}</mat-checkbox
@@ -453,9 +455,8 @@
                                                     color="primary"
                                                     name="placeOfSupplyCheckbox"
                                                     [(ngModel)]="
-                                                        customTemplate.sections['header'].data[
-                                                            'displayPlaceOfSupply'
-                                                        ].display
+                                                        customTemplate.sections['header'].data['displayPlaceOfSupply']
+                                                            .display
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
@@ -474,9 +475,8 @@
                                                     color="primary"
                                                     name="countryOfSupplyfCheckbox"
                                                     [(ngModel)]="
-                                                        customTemplate.sections['header'].data[
-                                                            'displayPlaceOfCountry'
-                                                        ].display
+                                                        customTemplate.sections['header'].data['displayPlaceOfCountry']
+                                                            .display
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
@@ -496,10 +496,8 @@
                                                     color="primary"
                                                     name="lutNumberCheckbox"
                                                     [(ngModel)]="
-                                                    customTemplate.sections['header'].data[
-                                                        'companyName'
-                                                    ].label
-                                                "
+                                                        customTemplate.sections['header'].data['displayLutNumber'].display
+                                                    "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
                                                     {{ localeData?.lut_number }}</mat-checkbox
@@ -626,8 +624,8 @@
                                                     color="primary"
                                                     name="gstinCheckbox"
                                                     [(ngModel)]="
-                                                customTemplate.sections['header'].data['gstin'].display
-                                            "
+                                                        customTemplate.sections['header'].data['gstin'].display
+                                                    "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     class="d-block"
                                                 >
@@ -711,7 +709,6 @@
                                             <ng-container
                                                 *ngIf="
                                                     voucherType === voucherTypeEnum.sales ||
-                                                    voucherType === '' ||
                                                     customTemplate?.templateType === templateTypeEnum.TallyTemplate
                                                 "
                                             >
@@ -760,9 +757,14 @@
                                                                         ].display
                                                                     "
                                                                     [label]="
-                                                                        customTemplate?.templateType ===
-                                                                            templateTypeEnum.TallyTemplate &&
-                                                                        voucherType !== voucherTypeEnum.sales
+                                                                        templateType === voucherTypeEnum.purchase_order
+                                                                            ? 'PO Date'
+                                                                            : templateType ===
+                                                                              voucherTypeEnum.purchase_bill
+                                                                            ? 'Bill Date'
+                                                                            : customTemplate?.templateType ===
+                                                                                  templateTypeEnum.TallyTemplate &&
+                                                                              voucherType !== voucherTypeEnum.sales
                                                                             ? localeData?.voucher_date
                                                                             : localeData?.invoice_date
                                                                     "
@@ -831,9 +833,14 @@
                                                                         ].display
                                                                     "
                                                                     [label]="
-                                                                        customTemplate.templateType ===
-                                                                            templateTypeEnum.TallyTemplate &&
-                                                                        voucherType !== voucherTypeEnum.sales
+                                                                        templateType === voucherTypeEnum.purchase_order
+                                                                            ? 'PO Number'
+                                                                            : templateType ===
+                                                                              voucherTypeEnum.purchase_bill
+                                                                            ? 'Bill Number'
+                                                                            : customTemplate?.templateType ===
+                                                                                  templateTypeEnum.TallyTemplate &&
+                                                                              voucherType !== voucherTypeEnum.sales
                                                                             ? localeData?.voucher_number
                                                                             : localeData?.invoice_number
                                                                     "
@@ -872,87 +879,95 @@
                                                         <mat-checkbox
                                                             color="primary"
                                                             name="voucherDateCheckbox"
-                                                            [(ngModel)]="customTemplate.sections['header'].data['voucherDate'].display"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['header'].data['voucherDate']
+                                                                    .display
+                                                            "
                                                             (ngModelChange)="onChangeFieldVisibility()"
                                                             class="d-block"
                                                         >
                                                         </mat-checkbox>
                                                         <div class="ml-2 w-100">
-                                                            <input-field
-                                                                type="text"
-                                                                maxlength="15"
-                                                                cssClass="form-control"
-                                                                name="invoiceDate"
-                                                                [(ngModel)]="
-                                                                    customTemplate.sections['header'].data[
-                                                                        'voucherDate'
-                                                                    ].label
-                                                                "
-                                                                [label]="localeData?.voucher_date"
-                                                                (ngModelChange)="onFieldChange()"
-                                                                [readonly]="
-                                                                    !customTemplate.sections['header'].data[
-                                                                        'voucherDate'
-                                                                    ].display
-                                                                "
-                                                            ></input-field>
+                                                            <div>
+                                                                <input-field
+                                                                    type="text"
+                                                                    maxlength="15"
+                                                                    cssClass="form-control"
+                                                                    name="invoiceDate"
+                                                                    [(ngModel)]="
+                                                                        customTemplate.sections['header'].data[
+                                                                            'voucherDate'
+                                                                        ].label
+                                                                    "
+                                                                    (ngModelChange)="onFieldChange()"
+                                                                    [readonly]="
+                                                                        !customTemplate.sections['header'].data[
+                                                                            'voucherDate'
+                                                                        ].display
+                                                                    "
+                                                                    [label]="localeData?.voucher_date"
+                                                                ></input-field>
+                                                            </div>
+                                                            <p class="mt-1">
+                                                                <span class="light-gray font-12">{{
+                                                                    localeData?.characters_left
+                                                                }}</span>
+                                                                {{
+                                                                    15 -
+                                                                        customTemplate.sections["header"].data[
+                                                                            "voucherDate"
+                                                                        ].label?.length
+                                                                }}
+                                                            </p>
                                                         </div>
                                                     </div>
-                                                    <p class="mt-1">
-                                                        <span class="light-gray font-12">{{
-                                                            localeData?.characters_left
-                                                        }}</span>
-                                                        {{
-                                                            15 -
-                                                                customTemplate.sections["header"].data["voucherDate"]
-                                                                    .label?.length
-                                                        }}
-                                                    </p>
                                                 </div>
                                                 <!-- voucher number -->
-                                                <div *ngIf="sectionSettings?.header.voucherNumber">
-                                                    <mat-checkbox
-                                                        color="primary"
-                                                        name="voucherNumberCheckbox"
-                                                        [(ngModel)]="
-                                                            customTemplate.sections['header'].data['voucherNumber']
-                                                                .display
-                                                        "
-                                                        (ngModelChange)="onChangeFieldVisibility()"
-                                                    >
-                                                        {{ localeData?.voucher_number }}
-                                                    </mat-checkbox>
-                                                    <div class="ml-4">
-                                                        <div class="option-value-field">
-                                                            <input-field
-                                                                type="text"
-                                                                cssClass="form-control"
-                                                                maxlength="15"
-                                                                name="voucherNo"
-                                                                [(ngModel)]="
-                                                                customTemplate.sections['header'].data[
-                                                                    'invoiceNumber'
-                                                                ].label
+                                                <div *ngIf="sectionSettings?.header.voucherNumber" class="mr-t1">
+                                                    <div class="d-flex">
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            name="voucherNumberCheckbox"
+                                                            [(ngModel)]="
+                                                                customTemplate.sections['header'].data['voucherNumber']
+                                                                    .display
                                                             "
-                                                                (ngModelChange)="onFieldChange()"
-                                                                [readonly]="
-                                                                    !customTemplate.sections['header'].data[
-                                                                        'voucherNumber'
-                                                                    ].display
-                                                                "
-                                                            ></input-field>
+                                                            (ngModelChange)="onChangeFieldVisibility()"
+                                                        >
+                                                        </mat-checkbox>
+                                                        <div class="ml-2 w-100">
+                                                            <div>
+                                                                <input-field
+                                                                    type="text"
+                                                                    cssClass="form-control"
+                                                                    maxlength="15"
+                                                                    name="voucherNo"
+                                                                    [(ngModel)]="
+                                                                        customTemplate.sections['header'].data[
+                                                                            'voucherNumber'
+                                                                        ].label
+                                                                    "
+                                                                    (ngModelChange)="onFieldChange()"
+                                                                    [readonly]="
+                                                                        !customTemplate.sections['header'].data[
+                                                                            'voucherNumber'
+                                                                        ].display
+                                                                    "
+                                                                    [label]="localeData?.voucher_number"
+                                                                ></input-field>
+                                                            </div>
+                                                            <p class="mt-1">
+                                                                <span class="light-gray font-12">{{
+                                                                    localeData?.characters_left
+                                                                }}</span>
+                                                                {{
+                                                                    15 -
+                                                                        customTemplate.sections["header"].data[
+                                                                            "voucherNumber"
+                                                                        ].label?.length
+                                                                }}
+                                                            </p>
                                                         </div>
-                                                        <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
-                                                                localeData?.characters_left
-                                                            }}</span>
-                                                            {{
-                                                                15 -
-                                                                    customTemplate.sections["header"].data[
-                                                                        "voucherNumber"
-                                                                    ].label?.length
-                                                            }}
-                                                        </p>
                                                     </div>
                                                 </div>
                                             </ng-container>
@@ -1210,7 +1225,12 @@
                                                         >
                                                             <input-field
                                                                 [type]="'text'"
-                                                                [label]="localeData?.billing_address"
+                                                                [label]="
+                                                                    templateType === voucherTypeEnum.purchase_order ||
+                                                                    templateType === voucherTypeEnum.purchase_bill
+                                                                        ? localeData?.bill_from
+                                                                        : localeData?.billing_address
+                                                                "
                                                                 name="bill"
                                                                 [maxlength]="
                                                                     customTemplate?.templateType ===
@@ -1366,7 +1386,12 @@
                                                     <div class="ml-2 w-100">
                                                         <div>
                                                             <input-field
-                                                                [label]="localeData?.shipping_address"
+                                                                [label]="
+                                                                    templateType === voucherTypeEnum.purchase_order ||
+                                                                    templateType === voucherTypeEnum.purchase_bill
+                                                                        ? localeData?.ship_from
+                                                                        : localeData?.shipping_address
+                                                                "
                                                                 [type]="'text'"
                                                                 [name]="'shippAdd'"
                                                                 cssClass="form-control"
@@ -1979,7 +2004,9 @@
                                         </div>
                                         <div *ngIf="sectionSettings?.table.item" class="mr-t1">
                                             <div
-                                                *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
+                                                *ngIf="
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                "
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -2147,7 +2174,9 @@
                                         </div>
                                         <div *ngIf="sectionSettings?.table.quantity" class="mr-t1">
                                             <div
-                                                *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
+                                                *ngIf="
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                "
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -2295,7 +2324,9 @@
                                         </div>
                                         <div *ngIf="sectionSettings?.table.rate" class="mr-t1">
                                             <div
-                                                *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
+                                                *ngIf="
+                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
+                                                "
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -2709,11 +2740,15 @@
                                             </mat-checkbox>
                                         </div>
                                         <ng-container
-                                            *ngIf="
-                                                customTemplate?.templateType === templateTypeEnum.TallyTemplate
-                                            "
+                                            *ngIf="customTemplate?.templateType === templateTypeEnum.TallyTemplate"
                                         >
-                                            <div class="mr-t1" *ngIf="templateType !== voucherTypeEnum.purchase_order && templateType !== voucherTypeEnum.purchase_bill">
+                                            <div
+                                                class="mr-t1"
+                                                *ngIf="
+                                                    templateType !== voucherTypeEnum.purchase_order &&
+                                                    templateType !== voucherTypeEnum.purchase_bill
+                                                "
+                                            >
                                                 <div class="d-flex">
                                                     <mat-checkbox
                                                         color="primary"
@@ -2732,7 +2767,9 @@
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
                                                             (ngModelChange)="onValueChange('qrCodeId', $event)"
-                                                            [pattern]="'^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'"
+                                                            [pattern]="
+                                                                '^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'
+                                                            "
                                                             (patternValidation)="onPatternValidation($event)"
                                                         ></input-field>
                                                     </div>
@@ -3409,7 +3446,9 @@
                                                             (ngModelChange)="onFieldChange()"
                                                             [(ngModel)]="customTemplate.qrCodeId"
                                                             [disabled]="!customTemplate.showBankQrCode"
-                                                            [pattern]="'^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'"
+                                                            [pattern]="
+                                                                '^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'
+                                                            "
                                                             (patternValidation)="onPatternValidation($event)"
                                                         ></input-field>
                                                     </div>
