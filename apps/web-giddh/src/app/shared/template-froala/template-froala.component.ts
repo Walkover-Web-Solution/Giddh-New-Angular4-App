@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, skip, take, takeUntil } from 'rxjs';
@@ -67,7 +67,66 @@ export class TemplateFroalaComponent implements OnInit {
     /** Hold email suggestion suffix */
     public emailSuggestionSuffix: string = '}';
     /** Hold froala editor options */
-    public froalaOptions: any = this.getFroalaOptions();
+    public froalaOptions: any = {
+        key: FROALA_EDITOR_KEY,
+        attribution: false,
+        heightMin: 300,
+        heightMax: 300,
+        zIndex: 2501,
+        toolbarSticky: true,
+        toolbarButtons: {
+            moreText: {
+                buttons: [
+                    'bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'textColor',
+                    'backgroundColor', 'clearFormatting',
+                ],
+                align: 'left',
+                buttonsVisible: 9
+            },
+            moreRich: {
+                buttons: [
+                    'html', 'help',
+                    'fullscreen', 'emoticons', 'fontAwesome', 'insertHR'
+                ],
+                align: 'left',
+                buttonsVisible: 6
+            },
+            moreParagraph: {
+                buttons: [
+                    'alignLeft', 'alignCenter', 'alignRight', 'alignJustify',
+                    'formatOLSimple', 'formatOL', 'formatUL', 'paragraphFormat',
+                    'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'
+                ],
+                align: 'left',
+                buttonsVisible: 13
+            }
+        },
+        placeholderText: this.localeData?.email_content_suggestions,
+        charCounterCount: false,
+        wordCount: false,
+        htmlAllowedTags: ['.*'],
+        htmlAllowedAttrs: ['.*'],
+        events: {
+            initialized: (event) => {
+                this.froalaEditor = event.getEditor();
+                this.froalaEditor.events.on(
+                    'keydown',
+                    (e) => {
+                        if (e.which == FroalaEditor.KEYCODE.ENTER && this.froalaTribute.isActive) {
+                            return false;
+                        }
+                    },
+                    true
+                );
+            },
+            blur: () => { // Handles changes made in the code view when focus is lost
+                if (this.froalaEditor.codeView?.isActive()) {
+                    this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
+                    this.updateFormControl();
+                }
+            }
+        }
+    };
     /** Hold to email options */
     public toEmails: any[] = [];
     /** Hold selected to email options */
@@ -151,8 +210,8 @@ export class TemplateFroalaComponent implements OnInit {
         public dialogRef: MatDialogRef<any>,
         private generalService: GeneralService,
         private titleCasePipe: TitleCasePipe,
-        private pageLeaveUtilityService: PageLeaveUtilityService,
-        private changeDetectorRef: ChangeDetectorRef
+        private pageLeaveUtilityService: PageLeaveUtilityService
+        
     ) { }
 
     /**
@@ -240,10 +299,6 @@ export class TemplateFroalaComponent implements OnInit {
                     key: item
                 }));
 
-                console.log('froalaEditor-in', this.froalaEditor);
-                if (!this.froalaEditor) {
-                    this.froalaOptions = this.getFroalaOptions();
-                }
                 setTimeout(() => {
                     console.log('initializeFroalaEditor', 'froalaEditor-set', this.froalaEditor);
                     this.initializeTribute(tributeSuggestions);
@@ -284,7 +339,6 @@ export class TemplateFroalaComponent implements OnInit {
                     emailSubject: response.emailSubject ?? null,
                     html: response.html ?? null
                 }, { emitEvent: false });
-                this.changeDetectorRef.detectChanges();
             }
         });
 
@@ -417,7 +471,6 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private initializeTribute(tributeSuggestions: any[]): void {
-        console.log('initializeTribute', 'tributeSuggestions', tributeSuggestions);
         if (this.froalaTribute) {
             this.froalaTribute.detach(this.froalaEditor.el);
         }
@@ -437,7 +490,7 @@ export class TemplateFroalaComponent implements OnInit {
             values: tributeSuggestions,
             selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
         });
-        console.log('froalaEditor', 'froalaEditor', this.froalaEditor);
+
         if (this.froalaEditor) {
             this.froalaTribute.attach(this.froalaEditor.el);
         }
@@ -529,7 +582,6 @@ export class TemplateFroalaComponent implements OnInit {
                 html: [template?.html ?? null]
             }, { emitEvent: false });
         }
-        this.changeDetectorRef.detectChanges();
     }
 
     /**
