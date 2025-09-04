@@ -2505,24 +2505,6 @@ form#groupDetailForm {
     padding: 0 15px;
 }
 
-@media (max-width: 575px) {
-    .aside-pane {
-        max-width: 370px;
-    }
-    .advance-icon {
-        font-size: 16px !important;
-    }
-}
-@media (max-width: 375px) {
-    .aside-pane {
-        max-width: 310px;
-    }
-}
-@media (max-width: 320px) {
-    .aside-pane {
-        max-width: 280px;
-    }
-}
 .delete-custom-field-modal-container {
     z-index: 999999 !important;
 }
