@@ -17,7 +17,6 @@ import { AppState } from '../store';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
-import { MatDatepicker } from '@angular/material/datepicker';
 import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './gst.component.html',
@@ -331,12 +330,10 @@ export class GstComponent implements OnInit, OnDestroy {
     /**
      * Sets month/year
      *
-     * @param {*} date
-     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @param {*} date - Selected date from giddh-datepicker
      * @memberof GstComponent
      */
-    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker?.close();
+    public setMonthAndYear(date: any): void {
         const selectedMonth = new Date(date);
         const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
         const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);

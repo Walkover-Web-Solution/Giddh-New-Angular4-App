@@ -1,7 +1,9 @@
-<div>
-    <div class="modal-header theme-bg d-flex justify-content-between">
-        <h3 class="modal-title bg" id="modal-title" mat-dialog-title>{{ commonLocaleData?.app_advance_search }}</h3>
-        <button mat-stroked-button aria-hidden="true" class="close" (click)="onCancel()">×</button>
+<section>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ commonLocaleData?.app_advance_search }}</span>
+        <button mat-icon-button aria-label="close" (click)="onCancel()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
     <mat-dialog-content>
         <div class="modal-body clearfix" id="export-body">
@@ -204,6 +206,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-xs-12 col-sm-12">
                         <div class="row mr-0 ml-0">
                             <div class="col-md-5 pl-0 d-flex align-items-center">
@@ -481,4 +484,4 @@
             </form>
         </div>
     </mat-dialog-content>
-</div>
+</section>

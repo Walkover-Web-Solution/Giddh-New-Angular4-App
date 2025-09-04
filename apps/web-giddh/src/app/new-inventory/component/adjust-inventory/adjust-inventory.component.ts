@@ -17,7 +17,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { AdjustmentInventory, API_COUNT_LIMIT } from '../../../app.constant';
+import { AdjustmentInventory, API_COUNT_LIMIT, ASIDE_PANE_CONFIG } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'adjust-inventory',
@@ -454,14 +454,7 @@ export class AdjustInventoryComponent implements OnInit {
     * @memberof AdjustInventoryComponent
     */
     public openCreateReasonModal(): void {
-        this.matDialogRef = this.dialog.open(this.createReason, {
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.matDialogRef = this.dialog.open(this.createReason, ASIDE_PANE_CONFIG);
     }
 
     /**

@@ -17,7 +17,6 @@ import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-
 import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.constant';
 import { GeneralService } from '../../services/general.service';
 import { FormControl } from '@angular/forms';
-import { MatDatepicker } from '@angular/material/datepicker';
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -744,12 +743,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     /**
     * Sets month/year
     *
-    * @param {*} date
-    * @param {MatDatepicker<dayjs.Dayjs>} datepicker
-    * @memberof FilingHeaderComponent
+    * @param {*} date - Selected date from giddh-datepicker
+    * @memberof FileGstR3Component
     */
-    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker?.close();
+    public setMonthAndYear(date: any): void {
         const selectedMonth = new Date(date);
         const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
         const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
