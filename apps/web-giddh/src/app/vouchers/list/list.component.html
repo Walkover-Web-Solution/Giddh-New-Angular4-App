@@ -4853,6 +4853,7 @@
                                                         [matSuffix]="commonLocaleData?.app_days"
                                                     ></input-field>
                                                     <giddh-datepicker
+                                                        *ngIf="showInvoiceDate"
                                                         type="text"
                                                         (keydown.enter)="$event.preventDefault()"
                                                         [label]="localeData?.invoice_lock_date"
@@ -5590,6 +5591,7 @@
                                                 {{ localeData?.purchase_bill }}
                                             </h4>
                                             <giddh-datepicker
+                                                *ngIf="showPurchaseDate"
                                                 type="text"
                                                 (keydown.enter)="$event.preventDefault()"
                                                 [label]="localeData?.bill_lock_date"
