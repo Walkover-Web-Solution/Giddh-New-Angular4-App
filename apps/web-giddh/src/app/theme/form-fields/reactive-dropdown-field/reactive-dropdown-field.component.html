@@ -14,7 +14,7 @@
                         $event?.relatedTarget?.nodeName !== 'A'
                             ? trigger.closePanel()
                             : null
-                    " [value]="labelValue" />
+                    " [value]="labelValue ?? ''" />
                 <mat-autocomplete (opened)="panelOpened()" (optionSelected)="optionSelected($event)" optionsScroll class="py-0"
                     [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
                     [displayWith]="displayLabel" #auto="matAutocomplete">
@@ -71,7 +71,7 @@
                 $event?.relatedTarget?.nodeName !== 'A'
                     ? trigger.closePanel()
                     : null
-            " [value]="labelValue" />
+            " [value]="labelValue ?? ''" />
         <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll
             [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
             [displayWith]="displayLabel" #auto="matAutocomplete">
