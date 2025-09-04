@@ -47,23 +47,15 @@
                             </a>
                         </span>
                         <div>
-                            <input
-                                matInput
-                                [matDatepicker]="picker"
-                                [placeholder]="date?.value ?? '--'"
-                                autocomplete="off"
-                                (focus)="picker?.open()"
-                                (click)="picker?.open()"
-                                class="month-selection user-select-none mat-form-field-border border-0 text-center cursor-pointer"
-                                name="date"
-                                readonly
-                            />
-                            <mat-datepicker
-                                (monthSelected)="setMonthAndYear($event, picker)"
+                            <giddh-datepicker
+                                [monthYearMode]="true"
                                 [startView]="'multi-year'"
                                 [startAt]="startAt"
-                                #picker
-                            ></mat-datepicker>
+                                [placeholder]="date?.value ?? '--'"
+                                [appearance]="'outline'"
+                                (monthYearSelected)="setMonthAndYear($event)"
+                            >
+                            </giddh-datepicker>
                         </div>
                     </div>
 

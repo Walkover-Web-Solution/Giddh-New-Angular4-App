@@ -60,7 +60,7 @@
                         required
                     />
                 </label>
-                <span  class="path-name">{{ selectedFile }}</span>
+                <span  class="path-name align-self-center">{{ selectedFile }}</span>
             </div>
             <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === fileType.PDF && selectStatement === importStatementType.BankStatement">
                 <mat-label class="import-field-label align-bottom">{{ inputData?.commonLocaleData?.app_password }}</mat-label>
@@ -109,22 +109,18 @@
                     }}</span>
                 </mat-slide-toggle>
             </div>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between align-items-end">
                 <div>
                     <a
                         href="javascript:;"
-                        mat-raised-button
-                        color="primary"
-                        class="m-0 pl-0 font-14"
+                        class="m-0 pd-t05 pd-b05 pd-r1 font-14 text-underline"
                         (click)="downloadSampleFile(selectStatement)"
                     >
                         {{ inputData?.localeData?.download_sample_xls }}
                     </a>
                     <a
                         href="javascript:;"
-                        mat-raised-button
-                        color="primary"
-                        class="m-0 font-14"
+                        class="pd-t05 pd-b05 pd-r1 pd-l1 font-14 text-underline"
                         (click)="downloadSampleFile(selectStatement, true)"
                     >
                         {{ inputData?.localeData?.download_sample_csv }}
