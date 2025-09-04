@@ -260,7 +260,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             stockUnitCode: [controlValue.stockUnitCode, Validators.required],
             stockUnitName: [controlValue.stockUnitName, Validators.required],
 
-            purchaseUnits: [(controlValue.purchaseUnits?.length && controlValue.purchaseUnits[0] !== null ? controlValue.purchaseUnits[0]?.uniqueName : ""), Validators.required],
+            purchaseUnits: [(controlValue.purchaseUnits?.length && controlValue.purchaseUnits[0] !== null ? controlValue.purchaseUnits[0]?.code : ""), Validators.required],
             purchaseAccountName: [controlValue.purchaseAccountName, Validators.required],
             purchaseAccountUniqueName: [controlValue.purchaseAccountUniqueName, Validators.required],
             purchaseRate: [controlValue.purchaseRate, Validators.required],
