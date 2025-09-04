@@ -49,7 +49,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-/** Holds local JSON data */
+    /** Holds local JSON data */
     public localeData: any = {};
     /** Holds common JSON data */
     public commonLocaleData: any = {};
@@ -263,6 +263,9 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                     this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                     this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+                    if (this.listCount === 0) {
+                        this.getAllOcrDocuments(false);
+                    }
                 }
             });
         }
