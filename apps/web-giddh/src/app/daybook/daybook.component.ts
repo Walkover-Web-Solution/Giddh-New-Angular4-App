@@ -277,10 +277,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.showLoader = true;
         let daybookRequest = cloneDeep(withFilters);
         if (withFilters) {
-            daybookRequest.defaultVouchersLabel = null;
-            daybookRequest.defaultTagsLabel = null;
-            daybookRequest.defaultParticularsLabel = null;
-            daybookRequest.inventory.defaultInventoriesLabel = null;
+            delete daybookRequest.defaultVouchersLabel;
+            delete daybookRequest.defaultTagsLabel;
+            delete daybookRequest.defaultParticularsLabel;
+            delete daybookRequest.inventory.defaultInventoriesLabel;
         }
         this.daybookService.GetDaybook(daybookRequest, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
