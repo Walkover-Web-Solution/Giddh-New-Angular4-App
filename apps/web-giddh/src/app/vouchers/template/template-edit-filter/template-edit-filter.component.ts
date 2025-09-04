@@ -162,14 +162,11 @@ export class TemplateEditFilterComponent implements OnInit {
 
         this.templateService.setTemplateVoucherType(this.voucherType);
         if (this.templateMode === TemplateModeEnum.Create) {
-            console.log(this.dialogData);
             if (this.templateType === VoucherTypeEnum.purchase_order || this.templateType === VoucherTypeEnum.purchase_bill) {
                 const tallyTemplate = this.sampleTemplates?.find(template => template?.templateType === TemplateTypeEnum.TallyTemplate);
-                console.log(tallyTemplate);
                 this.initializeTemplate(this.companyUniqueName, companies, cloneDeep(tallyTemplate));
             } else {
                 const gstTemplate = this.sampleTemplates?.find(template => template?.templateType === TemplateTypeEnum.GstTemplateA);
-                console.log(gstTemplate);
                 this.initializeTemplate(this.companyUniqueName, companies, cloneDeep(gstTemplate));
             }
         } else {
@@ -866,7 +863,6 @@ export class TemplateEditFilterComponent implements OnInit {
         
         if (defaultTemplate) {
             const processedTemplate = cloneDeep(defaultTemplate);
-            console.log(processedTemplate, this.customTemplate, companyName, companyAddress);
             if (companyName) {
                 processedTemplate.sections.header.data.companyName.label = companyName;
                 processedTemplate.sections.footer.data.companyName.label = companyName;
