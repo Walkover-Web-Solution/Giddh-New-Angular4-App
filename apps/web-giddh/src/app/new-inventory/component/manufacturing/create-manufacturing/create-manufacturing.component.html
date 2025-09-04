@@ -85,6 +85,7 @@
                                             [cssClass]="errorFields.finishedStockName ? ' required-field-error' : ''"
                                             [name]="'stockUniqueName'"
                                             [scrollableElementId]="'finishedStockDropdown'"
+                                            [label]="commonLocaleData?.app_stock"
                                             [placeholder]="commonLocaleData?.app_select_stock"
                                             [options]="manufacturingObject.manufacturingDetails[0].stocks"
                                             (selectedOption)="
