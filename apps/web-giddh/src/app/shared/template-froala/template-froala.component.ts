@@ -66,67 +66,16 @@ export class TemplateFroalaComponent implements OnInit {
     public emailSuggestionPrefix: string = '{';
     /** Hold email suggestion suffix */
     public emailSuggestionSuffix: string = '}';
+    /** Instance of is electron variable */
+    public isElectron: any = isElectron;
     /** Hold froala editor options */
-    public froalaOptions: any = {
-        key: FROALA_EDITOR_KEY,
-        attribution: false,
-        heightMin: 300,
-        heightMax: 300,
-        zIndex: 2501,
-        toolbarSticky: true,
-        toolbarButtons: {
-            moreText: {
-                buttons: [
-                    'bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'textColor',
-                    'backgroundColor', 'clearFormatting',
-                ],
-                align: 'left',
-                buttonsVisible: 9
-            },
-            moreRich: {
-                buttons: [
-                    'html', 'help',
-                    'fullscreen', 'emoticons', 'fontAwesome', 'insertHR'
-                ],
-                align: 'left',
-                buttonsVisible: 6
-            },
-            moreParagraph: {
-                buttons: [
-                    'alignLeft', 'alignCenter', 'alignRight', 'alignJustify',
-                    'formatOLSimple', 'formatOL', 'formatUL', 'paragraphFormat',
-                    'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'
-                ],
-                align: 'left',
-                buttonsVisible: 13
-            }
-        },
-        placeholderText: this.localeData?.email_content_suggestions,
-        charCounterCount: false,
-        wordCount: false,
-        htmlAllowedTags: ['.*'],
-        htmlAllowedAttrs: ['.*'],
-        events: {
-            initialized: (event) => {
-                this.froalaEditor = event.getEditor();
-                this.froalaEditor.events.on(
-                    'keydown',
-                    (e) => {
-                        if (e.which == FroalaEditor.KEYCODE.ENTER && this.froalaTribute.isActive) {
-                            return false;
-                        }
-                    },
-                    true
-                );
-            },
-            blur: () => { // Handles changes made in the code view when focus is lost
-                if (this.froalaEditor.codeView?.isActive()) {
-                    this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
-                    this.updateFormControl();
-                }
-            }
-        }
-    };
+    public froalaOptions: any;
+    /** Retry counter for Froala initialization */
+    private froalaInitRetryCount: number = 0;
+    /** Maximum retry attempts for Froala initialization */
+    private readonly maxFroalaInitRetries: number = 5;
+    /** Retry delay in milliseconds */
+    private readonly froalaInitRetryDelay: number = 500;
     /** Hold to email options */
     public toEmails: any[] = [];
     /** Hold selected to email options */
@@ -212,7 +161,10 @@ export class TemplateFroalaComponent implements OnInit {
         private generalService: GeneralService,
         private titleCasePipe: TitleCasePipe,
         private pageLeaveUtilityService: PageLeaveUtilityService
-    ) { }
+    ) {
+        // Initialize Froala options after environment detection
+        this.froalaOptions = this.getFroalaOptions();
+    }
 
     /**
      * Initializes the component and performs necessary operations.
@@ -301,7 +253,12 @@ export class TemplateFroalaComponent implements OnInit {
                     key: item
                 }));
 
+                console.log('froalaEditor-in', this.froalaEditor);
+                if (!this.froalaEditor) {
+                    this.froalaOptions = this.getFroalaOptions();
+                }
                 setTimeout(() => {
+                    console.log('initializeFroalaEditor', 'froalaEditor-set', this.froalaEditor);
                     this.initializeTribute(tributeSuggestions);
                 }, 300);
 
@@ -384,6 +341,76 @@ export class TemplateFroalaComponent implements OnInit {
         this.emailForm.get('html')?.patchValue(this.froalaEditor.html.get());
     }
 
+    public getFroalaOptions() : any {
+        return {
+            key: FROALA_EDITOR_KEY,
+            attribution: false,
+            heightMin: 300,
+            heightMax: 300,
+            zIndex: 2501,
+            toolbarSticky: true,
+            // Add Electron-specific configurations
+            requestWithCORS: this.isElectron ? false : true,
+            toolbarButtons: {
+                moreText: {
+                    buttons: [
+                        'bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'textColor',
+                        'backgroundColor', 'clearFormatting',
+                    ],
+                    align: 'left',
+                    buttonsVisible: 9
+                },
+                moreRich: {
+                    buttons: [
+                        'html', 'help',
+                        'fullscreen', 'emoticons', 'fontAwesome', 'insertHR'
+                    ],
+                    align: 'left',
+                    buttonsVisible: 6
+                },
+                moreParagraph: {
+                    buttons: [
+                        'alignLeft', 'alignCenter', 'alignRight', 'alignJustify',
+                        'formatOLSimple', 'formatOL', 'formatUL', 'paragraphFormat',
+                        'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'
+                    ],
+                    align: 'left',
+                    buttonsVisible: 13
+                }
+            },
+            placeholderText: this.localeData?.email_content_suggestions,
+            charCounterCount: false,
+            wordCount: false,
+            htmlAllowedTags: ['.*'],
+            htmlAllowedAttrs: ['.*'],
+            events: {
+                initialized: (event) => {
+                    console.log('Froala editor initialized', event);
+                    this.froalaEditor = event.getEditor();
+                    
+                    // Add additional delay for Electron environment
+                    const setupDelay = this.isElectron ? 200 : 0;
+                    setTimeout(() => {
+                        this.setupFroalaEventHandlers();
+                    }, setupDelay);
+                },
+                blur: () => { // Handles changes made in the code view when focus is lost
+                    if (this.froalaEditor?.codeView?.isActive()) {
+                        this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
+                        this.updateFormControl();
+                    }
+                },
+                // Add error handling for Electron
+                'error': (error) => {
+                    console.error('Froala editor error:', error);
+                    if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
+                        this.retryFroalaInitialization();
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Updates the focus state for the email types ('to', 'cc', 'bcc').
      * @returns {void}
@@ -394,6 +421,82 @@ export class TemplateFroalaComponent implements OnInit {
         this.emailFocusStates.isTo = emailType === EmailType.To;
         this.emailFocusStates.isCc = emailType === EmailType.Cc;
         this.emailFocusStates.isBcc = emailType === EmailType.Bcc;
+    }
+
+    /**
+     * Detects if the application is running in Electron environment
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof TemplateFroalaComponent
+     */
+    private isElectronEnvironment(): boolean {
+        return !!(window && (window as any).require && (window as any).process && (window as any).process.type);
+    }
+
+    /**
+     * Sets up Froala event handlers
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private setupFroalaEventHandlers(): void {
+        if (this.froalaEditor) {
+            this.froalaEditor.events.on(
+                'keydown',
+                (e) => {
+                    if (e.which == FroalaEditor.KEYCODE.ENTER && this.froalaTribute?.isActive) {
+                        return false;
+                    }
+                },
+                true
+            );
+        }
+    }
+
+    /**
+     * Retries Froala editor initialization
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private retryFroalaInitialization(): void {
+        this.froalaInitRetryCount++;
+        console.log(`Retrying Froala initialization (attempt ${this.froalaInitRetryCount}/${this.maxFroalaInitRetries})`);
+        
+        setTimeout(() => {
+            this.froalaOptions = this.getFroalaOptions();
+        }, this.froalaInitRetryDelay * this.froalaInitRetryCount);
+    }
+
+    /**
+     * Initializes tribute with retry mechanism for Electron
+     *
+     * @private
+     * @param {any[]} tributeSuggestions
+     * @memberof TemplateFroalaComponent
+     */
+    private initializeTributeWithRetry(tributeSuggestions: any[]): void {
+        if (!tributeSuggestions || tributeSuggestions.length === 0) {
+            console.log('No tribute suggestions available');
+            return;
+        }
+
+        const attemptInitialization = (attempt: number = 1) => {
+            console.log(`Attempting tribute initialization (attempt ${attempt})`);
+            
+            if (this.froalaEditor && this.froalaEditor.el) {
+                this.initializeTribute(tributeSuggestions);
+                console.log('Tribute initialization successful');
+            } else if (attempt < this.maxFroalaInitRetries) {
+                console.log(`Froala editor not ready, retrying in ${this.froalaInitRetryDelay}ms`);
+                setTimeout(() => attemptInitialization(attempt + 1), this.froalaInitRetryDelay);
+            } else {
+                console.error('Failed to initialize tribute after maximum retries');
+            }
+        };
+
+        attemptInitialization();
     }
 
     /**
@@ -408,12 +511,14 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private initializeTribute(tributeSuggestions: any[]): void {
+        console.log('initializeTribute', 'tributeSuggestions', tributeSuggestions);
+        
         if (this.froalaTribute) {
             this.froalaTribute.detach(this.froalaEditor.el);
         }
 
         if (this.subjectTribute) {
-            this.froalaTribute.detach(this.subjectInputField.nativeElement);
+            this.subjectTribute.detach(this.subjectInputField.nativeElement);
         }
 
         this.froalaTribute = new Tribute({
@@ -427,10 +532,13 @@ export class TemplateFroalaComponent implements OnInit {
             values: tributeSuggestions,
             selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
         });
-
+        
+        console.log('froalaEditor', 'froalaEditor', this.froalaEditor);
+        
         if (this.froalaEditor) {
             this.froalaTribute.attach(this.froalaEditor.el);
         }
+        
         if (this.subjectInputField && this.subjectInputField.nativeElement) {
             this.subjectTribute.attach(this.subjectInputField.nativeElement);
         }
