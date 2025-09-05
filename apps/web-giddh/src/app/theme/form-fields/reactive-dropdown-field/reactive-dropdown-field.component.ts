@@ -156,7 +156,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private filterOptions(search: string): any {
         let filteredOptions = [];
         this.options?.forEach(option => {
-            if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+            if (typeof search !== "string" || (typeof option?.label === "string" && option.label.toLowerCase().indexOf(search.toLowerCase()) > -1)) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });

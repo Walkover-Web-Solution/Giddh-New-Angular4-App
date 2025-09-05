@@ -29,6 +29,7 @@ import { NewConfirmationModalComponent } from "../../../theme/new-confirmation-m
 import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store";
 import { PreviewVariantImageComponent } from "../preview-variant-image/preview-variant-image.component";
 import { ServiceConfig } from "../../../services/service.config";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 @Component({
     selector: "stock-create-edit",
@@ -2058,8 +2059,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
     /**
      * This will use for validation in name space
      *
@@ -2068,6 +2067,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public checkSpacingValidation(value: string): void {
         this.hasSpacingError = (value?.trim()) ? false : true;
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {MatTabChangeEvent} event
+     * @memberof StockCreateEditComponent
+     */
+    public onTabChange(event: MatTabChangeEvent): void {
+        this.activeTabIndex = event?.index;
     }
 
     /**

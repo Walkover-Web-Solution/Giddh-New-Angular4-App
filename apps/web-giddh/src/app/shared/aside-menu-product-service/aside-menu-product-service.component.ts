@@ -14,19 +14,7 @@ import { GeneralService } from '../../services/general.service';
 @Component({
     selector: 'aside-menu-product-service',
     styleUrls: ['./aside-menu-product-service.component.scss'],
-    templateUrl: './aside-menu-product-service.component.html',
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    templateUrl: './aside-menu-product-service.component.html'
 })
 export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -38,8 +26,6 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     public isAddStockOpen: boolean = false;
     public isAddServiceOpen: boolean = false;
     public hideFirstStep: boolean = false;
-    /** Aside menu state */
-    public accountAsideMenuState: string = "in";
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
