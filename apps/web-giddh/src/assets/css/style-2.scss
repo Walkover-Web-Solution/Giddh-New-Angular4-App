@@ -1287,10 +1287,6 @@ body {
     }
 }
 
-.mat-calendar-body-cell-content {
-    color: var(--color-datepicker-ternary-date);
-}
-
 .mat-calendar-body-cell {
     &.mat-calendar-body-active {
         .mat-calendar-body-selected {
@@ -2833,7 +2829,6 @@ modal-container.modal {
 .tooltip-box .tooltip {
     width: 150px;
 }
-
 
 /* my css end */
 

@@ -10,8 +10,7 @@ import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '.
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
 import { EWayBillComponentStore } from '../eWayBill.store';
-import { IOption } from '../../../app.constant';
-import { PAGINATION_LIMIT } from '../../../app.constant';
+import { IOption, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({

@@ -1,10 +1,12 @@
-<div class="aside-pane sales-aside-tax-pane text-left w-100" [keyboardShortcut]="'esc'" (onShortcutPress)="closeTaxesModal()">
-    <div class="form-header">
-        <h3 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h3>
+<div [keyboardShortcut]="'esc'" (onShortcutPress)="closeTaxesModal()">
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ commonLocaleData?.app_tax_applicable }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeTaxesModal()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <button mat-stroked-button type="button" (click)="closeTaxesModal()"><i class="icon-cross"></i></button>
-    <div class="aside-body">
-        <div class="aside-pane-form">
+    <mat-dialog-content class="dialog-body">
+        <div class="container-fluid px-0">
             <div class="row">
                 <div class="col-sm-12 mr-b1">
                     <span> {{ defaultOtherTaxesModal?.itemLabel }} </span>
@@ -54,5 +56,5 @@
                 </button>
             </div>
         </div>
-    </div>
+    </mat-dialog-content>
 </div>
