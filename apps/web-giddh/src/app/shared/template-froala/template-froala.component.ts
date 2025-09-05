@@ -73,9 +73,9 @@ export class TemplateFroalaComponent implements OnInit {
     /** Retry counter for Froala initialization */
     private froalaInitRetryCount: number = 0;
     /** Maximum retry attempts for Froala initialization */
-    private readonly maxFroalaInitRetries: number = 5;
+    private maxFroalaInitRetries: number = 5;
     /** Retry delay in milliseconds */
-    private readonly froalaInitRetryDelay: number = 500;
+    private froalaInitRetryDelay: number = 500;
     /** Hold to email options */
     public toEmails: any[] = [];
     /** Hold selected to email options */
@@ -393,7 +393,6 @@ export class TemplateFroalaComponent implements OnInit {
             htmlAllowedAttrs: ['.*'],
             events: {
                 initialized: (event) => {
-                    console.log('Froala editor initialized', event);
                     this.froalaEditor = event.getEditor();
                     
                     // Add additional delay for Electron environment
@@ -407,7 +406,6 @@ export class TemplateFroalaComponent implements OnInit {
                             const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
                             const htmlValue = currentForm?.get('html')?.value;
                             if (htmlValue) {
-                                console.log('Setting initial Froala content:', htmlValue);
                                 this.froalaEditor.html.set(htmlValue);
                             }
                         }, contentDelay);
@@ -424,7 +422,6 @@ export class TemplateFroalaComponent implements OnInit {
                 },
                 // Add error handling for Electron
                 'error': (error) => {
-                    console.error('Froala editor error:', error);
                     if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
                         this.retryFroalaInitialization();
                     }
@@ -473,8 +470,6 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private retryFroalaInitialization(): void {
         this.froalaInitRetryCount++;
-        console.log(`Retrying Froala initialization (attempt ${this.froalaInitRetryCount}/${this.maxFroalaInitRetries})`);
-        
         setTimeout(() => {
             this.froalaOptions = this.getFroalaOptions();
         }, this.froalaInitRetryDelay * this.froalaInitRetryCount);
