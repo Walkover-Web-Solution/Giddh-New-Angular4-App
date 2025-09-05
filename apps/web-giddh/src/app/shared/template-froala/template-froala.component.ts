@@ -207,11 +207,11 @@ export class TemplateFroalaComponent implements OnInit {
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
         private triggerStore: TriggerComponentStore,
+        private dialog: MatDialog,
         public dialogRef: MatDialogRef<any>,
         private generalService: GeneralService,
         private titleCasePipe: TitleCasePipe,
         private pageLeaveUtilityService: PageLeaveUtilityService
-        
     ) { }
 
     /**
@@ -260,6 +260,8 @@ export class TemplateFroalaComponent implements OnInit {
                 }
             });
             this.componentStore.getEmailConditionSuggestion(TriggerModuleEnum.VoucherDue);
+
+
             /** Search for voucher list dropdown */
             this.voucherListDropdown.valueChanges.pipe(this.searchPipe).subscribe((search: string) => {
                 if (!search) {
@@ -300,7 +302,6 @@ export class TemplateFroalaComponent implements OnInit {
                 }));
 
                 setTimeout(() => {
-                    console.log('initializeFroalaEditor', 'froalaEditor-set', this.froalaEditor);
                     this.initializeTribute(tributeSuggestions);
                 }, 300);
 
@@ -330,7 +331,7 @@ export class TemplateFroalaComponent implements OnInit {
                     this.selectedToEmails = response.to;
                 }
                 this.clickedOutsideEmail();
-
+                
                 // Patch existing form instead of recreating it
                 this.emailForm.patchValue({
                     to: response.to ?? null,
@@ -360,70 +361,6 @@ export class TemplateFroalaComponent implements OnInit {
             }
         });
     }
-
-    public getFroalaOptions() : any {
-        return {
-            key: FROALA_EDITOR_KEY,
-            attribution: false,
-            heightMin: 300,
-            heightMax: 300,
-            zIndex: 2501,
-            toolbarSticky: true,
-            toolbarButtons: {
-                moreText: {
-                    buttons: [
-                        'bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'textColor',
-                        'backgroundColor', 'clearFormatting',
-                    ],
-                    align: 'left',
-                    buttonsVisible: 9
-                },
-                moreRich: {
-                    buttons: [
-                        'html', 'help',
-                        'fullscreen', 'emoticons', 'fontAwesome', 'insertHR'
-                    ],
-                    align: 'left',
-                    buttonsVisible: 6
-                },
-                moreParagraph: {
-                    buttons: [
-                        'alignLeft', 'alignCenter', 'alignRight', 'alignJustify',
-                        'formatOLSimple', 'formatOL', 'formatUL', 'paragraphFormat',
-                        'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'
-                    ],
-                    align: 'left',
-                    buttonsVisible: 13
-                }
-            },
-            placeholderText: this.localeData?.email_content_suggestions,
-            charCounterCount: false,
-            wordCount: false,
-            htmlAllowedTags: ['.*'],
-            htmlAllowedAttrs: ['.*'],
-            events: {
-                initialized: (event) => {
-                    this.froalaEditor = event.getEditor();
-                    this.froalaEditor.events.on(
-                        'keydown',
-                        (e) => {
-                            if (e.which == FroalaEditor.KEYCODE.ENTER && this.froalaTribute.isActive) {
-                                return false;
-                            }
-                        },
-                        true
-                    );
-                },
-                blur: () => { // Handles changes made in the code view when focus is lost
-                    if (this.froalaEditor.codeView?.isActive()) {
-                        this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
-                        this.updateFormControl();
-                    }
-                }
-            }
-        }
-    }
-
 
     /**
      * This will handle the search pipe for ngx-mat-select-search
@@ -707,7 +644,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         // Prepare request based on type
         const req = this.prepareRequest(type, formValue);
-
+        
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
         this.componentStore.updateCustomTemplate(req);
@@ -1040,7 +977,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @returns {string}
      * @memberof TemplateFroalaComponent
      */
-    public getDayActionLabelValue(): string {
+    public getDayActionLabelValue(): string {  
         const executionTime = this.customTriggerForm?.get('executionTime');
         if (!executionTime) return '';
 
@@ -1099,6 +1036,7 @@ export class TemplateFroalaComponent implements OnInit {
     private validateEmailRecipientsUnchanged(): boolean {
         const currentForm = this.isTrigger ? this.customTriggerForm.value : this.emailForm.value;
         const { to, bcc, cc } = currentForm;
+        
         const formRecipients = { to, bcc, cc };
         const selectedRecipients = {
             to: this.selectedToEmails,
