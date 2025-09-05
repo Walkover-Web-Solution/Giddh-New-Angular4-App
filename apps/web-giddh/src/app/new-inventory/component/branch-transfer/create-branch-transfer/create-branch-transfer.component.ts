@@ -958,7 +958,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 });
                 this.branchTransferCreateEditForm.get('transporterDetails').patchValue({
                     dispatchedDate: response.body?.transporterDetails?.dispatchedDate,
-                    transporterName: this.transporterDropdown.find(res => res.value === response.body?.transporterDetails?.transporterId)?.label,
+                    transporterName: this.transporterDropdown.find(res => res.value === response.body?.transporterDetails?.transporterId)?.label ?? '',
                     transporterId: response.body?.transporterDetails?.transporterId,
                     transportMode: response.body?.transporterDetails?.transportMode,
                     vehicleNumber: response.body?.transporterDetails?.vehicleNumber

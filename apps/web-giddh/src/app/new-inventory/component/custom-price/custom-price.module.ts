@@ -23,6 +23,7 @@ import { ScrollComponent } from './advance-list-items-popup/virtual-scroll';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     imports: [
@@ -45,7 +46,8 @@ import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module'
         DiscountControlModule,
         MatTooltipModule,
         MatRadioModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatPaginatorModule
     ],
     exports: [
         CustomerWiseComponent,

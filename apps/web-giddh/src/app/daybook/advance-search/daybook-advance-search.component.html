@@ -5,7 +5,7 @@
             <i class="icon-cross"></i>
         </button>
     </div>
-    <mat-dialog-content class="dialog-body">
+    <mat-dialog-content class="dialog-body max-height-80vh">
         <form [formGroup]="advanceSearchForm" class="daybook-advance-search">
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
@@ -70,11 +70,11 @@
                         </div>
                         <div class="col-sm-7 col-xs-12">
                             <div class="row">
-                                <div class="col-6 col-sm-6">
+                                <div class="col-3">
                                     <mat-slide-toggle
                                         color="primary"
-                                        id="includeParticulars"
                                         formControlName="includeParticulars"
+                                        class="mr-t1"
                                     >
                                         <span
                                             class="pull-left"
@@ -88,20 +88,24 @@
                                         >
                                     </mat-slide-toggle>
                                 </div>
-                                <div class="col-6 col-sm-6">
-                                    <div class="form-group">
-                                        <reactive-dropdown-field
-                                            [options]="accounts$ | async"
+                                <div class="col-9">
+                                    <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['particulars']?.value?.length}">
+                                        <select-multiple-fields
                                             [name]="'particulars'"
-                                            formControlName="particulars"
-                                            (onClear)="onDDClear('particulars')"
-                                            (selectedOption)="onDDElementSelect('particulars', $event)"
-                                            [placeholder]="commonLocaleData?.app_select_accounts"
+                                            [appearance]="'outline'"
+                                            [label]="commonLocaleData?.app_select_accounts"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [commonLocaleData]="commonLocaleData"
+                                            [showMatLabel]="true"
+                                            [options]="accounts$ | async"
+                                            [chipListUniqueName]="advanceSearchForm?.controls['particulars']?.value" 
+                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['particulars']?.patchValue($event)"
+                                            (selectedOption)="advanceSearchForm?.controls['defaultParticularsLabel']?.patchValue($event)"
+                                            [selectedValues]="advanceSearchForm?.controls['defaultParticularsLabel']?.value"
                                             [enableDynamicSearch]="true"
-                                            [isPaginationEnabled]="true"
                                             (scrollEnd)="handleScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                        ></reactive-dropdown-field>
+                                        ></select-multiple-fields>
                                     </div>
                                 </div>
                             </div>
@@ -119,11 +123,11 @@
                         </div>
                         <div class="col-sm-7 col-xs-12">
                             <div class="row">
-                                <div class="col-6 col-sm-6">
+                                <div class="col-3">
                                     <mat-slide-toggle
                                         color="primary"
-                                        id="includeVouchers"
                                         formControlName="includeVouchers"
+                                        class="mr-t1"
                                     >
                                         <span
                                             class="pull-left"
@@ -137,17 +141,21 @@
                                         >
                                     </mat-slide-toggle>
                                 </div>
-                                <div class="col-6 col-sm-6">
-                                    <div class="form-group">
-                                        <reactive-dropdown-field
-                                            [options]="voucherTypeList | async"
+                                <div class="col-9">
+                                    <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['vouchers']?.value?.length}">
+                                        <select-multiple-fields
                                             [name]="'vouchers'"
-                                            formControlName="vouchers"
-                                            (onClear)="onDDClear('vouchers')"
-                                            (selectedOption)="onDDElementSelect('vouchers', $event)"
-                                            [placeholder]="commonLocaleData?.app_select_accounts"
-                                        >
-                                        </reactive-dropdown-field>
+                                            [appearance]="'outline'"
+                                            [label]="commonLocaleData?.app_voucher_type"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [commonLocaleData]="commonLocaleData"
+                                            [showMatLabel]="true"
+                                            [options]="voucherTypeList | async"
+                                            [chipListUniqueName]="advanceSearchForm?.controls['vouchers']?.value" 
+                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['vouchers']?.patchValue($event)"
+                                            (selectedOption)="advanceSearchForm?.controls['defaultVouchersLabel']?.patchValue($event)"
+                                            [selectedValues]="advanceSearchForm?.controls['defaultVouchersLabel']?.value"
+                                        ></select-multiple-fields>
                                     </div>
                                 </div>
                             </div>
@@ -162,8 +170,8 @@
                         </div>
                         <div class="col-sm-7 col-xs-12">
                             <div class="row">
-                                <div class="col-6 col-sm-6">
-                                    <mat-slide-toggle color="primary" id="includeTag" formControlName="includeTag">
+                                <div class="col-sm-3">
+                                    <mat-slide-toggle color="primary" formControlName="includeTag" class="mr-t1">
                                         <span
                                             class="pull-left"
                                             *ngIf="advanceSearchForm.get('includeTag')?.value"
@@ -176,22 +184,28 @@
                                         >
                                     </mat-slide-toggle>
                                 </div>
-                                <div class="col-6 col-sm-6">
-                                    <div class="form-group">
-                                        <reactive-dropdown-field
-                                            [options]="tags$ | async"
+                                <div class="col-sm-9">
+                                    <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['tags']?.value?.length}">
+                                        <select-multiple-fields
                                             [name]="'tags'"
-                                            formControlName="tags"
-                                            (onClear)="onDDClear('tags')"
-                                            (selectedOption)="onDDElementSelect('tags', $event)"
+                                            [appearance]="'outline'"
+                                            [commonLocaleData]="commonLocaleData"
+                                            [showMatLabel]="true"
+                                            [label]="localeData?.tags"
                                             [placeholder]="localeData?.select_tags"
-                                        ></reactive-dropdown-field>
+                                            [options]="tags$ | async"
+                                            [chipListUniqueName]="advanceSearchForm?.controls['tags']?.value" 
+                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['tags']?.patchValue($event)"
+                                            (selectedOption)="advanceSearchForm?.controls['tagsLabel']?.patchValue($event)"
+                                            [selectedValues]="advanceSearchForm?.controls['tagsLabel']?.value"
+                                        ></select-multiple-fields>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-xs-12 col-sm-12">
                     <div class="row mr-0 ml-0">
                         <div class="col-md-5 pl-0 d-flex align-items-center">
@@ -277,16 +291,14 @@
                                     </div>
                                 </div>
                                 <div class="col-6 col-sm-6">
-                                    <div class="form-group custom-input-field">
-                                        <mat-form-field appearance="fill" class="w-100">
-                                            <input
-                                                matInput
-                                                decimalDigitsDirective
-                                                [mask]="inputMaskFormat"
-                                                formControlName="amount"
-                                                class="form-control mat-field-border"
-                                            />
-                                        </mat-form-field>
+                                    <div class="form-group">
+                                        <input-field
+                                            [type]="'number'"
+                                            [name]="'amount'"
+                                            formControlName="amount"
+                                            [placeholder]="commonLocaleData?.app_amount"
+                                            [allowDecimalDigitsOnly]="true"
+                                        ></input-field>
                                     </div>
                                 </div>
                             </div>
@@ -313,8 +325,8 @@
                                             <div class="pr-0 col-sm-3 col-12">
                                                 <mat-slide-toggle
                                                     color="primary"
-                                                    id="includeInventory"
                                                     formControlName="includeInventory"
+                                                    class="mr-t1"
                                                 >
                                                     <span
                                                         class="pull-left"
@@ -335,26 +347,29 @@
                                                 </mat-slide-toggle>
                                             </div>
                                             <div class="col-sm-9 col-12">
-                                                <div class="form-group">
-                                                    <reactive-dropdown-field
-                                                        [options]="stockListDropDown$ | async"
+                                                <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['inventory'].controls['inventories']?.value?.length}">
+                                                    <select-multiple-fields
                                                         [name]="'inventory'"
-                                                        formControlName="inventories"
-                                                        (onClear)="onDDClear('inventory')"
-                                                        (selectedOption)="onDDElementSelect('inventory', $event)"
-                                                        [placeholder]="commonLocaleData?.app_select_accounts"
+                                                        [appearance]="'outline'"
+                                                        [label]="commonLocaleData?.app_select_accounts"
+                                                        [placeholder]="commonLocaleData?.app_select"
+                                                        [commonLocaleData]="commonLocaleData"
+                                                        [showMatLabel]="true"
+                                                        [options]="stockListDropDown$ | async"
+                                                        [chipListUniqueName]="advanceSearchForm?.controls['inventory'].controls['inventories']?.value"
+                                                        (selectedOptionUniqueName)="advanceSearchForm?.controls['inventory'].controls['inventories']?.patchValue($event)"
+                                                        (selectedOption)="advanceSearchForm?.controls['inventory'].controls['defaultInventoriesLabel']?.patchValue($event)"
+                                                        [selectedValues]="advanceSearchForm?.controls['inventory'].controls['defaultInventoriesLabel']?.value"
                                                         [enableDynamicSearch]="true"
-                                                        [isPaginationEnabled]="true"
                                                         (scrollEnd)="handleStockScrollEnd()"
                                                         (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
-                                                    >
-                                                    </reactive-dropdown-field>
+                                                    ></select-multiple-fields>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <div class="form-group custom-input-field">
+                                                <div class="form-group">
                                                     <reactive-dropdown-field
                                                         (selectedOption)="onRangeSelect('inventoryQty', $event)"
                                                         [options]="comparisonFilterDropDown$ | async"
@@ -365,25 +380,22 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
-                                                <div class="form-group custom-input-field">
-                                                    <mat-form-field appearance="fill" class="w-100">
-                                                        <input
-                                                            matInput
-                                                            type="text"
-                                                            class="form-control mat-field-border"
-                                                            decimalDigitsDirective
-                                                            [DecimalPlaces]="4"
-                                                            formControlName="quantity"
-                                                            [mask]="inputMaskFormat"
-                                                            [placeholder]="commonLocaleData?.app_quantity"
-                                                        />
-                                                    </mat-form-field>
+                                                <div class="form-group">
+                                                    <input-field
+                                                        [type]="'number'"
+                                                        [name]="'quantity'"
+                                                        formControlName="quantity"
+                                                        [customDecimalPlaces]="4"
+                                                        [mask]="inputMaskFormat"
+                                                        [placeholder]="commonLocaleData?.app_quantity"
+                                                        [allowDecimalDigitsOnly]="true"
+                                                    ></input-field>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <div class="form-group custom-input-field">
+                                                <div class="form-group">
                                                     <reactive-dropdown-field
                                                         (selectedOption)="onRangeSelect('inventoryVal', $event)"
                                                         [options]="comparisonFilterDropDown$ | async"
@@ -394,25 +406,24 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
-                                                <div class="form-group custom-input-field">
-                                                    <mat-form-field appearance="fill" class="w-100">
-                                                        <input
-                                                            matInput
-                                                            type="text"
-                                                            decimalDigitsDirective
-                                                            [DecimalPlaces]="3"
-                                                            class="form-control mat-field-border"
-                                                            formControlName="itemValue"
-                                                            [mask]="inputMaskFormat"
-                                                            [placeholder]="commonLocaleData?.app_value"
-                                                        />
-                                                    </mat-form-field>
+                                                <div class="form-group">
+                                                    <input-field
+                                                        [type]="'number'"
+                                                        [name]="'inventoryValue'"
+                                                        formControlName="itemValue"
+                                                        [customDecimalPlaces]="3"
+                                                        [mask]="inputMaskFormat"
+                                                        [placeholder]="commonLocaleData?.app_value"
+                                                        [allowDecimalDigitsOnly]="true"
+                                                    ></input-field>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 mr-t2">
                             <div class="row">
                                 <div class="col-sm-5 col-xs-12">
                                     <label>{{ localeData?.cheque_details }}</label>
@@ -420,24 +431,21 @@
                                 <div class="col-sm-7 col-xs-12">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="form-group custom-input-field">
-                                                <mat-form-field appearance="fill" class="w-100">
-                                                    <input
-                                                        matInput
-                                                        type="text"
-                                                        [placeholder]="localeData?.cheque_number"
-                                                        formControlName="chequeNumber"
-                                                        class="form-control mat-field-border"
-                                                    />
-                                                </mat-form-field>
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'text'"
+                                                    [name]="'chequeNumber'"
+                                                    formControlName="chequeNumber"
+                                                    [placeholder]="localeData?.cheque_number"
+                                                ></input-field>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="form-group custom-input-field">
+                                            <div class="form-group">
                                                 <giddh-datepicker
                                                     [placeholder]="localeData?.clearance_date"
                                                     name="from"
-                                                    [cssClass]="'mat-field-border bdr form-control w-100'"
+                                                    [appearance]="'outline'"
                                                     formControlName="dateOnCheque"
                                                     [showToggleIcon]="false"
                                                 >

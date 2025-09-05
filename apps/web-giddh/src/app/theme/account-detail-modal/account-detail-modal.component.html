@@ -8,7 +8,6 @@
     <div
         *ngIf="isModalOpen"
         class="p-modal-tooltip"
-        (clickOutside)="getUpdatedList(false)"
     >
         <div class="tb-pl-modal-header p-0">
             <div class="account-detail-modal-header-div" >
@@ -60,7 +59,7 @@
             [activeAccountDetails]="accInfo"
             [isUpdateAccount]="true"
             [commonLocaleData]="commonLocaleData"
-            (closeAsideEvent)="getUpdatedList(false)"
+            (closeAsideEvent)="getUpdatedList(true)"
             (getUpdateList)="getUpdatedList(true)"
         >
         </aside-menu-account>
