@@ -22,6 +22,7 @@ import { AllItem, AllItems } from '../helpers/allItems';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ArrayDataSource } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'primary-sidebar',
@@ -644,14 +645,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public openAccountAsidePane(): void {
-        this.genericAsideMenuAccountDialogRef = this.dialog.open(this.genericAsideMenuAccountTemplate, {
-            position: {
-                top: '0',
-                right: '0'
-            },
-            height: '100vh',
-            width: 'var(--aside-pane-width)'
-        })
+        this.genericAsideMenuAccountDialogRef = this.dialog.open(this.genericAsideMenuAccountTemplate, ASIDE_PANE_CONFIG)
     }
 
     /**
