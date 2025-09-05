@@ -6,7 +6,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { SalesTaxReport } from '../../utility/tax-authority.const';
 import { saveAs } from "file-saver";
 import { ActivatedRoute } from '@angular/router';
-import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-response.interface';
 
 @Component({
@@ -31,7 +31,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     /** Holds pagination request  */
     public pagination: IPagination = {
         page: 1,
-        count: this.pageSizeOptions[2],
+        count: PAGINATION_LIMIT,
         totalItems: null,
         totalPages: null
     };
@@ -190,8 +190,8 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     public handlePageChange(event: any): void {
         if (event) {
             this.pageIndex = event.pageIndex;
+            this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.pagination.count = event.pageSize;
-            this.pagination.page = event.pageIndex + 1;
             this.getSalesTaxReport();
         }
     }

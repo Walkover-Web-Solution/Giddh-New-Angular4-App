@@ -23,7 +23,7 @@ import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
@@ -244,7 +244,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
         this.groupStockReport$ = this.store.pipe(select(p => p.inventory.groupStockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();
-        this.GroupStockReportRequest.count = this.pageSizeOptions[2];
+        this.GroupStockReportRequest.count = PAGINATION_LIMIT;
         this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
@@ -525,7 +525,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.GroupStockReportRequest.count = event.pageSize;
         this.getGroupReport(false);
     }
-    
+
 
 
     public DownloadGroupReports(type: string) {
@@ -850,11 +850,11 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {            
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
-         } else {
+        } else {
             this.universalDatepickerTrigger?.closeMenu();
-         }
+        }
     }
 
     /**

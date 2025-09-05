@@ -45,7 +45,9 @@
                             <div class="text-center d-lg-flex d-none" *ngIf="showClearFilter">
                                 <div class="clear-filter">
                                     <button mat-stroked-button class="mr-0" (click)="clearFilters()">
-                                        <span class="icon-cross"></span>{{ commonLocaleData?.app_clear_filter }}
+                                        <span class="d-inline-flex align-items-center column-gap5">
+                                            <span class="icon-cross"></span>{{ commonLocaleData?.app_clear_filter }}
+                                        </span>
                                     </button>
                                 </div>
                             </div>
@@ -277,7 +279,7 @@
 
             <div
                 class="mt-4"
-                *ngIf="branchTransferPaginationObject?.totalItems > branchTransferPaginationObject?.count && !isLoading"
+                *ngIf="branchTransferPaginationObject?.totalItems > pageSizeOptions[0] && !isLoading"
             >
                 <mat-paginator
                     [length]="branchTransferPaginationObject?.totalItems"

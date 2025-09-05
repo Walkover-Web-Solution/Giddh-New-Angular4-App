@@ -8,7 +8,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
 import { TaxResponse } from '../models/api-models/Company';
-import { DaybookQueryRequest, ExportBodyRequest } from '../models/api-models/DaybookRequest';
+import { DaybookQueryRequest, DayBookRequestModel, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
@@ -63,7 +63,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-/* This will store selected date range to use in api */
+    /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -246,20 +246,20 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * if closing triggers from advance search filter
      * @param obj contains search params
      */
-    public closeAdvanceSearchPopup(obj) {
-        if (!obj.cancle) {
-            this.searchFilterData = cloneDeep(obj.dataToSend);
+    public closeAdvanceSearchPopup(reqObj: any): void {
+        if (!reqObj.cancle) {
+            this.searchFilterData = cloneDeep(reqObj.dataToSend);
             if (this.dateRangePickerCmp) {
                 this.dateRangePickerCmp.render();
             }
-            this.daybookQueryRequest.from = (obj.fromDate) ? obj.fromDate : this.todaySelected ? '' : this.daybookQueryRequest.from;
-            this.daybookQueryRequest.to = (obj.toDate) ? obj.toDate : this.todaySelected ? '' : this.daybookQueryRequest.to;
+            this.daybookQueryRequest.from = (reqObj.fromDate) ? reqObj.fromDate : this.todaySelected ? '' : this.daybookQueryRequest.from;
+            this.daybookQueryRequest.to = (reqObj.toDate) ? reqObj.toDate : this.todaySelected ? '' : this.daybookQueryRequest.to;
             this.daybookQueryRequest.page = 0;
-            if (obj.action === 'search') {
+            if (reqObj.action === 'search') {
                 this.modalDialogRef.close();
                 this.getDaybook(this.searchFilterData);
                 this.showAdvanceSearchIcon = true;
-            } else if (obj.action === 'export') {
+            } else if (reqObj.action === 'export') {
                 this.exportDaybook();
             }
         } else {
@@ -273,9 +273,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param {*} [withFilters=null]
      * @memberof DaybookComponent
      */
-    public getDaybook(withFilters = null): void {
+    public getDaybook(withFilters: DayBookRequestModel = null): void {
         this.showLoader = true;
-        this.daybookService.GetDaybook(withFilters, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let daybookRequest = cloneDeep(withFilters);
+        if (withFilters) {
+            delete daybookRequest.defaultVouchersLabel;
+            delete daybookRequest.defaultTagsLabel;
+            delete daybookRequest.defaultParticularsLabel;
+            delete daybookRequest.inventory.defaultInventoriesLabel;
+        }
+        this.daybookService.GetDaybook(daybookRequest, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response?.body?.entries?.length > 0) {
                     this.daybookQueryRequest.page = response?.body?.page;

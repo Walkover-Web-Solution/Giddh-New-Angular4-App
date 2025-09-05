@@ -70,7 +70,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.deleteAccountSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.isDeleteAccSuccess)).pipe(takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() { 
+    public ngOnInit() {
         if (this.isUpdateAccount && this.activeAccountDetails) {
             this.accountDetails = this.activeAccountDetails;
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
@@ -142,7 +142,13 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public closeAsidePane(event) {
+    /**
+     * Closes the aside pane.
+     *
+     * @param {*} event
+     * @memberof AsideMenuAccountInContactComponent
+     */
+    public closeAsidePane(event: any): void {
         if (this.hasUnsavedChanges) {
             this.confirmPageLeave(() => {
                 this.ngOnDestroy();

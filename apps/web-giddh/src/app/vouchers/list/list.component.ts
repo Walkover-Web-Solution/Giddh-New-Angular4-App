@@ -361,6 +361,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public selectedTemplate: any;
     /** True if columns loading */
     public showContent: boolean = true;
+    /** Show invoice lock date */
+    public showInvoiceDate: boolean = true;
+    /** Show purchase lock date */
+    public showPurchaseDate: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -954,6 +958,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private handleGetAllVoucherResponse(response: any): void {
         if (response && response.voucherType === this.voucherType) {
+            if (response.totalItems > 0 && response.totalPages < response.page) {
+                this.advanceFilters.page = response.totalPages;
+                this.getAllVouchers();
+                return;
+            }
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             this.selectAllVouchers({ checked: false });
@@ -1407,8 +1416,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.ledgerSearchRequest.count = event.pageSize;
             this.getLedgersOfInvoice();
         } else {
+            this.advanceFilters.page = this.advanceFilters.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.advanceFilters.count = event.pageSize;
-            this.advanceFilters.page = event.pageIndex + 1;
             this.getVouchers(false);
         }
     }
@@ -2408,12 +2417,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public copyVoucher(voucher: any): void {
+        const queryParams = {
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
+            page: this.advanceFilters.page,
+            count: this.advanceFilters.count ?? PAGINATION_LIMIT
+        }
+
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (searchString?.length) {
+            queryParams['search'] = searchString;
+        }
+
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-            this.router.navigate([`/pages/vouchers/estimates/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+            this.router.navigate([`/pages/vouchers/estimates/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`], { queryParams: queryParams });
         } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            this.router.navigate([`/pages/vouchers/proformas/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+            this.router.navigate([`/pages/vouchers/proformas/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`], { queryParams: queryParams });
         } else {
-            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
+            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`], { queryParams: queryParams });
         }
     }
 
@@ -3122,6 +3143,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('invoiceSettings.purchaseRoundOff').patchValue(false);
                         }
 
+                        const lockDateValue = this.settingForm.get('purchaseBillSettings.lockDate').value;
+                        if (lockDateValue === null || lockDateValue === '') {
+                            this.showPurchaseDate = false;
+                            setTimeout(() => {
+                               this.showPurchaseDate = true;
+                            }, 0);
+                        }
+
                         if (!this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').value) {
                             this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').patchValue(false);
                         }
@@ -3133,6 +3162,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
                         );
 
+
+                        const invoiceLockDateValue = this.settingForm.get('invoiceSettings.lockDate').value;
+                        if (invoiceLockDateValue === null || invoiceLockDateValue === '') {
+                            this.showInvoiceDate = false;
+                            setTimeout(() => {
+                               this.showInvoiceDate = true;
+                            }, 0);
+                        }
+
                         if (setting.companyEmailSettings) {
                             this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(
                                 cloneDeep(setting.companyEmailSettings.sendThroughGmail)
@@ -3141,6 +3179,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(false);
                         }
                     }
+
                     if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                         this.applyRoundOff = setting.invoiceSettings.salesRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.purchase) {
@@ -3403,10 +3442,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public templateDialog(template: any): void {
+        const reqObj = {
+            ...template,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
         this.dialog.open(TemplatePreviewDialogComponent, {
             width: '980px',
             height: '90vh',
-            data: template
+            data: reqObj
         });
     }
 
@@ -3487,7 +3531,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @private
      * @memberof VoucherListComponent
      */
-    private templateSelect(template: any): void {
+    public templateSelect(template: any): void {
         this.selectedTemplate = template;
         this.fetchAllCreatedTemplates(template.value);
         this.fetchTemplates(template.value);

@@ -404,8 +404,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      */
     public handlePageChange(event: any): void {
         this.pageIndex = event.pageIndex;
+        this.subscriptionRequestParams.page = this.subscriptionRequestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.subscriptionRequestParams.count = event.pageSize;
-        this.subscriptionRequestParams.page = event.pageIndex + 1;
         this.getAllSubscriptions(false);
     }
 

@@ -2327,7 +2327,7 @@ ul.sub-list {
 }
 
 .text-gray {
-    color: var(--color-gray);
+    color: var(--color-gray) !important;
 }
 // This color will same in all theme
 .text-static-white {

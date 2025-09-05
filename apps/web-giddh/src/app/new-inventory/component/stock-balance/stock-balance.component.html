@@ -319,7 +319,7 @@
         </div>
         <div
             class="mt-4"
-            *ngIf="GroupStockReportRequest?.totalItems > GroupStockReportRequest.count && !isLoading"
+            *ngIf="GroupStockReportRequest?.totalItems > pageSizeOptions[0] && !isLoading"
         >
             <mat-paginator
                 [length]="GroupStockReportRequest?.totalItems"

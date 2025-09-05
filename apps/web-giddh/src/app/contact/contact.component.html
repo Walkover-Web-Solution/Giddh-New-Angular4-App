@@ -8,7 +8,7 @@
     <div class="relative white-bg">
         <hamburger-menu *ngIf="activeTab !== 'vendor'" [pageHeading]="getPageHeading()"></hamburger-menu>
         <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="activeTab === 'vendor'"></hamburger-menu>
-
+        
         <mat-tab-group
             #staticTabs
             class="custom-mat-tabs customer-aging table-header-sticky"
@@ -19,6 +19,8 @@
         >
             <mat-tab
                 [label]="activeTab === 'customer' ? localeData?.customer : localeData?.vendor"
+                [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
+                *ngIf="activeTab !== 'aging-report'"
             >
                 <div class="container-fluid">
                     <div class="header-content-sticky vendor-z-index">
@@ -1531,13 +1533,13 @@
                     activeTab === 'customer' &&
                     sundryDebtorsAccountsBackup.results &&
                     sundryDebtorsAccountsBackup.results.length &&
-                    totalCustomers >= paginationLimit
+                    totalCustomers > pageSizeOptions[0]
                 "
             >
                 <mat-paginator
                     [length]="sundryDebtorsAccountsBackup.totalItems"
-                    [pageSize]="sundryDebtorsAccountsBackup.count"
-                    [pageIndex]="sundryDebtorsAccountsBackup.page - 1"
+                    [pageSize]="advanceFilters.count"
+                    [pageIndex]="advanceFilters.page - 1"
                     [pageSizeOptions]="pageSizeOptions"
                     [showFirstLastButtons]="true"
                     [hidePageSize]="false"
@@ -1550,13 +1552,13 @@
                     activeTab === 'vendor' &&
                     sundryCreditorsAccountsBackup.results &&
                     sundryCreditorsAccountsBackup.results.length &&
-                    totalVendors >= paginationLimit
+                    totalVendors > pageSizeOptions[0]
                 "
             >
                 <mat-paginator
                     [length]="sundryCreditorsAccountsBackup.totalItems"
-                    [pageSize]="sundryCreditorsAccountsBackup.count"
-                    [pageIndex]="pageIndex"
+                    [pageSize]="advanceFilters.count"
+                    [pageIndex]="advanceFilters.page - 1"
                     [pageSizeOptions]="pageSizeOptions"
                     [showFirstLastButtons]="true"
                     [hidePageSize]="false"

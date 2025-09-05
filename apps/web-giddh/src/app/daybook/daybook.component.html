@@ -121,7 +121,7 @@
                         </div>
                         <div class="form-group mb-0 cursor-pointer">
                             <button
-                                class="advance-icon align-items-center"
+                                class="mr-r15"
                                 [matTooltip]="commonLocaleData?.app_advance_search"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
@@ -129,7 +129,7 @@
                                 mat-raised-button
                                 color="primary"
                             >
-                                <span class="pd-r05 d-sm-inline d-none">{{ commonLocaleData?.app_filter }}</span>
+                                <span class="pd-r05">{{ commonLocaleData?.app_filter }}</span>
                                 <span class="icon-advance-filter"></span>
                             </button>
                         </div>
@@ -137,7 +137,6 @@
                             mat-raised-button
                             color="primary"
                             type="button"
-                            class="bdr export-btn mr-0 d-flex align-items-center"
                             (click)="exportDaybook()"
                             *ngIf="daybookData?.entries?.length > 0"
                         >
@@ -699,21 +698,10 @@
                     </table>
                 </div>
 
-                <div class="mt-5 text-center" [hidden]="!daybookData?.entries?.length">
-                    <small class="grey" *ngIf="daybookData?.totalItems"
-                        >{{ daybookData?.totalItems }}
-                        {{ commonLocaleData?.app_transactions }}
-                        | {{ daybookData?.totalPages }} {{ commonLocaleData?.app_pages }}
-                    </small>
-                    <small class="grey" *ngIf="!daybookData?.totalItems"
-                        >0 {{ commonLocaleData?.app_transactions }} | 0 {{ commonLocaleData?.app_pages }}</small
-                    >
-                </div>
-
                 <!-- pagination -->
                 <div
-                    class="mt-1"
-                    [hidden]="!daybookData?.entries?.length || daybookData?.totalItems <= daybookData?.count"
+                    class="mt-2"
+                    *ngIf="daybookData?.totalItems > pageSizeOptions[0]"
                 >
                     <mat-paginator
                         [length]="daybookData?.totalItems"
@@ -721,6 +709,7 @@
                         [pageSizeOptions]="pageSizeOptions"
                         [pageIndex]="daybookData?.page - 1"
                         (page)="handlePageEvent($event)"
+                        [hidePageSize]="false"
                         [showFirstLastButtons]="true">
                     </mat-paginator>
                 </div>

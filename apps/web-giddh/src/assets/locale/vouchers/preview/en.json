@@ -508,5 +508,9 @@
     "customer_details": "Customer Details",
     "shipping_details": "Shipping Details",
     "billing_details": "Billing Details",
-    "tax_rate": "Tax Rate"
+    "tax_rate": "Tax Rate",
+    "bill_from": "Bill From",
+    "ship_from": "Ship From",
+    "invoice": "Invoice",
+    "voucher": "Voucher"
 }

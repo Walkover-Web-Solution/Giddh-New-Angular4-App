@@ -6,7 +6,7 @@
                     <span>{{ groupStockReport.stockGroupName }}</span> (Group)
                 </h2>
                 <div class="advance-icon cursor-pointer" matTooltip="Advance Search" (click)="onOpenAdvanceSearch()">
-                    <span class="icon-advance-filter"></span>
+                    <i class="icon-advance-filter"></i>
                 </div>
             </div>
             <div class="clear-filter" *ngIf="isFilterCorrect && productName?.value?.length > 0">
@@ -621,7 +621,7 @@
                     </tr>
                 </tbody>
 
-                <tfoot *ngIf="groupStockReport && groupStockReport.totalPages > 1">
+                <tfoot *ngIf="groupStockReport && groupStockReport.totalItems > pageSizeOptions[0]">
                     <tr>
                         <td colspan="10" class="text-center">
                             <mat-paginator

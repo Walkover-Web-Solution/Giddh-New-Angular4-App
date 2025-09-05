@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { PageEvent } from '@angular/material/paginator';
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-import { PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
@@ -39,7 +39,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     /** Custom fields request */
     public customFieldsRequest: any = {
         page: 1,
-        count: PAGE_SIZE_OPTIONS[1],
+        count: PAGINATION_LIMIT,
         moduleUniqueName: ''
     };
     /** Holds get all custom fields api response */

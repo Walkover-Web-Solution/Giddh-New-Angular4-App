@@ -46,7 +46,7 @@
             </table>
         </div>
 
-        <div class="mb-4" [hidden]="!failedTransactions?.length">
+        <div class="mb-4" *ngIf="failedTransactions?.length > pageSizeOptions[0]">
             <mat-paginator
                 [length]="failedTransactions?.length"
                 [pageSize]="itemsPerPage"

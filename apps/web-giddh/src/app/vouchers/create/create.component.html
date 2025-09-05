@@ -1962,7 +1962,7 @@
 </ng-container>
 
 <ng-template #accountAsideMenu>
-    <generic-aside-menu-account (closeAsideEvent)="accountAsideMenuRef.close()" [class]="'in'"
+    <generic-aside-menu-account (closeAsideEvent)="accountAsideMenuRef.close()"
         [selectedGrpUniqueName]="accountParentGroup === 'bankaccounts' ? '' : accountParentGroup"
         [allGroups]="accountParentGroup === 'bankaccounts' ? true : false"
         [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"

@@ -191,13 +191,14 @@
                     <tr mat-row *matRowDef="let row; columns: tableHeadingColumns"></tr>
                 </table>
             </div>
-            <div class="mt-4" *ngIf="reportResponse && reportResponse?.totalPages > 1">
+            <div class="mt-4" *ngIf="reportResponse && reportResponse?.totalItems > pageSizeOptions[0]">
                 <mat-paginator
                     [length]="reportResponse.totalItems"
-                    [pageSize]="paginationLimit"
+                    [pageSize]="columnarReportExportRequest.count"
                     [pageSizeOptions]="pageSizeOptions"
-                    [pageIndex]="reportResponse.page - 1"
+                    [pageIndex]="columnarReportExportRequest.page - 1"
                     [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
                     (page)="handlePageEvent($event)"
                     aria-label="Select page of columnar report"
                 ></mat-paginator>

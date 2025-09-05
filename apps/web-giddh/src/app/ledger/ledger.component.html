@@ -1195,21 +1195,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-center mr-t2 page-count position-absolute">
-                                    <span class="grey"
-                                        >{{ bankTransactionsResponse?.totalItems }} {{ localeData?.transactions }},
-                                    </span>
-                                    <span class="black"
-                                        >{{ bankTransactionsResponse?.totalPages }} {{ localeData?.pages }}</span
-                                    >
-                                    <ng-container *ngIf="bankTransactionsResponse?.totalPages > 1">
+                                <div class="d-flex flex-column justify-content-center align-items-center mr-t2 page-count position-absolute">
+                                    <ng-container *ngIf="bankTransactionsResponse?.totalItems > pageSizeOptions[0]">
                                         <mat-paginator 
                                             [length]="bankTransactionsResponse?.totalItems" 
                                             [pageSize]="bankTransactionsResponse.countPerPage" 
                                             [pageSizeOptions]="pageSizeOptions" 
                                             [pageIndex]="bankTransactionsResponse.page - 1" 
-                                            (page)="handlePageEvent($event)" 
-                                            [showFirstLastButtons]="true">
+                                            (page)="handlePageEvent($event)"
+                                            [hidePageSize]="true"
+                                            [showFirstLastButtons]="false">
                                         </mat-paginator>
                                     </ng-container>
                                 </div>

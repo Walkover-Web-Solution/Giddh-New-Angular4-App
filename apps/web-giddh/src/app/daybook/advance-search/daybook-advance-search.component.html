@@ -13,8 +13,8 @@
                                 <label>{{ commonLocaleData?.app_date_range }}</label>
                             </div>
                             <div class="col-sm-9 col-xs-12 custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -30,7 +30,11 @@
                                         readonly
                                     />
                                 </div>
-                                <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                                <mat-menu
+                                    #universalDatepicker="matMenu"
+                                    class="universal-datepicker-menu-panel"
+                                    xPosition="after"
+                                >
                                     <ng-template matMenuContent>
                                         <app-datepicker-wrapper
                                             [inputStartDate]="selectedDateRange?.startDate"
@@ -65,7 +69,7 @@
                             </div>
                             <div class="col-sm-7 col-xs-12">
                                 <div class="row">
-                                    <div class="col-6 col-sm-6">
+                                    <div class="col-sm-3">
                                         <mat-slide-toggle
                                             color="primary"
                                             id="includeParticulars"
@@ -83,20 +87,24 @@
                                             >
                                         </mat-slide-toggle>
                                     </div>
-                                    <div class="col-6 col-sm-6">
+                                    <div class="col-sm-9">
                                         <div class="form-group">
-                                            <reactive-dropdown-field
-                                                [options]="accounts$ | async"
+                                            <select-multiple-fields
                                                 [name]="'particulars'"
-                                                formControlName="particulars"
-                                                (onClear)="onDDClear('particulars')"
-                                                (selectedOption)="onDDElementSelect('particulars', $event)"
-                                                [placeholder]="commonLocaleData?.app_select_accounts"
+                                                [appearance]="'outline'"
+                                                [label]="commonLocaleData?.app_select_accounts"
+                                                [placeholder]="commonLocaleData?.app_select"
+                                                [commonLocaleData]="commonLocaleData"
+                                                [showMatLabel]="true"
+                                                [options]="accounts$ | async"
+                                                [chipListUniqueName]="advanceSearchForm?.controls['particulars']?.value" 
+                                                (selectedOptionUniqueName)="advanceSearchForm?.controls['particulars']?.patchValue($event)"
+                                                (selectedOption)="advanceSearchForm?.controls['defaultParticularsLabel']?.patchValue($event)"
+                                                [selectedValues]="advanceSearchForm?.controls['defaultParticularsLabel']?.value"
                                                 [enableDynamicSearch]="true"
-                                                [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleScrollEnd()"
                                                 (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                            ></reactive-dropdown-field>
+                                            ></select-multiple-fields>
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +122,7 @@
                             </div>
                             <div class="col-sm-7 col-xs-12">
                                 <div class="row">
-                                    <div class="col-6 col-sm-6">
+                                    <div class="col-sm-3">
                                         <mat-slide-toggle
                                             color="primary"
                                             id="includeVouchers"
@@ -132,17 +140,21 @@
                                             >
                                         </mat-slide-toggle>
                                     </div>
-                                    <div class="col-6 col-sm-6">
+                                    <div class="col-sm-9">
                                         <div class="form-group">
-                                            <reactive-dropdown-field
-                                                [options]="voucherTypeList | async"
+                                            <select-multiple-fields
                                                 [name]="'vouchers'"
-                                                formControlName="vouchers"
-                                                (onClear)="onDDClear('vouchers')"
-                                                (selectedOption)="onDDElementSelect('vouchers', $event)"
-                                                [placeholder]="commonLocaleData?.app_select_accounts"
-                                            >
-                                            </reactive-dropdown-field>
+                                                [appearance]="'outline'"
+                                                [label]="commonLocaleData?.app_voucher_type"
+                                                [placeholder]="commonLocaleData?.app_select"
+                                                [commonLocaleData]="commonLocaleData"
+                                                [showMatLabel]="true"
+                                                [options]="voucherTypeList | async"
+                                                [chipListUniqueName]="advanceSearchForm?.controls['vouchers']?.value" 
+                                                (selectedOptionUniqueName)="advanceSearchForm?.controls['vouchers']?.patchValue($event)"
+                                                (selectedOption)="advanceSearchForm?.controls['defaultVouchersLabel']?.patchValue($event)"
+                                                [selectedValues]="advanceSearchForm?.controls['defaultVouchersLabel']?.value"
+                                            ></select-multiple-fields>
                                         </div>
                                     </div>
                                 </div>
@@ -157,12 +169,8 @@
                             </div>
                             <div class="col-sm-7 col-xs-12">
                                 <div class="row">
-                                    <div class="col-6 col-sm-6">
-                                        <mat-slide-toggle
-                                            color="primary"
-                                            id="includeTag"
-                                            formControlName="includeTag"
-                                        >
+                                    <div class="col-sm-3">
+                                        <mat-slide-toggle color="primary" id="includeTag" formControlName="includeTag">
                                             <span
                                                 class="pull-left"
                                                 *ngIf="advanceSearchForm.get('includeTag')?.value"
@@ -175,16 +183,21 @@
                                             >
                                         </mat-slide-toggle>
                                     </div>
-                                    <div class="col-6 col-sm-6">
+                                    <div class="col-sm-9">
                                         <div class="form-group">
-                                            <reactive-dropdown-field
-                                                [options]="tags$ | async"
+                                            <select-multiple-fields
                                                 [name]="'tags'"
-                                                formControlName="tags"
-                                                (onClear)="onDDClear('tags')"
-                                                (selectedOption)="onDDElementSelect('tags', $event)"
+                                                [appearance]="'outline'"
+                                                [commonLocaleData]="commonLocaleData"
+                                                [showMatLabel]="true"
+                                                [label]="localeData?.tags"
                                                 [placeholder]="localeData?.select_tags"
-                                            ></reactive-dropdown-field>
+                                                [options]="tags$ | async"
+                                                [chipListUniqueName]="advanceSearchForm?.controls['tags']?.value" 
+                                                (selectedOptionUniqueName)="advanceSearchForm?.controls['tags']?.patchValue($event)"
+                                                (selectedOption)="advanceSearchForm?.controls['tagsLabel']?.patchValue($event)"
+                                                [selectedValues]="advanceSearchForm?.controls['tagsLabel']?.value"
+                                            ></select-multiple-fields>
                                         </div>
                                     </div>
                                 </div>
@@ -225,18 +238,26 @@
                                                 <mat-select
                                                     panelClass="py-0"
                                                     name="salesPerson"
-                                                        [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
+                                                    [multiple]="true"
+                                                    [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
                                                 >
                                                     <mat-option class="mt-0">
                                                         <ngx-mat-select-search
-                                                            [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                                            [placeholderLabel]="
+                                                                commonLocaleData?.app_sales_person_placeholder
+                                                            "
+                                                            [noEntriesFoundLabel]="
+                                                                commonLocaleData?.app_no_result_found
+                                                            "
                                                             [formControl]="salesPersonDropdown"
                                                         >
                                                             <i class="icon-cross" ngxMatSelectSearchClear></i>
                                                         </ngx-mat-select-search>
                                                     </mat-option>
-                                                    <mat-option *ngFor="let salesPerson of filteredSalesPersonList" [value]="salesPerson?.value">
+                                                    <mat-option
+                                                        *ngFor="let salesPerson of filteredSalesPersonList"
+                                                        [value]="salesPerson?.value"
+                                                    >
                                                         {{ salesPerson?.label }}
                                                     </mat-option>
                                                 </mat-select>
@@ -310,14 +331,16 @@
                                                         <span
                                                             class="pull-left"
                                                             *ngIf="
-                                                                advanceSearchForm.get('inventory.includeInventory')?.value
+                                                                advanceSearchForm.get('inventory.includeInventory')
+                                                                    ?.value
                                                             "
                                                             >{{ commonLocaleData?.app_include }}</span
                                                         >
                                                         <span
                                                             class="pull-right"
                                                             *ngIf="
-                                                                !advanceSearchForm.get('inventory.includeInventory')?.value
+                                                                !advanceSearchForm.get('inventory.includeInventory')
+                                                                    ?.value
                                                             "
                                                             >{{ commonLocaleData?.app_exclude }}</span
                                                         >
@@ -325,19 +348,22 @@
                                                 </div>
                                                 <div class="col-sm-9 col-12">
                                                     <div class="form-group">
-                                                        <reactive-dropdown-field
-                                                            [options]="stockListDropDown$ | async"
+                                                        <select-multiple-fields
                                                             [name]="'inventory'"
-                                                            formControlName="inventories"
-                                                            (onClear)="onDDClear('inventory')"
-                                                            (selectedOption)="onDDElementSelect('inventory', $event)"
-                                                                        [placeholder]="commonLocaleData?.app_select_accounts"
+                                                            [appearance]="'outline'"
+                                                            [label]="commonLocaleData?.app_select_accounts"
+                                                            [placeholder]="commonLocaleData?.app_select"
+                                                            [commonLocaleData]="commonLocaleData"
+                                                            [showMatLabel]="true"
+                                                            [options]="stockListDropDown$ | async"
+                                                            [chipListUniqueName]="advanceSearchForm?.controls['inventory'].controls['inventories']?.value"
+                                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['inventory'].controls['inventories']?.patchValue($event)"
+                                                            (selectedOption)="advanceSearchForm?.controls['inventory'].controls['defaultInventoriesLabel']?.patchValue($event)"
+                                                            [selectedValues]="advanceSearchForm?.controls['inventory'].controls['defaultInventoriesLabel']?.value"
                                                             [enableDynamicSearch]="true"
-                                                            [isPaginationEnabled]="true"
                                                             (scrollEnd)="handleStockScrollEnd()"
                                                             (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
-                                                        >
-                                                        </reactive-dropdown-field>
+                                                        ></select-multiple-fields>
                                                     </div>
                                                 </div>
                                             </div>
@@ -456,4 +482,3 @@
         </div>
     </mat-dialog-content>
 </div>
-

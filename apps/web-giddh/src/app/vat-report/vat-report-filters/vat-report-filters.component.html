@@ -5,7 +5,7 @@
     </div>
     <div class="input-width" *ngIf="year && selectedYear">
         <reactive-dropdown-field [options]="months" (selectedOption)="getMonthStartAndEndDate($event)"
-            [placeholder]="commonLocaleData?.app_select_month" [labelValue]="selectedMonth?.label"></reactive-dropdown-field>
+            [placeholder]="commonLocaleData?.app_select_month" [labelValue]="selectedMonth?.label ?? ''"></reactive-dropdown-field>
     </div>
     <div class="custom-datepicker-wrapper">
         <div 

@@ -206,18 +206,25 @@ public advanceSearchObject: DayBookRequestModel = null;
 
                 if (dataToSend?.vouchers) {
                     this.advanceSearchForm.get('vouchers')?.patchValue(dataToSend?.vouchers);
+                    this.advanceSearchForm.get('defaultVouchersLabel')?.patchValue(dataToSend?.defaultVouchersLabel);
                 }
 
                 if (dataToSend?.particulars) {
                     this.advanceSearchForm.get('particulars')?.patchValue(dataToSend?.particulars);
+                    this.advanceSearchForm.get('defaultParticularsLabel')?.patchValue(dataToSend?.defaultParticularsLabel);
                 }
 
                 if (dataToSend?.inventory) {
                     this.advanceSearchForm.get('inventory')?.patchValue(dataToSend?.inventory);
                 }
 
+                if (dataToSend?.inventory?.defaultInventoriesLabel) {
+                    this.advanceSearchForm.get('inventory.defaultInventoriesLabel')?.patchValue(dataToSend?.inventory.defaultInventoriesLabel);
+                }
+
                 if (dataToSend?.tags) {
                     this.advanceSearchForm.get('tags')?.patchValue(dataToSend?.tags);
+                    this.advanceSearchForm.get('defaultTagsLabel')?.patchValue(dataToSend?.defaultTagsLabel);
                 }
             }, 500);
         }
@@ -496,11 +503,15 @@ public advanceSearchObject: DayBookRequestModel = null;
             chequeNumber: ['', Validators.required],
             dateOnCheque: ['', Validators.required],
             tags: [[]],
+            defaultTagsLabel: [[]],
             particulars: [[]],
+            defaultParticularsLabel: [[]],
             vouchers: [[]],
+            defaultVouchersLabel: [[]],
             inventory: this.fb.group({
                 includeInventory: true,
                 inventories: [[]],
+                defaultInventoriesLabel: [[]],
                 quantity: null,
                 inventoryQuantity: null,
                 inventoryValue: null,

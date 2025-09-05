@@ -140,42 +140,45 @@ export class InvoiceTemplatesService {
     }
 
     /**
-     * Get template preview or save template settings based on editMode
+     * Saves template settings/configuration.
      *
-     * @param {*} templateType
-     * @param {boolean} editMode - true for POST (save), false for GET (preview)
-     * @param {*} model - Required when editMode is true for POST request
-     * @param {string} templateUniqueName - Optional, only needed for GET requests
-     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @param {*} model The template settings model to save
+     * @returns {Observable<BaseResponse<any, any>>} Observable emitting the save response
      * @memberof InvoiceTemplatesService
      */
-    public getTemplatePreview(templateType: any, editMode: boolean, model?: any, templateUniqueName?: string): Observable<BaseResponse<any, string>> {
+    public saveTemplateSettings(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         
-        if (editMode) {
-            // POST method for saving template settings
-            const postUrl = this.config.apiUrl + INVOICE_API.GET_TEMPLATE_PREVIEW
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':templateUniqueName', '')
-                ?.replace(':voucherType', encodeURIComponent(templateType));
-                
-            return this.http.post(postUrl, model).pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = model;
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
-        } else {
-            // GET method for template preview
-            const getUrl = this.config.apiUrl + INVOICE_API.GET_TEMPLATE_PREVIEW
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':templateUniqueName', encodeURIComponent(templateUniqueName || ''))
-                ?.replace(':voucherType', encodeURIComponent(templateType));
-                
-            return this.http.get(getUrl).pipe(map((res) => {
-                let data: BaseResponse<any, string> = res;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
-        }
+        const postUrl = this.config.apiUrl + INVOICE_API.SAVE_TEMPLATE_SETTINGS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            
+        return this.http.post(postUrl, model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * Retrieves template preview for the given template type and unique name.
+     *
+     * @param {*} templateType The type of template to preview
+     * @param {string} [templateUniqueName] The unique name of the template (optional)
+     * @returns {Observable<BaseResponse<any, string>>} Observable emitting the template preview response
+     * @memberof InvoiceTemplatesService
+     */
+    public getTemplatePreview(templateType: any, templateUniqueName?: string): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        
+        const getUrl = this.config.apiUrl + INVOICE_API.GET_TEMPLATE_PREVIEW
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':templateUniqueName', encodeURIComponent(templateUniqueName || ''))
+            ?.replace(':voucherType', encodeURIComponent(templateType));
+            
+        return this.http.get(getUrl).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '')));
     }
 }

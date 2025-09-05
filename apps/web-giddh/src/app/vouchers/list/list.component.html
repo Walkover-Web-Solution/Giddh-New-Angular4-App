@@ -3076,9 +3076,7 @@
                                             class="mat-icon-sm-btn"
                                             [matTooltip]="commonLocaleData?.app_copy"
                                             [matTooltipPosition]="'above'"
-                                            [routerLink]="[
-                                                '/pages/purchase-management/purchase-order/new/' + element.uniqueName
-                                            ]"
+                                            (click)="copyVoucher(element)"
                                         >
                                             <i class="icon-copy-small"></i>
                                         </button>
@@ -4945,6 +4943,7 @@
                                                         [matSuffix]="commonLocaleData?.app_days"
                                                     ></input-field>
                                                     <giddh-datepicker
+                                                        *ngIf="showInvoiceDate"
                                                         type="text"
                                                         (keydown.enter)="$event.preventDefault()"
                                                         [label]="localeData?.invoice_lock_date"
@@ -5682,6 +5681,7 @@
                                                 {{ localeData?.purchase_bill }}
                                             </h4>
                                             <giddh-datepicker
+                                                *ngIf="showPurchaseDate"
                                                 type="text"
                                                 (keydown.enter)="$event.preventDefault()"
                                                 [label]="localeData?.bill_lock_date"
@@ -5863,7 +5863,7 @@
                 *ngIf="activeTabGroup === 0 || activeTabGroup === 1 || activeTabGroup === 2"
             >
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="activeModule === 'templates'">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [name]="'design'"
                         *ngIf="voucherType === voucherTypeEnum.purchase"
                         [label]="localeData?.select_design_for"
@@ -5871,9 +5871,9 @@
                         [options]="purchaseTemplatesList"
                         class="w-50 template-design d-block"
                         (selectedOption)="templateSelect($event)"
-                        [defaultValue]="selectedTemplate.label"
+                        [labelValue]="selectedTemplate.label"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">

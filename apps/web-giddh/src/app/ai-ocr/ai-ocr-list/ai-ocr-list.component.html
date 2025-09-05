@@ -158,6 +158,7 @@
                 class="mr-t15 d-block mr-b1"
                 *ngIf="
                     showClearFilter ||
+                    !dataSource?.filteredData?.length ||
                     ocrDocumentListForm?.controls['user']?.value ||
                     ocrDocumentListForm?.controls['fileName']?.value ||
                     ocrDocumentListForm?.controls['status']?.value ||
@@ -171,6 +172,7 @@
                     isCompany &&
                     !(
                         showClearFilter ||
+                        !dataSource?.filteredData?.length ||
                         ocrDocumentListForm?.controls['user']?.value ||
                         ocrDocumentListForm?.controls['fileName']?.value ||
                         ocrDocumentListForm?.controls['status']?.value ||

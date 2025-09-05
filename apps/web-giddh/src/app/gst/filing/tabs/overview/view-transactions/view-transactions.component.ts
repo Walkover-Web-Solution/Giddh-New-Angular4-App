@@ -15,17 +15,18 @@ import { GstReport } from '../../../../constants/gst.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
-import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.const';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { PageEvent } from '@angular/material/paginator';
 
 export const filterTransaction = {
     entityType: '',
     type: '',
     status: '',
     page: 1,
-    count: 20
+    count: PAGINATION_LIMIT
 };
 
 @Component({
@@ -150,7 +151,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         ];
 
         this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
-        this.filterParam.count = this.pageSizeOptions[2];
+        this.filterParam.count = PAGINATION_LIMIT;
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
         this.filterParam.gstin = this.activeCompanyGstNumber;
@@ -385,5 +386,17 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             disableClose: true,
             autoFocus: false
         });
+    }
+
+    /**
+     * This will use for page change
+     *
+     * @param {*} event
+     * @memberof ViewTransactionsComponent
+     */
+    public pageChanged(event: PageEvent): void {
+        this.pageIndex = this.filterParam.count !== event.pageSize ? 0 : event.pageIndex;
+        this.filterParam.count = event.pageSize;
+        this.viewFilteredTxn('page', this.pageIndex + 1);
     }
 }
