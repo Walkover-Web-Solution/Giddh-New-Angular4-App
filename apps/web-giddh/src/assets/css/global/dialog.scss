@@ -21,10 +21,6 @@
     width: 100%;
     height: calc(100% - 60px);
 
-    &.mat-mdc-dialog-content {
-        max-height: unset !important;
-    }
-
     &.max-height-80vh {
         &.mat-mdc-dialog-content {
             max-height: 80vh !important;
