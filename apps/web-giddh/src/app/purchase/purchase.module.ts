@@ -22,6 +22,7 @@ import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { PurchaseOrderPreviewModule } from '../shared/purchase-order-preview/purchase-order-preview.module';
 import { InvoiceModule } from '../invoice/invoice.module';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
@@ -74,6 +75,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
+        PurchaseOrderPreviewModule,
         GenericAsideMenuAccountModule,
         AsideMenuOtherTaxesModule,
         AsideMenuProductServiceModule,

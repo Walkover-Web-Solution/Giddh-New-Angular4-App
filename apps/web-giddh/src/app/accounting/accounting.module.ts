@@ -12,6 +12,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { QuickAccountModule } from '../theme/quick-account-component/quickAccount.module';
 import { InventoryModule } from './../inventory/inventory.module';
 import { SharedModule } from './../shared/shared.module';
 import { AccountingRoutingModule } from './accounting-routing.module';
@@ -55,6 +56,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         SharedModule,
         ClickOutsideModule,
         ElementViewChildModule,
+        QuickAccountModule,
         InventoryModule,
         NgxMaskModule.forRoot(),
         FormsModule,

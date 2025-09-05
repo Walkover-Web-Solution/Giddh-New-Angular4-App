@@ -1,0 +1,278 @@
+<div class="invoice-modal-content">
+    <div>
+        <div class="row mr-0 ml-0">
+            <div class="col-sm-12 col-lg-4 invoice-sidebar-wrapper pr-0">
+                <div>
+                    <div class="invoice-search-box">
+                        <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement />
+                        <!-- <button
+                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 1"
+                            mat-raised-button color="primary"
+                            [routerLink]="['/pages/purchase-management/purchase-order/new']"
+                        >
+                            {{ localeData?.new_order }}
+                        </button> -->
+                        <button
+                            *ngIf="(!isCompany && !isConsolidatedBranch) && voucherApiVersion === 2"
+                            mat-raised-button color="primary"
+                            [routerLink]="['/pages/vouchers/purchase-order/create']"
+                        >
+                            {{ localeData?.new_order }}
+                        </button>
+                    </div>
+                    <ul class="invoice-sidebar">
+                        <cdk-virtual-scroll-viewport [itemSize]="62" *ngIf="filteredData && filteredData.length > 0">
+                            <li
+                                class="single-invoice-detail cp"
+                                [ngClass]="{ 'activeItem': row?.uniqueName === purchaseOrderUniqueName }"
+                                *cdkVirtualFor="let row of filteredData; let i = index"
+                            >
+                                <div class="row" (click)="showPurchaseOrderPreview(row?.uniqueName)">
+                                    <div class="col-7 col-sm-7">
+                                        <div class="invoice-number-date">
+                                            <span class="order-number">
+                                                {{ row.voucherNumber }}
+                                            </span>
+                                            <span class="order-date"> | {{ row.voucherDate }} </span>
+                                        </div>
+                                        <div class="invoice-holder-name">
+                                            <p>{{ row.vendor?.name }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-5 col-sm-5">
+                                        <div class="invoice-amount pull-right">
+                                            <!-- {{row.grandTotal?.amountForAccount | giddhCurrency}} -->
+                                            <amount-field
+                                                [amount]="row.grandTotal?.amountForAccount"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </cdk-virtual-scroll-viewport>
+                    </ul>
+                </div>
+            </div>
+            <!-- endregion -->
+
+            <div class="col-sm-12 col-lg-8 p-0 invoice-detail-wrapper">
+                <div class="scroll-half">
+                    <div class="invoice-detail">
+                        <div class="invoice-detail-header col-md-12">
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-3 col-sm-12">
+                                    <div class="invoice-number-holder">
+                                        <h3 class="invoice-number">{{ purchaseOrder?.number }}</h3>
+                                        <p class="account-holder-name">{{ purchaseOrder?.account?.name }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-8 col-lg-9 col-sm-12">
+                                    <div class="edit-change-status">
+                                        <span
+                                            class="close-modal cp pull-right"
+                                            [routerLink]="['/pages/purchase-management/purchase']"
+                                        >
+                                            <img src="assets/images/multiply.svg"
+                                        /></span>
+
+                                        <div
+                                            *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                            class="btn-group change-status-dropdown pull-right"
+                                        >
+                                            <button
+                                                type="button"
+                                                mat-raised-button color="primary"
+                                                [matMenuTriggerFor]="changeStatusMenu"
+                                            >
+                                                {{ localeData?.change_status }}
+                                                <i class="caret"></i>
+                                            </button>
+
+                                            <mat-menu #changeStatusMenu="matMenu">
+                                                <button
+                                                    mat-menu-item
+                                                    *ngIf="purchaseOrder?.status === 'OPEN'"
+                                                    (click)="
+                                                        voucherApiVersion === 2
+                                                            ? openBulkConvert(purchaseBulkConvert)
+                                                            : convertToBill()
+                                                    "
+                                                >
+                                                    {{ localeData?.convert_tobill }}
+                                                </button>
+                                                <a
+                                                    mat-menu-item
+                                                    [routerLink]="[
+                                                        '/pages/purchase-management/purchase-order/new/' +
+                                                            purchaseOrderUniqueName
+                                                    ]"
+                                                >
+                                                    {{ commonLocaleData?.app_copy }}
+                                                </a>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="statusUpdate('cancelled')"
+                                                    *ngIf="purchaseOrder?.status !== 'CANCELLED'"
+                                                >
+                                                    {{ commonLocaleData?.app_cancel }}
+                                                </button>
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="statusUpdate('open')"
+                                                    *ngIf="
+                                                        purchaseOrder?.status === 'CANCELLED' ||
+                                                        purchaseOrder?.status === 'EXPIRED'
+                                                    "
+                                                >
+                                                    {{ localeData?.open }}
+                                                </button>
+                                                <button mat-menu-item (click)="confirmDelete()">
+                                                    {{ commonLocaleData?.app_delete }}
+                                                </button>
+                                            </mat-menu>
+                                        </div>
+                                        <!-- endregion -->
+
+                                        <div class="wrap-edit-history-btn">
+                                            <div class="edit-action-btn-groups pull-right">
+                                                <span *ngIf="(!isCompany && !isConsolidatedBranch)">
+                                                    <!-- <a
+                                                        href="javascript:;"
+                                                        [matTooltip]="commonLocaleData?.app_edit"
+                                                        matTooltipPosition="above"
+                                                        [routerLink]="[
+                                                            '/pages/purchase-management/purchase-order/edit/' +
+                                                                purchaseOrderUniqueName
+                                                        ]"
+                                                        *ngIf="voucherApiVersion === 1"
+                                                        ><i class="icon-edit-pencil"></i
+                                                    ></a> -->
+                                                    <a
+                                                        href="javascript:;"
+                                                        [matTooltip]="commonLocaleData?.app_edit"
+                                                        matTooltipPosition="above"
+                                                        [routerLink]="[
+                                                            '/pages/vouchers/purchase-order/' + purchaseOrder?.account?.uniqueName + '/' + purchaseOrderUniqueName + '/edit']"
+                                                        *ngIf="voucherApiVersion === 2"
+                                                        ><i class="icon-edit-pencil"></i
+                                                    ></a>
+                                                </span>
+
+                                                <span>
+                                                    <a
+                                                        href="javascript:;"
+                                                        [matTooltip]="commonLocaleData?.app_send_email"
+                                                        matTooltipPosition="above"
+                                                        (click)="openSendMailModal(sendEmailModal)"
+                                                        ><i class="icon-envelope font-12"></i
+                                                    ></a>
+                                                </span>
+
+                                                <span>
+                                                    <a
+                                                        href="javascript:;"
+                                                        [matTooltip]="commonLocaleData?.app_print"
+                                                        matTooltipPosition="above"
+                                                        (click)="printVoucher()"
+                                                        ><i class="fa fa-print"></i
+                                                    ></a>
+                                                </span>
+
+                                                <span>
+                                                    <a
+                                                        href="javascript:;"
+                                                        [matTooltip]="commonLocaleData?.app_download"
+                                                        matTooltipPosition="above"
+                                                        (click)="downloadFile()"
+                                                        ><i class="icon-file"></i
+                                                    ></a>
+                                                </span>
+
+                                                <span *ngIf="(!isCompany && !isConsolidatedBranch)">
+                                                    <a
+                                                        href="javascript:;"
+                                                        [matTooltip]="commonLocaleData?.app_delete"
+                                                        matTooltipPosition="above"
+                                                        (click)="confirmDelete()"
+                                                        ><i class="icon-trash"></i
+                                                    ></a>
+                                                </span>
+                                            </div>
+
+                                            <div class="history-btn">
+                                                <button
+                                                    mat-raised-button color="primary"
+                                                    (click)="openActivityHistoryAsidePaneDialog()"
+                                                >
+                                                    <i class="icon-history-icon font-12 pr-1"></i>
+                                                    {{ commonLocaleData?.app_history }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="invoice-image-section">
+                        <div class="relative">
+                            <div class="position-relative" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
+                                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                            </div>
+                            <div class="error" [hidden]="!pdfPreviewHasError">
+                                <span>
+                                    {{ localeData?.po_preview_unavailable }}
+                                </span>
+                            </div>
+                            <div class="pdf-preview" #attachedDocumentPreview>
+                                <iframe
+                                    #pdfContainer
+                                    *ngIf="sanitizedPdfFileUrl && pdfPreviewLoaded"
+                                    width="100%"
+                                    height="100%"
+                                    [src]="sanitizedPdfFileUrl"
+                                ></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- endregion -->
+</div>
+<ng-template #sendEmailModal>
+    <purchase-send-email-modal
+        *ngIf="purchaseOrder"
+        [module]="'purchase-order'"
+        [sendEmailRequest]="sendEmailRequest"
+        (closeModelEvent)="closeSendMailPopup($event)"
+    ></purchase-send-email-modal>
+</ng-template>
+<ng-template #revisionHistoryTemplate>
+    <aside-revision-history (closeAsideEvent)="revisionHistoryDialogRef.close()" [purchaseOrder]="purchaseOrder">
+    </aside-revision-history>
+</ng-template>
+<ng-template #poConfirmationTemplate>
+    <div class="modal-content">
+        <delete-voucher-confirmation-modal
+            [module]="'purchaseorder'"
+            (confirmDeleteEvent)="deleteItem()"
+            (closeModelEvent)="closeConfirmationPopup()"
+        >
+        </delete-voucher-confirmation-modal>
+    </div>
+</ng-template>
+<ng-template #purchaseBulkConvert>
+    <bulk-convert
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [selectedPo]="selectedPurchaseOrders"
+        (closeModelEvent)="closeBulkConvertPopup($event)"
+    >
+    </bulk-convert>
+</ng-template>
