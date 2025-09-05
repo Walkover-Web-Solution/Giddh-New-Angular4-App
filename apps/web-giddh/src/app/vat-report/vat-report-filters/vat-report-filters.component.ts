@@ -560,7 +560,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             let endYear = endDate.split('-');
             endYear = endYear[endYear?.length - 1];
             for (let year = startYear; year <= endYear; year++) {
-                this.financialYears.push({ label: year, value: year });
+                this.financialYears.push({ label: year.toString(), value: year.toString() });
             }
             return { startYear: startYear, endYear: endYear };
         }

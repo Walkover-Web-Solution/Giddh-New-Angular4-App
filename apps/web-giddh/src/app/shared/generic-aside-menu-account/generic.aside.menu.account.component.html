@@ -1,9 +1,9 @@
-<div
-    class="aside-pane"
+<ng-container
     appTranslate
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
+<section class="aside-dialog-wrapper">
     <div class="dialog-header">
         <span>{{ actionAccount }}</span>
         <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
@@ -69,4 +69,5 @@
             </account-add-new-details>
         </ng-container>
     </mat-dialog-content>
-</div>
+</section>
+</ng-container>
