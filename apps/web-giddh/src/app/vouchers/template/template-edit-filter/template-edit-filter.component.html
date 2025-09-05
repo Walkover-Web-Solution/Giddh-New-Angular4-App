@@ -377,7 +377,6 @@
                                                                 customTemplate?.templateType ===
                                                                 templateTypeEnum.ThermalTemplate
                                                             "
-                                                            class="ml-2"
                                                         >
                                                             {{ localeData?.company_name }}</span
                                                         >
@@ -2759,6 +2758,7 @@
                                                     </mat-checkbox>
                                                     <div class="w-100 ml-2">
                                                         <input-field
+                                                            [floatLabel]="'always'"
                                                             [label]="localeData?.show_bank_qr_code"
                                                             [type]="'text'"
                                                             [name]="'qrcode'"
@@ -3053,7 +3053,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.show_qr_code }}
+                                                   <span class="ml-2">{{ localeData?.show_qr_code }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <div
@@ -3117,25 +3117,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div
-                                                *ngIf="
-                                                    sectionSettings?.footer.taxableAmount &&
-                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
-                                                    customTemplate?.templateType !== templateTypeEnum.TallyTemplate
-                                                "
-                                            >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    class="d-block"
-                                                    name="tam"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['footer'].data['taxableAmount'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility()"
-                                                >
-                                                    <span class="ml-2">{{ localeData?.taxable_amount }}</span>
-                                                </mat-checkbox>
                                             </div>
                                             <div *ngIf="sectionSettings?.footer.totalTax" [hidden]="true">
                                                 <mat-checkbox
@@ -3296,14 +3277,14 @@
                                                                 [cssClass]="'form-control'"
                                                                 name="tv1"
                                                                 [(ngModel)]="
-                                                                    customTemplate.sections['table'].data[
-                                                                        'taxableValue'
+                                                                    customTemplate.sections['footer'].data[
+                                                                        'taxableAmount'
                                                                     ].label
                                                                 "
                                                                 (ngModelChange)="onFieldChange()"
                                                                 [readonly]="
-                                                                    !customTemplate.sections['table'].data[
-                                                                        'taxableValue'
+                                                                    !customTemplate.sections['footer'].data[
+                                                                        'taxableAmount'
                                                                     ].display
                                                                 "
                                                             ></input-field>
@@ -3315,8 +3296,8 @@
                                                                 }}</span>
                                                                 {{
                                                                     14 -
-                                                                        customTemplate.sections["table"].data[
-                                                                            "taxableValue"
+                                                                        customTemplate.sections["footer"].data[
+                                                                            "taxableAmount"
                                                                         ].label?.length
                                                                 }}
                                                             </p>
@@ -3440,12 +3421,13 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [label]="localeData?.show_bank_qr_code"
+                                                            [floatLabel]="'always'"
                                                             name="bankQrCode"
                                                             [cssClass]="'form-control'"
+                                                            [readonly]="!customTemplate.showBankQrCode"
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             (ngModelChange)="onFieldChange()"
                                                             [(ngModel)]="customTemplate.qrCodeId"
-                                                            [disabled]="!customTemplate.showBankQrCode"
                                                             [pattern]="
                                                                 '^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'
                                                             "
@@ -3702,7 +3684,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    <span class="ml-2"> {{ localeData?.company_name }}</span>
+                                                    {{ localeData?.company_name }}
                                                 </mat-checkbox>
                                             </div>
                                             <div

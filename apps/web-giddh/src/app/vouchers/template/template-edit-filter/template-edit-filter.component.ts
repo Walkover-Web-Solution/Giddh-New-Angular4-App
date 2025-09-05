@@ -656,7 +656,7 @@ export class TemplateEditFilterComponent implements OnInit {
     /**
      * Uploads signature
      *
-     * @memberof ContentFilterComponent
+     * @memberof TemplateEditFilterComponent
      */
     public uploadImage(): void {
         const selectedFile: any = document.getElementById("signatureImg-edit");
