@@ -73,8 +73,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
-
-    @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
     /** Instance of all items dialog */
     @ViewChild("chequeEntryModal") public dialogBox: TemplateRef<any>;
     @ViewChild('particular', { static: false }) public accountField: ElementRef;

@@ -24,6 +24,16 @@
     &.mat-mdc-dialog-content {
         max-height: unset !important;
     }
+
+    &.max-height-80vh {
+        &.mat-mdc-dialog-content {
+            max-height: 80vh !important;
+        }
+    }
+
+    &.mat-mdc-dialog-content {
+        max-height: unset !important;
+    }
     &.mdc-dialog__content {
         &.mat-mdc-dialog-content {
             padding: 15px !important;

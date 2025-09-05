@@ -66,7 +66,6 @@ import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.modul
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-other-tax.module";
-import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBill/generateEWayBill.module";
@@ -169,7 +168,6 @@ import { TemplateEditFilterComponent } from "./template/template-edit-filter/tem
         ReplacePipeModule,
         CurrencyModule,
         NgxMatSelectSearchModule,
-        PurchaseOrderPreviewModule,
         DecimalDigitsModule,
         NgxMaskModule,
         GenerateEWayBillModule,
