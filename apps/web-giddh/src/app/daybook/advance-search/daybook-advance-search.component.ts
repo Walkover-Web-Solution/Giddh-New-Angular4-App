@@ -1,8 +1,8 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { debounceTime, filter, take, takeUntil } from 'rxjs/operators';
+import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -16,11 +16,13 @@ import { SearchService } from '../../services/search.service';
 import { InventoryService } from '../../services/inventory.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { SettingsTagService } from '../../services/settings.tag.service';
+import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
 
 @Component({
     selector: 'daybook-advance-search-model',
     templateUrl: './daybook-advance-search.component.html',
-    styleUrls: ['./daybook-advance-search.component.scss']
+    styleUrls: ['./daybook-advance-search.component.scss'],
+    providers: [SalesPersonComponentStore]
 
 })
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
@@ -106,6 +108,12 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public isExpanded: boolean = false;
     /** List of tags */
     public tags$: Observable<IOption[]>;
+    /** Sales Person List */
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** This will use for instance of sales person Dropdown */
+    public salesPersonDropdown: FormControl = new FormControl();
+    /** Filtered Sales Person List */
+    public filteredSalesPersonList: IOption[] = [];
 
     constructor(
         private inventoryService: InventoryService,
@@ -114,7 +122,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         private generalService: GeneralService,
         private modalService: BsModalService,
         private searchService: SearchService,
-        private settingsTagService: SettingsTagService
+        private settingsTagService: SettingsTagService,
+        private salesPersonStore: SalesPersonComponentStore,
+        private changeDetectionRef: ChangeDetectorRef
     ) {
 
     }
@@ -123,6 +133,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.setVoucherTypes();
         this.loadDefaultAccountsSuggestions();
         this.loadDefaultStocksSuggestions();
+        this.getSalesPersonList();
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
@@ -146,6 +157,33 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
             { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' }
         ]);
+
+        this.salesPersonList$.pipe(filter(Boolean), take(1)).subscribe(res => {
+            this.filteredSalesPersonList = res as IOption[];
+        });
+
+        this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
+            takeUntil(this.destroyed$)).subscribe((search: string) => {
+                if (!search) {
+                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                        this.filteredSalesPersonList = res as IOption[];
+                    });
+                } else {
+                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                        this.filteredSalesPersonList = res?.filter((salesPerson: IOption) => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
+                    });
+                }
+                this.changeDetectionRef.detectChanges();
+            });
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -485,6 +523,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 itemValueEqualTo: true,
                 itemValueGreaterThan: false
             }),
+            includeSalesPersons: [true],
+            salesPersonUniqueNames: [[]],
         });
 
         if (this.searchFilterData) {

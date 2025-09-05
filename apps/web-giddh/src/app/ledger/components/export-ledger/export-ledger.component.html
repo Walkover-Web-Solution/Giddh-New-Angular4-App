@@ -10,6 +10,9 @@
         <mat-dialog-content>
             <div class="modal-body" id="export-body">
                 <form name="addShareEmailForm" novalidate autocomplete="off">
+                    <p class="mr-b1">
+                        {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
+                    </p>
                     <div class="pd-b3 clearfix">
                         <div class="form-inline">
                             <div class="form-group">
@@ -54,42 +57,46 @@
                         </div>
                     </div>
                     <ng-container *ngIf="emailTypeSelected === 'voucher'">
-                        <div class="pd-b2 clearfix export-type">
-                            <label class="w150">{{ localeData?.export_attachment }}:</label>
-                            <mat-slide-toggle color="primary" name="attachmentExport"
-                                [(ngModel)]="exportRequest.attachmentExport">
-                                <span>{{
-                                    exportRequest.attachmentExport
-                                    ? commonLocaleData?.app_yes
-                                    : commonLocaleData?.app_no
-                                    }}</span>
-                            </mat-slide-toggle>
+                        <div class="pd-b1 clearfix export-type d-flex column-gap15">
+                            <div class="d-flex align-items-center">
+                                <label class="w125">{{ localeData?.attachment }}:</label>
+                                <mat-slide-toggle color="primary" name="attachmentExport"
+                                    [(ngModel)]="exportRequest.attachmentExport">
+                                    <span>{{
+                                        exportRequest.attachmentExport
+                                        ? commonLocaleData?.app_yes
+                                        : commonLocaleData?.app_no
+                                        }}</span>
+                                </mat-slide-toggle>
+                            </div>
+                            <i class="icon-info1 cursor-pointer d-flex align-items-center" [matTooltip]="localeData?.export_attachment_info" matTooltipPosition="above"></i>
                         </div>
-                        <div class="pd-b2 d-flex column-gap15 align-items-center"
+                        <div class="d-flex column-gap15 align-items-center"
                             *ngIf="exportRequest.attachmentExport">
-                            <div>
+                            <div class="mb-2">
                                 {{ commonLocaleData?.app_file_format }}
                             </div>
-                            <div class="w-50">
-                                <mat-form-field appearance="outline" class="w-100">
-                                    <mat-label>{{ commonLocaleData?.app_select_file }}</mat-label>
-                                    <mat-select name="fileFormat" [(ngModel)]="selectedFormatList" multiple
-                                        placeholder="{{ commonLocaleData?.app_select }}">
-                                        <mat-option *ngFor="let fileFormat of getSortedFormatList()" [value]="{
-                                                uniqueName: fileFormat?.uniqueName,
-                                                showValue: fileFormat?.showValue
-                                            }">
-                                            {{ fileFormat?.name }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <div class="font-12" *ngIf="selectedFormatList.length">
-                                    {{ getFileFormat() }}
+                            <div class="d-flex flex-column w-50">
+                                <input
+                                    matInput
+                                    #tribute="appTributeMention"
+                                    (click)="tribute.open()"
+                                    [(ngModel)]="selectedFormatList"
+                                    [placeholder]="commonLocaleData?.app_variable_search_hint"
+                                    class="form-control radius-none border-0 border-bottom"
+                                    name="formatList"
+                                    (ngModelChange)="getFileFormat()"
+                                    [appTributeMention]="tributeConfig"
+                                    [appTributeMentionValues]="fileFormatList"
+                                />
+                                <div class="font-12 word-break pd-t05 pd-b05">
+                                    {{ exportRequest.fileNameFormat }}
                                 </div>
                             </div>
                         </div>
-                        <div class="pd-b2 clearfix export-type">
-                            <label class="w125">{{ localeData?.export_voucher }}:</label>
+                        <mat-divider [ngClass]="{'mr-t1': exportRequest.attachmentExport && !selectedFormatList?.trim().length}"></mat-divider>
+                        <div class="pd-b2 pd-t1 clearfix export-type">
+                            <label class="w125">{{ commonLocaleData?.app_voucher }}:</label>
                             <mat-slide-toggle color="primary" name="voucherExport"
                                 [(ngModel)]="exportRequest.voucherExport">
                                 <span>{{

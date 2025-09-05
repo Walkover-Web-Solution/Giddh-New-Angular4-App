@@ -383,4 +383,34 @@ export class SettingsProfileService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
+
+    /**
+     * This will be use for get module export setting
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
+    public getModuleExportSetting(): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET_UPDATE_MODULE_EXPORT_SETTING?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This will be use for update module export setting
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
+    public updateModuleExportSetting(model: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.patch(this.config.apiUrl + SETTINGS_PROFILE_API.GET_UPDATE_MODULE_EXPORT_SETTING?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
 }

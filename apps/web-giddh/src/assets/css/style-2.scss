@@ -1226,6 +1226,12 @@ body {
     }
 }
 
+body {
+    div > a[href*="froala.com/wysiwyg-editor"] {
+        display: none !important;
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -14027,6 +14033,11 @@ mat-list {
 
 .bg-white {
     background: var(--color-white) !important;
+}
+
+.only-right-radius {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
 }
 
 .template-froala-wrapper {
