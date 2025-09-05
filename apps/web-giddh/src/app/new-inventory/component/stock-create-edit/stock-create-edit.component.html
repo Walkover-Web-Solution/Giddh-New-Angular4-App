@@ -166,8 +166,7 @@
                                             <button 
                                                 aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
-                                                mat-raised-button
-                                                color="primary"
+                                                mat-stroked-button
                                                 class="min-width-100 move-stock mr-0"
                                                 (click)="moveStock()"
                                                 [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"

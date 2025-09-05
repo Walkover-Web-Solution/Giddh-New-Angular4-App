@@ -40,7 +40,7 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
 
 @NgModule({
     declarations: [
-        PurchaseComponent,
+        PurchaseComponent
     ],
     imports: [
         MatButtonModule,

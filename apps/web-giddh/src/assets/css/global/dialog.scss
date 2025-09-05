@@ -1,4 +1,4 @@
-.dialog-header{
+.dialog-header {
     height: var(--header-height);
     padding: 15px;
     display: flex;
@@ -10,29 +10,35 @@
     button {
         &.mdc-icon-button {
             padding: 0 !important;
-            .icon-cross{
+            .icon-cross {
                 color: var(--color-primary-header-icons) !important;
                 font-size: var(--font-size-16);
             }
         }
     }
 }
-.dialog-body{
+.dialog-body {
     width: 100%;
     height: calc(100% - 60px);
 
-    &.mat-mdc-dialog-content{
+    &.max-height-80vh {
+        &.mat-mdc-dialog-content {
+            max-height: 80vh !important;
+        }
+    }
+
+    &.mat-mdc-dialog-content {
         max-height: unset !important;
     }
-    &.mdc-dialog__content{
-        &.mat-mdc-dialog-content{
+    &.mdc-dialog__content {
+        &.mat-mdc-dialog-content {
             padding: 15px !important;
         }
     }
 }
 
 // Handel Asidepan header height with giddh header
-.cdk-overlay-pane{
+.cdk-overlay-pane {
     transform: translateY(-1px) !important;
 }
 
