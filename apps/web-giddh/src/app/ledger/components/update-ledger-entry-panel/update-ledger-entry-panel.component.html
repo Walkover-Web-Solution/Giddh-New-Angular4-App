@@ -2476,8 +2476,7 @@
                                                     !((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && branches?.length > 1)
                                                 "
                                                 aria-label="Duplicate entry button"
-                                                mat-raised-button
-                                                color="primary"
+                                                mat-stroked-button
                                                 (click)="duplicateEntry()"
                                             >
                                                 {{ localeData?.duplicate }}
@@ -2485,8 +2484,7 @@
 
                                             <button
                                                 class="ml-auto"
-                                                mat-raised-button
-                                                color="primary"
+                                                mat-stroked-button
                                                 id="update-ledger-delete-button"
                                                 (click)="showDeleteEntryModal()"
                                             >
