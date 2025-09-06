@@ -40,7 +40,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public search: string = '';
     public financialOptions: IOption[] = [];
     public accountSearchControl: UntypedFormControl = new UntypedFormControl();
-    public tags: TagRequest[] = [];
+    public tags: IOption[] = [];
     public selectedTag: string;
     @Input() public tbExportXLS: boolean = false;
     @Input() public tbExportCsv: boolean = false;
@@ -69,16 +69,12 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** True, if mobile screen size is detected */
-    public isMobileScreen: boolean = true;
     @Input() public showLoader: boolean = true;
     @Input() public showLabels: boolean = false;
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
     /** Emits true to show Tally Report options */
     @Output() public showReportTally = new EventEmitter<boolean>();
-    @ViewChild('createTagTemplate', { static: true }) public createTagTemplate: TemplateRef<any>;
     public universalDate$: Observable<any>;
-    public newTagForm: UntypedFormGroup;    
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Instance of universal datepicker menu trigger */
@@ -111,8 +107,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public showReconcileOptions: boolean = false;
     /** True if show confirmation on date change */
     public showConfirmationOnDateChange: boolean = false;
-    /** Dialog reference for create tag modal */
-    private createTagDialogRef: MatDialogRef<any>;
     /** From date for datepicker */
     public fromDate: string;
     /** To date for datepicker */
@@ -124,7 +118,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
-        private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
         private toaster: ToasterService,
         @Inject(ServiceConfig) private serviceConfig,
@@ -143,11 +136,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             tagName: [''],
             compareValue: [null],
             compareType: [null]
-        });
-
-        this.newTagForm = this.fb.group({
-            name: ['', Validators.required],
-            description: []
         });
 
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -216,12 +204,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.getReconcileDateRange();
             });
         }
-
-        this.breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
@@ -444,44 +426,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         }
     }
-
-    /**
-     * Opens or closes the create tag dialog
-     *
-     * @memberof FinancialReportsFilterComponent
-     */
-    public toggleTagsModal(): void {
-        if (this.createTagDialogRef) {
-            this.createTagDialogRef.close();
-            this.createTagDialogRef = null;
-        } else {
-            this.createTagDialogRef = this.dialog.open(this.createTagTemplate, {
-                panelClass: 'mat-dialog-md',
-                disableClose: true
-            });
-        }
-    }
-
-    /**
-     * Creates a new tag and closes the dialog
-     *
-     * @memberof FinancialReportsFilterComponent
-     */
-    public createTag(): void {
-        this.settingsTagService.CreateTag(this.newTagForm.getRawValue()).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.toaster.clearAllToaster();
-            if (response?.status === "success") {
-                this.getTags();
-                this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_created, this.commonLocaleData?.app_success);
-            } else {
-                this.toaster.errorToast(response?.message, response?.code);
-            }
-        });
-        if (this.createTagDialogRef) {
-            this.createTagDialogRef.close();
-            this.createTagDialogRef = null;
-        }
-    }
     
     /**
      * Gets the list of tags
@@ -491,7 +435,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public getTags(): void {
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success") {
-                this.tags = response.body;
+                this.tags = response?.body?.map(tag => {
+                    return { label: tag?.name, value: tag?.name };
+                }) as IOption[];
                 this.cd.detectChanges();
             }
         });
