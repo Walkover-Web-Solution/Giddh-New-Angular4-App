@@ -118,7 +118,7 @@ export class ListManufacturingComponent implements OnInit {
     /** Holds Total Pages Count*/
     public totalPages: number = 1;
     /** Holds Current Page Number */
-    public currentPage: number = 1;
+    public currentPage: number = 0;
 
     constructor(
         private dialog: MatDialog,
@@ -568,10 +568,10 @@ export class ListManufacturingComponent implements OnInit {
      */
     public handlePageEvent(event: PageEvent): void {
         if (PAGINATION_LIMIT !== event.pageSize) {
-            this.currentPage = 1;
+            this.currentPage = 0;
             this.manufacturingSearchRequest.page = 1;
         } else {
-            this.currentPage = event.pageIndex + 1;
+            this.currentPage = event.pageIndex;
             this.manufacturingSearchRequest.page = event.pageIndex + 1;
         }
         this.manufacturingSearchRequest.count = event.pageSize;

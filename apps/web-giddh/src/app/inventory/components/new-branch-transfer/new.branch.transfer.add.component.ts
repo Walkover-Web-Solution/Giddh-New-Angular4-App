@@ -343,8 +343,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.transporterListDetails$ = this.store.pipe(select(p => p.ewaybillstate.TransporterListDetails), takeUntil(this.destroyed$));
         this.transporterList$ = this.store.pipe(select(p => p.ewaybillstate.TransporterList), takeUntil(this.destroyed$));
 
-        this.transporterListDetails$.subscribe(op => {
-            this.transporterListDetails = op;
+        this.transporterListDetails$.subscribe(response => {
+            this.transporterListDetails = response;
+            if (response?.totalItems > 0 && response?.totalPages < response?.page) {
+                this.transporterFilterRequest.page = response?.totalPages;
+                this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+                return;
+            }
         })
 
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));

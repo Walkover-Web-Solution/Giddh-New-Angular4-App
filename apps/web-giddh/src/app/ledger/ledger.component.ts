@@ -236,7 +236,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         totalItems: 0,
         totalPages: 0,
         page: 1,
-        countPerPage: PAGINATION_LIMIT
+        countPerPage: 10
     };
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -1233,7 +1233,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * This will get the bank transactions of the account
-     *
+     * 
      * @memberof LedgerComponent
      */
     public getBankTransactions(): void {
@@ -1246,9 +1246,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.isBankTransactionLoading = false;
                 if (res?.status === 'success') {
                     if (res.body) {
+                        if (res.body?.totalItems > 0 && res.body?.totalPages < this.bankTransactionsResponse?.page) {
+                            this.bankTransactionsResponse.page = res.body?.totalPages;
+                            this.getBankTransactions();
+                            return;
+                        }
                         this.bankTransactionsResponse.totalItems = res.body.totalItems;
                         this.bankTransactionsResponse.totalPages = res.body.totalPages;
-                        this.bankTransactionsResponse.page = res.body.page;
                         this.bankAccount.reLoginRequired = res.body.reLoginRequired;
                         this.bankAccount.gocardlessMessage = res.body.message;
                         this.bankAccount.itemId = res.body.itemId;

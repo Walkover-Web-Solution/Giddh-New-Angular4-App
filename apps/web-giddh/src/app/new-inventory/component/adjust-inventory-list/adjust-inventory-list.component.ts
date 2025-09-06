@@ -168,6 +168,11 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         /** Get Adjust inventory List */
         this.adjustInventoryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                if (response.body?.totalItems > 0 && response.body?.totalPages < this.adjustInventoryListRequest?.page) {
+                    this.adjustInventoryListRequest.page = response.body?.totalPages;
+                    this.getAllAdjustReports(false);
+                    return;
+                }
                 this.adjustInventoryList = response?.body?.results;
                 this.dataSource = new MatTableDataSource<any>(response?.body?.results);
                 if (this.dataSource?.filteredData?.length || this.adjustInventoryListForm?.controls['referenceNo']?.value ||

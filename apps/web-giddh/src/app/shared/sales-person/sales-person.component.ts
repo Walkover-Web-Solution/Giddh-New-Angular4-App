@@ -116,6 +116,15 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             this.focusInputField();
         })).subscribe();
         this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => { this.salesPersonListIsModified = true; this.salesPersonAction(SalesPersonActionEnum.GET_ALL); })).subscribe();
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                if (res.totalItems > 0 && res.totalPages < res.page) {
+                    this.requestParams.page = res.totalPages;
+                    this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
+                    return;
+                }
+            }
+        });
     }
 
     /**

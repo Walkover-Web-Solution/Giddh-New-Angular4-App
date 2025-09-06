@@ -170,6 +170,10 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.totalResults -= 1;
+                if (this.dataSource.length === 0 && this.projectListRequest.page > 1) {
+                    this.projectListRequest.page -= 1;
+                    this.getAllProjectList();
+                }
                 this.changeDetection.detectChanges();
             }
         });

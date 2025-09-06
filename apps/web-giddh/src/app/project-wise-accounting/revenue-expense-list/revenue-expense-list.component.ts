@@ -227,6 +227,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             if (entryDeleteSuccess) {
                 this.totalResults -= 1;
                 this.entryList.removeAt(entryDeleteSuccess.index);
+                if (this.entryList.length === 0 && this.getProjectEntryListRequest.page > 1) {
+                    this.getProjectEntryListRequest.page -= 1;
+                    this.getEntryList();
+                }
                 this.getRevenueExpense();
             }
         });
