@@ -30,7 +30,6 @@
                                 formControlName="branchUniqueName"
                                 class="company-branch-dropdown"
                                 (selectedOption)="handleBranchChange($event)"
-                                [enableDynamicSearch]="true"
                                 [placeholder]="commonLocaleData?.app_select_entity"
                                 [labelValue]="currentBranch?.name"
                             >
@@ -85,7 +84,7 @@
                             <reactive-dropdown-field
                                 [options]="financialOptions"
                                 formControlName="selectedFinancialYearOption"
-                                [enableDynamicSearch]="true"
+                                (selectedOption)="selectFinancialYearOption($event)"
                                 class="company-branch-dropdown"
                                 [label]="commonLocaleData?.app_financial_year"
                                 [placeholder]="commonLocaleData?.app_datepicker?.select_financial_year"
