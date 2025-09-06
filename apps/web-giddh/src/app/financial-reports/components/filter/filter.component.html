@@ -75,6 +75,7 @@
                                 class="company-branch-dropdown"
                                 [placeholder]="commonLocaleData?.app_select_option"
                                 [labelValue]="selectedDateOption?.label ?? ''"
+                                formControlName="selectedDateOption"
                             >
                             </reactive-dropdown-field>
                         </div>
@@ -86,7 +87,8 @@
                                 formControlName="selectedFinancialYearOption"
                                 [enableDynamicSearch]="true"
                                 class="company-branch-dropdown"
-                                [placeholder]="commonLocaleData?.app_select_financial_year"
+                                [label]="commonLocaleData?.app_financial_year"
+                                [placeholder]="commonLocaleData?.app_datepicker?.select_financial_year"
                             ></reactive-dropdown-field>
                         </div>
                     </div>
