@@ -463,9 +463,15 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         this.onPropertyChanged.emit(this.filterForm?.value);
     }
 
-    public dateOptionIsSelected(ev) {
-        if (ev) {
-            if (ev.value === '0') {
+    /**
+     * Date option selected handler
+     *
+     * @param {IOption} event
+     * @memberof FinancialReportsFilterComponent
+     */
+    public dateOptionIsSelected(event: IOption): void {
+        if (event) {
+            if (event.value === '0') {
                 this.selectFinancialYearOption(this.financialOptions[0]);
             } else {
                 const fromDate = dayjs(this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
