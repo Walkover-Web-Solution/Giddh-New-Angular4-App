@@ -192,15 +192,11 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         transaction['salesBifurcation'] = true;
         this.selectedItem = transaction;
         
-        let dialogRef = this.dialog.open(templateRef, {
+        this.dialog.open(templateRef, {
             width: '70%',
             height: '790px',
             role: 'alertdialog',
             ariaLabel: 'template'
-        });
-
-        dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
-            this.initApiCall();
         });
     }
 
