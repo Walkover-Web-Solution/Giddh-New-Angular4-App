@@ -40,8 +40,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public modalRef: BsModalRef;
     public isClearFilter: boolean = false;
     public isFilterSelected: boolean = false;
+    /** Holds current selected tab */
     public currentSelectedTab: string = EExpenseTabName.PENDING;
-    /** Enum reference for template usage */
+    /** Holds expense tab name enum */
     public readonly EExpenseTabName = EExpenseTabName;
     public activeTab: string;
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
