@@ -30,7 +30,7 @@
                                 templateType !== voucherTypeEnum.purchase_order &&
                                 templateType !== voucherTypeEnum.purchase_bill
                             "
-                            [expanded]="templateMode === templateModeEnum.Update ? true : false"
+                            [expanded]="templateMode === templateModeEnum.Update"
                         >
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
@@ -49,7 +49,7 @@
                                         "
                                     >
                                         <img
-                                            src="./assets/images/templates/{{ template?.templateType }}.png"
+                                            src="{{ imgPath }}templates/{{ template?.templateType }}.png"
                                             alt="template"
                                             class="view-img w-100 h-100 border-radius-5"
                                         />
@@ -58,7 +58,7 @@
                                             class="beta-img position-absolute"
                                             *ngIf="template?.templateType !== templateTypeEnum.GstTemplateA"
                                         >
-                                            <img src="./assets/images/templates/beta.png" alt="beta" />
+                                            <img src="{{ imgPath }}templates/beta.png" alt="beta" />
                                         </div>
                                     </div>
                                 </ng-container>
@@ -165,24 +165,13 @@
                                 </span>
                                 <div class="mr-l1 pull-left">
                                     <ul>
-                                        <li (click)="changeColor('#bdbdbd', '#fcfcfc')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#636363', '#f7f7f7')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#000000', '#f2f2f2')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#e34818', '#f2f3f4')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#7889a1', '#f8f9fa')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#48565f', '#f6f6f7')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#79bd58', '#f8fcf6')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#0e909a', '#f3f9fa')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#202e5a', '#f4f4f7')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#96bc2d', '#fafcf4')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#2a651d', '#f4f7f3')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#004254', '#f2f5f6')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#ff8c00', '#fffaf3')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#82001d', '#f9f2f3')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#6b1438', '#f7f3f5')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#f4749b', '#fef8fa')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#950069', '#faf2f7')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#542852', '#f6f4f6')" class="cursor-pointer"></li>
+                                        <li 
+                                            *ngFor="let color of colorPalette; trackBy: trackByColor"
+                                            (click)="changeColor(color.primary, color.secondary)" 
+                                            class="cursor-pointer"
+                                            [style.background-color]="color.primary"
+                                            [title]="color.primary">
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -378,7 +367,7 @@
                                                                 templateTypeEnum.ThermalTemplate
                                                             "
                                                         >
-                                                            {{ localeData?.company_name }}</span
+                                                            {{ commonLocaleData?.app_company_name }}</span
                                                         >
                                                     </mat-checkbox>
                                                     <div
@@ -415,10 +404,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                50 -
-                                                                    customTemplate?.sections?.['header']?.data?.[
-                                                                        'companyName'
-                                                                    ]?.label?.length
+                                                                getRemainingCharacters(
+                                                                    50,
+                                                                    customTemplate?.sections?.['header']?.data?.['companyName']?.label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -696,10 +685,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                70 -
-                                                                    customTemplate.sections["header"].data[
-                                                                        "gstComposition"
-                                                                    ].label?.length
+                                                                getRemainingCharacters(
+                                                                    70,
+                                                                    customTemplate?.sections?.["header"]?.data?.["gstComposition"]?.label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -775,14 +764,14 @@
                                                                 }}</span>
                                                                 {{
                                                                     customTemplate.templateType === "thermal_template"
-                                                                        ? 12 -
-                                                                          customTemplate.sections["header"].data[
-                                                                              "invoiceDate"
-                                                                          ].label?.length
-                                                                        : 15 -
-                                                                          customTemplate.sections["header"].data[
-                                                                              "invoiceDate"
-                                                                          ].label?.length
+                                                                        ? getRemainingCharacters(
+                                                                            12,
+                                                                            customTemplate?.sections?.["header"]?.data?.["invoiceDate"]?.label
+                                                                          )
+                                                                        : getRemainingCharacters(
+                                                                            15,
+                                                                            customTemplate?.sections?.["header"]?.data?.["invoiceDate"]?.label
+                                                                          )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -852,14 +841,14 @@
                                                                 {{
                                                                     customTemplate.templateType ===
                                                                     templateTypeEnum.ThermalTemplate
-                                                                        ? 14 -
-                                                                          customTemplate.sections["header"].data[
-                                                                              "invoiceNumber"
-                                                                          ].label?.length
-                                                                        : 15 -
-                                                                          customTemplate.sections["header"].data[
-                                                                              "invoiceNumber"
-                                                                          ].label?.length
+                                                                        ? getRemainingCharacters(
+                                                                            14,
+                                                                            customTemplate?.sections?.["header"]?.data?.["invoiceNumber"]?.label
+                                                                          )
+                                                                        : getRemainingCharacters(
+                                                                            15,
+                                                                            customTemplate?.sections?.["header"]?.data?.["invoiceNumber"]?.label
+                                                                          )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -912,10 +901,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "voucherDate"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["voucherDate"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -960,10 +949,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "voucherNumber"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["voucherNumber"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1013,9 +1002,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                15 -
-                                                                    customTemplate.sections["header"].data["dueDate"]
-                                                                        .label?.length
+                                                                getRemainingCharacters(
+                                                                    15,
+                                                                    customTemplate?.sections?.["header"]?.data?.["dueDate"]?.label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -1076,10 +1066,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "formNameInvoice"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["formNameInvoice"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1109,10 +1099,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "formNameTaxInvoice"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["formNameTaxInvoice"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1262,12 +1252,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    (customTemplate?.templateType === "tally_template"
-                                                                        ? 20
-                                                                        : 18) -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "billingAddress"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                    customTemplate?.templateType === "tally_template" ? 20 : 18,
+                                                                    customTemplate?.sections?.["header"]?.data?.["billingAddress"]?.label
+                                                                )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1351,10 +1339,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "billingGstin"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["billingGstin"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1420,12 +1408,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    (customTemplate?.templateType === "tally_template"
-                                                                        ? 20
-                                                                        : 18) -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "shippingAddress"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                    customTemplate?.templateType === "tally_template" ? 20 : 18,
+                                                                    customTemplate?.sections?.["header"]?.data?.["shippingAddress"]?.label
+                                                                )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1497,10 +1483,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "shippingGstin"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["shippingGstin"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1564,10 +1550,10 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
-                                                                                customTemplate.sections["header"].data[
-                                                                                    "shippingDate"
-                                                                                ].label?.length
+                                                                            getRemainingCharacters(
+                                                                                15,
+                                                                                customTemplate?.sections?.["header"]?.data?.["shippingDate"]?.label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1614,10 +1600,10 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
-                                                                                customTemplate.sections["header"].data[
-                                                                                    "shippedVia"
-                                                                                ].label?.length
+                                                                            getRemainingCharacters(
+                                                                                15,
+                                                                                customTemplate?.sections?.["header"]?.data?.["shippedVia"]?.label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -2615,12 +2601,14 @@
                                                             }}</span>
                                                             {{
                                                                 customTemplate.templateType === "thermal_template"
-                                                                    ? 5 -
-                                                                      customTemplate.sections["table"].data["total"]
-                                                                          .label?.length
-                                                                    : 6 -
-                                                                      customTemplate.sections["table"].data["total"]
-                                                                          .label?.length
+                                                                    ? getRemainingCharacters(
+                                                                        5,
+                                                                        customTemplate?.sections?.["table"]?.data?.["total"]?.label
+                                                                      )
+                                                                    : getRemainingCharacters(
+                                                                        6,
+                                                                        customTemplate?.sections?.["table"]?.data?.["total"]?.label
+                                                                      )
                                                             }}
                                                         </p>
                                                     </div>
@@ -3771,7 +3759,7 @@
                                                     <div class="form-group mr-l3 clearfix">
                                                         <span class="clearfix">
                                                             <label
-                                                                class="upload-button"
+                                                                class="upload-button text-center cursor-pointer"
                                                                 for="signatureImg-edit"
                                                                 [hidden]="signatureImgAttached"
                                                             >

@@ -5,6 +5,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
 import { InvoiceTemplatesService } from '../../services/invoice.templates.service';
 import { ToasterService } from '../../services/toaster.service';
+import { VoucherTypeEnum } from '../utility/vouchers.const';
 
 @Component({
   selector: 'app-template-preview-dialog',
@@ -59,18 +60,18 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
     let templateType = '';
     // Map template types to display names
     switch (this.data?.type?.toLowerCase()) {
-      case 'sales':
-      case 'invoice':
+      case VoucherTypeEnum.sales:
+      case VoucherTypeEnum.invoice:
         templateType = this.data?.localeData?.invoice;
         break;
-      case 'voucher':
+      case VoucherTypeEnum.voucher:
         templateType = this.data?.localeData?.voucher;
         break;
-      case 'purchase':
-      case 'purchase_bill':
+      case VoucherTypeEnum.purchase:
+      case VoucherTypeEnum.purchase_bill:
         templateType = this.data?.localeData?.purchase_bill;
         break;
-      case 'purchase_order':
+      case VoucherTypeEnum.purchase_order:
         templateType = this.data?.localeData?.purchase_order;
         break;
       default:

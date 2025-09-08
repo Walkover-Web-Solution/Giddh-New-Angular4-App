@@ -15,8 +15,12 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
+<<<<<<< HEAD
 import { PageEvent } from '@angular/material/paginator';
 import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+=======
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+>>>>>>> 48f811567a (fixed PR changes)
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -30,7 +34,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     @ViewChild('eWayBillCredentialsTemplate', { static: true }) public eWayBillCredentialsTemplate: TemplateRef<any>;
     @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
+<<<<<<< HEAD
     @ViewChild('invoiceRemoveConfirmationTemplate', { static: true }) public invoiceRemoveConfirmationTemplate: TemplateRef<any>;
+=======
+>>>>>>> 48f811567a (fixed PR changes)
     @ViewChild('subgrp', { static: true }) public subgrp: any;
     @ViewChild('doctypes', { static: true }) public doctype: any;
     @ViewChild('trans', { static: true }) public transport: any;
@@ -61,6 +68,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
     public currenTransporterId: string;
     public isUserlogedIn: boolean;
+<<<<<<< HEAD
+=======
+    public deleteTemplateConfirmationMessage: string;
+>>>>>>> 48f811567a (fixed PR changes)
     public showClear: boolean = false;
     public generateEwayBillform: GenerateEwayBill = {
         supplyType: null,

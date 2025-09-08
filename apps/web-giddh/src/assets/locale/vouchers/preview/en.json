@@ -398,7 +398,6 @@
     "tcs": "TCS",
     "tds": "TDS",
     "totalDue": "Total Due",
-    "company_name": "Company Name",
     "total_quantity": "Total Quantity",
     "discount": "Discount",
     "taxable_amount": "Taxable Amount",
@@ -512,5 +511,7 @@
     "bill_from": "Bill From",
     "ship_from": "Ship From",
     "invoice": "Invoice",
-    "voucher": "Voucher"
+    "voucher": "Voucher",
+    "template_set_as_default_successfully": "Template set as default successfully",
+    "are_you_sure_you_want_to_delete":"Are you sure you want to delete \"<b>${template.name}</b>\" template?"
 }
