@@ -170,8 +170,8 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.totalResults -= 1;
-                if (this.dataSource.length === 0 && this.projectListRequest.page > 1) {
-                    this.projectListRequest.page -= 1;
+                if (this.dataSource.length === 0) {
+                    this.projectListRequest.page = this.projectListRequest.page > 1 ? this.projectListRequest.page - 1 : 1;
                     this.getAllProjectList();
                 }
                 this.changeDetection.detectChanges();
@@ -326,7 +326,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             sort: 'desc',
             sortBy: 'STATUS',
             page: 1,
-            count: PAGINATION_LIMIT,
+            count: 10,
             searchQuery: '',
             queryColumn: 'STATUS'
         }

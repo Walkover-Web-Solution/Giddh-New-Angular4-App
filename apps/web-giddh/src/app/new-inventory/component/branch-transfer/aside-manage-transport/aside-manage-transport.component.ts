@@ -142,11 +142,6 @@ export class AsideManageTransportComponent implements OnInit {
     public getTransportersList(): void {
         this.isLoading = true;
         this.invoiceServices.getAllTransporterList(this.transporterObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.body?.totalItems > 0 && response.body?.totalPages < this.transporterObj?.page) {
-                this.transporterObj.page = response.body?.totalPages;
-                this.getTransportersList();
-                return;
-            }
             this.isLoading = false;
             if (response && response.status === "success" && response.body) {
                 this.transporterListDetails = response.body.results;
@@ -235,6 +230,9 @@ export class AsideManageTransportComponent implements OnInit {
                     this.isLoading = false;
                     if (response && response.status === "success" && response.body) {
                         this.toasty.showSnackBar("success", response.body);
+                        if(this.transporterObj.page > 1 && this.transporterObj.totalItems % this.transporterObj.count === 1) {
+                            this.transporterObj.page = this.transporterObj.page - 1;
+                        }
                         this.getTransportersList();
                     } else {
                         this.toasty.showSnackBar("error", response.message);

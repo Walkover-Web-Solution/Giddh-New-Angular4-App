@@ -1069,8 +1069,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public handleDeleteAddress(addressDetails: any): void {
         this.settingsProfileService.deleteAddress(addressDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.loadAddresses('GET');
-            this._toasty.successToast('Address deleted successfully');
+            if (response?.status === 'success') {
+                if (this.addresses.length % this.addressTabPaginationData.count === 1 && this.addressTabPaginationData.page > 1) {
+                    this.addressTabPaginationData.page = this.addressTabPaginationData.page - 1;
+                }
+                this.loadAddresses('GET');
+                this._toasty.successToast('Address deleted successfully');
+            }
         });
     }
 
@@ -1239,10 +1244,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 if (response && response.body && response.status === 'success') {
                     this.updateAddressPagination(response.body);
                     this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results);
-                    if (this.addresses.length === 0 && response.body.totalPages < response.body.page) {
-                        this.addressTabPaginationData.page = response.body.totalPages;
-                        this.loadAddresses('GET');
-                    }
                 }
             });
         }

@@ -87,6 +87,8 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
         page: 1,
         count: PAGINATION_LIMIT
     };
+    /** Total results */
+    public totalResults: number = 0;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesPersonData: any,
@@ -115,14 +117,16 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
             this.focusInputField();
         })).subscribe();
-        this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => { this.salesPersonListIsModified = true; this.salesPersonAction(SalesPersonActionEnum.GET_ALL); })).subscribe();
+        this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
+            this.salesPersonListIsModified = true;
+            if (this.totalResults % this.requestParams.count === 1 && this.requestParams.page > 1) {
+                this.requestParams.page = this.requestParams.page - 1;
+            }
+            this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
+        })).subscribe();
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
-                if (res.totalItems > 0 && res.totalPages < res.page) {
-                    this.requestParams.page = res.totalPages;
-                    this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
-                    return;
-                }
+                this.totalResults = res.totalItems;
             }
         });
     }

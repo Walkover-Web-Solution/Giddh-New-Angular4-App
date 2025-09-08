@@ -361,11 +361,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.isStockLoading = true;
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response?.status === 'success') {
-                if (response.body?.totalItems > 0 && response.body?.totalPages < this.pagination.stock?.page) {
-                    this.pagination.stock.page = response.body?.totalPages;
-                    this.getAllDiscount(userData, query);
-                    return;
-                }
                 this.initialiseAllDiscounts(userData, cloneDeep(response));
             } else {
                 this.currentUserStocks = [];
@@ -537,6 +532,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.inventoryService.deleteDiscountRecord(model).pipe(take(1)).subscribe((response) => {
                 if (response && response?.status === "success") {
                     this.showSaveDiscardButton = false;
+                    if (this.pagination.stock.page > 1 && this.pagination.stock.totalItems % this.pagination.stock.count === 1) {
+                        this.pagination.stock.page = this.pagination.stock.page - 1;
+                    }
                     if (type === 'variant') {
                         const stock = discounts.at(stockFormArrayIndex).get('variants') as UntypedFormArray;
                         var variant = stock.at(variantFormArrayIndex)?.value;

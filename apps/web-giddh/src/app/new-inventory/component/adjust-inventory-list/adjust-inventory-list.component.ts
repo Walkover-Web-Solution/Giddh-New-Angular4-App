@@ -200,6 +200,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         /** Delete adjust inventory success */
         this.componentStore.deleteAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                if(this.adjustInventoryListRequest.page > 1 && this.adjustInventoryListRequest.totalItems % this.adjustInventoryListRequest.count === 1) {
+                    this.adjustInventoryListRequest.page = this.adjustInventoryListRequest.page - 1;
+                }
                 this.getAllAdjustReports(true);
             }
         });
