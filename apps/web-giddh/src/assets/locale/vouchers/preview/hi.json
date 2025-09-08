@@ -398,7 +398,6 @@
     "tcs": "टीसीएस",
     "tds": "टीडीएस",
     "totalDue": "कुल बकाया",
-    "company_name": "कंपनी का नाम",
     "total_quantity": "कुल मात्रा",
     "discount": "डिस्काउंट",
     "taxable_amount": "कर योग्य राशि",
@@ -512,5 +511,7 @@
     "bill_from": "बिल फ्रॉम",
     "ship_from": "शिप फ्रॉम",
     "invoice": "चलन",
-    "voucher": "वाउचर"
+    "voucher": "वाउचर",
+    "template_set_as_default_successfully": "टेम्पलेट डिफ़ॉल्ट रूपांतरित किया गया",
+    "are_you_sure_you_want_to_delete":"क्या आप वाकई \"<b>${template.name}</b>\" टेम्पलेट को हटाना चाहते हैं?"
 }
