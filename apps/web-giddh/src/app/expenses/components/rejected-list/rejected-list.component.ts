@@ -255,6 +255,9 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", res?.body);
+                if (this.pettyCashRejectedReportResponse?.totalItems % this.pettyCashRejectedReportResponse?.count === 1 && this.pettyCashRejectedReportResponse?.page > 1) {
+                    this.pettycashRequest.page = this.pettyCashRejectedReportResponse?.page - 1;
+                }
                 this.getPettyCashRejectedReports(this.pettycashRequest);
             } else if(res?.message) {
                 this.toaster.showSnackBar("error", res.message);

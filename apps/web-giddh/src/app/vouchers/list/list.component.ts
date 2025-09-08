@@ -958,11 +958,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private handleGetAllVoucherResponse(response: any): void {
         if (response && response.voucherType === this.voucherType) {
-            if (response.totalItems > 0 && response.totalPages < response.page) {
-                this.advanceFilters.page = response.totalPages;
-                this.getAllVouchers();
-                return;
-            }
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             this.selectAllVouchers({ checked: false });
@@ -1722,6 +1717,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
+                if ((voucher?.uniqueName && this.dataSource?.length % this.advanceFilters.count === 1 || !voucher?.uniqueName && this.dataSource?.length - this.selectedVouchers?.length === 0) && this.advanceFilters.page > 1) {
+                    this.advanceFilters.page -= 1;
+                }
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.componentStore.deleteVoucher({
                         accountUniqueName: voucher?.account?.uniqueName, model: {
@@ -3505,14 +3503,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-     /**
-     * This will show the datepicker
-     *
-     * @param {boolean} isOpen
-     * @memberof VoucherListComponent
-     */
-     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+    /**
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();

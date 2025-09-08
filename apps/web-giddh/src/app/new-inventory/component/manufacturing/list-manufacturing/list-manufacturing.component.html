@@ -188,11 +188,11 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </section>
-        <div class="mt-4" *ngIf="(totalItems >= pageSizeOptions[0]) && !isReportLoading">
+        <div class="mt-4" *ngIf="(totalItems > pageSizeOptions[0]) && !isReportLoading">
             <mat-paginator
                 [length]="totalItems"
                 [pageSize]="manufacturingSearchRequest.count"
-                [pageIndex]="currentPage - 1"
+                [pageIndex]="currentPage"
                 [pageSizeOptions]="pageSizeOptions"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"

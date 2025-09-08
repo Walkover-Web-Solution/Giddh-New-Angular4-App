@@ -143,13 +143,13 @@ export class ListBranchTransferComponent implements OnInit {
     public get shouldShowElement(): boolean {
         return (
             (this.branchTransferForm?.controls['sender']?.value ||
-            this.branchTransferForm?.controls['receiver']?.value ||
-            this.branchTransferForm?.controls['senderReceiver']?.value ||
-            this.branchTransferForm?.controls['fromWarehouse']?.value ||
-            this.branchTransferForm?.controls['toWarehouse']?.value) &&
+                this.branchTransferForm?.controls['receiver']?.value ||
+                this.branchTransferForm?.controls['senderReceiver']?.value ||
+                this.branchTransferForm?.controls['fromWarehouse']?.value ||
+                this.branchTransferForm?.controls['toWarehouse']?.value) &&
             (!this.branchTransferForm?.controls['voucherType']?.value &&
-            !this.branchTransferForm?.controls['amountOperator']?.value &&
-            !this.branchTransferForm?.controls['amount']?.value)
+                !this.branchTransferForm?.controls['amountOperator']?.value &&
+                !this.branchTransferForm?.controls['amount']?.value)
         );
     }
 
@@ -515,6 +515,9 @@ export class ListBranchTransferComponent implements OnInit {
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", response.body);
+                if (this.branchTransferPaginationObject.page > 1 && this.branchTransferPaginationObject.totalItems % this.branchTransferPaginationObject.count === 1) {
+                    this.branchTransferPaginationObject.page = this.branchTransferPaginationObject.page - 1;
+                }
                 this.getBranchTransferList(false);
             } else {
                 this.toaster.showSnackBar("error", response.message);
@@ -557,7 +560,7 @@ export class ListBranchTransferComponent implements OnInit {
         this.branchTransferPaginationObject.count = event.pageSize;
         this.getBranchTransferList(false);
     }
-    
+
 
 
     /**

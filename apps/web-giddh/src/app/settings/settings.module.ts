@@ -77,6 +77,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
 import { ExportFileNameComponent } from './export-file-name/export-file-name.component';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replaceAll.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
@@ -164,7 +165,7 @@ import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replace
         TributeMentionModule,
         ReplaceAllPipeModule,
         TitleCasePipe,
-        OverlayModule
+        MatPaginatorModule
     ],
 })
 

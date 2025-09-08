@@ -22,6 +22,7 @@ import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-p
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     imports: [
@@ -44,7 +45,8 @@ import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module'
         GiddhPageLoaderModule,
         MatExpansionModule,
         MatSlideToggleModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatPaginatorModule
     ],
     exports: [
         CreateManufacturingComponent,

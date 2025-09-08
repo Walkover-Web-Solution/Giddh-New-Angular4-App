@@ -145,7 +145,6 @@ export class AsideManageTransportComponent implements OnInit {
             this.isLoading = false;
             if (response && response.status === "success" && response.body) {
                 this.transporterListDetails = response.body.results;
-                this.transporterObj.page = response.body?.page;
                 this.transporterObj.totalItems = response.body?.totalItems;
                 this.transporterObj.totalPages = response.body?.totalPages;
                 this.transporterObj.count = response.body?.count;
@@ -231,6 +230,9 @@ export class AsideManageTransportComponent implements OnInit {
                     this.isLoading = false;
                     if (response && response.status === "success" && response.body) {
                         this.toasty.showSnackBar("success", response.body);
+                        if (this.transporterObj.page > 1 && this.transporterObj.totalItems % this.transporterObj.count === 1) {
+                            this.transporterObj.page = this.transporterObj.page - 1;
+                        }
                         this.getTransportersList();
                     } else {
                         this.toasty.showSnackBar("error", response.message);

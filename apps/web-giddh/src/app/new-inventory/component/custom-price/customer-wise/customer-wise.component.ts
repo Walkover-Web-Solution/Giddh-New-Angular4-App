@@ -360,7 +360,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         };
         this.isStockLoading = true;
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && response?.body?.results?.length) {
+            if (response && response?.status === 'success') {
                 this.initialiseAllDiscounts(userData, cloneDeep(response));
             } else {
                 this.currentUserStocks = [];
@@ -532,6 +532,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.inventoryService.deleteDiscountRecord(model).pipe(take(1)).subscribe((response) => {
                 if (response && response?.status === "success") {
                     this.showSaveDiscardButton = false;
+                    if (this.pagination.stock.page > 1 && this.pagination.stock.totalItems % this.pagination.stock.count === 1) {
+                        this.pagination.stock.page = this.pagination.stock.page - 1;
+                    }
                     if (type === 'variant') {
                         const stock = discounts.at(stockFormArrayIndex).get('variants') as UntypedFormArray;
                         var variant = stock.at(variantFormArrayIndex)?.value;
@@ -552,6 +555,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         this.currentUserStocks = [];
                     }
                     if (type === 'stock') {
+                        let currentUser = this.currentUser;
                         discounts.removeAt(stockFormArrayIndex);
                         if (discounts.length === 0) {
                             let indexInUserListArray = this.checkUserList(this.currentUser.uniqueName);
@@ -562,6 +566,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         }
                         this.currentUserStocks.splice(stockFormArrayIndex, 1);
                         this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
+                        this.getAllDiscount(currentUser, this.stockSearchQuery);
                     }
                     this.toaster.successToast(response?.body);
                 } else {
@@ -607,6 +612,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
                 const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
+                this.getAllDiscount(this.currentUser, this.stockSearchQuery);
             }
         }
     }
