@@ -5331,9 +5331,9 @@
                                                         "
                                                         [name]="'initialCreditNoteNumber'"
                                                         [label]="localeData?.initial_no"
+                                                        formControlName="initialCreditNoteNumber"
                                                         [placeholder]="'00'"
                                                         [type]="'text'"
-                                                        formControlName="initialCreditNoteNumber"
                                                     ></input-field>
                                                 </div>
                                                 <mat-slide-toggle
@@ -5794,7 +5794,7 @@
                         [options]="purchaseTemplatesList"
                         class="w-50 template-design d-block"
                         (selectedOption)="templateSelect($event)"
-                        [defaultValue]="selectedTemplate.label"
+                        [defaultValue]="selectedTemplate?.label"
                     >
                     </dropdown-field>
                     <div class="template-wrapper mt-3">
@@ -5807,7 +5807,7 @@
                                 <button
                                     mat-stroked-button
                                     color="primary"
-                                    (click)="templateEdit(null, 'create')"
+                                    (click)="templateAction(null, 'create')"
                                     *ngIf="voucherApiVersion === 2"
                                 >
                                     {{ localeData?.add_new }}
@@ -5818,10 +5818,8 @@
                             <mat-card
                                 class="outline-card add-template-wrapper text-center"
                                 *ngIf="
-                                    (template.type === 'invoice' ||
-                                        template.type === 'purchase_bill' ||
-                                        template.type === 'purchase_order') &&
-                                    (voucherType === 'sales' || voucherType === 'purchase')
+                                    [voucherTypeEnum.invoice, voucherTypeEnum.purchase_bill, voucherTypeEnum.purchase_order].includes(template.type) &&
+                                    [voucherTypeEnum.sales, voucherTypeEnum.purchase].includes(voucherType)
                                 "
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
@@ -5840,11 +5838,11 @@
                                         (click)="
                                             setTemplateAsDefault(
                                                 template.uniqueName,
-                                                template.type === 'invoice'
-                                                    ? 'invoice'
-                                                    : template.type === 'purchase_bill'
-                                                    ? 'purchase_bill'
-                                                    : 'purchase_order'
+                                                template.type === voucherTypeEnum.invoice
+                                                    ? voucherTypeEnum.invoice
+                                                    : template.type === voucherTypeEnum.purchase_bill
+                                                    ? voucherTypeEnum.purchase_bill
+                                                    : voucherTypeEnum.purchase_order
                                             )
                                         "
                                     >
@@ -5858,7 +5856,7 @@
                                             class="mat-icon-md-btn"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
-                                            (click)="templateDialog(template)"
+                                            (click)="previewTemplate(template)"
                                         >
                                             <i class="icon-eye"></i>
                                         </button>
@@ -5868,7 +5866,7 @@
                                             class="mat-icon-md-btn"
                                             [matTooltip]="localeData?.edit_template"
                                             matTooltipPosition="above"
-                                            (click)="templateEdit(template, 'edit')"
+                                            (click)="templateAction(template, 'edit')"
                                         >
                                             <i class="icon-edit-pencil"></i>
                                         </button>
@@ -5884,11 +5882,11 @@
                                                     ? null
                                                     : deleteTemplate(
                                                           template,
-                                                          template.type === 'invoice'
-                                                              ? 'invoice'
-                                                              : template.type === 'purchase_bill'
-                                                              ? 'purchase_bill'
-                                                              : 'purchase_order'
+                                                          template.type === voucherTypeEnum.invoice
+                                                              ? voucherTypeEnum.invoice
+                                                              : template.type === voucherTypeEnum.purchase_bill
+                                                              ? voucherTypeEnum.purchase_bill
+                                                              : voucherTypeEnum.purchase_order
                                                       )
                                             "
                                         >
@@ -5908,8 +5906,8 @@
                             <mat-card
                                 class="outline-card add-template-wrapper text-center"
                                 *ngIf="
-                                    template.type === 'voucher' &&
-                                    (voucherType === 'credit note' || voucherType === 'debit note')
+                                    template.type === voucherTypeEnum.voucher &&
+                                    (voucherType === voucherTypeEnum.creditNote || voucherType === voucherTypeEnum.debitNote)
                                 "
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
@@ -5925,7 +5923,7 @@
                                     <span
                                         *ngIf="!template.isDefaultForVoucher"
                                         class="default-wrap font-12 p-2 cursor-pointer"
-                                        (click)="setTemplateAsDefault(template.uniqueName, 'voucher')"
+                                        (click)="setTemplateAsDefault(template.uniqueName, voucherTypeEnum.voucher)"
                                     >
                                         <i class="icon-favorite-selected"></i>
                                         {{ localeData?.set_as_default }}
@@ -5937,7 +5935,7 @@
                                             class="mat-icon-md-btn"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
-                                            (click)="templateDialog(template)"
+                                            (click)="previewTemplate(template)"
                                         >
                                             <i class="icon-eye"></i>
                                         </button>
@@ -5947,7 +5945,7 @@
                                             class="mat-icon-md-btn"
                                             matTooltip="{{ localeData?.edit_template }}"
                                             matTooltipPosition="above"
-                                            (click)="templateEdit(template, 'edit')"
+                                            (click)="templateAction(template, 'edit')"
                                         >
                                             <i class="icon-edit-pencil"></i>
                                         </button>

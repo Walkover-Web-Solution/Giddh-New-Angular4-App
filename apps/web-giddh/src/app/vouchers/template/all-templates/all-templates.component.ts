@@ -6,7 +6,7 @@ import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { PDF_ZOOM_CONFIG } from '../../../app.constant';
+import { IFRAME_ZOOM_CONFIG } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { ToasterService } from '../../../services/toaster.service';
 
@@ -51,7 +51,7 @@ export class AllTemplatesComponent implements OnInit {
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
                         // Use fit entire page configuration from constants
-                        const pdfUrlWithZoom = `${this.pdfFileURL}${PDF_ZOOM_CONFIG.FIT_PAGE}`;
+                        const pdfUrlWithZoom = `${this.pdfFileURL}${IFRAME_ZOOM_CONFIG.ZOOM_100}`;
                         this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfUrlWithZoom);
                         this.isFileUploading = false;
                     } else {

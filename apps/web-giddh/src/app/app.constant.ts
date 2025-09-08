@@ -31,7 +31,7 @@ export enum BranchHierarchyType {
 };
 
 /** PDF Zoom Configuration Constants */
-export const PDF_ZOOM_CONFIG = {
+export const IFRAME_ZOOM_CONFIG = {
     FIT_PAGE: '#view=Fit',
     FIT_HORIZONTAL: '#view=FitH',
     FIT_VERTICAL: '#view=FitV',

@@ -14,6 +14,8 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -24,7 +26,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: ModalDirective;
     @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
-    @ViewChild('invoiceRemoveConfirmationModel', { static: true }) public invoiceRemoveConfirmationModel: ModalDirective;
     @ViewChild('subgrp', { static: true }) public subgrp: any;
     @ViewChild('doctypes', { static: true }) public doctype: any;
     @ViewChild('trans', { static: true }) public transport: any;
@@ -53,7 +54,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public currenTransporterId: string;
     public isUserlogedIn: boolean;
     public deleteTemplateConfirmationMessage: string;
-    public confirmationFlag: string;
     public showClear: boolean = false;
     public generateEwayBillform: GenerateEwayBill = {
         supplyType: null,
@@ -106,9 +106,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public voucherDetails: any;
     /** Transaction type dropdown - (Regular [1] | Bill to - ship to [2] | Bill from - Dispatch from [3] | Combination [4]) */
     public transactionSubType: IOption[] = [];
+    /** Invoice remove dialog reference */
+    public invoiceRemoveDialogRef: any;
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
+        private dialog: MatDialog,
         private _cdRef: ChangeDetectorRef, private toaster: ToasterService, private generalService: GeneralService) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
@@ -292,12 +295,18 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public removeInvoice(invoice: any[]) {
-        this.confirmationFlag = 'closeConfirmation';
-
         let removeInvoice = this.localeData?.remove_invoice;
         removeInvoice = removeInvoice?.replace("[VOUCHER_NUMBER]", this.selectedInvoices[0]?.voucherNumber);
         this.deleteTemplateConfirmationMessage = removeInvoice;
-        this.invoiceRemoveConfirmationModel?.show();
+        this.invoiceRemoveDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    removeInvoice,
+                    this.commonLocaleData
+                )
+            }
+        });
     }
 
     /**
@@ -310,7 +319,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.redirectToSalesInvoice();
             }
         }
-        this.invoiceRemoveConfirmationModel?.hide();
+        this.invoiceRemoveDialogRef?.close();
     }
 
     detectChanges() {

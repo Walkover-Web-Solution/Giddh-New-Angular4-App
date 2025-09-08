@@ -126,6 +126,31 @@ export class TemplateEditFilterComponent implements OnInit {
     public commonLocaleData: any = {};
     /** Holds voucher type enum */
     public voucherTypeEnum: any = VoucherTypeEnum;
+    /** Holds images folder path */
+    public imgPath: string = "";
+    /** Timer for debouncing field changes */
+    private fieldChangeTimer: any;
+    /** Color palette for template customization */
+    public readonly colorPalette = [
+        { primary: '#bdbdbd', secondary: '#fcfcfc' },
+        { primary: '#636363', secondary: '#f7f7f7' },
+        { primary: '#000000', secondary: '#f2f2f2' },
+        { primary: '#e34818', secondary: '#f2f3f4' },
+        { primary: '#7889a1', secondary: '#f8f9fa' },
+        { primary: '#48565f', secondary: '#f6f6f7' },
+        { primary: '#79bd58', secondary: '#f8fcf6' },
+        { primary: '#0e909a', secondary: '#f3f9fa' },
+        { primary: '#202e5a', secondary: '#f4f4f7' },
+        { primary: '#96bc2d', secondary: '#fafcf4' },
+        { primary: '#2a651d', secondary: '#f4f7f3' },
+        { primary: '#004254', secondary: '#f2f5f6' },
+        { primary: '#ff8c00', secondary: '#fffaf3' },
+        { primary: '#82001d', secondary: '#f9f2f3' },
+        { primary: '#6b1438', secondary: '#f7f3f5' },
+        { primary: '#f4749b', secondary: '#fef8fa' },
+        { primary: '#950069', secondary: '#faf2f7' },
+        { primary: '#542852', secondary: '#f6f4f6' }
+    ];
 
     constructor(
         private generalService: GeneralService,
@@ -137,12 +162,37 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
+     * TrackBy function for color palette to optimize ngFor performance
+     *
+     * @param {number} index
+     * @param {any} color
+     * @returns {string}
+     * @memberof TemplateEditFilterComponent
+     */
+    public trackByColor(index: number, color: any): string {
+        return color.primary;
+    }
+
+    /**
+     * Calculate remaining characters for a field with character limit
+     *
+     * @param {number} maxLength Maximum allowed characters
+     * @param {string} currentValue Current field value
+     * @returns {number} Remaining character count
+     * @memberof TemplateEditFilterComponent
+     */
+    public getRemainingCharacters(maxLength: number, currentValue: string): number {
+        const currentLength = currentValue?.length || 0;
+        return Math.max(0, maxLength - currentLength);
+    }
+
+    /**
      * Angular lifecycle hook that is called after data-bound properties are initialized.
-     * Initializes company, template, and UI data for the template editor.
      *
      * @memberof TemplateEditFilterComponent
      */
     public ngOnInit(): void {
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         // Initialize dialog data
         const { templateType, voucherType, templateList, mode, localeData, commonLocaleData } = this.dialogData || {};
         this.templateType = templateType;
@@ -283,9 +333,18 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onValueChange(fieldName: string, value: string) {
-        const template = cloneDeep(this.customTemplate);
-        if (fieldName) template[fieldName] = value;
-        this.templateService.setCustomTemplate(template);
+          // Clear existing timer
+          if (this.fieldChangeTimer) {
+            clearTimeout(this.fieldChangeTimer);
+        }
+        
+        // Set new timer with 500ms delay
+        this.fieldChangeTimer = setTimeout(() => {
+            const template = cloneDeep(this.customTemplate);
+            if (fieldName) template[fieldName] = value;
+            this.templateService.setCustomTemplate(template);
+        }, 1500);
+
     }
 
     /**
@@ -543,18 +602,8 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onChangeDesignFieldVisibility(fieldName: string, value: string): void {
         const template = cloneDeep(this.customTemplate);
-        if (fieldName) template[fieldName] = value;
+        template[fieldName] = value;
         this.templateService.setCustomTemplate(template);
-    }
-
-    /**
-     * Angular lifecycle hook that is called when the component is destroyed. Releases memory and cleans up subscriptions.
-     *
-     * @memberof TemplateEditFilterComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 
     /**
@@ -582,7 +631,7 @@ export class TemplateEditFilterComponent implements OnInit {
 
 
     /**
-     * Handles field changes within a template section.
+     * Handles field changes within a template section with debounce delay.
      *
      * @param {string} sectionName The name of the section
      * @param {string} fieldName The name of the field
@@ -590,8 +639,16 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onFieldChange(): void {
-        let template = cloneDeep(this.customTemplate);
-        this.templateService.setCustomTemplate(template);
+        // Clear existing timer
+        if (this.fieldChangeTimer) {
+            clearTimeout(this.fieldChangeTimer);
+        }
+        
+        // Set new timer with 500ms delay
+        this.fieldChangeTimer = setTimeout(() => {
+            let template = cloneDeep(this.customTemplate);
+            this.templateService.setCustomTemplate(template);
+        }, 1500);
     }
 
     /**
