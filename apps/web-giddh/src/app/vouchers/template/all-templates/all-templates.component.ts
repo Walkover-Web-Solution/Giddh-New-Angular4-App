@@ -51,7 +51,7 @@ export class AllTemplatesComponent implements OnInit {
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
                         // Use fit entire page configuration from constants
-                        const pdfUrlWithZoom = `${this.pdfFileURL}${IFRAME_ZOOM_CONFIG.FIT_PAGE}`;
+                        const pdfUrlWithZoom = `${this.pdfFileURL}${IFRAME_ZOOM_CONFIG.ZOOM_100}`;
                         this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfUrlWithZoom);
                         this.isFileUploading = false;
                     } else {
