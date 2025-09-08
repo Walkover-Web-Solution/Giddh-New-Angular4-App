@@ -373,6 +373,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     ];
     /** Selected template */
     public selectedTemplate: any;
+    /** True if columns loading */
+    public showContent: boolean = true;
+    /** Show invoice lock date */
+    public showInvoiceDate: boolean = true;
+    /** Show purchase lock date */
+    public showPurchaseDate: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -492,6 +498,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
+                this.showContent = false;
+                setTimeout(() => {
+                    this.showContent = true;
+                }, 50);
                 this.isColumnsLoading = true;
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
@@ -895,6 +905,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const broadcast = new BroadcastChannel("settings");
         broadcast.onmessage = (event) => {
             if (event?.data?.form !== undefined && event?.data?.form !== null) {
+                this.isSettingUpdateMode = false;
                 let formValues = event?.data?.form;
                 this.settingForm.patchValue({
                     purchaseBillSettings: formValues.purchaseBillSettings || {},
@@ -1063,7 +1074,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getSelectedTabIndex(): void {
-
         if (!this.isCompany && !this.isConsolidatedBranch) {
             if (this.activeTabGroup === 0) {
                 if (this.voucherType === 'estimates' && this.activeModule === 'list') {
@@ -1315,7 +1325,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         }
-
         if (this.queryParams.page) {
             this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
                 queryParams: {
@@ -1565,6 +1574,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.ledgerSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.isUniversalDateApplicable = false;
             this.advanceFiltersApplied = true;
+            this.ledgerSearchRequest.page = 1;
+            this.advanceFilters.page = 1;
 
             if (window.localStorage) {
                 localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));
@@ -3145,6 +3156,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('invoiceSettings.purchaseRoundOff').patchValue(false);
                         }
 
+                        const lockDateValue = this.settingForm.get('purchaseBillSettings.lockDate').value;
+                        if (lockDateValue === null || lockDateValue === '') {
+                            this.showPurchaseDate = false;
+                            setTimeout(() => {
+                               this.showPurchaseDate = true;
+                            }, 0);
+                        }
+
                         if (!this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').value) {
                             this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').patchValue(false);
                         }
@@ -3156,6 +3175,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
                         );
 
+
+                        const invoiceLockDateValue = this.settingForm.get('invoiceSettings.lockDate').value;
+                        if (invoiceLockDateValue === null || invoiceLockDateValue === '') {
+                            this.showInvoiceDate = false;
+                            setTimeout(() => {
+                               this.showInvoiceDate = true;
+                            }, 0);
+                        }
+
                         if (setting.companyEmailSettings) {
                             this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(
                                 cloneDeep(setting.companyEmailSettings.sendThroughGmail)
@@ -3164,6 +3192,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(false);
                         }
                     }
+
                     if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                         this.applyRoundOff = setting.invoiceSettings.salesRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.purchase) {

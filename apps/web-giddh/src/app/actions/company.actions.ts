@@ -588,7 +588,7 @@ export class CompanyActions {
      * @returns {CustomActions} Action to set the financial year
      * @memberof CompanyActions
      */
-    public setUserChosenFinancialYear(filterValues: { financialYear: string, branchUniqueName: string, timeFilter: string }): CustomActions {
+    public setUserChosenFinancialYear(filterValues: { financialYear: string, branchUniqueName: string, timeFilter: string, salesPersonUniqueNames: string[], accountUniqueNames: string[], groupBy: string }): CustomActions {
         return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: filterValues };
     }
 

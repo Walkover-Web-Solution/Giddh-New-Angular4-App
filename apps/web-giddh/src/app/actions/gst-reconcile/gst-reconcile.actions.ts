@@ -393,8 +393,8 @@ export class GstReconcileActions {
     }
 
     public downloadFile(data: BaseResponse<any, GstrSheetDownloadRequest>) {
-        let blob = this.generalService.base64ToBlob(data?.body, 'application/xls', 512);
-        return saveAs(blob, `${data.queryString.sheetType}-${data.queryString.from}-${data.queryString.to}-${data.queryString.gstin}.xlsx`);
+        let blob = this.generalService.base64ToBlob(data?.body.data, 'application/xls', 512);
+        return saveAs(blob, data?.body.name);
     }
 
     public SetSelectedPeriod(period) {

@@ -193,8 +193,8 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
 
         this.vatService.downloadVatLiabilityReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === "success") {
-                let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                return saveAs(blob, 'VatLiabilityReport.xlsx');
+                let blob = this.generalService.base64ToBlob(res.body.data, 'application/xls', 512);
+                return saveAs(blob, res.body.name);
             } else {
                 this.toaster.showSnackBar('error', res?.message);
             }

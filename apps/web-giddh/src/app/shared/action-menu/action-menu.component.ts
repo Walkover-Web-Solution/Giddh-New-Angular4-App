@@ -99,7 +99,7 @@ export class ActionMenuComponent {
                 break;
 
             case 2: // go to sales or purchase
-                this.purchaseOrSales = this.account?.accountType;
+                this.purchaseOrSales = this.account?.voucherGeneratedType;
                 if (this.purchaseOrSales === "purchase") {
                     if (this.voucherApiVersion === 2) {
                         this.goToRoute("vouchers/purchase/" + account?.uniqueName + "/create", "", "");
@@ -123,7 +123,7 @@ export class ActionMenuComponent {
                 if (event) {
                     event.stopPropagation();
                 }
-                this.openCustomEmailDialog(account, this.account?.voucherGeneratedType, false);
+                this.openCustomEmailDialog(account, this.account?.voucherGeneratedType === 'sales' ? 'customer' : 'vendor', false);
                 break;
             case 4: // edit account
                 if (event) {

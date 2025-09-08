@@ -216,12 +216,14 @@ export class ReceiptService {
         let url = this.createQueryString(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_SALES, {
             page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
         });
+
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
-        return this.http.get(url).pipe(map((res) => {
+
+        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, salesPersonUniqueName: request.salesPersonUniqueName }).pipe(map((res) => {
             let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
@@ -235,12 +237,14 @@ export class ReceiptService {
         let url = this.createQueryString(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_PURCHASE, {
             page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
         });
+
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
-        return this.http.get(url).pipe(map((res) => {
+
+        return this.http.post(url, { accountUniqueNames: request.accountUniqueNames, salesPersonUniqueName: request.salesPersonUniqueName }).pipe(map((res) => {
             let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));

@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <div class="position-relative invoice-list overflow-visible">
+    <div class="position-relative invoice-list overflow-visible" *ngIf="showContent">
         <mat-tab-group
             mat-stretch-tabs="false"
             mat-align-tabs="start"
@@ -4856,6 +4856,7 @@
                                                         [matSuffix]="commonLocaleData?.app_days"
                                                     ></input-field>
                                                     <giddh-datepicker
+                                                        *ngIf="showInvoiceDate"
                                                         type="text"
                                                         (keydown.enter)="$event.preventDefault()"
                                                         [label]="localeData?.invoice_lock_date"
@@ -5593,6 +5594,7 @@
                                                 {{ localeData?.purchase_bill }}
                                             </h4>
                                             <giddh-datepicker
+                                                *ngIf="showPurchaseDate"
                                                 type="text"
                                                 (keydown.enter)="$event.preventDefault()"
                                                 [label]="localeData?.bill_lock_date"
