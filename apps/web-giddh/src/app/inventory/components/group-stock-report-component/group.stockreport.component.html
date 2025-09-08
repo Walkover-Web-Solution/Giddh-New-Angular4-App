@@ -6,7 +6,7 @@
                     <span>{{ groupStockReport.stockGroupName }}</span> (Group)
                 </h2>
                 <div class="advance-icon cursor-pointer" matTooltip="Advance Search" (click)="onOpenAdvanceSearch()">
-                    <span class="icon-advance-filter"></span>
+                    <i class="icon-advance-filter"></i>
                 </div>
             </div>
             <div class="clear-filter" *ngIf="isFilterCorrect && productName?.value?.length > 0">
@@ -37,7 +37,7 @@
                     </mat-menu>
                 </div>
                 <button
-                    mat-raised-button color="primary" class="transfer-btn"
+                    mat-raised-button color="primary" class="transfer-btn mr-r15"
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     matTooltip="Alt+N"
                     (click)="openBranchTransferDialog()"

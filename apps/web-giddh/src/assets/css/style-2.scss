@@ -1287,10 +1287,6 @@ body {
     }
 }
 
-.mat-calendar-body-cell-content {
-    color: var(--color-datepicker-ternary-date);
-}
-
 .mat-calendar-body-cell {
     &.mat-calendar-body-active {
         .mat-calendar-body-selected {
@@ -2344,7 +2340,7 @@ ul.sub-list {
 }
 
 .text-gray {
-    color: var(--color-gray);
+    color: var(--color-gray) !important;
 }
 // This color will same in all theme
 .text-static-white {
@@ -5201,6 +5197,9 @@ label {
 
 .d-inline-block {
     display: inline-block !important;
+}
+.d-inline-grid {
+    display: inline-grid !important;
 }
 
 .d-grid {
@@ -12657,16 +12656,17 @@ hamburger-menu {
             height: 100%;
             width: 100%;
             float: right;
-            max-width: 435px;
+            max-width: 485px;
             margin-left: auto;
 
             .advance-filter-button {
                 border-left: 1px solid var(--color-gray);
                 border-radius: 0;
                 margin-right: 0 !important;
-                height: 100%;
+                height: calc(100% + 2px);
                 width: 33%;
-                margin-top: -1px;
+                border-top: none;
+                border-bottom: none;
 
                 &:hover {
                     color: var(--color-giddh-blue) !important;
@@ -12678,8 +12678,7 @@ hamburger-menu {
                 width: 39%;
             }
 
-            .customise-filter-button {
-                border-left: 1px solid var(--color-fields-border);
+            .customise-filter-button {  
                 border-radius: 0;
                 margin-right: 0 !important;
                 height: 100%;
@@ -13893,4 +13892,21 @@ mat-list {
     border-radius: 4px;
     box-shadow: var(--mat-menu-box-shadow);
     background-color: var(--color-dark-fog);
+}
+
+// Position inset classes
+.top-0 {
+    top: 0;
+}
+.left-0 {
+    left: 0;
+}
+.right-0 {
+    right: 0;
+}
+.bottom-0 {
+    bottom: 0;
+}
+.inset-0 {
+    inset: 0;
 }

@@ -9,7 +9,7 @@
             <ng-container *ngIf="showPdfWrap">
                 <button
                     type="button"
-                    mat-stroked-button
+                    mat-raised-button
                     class="mr-r1"
                     *ngIf="showEditButton"
                     (click)="editVoucher()"
@@ -18,7 +18,7 @@
                 </button>
                 <button
                     type="button"
-                    mat-stroked-button
+                    mat-raised-button
                     class="mr-r1"
                     [matMenuTriggerFor]="showMoreOptions"
                     (click)="showEsign = false"
@@ -115,7 +115,7 @@
             </div>
         </mat-menu>
     </div>
-    <div mat-dialog-content class="dialog-body">
+    <mat-dialog-content class="dialog-body">
         <div *ngIf="isErrOccured$ | async">
             <p class="lead text-center">{{ commonLocaleData?.app_oops_something_went_wrong }}</p>
         </div>
@@ -132,7 +132,7 @@
                 [src]="sanitizedPdfFileUrl"
             ></iframe>
         </div>
-    </div>
+    </mat-dialog-content>
 </ng-container>
 
 <!-- Invoice Copy Options (checkbox) -->

@@ -100,7 +100,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Function to be called when the control is touched */
     private onTouched: () => void = () => { };
     /** Next observable */
-    public next$: Subject<void> = new Subject();
+    private next$: Subject<any> = new Subject();
 
     constructor(
         private changeDetection: ChangeDetectorRef
@@ -156,7 +156,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private filterOptions(search: string): any {
         let filteredOptions = [];
         this.options?.forEach(option => {
-            if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+            if (typeof search !== "string" || (typeof option?.label === "string" && option.label.toLowerCase().indexOf(search.toLowerCase()) > -1)) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
@@ -175,8 +175,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
             this.fieldFilteredOptions$ = of(this.options);
-            if (changes?.options?.currentValue?.length > 0 && !changes?.options?.previousValue) {
-                this.setLabelValue();
+            // Always try to set label value when options change, regardless of previous value
+            if (changes?.options?.currentValue?.length > 0) {
+                // Use setTimeout to ensure the value is properly set before trying to find the label
+                setTimeout(() => {
+                    this.setLabelValue();
+                }, 0);
             }
         }
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
@@ -213,7 +217,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public onScroll(): void {
-        this.next$.next();
+        this.next$.next(true);
         this.scrollEnd.emit();
     }
 
@@ -224,12 +228,23 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @return {*}  {string}
      * @memberof ReactiveDropdownFieldComponent
      */
-    public displayLabel(option: any): string {
-        return option?.label;
+    public displayWith(option: any): string {
+        return option?.label || '';
     }
 
     /**
-     * Writes value in ng value accessor
+     * Display function for mat-autocomplete displayWith
+     *
+     * @param {*} option
+     * @return {*}  {string}
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public displayLabel(option: any): string {
+        return option?.label || '';
+    }
+
+    /**
+     * Write value to the component (ControlValueAccessor implementation)
      *
      * @param {*} value
      * @memberof ReactiveDropdownFieldComponent
@@ -241,10 +256,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.value = '';
         }
         this.onChange(value);
+        
+        // Also try to set label immediately if options are available
+        if (this.options && this.options.length > 0) {
+            this.setLabelValue();
+        }
     }
 
     /**
-     * Callback for option selection
+     * Handles option selection from autocomplete
      *
      * @param {*} event
      * @memberof ReactiveDropdownFieldComponent
@@ -304,10 +324,17 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     private setLabelValue(): void {
-        if (this.value !== undefined && this.value !== null) {
-            let val = this.options.find(search => search?.value === this.value);
-            if (val) {
-                this.labelValue = val.label;
+        // Check if we have options and a current value
+        if (this.options && this.options.length > 0) {
+            const currentValue = this.value !== undefined && this.value !== null ? this.value : null;
+            
+            if (currentValue !== null && currentValue !== '') {
+                const matchedOption = this.options.find(option => option?.value === currentValue);
+                if (matchedOption) {
+                    // Always set labelValue to the string label, not the object
+                    this.labelValue = matchedOption.label || '';
+                    this.changeDetection.detectChanges();
+                }
             }
         }
     }

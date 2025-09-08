@@ -10,7 +10,7 @@
         <div class="top-bar clearfix">
             <div class="form-inline">
                 <form #carried="ngForm" (ngSubmit)="getSalesBifurcation()">
-                    <div class="pull-left d-flex align-start select-fields">
+                    <div class="pull-left d-flex align-center select-fields pd-b2">
                         <div class="form-group mr-r1 max-width-500 d-initial">
                             <reactive-dropdown-field
                                 [placeholder]="localeData?.select_year_placeholder"
@@ -34,7 +34,7 @@
                                 [required]="true"
                                 (selectedOption)="resetData()">
                             </reactive-dropdown-field>
-                            <div class="height-25px" *ngIf="SelectType.invalid">
+                            <div class="height-25px position-absolute" *ngIf="SelectType.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_type }}</div>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                                 [options]="monthOptions"
                                 [required]="true">
                             </reactive-dropdown-field>
-                            <div class="height-25px" *ngIf="SelectMonth.invalid">
+                            <div class="height-25px position-absolute" *ngIf="SelectMonth.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_month }}</div>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                                 [options]="quaterOptions"
                                 [required]="true">
                             </reactive-dropdown-field>
-                            <div class="height-25px" *ngIf="SelectQuater.invalid">
+                            <div class="height-25px position-absolute" *ngIf="SelectQuater.invalid">
                                 <div class="text-danger">{{ localeData?.invalid_quarter }}</div>
                             </div>
                         </div>

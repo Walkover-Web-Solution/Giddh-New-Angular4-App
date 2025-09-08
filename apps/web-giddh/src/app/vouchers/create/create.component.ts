@@ -3255,13 +3255,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.accountParentGroup = "bankaccounts";
         }
 
-        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true,
-        });
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
 
         this.accountAsideMenuRef
             .afterClosed()

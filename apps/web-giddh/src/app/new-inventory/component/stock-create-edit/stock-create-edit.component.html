@@ -166,8 +166,7 @@
                                             <button 
                                                 aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
-                                                mat-raised-button
-                                                color="primary"
+                                                mat-stroked-button
                                                 class="min-width-100 move-stock mr-0"
                                                 (click)="moveStock()"
                                                 [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
@@ -974,7 +973,8 @@
                                                                     <div class="done-btn my-3">
                                                                         <button
                                                                             aria-label="done"
-                                                                            mat-stroked-button
+                                                                            mat-raised-button
+                                                                            color="primary"
                                                                             (click)="updateOptionValues(option, i)"
                                                                         >
                                                                             {{ commonLocaleData?.app_done }}

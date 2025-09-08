@@ -63,24 +63,15 @@
                             <span class="normal"> {{ localeData?.gst_summary_for }} </span>
                         </li>
                         <li>
-                            <input
-                                matInput
-                                [matDatepicker]="picker"
-                                [placeholder]="date?.value ?? '--'"
-                                autocomplete="off"
-                                (focus)="picker?.open()"
-                                (click)="picker?.open()"
-                                class="month-selection user-select-none mat-form-field-border border-0 text-center cursor-pointer"
-                                name="date"
-                                readonly
-                            />
-                            <mat-datepicker
-                                (monthSelected)="setMonthAndYear($event, picker)"
+                            <giddh-datepicker
+                                [monthYearMode]="true"
                                 [startView]="'multi-year'"
                                 [startAt]="startAt"
-                                #picker
+                                [placeholder]="date?.value ?? '--'"
+                                [appearance]="'outline'"
+                                (monthYearSelected)="setMonthAndYear($event)"
                             >
-                            </mat-datepicker>
+                            </giddh-datepicker>
                         </li>
                     </ul>
                 </div>

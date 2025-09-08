@@ -191,5 +191,6 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      */
     public getUpdatedList(event: any): void {
         this.modalClosed.emit(event);
+        this.asideMenuDialogRef.close();
     }
 }
