@@ -2597,5 +2597,6 @@
         [createNewText]="commonLocaleData?.app_create_new"
         (createOption)="openSalesPersonDialog()"
         (selectedOption)="handleSalesPersonSelection($event)"
+        (onClear)="clearSalesPerson()"
     ></reactive-dropdown-field>
 </ng-template>
