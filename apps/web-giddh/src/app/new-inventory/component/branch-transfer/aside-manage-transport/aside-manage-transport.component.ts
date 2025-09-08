@@ -230,7 +230,7 @@ export class AsideManageTransportComponent implements OnInit {
                     this.isLoading = false;
                     if (response && response.status === "success" && response.body) {
                         this.toasty.showSnackBar("success", response.body);
-                        if(this.transporterObj.page > 1 && this.transporterObj.totalItems % this.transporterObj.count === 1) {
+                        if (this.transporterObj.page > 1 && this.transporterObj.totalItems % this.transporterObj.count === 1) {
                             this.transporterObj.page = this.transporterObj.page - 1;
                         }
                         this.getTransportersList();

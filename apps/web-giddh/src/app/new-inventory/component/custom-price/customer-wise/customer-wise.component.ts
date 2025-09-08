@@ -180,13 +180,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 page: 1,
                 totalPages: null,
                 totalItems: null,
-                count: 10
+                count: PAGINATION_LIMIT
             },
             stock: {
                 page: 1,
                 totalPages: null,
                 totalItems: null,
-                count: 10
+                count: PAGINATION_LIMIT
             }
         }
     }

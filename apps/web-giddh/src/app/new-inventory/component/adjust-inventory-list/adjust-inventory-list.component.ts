@@ -97,7 +97,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public isCompany: boolean;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-/** This will store selected date range to show on UI */
+    /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -168,11 +168,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         /** Get Adjust inventory List */
         this.adjustInventoryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (response.body?.totalItems > 0 && response.body?.totalPages < this.adjustInventoryListRequest?.page) {
-                    this.adjustInventoryListRequest.page = response.body?.totalPages;
-                    this.getAllAdjustReports(false);
-                    return;
-                }
                 this.adjustInventoryList = response?.body?.results;
                 this.dataSource = new MatTableDataSource<any>(response?.body?.results);
                 if (this.dataSource?.filteredData?.length || this.adjustInventoryListForm?.controls['referenceNo']?.value ||
@@ -200,7 +195,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         /** Delete adjust inventory success */
         this.componentStore.deleteAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if(this.adjustInventoryListRequest.page > 1 && this.adjustInventoryListRequest.totalItems % this.adjustInventoryListRequest.count === 1) {
+                if (this.adjustInventoryListRequest.page > 1 && this.adjustInventoryListRequest.totalItems % this.adjustInventoryListRequest.count === 1) {
                     this.adjustInventoryListRequest.page = this.adjustInventoryListRequest.page - 1;
                 }
                 this.getAllAdjustReports(true);
