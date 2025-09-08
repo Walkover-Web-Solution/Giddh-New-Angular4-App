@@ -1277,7 +1277,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.state }}
+                                                    {{ commonLocaleData?.app_state }}
                                                 </mat-checkbox>
                                             </div>
                                             <!-- billing gstin -->
@@ -1433,7 +1433,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.state }}
+                                                    {{ commonLocaleData?.app_state }}
                                                 </mat-checkbox>
                                             </div>
                                             <!-- shipping gstin -->
@@ -1942,7 +1942,7 @@
                                                             templateTypeEnum.TallyTemplate
                                                         "
                                                     >
-                                                        {{ localeData?.date }}</span
+                                                        {{ commonLocaleData?.app_date }}</span
                                                     >
                                                 </mat-checkbox>
                                                 <div class="w-100 ml-2">
@@ -1954,7 +1954,7 @@
                                                     >
                                                         <input-field
                                                             [type]="'text'"
-                                                            [label]="localeData?.date"
+                                                            [label]="commonLocaleData?.app_date"
                                                             [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="dt1"
@@ -2179,7 +2179,7 @@
                                                         <div>
                                                             <input-field
                                                                 [type]="'text'"
-                                                                [label]="localeData?.quantity"
+                                                                [label]="commonLocaleData?.app_quantity"
                                                                 [name]="'quantity'"
                                                                 [cssClass]="'form-control'"
                                                                 [maxlength]="
@@ -2225,7 +2225,7 @@
                                                     <div>
                                                         <input-field
                                                             [type]="'text'"
-                                                            [label]="localeData?.quantity"
+                                                            [label]="commonLocaleData?.app_quantity"
                                                             [name]="'quantity'"
                                                             [cssClass]="'form-control'"
                                                             [maxlength]="
@@ -2276,7 +2276,7 @@
                                                 <div class="w-100 ml-2">
                                                     <div>
                                                         <input-field
-                                                            [label]="localeData?.description"
+                                                            [label]="commonLocaleData?.app_description"
                                                             [type]="'text'"
                                                             [cssClass]="'form-control'"
                                                             maxlength="10"
@@ -2483,7 +2483,7 @@
                                                     <div>
                                                         <input-field
                                                             [type]="'text'"
-                                                            [label]="localeData?.taxable_value"
+                                                            [label]="commonLocaleData?.app_taxable_value"
                                                             maxlength="14"
                                                             [cssClass]="'form-control'"
                                                             name="tv1"
@@ -2528,7 +2528,7 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             maxlength="10"
-                                                            [label]="localeData?.tax"
+                                                            [label]="commonLocaleData?.app_tax"
                                                             [cssClass]="'form-control'"
                                                             name="t1"
                                                             [(ngModel)]="
@@ -2576,7 +2576,7 @@
                                                     <div>
                                                         <input-field
                                                             [type]="'text'"
-                                                            [label]="localeData?.total"
+                                                            [label]="commonLocaleData?.app_total"
                                                             [maxlength]="
                                                                 customTemplate.templateType ===
                                                                 templateTypeEnum.ThermalTemplate
@@ -2702,7 +2702,7 @@
                                                 [disabled]="!customTemplate.sections['table'].data['quantity'].display"
                                                 (ngModelChange)="onChangeFieldVisibility()"
                                             >
-                                                <span class="ml-2">{{ localeData?.total_quantity }}</span>
+                                                <span class="ml-2">{{ commonLocaleData?.app_total_quantity }}</span>
                                             </mat-checkbox>
                                         </div>
                                         <div
@@ -2774,7 +2774,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    <span class="ml-2">{{ localeData?.tax_bifurcation }}</span>
+                                                    <span class="ml-2">{{ commonLocaleData?.app_tax_bifurcation }}</span>
                                                 </mat-checkbox>
                                             </div>
                                         </ng-container>
@@ -2923,7 +2923,7 @@
                                                             <div>
                                                                 <input-field
                                                                     [type]="'text'"
-                                                                    [label]="localeData?.total_due"
+                                                                    [label]="commonLocaleData?.app_total_due"
                                                                     maxlength="40"
                                                                     name="totalDue"
                                                                     [cssClass]="'form-control'"
@@ -3116,7 +3116,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    <span class="ml-2">{{ localeData?.total_tax }}</span>
+                                                    <span class="ml-2">{{ commonLocaleData?.app_total_tax }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <div *ngIf="sectionSettings?.footer.total">
@@ -3156,11 +3156,11 @@
                                                         <div>
                                                             <input-field
                                                                 [type]="'text'"
-                                                                [label]="localeData?.total_quantity"
+                                                                [label]="commonLocaleData?.app_total_quantity"
                                                                 name="totalQuantity"
                                                                 maxlength="13"
                                                                 [cssClass]="'form-control'"
-                                                                [placeholder]="localeData?.total_quantity"
+                                                                [placeholder]="commonLocaleData?.app_total_quantity"
                                                                 [disabled]="!sectionSettings?.table.quantity?.display"
                                                                 (keyup)="onFieldChange()"
                                                                 [(ngModel)]="
@@ -3259,7 +3259,7 @@
                                                     <div class="w-100 ml-2">
                                                         <div>
                                                             <input-field
-                                                                [label]="localeData?.taxable_amount"
+                                                                [label]="commonLocaleData?.app_taxable_amount"
                                                                 [type]="'text'"
                                                                 maxlength="14"
                                                                 [cssClass]="'form-control'"
@@ -3346,7 +3346,7 @@
                                                         checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                                     "
                                                 >
-                                                    <span class="ml-2">{{ localeData?.tax_bifurcation }}</span>
+                                                    <span class="ml-2">{{ commonLocaleData?.app_tax_bifurcation }}</span>
                                                 </mat-checkbox>
                                                 <div
                                                     class="ml-4"
@@ -3372,7 +3372,7 @@
                                                                     'taxBifurcation'
                                                                 ].display
                                                             "
-                                                            >{{ localeData?.tax_rate }}</mat-radio-button
+                                                            >{{ commonLocaleData?.app_tax_rate }}</mat-radio-button
                                                         >
                                                         <mat-radio-button
                                                             value="2"
@@ -3491,7 +3491,7 @@
                                                         checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                                     "
                                                 >
-                                                    <span class="ml-2">{{ localeData?.tax_bifurcation }}</span>
+                                                    <span class="ml-2">{{ commonLocaleData?.app_tax_bifurcation }}</span>
                                                 </mat-checkbox>
                                                 <div
                                                     class="ml-4"
@@ -3517,7 +3517,7 @@
                                                                     'taxBifurcation'
                                                                 ].display
                                                             "
-                                                            >{{ localeData?.tax_rate }}</mat-radio-button
+                                                            >{{ commonLocaleData?.app_tax_rate }}</mat-radio-button
                                                         >
                                                     </mat-radio-group>
                                                 </div>
