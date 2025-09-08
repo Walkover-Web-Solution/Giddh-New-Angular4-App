@@ -279,7 +279,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             return;
         }
         this.approveEntryModalRef = this.dialog.open(ref, {
-            width: '500px',
+            panelClass: "mat-dialog-sm",
             disableClose: true
         });
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
@@ -350,7 +350,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             if (res?.status === 'success') {
                 this.hideApproveConfirmPopup(false);
                 this.toaster.showSnackBar("success", res?.body);
-                this.processNextRecord();
+                this.processNextRecord(true);
             } else {
                 this.toaster.showSnackBar("error", res?.message);
                 this.approveEntryRequestInProcess = false;
