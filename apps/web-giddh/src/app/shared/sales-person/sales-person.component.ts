@@ -119,9 +119,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
         })).subscribe();
         this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             this.salesPersonListIsModified = true;
-            if (this.totalResults % this.requestParams.count === 1 && this.requestParams.page > 1) {
-                this.requestParams.page = this.requestParams.page - 1;
-            }
+            this.requestParams.page = this.generalService.adjustPageIndex(this.totalResults, this.requestParams.page, this.requestParams.count);
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         })).subscribe();
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {

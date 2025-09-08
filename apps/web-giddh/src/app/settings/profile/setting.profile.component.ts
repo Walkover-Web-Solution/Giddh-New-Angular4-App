@@ -1070,9 +1070,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public handleDeleteAddress(addressDetails: any): void {
         this.settingsProfileService.deleteAddress(addressDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
-                if (this.addresses.length % this.addressTabPaginationData.count === 1 && this.addressTabPaginationData.page > 1) {
-                    this.addressTabPaginationData.page = this.addressTabPaginationData.page - 1;
-                }
+                this.addressTabPaginationData.page = this.generalService.adjustPageIndex(this.addresses.length, this.addressTabPaginationData.page, this.addressTabPaginationData.count);
                 this.loadAddresses('GET');
                 this._toasty.successToast('Address deleted successfully');
             }

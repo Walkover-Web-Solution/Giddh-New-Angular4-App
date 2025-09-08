@@ -515,9 +515,7 @@ export class ListBranchTransferComponent implements OnInit {
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", response.body);
-                if (this.branchTransferPaginationObject.page > 1 && this.branchTransferPaginationObject.totalItems % this.branchTransferPaginationObject.count === 1) {
-                    this.branchTransferPaginationObject.page = this.branchTransferPaginationObject.page - 1;
-                }
+                this.branchTransferPaginationObject.page = this.generalService.adjustPageIndex(this.branchTransferPaginationObject.totalItems, this.branchTransferPaginationObject.page, this.branchTransferPaginationObject.count);
                 this.getBranchTransferList(false);
             } else {
                 this.toaster.showSnackBar("error", response.message);

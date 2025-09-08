@@ -14,6 +14,7 @@ import { ConfirmModalComponent } from "apps/web-giddh/src/app/theme/new-confirm-
 import { ReplaySubject, debounceTime, take, takeUntil } from "rxjs";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BREAKPOINT_SCREEN_SIZE } from "apps/web-giddh/src/app/app.constant";
+import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 
 /** Inteface for create payload for getAllDiscount API */
 export interface CustomerVendorDiscountBasic {
@@ -107,7 +108,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         private formBuilder: UntypedFormBuilder,
         private changeDetectorRef: ChangeDetectorRef,
         private scrollDispatcher: ScrollDispatcher,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService
     ) { }
 
     /**
@@ -532,9 +534,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.inventoryService.deleteDiscountRecord(model).pipe(take(1)).subscribe((response) => {
                 if (response && response?.status === "success") {
                     this.showSaveDiscardButton = false;
-                    if (this.pagination.stock.page > 1 && this.pagination.stock.totalItems % this.pagination.stock.count === 1) {
-                        this.pagination.stock.page = this.pagination.stock.page - 1;
-                    }
+                    this.pagination.stock.page = this.generalService.adjustPageIndex(this.pagination.stock.totalItems, this.pagination.stock.page, this.pagination.stock.count);
                     if (type === 'variant') {
                         const stock = discounts.at(stockFormArrayIndex).get('variants') as UntypedFormArray;
                         var variant = stock.at(variantFormArrayIndex)?.value;
