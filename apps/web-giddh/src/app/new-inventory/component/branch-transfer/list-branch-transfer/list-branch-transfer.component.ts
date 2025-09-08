@@ -335,11 +335,6 @@ export class ListBranchTransferComponent implements OnInit {
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferForm.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response?.status === "success") {
-                if (response.body?.totalItems > 0 && response.body?.totalPages < this.branchTransferPaginationObject?.page) {
-                    this.branchTransferPaginationObject.page = response.body?.totalPages;
-                    this.getBranchTransferList(false);
-                    return;
-                }
                 this.branchTransferPaginationObject.page = response.body.page;
                 this.branchTransferPaginationObject.totalPages = response.body.totalPages;
                 this.branchTransferPaginationObject.totalItems = response.body.totalItems;

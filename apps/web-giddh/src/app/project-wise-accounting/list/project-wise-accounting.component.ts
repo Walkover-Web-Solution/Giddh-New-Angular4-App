@@ -326,7 +326,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             sort: 'desc',
             sortBy: 'STATUS',
             page: 1,
-            count: 10,
+            count: PAGINATION_LIMIT,
             searchQuery: '',
             queryColumn: 'STATUS'
         }
