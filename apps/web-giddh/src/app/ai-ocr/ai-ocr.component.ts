@@ -121,6 +121,10 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public broadcast: any;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** This will use for initial page */
+    public initialUpload: boolean = true;
+    /** This will use for initial file upload */
+    public initialUploadFile: boolean = false;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -164,11 +168,19 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         this.getAllOcrDocuments(false);
 
         this.ocrMainList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.listCount = res?.totalItems;
-                this.ocrMainList = res;
-                this.changeDetection.detectChanges();
+            if (!res) {
+                return;
             }
+            // Update initial upload state
+            if (this.initialUploadFile) {
+                this.initialUpload = false;
+            }
+            // Update list data
+            this.listCount = res.totalItems || 0;
+            this.ocrMainList = res;
+            // Trigger change detection once after all updates
+            this.changeDetection.detectChanges();
+            // Get completed count only if we have items
             if (this.listCount > 0) {
                 this.aiOcrStore.getCompletedCount(null);
             }
@@ -271,10 +283,18 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         }
 
         this.ocrUploadSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.signedUrlResponse = res;
-                this.ledgerComponentStore.uploadVoucher({ url: res.signedUrl, file: this.file });
+            if (!res) {
+                return;
             }
+            this.signedUrlResponse = res;
+            // Update initial upload state
+            if (this.initialUploadFile) {
+                this.initialUpload = false;
+            }            
+            this.ledgerComponentStore.uploadVoucher({ 
+                url: res.signedUrl, 
+                file: this.file 
+            });
         });
 
         this.ledgerComponentStore.uploadVoucherSuccess$
@@ -396,9 +416,16 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * Initiates the file upload dialog.
      * @param event - The event triggering the upload.
      * @param fileInput - The file input element.
+     * @param mode - The mode of upload.
      * @memberof AiOcrComponent
      */
-    public onUploadFile(event: any, fileInput: HTMLInputElement): void {
+    public onUploadFile(event: any, fileInput: HTMLInputElement, mode?: string): void {
+        // Set initial upload flag if in initial mode
+        if (mode === "initial") {
+            this.initialUploadFile = true;
+        }
+        
+        // Trigger file input dialog if event exists
         if (event) {
             fileInput.value = "";
             fileInput.click();
