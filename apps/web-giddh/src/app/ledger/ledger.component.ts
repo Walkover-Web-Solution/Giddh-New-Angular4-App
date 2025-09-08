@@ -3258,9 +3258,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let params = { transactionIds: [...this.selectedCreditTransactionIds, ...this.selectedDebitTransactionIds] };
         this.ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                if ((this.bankTransactionsResponse?.creditTransactionsCount + this.bankTransactionsResponse?.debitTransactionsCount - this.selectedCreditTransactionIds.size - this.selectedDebitTransactionIds.size) === 0 && this.bankTransactionsResponse?.page > 1) {
-                    this.bankTransactionsResponse.page = this.bankTransactionsResponse?.page - 1;
-                }
+                this.bankTransactionsResponse.page = this.generalService.adjustPageIndex(this.bankTransactionsResponse?.creditTransactionsCount + this.bankTransactionsResponse?.debitTransactionsCount, this.bankTransactionsResponse?.page, this.bankTransactionsResponse?.countPerPage, this.selectedCreditTransactionIds.size + this.selectedDebitTransactionIds.size);
                 this.getBankTransactions();
                 this.selectedCreditTransactionIds.clear();
                 this.selectedDebitTransactionIds.clear();

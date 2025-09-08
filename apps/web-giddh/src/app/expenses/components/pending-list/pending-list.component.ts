@@ -423,9 +423,7 @@ export class PendingListComponent implements OnInit, OnChanges {
         salesDetailedfilter.status = 'rejected';
         salesDetailedfilter.sort = this.pettycashRequest.sort;
         salesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
-        if (this.pettyCashPendingReportResponse?.totalItems % this.pettyCashPendingReportResponse?.count === 1 && this.pettyCashPendingReportResponse?.page > 1) {
-            salesDetailedfilter.page = this.pettyCashPendingReportResponse?.totalPages;
-        }
+        salesDetailedfilter.page = this.generalService.adjustPageIndex(this.pettyCashPendingReportResponse?.totalItems, this.pettyCashPendingReportResponse?.page, this.pettyCashPendingReportResponse?.count);
         this.reloadRejectReportList.emit(salesDetailedfilter);
     }
 }

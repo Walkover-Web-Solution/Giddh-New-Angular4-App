@@ -1717,9 +1717,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
-                if ((voucher?.uniqueName && this.dataSource?.length % this.advanceFilters.count === 1 || !voucher?.uniqueName && this.dataSource?.length - this.selectedVouchers?.length === 0) && this.advanceFilters.page > 1) {
-                    this.advanceFilters.page -= 1;
-                }
+                this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.componentStore.deleteVoucher({
                         accountUniqueName: voucher?.account?.uniqueName, model: {
