@@ -18,38 +18,6 @@
                                 [labelValue]="currentBranch?.name"
                                 class="entity-dropdown"
                             >
-                                <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a href="javascript:;" class="list-item d-flex">
-                                            <span class="entity-icon">
-                                                <i
-                                                    [ngClass]="{
-                                                        'icon-company-profile': option?.consolidatedBranch,
-                                                        'icon-branch-icon': !option?.consolidatedBranch
-                                                    }"
-                                                    class="pull-right"
-                                                    *ngIf="!option.isCompany"
-                                                    [matTooltip]="commonLocaleData?.app_branch"
-                                                    matTooltipClass="tooltip-black"
-                                                ></i>
-                                                <i
-                                                    class="icon-company-profile pull-right"
-                                                    *ngIf="option.isCompany"
-                                                    [matTooltip]="commonLocaleData?.app_company"
-                                                    matTooltipClass="tooltip-black"
-                                                ></i>
-                                            </span>
-                                            <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">
-                                                    {{ option.label || "-" }}
-                                                </div>
-                                                <div class="item-unique giddh-limit single-line-clamp">
-                                                    {{ option.name || "-" }}
-                                                </div>
-                                            </span>
-                                        </a>
-                                    </ng-container>
-                                </ng-template>
                             </reactive-dropdown-field>
                         </div>
                     </div>
