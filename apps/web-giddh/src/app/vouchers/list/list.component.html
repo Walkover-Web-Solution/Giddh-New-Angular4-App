@@ -5864,8 +5864,8 @@
             >
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="activeModule === 'templates'">
                     <reactive-dropdown-field
+                        *ngIf="voucherType === voucherTypeEnum.purchase && selectedTemplate?.label"
                         [name]="'design'"
-                        *ngIf="voucherType === voucherTypeEnum.purchase"
                         [label]="localeData?.select_design_for"
                         [placeholder]="commonLocaleData?.app_select"
                         [options]="purchaseTemplatesList"
