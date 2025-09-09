@@ -19,7 +19,7 @@ import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 import { ServiceConfig } from '../../../services/service.config';
-import { IOption } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
 
 @Component({
     selector: 'app-expense-details',
@@ -34,6 +34,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Instance of approve confirm dialog */
     @ViewChild("rejectionReason") public rejectionReason;
+    /** Instance of ledger aside pane modal */
+    @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
     @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
@@ -44,6 +46,13 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public selectedRowItem: any;
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        // let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
+        // return (hasParticularSelected?.length) ? true : false;
+    }
+    /** Ledger aside pan modal */
+    private ledgerAsidePaneDialogRef: any;
     public dialogRef: any;
     public approveEntryModalRef: any;
     public message: string;
@@ -925,5 +934,23 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.accountEntryPettyCash.particular.uniqueName = "";
         this.accountEntryPettyCash.particular.name = "";
         this.entryAgainstObject.model = "";
+    }
+
+    /**
+     * Open ledger aside pane
+     *
+     * @memberof LedgerComponent
+     */
+    public openLedgerAsidePaneDialog(): void {
+        this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
+
+        this.ledgerAsidePaneDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            setTimeout(() => {
+                if (this.showPageLeaveConfirmation) {
+                    this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+                }
+                this.ledgerAsidePaneDialogRef = undefined;
+            }, 100);
+        });
     }
 }
