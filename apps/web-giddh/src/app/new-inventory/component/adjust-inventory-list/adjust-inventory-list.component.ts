@@ -97,7 +97,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public isCompany: boolean;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-/** This will store selected date range to show on UI */
+    /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -195,6 +195,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         /** Delete adjust inventory success */
         this.componentStore.deleteAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.adjustInventoryListRequest.page = this.generalService.adjustPageIndex(this.adjustInventoryListRequest.totalItems, this.adjustInventoryListRequest.page, this.adjustInventoryListRequest.count);
                 this.getAllAdjustReports(true);
             }
         });

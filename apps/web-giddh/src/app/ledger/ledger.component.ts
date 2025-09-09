@@ -236,7 +236,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         totalItems: 0,
         totalPages: 0,
         page: 1,
-        countPerPage: PAGINATION_LIMIT
+        countPerPage: PAGINATION_LIMIT,
+        creditTransactionsCount: 0,
+        debitTransactionsCount: 0
     };
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -1233,7 +1235,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * This will get the bank transactions of the account
-     *
+     * 
      * @memberof LedgerComponent
      */
     public getBankTransactions(): void {
@@ -1248,7 +1250,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     if (res.body) {
                         this.bankTransactionsResponse.totalItems = res.body.totalItems;
                         this.bankTransactionsResponse.totalPages = res.body.totalPages;
-                        this.bankTransactionsResponse.page = res.body.page;
+                        this.bankTransactionsResponse.creditTransactionsCount = res.body.creditTransactionsCount;
+                        this.bankTransactionsResponse.debitTransactionsCount = res.body.debitTransactionsCount;
                         this.bankAccount.reLoginRequired = res.body.reLoginRequired;
                         this.bankAccount.gocardlessMessage = res.body.message;
                         this.bankAccount.itemId = res.body.itemId;
@@ -3236,6 +3239,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let params = { transactionIds: [...this.selectedCreditTransactionIds, ...this.selectedDebitTransactionIds] };
         this.ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
+                this.bankTransactionsResponse.page = this.generalService.adjustPageIndex(this.bankTransactionsResponse?.creditTransactionsCount + this.bankTransactionsResponse?.debitTransactionsCount, this.bankTransactionsResponse?.page, this.bankTransactionsResponse?.countPerPage, this.selectedCreditTransactionIds.size + this.selectedDebitTransactionIds.size);
                 this.getBankTransactions();
                 this.selectedCreditTransactionIds.clear();
                 this.selectedDebitTransactionIds.clear();

@@ -436,13 +436,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public tabChanged(event: any): void {
         if (event?.index === 0) {
             this.currentSelectedTab = 'pending';
-            this.router.navigate(['/pages/expenses/pending']);
+            this.router.navigate(['/pages/expenses-manager'], { queryParams: { tab: 'pending', tabIndex: 0 } });
         } else if (event?.index === 1) {
-            this.currentSelectedTab = 'approved';
-            this.router.navigate(['/pages/expenses/approved']);
-        } else if (event?.index === 2) {
             this.currentSelectedTab = 'rejected';
-            this.router.navigate(['/pages/expenses/rejected']);
+            this.router.navigate(['/pages/expenses-manager'], { queryParams: { tab: 'rejected', tabIndex: 1 } });
         }
     }
 }

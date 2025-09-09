@@ -14,6 +14,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { Lightbox } from 'ngx-lightbox';
 import { ServiceConfig } from '../../../services/service.config';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'app-rejected-list',
@@ -63,7 +64,8 @@ export class RejectedListComponent implements OnInit, OnChanges {
         @Inject(ServiceConfig) private serviceConfig,
         private expenseService: ExpenseService,
         public dialog: MatDialog,
-        private lightbox: Lightbox
+        private lightbox: Lightbox,
+        private generalService: GeneralService
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
@@ -255,6 +257,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", res?.body);
+                this.pettycashRequest.page = this.generalService.adjustPageIndex(this.pettyCashRejectedReportResponse?.totalItems, this.pettyCashRejectedReportResponse?.page, this.pettyCashRejectedReportResponse?.count);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
             } else if(res?.message) {
                 this.toaster.showSnackBar("error", res.message);

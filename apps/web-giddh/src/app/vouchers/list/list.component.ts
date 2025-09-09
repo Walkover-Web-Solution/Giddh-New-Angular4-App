@@ -342,7 +342,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public paymentTableColumnsEnum: typeof PaymentTableColumnsEnum = PaymentTableColumnsEnum;
     /** True if columns loading */
     public isColumnsLoading: boolean = true;
-constructor(
+    constructor(
         private activatedRoute: ActivatedRoute,
         private fb: FormBuilder,
         private router: Router,
@@ -388,7 +388,7 @@ constructor(
                 }
             });
 
-            
+
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
@@ -917,11 +917,6 @@ constructor(
      */
     private handleGetAllVoucherResponse(response: any): void {
         if (response && response.voucherType === this.voucherType) {
-            if (response.totalItems > 0 && response.totalPages < response.page) {
-                this.advanceFilters.page = response.totalPages;
-                this.getAllVouchers();
-                return;
-            }
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             this.selectAllVouchers({ checked: false });
@@ -1674,6 +1669,7 @@ constructor(
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
+                this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.componentStore.deleteVoucher({
                         accountUniqueName: voucher?.account?.uniqueName, model: {
@@ -2018,7 +2014,7 @@ constructor(
      * @memberof VoucherListComponent
      */
     public actionVoucher(voucher: any, action: string): void {
-        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType }});
+        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType } });
     }
 
     /**
@@ -2833,7 +2829,7 @@ constructor(
     public deleteEmail(emailId: string) {
         if (!emailId) {
             return false;
-        } 
+        }
 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-sm'],
@@ -3134,12 +3130,12 @@ constructor(
         }
     }
 
-   /**
-     * Submits the form
-     *
-     * @return {*}  {void}
-     * @memberof VoucherListComponent
-     */
+    /**
+      * Submits the form
+      *
+      * @return {*}  {void}
+      * @memberof VoucherListComponent
+      */
     public onSubmit(): void {
         this.isSettingUpdateMode = true;
         if (this.settingForm.get('invoiceSettings.autoPaid').value) {
@@ -3222,20 +3218,20 @@ constructor(
                 .filter(item => item?.checked)
                 .map(item => item.value);
             if (!this.displayedColumns.includes('index')) {
-                this.displayedColumns.unshift('index'); 
+                this.displayedColumns.unshift('index');
             }
             if (!this.displayedColumns.includes('more_options') && ![VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                 this.displayedColumns.push('more_options');
             } else if ([VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType) && this.displayedColumns.includes('more_options')) {
-                this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');  
+                this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');
             }
             this.setEInvoiceColumns();
             this.getVouchers(false);
             this.getVoucherBalances();
         });
-       setTimeout(() => {
+        setTimeout(() => {
             this.isColumnsLoading = false;
-       }, 400);
+        }, 400);
     }
 
     /**
@@ -3245,7 +3241,7 @@ constructor(
      * @memberof VoucherListComponent
      */
     private setModuleType(): void {
-        switch(this.voucherType) {
+        switch (this.voucherType) {
             case VoucherTypeEnum.sales:
                 this.moduleType = VoucherReportFilterModuleEnum.Sales;
                 break;
@@ -3298,18 +3294,18 @@ constructor(
         }
     }
 
-     /**
-     * This will show the datepicker
-     *
-     * @param {boolean} isOpen
-     * @memberof VoucherListComponent
-     */
-     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+    /**
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();
         }
     }
-    
+
 }

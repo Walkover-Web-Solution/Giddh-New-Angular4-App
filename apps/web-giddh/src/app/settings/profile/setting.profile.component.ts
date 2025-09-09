@@ -23,7 +23,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
-import { SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 export interface IGstObj {
@@ -116,7 +116,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         page: 0,
         totalPages: 0,
         totalItems: 0,
-        count: 0
+        count: PAGINATION_LIMIT
     };
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -1069,8 +1069,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public handleDeleteAddress(addressDetails: any): void {
         this.settingsProfileService.deleteAddress(addressDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.loadAddresses('GET');
-            this._toasty.successToast('Address deleted successfully');
+            if (response?.status === 'success') {
+                this.addressTabPaginationData.page = this.generalService.adjustPageIndex(this.addresses.length, this.addressTabPaginationData.page, this.addressTabPaginationData.count);
+                this.loadAddresses('GET');
+                this._toasty.successToast('Address deleted successfully');
+            }
         });
     }
 
@@ -1229,7 +1232,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private loadAddresses(method: string, params?: any): void {
         if (this.currentOrganizationType === OrganizationType.Company) {
             this.shouldShowAddressLoader = true;
-            this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            const paginationParams = {
+                page: this.addressTabPaginationData.page,
+                count: this.addressTabPaginationData.count,
+                ...params
+            };
+            this.settingsProfileService.getCompanyAddresses(method, paginationParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.shouldShowAddressLoader = false;
                 if (response && response.body && response.status === 'success') {
                     this.updateAddressPagination(response.body);

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from '../../services/general.service';
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -39,7 +39,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
 /** Request parameters for fetching project entries */
-    public getProjectEntryListRequest: any = { count: 50, page: 1 };
+    public getProjectEntryListRequest: any = { count: PAGINATION_LIMIT, page: 1 };
     /** Default parameters for API requests */
     public defaultParamsValue: DefaultParamType = {
         companyUniqueName: '',
@@ -227,6 +227,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             if (entryDeleteSuccess) {
                 this.totalResults -= 1;
                 this.entryList.removeAt(entryDeleteSuccess.index);
+                this.getProjectEntryListRequest.page = this.generalService.adjustPageIndex(this.totalResults, this.getProjectEntryListRequest.page, this.getProjectEntryListRequest.count);
+                if (this.entryList.length === 0) {
+                    this.getEntryList();
+                }
                 this.getRevenueExpense();
             }
         });
