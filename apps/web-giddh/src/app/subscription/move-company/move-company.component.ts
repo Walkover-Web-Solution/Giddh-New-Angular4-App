@@ -261,7 +261,12 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         let text = '';
         if (this.subscriptionMove) {
             text = this.localeData?.move_plan_note;    
-            text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name ? this.moveSelectedCompany?.name : (this.moveSelectedCompany?.companies && this.moveSelectedCompany?.companies[0]?.name ? this.moveSelectedCompany?.companies[0]?.name : this.moveSelectedCompany?.companiesList[0]?.name))?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name ? this.moveSelectedCompany?.subscription?.planDetails?.name : this.moveSelectedCompany?.plan?.name);
+            const companyName = this.moveSelectedCompany?.name || 
+                               this.moveSelectedCompany?.companies?.[0]?.name || 
+                               this.moveSelectedCompany?.companiesList?.[0]?.name || '';
+            const planName = this.moveSelectedCompany?.subscription?.planDetails?.name || 
+                            this.moveSelectedCompany?.plan?.name || this.moveSelectedCompany?.planName || '';
+            text = text?.replace("[COMPANY_NAME]", companyName)?.replace("[PLAN_NAME]", planName);
         } else {
             text = this.localeData.company_note;
             text = text?.replace("[COMPANY_NAME]", this.companyDetails?.name ?? '');
