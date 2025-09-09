@@ -6,9 +6,15 @@
 <section class="aside-dialog-wrapper">
     <div class="dialog-header">
         <span>{{ actionAccount }}</span>
-        <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
-            <i class="icon-cross"></i>
-        </button>
+
+        <div class="d-flex align-items-center column-gap15">
+            <button mat-raised-button *ngIf="backButtonVisible" (click)="backButtonPressed()">
+                {{ commonLocaleData?.app_back }}
+            </button>
+            <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
     </div>
     <mat-dialog-content class="dialog-body">
         <ng-container *ngIf="!selectedAccountUniqueName && (activeGroupUniqueName || allGroups) && !createAccountFromCommandK">

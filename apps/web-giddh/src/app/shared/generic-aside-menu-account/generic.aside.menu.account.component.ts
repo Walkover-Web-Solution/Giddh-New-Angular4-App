@@ -24,6 +24,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
     @Output() public updateEvent: EventEmitter<UpdateAccountRequest> = new EventEmitter();
+    /** Emitted when the back button is pressed */
+    @Output() public backButtonPressedEvent: EventEmitter<void> = new EventEmitter();
     /** Emitted when the update via patch api . */
     @Output() public updateViaPatchApi: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2, isAccountArchived?: boolean }>
         = new EventEmitter();
@@ -68,6 +70,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Input() public isCustomerCreation: boolean;
     /** True if creating account from cmd+k */
     @Input() public allGroups: boolean;
+    /** True if back button is visible */
+    @Input() public backButtonVisible: boolean = true;
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
@@ -150,6 +154,16 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
                 this.closeAsideEvent.emit(event);
             }
         }
+    }
+
+    /**
+     * This will use for back button pressed
+     * 
+     * @memberof GenericAsideMenuAccountComponent
+     * @returns {void}
+     */
+    public backButtonPressed(): void {
+        this.backButtonPressedEvent.emit();
     }
 
     public isGroupSelected(event) {
