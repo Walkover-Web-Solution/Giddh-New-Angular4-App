@@ -6119,25 +6119,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             entryFormGroup.get("hsnNumber")?.patchValue(response.stock.hsnNumber || response.hsnNumber);
             entryFormGroup.get("sacNumber")?.patchValue(response.stock.sacNumber || response.sacNumber);
-            entryFormGroup
-                .get("showCodeType")
-                ?.patchValue(response.stock.hsnNumber || response.hsnNumber ? "hsn" : "sac");
+            entryFormGroup.get("showCodeType")?.patchValue(response.stock.hsnNumber || response.hsnNumber ? "hsn" : "sac");
 
-            const rate = Number(
-                (
-                    (response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0) /
-                    (this.invoiceForm.get("exchangeRate")?.value ?? 1)
-                ).toFixed(this.highPrecisionRate)
-            );
+            transactionFormGroup.get("stock.stockUnit.code")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
+            transactionFormGroup.get("stock.stockUnit.uniqueName")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
+            
+            let baseRate: number;
+            if (response.stock.variant?.unitRates?.length) {
+                baseRate = this.getRateByUnit(transactionFormGroup.get("stock.stockUnit.uniqueName")?.value,response.stock.variant?.unitRates);
+            } else {
+                baseRate = response.stock.rate;
+            }
+            const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value ?? 1;
+            const rate = Number((baseRate / exchangeRateValue).toFixed(this.highPrecisionRate));
             transactionFormGroup.get("stock.rate.rateForAccount")?.patchValue(rate);
             transactionFormGroup.get("stock.skuCode")?.patchValue(response.stock.skuCode);
             transactionFormGroup.get("stock.skuCodeHeading")?.patchValue(response.stock.skuCodeHeading);
-            transactionFormGroup
-                .get("stock.stockUnit.code")
-                ?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
-            transactionFormGroup
-                .get("stock.stockUnit.uniqueName")
-                ?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
 
             if (response.stock.variant?.name) {
                 transactionFormGroup.get("stock.variant.name")?.patchValue(response.stock.variant?.name);
@@ -6256,6 +6253,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 ?.patchValue(amount / transactionFormGroup.get("stock.quantity")?.value);
         }
         this.checkIfEntriesHasStock();
+    }
+
+    /**
+     * Get rate by unit
+     *
+     * @param {string} stockUnitUniqueName
+     * @param {any[]} unitRates
+     * @returns {number}
+     * @memberof VoucherCreateComponent
+     */
+    private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
+        return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
     }
 
     /**
@@ -6787,6 +6796,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         )?.stockUnitCode;
         if (selectedUnitCode) {
             transaction.get("stock.stockUnit.code")?.patchValue(selectedUnitCode);
+            transaction.get("stock.rate.rateForAccount")?.patchValue(this.getRateByUnit(selectedUnitCode, resolvedUnits));
         }
     }
 
