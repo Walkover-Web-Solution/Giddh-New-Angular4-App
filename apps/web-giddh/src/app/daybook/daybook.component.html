@@ -25,44 +25,7 @@
                                         (selectedOption)="handleBranchChange($event)"
                                         [placeholder]="localeData?.select_entity"
                                         [labelValue]="currentBranch?.name"
-                                    >
-                                        <ng-template #optionTemplate let-option="option">
-                                            <a
-                                                href="javascript:void(0);"
-                                                aria-label="branch"
-                                                class="list-item d-flex"
-                                            >
-                                                <span class="entity-icon">
-                                                    <i
-                                                        class="pull-right"
-                                                        [ngClass]="{
-                                                            'icon-company-profile': option.consolidatedBranch,
-                                                            'icon-branch-icon': !option.consolidatedBranch
-                                                        }"
-                                                        *ngIf="!option.isCompany"
-                                                        [matTooltip]="commonLocaleData?.app_branch"
-                                                        [matTooltipPosition]="'above'"
-                                                        matTooltipClass="tooltip-black"
-                                                    ></i>
-                                                    <i
-                                                        class="icon-company-profile pull-right"
-                                                        *ngIf="option.isCompany"
-                                                        [matTooltip]="commonLocaleData?.app_company"
-                                                        [matTooltipPosition]="'above'"
-                                                        matTooltipClass="tooltip-black"
-                                                    ></i>
-                                                </span>
-                                                <span class="entity-details">
-                                                    <div class="item giddh-limit single-line-clamp">
-                                                        {{ option.label || "-" }}
-                                                    </div>
-                                                    <div class="item-unique giddh-limit single-line-clamp">
-                                                        {{ option.name || "-" }}
-                                                    </div>
-                                                </span>
-                                            </a>
-                                        </ng-template>
-                                    </reactive-dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                             <div class="form-inline align-items-center d-flex flex-nowrap daybook-filter">
