@@ -3100,4 +3100,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
     }
+
+    /**
+     * Clear sales person
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public clearSalesPerson(): void {
+        this.vm.selectedLedger.salesPerson.name = null;
+        this.vm.selectedLedger.salesPersonUniqueName = null;
+    }
 }
