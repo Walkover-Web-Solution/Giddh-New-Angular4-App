@@ -316,6 +316,7 @@
                                     *ngIf="(statesSource$ | async)?.length"
                                     [label]="commonLocaleData?.app_state"
                                     [placeholder]="commonLocaleData?.app_select"
+                                    [useCustomLabelValue]="true"
                                     [labelValue]="gst?.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name : ''" 
                                     [options]="statesSource$ | async"
                                     formControlName="stateCode"

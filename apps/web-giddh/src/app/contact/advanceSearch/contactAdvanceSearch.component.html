@@ -37,15 +37,17 @@
                                 ></reactive-dropdown-field>
                             </div>
                             <div class="col-sm-4 col-xs-6">
-                                <text-field
+                                <input-field
                                     [cssClass]="'form-control mat-field-border'"
                                     [type]="'text'"
                                     [placeholder]="
                                         commonLocaleData?.app_numbers?.zero + '' + commonLocaleData?.app_numbers?.zero
                                     "
+                                    [allowDigitsOnly]="true"
+                                    [label]="commonLocaleData?.app_amount"
                                     [name]="'total'"
                                     [(ngModel)]="request.amount"
-                                ></text-field>
+                                ></input-field>
                             </div>
                         </div>
                     </div>
