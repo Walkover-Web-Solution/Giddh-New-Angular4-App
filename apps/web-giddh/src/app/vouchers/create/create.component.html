@@ -871,6 +871,7 @@
                                                                         [placeholder]="localeData?.select_acc"
                                                                         formControlName="uniqueName"
                                                                         [name]="'transactionAccountUniqueName' + entryIndex"
+                                                                        [useCustomLabelValue]="true"
                                                                         [labelValue]="transaction.get('stock.name')?.value
                                                                         ? transaction.get('account.name')?.value +
                                                                         ' (' +
