@@ -1658,10 +1658,12 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
+                                                                            getRemainingCharacters(
+                                                                                15,
                                                                                 customTemplate.sections["header"].data[
-                                                                                    "trackingNumber"
-                                                                                ].label?.length
+                                                                                "trackingNumber"
+                                                                            ].label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1727,10 +1729,12 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
+                                                                            getRemainingCharacters(
+                                                                                15,
                                                                                 customTemplate.sections["header"].data[
-                                                                                    "customField1"
-                                                                                ].label?.length
+                                                                                "customField1"
+                                                                            ].label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1777,10 +1781,12 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
+                                                                            getRemainingCharacters(
+                                                                                15,
                                                                                 customTemplate.sections["header"].data[
-                                                                                    "customField2"
-                                                                                ].label?.length
+                                                                                "customField2"
+                                                                            ].label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1827,10 +1833,12 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
+                                                                            getRemainingCharacters(
+                                                                                15,
                                                                                 customTemplate.sections["header"].data[
-                                                                                    "customField3"
-                                                                                ].label?.length
+                                                                                "customField3"
+                                                                            ].label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1896,9 +1904,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
+                                                                getRemainingCharacters(
+                                                                    10,
                                                                     customTemplate.sections["table"].data["sNo"].label
-                                                                        ?.length
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -1978,9 +1987,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
+                                                                getRemainingCharacters(
+                                                                    10,
                                                                     customTemplate.sections["table"].data["date"].label
-                                                                        ?.length
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2033,11 +2043,13 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    (customTemplate.templateType === "tally_template"
-                                                                        ? 20
-                                                                        : 12) -
+                                                                    getRemainingCharacters(
+                                                                        customTemplate.templateType === "tally_template"
+                                                                            ? 20
+                                                                            : 12,
                                                                         customTemplate.sections["table"].data["item"]
-                                                                            .label?.length
+                                                                            .label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -2076,11 +2088,12 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                (customTemplate.templateType === "tally_template"
-                                                                    ? 20
-                                                                    : 12) -
+                                                                getRemainingCharacters(
+                                                                    customTemplate.templateType === "tally_template"
+                                                                        ? 20
+                                                                        : 12,
                                                                     customTemplate.sections["table"].data["item"].label
-                                                                        ?.length
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2148,9 +2161,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                8 -
-                                                                    customTemplate.sections["table"].data["hsnSac"]
-                                                                        .label?.length
+                                                                getRemainingCharacters(
+                                                                    8,
+                                                                    customTemplate.sections["table"].data["hsnSac"].label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2206,12 +2220,14 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    (customTemplate.templateType === "tally_template"
-                                                                        ? 8
-                                                                        : 6) -
+                                                                    getRemainingCharacters(
+                                                                        customTemplate.templateType === "tally_template"
+                                                                            ? 8
+                                                                            : 6,
                                                                         customTemplate.sections["table"].data[
                                                                             "quantity"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -2251,11 +2267,14 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                (customTemplate.templateType === "tally_template"
-                                                                    ? 8
-                                                                    : 6) -
-                                                                    customTemplate.sections["table"].data["quantity"]
-                                                                        .label?.length
+                                                                getRemainingCharacters(
+                                                                    customTemplate.templateType === "tally_template"
+                                                                        ? 8
+                                                                        : 6,
+                                                                    customTemplate.sections["table"].data[
+                                                                        "quantity"
+                                                                    ].label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2298,9 +2317,12 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
-                                                                    customTemplate.sections["table"].data["description"]
-                                                                        .label?.length
+                                                                getRemainingCharacters(
+                                                                    10,
+                                                                    customTemplate.sections["table"].data[
+                                                                        "description"
+                                                                    ].label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2347,9 +2369,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    10 -
-                                                                        customTemplate.sections["table"].data["rate"]
-                                                                            .label?.length
+                                                                    getRemainingCharacters(
+                                                                        10,
+                                                                        customTemplate.sections["table"].data[
+                                                                            "rate"
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -2382,9 +2407,12 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
-                                                                    customTemplate.sections["table"].data["rate"].label
-                                                                        ?.length
+                                                                getRemainingCharacters(
+                                                                    10,
+                                                                    customTemplate.sections["table"].data[
+                                                                        "rate"
+                                                                    ].label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2452,9 +2480,12 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
-                                                                    customTemplate.sections["table"].data["discount"]
-                                                                        .label?.length
+                                                                getRemainingCharacters(
+                                                                    10,
+                                                                    customTemplate.sections["table"].data[
+                                                                        "discount"
+                                                                    ].label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2504,10 +2535,12 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                14 -
+                                                                getRemainingCharacters(
+                                                                    14,
                                                                     customTemplate.sections["table"].data[
                                                                         "taxableValue"
-                                                                    ].label?.length
+                                                                    ].label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2546,9 +2579,12 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
-                                                                    customTemplate.sections["table"].data["tax"].label
-                                                                        ?.length
+                                                                getRemainingCharacters(
+                                                                    10,
+                                                                    customTemplate.sections["table"].data[
+                                                                        "tax"
+                                                                    ].label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2658,9 +2694,12 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                14 -
-                                                                    customTemplate.sections["table"].data["previousDue"]
-                                                                        .label?.length
+                                                                getRemainingCharacters(
+                                                                    14,
+                                                                    customTemplate.sections["table"].data[
+                                                                        "previousDue"
+                                                                    ].label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2774,7 +2813,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    <span class="ml-2">{{ commonLocaleData?.app_tax_bifurcation }}</span>
+                                                    <span class="ml-2">{{ localeData?.tax_bifurcation }}</span>
                                                 </mat-checkbox>
                                             </div>
                                         </ng-container>
@@ -2838,10 +2877,12 @@
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
-                                                                        10 -
+                                                                        getRemainingCharacters(
+                                                                            10,
                                                                             customTemplate.sections["footer"].data[
                                                                                 "tcs"
-                                                                            ].label?.length
+                                                                            ].label
+                                                                        )
                                                                     }}
                                                                 </p>
                                                             </div>
@@ -2890,10 +2931,12 @@
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
-                                                                        10 -
+                                                                        getRemainingCharacters(
+                                                                            10,
                                                                             customTemplate.sections["footer"].data[
                                                                                 "tds"
-                                                                            ].label?.length
+                                                                            ].label
+                                                                        )
                                                                     }}
                                                                 </p>
                                                             </div>
@@ -2946,10 +2989,12 @@
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
-                                                                        40 -
+                                                                        getRemainingCharacters(
+                                                                            40,
                                                                             customTemplate.sections["footer"].data[
                                                                                 "totalDue"
-                                                                            ].label?.length
+                                                                            ].label
+                                                                        )
                                                                     }}
                                                                 </p>
                                                             </div>
@@ -3017,10 +3062,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    50 -
+                                                                    getRemainingCharacters(
+                                                                        50,
                                                                         customTemplate.sections["footer"].data[
                                                                             "companyName"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3096,10 +3143,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    124 -
+                                                                    getRemainingCharacters(
+                                                                        124,
                                                                         customTemplate.sections["footer"].data[
                                                                             "companyAddress"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3176,10 +3225,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    13 -
+                                                                    getRemainingCharacters(
+                                                                        13,
                                                                         customTemplate.sections["table"].data[
                                                                             "totalQuantity"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3228,10 +3279,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    10 -
+                                                                    getRemainingCharacters(
+                                                                        10,
                                                                         customTemplate.sections["table"].data[
                                                                             "discount"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3283,10 +3336,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    14 -
+                                                                    getRemainingCharacters(
+                                                                        14,
                                                                         customTemplate.sections["footer"].data[
                                                                             "taxableAmount"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3346,7 +3401,7 @@
                                                         checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                                     "
                                                 >
-                                                    <span class="ml-2">{{ commonLocaleData?.app_tax_bifurcation }}</span>
+                                                    <span class="ml-2">{{ localeData?.tax_bifurcation }}</span>
                                                 </mat-checkbox>
                                                 <div
                                                     class="ml-4"
@@ -3491,7 +3546,7 @@
                                                         checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                                     "
                                                 >
-                                                    <span class="ml-2">{{ commonLocaleData?.app_tax_bifurcation }}</span>
+                                                    <span class="ml-2">{{ localeData?.tax_bifurcation }}</span>
                                                 </mat-checkbox>
                                                 <div
                                                     class="ml-4"
@@ -3551,6 +3606,7 @@
                                                                             ? null
                                                                             : 200
                                                                     "
+                                                                    [class.error-box]="isCharacterLimitExceeded(200, customTemplate.sections['footer'].data['message1'].label)"
                                                                     [placeholder]="localeData?.footer_text"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['footer'].data[
@@ -3573,16 +3629,18 @@
                                                                 ></textarea>
                                                             </mat-form-field>
                                                         </div>
-                                                        <div>
+                                                        <div *ngIf="!customTemplate.sections['footer'].data['showNotesAtLastPage'].display">
                                                             <p class="mt-1">
                                                                 <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    200 -
+                                                                    getRemainingCharacters(
+                                                                        200,
                                                                         customTemplate.sections["footer"].data[
                                                                             "message1"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3649,9 +3707,11 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    30 -
+                                                                    getRemainingCharacters(
+                                                                        30,
                                                                         customTemplate.sections["footer"].data["thanks"]
-                                                                            .label?.length
+                                                                            .label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3719,10 +3779,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    50 -
+                                                                    getRemainingCharacters(
+                                                                        50,
                                                                         customTemplate.sections["footer"].data[
                                                                             "textUnderSlogan"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3735,6 +3797,12 @@
                                                 "
                                                 class="clearfix mr-t1 row"
                                             >
+                                                <mat-radio-group
+                                                    [(ngModel)]="selectedSignatureType"
+                                                    (ngModelChange)="onSignatureTypeChange($event)"
+                                                    class="d-flex flex-wrap"
+                                                >
+                                                <div class="d-flex">
                                                 <div class="clearfix" class="col-lg-6 col-md-12">
                                                     <div
                                                         class="mb-4px"
@@ -3743,18 +3811,12 @@
                                                             templateTypeEnum.TallyTemplate
                                                         "
                                                     >
-                                                        <mat-checkbox
+                                                        <mat-radio-button
                                                             color="primary"
-                                                            name="signatureType"
-                                                            (change)="chooseSigntureType('image')"
-                                                            (ngModelChange)="onFieldChange()"
-                                                            [checked]="
-                                                                customTemplate.sections.footer.data.imageSignature
-                                                                    .display
-                                                            "
+                                                            value="image"
                                                         >
                                                             {{ localeData?.image_signature }}
-                                                        </mat-checkbox>
+                                                        </mat-radio-button>
                                                     </div>
                                                     <div class="form-group mr-l3 clearfix">
                                                         <span class="clearfix">
@@ -3818,17 +3880,12 @@
                                                     "
                                                 >
                                                     <div>
-                                                        <mat-checkbox
+                                                        <mat-radio-button
                                                             color="primary"
-                                                            name="signatureType"
-                                                            (change)="chooseSigntureType('slogan')"
-                                                            (ngModelChange)="onFieldChange()"
-                                                            [checked]="
-                                                                customTemplate.sections.footer.data.slogan.display
-                                                            "
+                                                            value="slogan"
                                                         >
                                                             {{ localeData?.slogan }}
-                                                        </mat-checkbox>
+                                                        </mat-radio-button>
 
                                                         <div class="form-group ml-3 clearfix">
                                                             <div>
@@ -3858,10 +3915,12 @@
                                                                                 localeData?.characters_left
                                                                             }}&nbsp;</span
                                                                         ><span class="max-character-value">{{
-                                                                            30 -
+                                                                            getRemainingCharacters(
+                                                                                30,
                                                                                 customTemplate.sections["footer"].data[
                                                                                     "slogan"
-                                                                                ].label?.length
+                                                                                ].label
+                                                                            )
                                                                         }}</span>
                                                                     </ng-container>
                                                                 </div>
@@ -3869,6 +3928,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                </div>
+                                                </mat-radio-group>
                                             </div>
                                         </div>
                                     </div>
