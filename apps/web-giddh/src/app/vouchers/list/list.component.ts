@@ -954,11 +954,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private handleGetAllVoucherResponse(response: any): void {
         if (response && response.voucherType === this.voucherType) {
-            if (response.totalItems > 0 && response.totalPages < response.page) {
-                this.advanceFilters.page = response.totalPages;
-                this.getAllVouchers();
-                return;
-            }
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             this.selectAllVouchers({ checked: false });
@@ -1718,6 +1713,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
+                this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.componentStore.deleteVoucher({
                         accountUniqueName: voucher?.account?.uniqueName, model: {
@@ -3510,14 +3506,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-     /**
-     * This will show the datepicker
-     *
-     * @param {boolean} isOpen
-     * @memberof VoucherListComponent
-     */
-     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+    /**
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();

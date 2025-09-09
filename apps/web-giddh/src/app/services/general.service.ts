@@ -2418,5 +2418,23 @@ export class GeneralService {
         }
         return { fromDate: '', toDate: '' };
     }
+
+    /**
+     * Adjusts the page index based on the total number of items and the number of items to remove.
+     * If the total number of items minus the number of items to remove is a multiple of the count,
+     * and the page is greater than 1, the page index is decremented by 1.
+     *
+     * @param totalItems The total number of items.
+     * @param page The current page index.
+     * @param count The number of items per page.
+     * @param removeCount The number of items to remove (default is 1).
+     * @returns The adjusted page index.
+     */
+    public adjustPageIndex(totalItems: number, page: number, count: number, removeCount: number = 1) {
+        if (((totalItems - removeCount) % count === 0) && page > 1) {
+            page = page - 1;
+        }
+        return page;
+    }
 }
 
