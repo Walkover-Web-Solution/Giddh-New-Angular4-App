@@ -122,6 +122,8 @@ export class TemplateEditFilterComponent implements OnInit {
     public activeTab: string;
     /** This will hold local JSON data */
     public localeData: any = {};
+    /** Selected signature type for radio button group */
+    public selectedSignatureType: string = '';
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds voucher type enum */
@@ -174,9 +176,9 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
-     * Calculate remaining characters for a field with character limit
+     * Gets remaining character count for a field
      *
-     * @param {number} maxLength Maximum allowed characters
+     * @param {number} maxLength Maximum allowed length
      * @param {string} currentValue Current field value
      * @returns {number} Remaining character count
      * @memberof TemplateEditFilterComponent
@@ -184,6 +186,19 @@ export class TemplateEditFilterComponent implements OnInit {
     public getRemainingCharacters(maxLength: number, currentValue: string): number {
         const currentLength = currentValue?.length || 0;
         return Math.max(0, maxLength - currentLength);
+    }
+
+    /**
+     * Checks if character limit is exceeded for a field
+     *
+     * @param {number} maxLength Maximum allowed length
+     * @param {string} currentValue Current field value
+     * @returns {boolean} True if character limit is exceeded
+     * @memberof TemplateEditFilterComponent
+     */
+    public isCharacterLimitExceeded(maxLength: number, currentValue: string): boolean {
+        const currentLength = currentValue?.length || 0;
+        return currentLength > maxLength;
     }
 
     /**
@@ -258,6 +273,9 @@ export class TemplateEditFilterComponent implements OnInit {
                 footer: this.customTemplate?.sections?.footer?.data || {}
             };
             this.templateService.setFieldsAndVisibility(section);
+
+            // Initialize selected signature type based on current template state
+            this.initializeSelectedSignatureType();
 
             // Set logo size and preview
             if (this.customTemplate?.logoSize) {
@@ -785,6 +803,33 @@ export class TemplateEditFilterComponent implements OnInit {
         }
         this.templateService.setCustomTemplate(template);
 
+    }
+
+    /**
+     * Initializes the selected signature type based on current template state
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    private initializeSelectedSignatureType(): void {
+        if (this.customTemplate?.sections?.footer?.data?.imageSignature?.display) {
+            this.selectedSignatureType = 'image';
+        } else if (this.customTemplate?.sections?.footer?.data?.slogan?.display) {
+            this.selectedSignatureType = 'slogan';
+        } else {
+            this.selectedSignatureType = '';
+        }
+    }
+
+    /**
+     * Handles radio button selection for signature type
+     *
+     * @param {string} signatureType The selected signature type ('image' or 'slogan')
+     * @memberof TemplateEditFilterComponent
+     */
+    public onSignatureTypeChange(signatureType: string): void {
+        this.selectedSignatureType = signatureType;
+        this.chooseSigntureType(signatureType);
+        this.onFieldChange();
     }
 
     /**
