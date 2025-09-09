@@ -1,8 +1,5 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <section class="aside-dialog-wrapper">
-        <button mat-raised-button *ngIf="hideFirstStep" (click)="backButtonPressed()" class="back-button position-absolute">
-            {{ commonLocaleData?.app_back }}
-        </button>
         <div class="dialog-header">
             <span mat-dialog-title>
                 {{ commonLocaleData?.app_add }}
@@ -10,27 +7,23 @@
                     stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"
                 }}</span>
             </span>
-            <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
-                <i class="icon-cross"></i>
-            </button>
+            <div class="d-flex align-items-center column-gap15">
+                <button mat-raised-button *ngIf="hideFirstStep && !isAddServiceOpen" (click)="backButtonPressed()">
+                    {{ commonLocaleData?.app_back }}
+                </button>
+                <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
+                    <i class="icon-cross"></i>
+                </button>
+            </div>
         </div>
-        <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger px-0" *ngIf="!hideFirstStep">
-            <div class="pb-3 text-center">
+        <mat-dialog-content class="dialog-body">
+            <div class="aside-panel-ledger" *ngIf="!hideFirstStep">
                 <div class="d-inline-grid">
                     <ng-container *ngIf="inputData !== 'receipt-note' && inputData !== 'delivery-challan'">
                         <button mat-raised-button color="primary" class="mb-2" (click)="toggleAccountPane()">
                             {{ commonLocaleData?.app_add_account }}
                         </button>
                     </ng-container>
-                    <!-- <button
-                        mat-raised-button
-                        color="primary"
-                        class="mb-2"
-                        *ngIf="voucherApiVersion !== 2
-                        (click)="toggleStockPane()"
-                    >
-                        {{ commonLocaleData?.app_add_product }}
-                    </button> -->
                     <button
                         *ngIf="voucherApiVersion === 2"
                         mat-raised-button
@@ -60,33 +53,27 @@
                     </button>
                 </div>
             </div>
-        </div>
 
-        <!-- <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen && voucherApiVersion !== 2">
-            <sales-create-stock
-                [autoFocusInChild]="autoFocusInChild"
-                (closeAsideEvent)="closeAsidePane($event)"
-            ></sales-create-stock>
-        </div> -->
-
-        <div class="dialog-body" *ngIf="isAddStockOpen && voucherApiVersion === 2">
             <stock-create-edit
+                *ngIf="isAddStockOpen && voucherApiVersion === 2"
                 [addStock]="true"
                 [stockType]="stockType"
                 (closeAsideEvent)="closeAsidePane($event)"
             ></stock-create-edit>
-        </div>
-
-        <div class="w-100 position-absolute top-0 right-0" *ngIf="isAddServiceOpen">
-            <generic-aside-menu-account
-                (closeAsideEvent)="closeAsidePane($event)"
-                [selectedGroupUniqueName]="selectedVoucherType"
-                [isDebtorCreditor]="false"
-                [isBankAccount]="false"
-                [includeSearchedGroup]="includeSearchedGroup"
-                [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
-                (addEvent)="addNewServiceAccount($event)"
-            ></generic-aside-menu-account>
-        </div>
+        </mat-dialog-content>
     </section>
 </ng-container>
+
+<ng-template #accountTemplate>
+    <generic-aside-menu-account
+        (closeAsideEvent)="closeAsidePane($event)"
+        [backButtonVisible]="hideFirstStep"
+        (backButtonPressedEvent)="backButtonPressed()"
+        [selectedGroupUniqueName]="selectedVoucherType"
+        [isDebtorCreditor]="false"
+        [isBankAccount]="false"
+        [includeSearchedGroup]="includeSearchedGroup"
+        [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
+        (addEvent)="addNewServiceAccount($event)"
+    ></generic-aside-menu-account>
+</ng-template>
