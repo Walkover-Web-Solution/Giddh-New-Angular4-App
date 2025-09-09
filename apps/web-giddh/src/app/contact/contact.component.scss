@@ -236,7 +236,7 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
 
     &:hover {
         .table-menu-first-td {
-            display: block;
+            display: inline-block;
             line-height: 1;
         }
         .checkbox-left-side-in-table {
@@ -380,8 +380,7 @@ span.input-addon {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    float: left;
-    width: 200px;
+    margin-right: 50px;
 }
 
 .customer-name .icon-ellipse {
@@ -587,6 +586,10 @@ button.btn.btn-filter {
 .customer-img {
     height: 360px;
     width: 489px;
+}
+
+.account-width {
+    width: clamp(100px, 9vw, 175px);
 }
 
 /*responsive*/
@@ -976,10 +979,10 @@ button.btn.btn-filter {
         left: 20px;
     }
 }
-.select-single-checkbox-wrapper {
-    display: flex;
-    align-items: center;
-}
+// .select-single-checkbox-wrapper {
+//     display: flex;
+//     align-items: center;
+// }
 .mat-chip-wrapper {
     border: unset;
     margin-top: 20px;

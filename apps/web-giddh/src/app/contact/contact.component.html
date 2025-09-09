@@ -580,8 +580,8 @@
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
                             >
-                                <div class="customer-name-filed cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
-                                    <div class="select-single-checkbox-wrapper">
+                                <div class="customer-name-filed cursor-pointer pd-r2 w-inherit" (dblclick)="trigger?.openMenu()">
+                                    <div class="d-flex align-items-center w-inherit">
                                         <mat-checkbox
                                             color="primary"
                                             class="mr-2 checkbox-left-side-in-table"
@@ -593,22 +593,21 @@
                                         </mat-checkbox>
                                     <a
                                         href="javascript:;"
-                                        class="btn-link-2"
+                                        class="btn-link-2 text-ellipsis account-width d-block"
                                         (click)="showAccountPreview(account?.uniqueName)"
                                     >
-                                        <span class="text-ellipsis">{{ account.name }}</span>
+                                        {{ account.name }}
                                     </a>
                                     </div>
 
                                     <button
                                         mat-icon-button
-                                        id="edit-model-basic"
                                         class="table-menu-first-td"
                                         [matMenuTriggerFor]="editModelBasic"
                                         #trigger="matMenuTrigger"
                                         aria-label="dots"
                                     >
-                                        <span class="icon-dots-three-vertical"></span>
+                                        <i class="icon-dots-three-vertical"></i>
                                     </button>
 
                                     <mat-menu #editModelBasic="matMenu">
