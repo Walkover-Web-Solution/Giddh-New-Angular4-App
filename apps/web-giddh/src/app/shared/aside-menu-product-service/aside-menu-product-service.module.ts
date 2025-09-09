@@ -12,6 +12,7 @@ import { AsideMenuProductServiceComponent } from "./aside-menu-product-service.c
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRadioModule } from "@angular/material/radio";
+import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import { MatRadioModule } from "@angular/material/radio";
         StockCreateEditModule,
         MatButtonModule,
         MatCheckboxModule,
-        MatRadioModule 
+        MatRadioModule,
+        MatDialogModule
     ],
     exports: [
         AsideMenuProductServiceComponent
