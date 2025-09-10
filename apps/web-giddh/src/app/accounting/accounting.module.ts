@@ -66,7 +66,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         GiddhDatepickerModule,
         KeyboardShortutModule,
         ScrollingModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatInputModule
     ],
 })
 export class AccountingModule {

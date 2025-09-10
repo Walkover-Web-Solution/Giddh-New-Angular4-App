@@ -242,16 +242,20 @@
             <div class="clearfix row">
                 <div class="col-xs-9 col-sm-9">
                     <div class="form-group custom-textarea">
-                        <label>{{ localeData?.narration }}:</label>
-                        <textarea
-                            #narrationBox
-                            id="narration"
-                            class="form-control"
-                            formControlName="description"
-                            (keydown)="handleEnterKeyPress($event, submitButton)"
-                            resize="false"
-                            rows="3"
-                        ></textarea>
+                        <mat-form-field appearance="outline" class="w-50" floatLabel="always">
+                            <mat-label>{{
+                                localeData?.narration
+                            }}</mat-label>
+                            <textarea
+                                #narrationBox
+                                id="narration"
+                                formControlName="description"
+                                (keydown)="handleEnterKeyPress($event, submitButton)"
+                                resize="false"
+                                rows="3"
+                                matInput
+                            ></textarea>
+                        </mat-form-field>
                     </div>
                 </div>
                 <div class="col-xs-3 col-sm-3">
