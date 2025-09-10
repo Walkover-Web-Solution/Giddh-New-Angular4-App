@@ -18,7 +18,7 @@ import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.cons
 import { GeneralService } from '../../services/general.service';
 import { FormControl } from '@angular/forms';
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GstComponentStore } from '../gst.store';
 
@@ -788,16 +788,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      */
     public openSettingAsidePane(): void {
         this.selectedService = TaxServiceEnum.TAXPRO;
-        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            disableClose: true,
-            autoFocus: false
-        })
+        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {...ASIDE_PANE_CONFIG, autoFocus: false});
     }
 
     /**

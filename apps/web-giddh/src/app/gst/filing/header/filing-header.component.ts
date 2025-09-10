@@ -17,7 +17,7 @@ import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../../../services/service.config';
-import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../../app.constant';
 import { BreakpointObserver } from "@angular/cdk/layout";
 
 @Component({
@@ -241,16 +241,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (selectedService) {
             this.selectedService = selectedService;
         }
-        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            disableClose: true,
-            autoFocus: false
-        })
+        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {...ASIDE_PANE_CONFIG, autoFocus: false});
     }
 
     /**

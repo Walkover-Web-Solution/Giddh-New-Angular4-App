@@ -1318,16 +1318,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.asideMenuStateForOtherTaxesDialogRef && this.dialog.getDialogById(this.asideMenuStateForOtherTaxesDialogRef.id)) {
             this.closeOtherTaxesDialog();
         } else {
-            this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
-                position: {
-                    right: '0'
-                },
-                maxWidth: '760px',
-                width: '100%',
-                height: '100vh',
-                maxHeight: '100vh',
-                disableClose: true
-            });
+            this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, ASIDE_PANE_CONFIG);
         }
     }
 
@@ -2249,12 +2240,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     * @memberof NewLedgerEntryPanelComponent
     */
     public showCreateDiscountDialog(): void {
-        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, {
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
         this.discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
@@ -2271,12 +2257,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public showCreateTaxDialog(): void {
         this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
-        this.taxDialogRef = this.dialog.open(this.createTax, {
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.taxDialogRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
     }
 
     /**

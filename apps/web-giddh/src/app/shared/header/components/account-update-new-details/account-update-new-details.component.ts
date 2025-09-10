@@ -2476,14 +2476,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : this.accountOpeningBalance
         }
         const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true,
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            maxHeight: '100vh',
+            ...ASIDE_PANE_CONFIG,
             data: data
         });
         bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {

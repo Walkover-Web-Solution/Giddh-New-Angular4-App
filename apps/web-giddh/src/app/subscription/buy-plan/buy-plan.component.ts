@@ -1567,7 +1567,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public activateDialog(): void {
         this.dialog.open(ActivateDialogComponent, {
-            width: 'var(--aside-pane-width)',
+            panelClass: 'mat-dialog-md'
         })
     }
 

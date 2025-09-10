@@ -582,8 +582,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
-            width: 'var(--aside-pane-width)',
-            panelClass: 'subscription-sidebar',
+            panelClass: ['subscription-sidebar', 'mat-dialog-md'],
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
         });
@@ -2601,17 +2600,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public toggleOtherTaxesAsidePane(updateLedgerModalVm: any): void {
         if (updateLedgerModalVm) {
             this.updateLedgerModalVm = updateLedgerModalVm;
-            this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
-                position: {
-                    right: '0'
-                },
-                maxWidth: '760px',
-                width: '100%',
-                height: '100vh',
-                maxHeight: '100vh',
-                role: 'alertdialog',
-                ariaLabel: 'aside'
-            });
+            this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, ASIDE_PANE_CONFIG);
             this.cdRf.detectChanges();
         } else {
             this.asideMenuStateForOtherTaxesDialogRef?.close();
@@ -3852,14 +3841,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public openAccountAsidePane(): void {
-        this.updateAccountDialogRef = this.dialog.open(this.updateAccount, {
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true
-        });
+        this.updateAccountDialogRef = this.dialog.open(this.updateAccount, ASIDE_PANE_CONFIG);
     }
 
     /** 
