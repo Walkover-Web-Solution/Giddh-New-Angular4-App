@@ -46,11 +46,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public selectedRowItem: any;
-    /** Returns true if account is selected else false */
-    public get showPageLeaveConfirmation(): boolean {
-        // let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
-        // return (hasParticularSelected?.length) ? true : false;
-    }
     /** Ledger aside pan modal */
     private ledgerAsidePaneDialogRef: any;
     public dialogRef: any;
@@ -943,14 +938,5 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openLedgerAsidePaneDialog(): void {
         this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
-
-        this.ledgerAsidePaneDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            setTimeout(() => {
-                if (this.showPageLeaveConfirmation) {
-                    this.pageLeaveUtilityService.addBrowserConfirmationDialog();
-                }
-                this.ledgerAsidePaneDialogRef = undefined;
-            }, 100);
-        });
     }
 }
