@@ -44,46 +44,45 @@ const mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
 // PHP script to prepend to index.html
 const phpScript = `<?php
     $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    if ($requestUri === '/instance-id') {
-    header('Content-Type: application/json');
-    $cacheFile = __DIR__ . '/instance-id.json';
-    $cachedInstanceId = null;
-    if (file_exists($cacheFile)) {
-        $data = json_decode(file_get_contents($cacheFile), true);
-        $cachedInstanceId = $data['instanceId'] ?? null;
-    }
-    if ($cachedInstanceId === null) {
-        $token = @file_get_contents(
-            "http://169.254.169.254/latest/api/token",
-            false,
-            stream_context_create([
-                'http' => [
-                    'method' => 'PUT',
-                    'header' => "X-aws-ec2-metadata-token-ttl-seconds: 21600"
-                ]
-            ])
-        );
-
-        if ($token !== false) {
-            $ctx = stream_context_create([
-                'http' => [
-                    'method' => 'GET',
-                    'header' => "X-aws-ec2-metadata-token: $token"
-                ]
-            ]);
-            $cachedInstanceId = @file_get_contents(
-                "http://169.254.169.254/latest/meta-data/instance-id",
+    if ($requestUri === '/instance-metadata') {
+        header('Content-Type: application/json');
+        $cacheFile = __DIR__ . '/instance-metadata.json';
+        $instanceInfo = null;
+        if (file_exists($cacheFile)) {
+            $instanceInfo = json_decode(file_get_contents($cacheFile), true);
+        }
+        if ($instanceInfo === null) {
+            $token = @file_get_contents(
+                "http://169.254.169.254/latest/api/token",
                 false,
-                $ctx
+                stream_context_create([
+                    'http' => [
+                        'method' => 'PUT',
+                        'header' => "X-aws-ec2-metadata-token-ttl-seconds: 21600"
+                    ]
+                ])
             );
-            if ($cachedInstanceId) {
-                file_put_contents($cacheFile, json_encode(['instanceId' => $cachedInstanceId]));
+
+            if ($token !== false) {
+                $ctx = stream_context_create([
+                    'http' => [
+                        'method' => 'GET',
+                        'header' => "X-aws-ec2-metadata-token: $token"
+                    ]
+                ]);
+                $instanceInfo = @file_get_contents(
+                    "http://169.254.169.254/latest/dynamic/instance-identity/document",
+                    false,
+                    $ctx
+                );
+                if ($instanceInfo) {
+                    file_put_contents($cacheFile, $instanceInfo);
+                }
             }
         }
-    }
-    http_response_code(200);
-    echo json_encode(["instanceId" => $cachedInstanceId]);
-    exit;
+        http_response_code(200);
+        echo $instanceInfo;
+        exit;
     }
 
     $protocol   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
@@ -94,7 +93,7 @@ const phpScript = `<?php
     $baseUrl    = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
 
     $headers = [
-    "Origin: $baseUrl"
+        "Origin: $baseUrl"
     ];
 
     $ch = curl_init();
@@ -103,7 +102,7 @@ const phpScript = `<?php
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     curl_close($ch);
-    ?>`;
+?>`;
 
 // JavaScript to append to index.html
 const whiteLabelScript = `
