@@ -500,6 +500,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.fetchTemplates(templateType);
                     this.fetchAllCreatedTemplates(templateType);
                 }
+                setTimeout(() => {
+                    if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                        this.purchaseTemplatesList = [
+                            { label: this.commonLocaleData?.app_purchase_bill, value: this.voucherTypeEnum.purchase_bill },
+                            { label: this.commonLocaleData?.app_voucher_types?.purchase_order, value: this.voucherTypeEnum.purchase_order }
+                        ]; 
+                        this.selectedTemplate = this.purchaseTemplatesList[0];
+                    }  else {
+                        this.selectedTemplate = null;
+                    }
+                }, 100);
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                     this.setModuleType();
                 }
@@ -2689,13 +2700,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 { label: this.localeData.tabs.credit_note, value: VoucherTypeEnum.creditNote },
                 { label: this.localeData.tabs.debit_note, value: VoucherTypeEnum.debitNote }
             ];
-            this.purchaseTemplatesList = [
-                { label: this.commonLocaleData?.app_purchase_bill, value: this.voucherTypeEnum.purchase_bill },
-                { label: this.commonLocaleData?.app_voucher_types?.purchase_order, value: this.voucherTypeEnum.purchase_order }
-            ]; 
-            if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-                this.selectedTemplate = this.purchaseTemplatesList[0];
-            } 
         }
     }
 
@@ -3460,7 +3464,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
                 : this.voucherType === VoucherTypeEnum.purchaseOrder ? VoucherTypeEnum.purchase_order : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase_bill : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
         const voucherType = this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher : VoucherTypeEnum.sales;
-        const templatesType = this.urlVoucherType === VoucherTypeEnum.purchase ? this.selectedTemplate.value : templateType;
+        const templatesType = this.urlVoucherType === VoucherTypeEnum.purchase ? this.selectedTemplate?.value : templateType;
         const dataToSend = {
             templateList: this.templatesList,
             voucherType: voucherType,
