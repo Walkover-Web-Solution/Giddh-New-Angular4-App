@@ -49,7 +49,7 @@ const phpScript = `<?php
         $cacheFile = __DIR__ . '/instance-metadata.json';
         $instanceInfo = null;
         if (file_exists($cacheFile)) {
-            $instanceInfo = json_decode(file_get_contents($cacheFile), true);
+            $instanceInfo = file_get_contents($cacheFile);
         }
         if ($instanceInfo === null) {
             $token = @file_get_contents(
