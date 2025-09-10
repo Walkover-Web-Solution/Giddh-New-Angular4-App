@@ -34,7 +34,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { PageEvent } from "@angular/material/paginator";
-import { BranchHierarchyType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { BranchHierarchyType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
@@ -551,16 +551,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public showUnpaidInvoiceList(accountUniqueName: string, range: string): void {
-        this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, {
-            height: '100vh',
-            width: '760px',
-            maxWidth: '65vw',
-            role: 'alertdialog',
-            ariaLabel: 'Unpaid Invoice',
-            position: {
-                right: '0'
-            }
-        });
+        this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, ASIDE_PANE_CONFIG);
         this.unpaidInvoiceData = [];
         this.unpaidInvoicePaginationData = undefined;
         this.getAllInvoices(accountUniqueName, range);

@@ -14,6 +14,7 @@ import { cloneDeep, each, map } from '../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'setting-taxes',
@@ -202,13 +203,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     public openCreateUpdateDialog(tax?: TaxResponse): void {
         this.selectedTax = tax ?? null;
         this.createUpdateDialogRef = this.dialog.open(this.createUpdateDialog, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: 'var(--aside-pane-width)',
-            height: '100vh !important',
-            disableClose: true,
+            ...ASIDE_PANE_CONFIG,
             autoFocus: false
         });
     }

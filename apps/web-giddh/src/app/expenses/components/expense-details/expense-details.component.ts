@@ -19,7 +19,7 @@ import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 import { ServiceConfig } from '../../../services/service.config';
-import { IOption } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
 
 @Component({
     selector: 'app-expense-details',
@@ -452,15 +452,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
-            position: {
-                right: '0'
-            },
-            maxWidth: '760px',
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh'
-        });
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, ASIDE_PANE_CONFIG);
     }
 
     /**

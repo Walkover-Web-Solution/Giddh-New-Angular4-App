@@ -2721,13 +2721,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
             data: voucherType,
-            width: 'var(--aside-pane-width)',
-            height: '70vh',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
+            ...ASIDE_PANE_CONFIG
         });
     }
 
