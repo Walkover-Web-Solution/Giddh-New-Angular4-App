@@ -7,10 +7,9 @@
     border: 4px dashed var(--color-gray);
 }
 
-.template-view {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+.template-view-design {
+    height: 350px;
+    width: 250px;
 }
 
 .beta-img {

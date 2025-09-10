@@ -62,10 +62,10 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
     switch (this.data?.type?.toLowerCase()) {
       case VoucherTypeEnum.sales:
       case VoucherTypeEnum.invoice:
-        templateType = this.data?.localeData?.invoice;
+        templateType = this.data?.commonLocaleData?.app_invoice;
         break;
       case VoucherTypeEnum.voucher:
-        templateType = this.data?.localeData?.voucher;
+        templateType = this.data?.commonLocaleData?.app_voucher;
         break;
       case VoucherTypeEnum.purchase:
       case VoucherTypeEnum.purchase_bill:
@@ -75,7 +75,7 @@ export class TemplatePreviewDialogComponent implements OnInit, OnDestroy {
         templateType = this.data?.localeData?.purchase_order;
         break;
       default:
-        templateType = this.data?.localeData?.invoice;
+        templateType = this.data?.commonLocaleData?.app_invoice;
         break;
     }
     
