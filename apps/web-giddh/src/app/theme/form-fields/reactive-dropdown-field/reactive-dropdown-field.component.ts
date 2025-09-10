@@ -256,7 +256,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.value = '';
         }
         this.onChange(value);
-        
+
         // Also try to set label immediately if options are available
         if (this.options && this.options.length > 0) {
             this.setLabelValue();
@@ -327,7 +327,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         // Check if we have options and a current value
         if (this.options && this.options.length > 0) {
             const currentValue = this.value !== undefined && this.value !== null ? this.value : null;
-            
+
             if (currentValue !== null && currentValue !== '') {
                 const matchedOption = this.options.find(option => option?.value === currentValue);
                 if (matchedOption) {
@@ -358,5 +358,19 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public clearDropdownValue(value: any = { label: "", value: "" }): void {
         this.onClear.emit(value);
+    }
+
+    /**
+     * Callback for translation complete
+     *
+     * @param event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            if (this.showCreateNew && this.createNewText === '') {
+                this.createNewText = this.commonLocaleData?.app_create_new;
+            }
+        }
     }
 }

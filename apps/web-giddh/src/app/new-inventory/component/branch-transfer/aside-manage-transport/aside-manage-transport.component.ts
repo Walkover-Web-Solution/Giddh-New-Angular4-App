@@ -149,7 +149,6 @@ export class AsideManageTransportComponent implements OnInit {
                 this.transporterListDetails = response.body.results;
                 this.transporterObj.totalItems = response.body?.totalItems;
                 this.transporterObj.totalPages = response.body?.totalPages;
-                this.transporterObj.count = response.body?.count;
             } else {
                 this.dataSource = [];
                 this.transporterObj.totalItems = 0;
