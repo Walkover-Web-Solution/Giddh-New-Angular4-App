@@ -1,4 +1,4 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <ng-container *ngIf="showLabel">
         <div [ngClass]="{ 'readonly-field': readonly || disabled, 'dropdown-without-label': !showMatLabel}">
             <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }" (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()">
@@ -33,7 +33,7 @@
                         <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
                             {{ commonLocaleData?.app_no_result_found }}
                         </mat-option>
-                        <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()"
+                        <a href="javascript:;" *ngIf="showCreateNew && createNewText" (click)="createNewRecord()"
                             class="position-sticky create-new-wrapper d-flex justify-content-between px-3 py-2">
                             <div class="item create-new">{{ createNewText }}</div>
                             <div class="item create-new-command" *ngIf="showKeyboardCommand">
