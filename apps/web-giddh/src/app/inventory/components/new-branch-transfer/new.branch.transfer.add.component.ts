@@ -1267,14 +1267,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         document.querySelector("body").classList.add("new-branch-transfer-page");
 
-        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: '760px',
-            height: '100vh !important'
-        });
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
 
         this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
             document.querySelector("body").classList.remove("new-branch-transfer-page");

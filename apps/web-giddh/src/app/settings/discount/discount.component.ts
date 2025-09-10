@@ -10,6 +10,7 @@ import { SettingsDiscountService } from '../../services/settings.discount.servic
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreateDiscountComponent } from '../../theme/create-discount/create-discount.component';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'setting-discount',
@@ -87,13 +88,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
      */
     public openAccountAsidePane(event: any): void {
         if (event) {
-            this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
-                width: 'var(--aside-pane-width)',
-                position: {
-                    right: '0',
-                    top: '0'
-                }
-            });
+            this.createNewAccountDialogRef = this.dialog.open(this.createNew, ASIDE_PANE_CONFIG);
         }
     }
 
@@ -105,12 +100,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public openCreateEditDiscountAsidePane(discountInfo?: CreateDiscountRequest): void {
         this.createUpdateDiscountRef = this.dialog.open(CreateDiscountComponent, {
             data: discountInfo ?? null,
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            position: {
-                right: '0',
-                top: '0'
-            }
+            ...ASIDE_PANE_CONFIG
         });
 
         this.createUpdateDiscountRef.afterClosed().pipe(take(1)).subscribe(response => {

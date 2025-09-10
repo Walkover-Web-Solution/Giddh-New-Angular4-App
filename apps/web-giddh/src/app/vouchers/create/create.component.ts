@@ -3161,13 +3161,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.otherTaxAsideMenuRef = this.dialog.open(OtherTaxComponent, {
+            ...ASIDE_PANE_CONFIG,
             data: {
                 entryIndex: entryIndex,
                 appliedOtherTax: entry.get("otherTax")?.value,
-            },
-            position: {
-                top: "0",
-                right: "0",
             },
         });
 

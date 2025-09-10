@@ -17,7 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { RestrictedModules } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, RestrictedModules } from '../../app.constant';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
@@ -622,13 +622,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
             data: voucherType,
-            width: 'var(--aside-pane-width)',
-            height: '70vh',
-            position: {
-                right: '0',
-                bottom: '0'
-            },
-            disableClose: true
+            ...ASIDE_PANE_CONFIG
         });
     }
 

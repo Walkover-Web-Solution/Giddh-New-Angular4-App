@@ -10,7 +10,7 @@ import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.
 import { ProjectDetails, ProjectRequestType, ProjectStatusType } from '../project-wise-accounting';
 import { GeneralService } from '../../services/general.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { MatSort, Sort } from "@angular/material/sort";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -378,13 +378,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      */
     public openCreateProjectDialog(isCreateFlow: boolean, project: any): void {
         const dialogRef = this.dialog.open(CreateProjectComponent, {
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true,
+            ...ASIDE_PANE_CONFIG,
             data: {
                 isCreateFlow: isCreateFlow,
                 project: {

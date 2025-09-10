@@ -8,7 +8,7 @@ import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
@@ -800,15 +800,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
         this.dialog.open(this.historyAsideDialog, {
             data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData },
-            position: {
-                top: '0',
-                right: '0'
-            },
-            maxWidth: 'var(--aside-pane-width)',
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh',
-            disableClose: true
+            ...ASIDE_PANE_CONFIG
         });
     }
 

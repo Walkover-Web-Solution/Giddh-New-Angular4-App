@@ -200,12 +200,7 @@ export class ActionMenuComponent {
                 activeTab: activeTab,
                 accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
             },
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
+            ...ASIDE_PANE_CONFIG
         });dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.sendEmail.emit(true);
