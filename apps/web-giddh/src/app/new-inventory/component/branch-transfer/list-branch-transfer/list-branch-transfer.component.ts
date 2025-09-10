@@ -332,13 +332,13 @@ export class ListBranchTransferComponent implements OnInit {
         }
         this.changeDetection.detectChanges();
         this.branchTransferGetRequestParams.page = this.branchTransferPaginationObject.page;
+        this.branchTransferGetRequestParams.count = this.branchTransferPaginationObject.count;
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferForm.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response?.status === "success") {
                 this.branchTransferPaginationObject.page = response.body.page;
                 this.branchTransferPaginationObject.totalPages = response.body.totalPages;
                 this.branchTransferPaginationObject.totalItems = response.body.totalItems;
-                this.branchTransferPaginationObject.count = response.body.count;
                 this.branchTransferResponse = response.body?.items;
             } else {
                 this.branchTransferResponse = [];
