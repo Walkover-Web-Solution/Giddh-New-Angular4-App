@@ -10,7 +10,7 @@ import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '.
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
 import { EWayBillComponentStore } from '../eWayBill.store';
-import { IOption, PAGINATION_LIMIT } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -222,15 +222,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public openTransporterModel(): void {
-        this.dialog.open(this.accountAsideMenu, {
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '0',
-                top: '0'
-            },
-            height: '100vh',
-            disableClose: true
-        });
+        this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
     }
 
     /**

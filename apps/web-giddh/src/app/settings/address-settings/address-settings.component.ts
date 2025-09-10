@@ -6,7 +6,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { combineLatest, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { BranchFilterRequest } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
@@ -277,15 +277,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public toggleAccountAsidePane(): void {
         this.isAddressChangeInProgress = false;
         this.isAddressChangeInProgressChange.emit(this.isAddressChangeInProgress);
-        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
-            width: '1000px',
-            height: '100vh !important',
-            disableClose: true,
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, ASIDE_PANE_CONFIG);
     }
 
     /**

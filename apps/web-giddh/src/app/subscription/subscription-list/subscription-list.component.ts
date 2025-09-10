@@ -445,8 +445,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.menu.closeMenu();
         this.dialog.open(TransferDialogComponent, {
             data: subscriptionId,
-            panelClass: 'transfer-popup',
-            width: 'var(--aside-pane-width)',
+            panelClass: ['transfer-popup', 'mat-dialog-md'],
             role: 'alertdialog',
             ariaLabel: 'transferDialog'
         });
@@ -485,7 +484,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.subscriptionMove = true;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
-            width: 'var(--aside-pane-width)',
+            panelClass: 'mat-dialog-md',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
@@ -553,8 +552,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 ok: this.commonLocaleData?.app_proceed,
                 cancel: this.commonLocaleData?.app_cancel
             },
-            panelClass: 'cancel-confirmation-modal',
-            width: 'var(--aside-pane-width)',
+            panelClass: ['cancel-confirmation-modal', 'mat-dialog-md'],
             role: 'alertdialog',
             ariaLabel: 'confirmDialog'
         });
@@ -652,7 +650,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.subscriptionMove = false;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
-            width: 'var(--aside-pane-width)',
+            panelClass: 'mat-dialog-md',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
