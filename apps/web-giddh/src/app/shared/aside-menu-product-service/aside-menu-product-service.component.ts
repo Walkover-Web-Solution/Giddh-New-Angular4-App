@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input, OnDestroy, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnDestroy, OnInit, ChangeDetectorRef, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -10,6 +10,8 @@ import { AppState } from '../../store';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { GeneralService } from '../../services/general.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'aside-menu-product-service',
@@ -22,6 +24,10 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     /* This will hold branch transfer mode input  */
     @Input() public inputData: string = '';
     @Input() public includeSearchedGroup: boolean = false;
+    /** Template reference for aside menu account */
+    @ViewChild("accountTemplate", { static: true }) public accountTemplate: TemplateRef<any>;
+    /** Reference for account aside menu dialog */
+    public accountTemplateRef: MatDialogRef<any>;
     public autoFocusInChild: boolean = true;
     public isAddStockOpen: boolean = false;
     public isAddServiceOpen: boolean = false;
@@ -45,7 +51,8 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private accountsAction: AccountsAction,
         private changeDetectionRef: ChangeDetectorRef,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private dialog: MatDialog
     ) {
     }
 
@@ -73,6 +80,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         this.accountService.CreateAccountV2(item.accountRequest, item.activeGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.successToast(this.commonLocaleData?.app_account_created);
+                this.accountTemplateRef?.close();
                 this.closeAsideEvent.emit();
             } else {
                 this.toasterService.errorToast(response?.message);
@@ -121,6 +129,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         if (this.isAddServiceOpen && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
+                    this.accountTemplateRef?.close();
                     this.stockType = '';
                     this.hideFirstStep = false;
                     this.isAddStockOpen = false;
@@ -129,6 +138,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
+            this.accountTemplateRef?.close();
             this.stockType = '';
             this.hideFirstStep = false;
             this.isAddStockOpen = false;
@@ -146,6 +156,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         if (this.isAddServiceOpen && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
+                    this.accountTemplateRef?.close();
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                     this.stockType = '';
                     this.hideFirstStep = false;
@@ -155,6 +166,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
+            this.accountTemplateRef?.close();
             this.stockType = '';
             this.hideFirstStep = false;
             this.isAddStockOpen = false;
@@ -171,5 +183,10 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         this.hideFirstStep = true;
         this.isAddStockOpen = false;
         this.isAddServiceOpen = !this.isAddServiceOpen;
+        this.accountTemplateRef = this.dialog.open(this.accountTemplate,
+            {
+                ...ASIDE_PANE_CONFIG,
+                hasBackdrop: false
+            });
     }
 }
