@@ -11,7 +11,7 @@ import { TaxResponse } from '../models/api-models/Company';
 import { DaybookQueryRequest, DayBookRequestModel, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../services/general.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -692,14 +692,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
-            position: {
-                right: '0',
-                top: '0',
-            },
-            width: '760px',
-            disableClose: true
-        });
+        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
         this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
