@@ -2276,6 +2276,7 @@
                                         <reactive-dropdown-field
                                             (createOption)="toggleTransporterModel()"
                                             [showCreateNew]="true"
+                                            [createNewText]="commonLocaleData?.app_create_new"
                                             [name]="'transporterCompany'"
                                             [placeholder]="localeData?.transport_company"
                                             [options]="transporterDropdown"

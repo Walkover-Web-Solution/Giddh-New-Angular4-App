@@ -71,7 +71,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     /** True if creating account from cmd+k */
     @Input() public allGroups: boolean;
     /** True if back button is visible */
-    @Input() public backButtonVisible: boolean = true;
+    @Input() public backButtonVisible: boolean = false;
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */

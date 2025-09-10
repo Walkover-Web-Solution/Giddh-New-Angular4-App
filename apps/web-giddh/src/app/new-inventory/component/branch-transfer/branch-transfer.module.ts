@@ -26,6 +26,7 @@ import { AsideManageTransportComponent } from './aside-manage-transport/aside-ma
 import { AsideMenuProductServiceModule } from '../../../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { CreateBranchTransferComponent } from './create-branch-transfer/create-branch-transfer.component';
 import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-transfer.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
     imports: [
         CommonModule,
@@ -51,7 +52,8 @@ import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-
         MatSortModule,
         ReactiveFormsModule,
         TranslateDirectiveModule,
-        AsideMenuProductServiceModule
+        AsideMenuProductServiceModule,
+        MatPaginatorModule
     ],
     exports: [
         AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent
