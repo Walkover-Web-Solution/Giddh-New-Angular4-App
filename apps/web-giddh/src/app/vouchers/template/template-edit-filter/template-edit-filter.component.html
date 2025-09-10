@@ -13,7 +13,7 @@
                         [placeholder]="localeData?.enter_template_name"
                         [name]="'fieldName'"
                         [(ngModel)]="customTemplate.name"
-                        (ngModelChange)="onValueChange(null, null)"
+                        (ngModelChange)="onChangeFieldVisibility()"
                         [label]="localeData?.template_name"
                         [maxlength]="'18'"
                         [autocomplete]="'off'"
@@ -123,7 +123,7 @@
                                                     [color]="defaultImageSize === size?.label ? 'primary' : ''"
                                                     (click)="
                                                         defaultImageSize = size?.label;
-                                                        onValueChange('logoSize', size.value)
+                                                        onChangeFieldVisibility()
                                                     "
                                                 >
                                                     <span>{{ size.label }}</span>
@@ -241,7 +241,7 @@
                                         [customDecimalPlaces]="1"
                                         [(ngModel)]="customTemplate.topMargin"
                                         (keyup)="
-                                            onValueChange(null, null);
+                                            onChangeFieldVisibility();
                                             validatePrintSetting(customTemplate?.topMargin, 0, 'topMargin')
                                         "
                                         [type]="'number'"
@@ -255,7 +255,7 @@
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
                                         (keyup)="
-                                            onValueChange(null, null);
+                                            onChangeFieldVisibility();
                                             validatePrintSetting(customTemplate?.leftMargin, 0, 'leftMargin')
                                         "
                                         [(ngModel)]="customTemplate.leftMargin"
@@ -270,7 +270,7 @@
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
                                         (keyup)="
-                                            onValueChange(null, null);
+                                            onChangeFieldVisibility();
                                             validatePrintSetting(customTemplate?.bottomMargin, 0, 'bottomMargin')
                                         "
                                         [(ngModel)]="customTemplate.bottomMargin"
@@ -285,7 +285,7 @@
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
                                         (keyup)="
-                                            onValueChange(null, null);
+                                            onChangeFieldVisibility();
                                             validatePrintSetting(customTemplate?.rightMargin, 0, 'rightMargin')
                                         "
                                         [(ngModel)]="customTemplate.rightMargin"
@@ -2816,7 +2816,7 @@
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
-                                                            (ngModelChange)="onValueChange('qrCodeId', $event)"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [pattern]="
                                                                 '^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'
                                                             "
@@ -3457,7 +3457,7 @@
                                                             value="2"
                                                             class="d-block w-100"
                                                             name="tax-rate"
-                                                            (ngModelChange)="onValueChange('taxBifurcation', $event)"
+                                                            (ngModelChange)="onChangeFieldVisibility"
                                                             (change)="checkedTaxBifurcation('hsnSac', 'footer')"
                                                             [checked]="
                                                                 customTemplate.sections['footer'].data['taxBifurcation']
