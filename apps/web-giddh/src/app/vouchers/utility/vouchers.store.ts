@@ -1054,7 +1054,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
                                 this.patchState({
                                     bulkExportVoucherInProgress: false,
-                                    bulkExportVoucherResponse: res.body
+                                    bulkExportVoucherResponse: res
                                 });
                             } else {
                                 this.toaster.showSnackBar("error", res.message);

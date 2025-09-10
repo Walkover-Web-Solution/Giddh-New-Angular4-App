@@ -1376,8 +1376,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
-
-        if (!this.removePromoCode) {
+        if (!this.removePromoCode && !this.thirdStepForm.get('paymentProvider')?.value) {
             // Clear the payment provider initially
             this.thirdStepForm.get('paymentProvider')?.patchValue(null);
         }
