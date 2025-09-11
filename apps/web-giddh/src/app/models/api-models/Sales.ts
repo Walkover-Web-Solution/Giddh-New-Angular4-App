@@ -10,22 +10,39 @@ import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { ITaxControlData } from '../interfaces/tax.interface';
 
+
 export enum VoucherTypeEnum {
-    'sales' = 'sales',
-    'purchase' = 'purchase',
-    'purchaseOrder' = 'purchase-order',
-    'debitNote' = 'debit note',
-    'creditNote' = 'credit note',
-    'proforma' = 'proforma',
-    'generateProforma' = 'proformas',
-    'estimate' = 'estimate',
-    'generateEstimate' = 'estimates',
-    'cash' = 'cash',
-    'receipt' = 'receipt',
-    'payment' = 'payment',
-    'cashDebitNote' = 'cash debit note',
-    'cashCreditNote' = 'cash credit note',
-    'cashBill' = 'cash bill'
+    sales = 'sales',
+    purchase = 'purchase',
+    debitNote = 'debit note',
+    creditNote = 'credit note',
+    proforma = 'proforma',
+    generateProforma = 'proformas',
+    estimate = 'estimate',
+    generateEstimate = 'estimates',
+    cash = 'cash',
+    receipt = 'receipt',
+    payment = 'payment',
+    cashDebitNote = 'cash debit note',
+    cashCreditNote = 'cash credit note',
+    cashBill = 'cash bill',
+    purchaseOrder = 'purchase-order',
+    invoice = 'invoice',
+    voucher = 'voucher',
+    purchase_bill = 'purchase_bill',
+    purchase_order = 'purchase_order'
+};
+
+export enum TemplateTypeEnum {
+    GstTemplateA = 'gst_template_a',
+    TallyTemplate = 'tally_template',
+    ThermalTemplate = 'thermal_template'
+}
+
+export enum TemplateModeEnum {
+    Create = 'create',
+    Edit = 'edit',
+    Update = 'update'
 }
 
 export enum ActionTypeAfterVoucherGenerateOrUpdate {

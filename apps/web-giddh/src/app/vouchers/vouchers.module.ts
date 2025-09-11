@@ -44,16 +44,12 @@ import { VoucherNameModule } from "./utility/pipe/voucher-name/voucher-name.modu
 import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-copy-link.module";
 import { TaxDropdownModule } from "../theme/tax-dropdown/tax-dropdown.module";
 import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-dropdown.module";
-import { GstTemplateAComponent } from "./template/gst-template-a/gst-template-a.component";
 import { TemplatePreviewDialogComponent } from "./template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edit-dialog.component";
 import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
 import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-account/generic.aside.menu.account.module";
 import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
-import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MatBadgeModule } from '@angular/material/badge';
-import { DesignFilterComponent } from "./template/design-filter/design-filter.component";
-import { ContentFilterComponent } from "./template/content-filter/content-filter.component";
 import { CreateDiscountModule } from "../theme/create-discount/create-discount.module";
 import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-menu-create-tax.module";
 import { ConvertBillDialogComponent } from "./convert-bill-dialog/convert-bill-dialog.component";
@@ -81,7 +77,6 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-setting.module";
 import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module";
 import { InvoiceGenerateModule } from "../invoice/generate/invoice-generate.module";
-import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.module";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
 import { CancelEInvoiceDialogComponent } from "./cancel-einvoice-dialog/cancel-einvoice-dialog.component";
@@ -96,6 +91,8 @@ import { SelectTableColumnModule } from "../shared/select-table-column/select-ta
 import { SalesPersonService } from "../shared/sales-person/utility/sales-person.service";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { TributeMentionModule } from "../shared/helpers/directives/tributeMention/tributeMention.module";
+import { AllTemplatesComponent } from "./template/all-templates/all-templates.component";
+import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 
 @NgModule({
     declarations: [
@@ -110,17 +107,15 @@ import { TributeMentionModule } from "../shared/helpers/directives/tributeMentio
         BulkUpdateComponent,
         HistoryDialogComponent,
         EmailSendDialogComponent,
-        GstTemplateAComponent,
         TemplatePreviewDialogComponent,
         TemplateEditDialogComponent,
         PrintVoucherComponent,
         TemplateEditFilterComponent,
-        DesignFilterComponent,
-        ContentFilterComponent,
         ConvertBillDialogComponent,
         FullAddressComponent,
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
+        AllTemplatesComponent,
     ],
     imports: [
         CommonModule,
@@ -187,7 +182,6 @@ import { TributeMentionModule } from "../shared/helpers/directives/tributeMentio
         PurchaseSettingModule,
         InvoiceSettingModule,
         InvoiceGenerateModule,
-        InvoiceTemplatesModule,
         CdkScrollModule,
         TrimPipeModule,
         A11yModule,
@@ -196,10 +190,12 @@ import { TributeMentionModule } from "../shared/helpers/directives/tributeMentio
         SubscriptionUpgradeButtonModule,
         SelectTableColumnModule,
         MatButtonToggleModule,
+        MatProgressSpinnerModule,
         TributeMentionModule
     ],
     exports: [
-VoucherCreateComponent
+        VoucherCreateComponent,
+        AllTemplatesComponent,
     ],
     providers: [TitleCasePipe, InvoiceUiDataService, SalesPersonService]
 })
