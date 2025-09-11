@@ -536,6 +536,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.stockReportRequestExport.expression = response.stockReportRequestExport?.expression;
                 this.stockReportRequestExport.val = response.stockReportRequestExport?.val;
 
+                this.selectedDateRange = { startDate: dayjs(response.stockReportRequest?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response.stockReportRequest?.toDate, GIDDH_DATE_FORMAT) };
+                this.selectedDateRangeUi = dayjs(response.stockReportRequest?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.stockReportRequest?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+
                 this.stockReportRequest.page = 1;
                 this.showAdvanceSearchModal = true;
                 this.isFilterActive();
