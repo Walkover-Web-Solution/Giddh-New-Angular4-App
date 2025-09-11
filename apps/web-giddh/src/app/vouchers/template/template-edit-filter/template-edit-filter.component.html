@@ -98,7 +98,7 @@
                                         </label>
                                     </span>
                                     <span
-                                        class="start-upload-btn floar-right mr-l2 position-relative"
+                                        class="start-upload-btn float-right mr-l2 position-relative"
                                         *ngIf="isFileUploadInProgress"
                                         ><b>{{ localeData?.uploading }}</b></span
                                     >
@@ -129,16 +129,6 @@
                                                     <span>{{ size.label }}</span>
                                                 </button>
                                             </div>
-                                        </div>
-                                        <div class="d-block mr-t1">
-                                            <a
-                                                class="primary-color cursor-pointer"
-                                                [hidden]="!logoAttached"
-                                                (click)="toogleLogoVisibility()"
-                                                ><span [hidden]="showLogo">{{ localeData?.show }}</span
-                                                ><span [hidden]="!showLogo">{{ localeData?.hide }}</span
-                                                >{{ localeData?.logo }}</a
-                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -3833,15 +3823,15 @@
                                                 *ngIf="
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
-                                                class="clearfix mr-t1 row"
+                                                class="clearfix mr-t1"
                                             >
                                                 <mat-radio-group
                                                     [(ngModel)]="selectedSignatureType"
                                                     (ngModelChange)="onSignatureTypeChange($event)"
-                                                    class="d-flex flex-wrap"
+                                                    class="d-flex flex-wrap w-100"
                                                 >
-                                                    <div class="d-flex">
-                                                        <div class="clearfix" class="col-lg-6 col-md-12">
+                                                    <div class="d-flex w-100">
+                                                        <div class="clearfix" class="w-50">
                                                             <div
                                                                 *ngIf="
                                                                     customTemplate?.templateType !==
@@ -3863,7 +3853,7 @@
                                                             >
                                                                 {{ localeData?.image_signature }}
                                                             </div>
-                                                            <div class="form-group mr-l3 clearfix">
+                                                            <div class="form-group mr-l3 clearfix d-flex column-gap15">
                                                                 <span class="clearfix">
                                                                     <label
                                                                         class="upload-button text-center cursor-pointer"
@@ -3876,6 +3866,9 @@
                                                                                 customTemplate.sections.footer.data
                                                                                     .slogan.display
                                                                             "
+                                                                            [ngClass]="{
+                                                                                'cursor-disable': !customTemplate.sections.footer.data.slogan.display
+                                                                            }"
                                                                             accept="image/png, image/jpeg"
                                                                             id="signatureImg-edit"
                                                                             (change)="uploadImage()"
@@ -3943,6 +3936,7 @@
                                                                                         .imageSignature.display
                                                                                 "
                                                                                 name="slogan"
+                                                                                rows="3"
                                                                                 [(ngModel)]="
                                                                                     customTemplate.sections['footer']
                                                                                         .data['slogan'].label
