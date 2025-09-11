@@ -1,358 +1,341 @@
-<div class="modal-header d-flex align-items-center">
-    <h4 class="modal-title pull-left">{{ commonLocaleData?.app_payment }}</h4>
-    <button
-        mat-icon-button
-        type="button"
-        class="close"
-        [attr.aria-label]="commonLocaleData?.app_close"
-        (click)="closePaymentModel(false)"
-        mat-dialog-close
-        aria-label="close"
-    >
-        <span aria-hidden="true">&times;</span>
+<div class="dialog-header">
+    <span mat-dialog-title>{{ commonLocaleData?.app_payment }}</span>
+    <button mat-icon-button aria-label="close" (click)="closePaymentModel(false)">
+        <i class="icon-cross"></i>
     </button>
 </div>
-<mat-dialog-content class="all-payment-side w-100">
-    <div class="clearfix">
-        <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
-            <div class="row d-flex align-items-center payment-top-form">
-                <div class="col-sm-12">
-                    <div class="d-flex mb-1" *ngIf="selectedAccForBulkPayment?.length > 1">
-                        <span class="red-text font-14">{{ localeData?.bulk_payment_warning }}</span>
-                    </div>
-                    <div class="d-flex mr-b1">
-                        <div class="form-group mr-r15 select-bank" *ngIf="selectIntegratedBankList?.length !== 1">
-                            <label>{{ localeData?.select_bank }}<span class="red-text">*</span></label>
-                            <div class="relative">
-                                <img
-                                    *ngIf="isGetAllIntegratedBankInProgress$ | async"
-                                    class="dropdown-loader"
-                                    src="{{ imgPath }}loader.gif"
-                                    alt=""
-                                />
-                                <reactive-dropdown-field
-                                    [options]="selectIntegratedBankList"
-                                    [disabled]="isPayClicked"
-                                    #selectBankEle
-                                    [labelValue]="selectedBankName"
-                                    [enableDynamicSearch]="true"
-                                    class="text-left"
-                                    [(ngModel)]="selectedBankUniqueName"
-                                    [name]="'selectedBankUniqueName'"
-                                    [required]="true"
-                                    [placeholder]="localeData?.select_bank"
-                                    (selectedOption)="selectBank($event)"
-                                >
-                                    <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" class="list-item">
-                                            <div class="item">{{ option?.label }}</div>
-                                            <div class="item-unique">
-                                                <p class="font-12 text-gray mb-0">
-                                                    A/c No.:
-                                                    {{ option?.additional?.accountNo }}
-                                                </p>
-                                            </div>
-                                            <div class="item-unique">
-                                                <p class="font-12 text-gray mb-0">
-                                                    Clo Bal:
-                                                    {{ option?.additional?.effectiveBal | giddhCurrency }} dr.
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </ng-template>
-                                </reactive-dropdown-field>
-                            </div>
-                            <div>
-                                <p *ngIf="totalAvailableBalance" class="total-balance">
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        id="total-balance-id"
-                                        [(ngModel)]="showBankBalance"
-                                        name="showBankBalance"
-                                    >
-                                        <span *ngIf="showBankBalance" class="pull-left">{{
-                                            localeData?.hide_bank_balance
-                                        }}</span>
-                                        <span *ngIf="!showBankBalance" class="pull-right">{{
-                                            localeData?.show_bank_balance
-                                        }}</span>
-                                    </mat-slide-toggle>
-                                </p>
-                                  <p *ngIf="totalAvailableBalance && showBankBalance" class="mr-t05">
-                                    <small class="text-gray"
-                                        >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
-                                        {{ commonLocaleData?.app_dr }}</small
-                                    >
-                                </p>
-                            </div>
+<mat-dialog-content class="dialog-body">
+    <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
+        <div class="row d-flex align-items-center payment-top-form">
+            <div class="col-sm-12">
+                <div class="d-flex mb-1" *ngIf="selectedAccForBulkPayment?.length > 1">
+                    <span class="red-text font-14">{{ localeData?.bulk_payment_warning }}</span>
+                </div>
+                <div class="d-flex mr-b1">
+                    <div class="form-group mr-r15 select-bank" *ngIf="selectIntegratedBankList?.length !== 1">
+                        <label>{{ localeData?.select_bank }}<span class="red-text">*</span></label>
+                        <div class="relative">
+                            <img
+                                *ngIf="isGetAllIntegratedBankInProgress$ | async"
+                                class="dropdown-loader"
+                                src="{{ imgPath }}loader.gif"
+                                alt=""
+                            />
+                            <reactive-dropdown-field
+                                [options]="selectIntegratedBankList"
+                                [disabled]="isPayClicked"
+                                #selectBankEle
+                                [labelValue]="selectedBankName"
+                                [enableDynamicSearch]="true"
+                                class="text-left"
+                                [(ngModel)]="selectedBankUniqueName"
+                                [name]="'selectedBankUniqueName'"
+                                [required]="true"
+                                [placeholder]="localeData?.select_bank"
+                                (selectedOption)="selectBank($event)"
+                            >
+                                <ng-template #optionTemplate let-option="option">
+                                    <a href="javascript:void(0)" class="list-item">
+                                        <div class="item">{{ option?.label }}</div>
+                                        <div class="item-unique">
+                                            <p class="font-12 text-gray mb-0">
+                                                A/c No.:
+                                                {{ option?.additional?.accountNo }}
+                                            </p>
+                                        </div>
+                                        <div class="item-unique">
+                                            <p class="font-12 text-gray mb-0">
+                                                Clo Bal:
+                                                {{ option?.additional?.effectiveBal | giddhCurrency }} dr.
+                                            </p>
+                                        </div>
+                                    </a>
+                                </ng-template>
+                            </reactive-dropdown-field>
                         </div>
-                        <div class="form-group mr-r15">
-                            <label>{{ localeData?.select_payor }}<span class="red-text">*</span></label>
-                            <div class="relative">
-                                <img
-                                    *ngIf="isPayorListInProgress"
-                                    class="dropdown-loader"
-                                    src="{{ imgPath }}loader.gif"
-                                    alt=""
-                                />
-                                <reactive-dropdown-field
-                                    [disabled]="isPayClicked"
-                                    [required]="isPayorRequired"
-                                    [placeholder]="localeData?.select_payor"
-                                    [options]="payorsList"
-                                    (selectedOption)="selectPayor($event)"
-                                    [name]="'bankUserId'"
-                                ></reactive-dropdown-field>
-                            </div>
-                            <div>
-                                <p
-                                    *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance"
-                                    class="total-balance"
+                        <div>
+                            <p *ngIf="totalAvailableBalance" class="total-balance">
+                                <mat-slide-toggle
+                                    color="primary"
+                                    id="total-balance-id"
+                                    [(ngModel)]="showBankBalance"
+                                    name="showBankBalance"
                                 >
-                                    <mat-slide-toggle
-                                        color="primary"
-                                        id="total-balance-single"
-                                        [(ngModel)]="showBankBalance"
-                                        name="showSingleBankBalance"
-                                    >
                                     <span *ngIf="showBankBalance" class="pull-left">{{
                                         localeData?.hide_bank_balance
                                     }}</span>
                                     <span *ngIf="!showBankBalance" class="pull-right">{{
                                         localeData?.show_bank_balance
                                     }}</span>
-                                    </mat-slide-toggle>
-                                </p>
-                                <p *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance && showBankBalance" class="mr-t05">
-                                    <small class="text-gray"
-                                        >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
-                                        {{ commonLocaleData?.app_dr }}</small
-                                    >
-                                </p>
-                            </div>
-                        </div>
-                        <div class="form-group mr-r15">
-                            <label>{{ commonLocaleData?.app_total_amount }}<span class="red-text">*</span></label>
-                            <text-field
-                                type="text"
-                                [cssClass]="'form-control mat-field-border'"
-                                decimalDigitsDirective
-                                [readonly]="true"
-                                [mask]="inputMaskFormat"
-                                [(ngModel)]="totalSelectedAccountAmount"
-                                name="amount"
-                            ></text-field>
-                        </div>
-                        <div class="form-group mr-r15" *ngIf="isPayClicked">
-                            <label class="relative d-flex"
-                                >{{ commonLocaleData?.app_enter_otp }}<span class="red-text">*</span>
-                                <p class="resend-btn" *ngIf="!timerOn">
-                                    <a href="javascript:void(0);" (click)="reSendOTP()" class="btn-link">{{
-                                        commonLocaleData?.app_resend
-                                    }}</a>
-                                </p>
-                                <p class="resend-btn timer-count" *ngIf="timerOn">
-                                    <a href="javascript:void(0);" class="btn-link">{{ timerCountDown$ | async }}</a>
-                                </p>
-                            </label>
-                            <text-field
-                                type="text"
-                                [cssClass]="'form-control mat-field-border'"
-                                [placeholder]="commonLocaleData?.app_enter_otp"
-                                required
-                                name="receivedOtp"
-                                (keypress)="allowOnlyNumbers($event)"
-                                [(ngModel)]="receivedOtp"
-                            ></text-field>
-                        </div>
-                        <div class="form-group mr-r15 d-flex column-gap15 confirm-btn" *ngIf="!isPayClicked">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                type="button"
-                                [ngClass]="{
-                                    'disabled-ladda-btn':
-                                        !isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData
-                                }"
-                                [disabled]="!isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData"
-                                [ladda]="isRequestInProcess"
-                                (click)="payClicked()"
-                                class="pay-btn"
-                                aria-label="pay"
-                            >
-                                {{ commonLocaleData?.app_pay }}
-                            </button>
+                                </mat-slide-toggle>
+                            </p>
+                                <p *ngIf="totalAvailableBalance && showBankBalance" class="mr-t05">
+                                <small class="text-gray"
+                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
+                                    {{ commonLocaleData?.app_dr }}</small
+                                >
+                            </p>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="isPayClicked">
-                        <div class="mr-t1 d-flex column-gap15">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                [ngClass]="{
-                                    'disabled-ladda-btn':
-                                        !isBankSelectedForBulkPayment ||
-                                        !selectedBankUserId ||
-                                        !isValidData ||
-                                        !receivedOtp
-                                }"
-                                [disabled]="
+                    <div class="form-group mr-r15">
+                        <label>{{ localeData?.select_payor }}<span class="red-text">*</span></label>
+                        <div class="relative">
+                            <img
+                                *ngIf="isPayorListInProgress"
+                                class="dropdown-loader"
+                                src="{{ imgPath }}loader.gif"
+                                alt=""
+                            />
+                            <reactive-dropdown-field
+                                [disabled]="isPayClicked"
+                                [required]="isPayorRequired"
+                                [placeholder]="localeData?.select_payor"
+                                [options]="payorsList"
+                                (selectedOption)="selectPayor($event)"
+                                [name]="'bankUserId'"
+                            ></reactive-dropdown-field>
+                        </div>
+                        <div>
+                            <p
+                                *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance"
+                                class="total-balance"
+                            >
+                                <mat-slide-toggle
+                                    color="primary"
+                                    id="total-balance-single"
+                                    [(ngModel)]="showBankBalance"
+                                    name="showSingleBankBalance"
+                                >
+                                <span *ngIf="showBankBalance" class="pull-left">{{
+                                    localeData?.hide_bank_balance
+                                }}</span>
+                                <span *ngIf="!showBankBalance" class="pull-right">{{
+                                    localeData?.show_bank_balance
+                                }}</span>
+                                </mat-slide-toggle>
+                            </p>
+                            <p *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance && showBankBalance" class="mr-t05">
+                                <small class="text-gray"
+                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
+                                    {{ commonLocaleData?.app_dr }}</small
+                                >
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group mr-r15">
+                        <label>{{ commonLocaleData?.app_total_amount }}<span class="red-text">*</span></label>
+                        <text-field
+                            type="text"
+                            [cssClass]="'form-control mat-field-border'"
+                            decimalDigitsDirective
+                            [readonly]="true"
+                            [mask]="inputMaskFormat"
+                            [(ngModel)]="totalSelectedAccountAmount"
+                            name="amount"
+                        ></text-field>
+                    </div>
+                    <div class="form-group mr-r15" *ngIf="isPayClicked">
+                        <label class="relative d-flex"
+                            >{{ commonLocaleData?.app_enter_otp }}<span class="red-text">*</span>
+                            <p class="resend-btn" *ngIf="!timerOn">
+                                <a href="javascript:void(0);" (click)="reSendOTP()" class="btn-link">{{
+                                    commonLocaleData?.app_resend
+                                }}</a>
+                            </p>
+                            <p class="resend-btn timer-count" *ngIf="timerOn">
+                                <a href="javascript:void(0);" class="btn-link">{{ timerCountDown$ | async }}</a>
+                            </p>
+                        </label>
+                        <text-field
+                            type="text"
+                            [cssClass]="'form-control mat-field-border'"
+                            [placeholder]="commonLocaleData?.app_enter_otp"
+                            required
+                            name="receivedOtp"
+                            (keypress)="allowOnlyNumbers($event)"
+                            [(ngModel)]="receivedOtp"
+                        ></text-field>
+                    </div>
+                    <div class="form-group mr-r15 d-flex column-gap15 confirm-btn" *ngIf="!isPayClicked">
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="button"
+                            [ngClass]="{
+                                'disabled-ladda-btn':
+                                    !isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData
+                            }"
+                            [disabled]="!isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData"
+                            [ladda]="isRequestInProcess"
+                            (click)="payClicked()"
+                            class="pay-btn"
+                            aria-label="pay"
+                        >
+                            {{ commonLocaleData?.app_pay }}
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group" *ngIf="isPayClicked">
+                    <div class="mr-t1 d-flex column-gap15">
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            [ngClass]="{
+                                'disabled-ladda-btn':
                                     !isBankSelectedForBulkPayment ||
                                     !selectedBankUserId ||
                                     !isValidData ||
                                     !receivedOtp
-                                "
-                                [ladda]="isRequestInProcess"
-                                (click)="confirmOTP()"
-                                aria-label="confirm"
-                            >
-                                {{ commonLocaleData?.app_confirm }}
-                            </button>
-                            <button
-                                mat-stroked-button
-                                color="primary"
-                                type="button"
-                                (click)="clickedCancelOtp()"
-                                aria-label="cancel"
-                            >
-                                {{ commonLocaleData?.app_cancel }}
-                            </button>
-                        </div>
+                            }"
+                            [disabled]="
+                                !isBankSelectedForBulkPayment ||
+                                !selectedBankUserId ||
+                                !isValidData ||
+                                !receivedOtp
+                            "
+                            [ladda]="isRequestInProcess"
+                            (click)="confirmOTP()"
+                            aria-label="confirm"
+                        >
+                            {{ commonLocaleData?.app_confirm }}
+                        </button>
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            type="button"
+                            (click)="clickedCancelOtp()"
+                            aria-label="cancel"
+                        >
+                            {{ commonLocaleData?.app_cancel }}
+                        </button>
                     </div>
                 </div>
-                <div class="col-sm-12" *ngIf="otpReceiverNameMessage">
-                    <p class="otp-success-msg mr-t05">
-                        <span class="mr-1 d-inline-block"> <img src="{{ imgPath }}checked-success.svg" /> </span
-                        >{{ otpReceiverNameMessage }}
-                    </p>
-                </div>
             </div>
-            <div class="selected-bank-details">
-                <!-- loop should in below div -->
-                <ng-container
-                    *ngFor="
-                        let item of selectedAccForBulkPayment;
-                        let entryIdx = index;
-                        let first = first;
-                        let last = last
-                    "
-                >
-                    <div class="mb-2">
-                        <div class="account-holder-name">
-                            <p>{{ item.name }}</p>
-                            <p class="due-amount hidden-xs">
-                                {{ localeData?.due }}:{{ item.totalDueAmount | giddhCurrency }}
-                                <span
-                                    class="red-text cursor-pointer"
-                                    *ngIf="selectedAccForBulkPayment?.length > 1"
-                                    (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"
-                                    ><i class="icon-trash mr-r05"></i>{{ commonLocaleData?.app_remove }}</span
-                                >
-                            </p>
-                        </div>
-                        <div class="bank-details-wrapper">
-                            <div class="readonly-bank-details">
-                                <div class="label-value-data">
-                                    <label>{{ commonLocaleData?.app_bank_name }}</label>
-                                    <label>{{ item?.accountBankDetails?.bankName }}</label>
+            <div class="col-sm-12" *ngIf="otpReceiverNameMessage">
+                <p class="otp-success-msg mr-t05">
+                    <span class="mr-1 d-inline-block"> <img src="{{ imgPath }}checked-success.svg" /> </span
+                    >{{ otpReceiverNameMessage }}
+                </p>
+            </div>
+        </div>
+        <div class="selected-bank-details">
+            <!-- loop should in below div -->
+            <ng-container
+                *ngFor="
+                    let item of selectedAccForBulkPayment;
+                    let entryIdx = index;
+                    let first = first;
+                    let last = last
+                "
+            >
+                <div class="mb-2">
+                    <div class="account-holder-name">
+                        <p>{{ item.name }}</p>
+                        <p class="due-amount hidden-xs">
+                            {{ localeData?.due }}:{{ item.totalDueAmount | giddhCurrency }}
+                            <span
+                                class="red-text cursor-pointer"
+                                *ngIf="selectedAccForBulkPayment?.length > 1"
+                                (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"
+                                ><i class="icon-trash mr-r05"></i>{{ commonLocaleData?.app_remove }}</span
+                            >
+                        </p>
+                    </div>
+                    <div class="bank-details-wrapper">
+                        <div class="readonly-bank-details">
+                            <div class="label-value-data">
+                                <label>{{ commonLocaleData?.app_bank_name }}</label>
+                                <label>{{ item?.accountBankDetails?.bankName }}</label>
+                            </div>
+                            <div class="label-value-data d-flex">
+                                <div class="mr-1">
+                                    <label *ngIf="item.country.code === 'IN'"
+                                        >{{ localeData?.account_number }}:</label
+                                    >
+                                    <label *ngIf="item.country.code !== 'IN'">{{
+                                        commonLocaleData?.app_iban
+                                    }}</label>
+                                    <label>{{ item?.accountBankDetails?.bankAccountNo }}</label>
                                 </div>
-                                <div class="label-value-data d-flex">
-                                    <div class="mr-1">
-                                        <label *ngIf="item.country.code === 'IN'"
-                                            >{{ localeData?.account_number }}:</label
-                                        >
-                                        <label *ngIf="item.country.code !== 'IN'">{{
-                                            commonLocaleData?.app_iban
-                                        }}</label>
-                                        <label>{{ item?.accountBankDetails?.bankAccountNo }}</label>
-                                    </div>
-                                    <div *ngIf="item.country.code !== 'IN'">
-                                        <label>{{ commonLocaleData?.app_swift_code }}</label>
-                                        <label>{{ item?.accountBankDetails?.swiftCode }}</label>
-                                    </div>
-                                    <div *ngIf="item.country.code === 'IN'">
-                                        <label>{{ commonLocaleData?.app_ifsc_code }}:</label>
-                                        <label>{{ item?.accountBankDetails?.ifsc }}</label>
-                                    </div>
+                                <div *ngIf="item.country.code !== 'IN'">
+                                    <label>{{ commonLocaleData?.app_swift_code }}</label>
+                                    <label>{{ item?.accountBankDetails?.swiftCode }}</label>
+                                </div>
+                                <div *ngIf="item.country.code === 'IN'">
+                                    <label>{{ commonLocaleData?.app_ifsc_code }}:</label>
+                                    <label>{{ item?.accountBankDetails?.ifsc }}</label>
                                 </div>
                             </div>
-                            <div class="amount-remark-section">
-                                <div class="d-flex flex-column flex-md-row">
-                                    <div class="form-group pd-r15">
-                                        <label
-                                            >{{ commonLocaleData?.app_amount }}<span class="text-danger">*</span></label
-                                        >
-                                        <div class="input-content">
-                                            <text-field
-                                                [cssClass]="'form-control amount-input mat-field-border'"
-                                                name="closingBalanceAmount{{ entryIdx }}"
-                                                maxLength="12"
-                                                decimalDigitsDirective
-                                                (change)="
-                                                    getTotalAmount();
-                                                    getBankAccountPayorsList();
-                                                    preventZero(item.closingBalanceAmount, entryIdx)
-                                                "
-                                                [mask]="inputMaskFormat"
-                                                [(ngModel)]="item.closingBalanceAmount"
-                                                type="text"
-                                                [required]="!isPayClicked"
-                                                [readonly]="isPayClicked"
-                                                [showError]="!item.closingBalanceAmount"
-                                            ></text-field>
-                                        </div>
-                                    </div>
-                                    <div class="form-group remark-block">
-                                        <label
-                                            >{{ commonLocaleData?.app_remark }}<span class="text-danger">*</span></label
-                                        >
-                                        <textarea
-                                            matInput
-                                            rows="1"
-                                            name="remark{{ entryIdx }}"
-                                            id="{{ entryIdx }}"
-                                            (blur)="getTotalAmount()"
-                                            [(ngModel)]="item.remarks"
-                                            autocomplete="off"
-                                            required
+                        </div>
+                        <div class="amount-remark-section">
+                            <div class="d-flex flex-column flex-md-row">
+                                <div class="form-group pd-r15">
+                                    <label
+                                        >{{ commonLocaleData?.app_amount }}<span class="text-danger">*</span></label
+                                    >
+                                    <div class="input-content">
+                                        <text-field
+                                            [cssClass]="'form-control amount-input mat-field-border'"
+                                            name="closingBalanceAmount{{ entryIdx }}"
+                                            maxLength="12"
+                                            decimalDigitsDirective
+                                            (change)="
+                                                getTotalAmount();
+                                                getBankAccountPayorsList();
+                                                preventZero(item.closingBalanceAmount, entryIdx)
+                                            "
+                                            [mask]="inputMaskFormat"
+                                            [(ngModel)]="item.closingBalanceAmount"
                                             type="text"
-                                            class="form-control mat-field-border"
-                                            [disabled]="isPayClicked"
-                                            [placeholder]="commonLocaleData?.app_remark"
-                                        ></textarea>
+                                            [required]="!isPayClicked"
+                                            [readonly]="isPayClicked"
+                                            [showError]="!item.closingBalanceAmount"
+                                        ></text-field>
                                     </div>
+                                </div>
+                                <div class="form-group remark-block">
+                                    <label
+                                        >{{ commonLocaleData?.app_remark }}<span class="text-danger">*</span></label
+                                    >
+                                    <textarea
+                                        matInput
+                                        rows="1"
+                                        name="remark{{ entryIdx }}"
+                                        id="{{ entryIdx }}"
+                                        (blur)="getTotalAmount()"
+                                        [(ngModel)]="item.remarks"
+                                        autocomplete="off"
+                                        required
+                                        type="text"
+                                        class="form-control mat-field-border"
+                                        [disabled]="isPayClicked"
+                                        [placeholder]="commonLocaleData?.app_remark"
+                                    ></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </ng-container>
-            </div>
-        </form>
-
-        <ng-template #successTemplate>
-            <div class="modal-header">
-                <h4 class="modal-title pull-left">{{ localeData?.payment_status }}</h4>
-                <button
-                    mat-stroked-button
-                    type="button"
-                    class="close pull-right"
-                    [attr.aria-label]="commonLocaleData?.app_close"
-                    mat-dialog-close
-                    aria-label="cross"
-                >
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="payment-img">
-                    <img src="{{ imgPath }}payment-succes.svg" />
                 </div>
-                <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
-                <p>{{ paymentSuccessfulMessage }}</p>
-                <button mat-raised-button color="primary" mat-dialog-close aria-label="done">
-                    {{ commonLocaleData?.app_done }}
-                </button>
-            </div>
-        </ng-template>
-    </div>
+            </ng-container>
+        </div>
+    </form>
 </mat-dialog-content>
+
+<ng-template #successTemplate>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ localeData?.payment_status }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="payment-img">
+            <img src="{{ imgPath }}payment-succes.svg" />
+        </div>
+        <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
+        <p>{{ paymentSuccessfulMessage }}</p>
+        <button mat-raised-button color="primary" mat-dialog-close aria-label="done">
+            {{ commonLocaleData?.app_done }}
+        </button>
+    </mat-dialog-content>
+</ng-template>

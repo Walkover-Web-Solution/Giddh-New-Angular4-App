@@ -6,6 +6,7 @@ import { TranslateDirectiveModule } from '../translate/translate.directive.modul
 import { AsideMenuAccountModule } from '../../shared/aside-menu-account/aside.menu.account.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page
         TranslateDirectiveModule,
         AsideMenuAccountModule,
         ClickOutsideModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        MatDialogModule
     ],
     exports: [AccountDetailModalComponent],
     declarations: [AccountDetailModalComponent],

@@ -4,12 +4,14 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="modal-header d-flex align-items-center">
-        <h3>{{ localeData?.page_heading }}</h3>
-        <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ localeData?.page_heading }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
     </div>
     <p class="mb-2 money-back-guarantee py-2" [innerHTML]="localeData?.money_back_guarantee"></p>
-    <mat-dialog-content class="all-features-content w-100">
+    <mat-dialog-content class="dialog-body">
         <div id="my-frame" class="container all-feature-modal clearfix">
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">

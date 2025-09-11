@@ -4,14 +4,13 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-  <div class="modal-header">
-    <h3>{{ localeData?.export_group_ledger }}</h3>
-    <button aria-hidden="true" class="close" mat-dialog-close>
-      ×
+  <div class="dialog-header">
+    <span mat-dialog-title>{{ localeData?.export_group_ledger }}</span>
+    <button mat-icon-button aria-label="close" mat-dialog-close>
+      <i class="icon-cross"></i>
     </button>
   </div>
-  <mat-dialog-content>
-    <div class="modal-body">
+  <mat-dialog-content class="dialog-body">
       <p class="pb-3">
         {{ commonLocaleData?.app_note }} :
         <span [innerHTML]="commonLocaleData.app_export_note">
@@ -22,6 +21,5 @@
         (exportFormMaster) = "exportFormValue = $event"
       ></master-export-option>
       <button mat-raised-button color="primary" (click)="exportMaster()">{{ commonLocaleData?.app_export }}</button>
-    </div>
   </mat-dialog-content>
 </ng-container>
