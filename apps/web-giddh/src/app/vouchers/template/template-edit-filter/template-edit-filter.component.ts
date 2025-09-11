@@ -557,17 +557,7 @@ export class TemplateEditFilterComponent implements OnInit {
         this.showDeleteButton = false;
         this.mainLogoFile = null;
         this.mainLogoSelectedFile = null;
-        
-        // Clear the file input element to allow re-uploading the same file
-        const logoInput = document.getElementById("logo-edit") as HTMLInputElement;
-        if (logoInput) {
-            logoInput.value = "";
-        }
-        
-        if (this.customTemplate?.sections?.header?.data?.imageLogo) {
-            this.customTemplate.sections.header.data.imageLogo.label = '';
-        }
-        this.templateService.setCustomTemplate(this.customTemplate);
+       this.logoFile?.nativeElement && (this.logoFile.nativeElement.value = "");
     }
 
     /**

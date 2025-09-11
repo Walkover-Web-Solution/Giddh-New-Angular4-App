@@ -3327,7 +3327,9 @@
                                                     <div class="w-100 ml-2">
                                                         <div>
                                                             <input-field
-                                                                [label]="commonLocaleData?.app_taxable_amount"
+                                                                [label]="customTemplate.sections['footer'].data[
+                                                                'taxableAmount'
+                                                            ].label"
                                                                 [type]="'text'"
                                                                 maxlength="14"
                                                                 [cssClass]="'form-control'"
