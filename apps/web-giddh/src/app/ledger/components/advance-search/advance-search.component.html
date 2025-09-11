@@ -8,24 +8,21 @@
     <giddh-page-loader *ngIf="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading">
     </giddh-page-loader>
     <div class="advance-search" [hidden]="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading">
-        <div class="modal-header theme-bg">
-            <h3 mat-dialog-title class="modal-title bg unbold" id="modal-title">
-                {{ commonLocaleData?.app_advance_search }}
-            </h3>
-            <div class="clear-filter-close">
-                <a
-                    class="cp"
-                    href="javascript:void(0);"
-                    (click)="resetAdvanceSearchModal()"
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ commonLocaleData?.app_advance_search }}</span>
+            <div class="d-flex align-items-center column-gap1">
+                <button 
+                    mat-raised-button
                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
                     [matTooltipPosition]="'above'"
                     matTooltipClass="tooltip-black"
+                    (click)="resetAdvanceSearchModal()"
                 >
                     <i class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
-                </a>
-                <span class="close" (click)="onCancel()">
-                    <i class="icon-cross font-15"></i>
-                </span>
+                </button>
+                <button mat-icon-button aria-label="close" mat-dialog-close>
+                    <i class="icon-cross"></i>
+                </button>
             </div>
         </div>
         <mat-dialog-content>

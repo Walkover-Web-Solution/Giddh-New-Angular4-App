@@ -80,19 +80,13 @@
 
     <!-- Not In Use -->
     <ng-template #consolidateModal>
-        <div class="modal-header">
-            <h3 class="modal-title pull-left">{{ localeData?.consolidated_details_heading }}</h3>
-            <button mat-stroked-button
-                type="button"
-                class="close pull-right"
-                [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="closeModel()"
-                aria-label="close"
-            >
-                <span aria-hidden="true">&times;</span>
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.consolidated_details_heading }}</span>
+            <button mat-icon-button aria-label="close" (click)="closeModel()">
+                <i class="icon-cross"></i>
             </button>
         </div>
-        <div class="modal-body">
+        <mat-dialog-content class="dialog-body">
             <h4 class="font-24 mb-2">
                 {{ commonLocaleData?.app_numbers?.one }}. {{ localeData?.consolidated_ewaybill_details }}
             </h4>
@@ -167,7 +161,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </mat-dialog-content>
     </ng-template>
 
     <!-- Universal Datepicker menu -->
@@ -195,11 +189,13 @@
 
     <!-- Add Vehicle Dialog -->
     <ng-template #addVehicle>
-        <div class="modal-header d-flex align-items-center activity-header">
-            <h3>{{ localeData?.add_vehicle }}</h3>
-            <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.add_vehicle }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
+            </button>
         </div>
-        <mat-dialog-content class="w-100">
+        <mat-dialog-content class="dialog-body">
             <form #updateVehicleForm="ngForm" autocomplete="off" name="updateEwayVehicleform">
                 <div class="p-3">
                     <div class="d-flex column-gap15 mr-b15">
@@ -338,11 +334,13 @@
     <!-- Cancel Dialog -->
     <ng-template #cancellation>
         <!-- Reasons for cancellation -->
-        <div class="modal-header d-flex align-items-center activity-header">
-            <h3>{{ localeData?.reasons_for_cancellation }}</h3>
-            <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.reasons_for_cancellation }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
+            </button>
         </div>
-        <mat-dialog-content class="w-100">
+        <mat-dialog-content class="dialog-body">
             <form #cancelEwayForm="ngForm" autocomplete="off" class="p-3">
                 <div class="d-flex flex-column row-gap15">
                     <!-- Reason Code -->

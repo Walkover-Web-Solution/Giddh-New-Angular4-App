@@ -1,9 +1,11 @@
 <div>
-    <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
-        <h3 class="modal-title bg" id="modal-title">{{ inputData?.title }}</h3>
-        <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="sendResponse(null)"></i>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ inputData?.title }}</span>
+        <button mat-icon-button aria-label="close" (click)="sendResponse(null)">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+    <mat-dialog-content class="dialog-body" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
             <div class="modal-wrap mr-b2 text-center">
                 <h2>{{ inputData?.body }}</h2>
@@ -21,5 +23,5 @@
                 </div>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </div>

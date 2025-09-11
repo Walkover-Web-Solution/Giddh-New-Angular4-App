@@ -1,18 +1,12 @@
-<div class="modal-header d-flex align-items-center">
-    <h3 mat-dialog-title class="modal-title pull-left">{{ localeData?.approve }}</h3>
-    <button
-        mat-button
-        type="button"
-        class="close d-flex align-items-center justify-content-end"
-        aria-label="Close"
-        (click)="approveEntry.emit(false)"
-    >
-        <span aria-hidden="true">&times;</span>
+<div class="dialog-header">
+    <span mat-dialog-title>{{ localeData?.approve }}</span>
+    <button mat-icon-button aria-label="close"  (click)="approveEntry.emit(false)">
+        <i class="icon-cross"></i>
     </button>
 </div>
 
-<div class="modal-body approve-modal">
-    <div class="clearfix modal-top">
+<mat-dialog-content class="dialog-body">
+    <div class="modal-top">
         <p class="font-12 text-gray mr-b1">
             <span>{{ selectedEntryForApprove?.entryDate }} </span> |
             <span>{{ byCreator }}</span>
@@ -100,4 +94,4 @@
             </button>
         </div>
     </div>
-</div>
+</mat-dialog-content>

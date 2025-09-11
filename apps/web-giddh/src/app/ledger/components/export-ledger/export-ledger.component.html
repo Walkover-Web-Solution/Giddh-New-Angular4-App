@@ -1,11 +1,11 @@
 <ng-container appTranslate [file]="'ledger/export-ledger'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div id="exportModal" class="disable-ripple">
-        <div class="modal-header flex-row-reverse">
-            <button aria-hidden="true" class="close" mat-dialog-close [attr.aria-label]="commonLocaleData?.app_close">
-                ×
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.page_heading }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
             </button>
-            <h3 class="unbold" mat-dialog-title>{{ localeData?.page_heading }}</h3>
         </div>
         <mat-dialog-content>
             <div class="modal-body" id="export-body">

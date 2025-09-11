@@ -6,6 +6,7 @@ import { TranslateDirectiveModule } from '../../theme/translate/translate.direct
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
         TranslateDirectiveModule,
         MatInputModule,
         MatCheckboxModule,
-        MatButtonModule
+        MatButtonModule,
+        MatDialogModule
     ],
     exports: [
         SendEmailInvoiceComponent
