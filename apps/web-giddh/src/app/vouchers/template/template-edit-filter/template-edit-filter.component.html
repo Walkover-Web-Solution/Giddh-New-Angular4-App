@@ -123,7 +123,7 @@
                                                     [color]="defaultImageSize === size?.label ? 'primary' : ''"
                                                     (click)="
                                                         defaultImageSize = size?.label;
-                                                        onChangeFieldVisibility()
+                                                        onValueChange('logoSize', size.value)
                                                     "
                                                 >
                                                     <span>{{ size.label }}</span>
@@ -383,7 +383,7 @@
                                                                     ].label
                                                                 "
                                                                 (ngModelChange)="
-                                                                    onChangeFieldVisibility(null, null, null)
+                                                                    onChangeFieldVisibility()
                                                                 "
                                                                 [readonly]="
                                                                     !customTemplate?.sections?.['header']?.data?.[
@@ -673,7 +673,7 @@
                                                                     ].label
                                                                 "
                                                                 (ngModelChange)="
-                                                                    onChangeFieldVisibility(null, null, null)
+                                                                    onChangeFieldVisibility()
                                                                 "
                                                                 [readonly]="
                                                                     !customTemplate.sections['header'].data[
@@ -790,7 +790,8 @@
                                                                     .display
                                                             "
                                                             (ngModelChange)="
-                                                                handleInvoiceDateNumberCheckboxChange(false)
+                                                                handleInvoiceDateNumberChange(false);
+                                                                onChangeFieldVisibility()
                                                             "
                                                             class="d-block"
                                                         >
@@ -814,7 +815,7 @@
                                                                     "
                                                                     (ngModelChange)="
                                                                         handleInvoiceDateNumberChange(false);
-                                                                        onChangeFieldVisibility(null, null, null)
+                                                                        onChangeFieldVisibility()
                                                                     "
                                                                     [readonly]="
                                                                         !customTemplate.sections['header'].data[
@@ -2806,7 +2807,7 @@
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
-                                                            (ngModelChange)="onChangeFieldVisibility()"
+                                                            (ngModelChange)="onValueChange('qrCodeId', $event)"
                                                             [pattern]="
                                                                 '^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'
                                                             "
