@@ -1285,6 +1285,7 @@
                                                                     [options]="branches"
                                                                     (selectedOption)="selectSenderName($event, i)"
                                                                     [defaultValue]="source.get('name').value"
+                                                                    [openDropdown]="!source.get('name').value"
                                                                     #selectAccount
                                                                 >
                                                                 </select-field>
@@ -1541,6 +1542,7 @@
                                                                 (dynamicSearchedQuery)="
                                                                     onStockSearchQueryChanged($event)
                                                                 "
+                                                                [openDropdown]="!product.get('name').value"
                                                             >
                                                             </select-field>
                                                             <span
@@ -1970,6 +1972,7 @@
                                                                     [options]="branches"
                                                                     (selectedOption)="selectRecieverName($event, i)"
                                                                     [defaultValue]="destination.get('name').value"
+                                                                    [openDropdown]="!destination.get('name').value"
                                                                     #selectAccount
                                                                 >
                                                                 </select-field>
