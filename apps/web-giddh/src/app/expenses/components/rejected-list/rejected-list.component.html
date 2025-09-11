@@ -156,7 +156,7 @@
 </div>
 
 <div
-    *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0]"
+    *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashRejectedReportLoading"
     class="mt-4"
 >
     <mat-paginator
