@@ -38,8 +38,6 @@ export class TemplateEditFilterComponent implements OnInit {
     public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
     /** True, if a logo is attached */
     public logoAttached: boolean = false;
-    /** True, if logo should be displayed */
-    public showLogo: boolean = true;
     /** Unique name of the selected template */
     public selectedTemplateUniqueName: string = TemplateTypeEnum.GstTemplateA;
     /** List of preset font options */
@@ -153,6 +151,15 @@ export class TemplateEditFilterComponent implements OnInit {
         { primary: '#950069', secondary: '#faf2f7' },
         { primary: '#542852', secondary: '#f6f4f6' }
     ];
+    /** Selected file for image upload */
+    public footerSelectedFile: any;
+    /** Holds the file object after selection */
+    public footerFile: any ;
+    /** Selected file for image upload */
+    public mainLogoSelectedFile: any;
+    /** Holds the file object after selection */
+    public mainLogoFile: any ;
+
 
     constructor(
         private generalService: GeneralService,
@@ -471,10 +478,10 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public uploadLogo(): void {
-        const selectedFile: any = document.getElementById("logo-edit");
-        if (selectedFile?.files?.length) {
-            const file = selectedFile.files[0];
-            this.generalService.getSelectedFile(file, (blob, fileObj) => {
+        this.mainLogoSelectedFile = document.getElementById("logo-edit");
+        if (this.mainLogoSelectedFile?.files?.length) {
+            this.mainLogoFile = this.mainLogoSelectedFile.files[0];
+            this.generalService.getSelectedFile(this.mainLogoFile, (blob, fileObj) => {
                 this.isFileUploadInProgress = true;
                 this.templateService.isLogoUpdateInProgress = true;
                 this.previewFile(fileObj);
@@ -537,19 +544,6 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
-     * Toggles the visibility of the logo in the template.
-     *
-     * @param {boolean} [show] Optional flag to explicitly set visibility
-     * @memberof TemplateEditFilterComponent
-     */
-    public toogleLogoVisibility(show?: boolean): void {
-        if (!this.isFileUploaded) {
-            this.showLogo = show ?? !this.showLogo;
-            this.templateService.setLogoVisibility(this.showLogo);
-        }
-    }
-
-    /**
      * Deletes the logo from the template and resets related UI state.
      *
      * @memberof TemplateEditFilterComponent
@@ -561,7 +555,19 @@ export class TemplateEditFilterComponent implements OnInit {
         this.isFileUploaded = false;
         this.isFileUploadInProgress = false;
         this.showDeleteButton = false;
-        this.logoFile?.nativeElement && (this.logoFile.nativeElement.value = "");
+        this.mainLogoFile = null;
+        this.mainLogoSelectedFile = null;
+        
+        // Clear the file input element to allow re-uploading the same file
+        const logoInput = document.getElementById("logo-edit") as HTMLInputElement;
+        if (logoInput) {
+            logoInput.value = "";
+        }
+        
+        if (this.customTemplate?.sections?.header?.data?.imageLogo) {
+            this.customTemplate.sections.header.data.imageLogo.label = '';
+        }
+        this.templateService.setCustomTemplate(this.customTemplate);
     }
 
     /**
@@ -734,14 +740,16 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public uploadImage(): void {
-        const selectedFile: any = document.getElementById("signatureImg-edit");
-        if (selectedFile?.files?.length) {
-            const file = selectedFile?.files[0];
+        this.footerSelectedFile = document.getElementById("signatureImg-edit");
+        this.mainLogoSelectedFile = document.getElementById("mainLogoImg-edit");
 
-            this.generalService.getSelectedFileBase64(file, (base64) => {
+        if (this.footerSelectedFile?.files?.length) {
+            this.footerFile = this.footerSelectedFile?.files[0];
+
+            this.generalService.getSelectedFileBase64(this.footerFile, (base64) => {
                 this.isSignatureUploadInProgress = true;
 
-                this.commonService.uploadImageBase64({ base64: base64, format: file.type, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.commonService.uploadImageBase64({ base64: base64, format: this.footerFile.type, fileName: this.footerFile.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isSignatureUploadInProgress = false;
 
                     if (response?.status === 'success') {
@@ -771,6 +779,17 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public removeFile(): void {
         this.signatureImgAttached = false;
+        this.signatureSrc = '';
+        this.isSignatureUploadInProgress = false;
+        this.footerFile = null;
+        this.footerSelectedFile = null;
+        
+        // Clear the file input element to allow re-uploading the same file
+        const signatureInput = document.getElementById("signatureImg-edit") as HTMLInputElement;
+        if (signatureInput) {
+            signatureInput.value = "";
+        }
+        
         if (this.customTemplate?.sections?.footer?.data?.imageSignature) {
             this.customTemplate.sections.footer.data.imageSignature.label = '';
         }
