@@ -22,7 +22,7 @@
                 <button
                     mat-raised-button
                     color="primary"
-                    (click)="onUploadFile($event, fileInput,'initial')"
+                    (click)="onUploadFile($event, fileInput)"
                     *ngIf="!isCompany && !isConsolidatedBranch"
                 >
                     {{ localeData?.upload_button }}

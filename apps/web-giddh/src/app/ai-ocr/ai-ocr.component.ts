@@ -416,15 +416,10 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * Initiates the file upload dialog.
      * @param event - The event triggering the upload.
      * @param fileInput - The file input element.
-     * @param mode - The mode of upload.
      * @memberof AiOcrComponent
      */
-    public onUploadFile(event: any, fileInput: HTMLInputElement, mode?: string): void {
-        // Set initial upload flag if in initial mode
-        if (mode === "initial") {
-            this.initialUploadFile = true;
-        }
-        
+    public onUploadFile(event: any, fileInput: HTMLInputElement): void {
+        this.initialUploadFile = true;
         // Trigger file input dialog if event exists
         if (event) {
             fileInput.value = "";

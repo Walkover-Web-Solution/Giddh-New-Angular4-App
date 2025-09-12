@@ -43,6 +43,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Holds common localized JSON data shared across modules */
     public commonLocaleData: any = {};
+    /** True if api call in progress */
+    public isLoading: boolean = false;
     /** Used to unsubscribe all store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Array of column names displayed in the account statement table */
@@ -115,6 +117,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.isLoading = false;
             if (response && response.transactionDetailList?.length) {
                     this.accountListData = response.transactionDetailList;
                     this.responseAccountList = response;
@@ -141,7 +144,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.accountListRequest.page = 1;
                 this.advanceFiltersApplied = false;
                 this.clearFilter = true;
-                this.getAccountStatementList();
+                if (!this.isLoading) {
+                    this.getAccountStatementList();
+                }
             }
         });
 
@@ -296,6 +301,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public getAccountStatementList(isAdvanceSearch: boolean = false): void {
+        this.isLoading = true;
         this.accountListData = [];
         const advReq = this.advanceSearchRequest.dataToSend;
         if (this.advanceFiltersApplied) {
