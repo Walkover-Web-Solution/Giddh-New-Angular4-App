@@ -35,6 +35,10 @@ export class AiOcrService {
     public resetData$: BehaviorSubject<any> = new BehaviorSubject(null);
     /** Indicates whether the "Select Branch" action is active. */
     public selectBranch$: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Indicates whether the "Main Page" action is active. */
+    public mainPage$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    /** Holds the main page OCR data, updated with the latest data. */
+    public mainPageOcrData$: BehaviorSubject<any> = new BehaviorSubject(null);
 
     constructor(
         private errorHandler: GiddhErrorHandler,

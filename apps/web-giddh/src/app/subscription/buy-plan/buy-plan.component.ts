@@ -1367,6 +1367,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             });
         }
         this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
+        this.thirdStepForm.get('paymentProvider')?.patchValue(null);
         this.setFinalAmount();
         this.changeDetection.detectChanges();
     }

@@ -6,7 +6,7 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
-import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, takeUntil } from "rxjs";
+import { debounceTime, distinctUntilChanged, map, Observable, ReplaySubject, switchMap, takeUntil } from "rxjs";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -85,7 +85,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     /** Hold broadcast event */
     public broadcast: any;
     /** True if show clear filter */
-    public showClearFilter : boolean = false;
+    public showClearFilter: boolean = false;
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -107,29 +107,27 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.initForm();
 
         /** Get Ocr List */
-        this.ocrList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            this.store.dispatch(this.generalActions.openSideMenu(true));
-            if (response?.items) {
-                this.dataSource = new MatTableDataSource<any>(response?.items);
-                if (
-                    this.dataSource?.filteredData?.length ||
-                    this.ocrDocumentListForm?.controls["uploadedBy"]?.value ||
-                    this.ocrDocumentListForm?.controls["fileName"]?.value ||
-                    this.ocrDocumentListForm?.controls["status"]?.value ||
-                    this.ocrDocumentListForm?.controls["convertedStatus"]?.value
-                ) {
-                    this.showData = true;
+        this.aiOcrService.mainPage$.pipe(
+            takeUntil(this.destroyed$),
+            switchMap((isMainPage) => {
+                if (isMainPage) {
+                    return this.aiOcrService.mainPageOcrData$.pipe(
+                        map(data => ({ data, isMainPage: true }))
+                    );
                 } else {
-                    this.showData = false;
+                    return this.ocrList$.pipe(
+                        map(data => ({ data, isMainPage: false }))
+                    );
                 }
-                this.dataSource.paginator = this.paginator;
-                this.ocrDocumentsRequestParams.totalItems = response?.totalItems;
-            } else {
-                this.dataSource = new MatTableDataSource<any>([]);
-                this.showData = false;
-                this.ocrDocumentsRequestParams.totalItems = 0;
+            })
+        ).subscribe(({ data, isMainPage }) => {
+            if (!isMainPage) {
+                this.store.dispatch(this.generalActions.openSideMenu(true));
             }
+            
+            this.updateDataSource(data);
         });
+
 
         this.aiOcrService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
@@ -203,10 +201,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     this.showFileName = false;
                 }
             });
-
-        this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.dateSelectedCallback(res);
+            
+        this.aiOcrService.mainPage$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (!response) {
+                this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    if (res) {
+                        this.dateSelectedCallback(res);
+                    }
+                });
             }
         });
 
@@ -413,6 +415,35 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentsRequestParams.to = res.to;
         this.getAllOcrDocuments(true);
         this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Updates the data source with the provided data.
+     *
+     * @param data - The data to update the data source with.
+     * @memberof AiOcrListComponent
+     */
+    private updateDataSource(data: any): void {
+        if (data?.items) {
+            this.dataSource = new MatTableDataSource<any>(data.items);
+            if (
+                this.dataSource?.filteredData?.length ||
+                this.ocrDocumentListForm?.controls["uploadedBy"]?.value ||
+                this.ocrDocumentListForm?.controls["fileName"]?.value ||
+                this.ocrDocumentListForm?.controls["status"]?.value ||
+                this.ocrDocumentListForm?.controls["convertedStatus"]?.value
+            ) {
+                this.showData = true;
+            } else {
+                this.showData = false;
+            }
+            this.dataSource.paginator = this.paginator;
+            this.ocrDocumentsRequestParams.totalItems = data.totalItems;
+        } else {
+            this.dataSource = new MatTableDataSource<any>([]);
+            this.showData = false;
+            this.ocrDocumentsRequestParams.totalItems = 0;
+        }
     }
 
     /**
