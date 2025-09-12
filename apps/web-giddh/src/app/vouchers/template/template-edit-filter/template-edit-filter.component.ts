@@ -557,17 +557,7 @@ export class TemplateEditFilterComponent implements OnInit {
         this.showDeleteButton = false;
         this.mainLogoFile = null;
         this.mainLogoSelectedFile = null;
-        
-        // Clear the file input element to allow re-uploading the same file
-        const logoInput = document.getElementById("logo-edit") as HTMLInputElement;
-        if (logoInput) {
-            logoInput.value = "";
-        }
-        
-        if (this.customTemplate?.sections?.header?.data?.imageLogo) {
-            this.customTemplate.sections.header.data.imageLogo.label = '';
-        }
-        this.templateService.setCustomTemplate(this.customTemplate);
+       this.logoFile?.nativeElement && (this.logoFile.nativeElement.value = "");
     }
 
     /**
@@ -932,13 +922,13 @@ export class TemplateEditFilterComponent implements OnInit {
     public handleInvoiceDateNumberChange(isDate: boolean = true): void {
         if (isDate) {
             if (this.customTemplate?.sections?.['header']?.data?.['voucherDate'] && this.customTemplate?.sections?.['header']?.data?.['invoiceDate']) {
-                this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
-                this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
+                this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate?.sections['header']?.data['invoiceDate']?.label;
+                this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate?.sections['header']?.data['invoiceDate']?.display;
             }
         } else {
             if (this.customTemplate?.sections?.['header']?.data?.['voucherNumber'] && this.customTemplate?.sections?.['header']?.data?.['invoiceNumber']) {
-                this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
-                this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
+                this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate?.sections['header']?.data['invoiceNumber']?.label;
+                this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate?.sections['header']?.data['invoiceNumber']?.display;
             }
         }
     }
