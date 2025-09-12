@@ -13,22 +13,20 @@
         class="new-account-form"
         (ngSubmit)="actionAccount()"
     >
-        <div class="modal-header" *ngIf="localeData?.payment">
-            <h3 mat-dialog-title class="modal-title">
+        <div class="dialog-header" *ngIf="localeData?.payment">
+            <span mat-dialog-title>
                 {{ activeBankAccount ? localeData?.payment?.edit_account : localeData?.payment?.connect_icici_account }}
-            </h3>
+            </span>
             <button
                 mat-icon-button
-                [attr.aria-label]="commonLocaleData?.app_close"
-                class="close hover-orange"
+                aria-label="close"
                 type="button"
                 (click)="closeAccountModal()"
             >
-                ×
+                <i class="icon-cross"></i>
             </button>
         </div>
-        <mat-dialog-content>
-            <div class="modal-body icici-account-create-edit">
+        <mat-dialog-content class="dialog-body icici-account-create-edit">
                 <ng-container *ngIf="!isLoading && localeData?.payment">
                     <div class="" *ngIf="!activeBankAccount">
                         <input-field
@@ -95,8 +93,7 @@
                 <ng-container *ngIf="isLoading || !localeData?.payment">
                     <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                 </ng-container>
-            </div>
-            <div class="modal-footer" *ngIf="!isLoading && localeData?.payment">
+            <div class="d-flex justify-content-end mt-3" *ngIf="!isLoading && localeData?.payment">
                 <button
                     mat-raised-button
                     color="primary"
