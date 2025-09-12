@@ -375,7 +375,7 @@
                                                                 type="text"
                                                                 name="headerCompanyName"
                                                                 cssClass="form-control"
-                                                                [label]="localeData?.template_name"
+                                                                [label]="commonLocaleData?.app_company_name"
                                                                 [maxlength]="50"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['header'].data[
@@ -3830,6 +3830,7 @@
                                             >
                                                 <mat-radio-group
                                                     [(ngModel)]="selectedSignatureType"
+                                                    name="signatureType"
                                                     (ngModelChange)="onSignatureTypeChange($event)"
                                                     class="d-flex flex-wrap w-100"
                                                 >
