@@ -977,8 +977,8 @@
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
                             >
-                                <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
-                                    <div class="select-single-checkbox-wrapper">
+                                <div class="vendor-name-field cursor-pointer pd-r2 w-inherit" (dblclick)="trigger?.openMenu()">
+                                    <div class="d-flex align-items-center w-inherit">
                                         <mat-checkbox
                                             [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                             color="primary"
@@ -989,21 +989,20 @@
                                         </mat-checkbox>
                                     <a
                                         href="javascript:;"
-                                        class="btn-link-2"
+                                        class="btn-link-2 text-ellipsis account-width d-block"
                                         (click)="showAccountPreview(account?.uniqueName)"
                                     >
-                                        <span class="text-ellipsis">{{ account.name }}</span>
+                                        {{ account.name }}
                                     </a>
                                     </div>
                                     <button
                                         mat-icon-button
-                                        id="edit-model-basic2"
                                         class="table-menu-first-td"
                                         [matMenuTriggerFor]="dropdownBasic2"
                                         #trigger="matMenuTrigger"
                                         aria-label="dot vertical"
                                     >
-                                        <span class="icon-dots-three-vertical"></span>
+                                        <i class="icon-dots-three-vertical"></i>
                                     </button>
 
                                     <mat-menu #dropdownBasic2="matMenu">
