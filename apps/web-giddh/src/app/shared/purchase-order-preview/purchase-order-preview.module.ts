@@ -4,6 +4,7 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
 import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
 import { PurchaseOrderPreviewModalComponent } from "./purchase-order-preview.component";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -13,7 +14,8 @@ import { MatDialogModule } from "@angular/material/dialog";
         CommonModule,
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
-        MatDialogModule
+        MatDialogModule,
+        MatButtonModule
     ],
     exports: [
         PurchaseOrderPreviewModalComponent
