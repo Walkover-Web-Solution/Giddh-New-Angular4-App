@@ -1,7 +1,9 @@
 <div>
-    <div class="modal-header">
-        <h3>{{ localeData?.share_account }}</h3>
-        <i mat-dialog-close aria-label="close icon" class="icon-cross" (click)="closeModal()"></i>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ localeData?.share_account }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeModal()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <div class="pd-b3">

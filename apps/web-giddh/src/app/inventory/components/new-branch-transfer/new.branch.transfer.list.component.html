@@ -302,13 +302,13 @@
 </div>
 <!-- advance search start -->
 <ng-template #searchDialog>
-    <div mat-dialog-title class="modal-header">
-        <h4 class="modal-title bg pull-left">Advance Search</h4>
-        <button mat-stroked-button type="button" class="close pull-right" aria-label="Close" (click)="closeSearchDialog()">
-            <span aria-hidden="true">&times;</span>
+    <div class="dialog-header">
+        <span mat-dialog-title>Advance Search</span>
+        <button mat-icon-button aria-label="close" (click)="closeSearchDialog()">
+            <i class="icon-cross"></i>
         </button>
     </div>
-    <div mat-dialog-content class="modal-body pd-l2 pd-r2">
+    <mat-dialog-content class="dialog-body">
         <form class="clearfix">
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
@@ -356,7 +356,7 @@
                 </button>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </ng-template>
 <!-- advance search end -->
 

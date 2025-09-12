@@ -6,13 +6,13 @@
     (translationComplete)="translationComplete()"
 >
     <!-- Adjust Payment modal start -->
-    <div class="modal-header" *ngIf="isModal">
-        <h4 class="modal-title bg pull-left">{{ localeData?.page_heading }}</h4>
-        <button mat-button class="close pull-right" aria-label="Close" (click)="onCancel()">
-            <span aria-hidden="true">&times;</span>
+    <div class="dialog-header" *ngIf="isModal">
+        <span mat-dialog-title>{{ localeData?.page_heading }}</span>
+        <button mat-icon-button aria-label="close" (click)="onCancel()">
+            <i class="icon-cross"></i>
         </button>
     </div>
-    <div class="modal-body font-15 adjustments-list">
+    <mat-dialog-content class="dialog-body font-15 adjustments-list">
         <div class="row h-100">
             <div class="col-md-12 d-flex flex-column">
                 <span class="text-black" *ngIf="isUpdateMode && isVoucherModule">
@@ -319,5 +319,5 @@
                 </form>
             </div>
         </div>
-    </div>
+    </mat-dialog-content>
 </ng-container>

@@ -1,9 +1,11 @@
 <div class="add-new-role-modal">
-    <div class="modal-header d-flex justify-content-between">
-        <h3>{{ localeData?.add_role }}</h3>
-        <span class="cursor-pointer font-24 text-black" (click)="closePopupEvent()">×</span>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ localeData?.add_role }}</span>
+        <button mat-icon-button aria-label="close" (click)="closePopupEvent()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <div class="modal-body clearfix" id="export-body">
+    <mat-dialog-content class="dialog-body" id="export-body">
         <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
             <div>
                 <div class="form-group">
@@ -72,5 +74,5 @@
                 </div>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </div>
