@@ -34,7 +34,7 @@ export class SalesPersonService {
             url += `/${encodeURIComponent(uniqueName)}`;
         }
         if (httpMethod === HttpMethod.GET) {
-            url += `?page=${params?.page || 1}&count=${params?.count || 200}`;
+            url += `?page=${params?.page || 1}&count=${params?.count || 200}&archive=${params?.archive ?? false}`; // archive is false by default means only active sales person will be fetched
         }
         return this.http[httpMethod](url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;

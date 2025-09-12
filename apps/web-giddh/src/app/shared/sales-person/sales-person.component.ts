@@ -13,13 +13,14 @@ import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.cla
 import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 import { ElementViewChildModule } from '../helpers/directives/elementViewChild/elementViewChild.module';
 import { MatTableModule } from '@angular/material/table';
-import { SalesPersonActionEnum, SalesPersonCreateUpdate } from './utility/sales-person.constant';
+import { SalesPersonActionEnum, SalesPersonArchiveEnum, SalesPersonCreateUpdate } from './utility/sales-person.constant';
 import { InputFieldComponent } from '../../theme/form-fields/input-field/input-field.component';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
     selector: 'app-sales-person',
@@ -36,7 +37,8 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
         KeyboardShortutModule,
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
-        ElementViewChildModule
+        ElementViewChildModule,
+        MatMenuModule
     ],
     templateUrl: './sales-person.component.html',
     styleUrls: ['./sales-person.component.scss'],
@@ -71,11 +73,13 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Sales Person List In Progress */
     public salesPersonListInProgress$: Observable<boolean> = this.componentStore.salesPersonListInProgress$;
     /** Displayed columns for sales person table */
-    public displayedColumns: string[] = ['name', 'email', 'mobileNumber', 'action'];
+    public displayedColumns: string[] = ['name', 'email', 'mobileNumber', 'archive', 'action'];
     /** Active Row Index */
     public activeRowIndex: number = -1;
     /** Sales Person Action Enum */
-    public salesPersonActionEnum = SalesPersonActionEnum;
+    public readonly salesPersonActionEnum = SalesPersonActionEnum;
+    /** Sales Person Archive Enum */
+    public readonly salesPersonArchiveEnum = SalesPersonArchiveEnum;
     /** Sales Person Unique Name in case of user edit or delete */
     public salesPersonUniqueName: string | null = null;
     /** Sales Person Details in case of user edit */
@@ -85,7 +89,8 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds advance Filters keys */
     public requestParams: any = {
         page: 1,
-        count: PAGINATION_LIMIT
+        count: PAGINATION_LIMIT,
+        archive: SalesPersonArchiveEnum.BOTH
     };
     /** Total results */
     public totalResults: number = 0;
@@ -214,6 +219,9 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.openMatExpansionPanel = true;
                     this.focusInputField();
                 }, 0);
+                break;
+            case SalesPersonActionEnum.ARCHIVE:
+                this.componentStore.createUpdateSalesPerson({ model: { ...element, archiveStatus: element.archiveStatus === SalesPersonArchiveEnum.ARCHIVE ? SalesPersonArchiveEnum.UNARCHIVE : SalesPersonArchiveEnum.ARCHIVE }, uniqueName: element?.uniqueName });
                 break;
             default:
                 this.componentStore.getAllSalesPerson({ isDropdown: false, params: this.requestParams});

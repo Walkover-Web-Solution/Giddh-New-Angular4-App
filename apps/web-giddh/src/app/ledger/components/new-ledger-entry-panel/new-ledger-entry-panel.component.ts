@@ -444,6 +444,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.stockVariantSelected.emit(currentSelectedVariant?.value ?? res[0].value);
             }
         });
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe(salesPersonList => {
+            if (salesPersonList?.length && this.blankLedger.salesPersonUniqueName) {
+                this.removeArchivedSalesPerson(salesPersonList);
+            }
+        });
     }
 
     /**
@@ -2319,5 +2325,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+    }
+
+    /**
+     * Removes the archived sales person from the blank ledger
+     *
+     * @param {IOption[]} salesPersonList - The list of sales persons
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private removeArchivedSalesPerson(salesPersonList: IOption[]): void {
+        if (!salesPersonList?.some(salesPerson => salesPerson?.value === this.blankLedger.salesPersonUniqueName)) {
+            this.blankLedger.salesPersonName = '';
+            this.blankLedger.salesPersonUniqueName = null;
+        }
     }
 }

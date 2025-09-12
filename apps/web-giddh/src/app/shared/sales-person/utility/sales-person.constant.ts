@@ -12,5 +12,14 @@ export enum SalesPersonActionEnum {
     CREATE = 'create',
     UPDATE = 'update',
     DELETE = 'delete',
-    EDIT = 'edit'
+    EDIT = 'edit',
+    ARCHIVE = 'archive'
+}
+
+
+/** Sales Person Archive Enum */
+export enum SalesPersonArchiveEnum {
+    ARCHIVE = 'ARCHIVED',
+    UNARCHIVE = 'UNARCHIVED',
+    BOTH = ''
 }

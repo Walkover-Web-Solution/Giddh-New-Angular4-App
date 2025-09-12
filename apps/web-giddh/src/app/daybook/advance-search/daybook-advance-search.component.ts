@@ -177,7 +177,7 @@ public advanceSearchObject: DayBookRequestModel = null;
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200, archive: '' } });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
