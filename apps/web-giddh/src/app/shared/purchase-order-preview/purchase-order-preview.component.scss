@@ -21,6 +21,6 @@
     animation: loading 2s linear infinite;
 }
 
-.dialog-body {
+:host .dialog-body {
     height: 80vh !important;
 }
