@@ -1,0 +1,59 @@
+/*--- Inter Font Family ---*/
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    src: url("../fonts/Inter/Inter_Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+    src: url("../fonts/Inter/Inter_RegularItalic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    src: url("../fonts/Inter/Inter_Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+    src: url("../fonts/Inter/Inter_SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    src: url("../fonts/Inter/Inter_Bold.ttf") format("truetype");
+}
+
+:root { 
+    --font-family: "Inter";
+    
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --font-size-9 : 9px;
+    --font-size-12 : 12px;
+    --font-size-14 : 14px;
+    --font-size-15 : 15px;
+    --font-size-16 : 16px;
+    --font-size-20 : 20px;
+    --font-size-24 : 24px;
+    --font-size-32 : 32px;
+    --font-size-48 : 48px;
+}

@@ -53,7 +53,7 @@
 
         .select-puchase-info {
             padding: 6px 0px;
-            font-family: var(--font-semibold);
+            font-weight: var(--font-weight-semibold);
         }
 
         .add-new-field {
@@ -73,10 +73,10 @@
                 display: flex;
                 align-items: center;
                 overflow: hidden;
-                font-family: var(--font-regular) !important;
+                font-family: var(--font-family) !important;
 
                 .add-new-text-container {
-                    font-family: var(--font-regular);
+                    font-family: var(--font-family);
                     position: relative;
                     cursor: pointer;
                     font-size: var(--font-size-12);
@@ -122,7 +122,7 @@
     .stock-made-with {
         margin-bottom: 15px;
         position: relative;
-        font-family: var(--font-semibold);
+        font-weight: var(--font-weight-semibold);
 
         &:after {
             position: absolute;

@@ -641,8 +641,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.enableAutopaid = false;
         }
 
-        if (!this.generalService.checkIfCssExists("./assets/css/ledgerfont/ledgerfont.css")) {
-            this.generalService.addLinkTag("./assets/css/ledgerfont/ledgerfont.css");
+        if (!this.generalService.checkIfCssExists("./assets/style/ledgerfont/ledgerfont.css")) {
+            this.generalService.addLinkTag("./assets/style/ledgerfont/ledgerfont.css");
         }
         document.querySelector('body').classList.add('ledger-body');
 

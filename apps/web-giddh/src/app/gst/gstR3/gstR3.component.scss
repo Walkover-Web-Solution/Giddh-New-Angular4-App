@@ -218,7 +218,7 @@ svg.icon.icon-xxlg {
 .tax-engine .summary-content {
     max-width: 1085px;
     margin: 0 auto 30px;
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
 }
 
 .tax-engine .summary-content .gstr-3b-user {
@@ -317,7 +317,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     font-weight: 500;
     line-height: 1.1;
 }

@@ -1,7 +1,7 @@
-@import "../../../assets/css/global/mat-button.scss";
+@import "../../../assets/style/global/mat-button.scss";
 
 .md-drppicker {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     color: var(--color-datepicker-month-name);
     border-radius: 4px;
     width: 278px;
@@ -124,7 +124,7 @@
         th,
         .th-div {
             font-size: var(--font-size-15);
-            font-family: var(--font-regular) !important;
+            font-family: var(--font-family) !important;
             font: 400 var(--font-size-15) system-ui;
             margin-bottom: 0 !important;
         }
@@ -610,7 +610,7 @@
                         color: var(--color-datepicker-rightside-list-text);
                         background-color: var(--color-dropdown-primary-background);
                         border-left: 3px solid transparent !important;
-                        font-family: var(--font-regular) !important;
+                        font-family: var(--font-family) !important;
                         transition: all 100ms ease;
                         outline: none;
                         .available.prev {
@@ -653,7 +653,7 @@
                         &.active {
                             background-color: var(--color-primary-datepicker-input-bottom-border);
                             border-left: 3px solid var(--color-primary-datepicker-input-bottom-border) !important;
-                            font-family: var(--font-semibold);
+                            font-weight: var(--font-weight-semibold);
                             color: var(--color-white);
                             .available {
                                 &.prev {
@@ -1447,7 +1447,7 @@ td span {
                 cursor: pointer;
                 font-size: var(--font-size-12);
                 color: var(--color-datepicker-rightside-list-text);
-                font-family: var(--font-regular);
+                font-family: var(--font-family);
                 transition: all 100ms ease;
                 .drop-down {
                     position: absolute;

@@ -18,6 +18,7 @@ import { AppComponent } from './app.component';
 import { IS_ELECTRON_WA } from './app.constant';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
+import { AppInitService } from './app-init.service';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { ExceptionLogService } from './services/exception-log.service';
 import { GiddhHttpInterceptor } from './services/http.interceptor';
@@ -103,10 +104,10 @@ if (whiteLabelConfig) {
 // GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
 export function getServiceConfig(): any {
     return {
-        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `https://api.giddh.com/` :
+            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : "https://api.giddh.com/"),
+        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `https://api.giddh.com/` :
+            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : "https://api.giddh.com/"),
         appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
         AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
         PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
@@ -175,7 +176,12 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
             multi: true,
             deps: [HttpClient]
         },
-
+        {
+            provide: APP_INITIALIZER,
+            useFactory: (appInitService: AppInitService) => () => appInitService.init(whiteLabelConfig),
+            multi: true,
+            deps: [AppInitService]
+        },
         {
             provide: ServiceConfig,
             useFactory: getServiceConfig

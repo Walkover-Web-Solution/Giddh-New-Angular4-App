@@ -92,7 +92,7 @@
 .card-basic-details h2 {
     font-size: var(--font-size-15);
     color: var(--color-common-senary-text);
-    font-family: var(--font-bold);
+    font-weight: var(--font-weight-bold);
     margin-bottom: 12px;
     white-space: normal;
     word-break: break-all;
@@ -111,7 +111,7 @@
     padding-top: 20px;
 
     label {
-        font-family: var(--font-semibold);
+        font-weight: var(--font-weight-semibold);
         margin-bottom: 10px;
         color: var(--color-nero);
     }

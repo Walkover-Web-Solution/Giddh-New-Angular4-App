@@ -70,7 +70,7 @@
         top: 0;
         background-color: inherit;
         h2 {
-            font-family: var(--font-semibold) !important;
+            font-family: var(--font-weight-semibold) !important;
             font-size: var(--font-size-16) !important;
             color: var(--color-giddh-blue) !important;
             line-height: 20px !important;
@@ -89,7 +89,7 @@
 
                 p {
                     font-size: var(--font-size-15);
-                    font-family: var(--font-semibold);
+                    font-weight: var(--font-weight-semibold);
                 }
                 small {
                     font-size: var(--font-size-12);
@@ -103,7 +103,7 @@
                 list-style: none;
                 li {
                     font-size: var(--font-size-15);
-                    font-family: var(--font-semibold);
+                    font-weight: var(--font-weight-semibold);
                     margin-bottom: 10px;
                     a {
                         color: var(--color-nero);
@@ -122,7 +122,7 @@
             h4 {
                 padding-bottom: 5px;
                 font-size: var(--font-size-15);
-                font-family: var(--font-semibold);
+                font-weight: var(--font-weight-semibold);
             }
             ul {
                 list-style: none;
