@@ -19,6 +19,7 @@
                                 [placeholder]="'Select Group'"
                                 (selectedOption)="groupSelected($event)"
                                 [createNewText]="'+ Add New'"
+                                [showCreateNew]="true"
                                 (createOption)="addNewGroupPane()"
                                 [name]="'parentGroup'"
                             ></reactive-dropdown-field>
@@ -581,6 +582,10 @@
                                                 [options]="stockUnitsDropDown$ | async"
                                                 formControlName="stockUnitUniqueName"
                                                 [placeholder]="'Select Unit'"
+                                                [disabled]="!addStockForm.controls['enablePurchase']?.value"
+                                                [createNewText]="'+ Add New'"
+                                                [showCreateNew]="true"
+                                                (createOption)="addNewStockUnit()"
                                                 [name]="'stockUnitUniqueName'"
                                             ></reactive-dropdown-field>
                                         </td>
