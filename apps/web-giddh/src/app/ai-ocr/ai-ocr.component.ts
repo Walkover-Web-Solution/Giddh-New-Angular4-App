@@ -215,7 +215,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
         // Call getCompletedCount every 5 seconds
         setInterval(() => {
-            if (this.listCount > 0) {
+            if (this.listCount > 0 || this.initialUploadFile) {
                 this.aiOcrStore.getCompletedCount(null);
             }
         }, 5000);
