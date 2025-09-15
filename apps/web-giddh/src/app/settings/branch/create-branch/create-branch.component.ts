@@ -23,7 +23,7 @@ import { MatSelect } from '@angular/material/select';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { InventoryService } from '../../../services/inventory.service';
-import { BranchHierarchyType } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../../app.constant';
 import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
@@ -463,15 +463,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     private openCreateBranchDialog(): void {
-        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
-            width: '760px',
-            height: '100vh !important',
-            disableClose: true,
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, ASIDE_PANE_CONFIG);
     }
 
     /**

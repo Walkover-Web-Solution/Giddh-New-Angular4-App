@@ -75,6 +75,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showCaretIcon: boolean = true;
     /** Show Cross Icon to clear selection */
     @Input() public showClearIcon: boolean = false;
+    /** Use custom label value */
+    @Input() public useCustomLabelValue: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -189,6 +191,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
         if (changes?.labelValue) {
             this.labelValue = changes.labelValue.currentValue;
+        }
+
+        if (changes?.labelValue?.currentValue === null) {
+            this.labelValue = "";
         }
     }
 
@@ -329,12 +335,16 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             const currentValue = this.value !== undefined && this.value !== null ? this.value : null;
 
             if (currentValue !== null && currentValue !== '') {
+                if (this.useCustomLabelValue) return; // If useCustomLabelValue is true, do not set labelValue from options
+                
                 const matchedOption = this.options.find(option => option?.value === currentValue);
                 if (matchedOption) {
                     // Always set labelValue to the string label, not the object
                     this.labelValue = matchedOption.label || '';
                     this.changeDetection.detectChanges();
                 }
+            } else if (currentValue === "") {
+                this.labelValue = "";
             }
         }
     }

@@ -308,7 +308,8 @@
                         align-items: center;
                         justify-content: center;
                         position: absolute;
-                        bottom: 0px;
+                        bottom: 50%;
+                        transform: translateY(50%);
                         left: 95%;
                         min-width: 95px;
                     }

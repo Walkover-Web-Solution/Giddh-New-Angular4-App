@@ -22,7 +22,7 @@ import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
-import { BranchHierarchyType } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 @Component({
     selector: 'setting-branch',
@@ -402,16 +402,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.isBranchChangeInProgress = false;
 
-        this.addressAsidePaneRef = this.dialog.open(this.addressAsidePane,
-            {
-                position: {
-                    right: '0'
-                },
-                disableClose: true,
-                width: '760px',
-                height: '100vh',
-                maxHeight: '100vh'
-            });
+        this.addressAsidePaneRef = this.dialog.open(this.addressAsidePane, ASIDE_PANE_CONFIG);
 
     }
 

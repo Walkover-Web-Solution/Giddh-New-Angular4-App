@@ -1,23 +1,24 @@
-<div class="modal-header theme-bg d-flex justify-content-between">
-    <h3
-        class="modal-title bg"
-        id="modal-title"
-        mat-dialog-title
-        *ngIf="
-            (selectedService === taxServiceEnum.TAXPRO || selectedService === taxServiceEnum.VAYANA) &&
-            !gstAuthenticated &&
-            !gspSessionOtpAuthorized
-        "
-    >
-        {{ localeData?.aside_menu?.choose_provider }}
-    </h3>
-    <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{ localeData?.aside_menu?.gst_return_note }}:</h3>
-    <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{ localeData?.aside_menu?.submit_gst_returns }}:</h3>
-    <h3 *ngIf="selectedService === taxServiceEnum.RECONCILE">{{ localeData?.aside_menu?.gst_reconcile }}</h3>
-    <i (click)="toggleCancelModel()" aria-label="close icon" class="icon-cross"></i>
+<div class="dialog-header">
+    <span mat-dialog-title>
+        <ng-container
+            *ngIf="
+                (selectedService === taxServiceEnum.TAXPRO || selectedService === taxServiceEnum.VAYANA) &&
+                !gstAuthenticated &&
+                !gspSessionOtpAuthorized
+            "
+        >
+            {{ localeData?.aside_menu?.choose_provider }}
+        </ng-container>
+        <ng-container *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{ localeData?.aside_menu?.gst_return_note }}:</ng-container>
+        <ng-container *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{ localeData?.aside_menu?.submit_gst_returns }}:</ng-container>
+        <ng-container *ngIf="selectedService === taxServiceEnum.RECONCILE">{{ localeData?.aside_menu?.gst_reconcile }}</ng-container>
+    </span>
+    <button mat-icon-button aria-label="close" (click)="toggleCancelModel()">
+        <i class="icon-cross"></i>
+    </button>
 </div>
 
-<mat-dialog-content>
+<mat-dialog-content class="dialog-body">
     <div class="aside-pane-form position-relative overflow-auto pd-15">
         <div class="form-body white-bg clearfix margin-child-label">
             <!-- region not gst authenticated and before otp verified -->

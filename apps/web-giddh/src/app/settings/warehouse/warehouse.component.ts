@@ -16,7 +16,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
-import { OnBoardingType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { OnBoardingType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -218,15 +218,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                 linkedEntities: warehouse.addresses || []
             };
 
-            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, {
-                width: '760px',
-                height: '100vh !important',
-                disableClose: true,
-                position: {
-                    right: '0',
-                    top: '0'
-                }
-            });
+            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, ASIDE_PANE_CONFIG);
         });
     }
 

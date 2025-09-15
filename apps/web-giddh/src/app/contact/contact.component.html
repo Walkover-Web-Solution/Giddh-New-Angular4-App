@@ -384,24 +384,16 @@
         </mat-tab-group>
     </div>
 
-    <!-- region Modal for Mail/SMS for vendore-->
+    <!-- region Modal for Mail/SMS for vendor -->
     <ng-template #mailModal *ngIf="activeTab === 'vendor'" tabindex="1">
         <div>
-            <div class="modal-header theme-bg pd-l2 pd-r2">
-                <h3 class="modal-title bg" id="modal-title-mail-vendor">{{ messageBody.header.set }}</h3>
-                <button
-                    mat-icon-button
-                    aria-hidden="true"
-                    class="close-btn-in-mat-model"
-                    data-dismiss="modal"
-                    [attr.aria-label]="commonLocaleData?.app_close"
-                    (click)="closeAllDialogs()"
-                    aria-label="cross"
-                >
-                    ×
+            <div class="dialog-header">
+                <span mat-dialog-title>{{ messageBody.header.set }}</span>
+                <button mat-icon-button aria-label="close"  (click)="closeAllDialogs()">
+                    <i class="icon-cross"></i>
                 </button>
             </div>
-            <div class="modal-body pd-l2 pd-r2 clearfix">
+            <mat-dialog-content class="dialog-body">
                 <h1 class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
@@ -441,7 +433,7 @@
                         {{ messageBody.btn.set }}
                     </button>
                 </div>
-            </div>
+            </mat-dialog-content>
         </div>
     </ng-template>
     <!--endregion-->
@@ -449,20 +441,14 @@
     <!--region Modal for Mail/SMS for customer-->
     <ng-template #mailModal *ngIf="activeTab === 'customer'" tabindex="-1" class="email-dialog-box">
         <div>
-            <div class="modal-header theme-bg pd-l2 pd-r2">
-                <h3 class="modal-title bg" id="modal-title-mail-customer">{{ messageBody.header.set }}</h3>
-                <button
-                    mat-icon-button
-                    class="close-btn-in-mat-model"
-                    [attr.aria-label]="commonLocaleData?.app_close"
-                    (click)="closeAllDialogs()"
-                    aria-label="cross"
-                >
-                    ×
+            <div class="dialog-header">
+                <span mat-dialog-title>{{ messageBody.header.set }}</span>
+                <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
+                    <i class="icon-cross"></i>
                 </button>
             </div>
 
-            <div class="modal-body pd-l2 pd-r2 clearfix">
+            <mat-dialog-content class="dialog-body">
                 <h1 class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
@@ -504,7 +490,7 @@
                         {{ messageBody.btn.set }}
                     </button>
                 </div>
-            </div>
+            </mat-dialog-content>
         </div>
     </ng-template>
     <!--endregion-->
@@ -1094,24 +1080,14 @@
 
                                     <ng-template #mailModal>
                                         <div (click)="$event.stopPropagation()">
-                                            <div class="modal-header theme-bg pd-l2 pd-r2">
-                                                <h3 class="modal-title bg" id="modal-title">
-                                                    {{ messageBody.header.set }}
-                                                </h3>
-                                                <button
-                                                    mat-icon-button
-                                                    aria-hidden="true"
-                                                    class="close"
-                                                    data-dismiss="modal"
-                                                    [attr.aria-label]="commonLocaleData?.app_close"
-                                                    (click)="closeAllDialogs()"
-                                                    aria-label="cross"
-                                                >
-                                                    ×
+                                            <div class="dialog-header">
+                                                <span mat-dialog-title>{{ messageBody.header.set }}</span>
+                                                <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
+                                                    <i class="icon-cross"></i>
                                                 </button>
                                             </div>
 
-                                            <div class="modal-body pd-l2 pd-r2 clearfix">
+                                            <mat-dialog-content class="dialog-body">
                                                 <h1 class="mr-b1 mr-t15" *ngIf="messageBody.type == 'Email'">
                                                     {{ localeData?.enter_subject }}:
                                                 </h1>
@@ -1156,7 +1132,7 @@
                                                         {{ messageBody.btn.set }}
                                                     </button>
                                                 </div>
-                                            </div>
+                                            </mat-dialog-content>
                                         </div>
                                     </ng-template>
                                 </div>

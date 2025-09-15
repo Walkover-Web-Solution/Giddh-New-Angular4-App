@@ -1,11 +1,11 @@
 <div>
-    <div class="modal-header advance-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
-        <div class="d-flex justify-content-between w-100 align-items-center">
-            <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advance_search }}</h3>
-        </div>
-        <button mat-icon-button class="close" (click)="onCancel()">×</button>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ commonLocaleData?.app_advance_search }}</span>
+        <button mat-icon-button aria-label="close" (click)="onCancel()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <div class="modal-body pd-l2 pd-r2 clearfix ipad-responsive-modal" id="export-body">
+    <mat-dialog-content class="dialog-body" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
             <!--region invoice-->
             <div class="modal-wrap mr-b2">
@@ -37,15 +37,17 @@
                                 ></reactive-dropdown-field>
                             </div>
                             <div class="col-sm-4 col-xs-6">
-                                <text-field
+                                <input-field
                                     [cssClass]="'form-control mat-field-border'"
                                     [type]="'text'"
                                     [placeholder]="
                                         commonLocaleData?.app_numbers?.zero + '' + commonLocaleData?.app_numbers?.zero
                                     "
+                                    [allowDigitsOnly]="true"
+                                    [label]="commonLocaleData?.app_amount"
                                     [name]="'total'"
                                     [(ngModel)]="request.amount"
-                                ></text-field>
+                                ></input-field>
                             </div>
                         </div>
                     </div>
@@ -61,5 +63,5 @@
                 </button>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </div>
