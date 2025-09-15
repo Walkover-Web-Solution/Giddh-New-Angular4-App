@@ -133,6 +133,7 @@
                             [required]="true"
                             (createOption)="openCreateReasonModal()"
                             [createNewText]="localeData?.create_reason"
+                            [showCreateNew]="true"
                             (onClear)="adjustInventoryCreateEditForm.get('reasonUniqueName')?.patchValue(null)"
                             [showError]="
                                 isFormSubmitted && !adjustInventoryCreateEditForm.get('reasonUniqueName')?.value

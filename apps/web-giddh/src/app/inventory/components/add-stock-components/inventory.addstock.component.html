@@ -19,6 +19,7 @@
                                 [placeholder]="'Select Group'"
                                 (selectedOption)="groupSelected($event)"
                                 [createNewText]="'+ Add New'"
+                                [showCreateNew]="true"
                                 (createOption)="addNewGroupPane()"
                                 [name]="'parentGroup'"
                             ></reactive-dropdown-field>
