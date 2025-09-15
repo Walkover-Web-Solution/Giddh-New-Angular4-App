@@ -1,10 +1,5 @@
 @charset "utf-8";
-// @use rules must be first
-@use './themes/custom-theme.scss';
-
-// Import typography first
-@import "./typography.css";
-@import "./giddh-common.scss";
+@use './themes/_custom-theme.scss';
 @import "./json-tree.scss";
 @import "./json-diff.scss";
 @import "./intl.scss";

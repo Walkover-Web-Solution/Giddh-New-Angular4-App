@@ -1,0 +1,21 @@
+@use '@angular/material' as mat;
+
+// Custom Typography Configuration for Angular Material 16
+$custom-typography: mat.define-typography-config(
+    $font-family: var(--font-family),
+    $headline-1: mat.define-typography-level(var(--font-size-48), var(--line-height-36), var(--font-weight-regular), var(--font-family)),
+    $headline-2: mat.define-typography-level(var(--font-size-32), var(--line-height-32), var(--font-weight-regular), var(--font-family)),
+    $headline-3: mat.define-typography-level(var(--font-size-24), var(--line-height-32), var(--font-weight-regular), var(--font-family)),
+    $headline-4: mat.define-typography-level(var(--font-size-20), var(--line-height-24), var(--font-weight-regular), var(--font-family)),
+    $headline-5: mat.define-typography-level(var(--font-size-16), var(--line-height-24), var(--font-weight-medium), var(--font-family)),
+    $headline-6: mat.define-typography-level(var(--font-size-15), var(--line-height-22), var(--font-weight-medium), var(--font-family)),
+    $subtitle-1: mat.define-typography-level(var(--font-size-16), var(--line-height-24), var(--font-weight-regular), var(--font-family)),
+    $subtitle-2: mat.define-typography-level(var(--font-size-15), var(--line-height-22), var(--font-weight-regular), var(--font-family)),
+    $body-1: mat.define-typography-level(var(--font-size-14), var(--line-height-20), var(--font-weight-regular), var(--font-family)),
+    $body-2: mat.define-typography-level(var(--font-size-14), var(--line-height-20), var(--font-weight-medium), var(--font-family)),
+    $caption: mat.define-typography-level(var(--font-size-12), var(--line-height-16), var(--font-weight-regular), var(--font-family)),
+    $button: mat.define-typography-level(var(--font-size-14), var(--line-height-20), var(--font-weight-medium), var(--font-family)),
+    $overline: mat.define-typography-level(var(--font-size-9), var(--line-height-16), var(--font-weight-regular), var(--font-family))
+);
+
+$exported-custom-typography: $custom-typography;

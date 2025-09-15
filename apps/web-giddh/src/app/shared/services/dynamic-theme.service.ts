@@ -1,274 +1,205 @@
-import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { generateAndApplyTheme } from '../helpers/color-palette-generator';
+import { Injectable } from '@angular/core';
+import { MATERIAL_VARIABLES_CSS_TEMPLATE } from './material-variables-template';
+
+/** White label configuration interface */
+export interface IWhiteLabelConfig {
+    body?: {
+        giddhWhiteLabel?: {
+            theme?: ITheme;
+        };
+    };
+}
+
+export interface ITheme {
+    primary: string;
+    accent: string;
+    warn: string;
+}
 
 /**
- * Service for managing dynamic theme application with runtime CSS injection
+ * Service for managing dynamic theme application with CSS variables
+ * Generates Material Design color palettes and applies them as CSS variables
+ * 
+ * @public
  * @memberof SharedModule
  */
 @Injectable({
     providedIn: 'root'
 })
 export class DynamicThemeService {
-    /** Renderer for DOM manipulation */
-    private renderer: Renderer2;
-    
-    /** Current theme style element */
-    private currentThemeStyle: HTMLStyleElement | null = null;
-
-    constructor(private rendererFactory: RendererFactory2) {
-        this.renderer = this.rendererFactory.createRenderer(null, null);
-    }
-
-    /**
-     * Generates and injects complete Angular Material theme CSS at runtime
-     * @param {string} primaryColor - Primary theme color in hex format
-     * @param {string} accentColor - Accent theme color in hex format  
-     * @param {string} warnColor - Warning theme color in hex format
-     * @public
-     */
-    public applyRuntimeTheme(primaryColor: string, accentColor?: string, warnColor?: string): void {
-        try {
-            // Remove existing theme
-            if (this.currentThemeStyle) {
-                this.renderer.removeChild(document.head, this.currentThemeStyle);
-            }
-
-            // Generate complete theme CSS
-            const themeCSS = this.generateThemeCSS(primaryColor, accentColor, warnColor);
-            
-            // Create and inject new theme
-            this.currentThemeStyle = this.renderer.createElement('style');
-            this.renderer.setAttribute(this.currentThemeStyle, 'id', 'dynamic-material-theme');
-            this.renderer.appendChild(this.currentThemeStyle, this.renderer.createText(themeCSS));
-            this.renderer.appendChild(document.head, this.currentThemeStyle);
-
-            console.log('Runtime theme applied:', { primaryColor, accentColor, warnColor });
-        } catch (error) {
-            console.error('Error applying runtime theme:', error);
-        }
-    }
-
-    /**
-     * Generates complete Angular Material theme CSS string
-     * @param {string} primaryColor - Primary theme color
-     * @param {string} accentColor - Accent theme color
-     * @param {string} warnColor - Warning theme color
-     * @returns {string} Complete CSS theme string
-     * @private
-     */
-    private generateThemeCSS(primaryColor: string, accentColor?: string, warnColor?: string): string {
-        const primary = primaryColor;
-        const accent = accentColor || this.generateAccentColor(primaryColor);
-        const warn = warnColor || '#f44336';
-
-        return `
-            /* Dynamic Angular Material Theme - Generated at Runtime */
-            .mat-raised-button.mat-primary {
-                background-color: ${primary} !important;
-                color: white !important;
-            }
-            
-            .mat-raised-button.mat-accent {
-                background-color: ${accent} !important;
-                color: white !important;
-            }
-            
-            .mat-raised-button.mat-warn {
-                background-color: ${warn} !important;
-                color: white !important;
-            }
-            
-            .mat-form-field.mat-focused .mat-form-field-label {
-                color: ${primary} !important;
-            }
-            
-            .mat-form-field.mat-focused .mat-form-field-underline .mat-form-field-ripple {
-                background-color: ${primary} !important;
-            }
-            
-            .mat-checkbox-checked.mat-primary .mat-checkbox-background {
-                background-color: ${primary} !important;
-            }
-            
-            .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-                background-color: ${accent} !important;
-            }
-            
-            .mat-radio-button.mat-primary .mat-radio-outer-circle {
-                border-color: ${primary} !important;
-            }
-            
-            .mat-radio-button.mat-primary .mat-radio-inner-circle {
-                background-color: ${primary} !important;
-            }
-            
-            .mat-slide-toggle.mat-primary .mat-slide-toggle-thumb {
-                background-color: ${primary} !important;
-            }
-            
-            .mat-slide-toggle.mat-primary .mat-slide-toggle-bar {
-                background-color: ${this.lightenColor(primary, 0.5)} !important;
-            }
-            
-            .mat-progress-bar-fill::after {
-                background-color: ${primary} !important;
-            }
-            
-            .mat-progress-spinner circle {
-                stroke: ${primary} !important;
-            }
-        `;
-    }
-
-    /**
-     * Generates complementary accent color from primary
-     * @param {string} primaryColor - Primary color in hex
-     * @returns {string} Generated accent color
-     * @private
-     */
-    private generateAccentColor(primaryColor: string): string {
-        // Simple complementary color generation
-        const hex = primaryColor.replace('#', '');
-        const r = parseInt(hex.substr(0, 2), 16);
-        const g = parseInt(hex.substr(2, 2), 16);
-        const b = parseInt(hex.substr(4, 2), 16);
-        
-        // Generate complementary color
-        const compR = 255 - r;
-        const compG = 255 - g;
-        const compB = 255 - b;
-        
-        return `#${compR.toString(16).padStart(2, '0')}${compG.toString(16).padStart(2, '0')}${compB.toString(16).padStart(2, '0')}`;
-    }
-
-    /**
-     * Lightens a color by specified amount
-     * @param {string} color - Color in hex format
-     * @param {number} amount - Amount to lighten (0-1)
-     * @returns {string} Lightened color
-     * @private
-     */
-    private lightenColor(color: string, amount: number): string {
-        const hex = color.replace('#', '');
-        const r = Math.min(255, parseInt(hex.substr(0, 2), 16) + Math.round(255 * amount));
-        const g = Math.min(255, parseInt(hex.substr(2, 2), 16) + Math.round(255 * amount));
-        const b = Math.min(255, parseInt(hex.substr(4, 2), 16) + Math.round(255 * amount));
-        
-        return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-    }
-
-    /**
-     * Applies dynamic theme based on provided colors (CSS Variables approach)
-     * @param {string} primaryColor - Primary theme color in hex format
-     * @param {string} accentColor - Accent theme color in hex format
-     * @param {string} warnColor - Warning theme color in hex format
-     * @public
-     */
-    public applyTheme(primaryColor: string, accentColor?: string, warnColor?: string): void {
-        try {
-            generateAndApplyTheme(primaryColor, accentColor, warnColor);
-            console.log('CSS Variables theme applied:', { primaryColor, accentColor, warnColor });
-        } catch (error) {
-            console.error('Error applying CSS variables theme:', error);
-        }
-    }
-
-    /**
-     * Default theme configuration for fallback scenarios using Giddh brand colors
-     * @private
-     */
-    private readonly defaultThemeConfig = {
-        primary: '#1a237e',    // Giddh Deep Indigo var(--giddh-theme-primary)
-        accent: '#ff9933',     // Giddh Orange var(--giddh-theme-accent)
-        warn: '#F44336'        // Giddh Red var(--giddh-theme-warn)
+    /** Default accent and warn colors for palette generation */
+    private readonly defaultColors = {
+        accent: '#198754', 
+        warn: '#dc3545'
     };
+
+    /** Current material variables style element */
+    private materialVariablesStyle: HTMLStyleElement | null = null;
+
+    /**
+     * Applies theme from white label configuration
+     * Validates configuration and generates CSS variables for Material Design components
+     * Only applies theme if valid white label color is provided, otherwise does nothing
+     * 
+     * @public
+     * @param {IWhiteLabelConfig | null} whiteLabelConfig - White label configuration object
+     * @returns {boolean} Success status of theme application
+     * @memberof DynamicThemeService
+     */
+    public applyThemeFromWhiteLabel(whiteLabelConfig: IWhiteLabelConfig | null): boolean {
+        try {
+            const theme = this.extractAndValidateThemeColor(whiteLabelConfig);
+            
+            if (!theme) {
+                console.error('Invalid color or No white label configuration provided, using default theme');
+                this.removeMaterialVariablesCSS();
+                return false;
+            }
+
+            this.loadMaterialVariablesCSS();
+            this.generateAndApplyColorPalettes(theme);
+            console.log('White label theme applied successfully:', { theme });
+            return true;
+            
+        } catch (error) {
+            console.error('Error applying white label theme:', error);
+            this.removeMaterialVariablesCSS();
+            return false;
+        }
+    }
+
+    /**
+     * Extracts and validates theme color from white label configuration
+     * 
+     * @private
+     * @param {IWhiteLabelConfig | null} config - White label configuration
+     * @returns {string | null} Valid hex color or null if invalid
+     * @memberof DynamicThemeService
+     */
+    private extractAndValidateThemeColor(config: IWhiteLabelConfig | null): ITheme | null {
+        if (!config?.body?.giddhWhiteLabel?.theme?.primary) {
+            return null;
+        }
+
+        const primary = config.body.giddhWhiteLabel.theme.primary;
+        const accent = config.body.giddhWhiteLabel.theme.accent || this.defaultColors.accent;
+        const warn = config.body.giddhWhiteLabel.theme.warn || this.defaultColors.warn;
+        
+        const theme: ITheme = { primary, accent, warn };
+        if (this.isValidHexColor(primary) && this.isValidHexColor(accent) && this.isValidHexColor(warn)) {
+            return theme;
+        }
+        return null;
+    }
+
+    /**
+     * Generates and applies color variables as CSS variables
+     * Creates Material Design color variables for primary, accent, and warn colors
+     * 
+     * @private
+     * @param {ITheme} theme - Theme colors object
+     * @memberof DynamicThemeService
+     */
+    private generateAndApplyColorPalettes(theme: ITheme): void {
+        this.applyCSSVariables('primary', theme.primary);
+        this.applyCSSVariables('accent', theme.accent);
+        this.applyCSSVariables('warn', theme.warn);
+    }
+
+    /**
+     * Applies Material Design color variables to document root
+     * Creates --mat-{type}-color, --mat-{type}-color-rgb, and --mat-{type}-contrast-color variables
+     * 
+     * @private
+     * @param {string} paletteType - Type of palette ('primary', 'accent', 'warn')
+     * @param {string} hexColor - Hex color value
+     * @memberof DynamicThemeService
+     */
+    private applyCSSVariables(paletteType: string, hexColor: string): void {
+        const root = document.documentElement;
+        
+        // Convert hex to RGB values
+        const hexToRgb = (hex: string): string => {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            if (result) {
+                const r = parseInt(result[1], 16);
+                const g = parseInt(result[2], 16);
+                const b = parseInt(result[3], 16);
+                return `${r}, ${g}, ${b}`;
+            }
+            return '0, 0, 0';
+        };
+        
+        // Determine contrast color (white or black)
+        const getContrastColor = (hex: string): string => {
+            const rgb = hexToRgb(hex).split(', ').map(Number);
+            const luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
+            return luminance > 0.5 ? '#000000' : '#ffffff';
+        };
+        
+        // Set Material Design CSS variables
+        root.style.setProperty(`--mat-${paletteType}-color`, hexColor);
+        root.style.setProperty(`--mat-${paletteType}-color-rgb`, hexToRgb(hexColor));
+        root.style.setProperty(`--mat-${paletteType}-contrast-color`, getContrastColor(hexColor));
+    }
+
+    /**
+     * Dynamically injects Material Variables CSS when white label theme is applied
+     * 
+     * @private
+     * @memberof DynamicThemeService
+     */
+    private loadMaterialVariablesCSS(): void {
+        // Check if already loaded
+        if (this.materialVariablesStyle) {
+            return;
+        }
+
+        // Create style element with Material Variables CSS
+        this.materialVariablesStyle = document.createElement('style');
+        this.materialVariablesStyle.id = 'white-label-material-variables';
+        this.materialVariablesStyle.textContent = this.getMaterialVariablesCSS();
+        
+        // Append to head
+        document.head.appendChild(this.materialVariablesStyle);
+        console.log('Material variables CSS loaded for white label theme');
+    }
+
+    /**
+     * Removes the Material Variables CSS file when white label theme is not needed
+     * 
+     * @private
+     * @memberof DynamicThemeService
+     */
+    private removeMaterialVariablesCSS(): void {
+        if (this.materialVariablesStyle) {
+            document.head.removeChild(this.materialVariablesStyle);
+            this.materialVariablesStyle = null;
+            console.log('Material variables CSS removed - using default theme');
+        }
+    }
+
+    /**
+     * Returns the Material Variables CSS content as a string
+     * This contains all the Material Design component variable overrides
+     * 
+     * @private
+     * @returns {string} Complete CSS variables for all Angular Material components
+     * @memberof DynamicThemeService
+     */
+    private getMaterialVariablesCSS(): string {
+        return MATERIAL_VARIABLES_CSS_TEMPLATE;
+    }
 
     /**
      * Validates hex color format
+     * 
+     * @private
      * @param {string} color - Color string to validate
      * @returns {boolean} True if valid hex color
-     * @private
+     * @memberof DynamicThemeService
      */
     private isValidHexColor(color: string): boolean {
         return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color);
-    }
-
-    /**
-     * Safely extracts and validates theme colors from configuration
-     * @param {WhiteLabelConfig} config - White label configuration object
-     * @returns {ThemeColors} Validated theme colors
-     * @private
-     */
-    private extractThemeColors(config: any): { primary: string; accent: string; warn: string } {
-        const whiteLabelData = config?.body?.giddhWhiteLabel;
-        
-        const primary = this.isValidHexColor(whiteLabelData?.themeColor) 
-            ? whiteLabelData.themeColor 
-            : this.defaultThemeConfig.primary;
-            
-        const accent = this.isValidHexColor(whiteLabelData?.accentColor) 
-            ? whiteLabelData.accentColor 
-            : this.defaultThemeConfig.accent;
-            
-        const warn = this.isValidHexColor(whiteLabelData?.warnColor) 
-            ? whiteLabelData.warnColor 
-            : this.defaultThemeConfig.warn;
-
-        return { primary, accent, warn };
-    }
-
-    /**
-     * Applies theme from white label configuration with proper validation
-     * @param {any} whiteLabelConfig - White label configuration object
-     * @param {boolean} useRuntimeCSS - Whether to use runtime CSS injection instead of CSS variables
-     * @returns {boolean} True if theme was successfully applied
-     * @public
-     */
-    public applyThemeFromConfig(whiteLabelConfig: any, useRuntimeCSS: boolean = false): boolean {
-        try {
-            if (!whiteLabelConfig) {
-                console.warn('No white label configuration provided, using default theme');
-                return this.applyDefaultTheme(useRuntimeCSS);
-            }
-
-            const { primary, accent, warn } = this.extractThemeColors(whiteLabelConfig);
-            
-            if (useRuntimeCSS) {
-                this.applyRuntimeTheme(primary, accent, warn);
-            } else {
-                this.applyTheme(primary, accent, warn);
-            }
-
-            console.log('Theme applied successfully from configuration:', { primary, accent, warn });
-            return true;
-            
-        } catch (error) {
-            console.error('Failed to apply theme from configuration:', error);
-            return this.applyDefaultTheme(useRuntimeCSS);
-        }
-    }
-
-    /**
-     * Applies default theme as fallback
-     * @param {boolean} useRuntimeCSS - Whether to use runtime CSS injection
-     * @returns {boolean} True if default theme was applied
-     * @private
-     */
-    private applyDefaultTheme(useRuntimeCSS: boolean): boolean {
-        try {
-            const { primary, accent, warn } = this.defaultThemeConfig;
-            
-            if (useRuntimeCSS) {
-                this.applyRuntimeTheme(primary, accent, warn);
-            } else {
-                this.applyTheme(primary, accent, warn);
-            }
-            
-            console.log('Default theme applied as fallback');
-            return true;
-        } catch (error) {
-            console.error('Failed to apply default theme:', error);
-            return false;
-        }
     }
 }

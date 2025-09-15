@@ -1,6 +1,7 @@
 @charset "utf-8"; 
 @import "./giddh-common.scss";
-* {
+
+*:not([class*="icon-"]), *:not([class*="icon-ledger-"]) {
     font-family: var(--font-family);
 }
 
@@ -8,7 +9,6 @@ html,
 body {
     height: 100%;
     font-family: var(--font-family) !important;
-    // color: var(--color-nero);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: var(--font-size-15) !important;

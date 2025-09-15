@@ -256,7 +256,7 @@ export function updateCSSVariables(paletteType: string, palette: ColorPalette): 
     Object.keys(palette.contrast).forEach(shade => {
         const shadeKey = shade as keyof ColorPalette['contrast'];
         const varName = `--theme-${paletteType}-contrast-${shade}`;
-        const contrastValue = palette.contrast[shadeKey] === '#000000' ? 'rgba(0, 0, 0, 0.87)' : 'white';
+        const contrastValue = palette.contrast[shadeKey] === '#000000' ? 'rgba(0, 0, 0, 0.87)' : '#ffffff';
         root.style.setProperty(varName, contrastValue);
         console.log(`Set theme contrast variable: ${varName} = ${contrastValue}`);
     });
@@ -282,4 +282,3 @@ export function generateAndApplyTheme(
     updateCSSVariables('accent', accentPalette);
     updateCSSVariables('warn', warnPalette);
 }
-
