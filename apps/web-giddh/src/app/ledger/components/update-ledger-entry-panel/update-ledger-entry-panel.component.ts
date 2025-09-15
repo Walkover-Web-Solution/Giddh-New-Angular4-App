@@ -2591,11 +2591,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             height: '650px'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
             document.querySelector(".cdk-global-overlay-wrapper")?.classList?.remove("double-popup-zindex");
-            if (response) {
-                this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
-            }
         });
     }
 
