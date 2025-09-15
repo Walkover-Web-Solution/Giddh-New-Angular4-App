@@ -15,7 +15,7 @@
                         <reactive-dropdown-field [label]="localeData?.select_tax" [placeholder]="localeData?.select_tax"
                             [labelValue]="otherTaxForm.get('name')?.value" formControlName="tax" [name]="'tax'" [options]="taxesList$ | async" (onClear)="otherTaxForm.get('tax')?.patchValue(null)"
                             [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value"
-                            (createOption)="createTaxDialog()" [createNewText]="commonLocaleData?.app_create_new">
+                            (createOption)="createTaxDialog()" [createNewText]="commonLocaleData?.app_create_new" [showCreateNew]="true">
                         </reactive-dropdown-field>
                     </div>
                     <div class="col-6">

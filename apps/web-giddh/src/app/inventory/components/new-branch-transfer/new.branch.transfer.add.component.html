@@ -51,6 +51,7 @@
                                 <reactive-dropdown-field
                                     [name]="'productName'"
                                     [createNewText]="'Create New Product'"
+                                    [showCreateNew]="true"
                                    (createOption)="onProductNoResultsClicked(0)"
                                     [enableDynamicSearch]="true"
                                     [options]="stockList"
@@ -281,6 +282,7 @@
                                 <reactive-dropdown-field
                                     [name]="'productName'"
                                     [createNewText]="'Create New Product'"
+                                    [showCreateNew]="true"
                                    (createOption)="onProductNoResultsClicked(0)"
                                     [enableDynamicSearch]="true"
                                     [options]="stockList"
@@ -550,6 +552,7 @@
                                             <reactive-dropdown-field
                                                 [name]="'productName' + i"
                                                 [createNewText]="'Add New Product'"
+                                                [showCreateNew]="true"
                                                (createOption)="onProductNoResultsClicked(i)"
                                                 [enableDynamicSearch]="true"
                                                 [options]="stockList"
@@ -1142,6 +1145,7 @@
                                     [options]="transporterDropdown$ | async"
                                     [(ngModel)]="branchTransfer.transporterDetails.transporterId"
                                     [createNewText]="'Create New'"
+                                    [showCreateNew]="true"
                                    (createOption)="openTransporterPopupDialog()"
                                 ></reactive-dropdown-field>
                             </div>
