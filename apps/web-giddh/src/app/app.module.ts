@@ -104,10 +104,10 @@ if (whiteLabelConfig) {
 // GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
 export function getServiceConfig(): any {
     return {
-        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `https://api.giddh.com/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : "https://api.giddh.com/"),
-        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `https://api.giddh.com/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : "https://api.giddh.com/"),
+        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
+        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
+        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
         appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
         AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
         PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
