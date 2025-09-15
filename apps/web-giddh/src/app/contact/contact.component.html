@@ -20,7 +20,6 @@
             <mat-tab
                 [label]="activeTab === 'customer' ? localeData?.customer : localeData?.vendor"
                 [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
-                *ngIf="activeTab !== 'aging-report'"
             >
                 <div class="container-fluid">
                     <div class="header-content-sticky vendor-z-index">
@@ -155,7 +154,7 @@
                                                 <span>{{ commonLocaleData?.app_clear }}</span>
                                             </button>
                                         </div>
-                                        <div class="mr-0" *ngIf="activeTab !== 'aging'">
+                                        <div class="mr-0" *ngIf="activeTab !== 'aging-report'">
                                             <select-table-column
                                                 [moduleType]="moduleType"
                                                 [dynamicCustomColumns]="dynamicCustomColumns"
