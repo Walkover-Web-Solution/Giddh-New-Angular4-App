@@ -85,7 +85,6 @@
                                         >
                                             <input
                                                 type="file"
-                                                #fileInput
                                                 name="logo-edit"
                                                 id="logo-edit"
                                                 accept="image/png, image/jpeg"
@@ -2807,7 +2806,7 @@
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
-                                                            (ngModelChange)="onValueChange('qrCodeId', $event)"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [pattern]="
                                                                 '^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'
                                                             "
@@ -3888,7 +3887,7 @@
                                                                     >
                                                                         <img
                                                                             [src]="signatureSrc"
-                                                                            alt=""
+                                                                            alt="signature"
                                                                             id="signatureImage"
                                                                             (ngModelChange)="onChangeFieldVisibility()"
                                                                         />
