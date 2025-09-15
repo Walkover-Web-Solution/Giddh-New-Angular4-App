@@ -501,12 +501,28 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
+        // Increase timeout and add more robust checking
         const interval = setInterval(() => {
-            if (document.getElementById('init-contact-add')) {
+            const element = document.getElementById('init-contact-add');
+            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
+            
+            if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-add');
                 clearInterval(interval);
             }
-        }, 500);
+        }, 500); // Reduced interval for faster detection
+        
+        // Add fallback timeout to prevent infinite loop
+        setTimeout(() => {
+            clearInterval(interval);
+            // Try one more time after a longer delay
+            setTimeout(() => {
+                const element = document.getElementById('init-contact-add');
+                if (element && !this.intl['init-contact-add']) {
+                    this.onlyPhoneNumber('init-contact-add');
+                }
+            }, 1000);
+        }, 10000); // Clear after 10 seconds max
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName')?.value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
@@ -646,6 +662,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
+     * Reinitialize mobile number field if flag is not showing
+     *
+     * @param {string} fieldId
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public reinitializeMobileField(fieldId: string): void {
+        const element = document.getElementById(fieldId);
+        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
+        
+        if (element && intlTelInput && !this.intl[fieldId]) {
+            this.onlyPhoneNumber(fieldId);
+        }
+    }
+
+    /**
      * This will be use for add new portal user
      *
      * @param {*} [user]
@@ -674,11 +705,26 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         const lastIndex = mappings.controls.length - 1;
         const interval = setInterval(() => {
-            if (document.getElementById('init-contact-portal_' + lastIndex)) {
+            const element = document.getElementById('init-contact-portal_' + lastIndex);
+            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
+            
+            if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
             }
-        }, 500);
+        }, 200); // Faster checking for dynamic elements
+        
+        // Add fallback timeout
+        setTimeout(() => {
+            clearInterval(interval);
+            // Try one more time after a longer delay
+            setTimeout(() => {
+                const element = document.getElementById('init-contact-portal_' + lastIndex);
+                if (element && !this.intl['init-contact-portal_' + lastIndex]) {
+                    this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
+                }
+            }, 500);
+        }, 5000); // Clear after 5 seconds max
     }
 
     /**

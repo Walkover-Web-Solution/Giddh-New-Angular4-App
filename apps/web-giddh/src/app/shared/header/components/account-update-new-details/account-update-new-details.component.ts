@@ -526,12 +526,28 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
+        // Increase timeout and add more robust checking
         const interval = setInterval(() => {
-            if (document.getElementById('init-contact-update')) {
+            const element = document.getElementById('init-contact-update');
+            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
+            
+            if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-update');
                 clearInterval(interval);
             }
-        }, 500);
+        }, 500); // Reduced interval for faster detection
+        
+        // Add fallback timeout to prevent infinite loop
+        setTimeout(() => {
+            clearInterval(interval);
+            // Try one more time after a longer delay
+            setTimeout(() => {
+                const element = document.getElementById('init-contact-update');
+                if (element && !this.intl['init-contact-update']) {
+                    this.onlyPhoneNumber('init-contact-update');
+                }
+            }, 1000);
+        }, 10000); // Clear after 10 seconds max
 
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
@@ -825,6 +841,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
+     * Reinitialize mobile number field if flag is not showing
+     *
+     * @param {string} fieldId
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public reinitializeMobileField(fieldId: string): void {
+        const element = document.getElementById(fieldId);
+        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
+        
+        if (element && intlTelInput && !this.intl[fieldId]) {
+            this.onlyPhoneNumber(fieldId);
+        }
+    }
+
+    /**
      * This will be use for add new portal user
      *
      * @param {*} [user]
@@ -860,11 +891,26 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         const lastIndex = mappings.controls.length - 1;
         const interval = setInterval(() => {
-            if (document.getElementById('init-contact-portal_' + lastIndex)) {
+            const element = document.getElementById('init-contact-portal_' + lastIndex);
+            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
+            
+            if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
             }
-        }, 500);
+        }, 200); // Faster checking for dynamic elements
+        
+        // Add fallback timeout
+        setTimeout(() => {
+            clearInterval(interval);
+            // Try one more time after a longer delay
+            setTimeout(() => {
+                const element = document.getElementById('init-contact-portal_' + lastIndex);
+                if (element && !this.intl['init-contact-portal_' + lastIndex]) {
+                    this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
+                }
+            }, 500);
+        }, 5000); // Clear after 5 seconds max
     }
 
     /**
