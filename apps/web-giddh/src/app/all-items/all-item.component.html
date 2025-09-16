@@ -92,7 +92,7 @@
                 <i class="icon-cross"></i>
             </button>
         </div>
-        <mat-dialog-content class="dialog-body">
+        <mat-dialog-content class="dialog-body d-flex">
             <ng-container *ngFor="let item of subMenuItems">
                 <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional?.queryParams">
                     <mat-card-title>
