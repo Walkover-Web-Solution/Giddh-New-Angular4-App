@@ -2928,6 +2928,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             data: {
                 voucherType: this.voucherType,
                 exchangeRate: this.invoiceForm.get("exchangeRate")?.value ?? 1,
+                highPrecisionRate: this.highPrecisionRate,
                 customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
             },
         });
