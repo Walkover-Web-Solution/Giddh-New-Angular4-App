@@ -119,7 +119,7 @@
                                                 <button
                                                     *ngFor="let size of imageSizes"
                                                     mat-mini-fab
-                                                    [disabled]="isFileUploadInProgress"
+                                                    [disabled]="!customTemplate?.logoUniqueName"
                                                     [color]="defaultImageSize === size?.label ? 'primary' : ''"
                                                     (click)="
                                                         defaultImageSize = size?.label;
