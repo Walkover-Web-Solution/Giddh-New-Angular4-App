@@ -26,6 +26,7 @@ export class AllTemplatesComponent implements OnInit {
     public isFileUploading: boolean = true;
     /** Holds PDF file value */
     public pdfFileURL: string = '';
+    
     constructor(
         private invoiceUiDataService: InvoiceUiDataService,
         private generalService: GeneralService,
