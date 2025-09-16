@@ -30,6 +30,17 @@ export enum BranchHierarchyType {
     Tree = 'tree'
 };
 
+/** PDF Zoom Configuration Constants */
+export const IFRAME_ZOOM_CONFIG = {
+    FIT_PAGE: '#view=Fit',
+    FIT_HORIZONTAL: '#view=FitH',
+    FIT_VERTICAL: '#view=FitV',
+    ZOOM_50: '#zoom=50&view=FitH',
+    ZOOM_75: '#zoom=75&view=FitH',
+    ZOOM_100: '#zoom=100&view=FitH',
+    ZOOM_125: '#zoom=125&view=FitV'
+};
+
 /** Date Regex for 'MMM D, YYYY' */
 export const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 

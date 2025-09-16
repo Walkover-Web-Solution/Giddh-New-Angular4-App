@@ -219,5 +219,5 @@
     </mat-dialog-content>
 </ng-container>
 <ng-template #attachments>
-    <attachments [selectedItem]="selectedItem"></attachments>
+    <attachments [selectedItem]="selectedItem" (isDeletedAccount)="isDeletedAccount($event)"></attachments>
 </ng-template>

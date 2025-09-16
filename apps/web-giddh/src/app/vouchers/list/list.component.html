@@ -914,7 +914,10 @@
 
             <!-- invoice-content-start -->
             <mat-tab [label]="localeData?.tabs?.invoices" *ngIf="activeTabGroup === 0">
-                <div class="vouchers-wrapper pt-3 px-4 overflow-visible" *ngIf="voucherType === voucherTypeEnum.sales && activeModule === 'list'">
+                <div
+                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    *ngIf="voucherType === voucherTypeEnum.sales && activeModule === 'list'"
+                >
                     <div
                         class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1"
                     >
@@ -3681,13 +3684,13 @@
                                                 [matTooltip]="element.voucherNumber"
                                                 matTooltipPosition="above"
                                             >
-                                            <a
-                                                href="javascript:;"
-                                                class="btn-link-2"
-                                                (click)="showVoucherPreview(element?.uniqueName)"
-                                            >
-                                                {{ element?.voucherNumber }}
-                                            </a>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="btn-link-2"
+                                                    (click)="showVoucherPreview(element?.uniqueName)"
+                                                >
+                                                    {{ element?.voucherNumber }}
+                                                </a>
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -5328,9 +5331,9 @@
                                                         "
                                                         [name]="'initialCreditNoteNumber'"
                                                         [label]="localeData?.initial_no"
+                                                        formControlName="initialCreditNoteNumber"
                                                         [placeholder]="'00'"
                                                         [type]="'text'"
-                                                        formControlName="initialCreditNoteNumber"
                                                     ></input-field>
                                                 </div>
                                                 <mat-slide-toggle
@@ -5778,113 +5781,201 @@
             <!-- setting-content-end -->
 
             <!-- template-content-start -->
-            <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <div class="pd-t15" *ngIf="activeModule === 'templates'">
-                    <edit-invoice></edit-invoice>
-                </div>
-                <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
-                    <dropdown-field [name]="'design'" [label]="localeData?.select_design_for" [placeholder]="commonLocaleData?.app_select"
-                        class="w-50 template-design d-block">
+            <mat-tab
+                [label]="localeData?.tabs?.templates"
+                *ngIf="activeTabGroup === 0 || activeTabGroup === 1 || activeTabGroup === 2"
+            >
+                <div class="vouchers-wrapper pt-3 px-4" *ngIf="activeModule === 'templates'">
+                    <dropdown-field
+                        *ngIf="voucherType === voucherTypeEnum.purchase && selectedTemplate?.label"
+                        [name]="'design'"
+                        [label]="localeData?.select_design_for"
+                        [placeholder]="commonLocaleData?.app_select"
+                        [options]="purchaseTemplatesList"
+                        class="w-50 template-design d-block"
+                        (selectedOption)="templateSelect($event)"
+                        [defaultValue]="selectedTemplate?.label"
+                    >
                     </dropdown-field>
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">
-                                <h3 class="fonr-16">Design Template</h3>
+                                <h3 class="fonr-16">{{ localeData?.design_template }}</h3>
                                 <p class="my-3">
-                                    Click to add a template from our gallery. You can customize the template title,
-                                    columns,and headers in line item table.
+                                    {{ localeData?.template_gallery_info }}
                                 </p>
-                                <button mat-stroked-button color="primary" (click)="templateEdit()">Add New</button>
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    (click)="templateAction(null, 'create')"
+                                    *ngIf="voucherApiVersion === 2"
+                                >
+                                    {{ localeData?.add_new }}
+                                </button>
                             </mat-card-content>
                         </mat-card>
-                        <mat-card class="outline-card add-template-wrapper text-center">
-                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                <h3 class="fonr-16">Kriti - 28Sep</h3>
-                                <span class="default-wrap font-12 p-2 cursor-pointer">
-                                    <i class="icon-favorite-selected"></i>
-                                    Set as Default
-                                </span>
-                                <div class="d-flex column-gap1 justify-content-center">
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Preview"
-                                        matTooltipPosition="above"
-                                        (click)="templateDialog()"
+                        <ng-container *ngFor="let template of createdTemplatesList">
+                            <mat-card
+                                class="outline-card add-template-wrapper text-center"
+                                *ngIf="
+                                    [voucherTypeEnum.invoice, voucherTypeEnum.purchase_bill, voucherTypeEnum.purchase_order].includes(template.type) &&
+                                    [voucherTypeEnum.sales, voucherTypeEnum.purchase].includes(voucherType)
+                                "
+                            >
+                                <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                    <h3 class="fonr-16">{{ template.name }}</h3>
+                                    <span
+                                        *ngIf="template.isDefault"
+                                        [ngClass]="{ 'active': template.isDefault }"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
                                     >
-                                        <i class="icon-eye"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Edit Template"
-                                        matTooltipPosition="above"
-                                        (click)="templateEdit()"
+                                        <i class="icon-favorite-selected"></i>
+                                        {{ localeData?.default_template }}
+                                    </span>
+                                    <span
+                                        *ngIf="!template.isDefault"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        (click)="
+                                            setTemplateAsDefault(
+                                                template.uniqueName,
+                                                template.type === voucherTypeEnum.invoice
+                                                    ? voucherTypeEnum.invoice
+                                                    : template.type === voucherTypeEnum.purchase_bill
+                                                    ? voucherTypeEnum.purchase_bill
+                                                    : voucherTypeEnum.purchase_order
+                                            )
+                                        "
                                     >
-                                        <i class="icon-edit-pencil"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Delete"
-                                        matTooltipPosition="above"
-                                        (click)="deleteVoucherDialog()"
+                                        <i class="icon-favorite-selected"></i>
+                                        {{ localeData?.set_as_default }}
+                                    </span>
+                                    <div class="d-flex column-gap1 justify-content-center">
+                                        <button
+                                            mat-stroked-button
+                                            color="primary"
+                                            class="mat-icon-md-btn"
+                                            matTooltip="{{ localeData?.preview }}"
+                                            matTooltipPosition="above"
+                                            (click)="previewTemplate(template)"
+                                        >
+                                            <i class="icon-eye"></i>
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            color="primary"
+                                            class="mat-icon-md-btn"
+                                            [matTooltip]="localeData?.edit_template"
+                                            matTooltipPosition="above"
+                                            (click)="templateAction(template, 'edit')"
+                                        >
+                                            <i class="icon-edit-pencil"></i>
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            color="primary"
+                                            class="mat-icon-md-btn cursor-pointer"
+                                            [disabled]="template.isDefault"
+                                            [matTooltip]="localeData?.delete"
+                                            matTooltipPosition="above"
+                                            (click)="
+                                                template.isDefault
+                                                    ? null
+                                                    : deleteTemplate(
+                                                          template,
+                                                          template.type === voucherTypeEnum.invoice
+                                                              ? voucherTypeEnum.invoice
+                                                              : template.type === voucherTypeEnum.purchase_bill
+                                                              ? voucherTypeEnum.purchase_bill
+                                                              : voucherTypeEnum.purchase_order
+                                                      )
+                                            "
+                                        >
+                                            <i class="icon-trash"></i>
+                                        </button>
+                                    </div>
+                                    <p
+                                        class="text-ellipsis d-inline-block template-content"
+                                        [matTooltip]="
+                                            template.createdBy.name.length > 13 ? template.createdBy.name : null
+                                        "
                                     >
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </div>
-                                <p class="text-ellipsis d-inline-block template-content">
-                                    Created by: Dilpreet Singh Dang
-                                </p>
-                            </mat-card-content>
-                        </mat-card>
-                        <mat-card class="outline-card add-template-wrapper text-center">
-                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                <h3 class="fonr-16">Kriti - 28Sep</h3>
-                                <span class="default-wrap font-12 p-2 cursor-pointer active">
-                                    <i class="icon-favorite-selected"></i>
-                                    Set as Default
-                                </span>
-                                <div class="d-flex column-gap1 justify-content-center">
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Preview"
-                                        matTooltipPosition="above"
-                                        (click)="templateDialog()"
+                                        {{ localeData?.created_by }} {{ template.createdBy?.name }}
+                                    </p>
+                                </mat-card-content>
+                            </mat-card>
+                            <mat-card
+                                class="outline-card add-template-wrapper text-center"
+                                *ngIf="
+                                    template.type === voucherTypeEnum.voucher &&
+                                    (voucherType === voucherTypeEnum.creditNote || voucherType === voucherTypeEnum.debitNote)
+                                "
+                            >
+                                <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                    <h3 class="fonr-16">{{ template.name }}</h3>
+                                    <span
+                                        *ngIf="template.isDefaultForVoucher"
+                                        [ngClass]="{ 'active': template.isDefaultForVoucher }"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
                                     >
-                                        <i class="icon-eye"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Edit Template"
-                                        matTooltipPosition="above"
-                                        (click)="templateEdit()"
+                                        <i class="icon-favorite-selected"></i>
+                                        {{ localeData?.default_template }}
+                                    </span>
+                                    <span
+                                        *ngIf="!template.isDefaultForVoucher"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        (click)="setTemplateAsDefault(template.uniqueName, voucherTypeEnum.voucher)"
                                     >
-                                        <i class="icon-edit-pencil"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Delete"
-                                        matTooltipPosition="above"
-                                        (click)="deleteVoucherDialog()"
+                                        <i class="icon-favorite-selected"></i>
+                                        {{ localeData?.set_as_default }}
+                                    </span>
+                                    <div class="d-flex column-gap1 justify-content-center">
+                                        <button
+                                            mat-stroked-button
+                                            color="primary"
+                                            class="mat-icon-md-btn"
+                                            matTooltip="{{ localeData?.preview }}"
+                                            matTooltipPosition="above"
+                                            (click)="previewTemplate(template)"
+                                        >
+                                            <i class="icon-eye"></i>
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            color="primary"
+                                            class="mat-icon-md-btn"
+                                            matTooltip="{{ localeData?.edit_template }}"
+                                            matTooltipPosition="above"
+                                            (click)="templateAction(template, 'edit')"
+                                        >
+                                            <i class="icon-edit-pencil"></i>
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            color="primary"
+                                            [disabled]="template.isDefaultForVoucher"
+                                            class="mat-icon-md-btn cursor-pointer"
+                                            matTooltip="{{ localeData?.delete }}"
+                                            matTooltipPosition="above"
+                                            (click)="
+                                                template.isDefaultForVoucher
+                                                    ? null
+                                                    : deleteTemplate(template, 'voucher')
+                                            "
+                                        >
+                                            <i class="icon-trash"></i>
+                                        </button>
+                                    </div>
+                                    <p
+                                        class="text-ellipsis d-inline-block template-content"
+                                        [matTooltip]="
+                                            template.createdBy.name.length > 13 ? template.createdBy.name : null
+                                        "
                                     >
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </div>
-                                <p class="text-ellipsis d-inline-block template-content">
-                                    Created by: Dilpreet Singh Dang
-                                </p>
-                            </mat-card-content>
-                        </mat-card>
+                                        {{ localeData?.created_by }} {{ template.createdBy?.name }}
+                                    </p>
+                                </mat-card-content>
+                            </mat-card>
+                        </ng-container>
                     </div>
                 </div>
             </mat-tab>
