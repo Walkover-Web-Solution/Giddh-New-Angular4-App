@@ -342,6 +342,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     // Always set labelValue to the string label, not the object
                     this.labelValue = matchedOption.label || '';
                     this.changeDetection.detectChanges();
+                } else {
+                    this.labelValue = currentValue;
                 }
             } else if (currentValue === "") {
                 this.labelValue = "";
