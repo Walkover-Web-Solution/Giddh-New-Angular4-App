@@ -129,6 +129,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public initialUpload: boolean = true;
     /** This will use for initial file upload */
     public initialUploadFile: boolean = false;
+    /** This will use for main page upload file */
+    public mainPageUploadFile: boolean = false;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -170,13 +172,13 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             }
         });
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
-        this.getAllOcrDocuments(false);
 
 
         this.ocrMainList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (!res) {
                 return;
             }
+            this.aiOcrService.mainPageOcrData$.next(res);
             // Update initial upload state
             if (this.initialUploadFile) {
                 this.initialUpload = false;
@@ -213,7 +215,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
         // Call getCompletedCount every 5 seconds
         setInterval(() => {
-            if (this.listCount > 0) {
+            if (this.listCount > 0 || this.initialUploadFile) {
                 this.aiOcrStore.getCompletedCount(null);
             }
         }, 5000);
@@ -282,6 +284,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                     this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                     this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+                    this.getAllOcrDocuments(false);
                 }
             });
         }
@@ -294,10 +297,10 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             // Update initial upload state
             if (this.initialUploadFile) {
                 this.initialUpload = false;
-            }            
-            this.ledgerComponentStore.uploadVoucher({ 
-                url: res.signedUrl, 
-                file: this.file 
+            }
+            this.ledgerComponentStore.uploadVoucher({
+                url: res.signedUrl,
+                file: this.file
             });
         });
 
@@ -311,8 +314,11 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
         this.ocrImportSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
-                this.getAllOcrDocuments(false);
-                this.aiOcrService.uploadDataSuccess$.next(true);
+                if (this.mainPageUploadFile) {
+                    this.getAllOcrDocuments(false);
+                } else {
+                    this.aiOcrService.uploadDataSuccess$.next(true);
+                }
             }
         });
 
@@ -358,6 +364,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             pagination: this.ocrDocumentsRequestParams,
             model: reqObj,
         };
+        this.aiOcrService.mainPage$.next(true);
         this.aiOcrStore.getAllMainPageOcrData(request);
     }
 
@@ -421,15 +428,11 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * Initiates the file upload dialog.
      * @param event - The event triggering the upload.
      * @param fileInput - The file input element.
-     * @param mode - The mode of upload.
      * @memberof AiOcrComponent
      */
-    public onUploadFile(event: any, fileInput: HTMLInputElement, mode?: string): void {
-        // Set initial upload flag if in initial mode
-        if (mode === "initial") {
-            this.initialUploadFile = true;
-        }
-        
+    public onUploadFile(event: any, fileInput: HTMLInputElement, mainUpload: boolean): void {
+        this.initialUploadFile = true;
+        this.mainPageUploadFile = mainUpload;
         // Trigger file input dialog if event exists
         if (event) {
             fileInput.value = "";
@@ -485,6 +488,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             this.ocrDocumentsRequestParams.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.ocrDocumentsRequestParams.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+            this.aiOcrService.mainPage$.next(false);
         }
     }
 
