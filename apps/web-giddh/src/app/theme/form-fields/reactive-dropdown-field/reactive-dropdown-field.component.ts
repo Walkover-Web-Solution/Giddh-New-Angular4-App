@@ -334,7 +334,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (this.options && this.options.length > 0) {
             const currentValue = this.value !== undefined && this.value !== null ? this.value : null;
 
-            if (currentValue !== null && currentValue !== '') {
+            if ((currentValue !== null && currentValue !== '') || this.labelValue) {
                 if (this.useCustomLabelValue) return; // If useCustomLabelValue is true, do not set labelValue from options
                 
                 const matchedOption = this.options.find(option => option?.value === currentValue);
@@ -342,6 +342,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     // Always set labelValue to the string label, not the object
                     this.labelValue = matchedOption.label || '';
                     this.changeDetection.detectChanges();
+                } else {
+                    this.labelValue = currentValue;
                 }
             } else if (currentValue === "") {
                 this.labelValue = "";
