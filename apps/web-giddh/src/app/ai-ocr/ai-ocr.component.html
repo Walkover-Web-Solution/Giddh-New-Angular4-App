@@ -22,7 +22,7 @@
                 <button
                     mat-stroked-button
                     color="primary"
-                    (click)="onUploadFile($event, fileInput,'initial')"
+                    (click)="onUploadFile($event, fileInput, true)"
                     *ngIf="!isCompany && !isConsolidatedBranch"
                 >
                     {{ localeData?.upload_button }}
@@ -57,7 +57,7 @@
                         [matTooltip]="commonLocaleData?.app_upload"
                         matTooltipClass="tooltip-black"
                         [matTooltipPosition]="'above'"
-                        (click)="onUploadFile($event, fileInput)"
+                        (click)="onUploadFile($event, fileInput, false)"
                     >
                         <giddh-progress-spinner
                             *ngIf="ocrUploadInProgress$ | async"
