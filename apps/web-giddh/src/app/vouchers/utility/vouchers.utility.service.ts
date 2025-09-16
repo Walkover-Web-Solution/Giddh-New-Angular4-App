@@ -332,6 +332,7 @@ export class VouchersUtilityService {
             delete invoiceForm.chequeClearanceDate;
             delete invoiceForm.isAdvanceReceipt;
             delete invoiceForm.salesPurchaseAsReceiptPayment;
+            delete invoiceForm.salesPersonName;
 
             invoiceForm.entries?.forEach(entry => {
                 delete entry.showCodeType;

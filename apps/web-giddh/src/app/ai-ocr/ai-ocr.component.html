@@ -7,7 +7,7 @@
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <section class="ai-ocr container-fluid pd-15 d-flex flex-column" *ngIf="!isLoading">
-        <ng-container *ngIf="listCount === 0; else aiOcr">
+        <ng-container *ngIf="listCount === 0 && initialUpload; else aiOcr">
             <input
                 type="file"
                 #fileInput
@@ -22,7 +22,7 @@
                 <button
                     mat-stroked-button
                     color="primary"
-                    (click)="onUploadFile($event, fileInput)"
+                    (click)="onUploadFile($event, fileInput,'initial')"
                     *ngIf="!isCompany && !isConsolidatedBranch"
                 >
                     {{ localeData?.upload_button }}

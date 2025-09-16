@@ -333,6 +333,17 @@
                             "queryParams": { "addVendor" : true }
                         }
                     }
+                },
+                {
+                    "label": "Template",
+                    "link": "/pages/vouchers/preview/purchase/templates",
+                    "icon": "icon-template",
+                    "description": "Edit design & content of the template",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },

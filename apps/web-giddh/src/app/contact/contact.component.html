@@ -8,7 +8,7 @@
     <div class="relative white-bg">
         <hamburger-menu *ngIf="activeTab !== 'vendor'" [pageHeading]="getPageHeading()"></hamburger-menu>
         <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="activeTab === 'vendor'"></hamburger-menu>
-
+        
         <mat-tab-group
             #staticTabs
             class="custom-mat-tabs customer-aging table-header-sticky"
@@ -154,7 +154,7 @@
                                                 <span>{{ commonLocaleData?.app_clear }}</span>
                                             </button>
                                         </div>
-                                        <div class="mr-0" *ngIf="activeTab !== 'aging'">
+                                        <div class="mr-0" *ngIf="activeTab !== 'aging-report'">
                                             <select-table-column
                                                 [moduleType]="moduleType"
                                                 [dynamicCustomColumns]="dynamicCustomColumns"
