@@ -479,6 +479,7 @@ export class ListManufacturingComponent implements OnInit {
         if ((this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && this.allWarehouses?.length) {
             this.warehouses = this.allWarehouses[selectedEntity?.value];
         }
+        this.getReport();
     }
 
     /**
