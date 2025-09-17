@@ -4953,7 +4953,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
             const deposits = this.invoiceForm.get("deposits") as FormArray;
             let accountUniqueName = this.invoiceType.isCashInvoice
-                ? deposits.at(0).get("accountUniqueName")?.value ?? invoiceForm.account?.uniqueName ?? "cash"
+                ? deposits.at(0).get("accountUniqueName")?.value || invoiceForm.account?.uniqueName || "cash"
                 : invoiceForm.account?.uniqueName;
             if (invoiceForm?.account?.uniqueName) {
                 invoiceForm.account.uniqueName = accountUniqueName;
