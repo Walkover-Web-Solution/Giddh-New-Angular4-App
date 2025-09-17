@@ -250,7 +250,8 @@
                                 #narrationBox
                                 id="narration"
                                 formControlName="description"
-                                (keydown)="handleEnterKeyPress($event, submitButton)"
+                                (keydown.Enter)="handleEnterAndTabKeyPress($event, submitButton)"
+                                (keydown.Tab)="handleEnterAndTabKeyPress($event, submitButton)"
                                 resize="false"
                                 rows="3"
                                 matInput
