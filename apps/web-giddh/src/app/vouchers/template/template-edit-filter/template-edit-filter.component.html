@@ -118,6 +118,7 @@
                                             <div class="d-flex column-gap1">
                                                 <button
                                                     *ngFor="let size of imageSizes"
+                                                    [disabled]="!customTemplate?.logoUniqueName"
                                                     mat-mini-fab
                                                     [color]="defaultImageSize === size?.label ? 'primary' : ''"
                                                     (click)="
@@ -3497,7 +3498,7 @@
                                             </ng-container>
                                             <div
                                                 *ngIf="
-                                                    customTemplate?.type === 'invoice' &&
+                                                    (customTemplate?.type === 'invoice' || customTemplate?.type === 'voucher') &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
                                                     customTemplate.sections['footer'].data['showNotesAtLastPage']
