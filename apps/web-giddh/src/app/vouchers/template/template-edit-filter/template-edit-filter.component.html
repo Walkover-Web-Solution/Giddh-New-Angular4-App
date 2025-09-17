@@ -118,6 +118,7 @@
                                             <div class="d-flex column-gap1">
                                                 <button
                                                     *ngFor="let size of imageSizes"
+                                                    [disabled]="!customTemplate?.logoUniqueName"
                                                     mat-mini-fab
                                                     [color]="defaultImageSize === size?.label ? 'primary' : ''"
                                                     (click)="
