@@ -250,7 +250,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
             this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
             this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.getAccountStatementList();
+            if (!this.isLoading) {
+                this.getAccountStatementList();
+            }
         }
     }
 

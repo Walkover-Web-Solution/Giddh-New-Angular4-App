@@ -120,6 +120,7 @@
                                                     *ngFor="let size of imageSizes"
                                                     [disabled]="!customTemplate?.logoUniqueName"
                                                     mat-mini-fab
+                                                    [disabled]="!customTemplate?.logoUniqueName"
                                                     [color]="defaultImageSize === size?.label ? 'primary' : ''"
                                                     (click)="
                                                         defaultImageSize = size?.label;
