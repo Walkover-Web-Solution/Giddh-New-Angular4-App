@@ -375,14 +375,6 @@ span.input-addon {
     min-width: 170px;
 }
 
-.customer-name-filed,
-.vendor-name-field {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-right: 50px;
-}
-
 .customer-name .icon-ellipse {
     height: 14px;
     width: 14px;
@@ -588,8 +580,8 @@ button.btn.btn-filter {
     width: 489px;
 }
 
-.account-width {
-    width: clamp(100px, 9vw, 175px);
+.name-column {
+    min-width: max(150px, 10%);
 }
 
 /*responsive*/
