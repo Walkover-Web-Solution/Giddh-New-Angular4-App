@@ -199,11 +199,6 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.auditLogsActions.GetLogs(reqBody, 1));
     }
 
-    public customUserFilter(term: string, item: IOption) {
-        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 ||
-            (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase()?.indexOf(term) > -1));
-    }
-
     public resetFilters() {
         this.vm.reset();
         this.resetFilterBy();

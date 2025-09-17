@@ -192,19 +192,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Generate  custom users filter
-     *
-     * @param {string} term term to filter with
-     * @param {IOption} item term to filter for
-     * @returns
-     * @memberof AuditLogsFormComponent
-     */
-    public customUserFilter(term: string, item: IOption): any {
-        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 ||
-            (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase()?.indexOf(term) > -1));
-    }
-
-    /**
      * To reset audit log form
      *
      * @memberof AuditLogsFormComponent
