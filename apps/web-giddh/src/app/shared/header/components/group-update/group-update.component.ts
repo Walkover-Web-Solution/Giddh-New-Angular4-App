@@ -18,7 +18,7 @@ import { LedgerDiscountComponent } from '../../../../ledger/components/ledger-di
 import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT, IOption, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'group-update',
@@ -611,7 +611,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: DROPDOWN_ITEMS_COUNT_LIMIT
             };
             this.groupService.searchGroups(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {

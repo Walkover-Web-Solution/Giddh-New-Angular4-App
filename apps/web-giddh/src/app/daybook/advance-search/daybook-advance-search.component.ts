@@ -9,7 +9,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from '../../services/general.service';
 import { SearchService } from '../../services/search.service';
@@ -657,7 +657,7 @@ public advanceSearchObject: DayBookRequestModel = null;
             const requestObject = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
             this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {

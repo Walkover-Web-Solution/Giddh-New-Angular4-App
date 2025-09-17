@@ -13,7 +13,7 @@ import { AppState } from '../../../store';
 import { AuditLogsSidebarVM } from './Vm';
 import { GroupService } from '../../../services/group.service';
 import { SearchService } from '../../../services/search.service';
-import { API_COUNT_LIMIT, IOption } from '../../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption } from '../../../app.constant';
 import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
@@ -399,7 +399,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {

@@ -43,7 +43,7 @@ import { AppState } from '../../../../store';
 import { digitsOnly } from '../../../helpers';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -1941,7 +1941,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT,
+                count: DROPDOWN_ITEMS_COUNT_LIMIT,
             }
             this.groupService.searchGroups(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
