@@ -14083,3 +14083,15 @@ mat-list {
         }
     }
 }
+
+// Global class use to show/hide element on hover
+.hover-trigger {
+    .hover-target {
+        visibility: hidden;
+    }
+    &:hover {
+        .hover-target {
+            visibility: visible;
+        }
+    }
+}
