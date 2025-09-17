@@ -3497,7 +3497,7 @@
                                             </ng-container>
                                             <div
                                                 *ngIf="
-                                                    customTemplate?.type === 'invoice' &&
+                                                    (customTemplate?.type === 'invoice' || customTemplate?.type === 'voucher') &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
                                                     customTemplate.sections['footer'].data['showNotesAtLastPage']
