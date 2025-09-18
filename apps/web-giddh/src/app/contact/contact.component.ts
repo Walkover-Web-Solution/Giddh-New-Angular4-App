@@ -159,7 +159,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Pagination count */
-    public paginationLimit: number = PAGINATION_LIMIT; // 50
+    public paginationLimit: number = PAGINATION_LIMIT;
     /** Giddh decimal places set by user */
     public giddhDecimalPlaces = 2;
     private checkboxInfo: any = {
@@ -728,17 +728,14 @@ export class ContactComponent implements OnInit, OnDestroy {
      * Handles pagination events and updates API parameters
      * 
      * @param {PageEvent} event - Contains pagination details
-     * @param {any} variable - Variable to update pagination details
      * @memberof ContactComponent
      */
-    public handlePageEvent(event: PageEvent, variable: any): void {
+    public handlePageEvent(event: PageEvent): void {
         if (this.advanceFilters.count !== event.pageSize) {
             this.advanceFilters.page = 1;
-            variable.page = 1;
             this.checkboxInfo.selectedPage = 1;
         } else {
             this.advanceFilters.page = event.pageIndex + 1;
-            variable.page = event.pageIndex + 1;
             this.checkboxInfo.selectedPage = event.pageIndex + 1;
         }
         this.advanceFilters.count = event.pageSize;

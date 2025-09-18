@@ -44,7 +44,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ServiceConfig } from '../../services/service.config';
 
 interface SubscriptionErrorFlags {

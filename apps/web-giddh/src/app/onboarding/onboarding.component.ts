@@ -7,7 +7,6 @@ import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { Observable, ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OnboardingComponentStore } from './utility/onboarding.store';
 import { ASIDE_PANE_CONFIG, SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
