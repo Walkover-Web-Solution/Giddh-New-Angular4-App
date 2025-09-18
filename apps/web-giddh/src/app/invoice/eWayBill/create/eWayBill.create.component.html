@@ -415,26 +415,6 @@
             </div>
         </div>
     </div>
-    <div
-        bsModal
-        #invoiceRemoveConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-template-confirmation-modal
-                    [message]="deleteTemplateConfirmationMessage"
-                    [flag]="confirmationFlag"
-                    (closeModelEvent)="onCloseConfirmationModal($event)"
-                >
-                </delete-template-confirmation-modal>
-            </div>
-        </div>
-    </div>
-
     <div class="right-modal account-aside-menu-state">
         <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
         <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">

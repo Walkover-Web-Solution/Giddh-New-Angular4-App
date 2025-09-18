@@ -187,7 +187,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    accountStatementList: null,
+                                    accountStatementList: [],
                                     getAccountStatementInProgress: false
                                 });
                             }
@@ -196,7 +196,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                             this.toasterService.showSnackBar("error", error);
 
                             return this.patchState({
-                                accountStatementList: null,
+                                accountStatementList: [],
                                 getAccountStatementInProgress: false
                             });
                         }

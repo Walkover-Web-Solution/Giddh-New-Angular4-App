@@ -16,6 +16,13 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../app.constan
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExpenseService } from '../services/expences.service';
 import { ToasterService } from '../services/toaster.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+
+/** Enum for expense tab names */
+export enum EExpenseTabName {
+    PENDING = 'pending',
+    REJECTED = 'rejected'
+}
 
 @Component({
     selector: 'app-expenses',
@@ -33,7 +40,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public modalRef: BsModalRef;
     public isClearFilter: boolean = false;
     public isFilterSelected: boolean = false;
-    public currentSelectedTab: string = 'pending';
+    /** Holds current selected tab */
+    public currentSelectedTab: string = EExpenseTabName.PENDING;
+    /** Holds expense tab name enum */
+    public readonly EExpenseTabName = EExpenseTabName;
     public activeTab: string;
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -76,8 +86,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will store screen size */
-    public isMobileScreen: boolean = false;
     /** Petty cash pending report response */
     public pettyCashPendingReportResponse: PettyCashReportResponse;
     /** True if petty cash pending report is loading */
@@ -96,18 +104,11 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         private cdRf: ChangeDetectorRef,
         private generalService: GeneralService,
         private router: Router,
-        private breakPointObservar: BreakpointObserver,
         private expenseService: ExpenseService,
         private toasterService: ToasterService
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
-
-        this.breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
     }
 
     public ngOnInit() {
@@ -155,13 +156,17 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                             this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
                             this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
                         }
-                        this.getPettyCashPendingReports(this.pettycashRequest);
+                       
 
                         if (this.rejectedListComponent) {
                             this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
                             this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
                         }
-                        this.getPettyCashRejectedReports(this.pettycashRequest);
+                        if (this.selectedTabIndex === 0) {
+                            this.getPettyCashPendingReports(this.pettycashRequest);
+                        } else {
+                            this.getPettyCashRejectedReports(this.pettycashRequest);
+                        }
 
                         this.detectChanges();
                     });
@@ -175,10 +180,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public selectedRowInput(item: ExpenseResults) {
-        if (this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+        if (this.currentSelectedTab === EExpenseTabName.REJECTED && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
             this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
             this.rejectedTabSortOptions.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
-        } else if (this.currentSelectedTab === "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+        } else if (this.currentSelectedTab === EExpenseTabName.PENDING && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
             this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
             this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
         }
@@ -197,35 +202,43 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         this.isSelectedRow = !e;
 
         setTimeout(() => {
-            if (this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
+            if (this.currentSelectedTab === EExpenseTabName.PENDING && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                 this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                 this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
-            } else if (this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
+            } else if (this.currentSelectedTab === EExpenseTabName.REJECTED && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
                 this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
                 this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
         }, 500);
     }
 
-    public refreshPendingItem(e) {
-        if (e) {
+    /**
+     * This will refresh the pending item
+     *
+     * @param {boolean} event
+     * @memberof ExpensesComponent
+     */
+    public refreshPendingItem(event: boolean): void {
+        if (event) {
             if (this.pendingTabSortOptions) {
                 this.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                 this.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
             }
-            this.getPettyCashPendingReports(this.pettycashRequest);
-
             if (this.rejectedTabSortOptions) {
                 this.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
                 this.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
-            this.getPettyCashRejectedReports(this.pettycashRequest);
+            if (this.currentSelectedTab === EExpenseTabName.PENDING) {
+                this.getPettyCashPendingReports(this.pettycashRequest);
+            } else {
+                this.getPettyCashRejectedReports(this.pettycashRequest);
+            }
 
             setTimeout(() => {
-                if (this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
+                if (this.currentSelectedTab === EExpenseTabName.PENDING && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                     this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                     this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
-                } else if (this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
+                } else if (this.currentSelectedTab === EExpenseTabName.REJECTED && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
                     this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
                     this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
                 }
@@ -236,7 +249,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public getPettyCashPendingReports(request: CommonPaginatedRequest) {
-        request.status = 'pending';
+        request.status = EExpenseTabName.PENDING;
         request.from = this.pettycashRequest.from;
         request.to = this.pettycashRequest.to;
         this.isPettyCashPendingReportLoading = true;
@@ -252,7 +265,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public getPettyCashRejectedReports(request: CommonPaginatedRequest) {
-        request.status = 'rejected';
+        request.status = EExpenseTabName.REJECTED;
         request.from = this.pettycashRequest.from;
         request.to = this.pettycashRequest.to;
         this.isPettyCashRejectedReportLoading = true;
@@ -300,31 +313,33 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     /**
      * Callback for tab change event
      *
-     * @param {*} event
+     * @param {MatTabChangeEvent} event
      * @memberof ExpensesComponent
      */
-    public tabChanged(event: any): void {
-        let tab = (event?.index === 0) ? "pending" : "rejected";
+    public tabChanged(event: MatTabChangeEvent): void {
+        let tab = (event?.index === 0) ? EExpenseTabName.PENDING : EExpenseTabName.REJECTED;
         let tabIndex = (event?.index === 0) ? 0 : 1;
 
         this.router.navigate(['pages', 'expenses-manager'], { queryParams: { tab: tab, tabIndex: tabIndex } } );
 
-        if (tab === "pending" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+        if (tab === EExpenseTabName.PENDING && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
             this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
             this.rejectedTabSortOptions.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
-        } else if (tab === "rejected" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+        } else if (tab === EExpenseTabName.REJECTED && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
             this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
             this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
         }
         this.currentSelectedTab = tab;
 
         setTimeout(() => {
-            if (tab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+            if (tab === EExpenseTabName.PENDING && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
                 this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
                 this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
-            } else if (tab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+                this.getPettyCashPendingReports(this.pettycashRequest);
+            } else if (tab === EExpenseTabName.REJECTED && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
                 this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
                 this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
+                this.getPettyCashRejectedReports(this.pettycashRequest);
             }
         }, 20);
     }
@@ -343,7 +358,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public getActiveTab() {
         if (this.route.snapshot.queryParams.tab) {
             this.currentSelectedTab = this.route.snapshot.queryParams.tab;
-            if (this.currentSelectedTab === "pending") {
+            if (this.currentSelectedTab === EExpenseTabName.PENDING) {
                 this.selectedTabIndex = 0;
             } else {
                 this.selectedTabIndex = 1;
@@ -413,20 +428,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
             }
             this.getPettyCashRejectedReports(this.pettycashRequest);
-        }
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @memberof ExpensesComponent
-     */
-    public getPageHeading(): string {
-        if (this.currentSelectedTab === 'pending') {
-            return this.localeData?.pending;
-        }
-        else if (this.currentSelectedTab === 'rejected') {
-            return this.localeData?.rejected;
         }
     }
 

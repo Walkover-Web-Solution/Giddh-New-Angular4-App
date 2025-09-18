@@ -20,3 +20,7 @@
     background-color: var(--color-blue);
     animation: loading 2s linear infinite;
 }
+
+:host .dialog-body {
+    height: 80vh !important;
+}

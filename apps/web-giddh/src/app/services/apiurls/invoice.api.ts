@@ -21,7 +21,7 @@ export const INVOICE_API = {
     GET_RAZORPAY_DETAIL: COMMON_URL + 'razorpay', // Get RazorPay Detail
     SEND_INVOICE_ON_MAIL: COMMON_URL + PART_B + 'mail', // POST
     DOWNLOAD_INVOICE_EXPORT_CSV: COMMON_URL + 'export-invoices-v2?from=:from&to=:to&fileType=:fileType',
-    REMOVE_IMAGE_SIGNATURE: COMMON_URL + '/delete-image?imgUniqueName=:imgUniqueName',
+    REMOVE_IMAGE_SIGNATURE: COMMON_URL + 'delete-image?imgUniqueName=:imgUniqueName',
     CANCEL_E_INVOICE_API: COMMON_URL + 'invoice/:invoiceUniqueName/cancel-einvoice',
     CANCEL_CN_DN_E_INVOICE_API: COMMON_URL + 'voucher/:voucherUniqueName/cancel-einvoice',
     VERIFY_EMAIL: COMMON_URL + 'invoice-setting/verify-email?emailAddress=:emailAddress&scope=:scope&branchUniqueName=:branchUniqueName',
