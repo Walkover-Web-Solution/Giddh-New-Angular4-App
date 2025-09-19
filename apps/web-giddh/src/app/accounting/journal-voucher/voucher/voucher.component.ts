@@ -41,7 +41,7 @@ import { KEYS } from '../journal-voucher.component';
 import { AdjustmentTypesEnum } from "../../../shared/helpers/adjustmentTypes";
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { PAGINATION_LIMIT } from '../../../app.constant';
+import { KeyCodesEnum, PAGINATION_LIMIT } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { VOUCHERS } from '../../constants/accounting.constant';
 import { GeneralService } from '../../../services/general.service';
@@ -1500,7 +1500,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public handleEnterKeyPress(event: KeyboardEvent, submitButton: HTMLButtonElement): void {
-        if (event.key === 'Enter' && !this.showDiscountSidebar && !this.showTaxSidebar) {
+        if ((event.key === KeyCodesEnum.ENTER || event.key === KeyCodesEnum.TAB) && !this.showDiscountSidebar && !this.showTaxSidebar) {
             const descriptionControl = this.journalVoucherForm.get('description');
             if (!descriptionControl?.value || descriptionControl.value.trim() === '') {
                 event.preventDefault();

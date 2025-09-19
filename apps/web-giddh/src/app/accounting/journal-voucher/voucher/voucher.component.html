@@ -248,7 +248,8 @@
                             id="narration"
                             class="form-control"
                             formControlName="description"
-                            (keydown)="handleEnterKeyPress($event, submitButton)"
+                            (keydown.Enter)="handleEnterKeyPress($event, submitButton)"
+                            (keydown.Tab)="handleEnterKeyPress($event, submitButton)"
                             resize="false"
                             rows="3"
                         ></textarea>
