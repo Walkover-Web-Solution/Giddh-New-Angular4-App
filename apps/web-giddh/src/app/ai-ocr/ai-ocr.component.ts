@@ -275,6 +275,9 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             /** Universal date observer */
             this.aiOcrStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((dateObj) => {
                 if (dateObj) {
+                    if (this.countVariable > 0) {
+                        this.initialUpload = false;
+                    }
                     this.universalDate = _.cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi =
