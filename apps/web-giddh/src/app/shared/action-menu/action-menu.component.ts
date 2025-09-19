@@ -196,12 +196,13 @@ export class ActionMenuComponent {
      */
     public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
         const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            ...ASIDE_PANE_CONFIG,
             data: {
                 activeTab: activeTab,
                 accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
-            },
-            ...ASIDE_PANE_CONFIG
-        });dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.sendEmail.emit(true);
             }
