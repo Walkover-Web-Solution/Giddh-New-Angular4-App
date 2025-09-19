@@ -66,8 +66,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public controlLabelValue: any = this.labelValue;
     /** Close autocomplete on focus out if true - Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
     @Input() public closeOnFocusOut: boolean = false;
-    /** True if we need to clear the reactive form control */
-    @Input() public forceClearReactive: boolean = false;
+    /** If we need to clear form control on force clear */
+    @Input() public forceClear: boolean = false;
     /** Show or Hide Label */
     @Input() public showLabel: boolean = true;
     /** Keyboard command label */
@@ -190,7 +190,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 }, 0);
             }
         }
-        if (changes?.forceClearReactive && !changes.forceClearReactive.firstChange && changes.forceClearReactive.currentValue !== changes.forceClearReactive.previousValue) {
+        if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
             this.writeValue("");
             this.clearDropdownValue();
             this.controlLabelValue = "";

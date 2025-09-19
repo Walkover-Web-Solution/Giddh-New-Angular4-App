@@ -37,7 +37,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public groupUniqueName: string = '';
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    public forceClearReactive: boolean = false;
+    public forceClear: boolean = false;
     public fromMonth: any = null;
     public toMonth: any = null;
     public financialYearSelected: any;
@@ -384,7 +384,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.fromMonth = null;
         this.toMonth = null;
         this.forceClear$ = observableOf({ status: true });
-        this.forceClearReactive = !this.forceClearReactive;
+        this.forceClear = !this.forceClear; 
         this.fromMonthNames = [];
         this.toMonthNames = [];
         this.selectActiveFinancialYear();
