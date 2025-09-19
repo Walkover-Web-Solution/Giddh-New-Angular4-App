@@ -5,6 +5,7 @@ import { TranslateDirectiveModule } from "apps/web-giddh/src/app/theme/translate
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { MatDialogModule } from "@angular/material/dialog";
         MatTooltipModule, 
         TranslateDirectiveModule,
         MatBadgeModule,
-        MatDialogModule
+        MatDialogModule,
+        MatButtonModule
     ],
     exports: [
         GenerateEWayBillComponent

@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, of, 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { IOption } from "../../../app.constant";
+import { isEqual } from "../../../lodash-optimized";
 
 @Component({
     selector: "reactive-dropdown-field",
@@ -61,8 +62,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showError: boolean = false;
     /** Holds label of value */
     @Input() public labelValue: any = '';
+    /** Holds label of value to show in the field */
+    public controlLabelValue: any = this.labelValue;
     /** Close autocomplete on focus out if true - Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
     @Input() public closeOnFocusOut: boolean = false;
+    /** True if we need to clear the reactive form control */
+    @Input() public forceClearReactive: boolean = false;
     /** Show or Hide Label */
     @Input() public showLabel: boolean = true;
     /** Keyboard command label */
@@ -181,9 +186,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             if (changes?.options?.currentValue?.length > 0) {
                 // Use setTimeout to ensure the value is properly set before trying to find the label
                 setTimeout(() => {
-                    this.setLabelValue();
+                    this.setLabelValue(null);
                 }, 0);
             }
+        }
+        if (changes?.forceClearReactive && !changes.forceClearReactive.firstChange && changes.forceClearReactive.currentValue !== changes.forceClearReactive.previousValue) {
+            this.writeValue("");
+            this.clearDropdownValue();
+            this.controlLabelValue = "";
         }
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
             this.openDropdownPanel();
@@ -191,10 +201,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
         if (changes?.labelValue) {
             this.labelValue = changes.labelValue.currentValue;
+            this.controlLabelValue = this.labelValue;
         }
 
         if (changes?.labelValue?.currentValue === null) {
             this.labelValue = "";
+            this.controlLabelValue = "";
         }
     }
 
@@ -262,11 +274,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.value = '';
         }
         this.onChange(value);
-
-        // Also try to set label immediately if options are available
-        if (this.options && this.options.length > 0) {
-            this.setLabelValue();
-        }
     }
 
     /**
@@ -277,6 +284,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public optionSelected(event: any): void {
         this.writeValue(event?.option?.value?.value);
+        this.setLabelValue(event?.option?.value);
         this.onTouched();
         this.selectedOption.emit(event?.option?.value);
     }
@@ -329,25 +337,25 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @private
      * @memberof ReactiveDropdownFieldComponent
      */
-    private setLabelValue(): void {
+    private setLabelValue(event: any): void {
         // Check if we have options and a current value
         if (this.options && this.options.length > 0) {
-            const currentValue = this.value !== undefined && this.value !== null ? (this.value || this.labelValue || "") : null;
-
-            if ((currentValue !== null && currentValue !== '') || this.labelValue) {
-                if (this.useCustomLabelValue) return; // If useCustomLabelValue is true, do not set labelValue from options
-                
-                const matchedOption = this.options.find(option => option?.value === currentValue);
-                if (matchedOption) {
-                    // Always set labelValue to the string label, not the object
-                    this.labelValue = matchedOption.label || '';
+            if (event) {
+                const currentValue = event?.value;
+                if (currentValue !== null && currentValue !== '') {
+                    this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue) ? this.labelValue : (event?.label || '');
                     this.changeDetection.detectChanges();
-                } else {
-                    this.labelValue = currentValue;
+                } else if (currentValue === "") {
+                    this.controlLabelValue = "";
                 }
-            } else if (currentValue === "") {
-                this.labelValue = "";
+            } else if (this.value && this.controlLabelValue.trim() === "") {
+                this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue) ? this.labelValue : (this.options?.find(option => isEqual(option?.value, this.value))?.label || this.value);
+                this.changeDetection.detectChanges();
+            } else if (!this.value) {
+                this.controlLabelValue = this.labelValue || "";
             }
+        } else {
+            this.controlLabelValue = this.labelValue;
         }
     }
 

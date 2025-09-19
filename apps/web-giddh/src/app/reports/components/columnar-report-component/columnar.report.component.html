@@ -14,6 +14,7 @@
                         [labelValue]="activeFinancialYearLabel"
                         [placeholder]="localeData?.select_year"
                         [name]="'financialYear'"
+                        [(ngModel)]="financialYearSelected"
                         (selectedOption)="selectFinancialYear($event)">
                     </reactive-dropdown-field>
                 </div>
@@ -48,6 +49,7 @@
                         [options]="flatGroupsOptions"
                         [placeholder]="localeData?.group"
                         [name]="'group'"
+                        [forceClearReactive]="forceClearReactive"
                         (selectedOption)="selectGroup($event)"
                         [enableDynamicSearch]="true"
                         [isPaginationEnabled]="true"
