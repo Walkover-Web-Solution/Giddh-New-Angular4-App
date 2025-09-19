@@ -72,7 +72,7 @@
             </div>
             <div
                 class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
-                *ngIf="showClearFilter"
+                *ngIf="showClearFilter || isAdvanceSearchApplied"
             >
                 <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
@@ -81,10 +81,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <watch-video class="mr-r1" [cssClass]="'text-primary'" [moduleName]="'AGING_REPORT'"></watch-video>
                 <div class="pull-left d-flex wrap-searching-aging">
-                    <div
-                        class="form-group search-field max-width-250"
-                        [ngClass]="{ 'default-width': isAdvanceSearchApplied }"
-                    >
+                    <div class="form-group search-field max-width-250">
                         <text-field
                             type="text"
                             [placeholder]="localeData?.name_amount"
@@ -121,16 +118,6 @@
                     >
                         {{ commonLocaleData?.app_export }}
                     </button>
-                    <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
-                        <button mat-icon-button (click)="resetAdvanceSearch()" aria-label="refresh-btn">
-                            <i
-                                aria-hidden="true"
-                                class="icon-refresh"
-                                matTooltip="{{ commonLocaleData?.app_reset_filter }}"
-                                matTooltipPosition="below"
-                            ></i>
-                        </button>
-                    </span>
                 </div>
             </div>
             <div class="btn-group mr-t15 pull-left mobile-view">

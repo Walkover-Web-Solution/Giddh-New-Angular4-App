@@ -427,6 +427,8 @@ export class TemplateEditFilterComponent implements OnInit {
         if (template?.sections?.['footer']?.data?.['companyName']) {
             template.sections['footer'].data['companyName'].label = this.activeCompanyName;
         }
+       this.deleteLogo();
+       this.removeFile();
         this.templateService.setCustomTemplate(cloneDeep(template));
     }
 
