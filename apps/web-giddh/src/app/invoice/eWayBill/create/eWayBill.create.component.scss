@@ -1,6 +1,13 @@
 .right-panel {
     border-left: 1px solid var(--color-gray);
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    top: calc(var(--top-distance) + 54px);
     width: 280px;
+    padding: 15px;
+    overflow: auto;
+    
     mat-card {
         h2 {
             font-size: var(--font-size-15);

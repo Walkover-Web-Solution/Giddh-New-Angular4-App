@@ -125,7 +125,7 @@ export class ActionMenuComponent {
                 if (event) {
                     event.stopPropagation();
                 }
-                this.openCustomEmailDialog(account, this.account?.voucherGeneratedType, false);
+                this.openCustomEmailDialog(account, this.account?.voucherGeneratedType === 'sales' ? 'customer' : 'vendor', false);
                 break;
             case 4: // edit account
                 if (event) {
@@ -196,12 +196,13 @@ export class ActionMenuComponent {
      */
     public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
         const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            ...ASIDE_PANE_CONFIG,
             data: {
                 activeTab: activeTab,
                 accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
-            },
-            ...ASIDE_PANE_CONFIG
-        });dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.sendEmail.emit(true);
             }
