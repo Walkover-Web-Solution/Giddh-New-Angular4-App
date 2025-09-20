@@ -608,7 +608,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        confirmModalDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
             }
@@ -684,7 +684,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        confirmModalDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
                 this.linkedAccountLabel = '';
@@ -960,7 +960,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        confirmModalDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 // For DELETE
                 this.componentStore.payuCrudOperation({

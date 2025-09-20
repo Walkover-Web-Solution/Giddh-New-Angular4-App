@@ -846,7 +846,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @param {string} fieldId
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public reinitializeMobileField(fieldId: string): void {
+    public reInitializeMobileField(fieldId: string): void {
         const element = document.getElementById(fieldId);
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
         
@@ -1547,7 +1547,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             },
             disableClose: true
         });
-        confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+        confirnationDialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.deleteMergedAccount();
             }
@@ -2525,7 +2525,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             ...ASIDE_PANE_CONFIG,
             data: data
         });
-        bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
+        bulkAddAsideMenuRef.afterClosed().subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;

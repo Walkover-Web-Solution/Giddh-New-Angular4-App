@@ -98,6 +98,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** Stores the current visible on boarding modal instance */
     private dialogRefExpirePlanRef: MatDialogRef<any>;
+    /** Dialog reference for transaction limit exceeded modal */
     private dialogRefCrossLimitRef: MatDialogRef<any>;
 
     public hideAsDesignChanges: boolean = false;
@@ -465,13 +466,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
-                // if (this.voucherApiVersion === 1) {
-                //     this.showDepreciationMessage = true;
-                //     document.querySelector("body")?.classList?.add("depreciation-message");
-                // } else {
-                //     this.showDepreciationMessage = false;
-                //     document.querySelector("body")?.classList?.remove("depreciation-message");
-                // }
                 if (this.voucherApiVersion === 2) {
                     this.showDepreciationMessage = false;
                     document.querySelector("body")?.classList?.remove("depreciation-message");
@@ -1112,7 +1106,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             maxHeight: '100vh',
         });
 
-        this.manageGroupsAccountsDialogRef.afterOpened().pipe(take(1)).subscribe(() => {
+        this.manageGroupsAccountsDialogRef.afterOpened().subscribe(() => {
             const instance = this.manageGroupsAccountsDialogRef.componentInstance;
             setTimeout(() => {
                 if (instance.header?.nativeElement) {
@@ -1124,7 +1118,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             });
         });
 
-        this.manageGroupsAccountsDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+        this.manageGroupsAccountsDialogRef.afterClosed().subscribe(() => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
     }

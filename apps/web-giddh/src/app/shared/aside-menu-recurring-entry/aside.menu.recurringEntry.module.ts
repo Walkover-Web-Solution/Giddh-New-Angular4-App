@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { AsideMenuRecurringEntryComponent } from './aside.menu.recurringEntry.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SelectModule } from '../../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepicker.module';
@@ -16,7 +15,6 @@ import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
     imports: [
         ReactiveFormsModule,
         CommonModule,
-        SelectModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

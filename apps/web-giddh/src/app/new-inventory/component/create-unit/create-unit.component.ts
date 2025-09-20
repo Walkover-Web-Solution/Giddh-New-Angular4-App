@@ -344,7 +344,7 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.isLoading = true;
                 this.inventoryService.DeleteStockUnit(this.unitDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {

@@ -9,7 +9,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -92,7 +91,6 @@ export function provideConfig() {
         FormsModule,
         ReactiveFormsModule,
         SocialLoginModule,
-        SelectModule,
         ClickOutsideModule,
         ConfirmModalModule,
         LaddaModule.forRoot({
@@ -144,7 +142,6 @@ export function provideConfig() {
         LaddaModule,
         ManageGroupsAccountsComponent,
         AccountFilterPipe,
-        SelectModule,
         ClickOutsideModule,
         ScrollingModule,
         ConfirmModalModule,

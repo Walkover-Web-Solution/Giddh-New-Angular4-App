@@ -12,7 +12,7 @@
                         formControlName="inventoryEntryDate"
                         [minDate]="today"
                         [appearance]="'outline'"
-                        class="form-control"
+                        [required]="true"
                     ></giddh-datepicker>
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
@@ -34,6 +34,7 @@
                         formControlName="stock"
                         [required]="true"
                         [name]="'stock'"
+                        [required]="true"
                     ></reactive-dropdown-field>
                 </div>
             </div>
@@ -46,6 +47,7 @@
                         [placeholder]="'Select Sender'"
                         formControlName="inventoryUser"
                         [name]="'inventoryUser'"
+                        [required]="true"
                     ></reactive-dropdown-field>
                 </div>
 
@@ -54,9 +56,10 @@
                     <reactive-dropdown-field
                         [options]="userListOptions"
                         [placeholder]="'Select Receiver'"
-                        formControlName="senderReceiver"
                         [required]="true"
                         [name]="'senderReceiver'"
+                        (selectedOption)="recieverUniqueName = $event?.value"
+                        [required]="true"
                     >
                     </reactive-dropdown-field>
                 </div>
@@ -71,6 +74,7 @@
                         class="form-control"
                         formControlName="quantity"
                         [placeholder]="'Enter Quantity'"
+                        [required]="true"
                     />
                 </div>
 
@@ -82,6 +86,7 @@
                         formControlName="stockUnit"
                         [required]="true"
                         [name]="'stockUnit'"
+                        [required]="true"
                     ></reactive-dropdown-field>
                 </div>
             </div>

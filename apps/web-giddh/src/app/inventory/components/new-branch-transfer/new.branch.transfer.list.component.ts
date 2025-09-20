@@ -14,7 +14,7 @@ import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest } from '../../../models/api-models/BranchTransfer';
 import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../../../shared/helpers/branchTransferFilters";
-import { IOption } from '../../../theme/ng-select/ng-select';
+import { IOption } from '../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';

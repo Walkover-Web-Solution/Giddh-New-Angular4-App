@@ -390,7 +390,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             },
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response?.body) {
                 this.handleProjectResponse(response);
                 this.changeDetection.detectChanges();
@@ -419,7 +419,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
 
             });
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            dialogRef.afterClosed().subscribe((response) => {
                 if (response === this.commonLocaleData?.app_yes) {
                     this.componentStore.deleteProject(data);
                 }

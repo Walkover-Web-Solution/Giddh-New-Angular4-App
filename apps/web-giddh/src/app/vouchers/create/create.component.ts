@@ -4383,7 +4383,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.eWayBillResponse = response;
             this.saveVoucher();
         });

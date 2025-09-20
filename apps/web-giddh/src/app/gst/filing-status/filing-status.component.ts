@@ -8,6 +8,7 @@ import { GstReconcileService } from "../../services/gst-reconcile.service";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from 'dayjs';
 import { FormControl } from "@angular/forms";
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
     selector: 'filing-status',
@@ -132,7 +133,20 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         this.getGstrReferences();
     }
 
-
+    /**	
+     * Handle Page Change Event	
+     *	
+     * @param {*} event	
+     * @memberof FilingStatusComponent	
+     */	
+     public pageChanged(event: PageEvent): void {	
+        if (event) {	
+            this.pageIndex = event.pageIndex;	
+            this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            this.pagination.count = event.pageSize;	
+            this.getGstrReferences();	
+        }	
+    }
 
     /**
      * Get GST Filing Status form API

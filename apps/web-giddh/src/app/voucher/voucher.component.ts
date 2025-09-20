@@ -2984,7 +2984,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
 
-        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+        this.asideMenuStateForProductService.afterClosed().subscribe(response => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
@@ -6648,7 +6648,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             });
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     this.invFormData.generateEInvoice = true;
                 } else {
@@ -8944,7 +8944,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             document.querySelector('body').classList.remove('fixed');
             this.handleRcmChange(response);
         });
@@ -9050,7 +9050,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.handleAttachmentDelete(response);
         });
     }

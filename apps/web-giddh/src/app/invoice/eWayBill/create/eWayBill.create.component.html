@@ -91,7 +91,8 @@
                         <strong class="d-block mr-t15 mr-b15 text-center">{{ commonLocaleData?.app_transport_details }}</strong>
 
                         <div class="row row-gap15">
-                            <div class="col-6">
+                            <div class="col-6" [keyboardShortcut]="'alt+c'"
+                            (onShortcutPress)="openTransporterDialog()">
                                 <reactive-dropdown-field
                                     class="input"
                                     [options]="transporterDropdown$ | async"
@@ -103,6 +104,7 @@
                                     [showCreateNew]="true"
                                     [createNewText]="commonLocaleData?.app_create_new"
                                     (createOption)="openTransporterDialog()"
+                                    [showKeyboardCommand]="commonLocaleData?.app_alt_c"
                                 >
                                 </reactive-dropdown-field>
                             </div>

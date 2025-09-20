@@ -8,7 +8,7 @@ import * as dayjs from 'dayjs';
 import { CompanyActions } from '../../actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
-import { IOption } from '../../theme/ng-select/ng-select';
+import { IOption } from '../../app.constant';
 import { IForceClear } from '../../models/api-models/Sales';
 import { cloneDeep, each, map } from '../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -136,7 +136,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.userConfirmation(response);
         });
     }

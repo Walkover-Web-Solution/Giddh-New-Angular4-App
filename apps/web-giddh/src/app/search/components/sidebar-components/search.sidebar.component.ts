@@ -227,9 +227,9 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     public toggleGiddhDatepicker(isOpen: boolean): void {
         if (this.universalDatepickerTrigger) {
             if (isOpen) {
-                this.universalDatepickerTrigger?.openMenu();
+                this.universalDatepickerTrigger.openMenu();
             } else {
-                this.universalDatepickerTrigger?.closeMenu();
+                this.universalDatepickerTrigger.closeMenu();
             }
         }
     }

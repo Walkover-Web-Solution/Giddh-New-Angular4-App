@@ -7,7 +7,7 @@ import { AppState } from '../../store';
 import * as dayjs from 'dayjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
-import { IOption } from '../../theme/ng-select/ng-select';
+import { IOption } from '../../app.constant';
 import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
 import { SearchService } from '../../services/search.service';

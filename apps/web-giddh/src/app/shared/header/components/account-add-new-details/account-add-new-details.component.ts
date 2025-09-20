@@ -667,7 +667,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @param {string} fieldId
      * @memberof AccountAddNewDetailsComponent
      */
-    public reinitializeMobileField(fieldId: string): void {
+    public reInitializeMobileField(fieldId: string): void {
         const element = document.getElementById(fieldId);
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
         
@@ -1846,7 +1846,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
                         }
                     });
-                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    dialogRef.afterClosed().subscribe(response => {
                         if (response) {
                             if (addresses?.get('isDefault')?.value) {
                                 this.addAccountForm.get('name')?.patchValue(result.body?.lgnm);
@@ -1877,7 +1877,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             data: data
         });
 
-        bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
+        bulkAddAsideMenuRef.afterClosed().subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 import { ContactAdvanceSearchCommonModal } from '../../models/api-models/Contact';
 
 @Component({

@@ -15,7 +15,6 @@
                             <reactive-dropdown-field
                                 [placeholder]="commonLocaleData?.app_select"
                                 [options]="fieldOptions"
-                                [enableDynamicSearch]="true"
                                 [ngModelOptions]="{ standalone: true }"
                                 [(ngModel)]="selectedField"
                                 (selectedOption)="onSelectEntryField($event)"
@@ -29,7 +28,6 @@
                                 [placeholder]="commonLocaleData?.app_select"
                                 [options]="allTemplatesOptions"
                                 [required]="true"
-                                [enableDynamicSearch]="true"
                                 [name]="'templateUniqueName'"
                                 [(ngModel)]="updateTemplatesRequest.templateUniqueName"
                             ></reactive-dropdown-field>
@@ -57,7 +55,6 @@
                                 [placeholder]="commonLocaleData?.app_select_option"
                                 [options]="templateSignaturesOptions"
                                 [required]="true"
-                                [enableDynamicSearch]="true"
                                 [name]="'signatureOptions'"
                                 [(ngModel)]="signatureOptions"
                             ></reactive-dropdown-field>
@@ -67,7 +64,6 @@
                             <giddh-datepicker
                                 [(ngModel)]="updateDueDatesRequest.dueDate"
                                 [appearance]="'outline'"
-                                class="form-control"
                                 required
                             ></giddh-datepicker>
                         </div>
@@ -126,7 +122,6 @@
                                         [placeholder]="commonLocaleData?.app_state"
                                         [options]="allTemplatesOptions"
                                         [required]="true"
-                                        [enableDynamicSearch]="true"
                                         [name]="'templateUniqueName'"
                                     ></reactive-dropdown-field>
                                 </div>

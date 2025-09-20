@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { IOption } from '../../theme/ng-select/ng-select';
+import { IOption } from '../../app.constant';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';

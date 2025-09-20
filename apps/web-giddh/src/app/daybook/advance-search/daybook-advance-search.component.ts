@@ -4,7 +4,7 @@ import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@
 import { Store, select } from '@ngrx/store';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';

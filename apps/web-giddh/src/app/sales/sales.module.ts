@@ -8,7 +8,6 @@ import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-en
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { SharedModule } from '../shared/shared.module';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { AsideMenuSalesOtherTaxesModule } from './aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -23,7 +22,6 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         FormsModule,
         CommonModule,
         ReactiveFormsModule,
-        SelectModule.forRoot(),
         ElementViewChildModule,
         TaxControlModule,
         SharedModule,

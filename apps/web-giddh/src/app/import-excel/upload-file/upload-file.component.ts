@@ -13,7 +13,7 @@ import { AppState } from '../../store';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { cloneDeep } from '../../lodash-optimized';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'upload-file',

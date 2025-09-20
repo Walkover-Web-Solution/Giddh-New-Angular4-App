@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { debounceTime, distinctUntilChanged, map, Observable, ReplaySubject, switchMap, takeUntil } from "rxjs";
 import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
@@ -382,7 +382,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof AiOcrListComponent
      */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         if (this.ocrDocumentsRequestParams.count !== event.pageSize) {
             this.ocrDocumentsRequestParams.page = 1;
             this.pageIndex = 0;

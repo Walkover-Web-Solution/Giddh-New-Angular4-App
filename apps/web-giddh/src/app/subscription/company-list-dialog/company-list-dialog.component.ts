@@ -257,7 +257,7 @@ export class CompanyListDialogComponent implements OnInit {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.componentStore.archiveCompany(request);
             }

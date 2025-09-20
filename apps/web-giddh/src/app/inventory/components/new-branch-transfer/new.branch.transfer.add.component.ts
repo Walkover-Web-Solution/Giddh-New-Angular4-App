@@ -17,7 +17,7 @@ import {
 import { InventoryAction } from "../../../actions/inventory/inventory.actions";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { CommonActions } from "../../../actions/common.actions";
-import { IOption } from "../../../theme/ng-select/option.interface";
+import { IOption } from '../../../app.constant';
 import { ToasterService } from "../../../services/toaster.service";
 import { IForceClear } from "../../../models/api-models/Sales";
 import { IEwayBillfilter, IEwayBillTransporter, IAllTransporterDetails } from "../../../models/api-models/Invoice";
@@ -1269,7 +1269,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
 
-        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+        this.asideMenuStateForProductService.afterClosed().subscribe(response => {
             document.querySelector("body").classList.remove("new-branch-transfer-page");
         });
 

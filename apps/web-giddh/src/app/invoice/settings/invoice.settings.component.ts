@@ -9,7 +9,7 @@ import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -30,7 +30,7 @@ import { ServiceConfig } from '../../services/service.config';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
-
+    /** Selected tab index for Material tabs */
     @ViewChild('staticTabsSettings', { static: true }) public staticTabs: MatTabGroup;
     /** Selected tab index for Material tabs */
     public selectedTabIndex: number = 0;

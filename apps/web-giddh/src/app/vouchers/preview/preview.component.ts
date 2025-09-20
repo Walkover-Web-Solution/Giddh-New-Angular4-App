@@ -799,8 +799,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             model.postRequestObject[this.voucherType === VoucherTypeEnum.generateProforma ? 'proformaNumber' : 'estimateNumber'] = this.selectedInvoice?.voucherNumber;
         }
         this.dialog.open(this.historyAsideDialog, {
-            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData },
-            ...ASIDE_PANE_CONFIG
+            ...ASIDE_PANE_CONFIG,
+            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData }
         });
     }
 

@@ -104,7 +104,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public openAccountAsidePaneDialog(): void {
         this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
-        this.asideMenuDialogRef.afterOpened().pipe(take(1)).subscribe(() => {
+        this.asideMenuDialogRef.afterOpened().subscribe(() => {
             this.selectedGroupForCreateAcc = "bankaccounts";
         });
     }

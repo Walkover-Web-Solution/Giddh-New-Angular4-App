@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { FormsModule } from '@angular/forms';
 import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepicker.module';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { GiddhDatepickerModule } from '../../theme/giddh-datepicker/giddh-datepi
         MatTabsModule,
         TranslateDirectiveModule,
         MatSlideToggleModule,
-        GiddhDatepickerModule
+        GiddhDatepickerModule,
+        MatButtonModule
     ],
     exports: [
         PurchaseSettingComponent

@@ -29,9 +29,8 @@ import { SalesActions } from '../../../actions/sales/sales.action';
 import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import { KeyboardService } from '../../keyboard.service';
 import { KEYS } from '../journal-voucher.component';
 import { AdjustmentTypesEnum } from "../../../shared/helpers/adjustmentTypes";
@@ -1536,61 +1535,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     if (!this.isValidForm) {
                         return false;
                     }
-
-                    // let voucherAdjustments = this.receiptEntries;
-                    // if (voucherAdjustments && voucherAdjustments.length > 0) {
-                    //     let dataVoucherAdjustments = [];
-                    //     let byEntry = data.transactions[1];
-                    //     let totalTransactions = data.transactions?.length;
-                    //     let adjustmentsCount = 0;
-
-                    //     voucherAdjustments.forEach(adjustment => {
-                    //         if (adjustment.type === AdjustmentTypesEnum.receipt || adjustment.type === AdjustmentTypesEnum.advanceReceipt) {
-                    //             let taxAmount = 0;
-                    //             let advanceReceiptAmount = 0;
-
-                    //             if (adjustment.type === AdjustmentTypesEnum.advanceReceipt) {
-                    //                 taxAmount = adjustment.tax?.value;
-                    //                 advanceReceiptAmount = Number(adjustment.amount) - Number(taxAmount);
-                    //             }
-
-                    //             data.transactions[totalTransactions] = {
-                    //                 advanceReceiptAmount: advanceReceiptAmount,
-                    //                 amount: Number(adjustment.amount),
-                    //                 applyApplicableTaxes: byEntry.applyApplicableTaxes,
-                    //                 currentBalance: byEntry.applyApplicableTaxes,
-                    //                 discounts: [],
-                    //                 inventory: [],
-                    //                 isInclusiveTax: byEntry.isInclusiveTax,
-                    //                 particular: byEntry.particular,
-                    //                 selectedAccount: byEntry.selectedAccount,
-                    //                 stocks: null,
-                    //                 tax: taxAmount,
-                    //                 taxes: adjustment.tax?.uniqueName ? [adjustment.tax?.uniqueName] : [],
-                    //                 total: Number(adjustment.amount),
-                    //                 type: byEntry.type,
-                    //                 subVoucher: (adjustment.type === AdjustmentTypesEnum.advanceReceipt) ? SubVoucher.AdvanceReceipt : ""
-                    //             };
-                    //             totalTransactions++;
-                    //         } else {
-                    //             dataVoucherAdjustments[adjustmentsCount] = this.pendingInvoiceList[adjustment.invoice?.uniqueName];
-                    //             dataVoucherAdjustments[adjustmentsCount].adjustmentAmount = {
-                    //                 amountForAccount: Number(adjustment.amount),
-                    //                 amountForCompany: Number(adjustment.amount)
-                    //             };
-                    //             adjustmentsCount++;
-                    //         }
-                    //     });
-
-                    //     if (dataVoucherAdjustments && dataVoucherAdjustments.length > 0) {
-                    //         if (data.transactions[2]) {
-                    //             data.transactions[2].voucherAdjustments = { adjustments: [] };
-                    //             data.transactions[2].voucherAdjustments.adjustments = dataVoucherAdjustments;
-                    //         }
-                    //     }
-                    // }
-
-                    // data.transactions[1].type = "to"; // changing it to "to" so that it becomes debit in loop below
                 }
                 let salesAmount;
                 data.transactions.forEach((element: any) => {
@@ -1849,9 +1793,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.isComponentLoaded = true;
         this.activeRowIndex = 0;
         this.activeRowType = "account";
-        // this.dialog.afterAllClosed.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-        //     this.focusDebitCreditAmount();
-        // });
         setTimeout(() => {
             this.isNoAccFound = false;
         }, 3000);
@@ -2053,9 +1994,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
 
         this.changeDetectionRef.detectChanges();
-        //else if (this.selectedField === 'stock') {
-        //     this.onSelectStock(ev.additional);
-        // }
     }
 
 

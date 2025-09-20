@@ -1,5 +1,4 @@
 import { takeUntil } from 'rxjs/operators';
-import { IOption } from './../../theme/ng-select/option.interface';
 import { Store, select } from '@ngrx/store';
 import { Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
@@ -18,6 +17,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { Router } from '@angular/router';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'setting-linked-accounts',

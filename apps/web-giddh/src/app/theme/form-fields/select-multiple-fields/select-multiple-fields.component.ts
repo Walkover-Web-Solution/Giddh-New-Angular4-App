@@ -67,6 +67,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showMatLabel: boolean = false;
     /** List of selected values represented by their unique names. */
     @Input() public chipListUniqueName: string[] = [];
+    /** True if field is required */
+    @Input() public required: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */

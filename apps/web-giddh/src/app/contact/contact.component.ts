@@ -907,19 +907,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open Modal for SMS
-     *
-     * @memberof ContactComponent
-     */
-    // public openSmsDialog() {
-    //     this.messageBody.msg = '';
-    //     this.messageBody.type = 'sms';
-    //     this.messageBody.btn.set = this.messageBody.btn.sms;
-    //     this.messageBody.header.set = this.messageBody.header.sms;
-    //     this.mailModal.show();
-    // }
-
-    /**
      * Send Email/Sms for Accounts
      *
      * @param {string} groupsUniqueName
@@ -1686,7 +1673,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             },
            ...ASIDE_PANE_CONFIG
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.selectedCheckedContacts = [];
                 this.selectedAccountsList = [];

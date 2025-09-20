@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -402,7 +402,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof SubscriptionComponent
      */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         this.pageIndex = event.pageIndex;
         this.subscriptionRequestParams.page = this.subscriptionRequestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.subscriptionRequestParams.count = event.pageSize;

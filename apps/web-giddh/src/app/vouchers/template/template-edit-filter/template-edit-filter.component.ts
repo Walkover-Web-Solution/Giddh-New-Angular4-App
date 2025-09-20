@@ -8,7 +8,7 @@ import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
