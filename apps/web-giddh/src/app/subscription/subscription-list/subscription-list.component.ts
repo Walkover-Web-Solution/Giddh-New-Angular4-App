@@ -114,6 +114,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public statusOptions: IOption[] = [];
     /** This will use for selected status */
     public selectedStatus: string = '';
+    /** This will use for voucher api version */
+    public voucherApiVersion: number;
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
@@ -137,6 +139,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.body?.classList?.add("subscription-page");
         this.initForm();
         this.getAllSubscriptions(false);

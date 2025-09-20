@@ -261,7 +261,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
     public isMoreDetailsOpened: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Selected entry details */
     public selectedItem: any;
     /** Pagination Object */

@@ -66,7 +66,7 @@
                     </button>
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="overflow-visible">
                         <mat-button-toggle
-                            [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0"
+                            [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0 || voucherApiVersion === 1"
                             value="create"
                             (click)="onToggleChange(ocrAction.Create)"
                             [checked]="selectedToggle === ocrAction.Create"

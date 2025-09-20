@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </form>
-                <div class="row mt-4">
+                <div class="row mt-4" *ngIf="voucherApiVersion === 2">
                     <div class="col-12 d-flex column-gap1">
                         <button *ngIf="!isUpdateMode" mat-raised-button color="primary" (click)="saveDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_save }}</button>
                         <button *ngIf="isUpdateMode" mat-raised-button color="primary" (click)="updateDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_update }}</button>

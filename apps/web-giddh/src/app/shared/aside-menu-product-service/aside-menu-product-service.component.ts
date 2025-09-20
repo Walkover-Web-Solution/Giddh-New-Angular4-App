@@ -39,7 +39,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This will hold stock type */
     public stockType: string = '';
 

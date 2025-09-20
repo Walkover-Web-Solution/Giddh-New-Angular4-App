@@ -194,6 +194,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public voucherTypeEnum: any = VoucherTypeEnum;
     /** Holds true when need to refresh page */
     private isRefresh: boolean = null;
+    /** Voucher api version */
+    public voucherApiVersion: number;
 
     constructor(
         private router: Router,
@@ -220,6 +222,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @memberof VouchersPreviewComponent
     */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.serviceConfig.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

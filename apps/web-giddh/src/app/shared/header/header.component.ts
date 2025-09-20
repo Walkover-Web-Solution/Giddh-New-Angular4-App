@@ -216,7 +216,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* True if it is redirect to go to branch mode */
     public isGoToBranch: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** True, if login is made with social account */
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* True if we need to show Depreciation Message */

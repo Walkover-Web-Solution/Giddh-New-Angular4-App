@@ -1147,6 +1147,7 @@
         <div class="d-flex column-gap15" *ngIf="isOtherSelectedTab">
         <button
             (click)="submit()"
+            *ngIf="voucherApiVersion === 2"
             mat-raised-button
             color="primary"
             aria-label="update"
@@ -1164,7 +1165,7 @@
         </button>
         <button
             type="button"
-            *ngIf="showDeleteButton"
+            *ngIf="showDeleteButton && voucherApiVersion === 2"
             mat-stroked-button
             (click)="deleteClicked.emit(true)"
             aria-label="delete"
@@ -1177,6 +1178,7 @@
 <ng-template #templateForDeleteAndUpdate>
     <div class="d-flex column-gap15 pd-t2">
         <button
+        *ngIf="voucherApiVersion === 2"
         (click)="submit()"
         mat-raised-button
         color="primary"
@@ -1193,7 +1195,7 @@
         {{ addAccountForm.get('archive')?.value ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
     </button>
     <button
-        *ngIf="showDeleteButton"
+        *ngIf="showDeleteButton && voucherApiVersion === 2"
         type="button"
         mat-stroked-button
         color="primary"

@@ -161,7 +161,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Stock search request */
     public stockSearchRequest: any;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Invoice Settings */
     public invoiceSettings: any;
     /** True if round off will be applicable */

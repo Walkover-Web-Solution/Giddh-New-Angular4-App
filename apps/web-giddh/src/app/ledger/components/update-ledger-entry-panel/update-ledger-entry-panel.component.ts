@@ -275,7 +275,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public adjustmentDialogRef: any;
     public advanceReceiptRemoveDialogRef: any;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** True if user itself checked the generate voucher  */
     public manualGenerateVoucherChecked: boolean = false;
     /** Holds input to get invoice list request params */

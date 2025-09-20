@@ -275,6 +275,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Output() public salesEntry: EventEmitter<boolean> = new EventEmitter();
     /** True if api call in progress  */
     public loadMoreInProgress: boolean = false;
+    /** Holds voucher api version */
+    public voucherApiVersion: number;
   
     constructor(
         private _ledgerActions: LedgerActions,
@@ -374,6 +376,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event && event?.getDataLength() - event?.getRenderedRange().end < 20 && !this.loadMoreInProgress) {
                 this.loadMoreInProgress = true;

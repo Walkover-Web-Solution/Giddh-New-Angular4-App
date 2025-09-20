@@ -73,7 +73,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /* This will hold module type */
     public moduleType = 'SALES_REGISTER';
     /** This will use for sales register column check values */

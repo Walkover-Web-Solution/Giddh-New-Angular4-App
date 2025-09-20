@@ -35,7 +35,7 @@
                     [labelValue]="selectedStatus"
                 >
                 </reactive-dropdown-field>
-                <button mat-raised-button class="min160 mr-l1" color="primary" (click)="createSubscription()">
+                <button mat-raised-button class="min160 mr-l1" color="primary" *ngIf="voucherApiVersion === 2" (click)="createSubscription()">
                     + {{ commonLocaleData?.app_add }} {{ localeData?.tab_heading }}
                 </button>
             </div>

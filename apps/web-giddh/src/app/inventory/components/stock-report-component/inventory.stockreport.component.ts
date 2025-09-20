@@ -431,21 +431,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         }
     }
 
-    @HostListener('document:keyup', ['$event'])
-    public handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.altKey && event.which === 73) { // Alt + i
-            event.preventDefault();
-            event.stopPropagation();
-            this.openAsidePaneDialog();
-        }
-
-        if (event.key === KEYS.ESC) {
-            event.preventDefault();
-            event.stopPropagation();
-            this.asideTransferPaneDialogRef?.close();
-        }
-    }
-
     public initReport() {
         this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
         this.stockReportRequest.stockUniqueName = this.stockUniqueName;
@@ -508,15 +493,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    public goToManageStock() {
-        if (this.groupUniqueName && this.stockUniqueName) {
-            this.store.dispatch(this.inventoryAction.showLoaderForStock());
-            this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
-            this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
-            this.setInventoryAsideState(true, false, true);
-        }
     }
 
     public nextPage() {
@@ -638,15 +614,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public downloadStockReports(type: string) {
         this.stockReportRequest.reportDownloadType = type;
         this._toasty.infoToast('Upcoming feature');
-    }
-
-    /**
-     * open aside pane dialog
-     *
-     * @memberof InventoryStockReportComponent
-     */
-    public openAsidePaneDialog(): void {
-        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     // From Entity Dropdown
@@ -865,37 +832,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         } else {
             this.isFilterCorrect = false;
         }
-    }
-
-    /**
-    * To open edit stock aside panel
-    *
-    * @memberof InventoryStockReportComponent
-    */
-    public editStock(): void {
-        this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
-        this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
-        this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
-    }
-
-    /**
-     * open transfer aside pane dialog
-     *
-     * @memberof InventoryStockReportComponent
-     */
-    public openTransferAsidePaneDialog(): void {
-        this.asideTransferPaneDialogRef = this.dialog.open(this.asideTransferPaneTemplate, ASIDE_PANE_CONFIG);
-    }
-
-    /**
-     * This will open branch transfer popup
-     *
-     * @param {*} event
-     * @memberof InventoryStockReportComponent
-     */
-    public openBranchTransferPopup(event: any): void {
-        this.branchTransferMode = event;
-        this.openTransferAsidePaneDialog();
     }
 
     /**

@@ -70,12 +70,12 @@
                                     </mat-menu>
                                 </div>
 
-                                <button mat-raised-button color="primary" class="mr-0"
+                                <!-- <button mat-raised-button color="primary" class="mr-0"
                                     matTooltip="Alt+i"
                                     (click)="openTransferAsidePaneDialog()"
                                 >
                                     Create New
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                     </div>
@@ -302,14 +302,6 @@
         </section>
     </section>
 </div>
-
-<!-- aside inwards/outwards/transfer pane -->
-<ng-template #asideMenuTemplate>
-    <aside-transfer-pane
-        (closeAsideEvent)="asideMenuDialogRef?.close()"
-    ></aside-transfer-pane>
-</ng-template>
-<!-- aside inwards/outwards/transfer pane -->
 
 <!-- Advance search popup -->
 <ng-template #advanceSearchTemplate>

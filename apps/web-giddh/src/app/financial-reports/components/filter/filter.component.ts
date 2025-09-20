@@ -111,6 +111,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public fromDate: string;
     /** To date for datepicker */
     public toDate: string;
+    /** Holds voucher api version */
+    public voucherApiVersion: number;
 
     constructor(
         private fb: UntypedFormBuilder,
@@ -170,6 +172,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

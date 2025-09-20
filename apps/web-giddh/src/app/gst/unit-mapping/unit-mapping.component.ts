@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { cloneDeep } from "../../lodash-optimized";
 import { ToasterService } from "../../services/toaster.service";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { GeneralService } from "../../services/general.service";
 
 
 @Component({
@@ -35,8 +36,18 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will use for voucher api version */
+    public voucherApiVersion: number;
 
-    constructor(private commonService: CommonService, private store: Store<AppState>, private toasty: ToasterService, private customStockAction: CustomStockUnitAction, private router: Router, private changeDetection: ChangeDetectorRef) {
+    constructor(
+        private commonService: CommonService,
+        private store: Store<AppState>,
+        private toasty: ToasterService,
+        private customStockAction: CustomStockUnitAction,
+        private router: Router,
+        private changeDetection: ChangeDetectorRef,
+        private generalService: GeneralService
+    ) {
         this.stockUnit$ = this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
@@ -51,6 +62,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
      * @memberof UnitMappingComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getStockUnits();
         this.store.dispatch(this.customStockAction.getStockUnit());
         document.querySelector('body').classList.add('gst-sidebar-open');

@@ -497,7 +497,7 @@
                             </button>
                         </mat-menu>
                     </ng-container>
-                    <ng-container *ngIf="activeTabIndex === 1">
+                    <ng-container *ngIf="activeTabIndex === 1 && voucherApiVersion === 2">
                         <button mat-raised-button color="primary" (click)="onGenerateEwayBill(item)">
                                 {{ localeData?.generate_eway_bill }}
                         </button>
