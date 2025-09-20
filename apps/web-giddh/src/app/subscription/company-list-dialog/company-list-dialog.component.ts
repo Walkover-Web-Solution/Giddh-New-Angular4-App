@@ -216,7 +216,7 @@ export class CompanyListDialogComponent implements OnInit {
         this.selectedCompany = company;
         this.subscriptionMove = true;
         this.dialog.open(this.moveCompany, {
-            width: 'var(--aside-pane-width)',
+            panelClass: 'mat-dialog-md',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
@@ -257,7 +257,7 @@ export class CompanyListDialogComponent implements OnInit {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.componentStore.archiveCompany(request);
             }

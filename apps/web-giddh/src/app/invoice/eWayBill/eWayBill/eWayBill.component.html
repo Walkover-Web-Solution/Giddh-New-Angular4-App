@@ -7,7 +7,7 @@
 >
     <div
         class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState === 'in'"
+        *ngIf="asideGstSidebarMenuState"
     >
         <tax-sidebar
             (navigateEvent)="handleNavigation()"
@@ -22,31 +22,41 @@
                 class="form-group linked-entities mr-r15 mb-0"
                 *ngIf="(currentCompanyBranches?.length > 2) && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
             >
-                <dropdown-field
+                <reactive-dropdown-field
                     [label]="commonLocaleData?.app_entity"
-                    [defaultValue]="currentBranch?.name ?? ''"
+                    [labelValue]="currentBranch?.name ?? ''"
                     [options]="currentCompanyBranches"
                     (selectedOption)="currentBranch.uniqueName = $event.value; handleBranchChange($event)"
                     [placeholder]="commonLocaleData?.app_select_entity"
-                ></dropdown-field>
+                ></reactive-dropdown-field>
             </div>
-            <dropdown-field
+            <reactive-dropdown-field
                 *ngIf="taxes?.length"
                 [label]="commonLocaleData?.app_gstin"
                 [options]="taxes"
                 (selectedOption)="selectTax($event)"
-                [defaultValue]="EwayBillfilterRequest.gstin ?? ''"
+                [labelValue]="EwayBillfilterRequest.gstin ?? ''"
                 [placeholder]="localeData?.select_gstin"
                 [required]="true"
-            ></dropdown-field>
-            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                <input
-                    matInput
-                    type="text"
-                    name="selectedDateRange"
-                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                    class="giddh-datepicker date-range-picker"
-                />
+            ></reactive-dropdown-field>
+            <div class="custom-datepicker-wrapper">
+                <div 
+                    class="custom-datepicker" 
+                    [matMenuTriggerFor]="universalDatepicker"
+                    #universalDatepickerTrigger="matMenuTrigger"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-controls="universalDatepicker"
+                >
+                    <input
+                        matInput
+                        type="text"
+                        name="selectedDateRange"
+                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker date-range-picker"
+                        readonly
+                    />
+                </div>
             </div>
         </div>
     </div>
@@ -70,19 +80,13 @@
 
     <!-- Not In Use -->
     <ng-template #consolidateModal>
-        <div class="modal-header">
-            <h3 class="modal-title pull-left">{{ localeData?.consolidated_details_heading }}</h3>
-            <button
-                type="button"
-                class="close pull-right"
-                [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="closeModel()"
-                aria-label="close"
-            >
-                <span aria-hidden="true">&times;</span>
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.consolidated_details_heading }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
             </button>
         </div>
-        <div class="modal-body">
+        <mat-dialog-content class="dialog-body">
             <h4 class="font-24 mb-2">
                 {{ commonLocaleData?.app_numbers?.one }}. {{ localeData?.consolidated_ewaybill_details }}
             </h4>
@@ -157,100 +161,64 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </mat-dialog-content>
     </ng-template>
 
-    <!-- Universal Datepicker template -->
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                ></app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
+    <!-- Universal Datepicker menu -->
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            ></app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
 
     <!-- Add Vehicle Dialog -->
     <ng-template #addVehicle>
-        <div class="modal-header d-flex align-items-center activity-header">
-            <h3>{{ localeData?.add_vehicle }}</h3>
-            <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.add_vehicle }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
+            </button>
         </div>
-        <mat-dialog-content class="w-100">
+        <mat-dialog-content class="dialog-body">
             <form #updateVehicleForm="ngForm" autocomplete="off" name="updateEwayVehicleform">
                 <div class="p-3">
                     <div class="d-flex column-gap15 mr-b15">
                         <!-- Mode of Transportation -->
                         <label>{{ commonLocaleData?.app_transportation_mode }}</label>
-                        <ul class="list-icon-group column-gap1">
-                            <li>
-                                <input
-                                    id="transMode1"
-                                    type="radio"
-                                    name="transMode"
-                                    [(ngModel)]="updateEwayVehicleform.transMode"
-                                    value="1"
-                                />
-                                <label for="transMode1">
-                                    <img src="assets/icon/4.svg " alt="road img" />
-                                    {{ commonLocaleData?.app_road }}
-                                </label>
-                            </li>
-                            <li>
-                                <input
-                                    id="transMode2"
-                                    type="radio"
-                                    [(ngModel)]="updateEwayVehicleform.transMode"
-                                    name="transMode"
-                                    value="2"
-                                />
-                                <label for="transMode2"
-                                    ><img src="assets/icon/3.svg " alt="rail img" />
-                                    {{ commonLocaleData?.app_rail }}
-                                </label>
-                            </li>
-                            <li>
-                                <input
-                                    id="transMode3"
-                                    type="radio"
-                                    [(ngModel)]="updateEwayVehicleform.transMode"
-                                    name="transMode"
-                                    value="3"
-                                />
-                                <label for="transMode3"
-                                    ><img src="assets/icon/1.svg " alt="air img" />
-                                    {{ commonLocaleData?.app_air }}
-                                </label>
-                            </li>
-                            <li>
-                                <input
-                                    id="transMode4"
-                                    type="radio"
-                                    [(ngModel)]="updateEwayVehicleform.transMode"
-                                    name="transMode"
-                                    value="4"
-                                />
-                                <label for="transMode4">
-                                    <img src="assets/icon/2.svg " alt="ship img" />
-                                    {{ commonLocaleData?.app_ship }}
-                                </label>
-                            </li>
-                        </ul>
+                        <mat-radio-group name="transMode" [(ngModel)]="updateEwayVehicleform.transMode" class="d-flex flex-wrap">
+                            <mat-radio-button color="primary" value="1" class="mr-3 mb-2">
+                                <img src="assets/icon/4.svg" alt="road img" class="mr-1" />
+                                {{ commonLocaleData?.app_road }}
+                            </mat-radio-button>
+                            <mat-radio-button color="primary" value="2" class="mr-3 mb-2">
+                                <img src="assets/icon/3.svg" alt="rail img" class="mr-1" />
+                                {{ commonLocaleData?.app_rail }}
+                            </mat-radio-button>
+                            <mat-radio-button color="primary" value="3" class="mr-3 mb-2">
+                                <img src="assets/icon/1.svg" alt="air img" class="mr-1" />
+                                {{ commonLocaleData?.app_air }}
+                            </mat-radio-button>
+                            <mat-radio-button color="primary" value="4" class="mb-2">
+                                <img src="assets/icon/2.svg" alt="ship img" class="mr-1" />
+                                {{ commonLocaleData?.app_ship }}
+                            </mat-radio-button>
+                        </mat-radio-group>
                     </div>
                     <div class="d-flex flex-column row-gap15">
                         <!-- Vehicle Type -->
@@ -287,24 +255,24 @@
                         ></input-field>
 
                         <!-- From State -->
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [label]="localeData?.from_state_label"
                             [placeholder]="localeData?.from_state_placeholder"
                             [name]="'fromState'"
                             [required]="true"
                             (selectedOption)="updateEwayVehicleform.fromState = $event.value"
                             [options]="statesSource$ | async"
-                        ></dropdown-field>
+                        ></reactive-dropdown-field>
 
                         <!-- Reason Code -->
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [name]="'reasonCode'"
                             [label]="localeData?.reason_label"
                             [placeholder]="localeData?.reason_placeholder"
                             [required]="true"
                             [options]="ewayUpdateVehicleReasonList"
                             (selectedOption)="updateEwayVehicleform.reasonCode = $event.value"
-                        ></dropdown-field>
+                        ></reactive-dropdown-field>
 
                         <!-- Remark -->
                         <mat-form-field appearance="outline" class="w-100">
@@ -345,7 +313,7 @@
 
                         <div class="d-flex column-gap15">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 type="submit"
                                 (click)="updateEwayTransport(updateEwayVehicleform)"
@@ -366,15 +334,17 @@
     <!-- Cancel Dialog -->
     <ng-template #cancellation>
         <!-- Reasons for cancellation -->
-        <div class="modal-header d-flex align-items-center activity-header">
-            <h3>{{ localeData?.reasons_for_cancellation }}</h3>
-            <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.reasons_for_cancellation }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
+            </button>
         </div>
-        <mat-dialog-content class="w-100">
+        <mat-dialog-content class="dialog-body">
             <form #cancelEwayForm="ngForm" autocomplete="off" class="p-3">
                 <div class="d-flex flex-column row-gap15">
                     <!-- Reason Code -->
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [label]="localeData?.reason_label"
                         [placeholder]="localeData?.reason_placeholder"
                         [options]="ewayCancelReason"
@@ -382,7 +352,7 @@
                         [required]="true"
                         (selectedOption)="cancelEwayRequest.cancelRsnCode = $event.value"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
 
                     <!-- Remark -->
                     <mat-form-field appearance="outline" class="w-100">
@@ -398,7 +368,7 @@
 
                     <div class="d-flex column-gap15">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             type="submit"
                             (click)="cancelEwayBill(cancelEwayRequest)"
@@ -528,7 +498,7 @@
                         </mat-menu>
                     </ng-container>
                     <ng-container *ngIf="activeTabIndex === 1">
-                        <button mat-stroked-button color="primary" (click)="onGenerateEwayBill(item)">
+                        <button mat-raised-button color="primary" (click)="onGenerateEwayBill(item)">
                                 {{ localeData?.generate_eway_bill }}
                         </button>
                     </ng-container>

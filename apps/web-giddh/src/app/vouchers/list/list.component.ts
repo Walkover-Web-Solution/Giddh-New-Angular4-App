@@ -15,8 +15,7 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
@@ -25,7 +24,6 @@ import { InvoiceService } from "../../services/invoice.service";
 import { InvoiceTemplatesService } from "../../services/invoice.templates.service";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
-import { trigger, state, style, transition, animate } from "@angular/animations";
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
@@ -41,6 +39,7 @@ import { RestrictedModules } from '../../app.constant';
 import { SettingsIntegrationActions } from "../../actions/settings/settings.integration.action";
 import { CommonActions } from "../../actions/common.actions";
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { MatMenuTrigger } from "@angular/material/menu";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../services/invoice.ui.data.service';
 import { TemplateModeEnum } from "../../models/api-models/Sales";
@@ -63,19 +62,7 @@ interface IReportFilterTableColumn {
     selector: "list",
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
-    providers: [VoucherComponentStore],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    providers: [VoucherComponentStore]
 })
 export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold all voucher list data source for table */
@@ -107,10 +94,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
     /** Holds E-way bill dailog template reference */
     @ViewChild('ewayBill', { static: true }) public ewayBill: TemplateRef<any>;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Holds send email dailog template reference send email */
     @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+
     /** Holds show Customer Search input visibility status */
     public showCustomerSearch: boolean = false;
     /** Holds show Invoice No Search input visibility status */
@@ -135,18 +123,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public urlVoucherType: string = '';
     /** Hold day js reference */
     public dayjs: any = dayjs;
-    /** Hold Bootstrap Modal Reference */
-    public modalRef: BsModalRef;
     /** Holds selected date range */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Last vouchers get in progress Observable */
@@ -198,7 +182,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** True, if user has enable GST E-invoice */
     public isEInvoiceEnabled: boolean = null;
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
     public totalResults: number = 0;
@@ -338,10 +322,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public settingResponse: any;
     /** Hold request object for setting form to save */
     public formToSave: any;
-    /** Hold route params */
-    public isRouteApplied: boolean = false;
     /** Holds true if update setting mode */
     public isSettingUpdateMode: boolean = false;
+    /** Hold route params */
+    public isRouteApplied: boolean = false;
     /** Hold current url */
     private currentUrl: string = "";
     /** Enum for estimate table columns */
@@ -366,6 +350,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public templatesList: any[] = [];
     /** List of all created templates for a given type */
     public createdTemplatesList: any[] = [];
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
     /** List of all created templates for a given type */
     public purchaseTemplatesList: any[] = [];
     /** Selected template */
@@ -387,7 +373,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private vouchersUtilityService: VouchersUtilityService,
-        private modalService: BsModalService,
         private toasterService: ToasterService,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
@@ -613,7 +598,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-
         /** Universal date */
         this.componentStore.universalDate$.pipe(filter(Boolean), skip(1), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -678,7 +662,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     if (this.activeModule === 'list') {
                         this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
                     }
-                    this.advanceFilters.to = this.queryParams.to;
+                    this.advanceFilters.page = this.queryParams.page;
                 }
                 this.getVouchers(true);
                 this.getVoucherBalances();
@@ -908,7 +892,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
         const broadcast = new BroadcastChannel("settings");
         broadcast.onmessage = (event) => {
             if (event?.data?.form !== undefined && event?.data?.form !== null) {
@@ -1041,7 +1024,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.dataSource.push(item);
             });
-
             // When user search in table header then after api call focus on respective search field
             if (this.activeSearchField) {
                 setTimeout(() => {
@@ -1436,8 +1418,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.ledgerSearchRequest.count = event.pageSize;
             this.getLedgersOfInvoice();
         } else {
+            this.advanceFilters.page = this.advanceFilters.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.advanceFilters.count = event.pageSize;
-            this.advanceFilters.page = event.pageIndex + 1;
             this.getVouchers(false);
         }
     }
@@ -1506,7 +1488,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-
     /**
      * Generate E-Invoice API Call
      *
@@ -1521,37 +1502,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      *
      * @param {*} days
      * @returns {string}
-     * @memberof InvoicePreviewComponent
+     * @memberof VoucherListComponent
      */
     public getOverdueDaysText(days: any): string {
         let overdueDays = this.localeData?.overdue_days;
         overdueDays = overdueDays?.replace("[DAYS]", days);
         return overdueDays;
-    }
-
-    /**
-    * To show the datepicker
-    *
-    * @param {*} element
-    * @memberof VoucherListComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof VoucherListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -1562,7 +1518,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -1570,7 +1526,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.customDateSelected = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -1650,7 +1606,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response) {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
@@ -1700,7 +1656,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         } else {
             dataToSend['voucherUniqueNames'] = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
         }
-
 
         let dialogRef = this.dialog.open(BulkUpdateComponent, {
             panelClass: ['mat-dialog-md'],
@@ -1769,6 +1724,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
+                this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.componentStore.deleteVoucher({
                         accountUniqueName: voucher?.account?.uniqueName, model: {
@@ -2077,7 +2033,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response === this.commonLocaleData?.app_yes) {
+            if (response === this.commonLocaleData?.app_yes) {
                 this.actionVoucher(voucher, 'cancel');
             }
         });
@@ -2180,7 +2136,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     * To get all advance adjusted data
     *
     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
-    * @memberof InvoicePreviewComponent
+    * @memberof VoucherListComponent
     */
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         this.closeAdvanceReceiptDialog();
@@ -2293,13 +2249,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.voucherDetails = voucher;
         this.accountParentGroup = this.getParentGroupForAccountCreate(this.voucherType);
 
-        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true
-        });
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -2616,6 +2566,22 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will be check account of same accouunt on selected pending vouchers
+     *
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
+    public isSameAccount(): boolean {
+        if (!this.selectedPendingVouchers?.length) {
+            return false;
+        }
+        const firstAccountUniqueName = this.selectedPendingVouchers[0]?.account?.uniqueName;
+        return this.selectedPendingVouchers.every(voucher =>
+            voucher?.account?.uniqueName === firstAccountUniqueName
+        );
+    }
+
+    /**
      *  Navigates to the preview invoice page.
      *
      * @memberof VoucherListComponent
@@ -2795,7 +2761,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.verifyPurchaseEmail({ getRequestObject: getRequestObject, postRequestObject: postRequestObject });
     }
 
-
     /**
      * Open custom email dialog
      *
@@ -2805,13 +2770,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
             data: voucherType,
-            width: 'var(--aside-pane-width)',
-            height: '70vh',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
+            ...ASIDE_PANE_CONFIG
         });
     }
 
@@ -2922,7 +2881,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
                 if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                     this.updateSettingsEmail(null);
@@ -3452,7 +3411,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             ariaLabel: 'Confirm Dialog'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.invoiceTemplatesService.deleteTemplate(template.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res?.status === 'success') {
@@ -3519,7 +3478,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.fetchAllCreatedTemplates(templatesType);
             }
@@ -3542,6 +3501,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (!this.displayedColumns?.includes("e_invoice_status")) {
                 this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "e_invoice_status");
             }
+        }
+    }
+
+    /**
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
     }
 

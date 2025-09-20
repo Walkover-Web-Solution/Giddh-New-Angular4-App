@@ -1,30 +1,30 @@
 <ng-container appTranslate [file]="'inventory'" (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event">
     <div class="inventory-advance-search">
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">{{ localeData?.advance_search_filter?.advance_search }}</h4>
-            <button type="button" class="close pull-right" (click)="advanceFilterClose()" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.advance_search_filter?.advance_search }}</span>
+            <button mat-icon-button aria-label="close" (click)="advanceFilterClose()">
+                <i class="icon-cross"></i>
             </button>
         </div>
-        <div class="modal-body">
+        <mat-dialog-content class="dialog-body">
             <form>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pr-2">
-                                <dropdown-field [placeholder]="commonLocaleData?.app_select"
+                                <reactive-dropdown-field [placeholder]="commonLocaleData?.app_select"
                                     [options]="advanceSearchFilterBy" (selectedOption)="selectCategory($event)"
-                                    [defaultValue]="advanceSearchFormObj.filterBy.label" [allowValueReset]="true"
+                                    [labelValue]="advanceSearchFormObj.filterBy.label"
                                     (onClear)="advanceSearchFormObj.filterBy = ''"
-                                    [label]="localeData?.advance_search_filter?.filter_by"></dropdown-field>
+                                    [label]="localeData?.advance_search_filter?.filter_by"></reactive-dropdown-field>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pl-2">
-                                <dropdown-field [placeholder]="commonLocaleData?.app_select"
+                                <reactive-dropdown-field [placeholder]="commonLocaleData?.app_select"
                                     [options]="advanceSearchFilterByOptions" (selectedOption)="selectCategoryType($event)"
-                                    [defaultValue]="advanceSearchFormObj.type.label" [allowValueReset]="true"
+                                    [labelValue]="advanceSearchFormObj.type.label"
                                     (onClear)="advanceSearchFormObj.type.value = { label: commonLocaleData?.app_rate, value: 'rate'}"
-                                    [label]="localeData?.advance_search_filter?.type"></dropdown-field>
+                                    [label]="localeData?.advance_search_filter?.type"></reactive-dropdown-field>
                             </div>
                         </div>
                     </div>
@@ -33,11 +33,11 @@
                     <div class="col-lg-12">
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 mr-b15 pr-2">
-                                <dropdown-field [placeholder]="commonLocaleData?.app_select"
+                                <reactive-dropdown-field [placeholder]="commonLocaleData?.app_select"
                                     [options]="advanceSearchExpression" (selectedOption)="selectValueExpression($event)"
-                                    [defaultValue]="advanceSearchFormObj.expression.label" [allowValueReset]="true"
+                                    [labelValue]="advanceSearchFormObj.expression.label"
                                     (onClear)="advanceSearchFormObj.expression = ''"
-                                    [label]="localeData?.advance_search_filter?.expression"></dropdown-field>
+                                    [label]="localeData?.advance_search_filter?.expression"></reactive-dropdown-field>
                             </div>
                             <div class="col-lg-6 col-sm-6 mr-b15 pl-2">
                                 <input-field [type]="'number'"
@@ -53,7 +53,7 @@
                 <div class="row mt-3">
                     <div class="col-sm-12">
                         <div class="button-group d-flex justify-content-end column-gap15">
-                            <button id="search-btn" mat-stroked-button color="primary" (click)="advanceSearchAction()"
+                            <button id="search-btn" mat-raised-button color="primary" (click)="advanceSearchAction()"
                                 [disabled]="
                                     !advanceSearchFormObj.filterBy ||
                                     !advanceSearchFormObj.type ||
@@ -62,13 +62,13 @@
                                 ">
                                 {{ commonLocaleData?.app_search }}
                             </button>
-                            <button id="clear-btn" mat-stroked-button class="mr-0" (click)="initializeForm()">
+                            <button mat-stroked-button class="mr-0" (click)="initializeForm()">
                                 {{ commonLocaleData?.app_reset }}
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
-        </div>
+        </mat-dialog-content>
     </div>
 </ng-container>

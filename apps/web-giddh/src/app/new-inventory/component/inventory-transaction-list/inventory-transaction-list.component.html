@@ -348,7 +348,7 @@
                                 <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.date }}
                                 </th>
-                                <td data-title="Date" mat-cell *matCellDef="let element">
+                                <td data-title="Date" mat-cell *matCellDef="let element" class="common-column-width">
                                     {{ element?.entryDate ?? "-" }}
                                 </td>
                             </ng-container>
@@ -562,36 +562,25 @@
                                     </span>
                                 </td>
                             </ng-container>
-                            <!-- <ng-container matColumnDef="qty">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>qty</th>
-                        <td data-title="Qty" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.qty }}
-                        </td>
-                    </ng-container> -->
                             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
-                    <div class="pagination-wrapper mt-4">
-                        <pagination
+                    <div class="mt-4">
+                        <mat-paginator
                             *ngIf="
-                                stockReportRequest?.totalItems > stockReportRequest?.count &&
+                                stockReportRequest?.totalItems > pageSizeOptions[0] &&
                                 !isLoading &&
                                 displayedColumns?.length
                             "
-                            [totalItems]="stockReportRequest?.totalItems"
-                            [(ngModel)]="stockReportRequest.page"
-                            [maxSize]="5"
-                            class="pagination-sm"
-                            [boundaryLinks]="true"
-                            [itemsPerPage]="stockReportRequest?.count"
-                            [rotate]="false"
-                            (pageChanged)="pageChanged($event)"
-                            [firstText]="commonLocaleData?.app_first"
-                            [previousText]="commonLocaleData?.app_previous"
-                            [nextText]="commonLocaleData?.app_next"
-                            [lastText]="commonLocaleData?.app_last"
-                        ></pagination>
+                            [length]="stockReportRequest?.totalItems"
+                            [pageSize]="stockReportRequest?.count"
+                            [pageIndex]="stockReportRequest.page - 1"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                            (page)="handlePageEvent($event)"
+                        ></mat-paginator>
                     </div>
                 </div>
             </div>

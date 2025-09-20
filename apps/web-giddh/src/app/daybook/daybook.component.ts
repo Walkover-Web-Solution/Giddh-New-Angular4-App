@@ -3,15 +3,16 @@ import { Store, select } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
 import { TaxResponse } from '../models/api-models/Company';
-import { DaybookQueryRequest, ExportBodyRequest } from '../models/api-models/DaybookRequest';
+import { DaybookQueryRequest, DayBookRequestModel, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../services/general.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
@@ -19,7 +20,6 @@ import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LedgerVM } from '../ledger/ledger.vm';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -32,19 +32,7 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
-    styleUrls: [`./daybook.component.scss`],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ])
-    ]
+    styleUrls: [`./daybook.component.scss`]
 })
 
 export class DaybookComponent implements OnInit, OnDestroy {
@@ -54,6 +42,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public isAllExpanded: boolean = false;
     public daybookQueryRequest: DaybookQueryRequest;
     public daybookExportRequestType: 'get' | 'post';
+    /** Page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** True, If advance search applied */
@@ -71,16 +61,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public isEntryExpanded: boolean = false;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
     /* Selected from date */
@@ -89,8 +77,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -111,8 +97,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-    // aside menu properties
-    public asideMenuState: string = 'out';
     /** Ledger object */
     public lc: LedgerVM;
     /** Company taxes list */
@@ -156,7 +140,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private store: Store<AppState>,
         private generalService: GeneralService,
-        private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
         private ledgerActions: LedgerActions,
         private daybookService: DaybookService,
@@ -263,20 +246,20 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * if closing triggers from advance search filter
      * @param obj contains search params
      */
-    public closeAdvanceSearchPopup(obj) {
-        if (!obj.cancle) {
-            this.searchFilterData = cloneDeep(obj.dataToSend);
+    public closeAdvanceSearchPopup(reqObj: any): void {
+        if (!reqObj.cancle) {
+            this.searchFilterData = cloneDeep(reqObj.dataToSend);
             if (this.dateRangePickerCmp) {
                 this.dateRangePickerCmp.render();
             }
-            this.daybookQueryRequest.from = (obj.fromDate) ? obj.fromDate : this.todaySelected ? '' : this.daybookQueryRequest.from;
-            this.daybookQueryRequest.to = (obj.toDate) ? obj.toDate : this.todaySelected ? '' : this.daybookQueryRequest.to;
+            this.daybookQueryRequest.from = (reqObj.fromDate) ? reqObj.fromDate : this.todaySelected ? '' : this.daybookQueryRequest.from;
+            this.daybookQueryRequest.to = (reqObj.toDate) ? reqObj.toDate : this.todaySelected ? '' : this.daybookQueryRequest.to;
             this.daybookQueryRequest.page = 0;
-            if (obj.action === 'search') {
+            if (reqObj.action === 'search') {
                 this.modalDialogRef.close();
                 this.getDaybook(this.searchFilterData);
                 this.showAdvanceSearchIcon = true;
-            } else if (obj.action === 'export') {
+            } else if (reqObj.action === 'export') {
                 this.exportDaybook();
             }
         } else {
@@ -290,9 +273,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param {*} [withFilters=null]
      * @memberof DaybookComponent
      */
-    public getDaybook(withFilters = null): void {
+    public getDaybook(withFilters: DayBookRequestModel = null): void {
         this.showLoader = true;
-        this.daybookService.GetDaybook(withFilters, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let daybookRequest = cloneDeep(withFilters);
+        if (withFilters) {
+            delete daybookRequest.defaultVouchersLabel;
+            delete daybookRequest.defaultTagsLabel;
+            delete daybookRequest.defaultParticularsLabel;
+            delete daybookRequest.inventory.defaultInventoriesLabel;
+        }
+        this.daybookService.GetDaybook(daybookRequest, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response?.body?.entries?.length > 0) {
                     this.daybookQueryRequest.page = response?.body?.page;
@@ -369,11 +359,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
         });
     }
 
-    public pageChanged(event: any): void {
-        if (this.daybookQueryRequest.page !== event.page) {
-            this.daybookQueryRequest.page = event.page;
-            this.getDaybook(this.searchFilterData);
-        }
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof DaybookComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.daybookQueryRequest.page = this.daybookData.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.daybookQueryRequest.count = event.pageSize;
+        this.getDaybook(this.searchFilterData);
     }
 
     public exportDaybook() {
@@ -529,14 +524,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param {*} element
      * @memberof DaybookComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**
@@ -544,9 +537,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
      *
      * @memberof DaybookComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
 
     /**
      * Call back function for date/range selection in datepicker
@@ -556,7 +546,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -565,7 +555,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
         this.todaySelected = false;
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -611,11 +601,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        this.modalDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
+        this.modalDialogRef.afterOpened().subscribe(response => {
             this.updateLedgerComponent?.loadDefaultSearchSuggestions();
         });
 
-        this.modalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.modalDialogRef.afterClosed().subscribe(response => {
             document.querySelector('body').classList.remove('update-ledger-overlay');
             this.getDaybook(this.searchFilterData);
         });
@@ -629,15 +619,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
-            position: {
-                right: '0'
-            },
-            maxWidth: '760px',
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh'
-        })
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, ASIDE_PANE_CONFIG)
     }
 
     /**
@@ -696,22 +678,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * This will be use for toggle aside pan from daybook
      *
      * @param {*} [event]
-     * @param {ShSelectComponent} [shSelectElement]
      * @memberof DaybookComponent
      */
     public toggleAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
         }
-        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
-            position: {
-                right: '0',
-                top: '0',
-            },
-            width: '760px',
-            disableClose: true
-        });
-        this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
+        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
+        this.ledgerAsidePaneModal.afterClosed().subscribe(response => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();

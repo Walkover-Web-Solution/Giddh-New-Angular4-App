@@ -3,8 +3,9 @@ import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL } from "../app.constant";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -19,7 +20,6 @@ import {
     GoogleLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
@@ -38,10 +38,19 @@ declare var initSendOTP: any;
 })
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
-    @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
-    @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
+    /** Template reference for email verification dialog */
+    @ViewChild('emailVerifyTemplate', { static: true }) public emailVerifyTemplate: TemplateRef<any>;
+    /** Template reference for mobile verification dialog */
+    @ViewChild('mobileVerifyTemplate', { static: true }) public mobileVerifyTemplate: TemplateRef<any>;
+    /** Template reference for two-way authentication dialog */
+    @ViewChild('twoWayAuthTemplate', { static: true }) public twoWayAuthTemplate: TemplateRef<any>;
+    /** Dialog reference for email verify modal */
+    private emailVerifyDialogRef: MatDialogRef<any>;
+    /** Dialog reference for mobile verify modal */
+    private mobileVerifyDialogRef: MatDialogRef<any>;
+    /** Dialog reference for two way auth modal */
+    private twoWayAuthDialogRef: MatDialogRef<any>;
     public urlPath: string = "";
     public isSubmited: boolean = false;
     public mobileVerifyForm: UntypedFormGroup;
@@ -88,7 +97,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private ngZone: NgZone,
         @Inject(ServiceConfig) private serviceConfig,
-        private generalService : GeneralService
+        private generalService : GeneralService,
+        private dialog: MatDialog
     ) {
         this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER;
         this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
@@ -214,9 +224,17 @@ export class SignupComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Shows the email verification modal dialog
+     *
+     * @memberof SignupComponent
+     */
     public showEmailModal() {
-        this.emailVerifyModal?.show();
-        this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+        this.emailVerifyDialogRef = this.dialog.open(this.emailVerifyTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+        this.emailVerifyDialogRef.afterOpened().subscribe(() => {
             this.isSubmited = false;
         });
     }
@@ -254,28 +272,49 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
 
+    /**
+     * Hides the email verification modal dialog
+     *
+     * @memberof SignupComponent
+     */
     public hideEmailModal() {
-        this.emailVerifyModal.hide();
+        this.emailVerifyDialogRef?.close();
         this.store.dispatch(this.loginAction.ResetSignupWithEmailState());
         this.emailVerifyForm.reset();
     }
 
+    /**
+     * Shows the mobile verification modal dialog
+     *
+     * @memberof SignupComponent
+     */
     public showMobileModal() {
-        this.mobileVerifyModal?.show();
+        this.mobileVerifyDialogRef = this.dialog.open(this.mobileVerifyTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
+    /**
+     * Hides the mobile verification modal dialog
+     *
+     * @memberof SignupComponent
+     */
     public hideMobileModal() {
-        this.mobileVerifyModal.hide();
+        this.mobileVerifyDialogRef?.close();
         this.store.dispatch(this.loginAction.ResetSignupWithMobileState());
         this.mobileVerifyForm.get("mobileNumber").reset();
     }
 
     public showTwoWayAuthModal() {
-        this.twoWayAuthModal?.show();
+        this.twoWayAuthDialogRef = this.dialog.open(this.twoWayAuthTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     public hideTowWayAuthModal() {
-        this.twoWayAuthModal?.hide();
+        this.twoWayAuthDialogRef?.close();
     }
 
     public resetTwoWayAuthModal() {

@@ -7,7 +7,8 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { InventoryModuleName } from '../../inventory.enum';
-import { PAGINATION_LIMIT } from '../../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { InventoryComponentStore } from '../inventory.store';
 
 @Component({
@@ -31,6 +32,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public pagination: any;
     /**Holds Page count in single page for Pagination */
     private pageCount = PAGINATION_LIMIT;
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Item(stock) get from API */
     public totalInventoryCount: number;
     /** Holds recent sort order*/
@@ -255,13 +260,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             stockUnitCode: [controlValue.stockUnitCode, Validators.required],
             stockUnitName: [controlValue.stockUnitName, Validators.required],
 
-            purchaseUnits: [(controlValue.purchaseUnits?.length && controlValue.purchaseUnits[0] !== null ? controlValue.purchaseUnits[0]?.uniqueName : ""), Validators.required],
+            purchaseUnits: [(controlValue.purchaseUnits?.length && controlValue.purchaseUnits[0] !== null ? controlValue.purchaseUnits[0]?.code : ""), Validators.required],
             purchaseAccountName: [controlValue.purchaseAccountName, Validators.required],
             purchaseAccountUniqueName: [controlValue.purchaseAccountUniqueName, Validators.required],
             purchaseRate: [controlValue.purchaseRate, Validators.required],
             purchaseTaxInclusive: [controlValue.purchaseTaxInclusive, Validators.required],
 
-            salesUnits: [(controlValue.salesUnits?.length && controlValue.salesUnits[0] !== null ? controlValue.salesUnits[0]?.uniqueName : ""), Validators.required],
+            salesUnits: [(controlValue.salesUnits?.length && controlValue.salesUnits[0] !== null ? controlValue.salesUnits[0]?.code : ""), Validators.required],
             salesAccountName: [controlValue.salesAccountName, Validators.required],
             salesAccountUniqueName: [controlValue.salesAccountUniqueName, Validators.required],
             salesRate: [controlValue.salesRate, Validators.required],
@@ -269,7 +274,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
             fixedAssetTaxInclusive: [controlValue.fixedAssetTaxInclusive, Validators.required],
             fixedAssetRate: [controlValue.fixedAssetRate, Validators.required],
-            fixedAssetUnits: [(controlValue.fixedAssetUnits?.length && controlValue.fixedAssetUnits[0] !== null ? controlValue.fixedAssetUnits[0]?.uniqueName : ""), Validators.required],
+            fixedAssetUnits: [(controlValue.fixedAssetUnits?.length && controlValue.fixedAssetUnits[0] !== null ? controlValue.fixedAssetUnits[0]?.code : ""), Validators.required],
             fixedAssetAccountName: [controlValue.fixedAssetAccountName, Validators.required],
             fixedAssetAccountUniqueName: [controlValue.fixedAssetAccountUniqueName, Validators.required],
 
@@ -307,7 +312,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @memberof BulkStockEditComponent
      */
     onFormSubmit(): void {
-        // console.log(this.bulkStockEditForm.value);
     }
 
     /**
@@ -342,22 +346,36 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     * @param {*} event
     * @memberof BulkStockEditComponent
     */
-    public pageChanged(event: any): void {
-        if (this.pagination.currentPage !== event?.page) {
-            this.isLoading = true;
-            this.store.dispatch(this.inventoryAction.getBulkStockList({
-                inventoryType: this.inventoryType, page: event.page, count: this.pageCount, body: {
-                    "search": this.searchString !== null ? this.searchString : "",
-                    "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
-                    "filterBy": this.advanceSearchData !== null ? this.advanceSearchData?.filterBy?.value : "",
-                    "sortBy": this.sortOrderKey !== null ? this.sortOrderKey : "",
-                    "sort": this.sortOrderStatus !== null ? this.sortOrderStatus : "asc",
-                    "expression": this.advanceSearchData !== null ? this.advanceSearchData?.expression?.value : "",
-                    "rate": this.advanceSearchData !== null ? this.advanceSearchData?.amount : ""
-                }
-            }));
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof BulkStockEditComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.pageCount !== event.pageSize) {
+            this.pagination.currentPage = 1;
+        } else {
+            this.pagination.currentPage = event.pageIndex + 1;
         }
+        this.pageCount = event.pageSize;
+        this.isLoading = true;
+        this.store.dispatch(this.inventoryAction.getBulkStockList({
+            inventoryType: this.inventoryType, 
+            page: this.pagination.currentPage, 
+            count: this.pageCount, 
+            body: {
+                "search": this.searchString !== null ? this.searchString : "",
+                "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
+                "filterBy": this.advanceSearchData !== null ? this.advanceSearchData?.filterBy?.value : "",
+                "sortBy": this.sortOrderKey !== null ? this.sortOrderKey : "",
+                "sort": this.sortOrderStatus !== null ? this.sortOrderStatus : "asc",
+                "expression": this.advanceSearchData !== null ? this.advanceSearchData?.expression?.value : "",
+                "rate": this.advanceSearchData !== null ? this.advanceSearchData?.amount : ""
+            }
+        }));
     }
+
 
     /**
      *toggleInput(key) is used to change boolean value of tableHeadInput
@@ -394,7 +412,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @memberof BulkStockEditComponent
      */
     public getInputIndex(index: number, key: string): void {
-        // console.log(`At index - ${index} and key is '${key}'`);
     }
 
     /**
@@ -546,71 +563,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: bodyObj
         }));
     }
-
-    /**
-     * Get stock groups
-     *
-     * @memberof StockCreateEditComponent
-     */
-    // public getStockGroups(): void {
-
-    //     this.inventoryService.GetGroupsWithStocksFlatten(this.inventoryType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-    //         if (response?.status === "success") {
-    //             let stockGroups: IOption[] = [];
-    //             this.arrangeStockGroups(response.body?.results, stockGroups);
-    //             this.stockGroups = stockGroups;
-    //             // this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
-    //         }
-    //     });
-    //     this.changeDetection.detectChanges();
-    // }
-
-    /**
-     * Arrange stock groups
-     *
-     * @private
-     * @param {IGroupsWithStocksHierarchyMinItem[]} groups
-     * @param {IOption[]} [parents=[]]
-     * @memberof StockCreateEditComponent
-     */
-    // private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
-    //     groups.map(group => {
-    //         if (group) {
-    //             let newOption: IOption = { label: '', value: '', additional: {} };
-    //             newOption.label = group?.name;
-    //             newOption.value = group?.uniqueName;
-    //             newOption.additional = group;
-    //             parents.push(newOption);
-    //             if (group?.childStockGroups?.length > 0) {
-    //                 this.arrangeStockGroups(group?.childStockGroups, parents);
-    //             }
-    //         }
-    //     });
-    //     this.changeDetection.detectChanges();
-    // }
-
-    /**
-    * Get taxes
-    *
-    * @memberof BulkStockEditComponent
-    */
-    // public getTaxes(): void {
-    //     this.store.dispatch(this.companyAction.getTax());
-    //     this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
-    //         if (response?.length > 0 && !this.processedTaxes?.length) {
-    //             this.taxes = response || [];
-    //             console.log("Taxes: ", this.taxes);
-    //         }
-    //         this.changeDetection.detectChanges();
-    //     });
-    // }
-    // public openedSelectTax(event:any): void {
-    //     console.log("Selected Tax : ", event)
-    // }
-
-    // public selectTax(tax): void {
-    //     console.log("OnTaxSelection Change : ", tax)
-    // }
 
     /**
      * Open advance search Dialog

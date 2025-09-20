@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="clearfix" *ngIf="!isMobileScreen">
+    <div class="clearfix">
         <div class="row">
             <div class="col-12 d-flex justify-content-between align-items-start column-gap15">
                 <form
@@ -25,93 +25,86 @@
                         "
                     >
                         <div class="form-group">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="currentCompanyBranches"
                                 formControlName="branchUniqueName"
                                 class="company-branch-dropdown"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
-                                (selected)="handleBranchChange($event)"
-                                [isFilterEnabled]="true"
+                                (selectedOption)="handleBranchChange($event)"
                                 [placeholder]="commonLocaleData?.app_select_entity"
-                                [fixedValue]="currentBranch?.name"
-                                [forceClearReactive]="forceClear$ | async"
+                                [labelValue]="currentBranch?.name"
                             >
-                                <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a href="javascript:void(0)" class="list-item d-flex">
-                                            <span class="entity-icon">
-                                                <i
-                                                    [ngClass]="{
-                                                        'icon-company-profile': option.consolidatedBranch,
-                                                        'icon-branch-icon': !option.consolidatedBranch
-                                                    }"
-                                                    class="pull-right"
-                                                    *ngIf="!option.isCompany"
-                                                    [tooltip]="commonLocaleData?.app_branch"
-                                                ></i>
-                                                <i
-                                                    class="icon-company-profile pull-right"
-                                                    *ngIf="option.isCompany"
-                                                    [tooltip]="commonLocaleData?.app_company"
-                                                ></i>
-                                            </span>
-                                            <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">
-                                                    {{ option.label || "-" }}
-                                                </div>
-                                                <div class="item-unique giddh-limit single-line-clamp">
-                                                    {{ option.name || "-" }}
-                                                </div>
-                                            </span>
-                                        </a>
-                                    </ng-container>
-                                </ng-template>
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="form-group" *ngIf="showLabels">
                         <div class="form-group">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="dateOptions"
-                                (selected)="dateOptionIsSelected($event)"
+                                (selectedOption)="dateOptionIsSelected($event)"
                                 class="company-branch-dropdown"
-                                formControlName="selectedDateOption"
-                                [isFilterEnabled]="true"
                                 [placeholder]="commonLocaleData?.app_select_option"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
+                                [labelValue]="selectedDateOption?.label ?? ''"
+                                formControlName="selectedDateOption"
                             >
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="form-group" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
                         <div class="form-group">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="financialOptions"
                                 formControlName="selectedFinancialYearOption"
-                                [isFilterEnabled]="true"
-                                [placeholder]="commonLocaleData?.app_select_option"
-                                [showClear]="false"
-                                (selected)="selectFinancialYearOption($event)"
-                                [ItemHeight]="33"
-                            ></sh-select>
+                                (selectedOption)="selectFinancialYearOption($event)"
+                                class="company-branch-dropdown"
+                                [label]="commonLocaleData?.app_financial_year"
+                                [placeholder]="commonLocaleData?.app_datepicker?.select_financial_year"
+                            ></reactive-dropdown-field>
                         </div>
                     </div>
                     <div
                         class="form-group relative datepicker-field"
                         *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
                     >
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div 
+                            class="custom-datepicker"
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universalDatepicker"
+                        >
                             <input
+                                matInput
                                 type="text"
                                 name="selectedDateRange"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker"
+                                readonly
                             />
                         </div>
+                        <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                            <ng-template matMenuContent>
+                                <app-datepicker-wrapper
+                                    [inputStartDate]="selectedDateRange?.startDate"
+                                    [inputEndDate]="selectedDateRange?.endDate"
+                                    [alwaysShowCalendars]="true"
+                                    [ranges]="datePickerOptions"
+                                    [selectedRangeLabel]="selectedRangeLabel"
+                                    [showCustomRangeLabel]="true"
+                                    [showClearButton]="false"
+                                    [showCancel]="true"
+                                    [linkedCalendars]="true"
+                                    [showDropdowns]="true"
+                                    (rangeClicked)="dateSelectedCallback($event)"
+                                    (datesUpdated)="dateSelectedCallback($event)"
+                                    (closeCalender)="toggleGiddhDatepicker(false)"
+                                    [keepCalendarOpeningWithRange]="false"
+                                    [showRangeLabelOnInput]="false"
+                                    [showConfirmationOnChange]="showConfirmationOnDateChange"
+                                    [confirmationMessage]="localeData?.reconcile_mode_turned_off_message"
+                                ></app-datepicker-wrapper>
+                            </ng-template>
+                        </mat-menu>
                     </div>
                     <div class="form-group" *ngIf="plBsExportXLS">
                         <giddh-compare-with-date-range-picker
@@ -128,28 +121,23 @@
                             *ngIf="!isProjectWiseAccounting && tags?.length"
                         >
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="tags"
-                                name="selectedTag"
+                                [name]="'selectedTag'"
                                 formControlName="tagName"
-                                [isFilterEnabled]="true"
-                                (selected)="onTagSelected($event)"
+                                (selectedOption)="onTagSelected($event)"
+                                [label]="commonLocaleData?.app_tag"
                                 [placeholder]="commonLocaleData?.app_select_tag"
-                                [ItemHeight]="35"
-                                [notFoundLink]="false"
-                                (noResultsClicked)="toggleTagsModal()"
-                                [showNotFoundLinkAsDefault]="false"
-                                [width]="'170px'"
                             >
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                         <!-- Filter by Tag -->
                         <div class="form-group pull-left">
                             <a
                                 class="cp expand-icon"
                                 (click)="emitExpand(true)"
-                                data-placement="top"
-                                tooltip="{{ commonLocaleData?.app_expand_all }}"
+                                matTooltip="{{ commonLocaleData?.app_expand_all }}"
+                                matTooltipPosition="above"
                                 *ngIf="!expandAll"
                             >
                                 <span class="icon-expandIcon"></span>
@@ -157,15 +145,15 @@
                             <a
                                 class="cp expand-icon"
                                 (click)="emitExpand(false)"
-                                data-placement="top"
-                                tooltip="{{ commonLocaleData?.app_collapse_all }}"
+                                matTooltip="{{ commonLocaleData?.app_collapse_all }}"
+                                matTooltipPosition="above"
                                 *ngIf="expandAll"
                             >
                                 <span class="icon-collapse"></span>
                             </a>
                         </div>
                     </div>
-                    <button mat-stroked-button color="primary" type="submit">
+                    <button mat-raised-button color="primary" type="submit">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </form>
@@ -205,7 +193,7 @@
                             <span class="d-inline-block nowrap">{{ localeData?.switch_back_to_reconcile_mode }}</span>
                         </button>
                     </ng-container>
-                    <a class="cursor-pointer" (click)="refreshData()" tooltip="{{ localeData?.reload_data }}">
+                    <a class="cursor-pointer" (click)="refreshData()" matTooltip="{{ localeData?.reload_data }}">
                         <span class="icon-refresh"></span>
                     </a>
                     <button
@@ -248,262 +236,4 @@
             </div>
         </div>
     </div>
-    <!-- for mobile view only -->
-    <div class="tb-mobile-header" *ngIf="isMobileScreen">
-        <form
-            [formGroup]="filterForm"
-            (submit)="filterData()"
-            class="flex-column financial-select-year"
-            name="fromToDateForm"
-            novalidate
-        >
-            <div class="d-flex flex-column">
-                <div
-                    class="form-group mr-r15 linked-entities"
-                    *ngIf="
-                        showLabels &&
-                        currentCompanyBranches?.length > 2 &&
-                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                    "
-                >
-                    <div class="form-group mb-0">
-                        <sh-select
-                            [options]="currentCompanyBranches"
-                            formControlName="branchUniqueName"
-                            class="company-branch-dropdown w-100"
-                            [showClear]="false"
-                            [ItemHeight]="33"
-                            width="100%"
-                            (selected)="handleBranchChange($event)"
-                            [isFilterEnabled]="true"
-                            [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.name"
-                        >
-                            <ng-template #optionTemplate let-option="option">
-                                <ng-container>
-                                    <a href="javascript:void(0)" class="list-item d-flex">
-                                        <span class="entity-icon">
-                                            <i
-                                                [ngClass]="
-                                                    option?.consolidatedBranch
-                                                        ? 'icon-company-profile'
-                                                        : 'icon-branch-icon'
-                                                "
-                                                class="pull-right"
-                                                *ngIf="!option.isCompany"
-                                                [tooltip]="commonLocaleData?.app_branch"
-                                            ></i>
-                                            <i
-                                                class="icon-company-profile pull-right"
-                                                *ngIf="option.isCompany"
-                                                [tooltip]="commonLocaleData?.app_company"
-                                            ></i>
-                                        </span>
-                                        <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">
-                                                {{ option.label || "-" }}
-                                            </div>
-                                            <div class="item-unique giddh-limit single-line-clamp">
-                                                {{ option.name || "-" }}
-                                            </div>
-                                        </span>
-                                    </a>
-                                </ng-container>
-                            </ng-template>
-                        </sh-select>
-                    </div>
-                </div>
-                <div class="form-group mr-0 mb-0" *ngIf="showLabels">
-                    <div class="form-group">
-                        <sh-select
-                            [options]="dateOptions"
-                            (selected)="dateOptionIsSelected($event)"
-                            class="company-branch-dropdown w-100"
-                            formControlName="selectedDateOption"
-                            [isFilterEnabled]="true"
-                            [placeholder]="commonLocaleData?.app_select_option"
-                            [showClear]="false"
-                            [ItemHeight]="33"
-                            width="100%"
-                        >
-                        </sh-select>
-                    </div>
-                </div>
-
-                <div class="form-group mb-0" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
-                    <div class="form-group">
-                        <sh-select
-                            [options]="financialOptions"
-                            formControlName="selectedFinancialYearOption"
-                            [isFilterEnabled]="true"
-                            [placeholder]="commonLocaleData?.app_select_option"
-                            [showClear]="false"
-                            (selected)="selectFinancialYearOption($event)"
-                            [ItemHeight]="33"
-                        >
-                        </sh-select>
-                    </div>
-                </div>
-                <div
-                    class="form-group relative datepicker-field"
-                    *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
-                >
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <input
-                            type="text"
-                            name="selectedDateRange"
-                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div class="form-group" *ngIf="!showLoader">
-                <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="tags?.length">
-                    <i class="glyphicon glyphicon-triangle-bottom"></i>
-                    <sh-select
-                        [options]="tags"
-                        name="selectedTag"
-                        formControlName="tagName"
-                        [isFilterEnabled]="true"
-                        (selected)="onTagSelected($event)"
-                        [placeholder]="commonLocaleData?.app_select_tag"
-                        [ItemHeight]="35"
-                        [notFoundLink]="false"
-                        (noResultsClicked)="toggleTagsModal()"
-                        [showNotFoundLinkAsDefault]="false"
-                        [width]="'170px'"
-                    >
-                    </sh-select>
-                </div>
-                <!-- Filter by Tag -->
-                <div class="form-group pull-left d-flex">
-                    <a
-                        class="cp expand-icon"
-                        (click)="emitExpand(true)"
-                        data-placement="top"
-                        tooltip="{{ commonLocaleData?.app_expand_all }}"
-                        *ngIf="!expandAll"
-                    >
-                        <span class="icon-expandIcon"></span>
-                    </a>
-                    <a
-                        class="cp expand-icon"
-                        (click)="emitExpand(false)"
-                        data-placement="top"
-                        tooltip="{{ commonLocaleData?.app_collapse_all }}"
-                        *ngIf="expandAll"
-                    >
-                        <span class="icon-collapse"></span>
-                    </a>
-                    <a (click)="refreshData()" class="refresh-btn cp mr-l15" tooltip="{{ localeData?.reload_data }}">
-                        <span class="icon-refresh"></span>
-                    </a>
-                </div>
-            </div>
-        </form>
-
-        <div class="d-flex w-100 mb-2">
-            <trial-balance-export-csv
-                *ngIf="tbExportCsv"
-                [trialBalanceRequest]="filterForm?.value"
-                [selectedCompany]="selectedCompany"
-                (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
-                class="pull-left mr-r15"
-            >
-            </trial-balance-export-csv>
-            <trial-balance-export-xls
-                *ngIf="tbExportXLS"
-                [trialBalanceRequest]="filterForm?.value"
-                class="pull-left mr-r15"
-            >
-            </trial-balance-export-xls>
-            <profit-loss-export-xls
-                *ngIf="plBsExportXLS"
-                [fy]="filterForm.controls['fy']?.value"
-                [filters]="filterForm?.value"
-                class="pull-left"
-            ></profit-loss-export-xls>
-            <balance-sheet-export-xls
-                *ngIf="BsExportXLS"
-                [fy]="filterForm.controls['fy']?.value"
-                [filters]="filterForm?.value"
-                class="pull-left"
-            ></balance-sheet-export-xls>
-        </div>
-    </div>
-    <!-- for mobile view only -->
-
-    <!-- end box  -->
-    <!-- create tag modal -->
-    <div bsModal #createTagModal="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">{{ localeData?.create_new_tag }}</h3>
-                </div>
-                <div class="modal-body">
-                    <form novalidate [formGroup]="newTagForm">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group clearfix">
-                                    <div class="form-group">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            name="tagName"
-                                            formControlName="name"
-                                            [placeholder]="localeData?.tag_name"
-                                        />
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea
-                                            class="form-control"
-                                            name="tagDescription"
-                                            formControlName="description"
-                                            [placeholder]="localeData?.tag_description"
-                                        ></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-success" type="submit" (click)="createTag()" [disabled]="newTagForm.invalid">
-                        {{ commonLocaleData?.app_create }}
-                    </button>
-                    <button class="btn btn-default" (click)="toggleTagsModal()">
-                        {{ commonLocaleData?.app_cancel }}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- create tag modal -->
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                    [showConfirmationOnChange]="showConfirmationOnDateChange"
-                    [confirmationMessage]="localeData?.reconcile_mode_turned_off_message"
-                ></app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
 </ng-container>

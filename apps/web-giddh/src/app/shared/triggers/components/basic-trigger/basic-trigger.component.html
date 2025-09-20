@@ -20,7 +20,7 @@
                     + {{ commonLocaleData?.app_create_new }}
                 </button>
                 <button 
-                    mat-stroked-button 
+                    mat-raised-button 
                     color="primary" 
                     routerLink="/pages/settings/trigger/advance" 
                     [disabled]="isLoading$ | async"
@@ -112,7 +112,6 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                     <div
-                        class="pagination-wrapper justify-content-end"
                         *ngIf="(triggerList$ | async)?.totalItems > pageSizeOptions[0]"
                     >
                         <mat-paginator

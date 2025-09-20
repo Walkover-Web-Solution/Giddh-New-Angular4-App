@@ -1,8 +1,6 @@
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 
@@ -17,8 +15,6 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isMenuOpen: boolean = false;
     @Output() public selectedDiscountItems: EventEmitter<any[]> = new EventEmitter();
     @Output() public selectedDiscountItemsTotal: EventEmitter<number> = new EventEmitter();
-    @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
     @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
     // new code

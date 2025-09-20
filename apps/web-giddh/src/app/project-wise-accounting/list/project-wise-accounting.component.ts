@@ -1,5 +1,6 @@
 
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { CreateProjectComponent } from '../components/create-project/create-project.component';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
@@ -9,11 +10,10 @@ import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.
 import { ProjectDetails, ProjectRequestType, ProjectStatusType } from '../project-wise-accounting';
 import { GeneralService } from '../../services/general.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { MatSort, Sort } from "@angular/material/sort";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { cloneDeep } from '../../lodash-optimized';
@@ -27,8 +27,8 @@ import { OrganizationType } from '../../models/user-login-state';
 export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     /** Holds table sorting reference */
     @ViewChild(MatSort) sortBy: MatSort;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** MatMenuTrigger reference for the date picker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** Holds Paginator Reference */
     @ViewChild(MatPaginator) paginator: MatPaginator;
     /** This will hold local JSON data */
@@ -39,7 +39,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public dataSource: ProjectDetails[] = [];
     /** Holds the request parameters from the URL */
     public projectListRequest: ProjectRequestType;
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Hold active company */
     public activeCompany: any;
@@ -68,12 +68,8 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public toDate: string;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store modal reference */
-    public modalRef: BsModalRef;
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** True, if search filter is applied */
     public isSearch: boolean = false;
     /** Holds company branches */
@@ -98,8 +94,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         private componentStore: ProjectWiseAccountingComponentStore,
         private generalService: GeneralService,
         private fb: FormBuilder,
-        private changeDetection: ChangeDetectorRef,
-        private modalService: BsModalService
+        private changeDetection: ChangeDetectorRef
     ) {
         this.componentStore.patchState({ isFetchingProjects: true });
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -175,6 +170,10 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.totalResults -= 1;
+                this.projectListRequest.page = this.generalService.adjustPageIndex(this.totalResults, this.projectListRequest.page, this.projectListRequest.count);
+                if (this.dataSource.length === 0) {
+                    this.getAllProjectList();
+                }
                 this.changeDetection.detectChanges();
             }
         });
@@ -341,8 +340,8 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public handlePageChange(event: PageEvent): void {
+        this.projectListRequest.page = this.projectListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.projectListRequest.count = event.pageSize;
-        this.projectListRequest.page = event.pageIndex + 1;
         this.getAllProjectList();
     }
 
@@ -379,13 +378,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      */
     public openCreateProjectDialog(isCreateFlow: boolean, project: any): void {
         const dialogRef = this.dialog.open(CreateProjectComponent, {
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true,
+            ...ASIDE_PANE_CONFIG,
             data: {
                 isCreateFlow: isCreateFlow,
                 project: {
@@ -397,7 +390,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             },
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response?.body) {
                 this.handleProjectResponse(response);
                 this.changeDetection.detectChanges();
@@ -426,7 +419,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
 
             });
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            dialogRef.afterClosed().subscribe((response) => {
                 if (response === this.commonLocaleData?.app_yes) {
                     this.componentStore.deleteProject(data);
                 }
@@ -454,23 +447,29 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will hide the datepicker
-     *
-     * @memberof ProjectWiseAccountingListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef?.hide();
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof ProjectWiseAccountingListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value
+     * @param {*} value - Selected date/range value
+     * @returns {void}
      * @memberof ProjectWiseAccountingListComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -478,7 +477,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -488,22 +487,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 data.profitAndLoss = null;
             });
         }
-    }
-
-    /**
-     * To show the datepicker
-     *
-     * @param {*} element
-     * @memberof ProjectWiseAccountingListComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**

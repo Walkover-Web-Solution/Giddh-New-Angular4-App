@@ -3,7 +3,7 @@ import { VoucherAdjustments, AdjustAdvancePaymentModal, AdvanceReceiptRequest, A
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { SalesService } from '../../services/sales.service';
-import { IOption } from '../../theme/ng-select/ng-select';
+import { IOption } from '../../app.constant';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
@@ -135,9 +135,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        if (this.voucherApiVersion !== 2) {
-            this.paginationLimit = 500;
-        }
         this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
@@ -308,31 +305,23 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.getAllAdvanceReceiptsRequest.invoiceDate = this.adjustPayment.voucherDate;
 
             let apiCallObservable: Observable<any>;
-            if (this.voucherApiVersion !== 2) {
-                const requestObject = {
-                    accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
-                    invoiceDate: this.getAllAdvanceReceiptsRequest.invoiceDate
-                };
-                apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
-            } else {
-                const requestObject = {
-                    accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
-                    voucherType: this.adjustedVoucherType,
-                    number: '',
-                    page: 1
-                }
-
-                requestObject.number = this.searchReferenceVoucher;
-
-                if (requestObject.number) {
-                    this.resetInvoiceList();
-                }
-
-                requestObject.page = this.referenceVouchersCurrentPage;
-                this.referenceVouchersCurrentPage++;
-
-                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, this.paginationLimit);
+            const requestObject = {
+                accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
+                voucherType: this.adjustedVoucherType,
+                number: '',
+                page: 1
             }
+
+            requestObject.number = this.searchReferenceVoucher;
+
+            if (requestObject.number) {
+                this.resetInvoiceList();
+            }
+
+            requestObject.page = this.referenceVouchersCurrentPage;
+            this.referenceVouchersCurrentPage++;
+
+            apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, this.paginationLimit);
 
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res?.status === 'success') {
@@ -969,9 +958,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             // Find if the item is present in already adjusted voucher which means the item is already partially adjusted
             const itemPresentInExistingAdjustment = this.advanceReceiptAdjustmentUpdatedData.adjustments.find(adjustment => adjustment?.uniqueName === item?.uniqueName);
             if (itemPresentInExistingAdjustment && item.balanceDue?.amountForAccount) {
-                if (this.voucherApiVersion !== 2) {
-                    item.balanceDue.amountForAccount += itemPresentInExistingAdjustment?.balanceDue?.amountForAccount;
-                }
                 item.adjustmentAmount.amountForAccount += itemPresentInExistingAdjustment?.adjustmentAmount?.amountForAccount;
             }
         }
@@ -1158,7 +1144,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
 
         this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, this.paginationLimit).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && response.body && (this.voucherApiVersion !== 2 || (this.voucherApiVersion === 2 && response.body.page === requestObject.page))) {
+            if (response && response.body && (this.voucherApiVersion === 2 && response.body.page === requestObject.page)) {
                 let results = (response.body.results || response.body.items);
 
                 if (this.voucherApiVersion === 2) {

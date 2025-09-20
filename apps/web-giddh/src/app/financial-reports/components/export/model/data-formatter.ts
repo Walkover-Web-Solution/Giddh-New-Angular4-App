@@ -218,24 +218,4 @@ export class DataFormatter {
     }
 
 
-    // private truncate(value: string, wordWise: boolean, max: number, tail?: string) {
-    //     if (!value) {
-    //         return '';
-    //     }
-    //     if (!max) {
-    //         return value;
-    //     }
-    //     if (value?.length <= max) {
-    //         return value;
-    //     }
-    //     value = value.substr(0, max);
-    //     let lastspace;
-    //     if (wordWise) {
-    //         lastspace = value.lastIndexOf(' ');
-    //     }
-    //     if (lastspace !== -1) {
-    //         value = value.substr(0, lastspace);
-    //     }
-    //     return value + (tail ? tail : ' …');
-    // }
 }

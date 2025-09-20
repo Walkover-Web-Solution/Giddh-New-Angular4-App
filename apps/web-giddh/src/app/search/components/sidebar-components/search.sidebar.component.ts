@@ -1,5 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { AppState } from '../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -7,13 +8,11 @@ import * as dayjs from 'dayjs';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { API_COUNT_LIMIT, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GroupService } from '../../../services/group.service';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
@@ -53,23 +52,19 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     private paginationPageNumber: number;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
+    /** Directive to get reference of datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Stores the search results pagination details for group dropdown */
+/** Stores the search results pagination details for group dropdown */
     public groupsSearchResultsPaginationData = {
         page: 0,
         totalPages: 0,
@@ -100,7 +95,6 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         public searchActions: SearchActions,
         private generalService: GeneralService,
         private groupService: GroupService,
-        private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions
     ) { }
 
@@ -225,39 +219,30 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * To show the datepicker
+     * This will toggle the datepicker
      *
-     * @param {*} element
+     * @param {boolean} isOpen Set to true to open the datepicker, false to close it
      * @memberof SearchSidebarComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (this.universalDatepickerTrigger) {
+            if (isOpen) {
+                this.universalDatepickerTrigger.openMenu();
+            } else {
+                this.universalDatepickerTrigger.closeMenu();
+            }
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof SearchSidebarComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value
+     * @param {*} value Selected date range object
      * @memberof SearchSidebarComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -265,7 +250,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -302,7 +287,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT,
+                count: DROPDOWN_ITEMS_COUNT_LIMIT,
                 branchUniqueName: this.currentBranch?.uniqueName
             };
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {

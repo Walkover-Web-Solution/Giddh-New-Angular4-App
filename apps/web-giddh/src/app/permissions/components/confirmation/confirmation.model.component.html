@@ -1,13 +1,15 @@
 <div>
-    <div class="modal-header d-flex justify-content-between">
-        <h3>{{ commonLocaleData?.app_confirmation }}</h3>
-        <button aria-label="close" mat-button class="close" (click)="onCancel()">×</button>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ commonLocaleData?.app_confirmation }}</span>
+        <button mat-icon-button aria-label="close" (click)="onCancel()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <div class="modal-body clearfix" id="export-body">
+    <mat-dialog-content class="dialog-body" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
             <h3 [innerHTML]="confirmationMessage"></h3>
             <div class="text-right mr-t4 clearfix">
-                <button mat-stroked-button color="primary" class="mr-r1" (click)="onConfirmation()">
+                <button mat-raised-button color="primary" class="mr-r1" (click)="onConfirmation()">
                     {{ commonLocaleData?.app_yes }}
                 </button>
                 <button mat-stroked-button (click)="onCancel()">
@@ -15,5 +17,5 @@
                 </button>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </div>

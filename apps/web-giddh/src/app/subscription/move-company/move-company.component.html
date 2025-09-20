@@ -1,14 +1,16 @@
-<div class="modal-header d-flex align-items-center flex-row-reverse">
-    <button class="close" mat-dialog-close>×</button>
-    <h3 *ngIf="subscriptionMove">
+<div class="dialog-header">
+    <span mat-dialog-title *ngIf="subscriptionMove">
         {{ localeData?.subscription?.move_company ? localeData?.subscription?.move_company : localeData?.move_company }}
-    </h3>
-    <h3 *ngIf="!subscriptionMove">{{ localeData?.add_company }}</h3>
+    </span>
+    <span mat-dialog-title *ngIf="!subscriptionMove">{{ localeData?.add_company }}</span>
+    <button mat-icon-button aria-label="close" mat-dialog-close>
+        <i class="icon-cross"></i>
+    </button>
 </div>
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
-<mat-dialog-content class="move-content w-100">
+<mat-dialog-content class="dialog-body">
     <div *ngIf="!isLoading">
         <div id="my-frame" class="modal-body move-company-modal-body clearfix">
             <p class="text-black mb-2" [innerHTML]="getMovePlanText()"></p>
@@ -49,7 +51,7 @@
             </div>
             <div class="clearfix">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     color="primary"
                     mat-dialog-close
                     (click)="moveCompanyInNewPlan()"

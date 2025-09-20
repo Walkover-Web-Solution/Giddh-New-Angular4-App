@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 
 
 @Component({

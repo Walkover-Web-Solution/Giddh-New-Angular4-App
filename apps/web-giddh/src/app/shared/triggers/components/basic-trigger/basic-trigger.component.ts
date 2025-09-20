@@ -2,11 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { Observable, take } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { NewConfirmationModalComponent } from "apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component";
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from "apps/web-giddh/src/app/app.constant";
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 import { ITriggerList } from "../../uitilty/trigger.const";
 import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 import { TriggerComponentStore } from "../../uitilty/trigger.store";
 import { TemplateFroalaComponent } from "../../../template-froala/template-froala.component";
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
     selector: 'app-basic-trigger',
@@ -43,7 +44,7 @@ export class BasicTriggerComponent implements OnInit {
     /** Holds the request parameters from the URL */
     public triggerListRequest: any = {
         page: 1,
-        count: this.pageSizeOptions[0]
+        count: PAGINATION_LIMIT
     };
 
     constructor(
@@ -76,9 +77,9 @@ export class BasicTriggerComponent implements OnInit {
      * @param {*} event
      * @memberof BasicTriggerComponent
      */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
+        this.triggerListRequest.page = this.triggerListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.triggerListRequest.count = event.pageSize;
-        this.triggerListRequest.page = event.pageIndex + 1;
         this.getTriggerList();
     }
 
@@ -98,7 +99,7 @@ export class BasicTriggerComponent implements OnInit {
                 )
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.componentStore.deleteTrigger(element.uniqueName);
             }
@@ -115,7 +116,7 @@ export class BasicTriggerComponent implements OnInit {
         const dialogConfig = ASIDE_PANE_CONFIG;
         dialogConfig.data = { isTrigger: true, ...(triggerUniqueName ? { triggerUniqueName } : {}) };
         const dialogRef = this.dialog.open(TemplateFroalaComponent, dialogConfig);
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getTriggerList();
             }

@@ -1,10 +1,10 @@
-<div class="modal-header" appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <h4 class="modal-title pull-left">{{ commonLocaleData?.app_send_email }}</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
-        <span aria-hidden="true">&times;</span>
+<div class="dialog-header" appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <span mat-dialog-title>{{ commonLocaleData?.app_send_email }}</span>
+    <button mat-icon-button aria-label="close" (click)="hideModal()">
+        <i class="icon-cross"></i>
     </button>
 </div>
-<div class="modal-body">
+<mat-dialog-content class="dialog-body">
     <div class="row mr-b1">
         <div class="col-sm-12">
             <input
@@ -19,14 +19,14 @@
     <div class="row mr-t2 mr-b1">
         <div class="col-sm-12">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success" (click)="sendEmail()">
+                <button mat-raised-button color="primary" type="button" (click)="sendEmail()">
                     {{ commonLocaleData?.app_send }}
                 </button>
-                <button type="button" class="btn btn-danger" (click)="hideModal()">
+                <button mat-stroked-button type="button" (click)="hideModal()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>
         </div>
     </div>
     <!-- endregion -->
-</div>
+</mat-dialog-content>

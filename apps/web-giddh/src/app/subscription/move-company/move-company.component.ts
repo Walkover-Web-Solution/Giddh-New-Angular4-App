@@ -7,9 +7,9 @@ import { UntypedFormControl } from '@angular/forms';
 import { SubscriptionComponentStore } from '../../subscription/utility/subscription.store';
 import { SearchCompanyRequest, SubscriptionRequest } from '../../models/api-models/Company';
 import { AppState } from '../../store';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { cloneDeep } from '../../lodash-optimized';
 import { SearchSubscriptionRequest } from '../../models/api-models/Subscriptions';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'move-company',

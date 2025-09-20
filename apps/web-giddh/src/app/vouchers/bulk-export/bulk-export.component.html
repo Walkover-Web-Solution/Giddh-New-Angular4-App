@@ -43,7 +43,7 @@
                             <input
                                 matInput
                                 #tribute="appTributeMention"
-                                (click)="tribute.open()"
+                                (click)="tribute?.open()"
                                 formControlName="selectedFormatList"
                                 [placeholder]="commonLocaleData?.app_variable_search_hint"
                                 class="form-control radius-none border-0 border-bottom"
@@ -381,7 +381,7 @@
 
                 <div class="text-right mr-t2 w-100">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="exportVouchers(false)"
                         [disabled]="!exportForm.get('attachmentExport').value && !exportForm.get('voucherExport').value"

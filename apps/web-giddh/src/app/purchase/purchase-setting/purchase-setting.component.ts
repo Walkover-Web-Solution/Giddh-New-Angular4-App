@@ -6,7 +6,6 @@ import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import { BootstrapToggleSwitch } from '../../app.constant';
 import { AuthenticationService } from '../../services/authentication.service';
 import { InvoiceService } from '../../services/invoice.service';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
@@ -16,6 +15,8 @@ import { AppState } from '../../store';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceConfig } from '../../services/service.config';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'purchase-setting',
@@ -24,6 +25,8 @@ import { ServiceConfig } from '../../services/service.config';
 })
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
+    /** Selected tab index for Material tabs */
+    public selectedTabIndex: number = 0;
     /* This will hold the invoice settings */
     public invoiceSettings: any = { purchaseBillSettings: { sendThroughGmail: false, poAutoWhatsApp: false, autoWhatsApp: false, changePOStatusOnExpiry: false, useCustomPONumber: false, enableNarration: false, enableVoucherDownload: false }, invoiceSettings: { purchaseRoundOff: false, generateAutoPurchaseNumber: false } };
     /* This will hold the PB lock date */
@@ -50,8 +53,6 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
 
@@ -275,13 +276,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
             data: voucherType,
-            width: 'var(--aside-pane-width)',
-            height: '70vh',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
+            ...ASIDE_PANE_CONFIG
         });
     }
 
@@ -294,5 +289,15 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      */
     public getWhatsappSettingLabel(voucherType: string): string {
         return this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
+    }
+
+    /**
+     * Handles tab change events
+     *
+     * @param {MatTabChangeEvent} event
+     * @memberof PurchaseSettingComponent
+     */
+    public tabChanged(event: MatTabChangeEvent): void {
+        this.selectedTabIndex = event.index;
     }
 }

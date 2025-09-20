@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../actions/company.actions';
@@ -17,6 +16,7 @@ import { AppState } from '../../../store';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { CommonActions } from '../../../actions/common.actions';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
     selector: 'company-branch',
@@ -25,8 +25,6 @@ import { CommonActions } from '../../../actions/common.actions';
 })
 
 export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
-    /** Instance of tabset */
-    @ViewChild('staticTabs', { static: false }) staticTabs: TabsetComponent;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -63,6 +61,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     public currentCompanyBranches: Array<any>;
     /** This holds current branch unique name */
     public currentBranchUniqueName: string = "";
+     /** Holds active selected Tab Index  */
+     public selectedTabIndex: number;
 
     constructor(
         private store: Store<AppState>,
@@ -147,8 +147,11 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.isGoToBranch?.currentValue) {
             this.getCompanyBranches(this.companyBranches, false);
-            this.tabChanged('branch');
-            this.changeDetectorRef.detectChanges();
+            setTimeout(() => {
+                const event = new MatTabChangeEvent();
+                event.index = 1;
+                this.tabChanged(event, "branch");
+            }, 50);
         }
     }
 
@@ -316,9 +319,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.companyBranches.branchCount = company?.branchCount;
         if (company?.branchCount > 1) {
             setTimeout(() => {
-                if (this.staticTabs && this.staticTabs.tabs[1]) {
-                    this.staticTabs.tabs[1].active = true;
-                }
+                this.selectedTabIndex = 1;
             }, 20);
         } else {
             if (company?.uniqueName !== this.activeCompany?.uniqueName) {
@@ -330,11 +331,14 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     /**
      * Callback for select tab event
      *
-     * @param {string} tabName
+     * @param {MatTabChangeEvent} event
+     * @param {"company" | "branch"} [tabName="company"]
      * @memberof CompanyBranchComponent
      */
-    public tabChanged(tabName: string): void {
+    public tabChanged(event: MatTabChangeEvent, tabName: "company" | "branch" = "company"): void {
+        tabName = event.index === 0 ? "company" : "branch";
         this.activeTab = tabName;
+        this.selectedTabIndex = event.index;
         this.searchBranch = "";
         this.filterBranchList(this.searchBranch);
 
@@ -347,8 +351,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.companyBranches.unarchivedBranchCount = unarchivedBranchCount;
             this.companyBranches.branches = this.currentCompanyBranches;
             this.branchList = this.currentCompanyBranches;
-            this.changeDetectorRef.detectChanges();
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**

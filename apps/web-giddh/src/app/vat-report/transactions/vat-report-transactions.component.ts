@@ -8,16 +8,15 @@ import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
 import { VatService } from "../../services/vat.service";
 import { saveAs } from "file-saver";
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InvoiceService } from '../../services/invoice.service';
 import { GeneralService } from '../../services/general.service';
-import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { ReceiptService } from '../../services/receipt.service';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -39,24 +38,18 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         to: '',
         taxNumber: '',
         page: 1,
-        count: this.pageSizeOptions[2],
+        count: PAGINATION_LIMIT,
         section: ''
     };
     public isLoading: boolean = false;
-    public modalConfig = {
-        animated: true,
-        keyboard: false,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     public selectedInvoice: any;
     public base64Data: string;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /* This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /*-- mat-table --*/
@@ -120,7 +113,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out';
+        this.asideGstSidebarMenuState = false;
     }
 
     /**
@@ -151,20 +144,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * This function will change the page of vat report
-     *
-     * @param {*} event
-     * @memberof VatReportTransactionsComponent
-     */
-    public pageChanged(event: any): void {
-        if (event) {
-            this.vatReportTransactionsRequest.page = event.pageIndex + 1;
-            this.vatReportTransactionsRequest.count = event.pageSize;
-            this.vatReportTransactions.results = [];
-            this.getVatReportTransactions(false);
-        }
-    }
+
 
     /**
      * This will get called and open the invoice in popup if we click on any invoice number
@@ -173,58 +153,18 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public onSelectInvoice(invoice: any): void {
-        const uniqueName = (this.voucherApiVersion !== 2) ? invoice.purchaseRecordUniqueName : invoice.voucherUniqueName;
-        if (invoice.voucherType === VoucherTypeEnum.purchase) {
-            if (uniqueName) {
-                if (this.voucherApiVersion !== 2) {
-                    this.router.navigate(['pages', 'proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
-                } else {
-                    this.router.navigate(['pages', 'vouchers', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
-                }
-            }
-        } else {
-            if (invoice.voucherNumber) {
-                this.selectedInvoice = invoice;
-                this.selectedInvoice.uniqueName = uniqueName;
-
-                if (this.voucherApiVersion !== 2) {
-                    let downloadVoucherRequestObject = {
-                        voucherNumber: [invoice.voucherNumber],
-                        voucherType: invoice.voucherType,
-                        accountUniqueName: invoice.accountUniqueName
-                    };
-                    this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
-                }
-
-                this.dialog.open(this.downloadOrSendMailModel, {
-                    height: '80vh',
-                    width: '80vw',
-                    maxWidth: '800px',
-                    disableClose: true,
-                    autoFocus: false
-                });
-            }
+        const uniqueName =  invoice.voucherUniqueName;
+        if (invoice.voucherNumber) {
+            this.selectedInvoice = invoice;
+            this.selectedInvoice.uniqueName = uniqueName;
+            this.dialog.open(this.downloadOrSendMailModel, {
+                height: '80vh',
+                width: '80vw',
+                maxWidth: '800px',
+                disableClose: true,
+                autoFocus: false
+            });
         }
-    }
-
-    /**
-     * This will open the download/send email popup
-     *
-     * @memberof VatReportTransactionsComponent
-     */
-    public loadDownloadOrSendMailComponent(): void {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
-        let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
-        viewContainerRef.remove();
-
-        let componentInstanceView = componentFactory.create(viewContainerRef.injector);
-        viewContainerRef.insert(componentInstanceView.hostView);
-
-        let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
-        componentInstance.selectedVoucher = this.selectedInvoice;
-        componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
-        componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
-        componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
     }
 
     /**
@@ -356,5 +296,17 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public handleNavigation(): void {
         this.router.navigate(['pages', 'gstfiling']);
+    }
+
+    /**
+     * This will use for page change
+     *
+     * @param {*} event
+     * @memberof VatReportTransactionsComponent
+     */
+    public pageChanged(event: PageEvent): void {
+        this.vatReportTransactionsRequest.page = this.vatReportTransactionsRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.vatReportTransactionsRequest.count = event.pageSize;
+        this.getVatReportTransactions(false);
     }
 }

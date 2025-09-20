@@ -4,9 +4,11 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <div class="dialog-header d-flex align-items-center form-header">
-        <h3>{{ localeData?.create_reason }}</h3>
-        <button id="closedialog" mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></button>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ localeData?.create_reason }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="createReasonInProgress$ | async"></giddh-page-loader>
@@ -30,7 +32,7 @@
                         <div class="d-flex column-gap15">
                             <button
                                 aria-label="save"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 type="button"
                                 (click)="saveReason()"

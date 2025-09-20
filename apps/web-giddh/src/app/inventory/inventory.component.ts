@@ -2,14 +2,12 @@ import { InventoryAction } from '../actions/inventory/inventory.actions';
 import { CompanyResponse, BranchFilterRequest } from '../models/api-models/Company';
 import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
-import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { MatTabGroup, MatTabChangeEvent } from '@angular/material/tabs';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, TemplateRef, AfterViewInit, ElementRef } from '@angular/core';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -24,13 +22,13 @@ import { IGroupsWithStocksHierarchyMinItem } from "../models/interfaces/groups-w
 import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
-import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
 import { cloneDeep, each, find, orderBy } from '../lodash-optimized';
 import { BranchHierarchyType } from '../app.constant';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -43,19 +41,16 @@ export const IsyncData = [
 @Component({
     selector: 'inventory',
     templateUrl: './inventory.component.html',
-    styleUrls: ['./inventory.component.scss'],
-    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
+    styleUrls: ['./inventory.component.scss']
 })
 export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('branchModal', { static: true }) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: ModalDirective;
     @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
-    @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: TabsetComponent;
-    /** Warehouse filter instance */
-    @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
+    /** Angular Material tab group reference for inventory navigation tabs */
+    @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: MatTabGroup;
     /** Instance of branch transfer template */
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
+    /** Dialog reference */
+    public dialogRef: MatDialogRef<any>;
 
     public dataSyncOption = IsyncData;
     public companies$: Observable<CompanyResponse[]>;
@@ -103,8 +98,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public voucherApiVersion: 1 | 2;
     /** Hold branch transfer mode  */
     public branchTransferMode: string = "";
-    /** This will use for bootstrap modal refrence */
-    public modalRef: BsModalRef;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
@@ -125,7 +118,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private toastService: ToasterService,
         private breakPointObservar: BreakpointObserver,
         private generalService: GeneralService,
-        private modalService: BsModalService
+        private dialog: MatDialog
     ) {
         this.breakPointObservar.observe([
             '(max-width: 1023px)',
@@ -222,10 +215,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else {
                     this.branchTransferMode = params.type;
                 }
-                this.modalRef = this.modalService.show(
-                    this.branchtransfertemplate,
-                    Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pd-t85' })
-                );
+                this.dialogRef = this.dialog.open(this.branchtransfertemplate, {
+                    panelClass: 'mat-dialog-md'
+                });
             }
         });
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
@@ -256,7 +248,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public hideModal(): void {
         this.router.navigate(['/pages/inventory/report']);
-        this.modalRef.hide();
+        this.dialogRef.close();
     }
     public ngOnDestroy() {
         if (this.voucherApiVersion === 2) {
@@ -284,79 +276,60 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    public redirectUrlToActiveTab(type: string, event: any, activeTabIndex?: number, currentUrl?: string) {
-        if (event) {
-            if (!(event instanceof TabDirective)) {
-                return;
-            }
+    /**
+     * Handles tab change events and navigates to appropriate inventory routes
+     *
+     * @public
+     * @param {MatTabChangeEvent | any} event - Tab change event containing selected index
+     * @memberof InventoryComponent
+     */
+    public redirectUrlToActiveTab(event: MatTabChangeEvent | any) {
+        let tabIndex: number;
+        let type: string;
+        tabIndex = event.index;
+        this.activeTabIndex = tabIndex;
+        
+        switch (tabIndex) {
+            case 0:
+                type = 'inventory';
+                break;
+            case 1:
+                type = 'jobwork';
+                break;
+            case 2:
+                type = 'manufacturing';
+                break;
+            case 3:
+                type = 'report';
+                break;
+            default:
+                type = 'inventory';
         }
-        if (currentUrl) {
-            this.router.navigateByUrl(currentUrl);
-        } else {
-            if (this.voucherApiVersion === 2) {
-                switch (type) {
-                    case 'inventory':
-                        this.navigateToInventoryTab();
-                        break;
-                    case 'jobwork':
-                        this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
-                        this.activeTabIndex = 1;
-                        break;
-                    case 'manufacturing':
-                        this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
-                        this.activeTabIndex = 2;
-                        break;
-                    case 'report/receiptnote':
-                        this.router.navigate(['/pages', 'inventory', 'report', 'receiptnote'], { relativeTo: this.route });
-                        this.activeTabIndex = 3;
-                        break;
-                    case 'report/deliverychallan':
-                        this.router.navigate(['/pages', 'inventory', 'report', 'deliverychallan'], { relativeTo: this.route });
-                        this.activeTabIndex = 3;
-                        break;
-                }
-            } else {
-                switch (type) {
-                    case 'inventory':
-                        this.navigateToInventoryTab();
-                        break;
-                    case 'jobwork':
-                        this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
-                        this.activeTabIndex = 1;
-                        break;
-                    case 'manufacturing':
-                        this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
-                        this.activeTabIndex = 2;
-                        break;
-
-                    case 'report':
-                        this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
-                }
-            }
+        switch (type) {
+            case 'inventory':
+                this.navigateToInventoryTab();
+                break;
+            case 'jobwork':
+                this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
+                break;
+            case 'manufacturing':
+                this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
+                break;
+            case 'report':
+                this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
+                break;
         }
-
         setTimeout(() => {
-            if (activeTabIndex) {
-                if (this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[activeTabIndex]) {
-                    this.inventoryStaticTabs.tabs[activeTabIndex].active = true;
-                }
-            } else {
-                if (this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[this.activeTabIndex]) {
-                    this.inventoryStaticTabs.tabs[this.activeTabIndex].active = true;
-                }
+            if (this.inventoryStaticTabs) {
+                this.inventoryStaticTabs.selectedIndex = this.activeTabIndex;
             }
         });
-    }
-
-    public openAddBranchModal() {
-        this.branchModal?.show();
     }
 
     public hideAddBranchModal() {
         this.isAllSelected$ = observableOf(false);
         this.selectedCompaniesUniquename = [];
         this.selectedCompaniesName = [];
-        this.branchModal.hide();
     }
 
     public selectAllCompanies(ev) {
@@ -399,7 +372,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public removeBranch(branchUniqueName, companyName) {
         this.selectedBranch = branchUniqueName;
         this.confirmationMessage = `Are you sure want to remove <b>${companyName}</b>?`;
-        this.confirmationModal?.show();
     }
 
     public onUserConfirmation(yesOrNo) {
@@ -408,7 +380,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.selectedBranch = null;
         }
-        this.confirmationModal.hide();
     }
 
     public getAllBranches() {
@@ -531,9 +502,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     warehouse = warehouseData.formattedWarehouses[0]?.uniqueName;
                 }
                 const currentWarehouse = warehouseData.formattedWarehouses.find((data) => data?.uniqueName === warehouse || data?.value === warehouse);
-                if (currentWarehouse && this.warehouseFilter) {
-                    this.warehouseFilter.filter = currentWarehouse.label;
-                }
                 this.currentBranchAndWarehouseFilterValues = { warehouse, branch: branchDetails?.uniqueName, isCompany: branchDetails.isCompany };
             }
             this.warehouses = warehouseData.formattedWarehouses;

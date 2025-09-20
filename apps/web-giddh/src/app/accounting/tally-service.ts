@@ -43,7 +43,6 @@ export class TallyModuleService {
         }
     }];
 
-    // public requestData: BehaviorSubject<any> = new BehaviorSubject(new BlankLedgerVM());
     public requestData: BehaviorSubject<any> = new BehaviorSubject(null);
 
     public transactionObj: object = {};
@@ -53,113 +52,6 @@ export class TallyModuleService {
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
     ) {
-        // this.selectedFieldType.pipe(distinctUntilChanged((p, q) => p === q)).subscribe((type: string) => {
-        //     if (type && this.selectedPageInfo.value) {
-        //         let filteredAccounts;
-        //         if (this.selectedPageInfo.value.page === 'Journal') {
-        //             if (type === 'by') {
-        //                 filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             } else if (type === 'to') {
-        //                 filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             }
-        //         }
-        //         if (this.selectedPageInfo.value.page === 'Purchase') {
-        //             if (type === 'by') {
-        //                 if(this.cashAccounts.value) {
-        //                     filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-        //                 } else if(this.bankAccounts.value) {
-        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
-        //                 } else {
-        //                     filteredAccounts = _.cloneDeep(this.taxAccounts.value);
-        //                 }
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             } else if (type === 'to') {
-        //                 filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             }
-        //         }
-        //         if (this.selectedPageInfo.value.page === 'Sales') { // Here 1 thing is pending
-        //             if (type === 'by') {
-        //                 filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             } else if (type === 'to') {
-        //                 filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             }
-        //         }
-        //         if (this.selectedPageInfo.value.page === 'Payment') {
-        //             if (type === 'by') {
-        //                 filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             } else if (type === 'to') {
-        //                 if(this.salesAccounts.value) {
-        //                     filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value));
-        //                 } else {
-        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value);
-        //                 }
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             }
-        //         }
-        //         if (this.selectedPageInfo.value.page === 'Contra') {
-        //             if (type === 'by') {
-        //                 if(this.salesAccounts.value) {
-        //                     filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-        //                 } else if(this.bankAccounts.value) {
-        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
-        //                 } else {
-        //                     filteredAccounts = _.cloneDeep(this.taxAccounts.value);
-        //                 }
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             } else if (type === 'to') {
-        //                 if(this.salesAccounts.value) {
-        //                     filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-        //                 } else if(this.bankAccounts.value) {
-        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
-        //                 } else {
-        //                     filteredAccounts = _.cloneDeep(this.taxAccounts.value);
-        //                 }
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             }
-        //         }
-        //         if (this.selectedPageInfo.value.page === 'Receipt') {
-        //             // if (type === 'by') {
-        //             //     filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
-        //             //     this.filteredAccounts.next(filteredAccounts);
-        //             // } else if (type === 'to') {
-        //                 filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             //}
-        //         }
-        //         if (this.selectedPageInfo.value.page === 'Debit note') {
-        //             if (type === 'by') {
-        //                 if(this.cashAccounts.value) {
-        //                     filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
-        //                 } else if(this.bankAccounts.value) {
-        //                     filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
-        //                 } else {
-        //                     filteredAccounts = _.cloneDeep(this.taxAccounts.value);
-        //                 }
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             } else if (type === 'to') {
-        //                 filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             }
-        //         }
-        //         if (this.selectedPageInfo.value.page === 'Credit note') {
-        //             if (type === 'by') {
-        //                 filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             } else if (type === 'to') {
-        //                 filteredAccounts = _.cloneDeep(this.salesAccounts.value);
-        //                 this.filteredAccounts.next(filteredAccounts);
-        //             }
-        //         }
-        //     } else {
-        //         this.filteredAccounts.next(this.flattenAccounts.value);
-        //     }
-        // });
     }
 
     public setVoucher(info: IPageInfo) {
@@ -270,7 +162,6 @@ export class TallyModuleService {
         if (this.selectedPageInfo?.value) {
             switch (this.selectedPageInfo?.value.page) {
                 case 'journal':
-                    // accounts = this.flattenAccounts.value;
                     // As discussed with Manish, Cash and Bank account should not come in Journal entry
                     if (this.purchaseAccounts?.value) {
                         accounts = this.purchaseAccounts.value.concat(this.expenseAccounts?.value).concat(this.taxAccounts?.value).concat(this.salesAccounts?.value);
@@ -332,12 +223,6 @@ export class TallyModuleService {
                     accounts = this.flattenAccounts?.value;
             }
             if (accounts && accounts.length) {
-                // const endOfLine = {
-                //   uniqueName: '_endoflist',
-                //   name: 'End Of List',
-                //   parentGroups: []
-                // };
-                // accounts.unshift(endOfLine);
                 this.filteredAccounts.next(accounts);
             }
         }
@@ -375,90 +260,6 @@ export class TallyModuleService {
     private validateForData(data) {
         let isValid = true;
         switch (data.voucherType) {
-            // case 'Purchase':
-            //   let debitAcc = data.transactions.findIndex((trxn) => {
-            //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bank' || pg?.uniqueName === 'currentliabilities');
-            //     if (indx !== -1) {
-            //       return trxn.type === 'debit' ? true : false;
-            //     } else {
-            //       return false;
-            //     }
-            //   });
-            //   if (debitAcc === -1) {
-            //     isValid = false;
-            //     this._toaster.errorToast('At least one debit account is required in Purchase (debit side).');
-            //   }
-            //   break;
-            // case 'Sales':
-            //   let creditAcc = data.transactions.findIndex((trxn) => {
-            //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg?.uniqueName === 'income');
-            //     if (indx !== -1) {
-            //       return trxn.type === 'credit' ? true : false;
-            //     } else {
-            //       return false;
-            //     }
-            //   });
-            //   if (creditAcc === -1) {
-            //     isValid = false;
-            //     this._toaster.errorToast('At least one income account is required in Sales (credit side).');
-            //   }
-            //   break;
-            //   case 'Debit note':
-            //   let debitNoteAcc = data.transactions.findIndex((trxn) => {
-            //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bank' || pg?.uniqueName === 'currentliabilities');
-            //     if (indx !== -1) {
-            //       return trxn.type === 'credit' ? true : false;
-            //     } else {
-            //       return false;
-            //     }
-            //   });
-            //   if (debitNoteAcc === -1) {
-            //     isValid = false;
-            //     this._toaster.errorToast('At least one credit account is required in Debit note (credit side).');
-            //   }
-            //   break;
-            //   case 'Credit note':
-            //   let creditNoteAcc = data.transactions.findIndex((trxn) => {
-            //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg?.uniqueName === 'income');
-            //     if (indx !== -1) {
-            //       return trxn.type === 'debit' ? true : false;
-            //     } else {
-            //       return false;
-            //     }
-            //   });
-            //   if (creditNoteAcc === -1) {
-            //     isValid = false;
-            //     this._toaster.errorToast('At least one debit account is required in Credit note (debit side).');
-            //   }
-            //   break;
-            //   case 'Payment':
-            //   let paymentAcc = data.transactions.findIndex((trxn) => {
-            //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bank');
-            //     if (indx !== -1) {
-            //       return trxn.type === 'credit' ? true : false;
-            //     } else {
-            //       return false;
-            //     }
-            //   });
-            //   if (paymentAcc === -1) {
-            //     isValid = false;
-            //     this._toaster.errorToast('At least one credit account is required in Payment (credit side).');
-            //   }
-            //   break;
-            //   case 'Receipt':
-            //   let receiptAcc = data.transactions.findIndex((trxn) => {
-            //     let indx = trxn.selectedAccount.parentGroups.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bank');
-            //     if (indx !== -1) {
-            //       return trxn.type === 'debit' ? true : false;
-            //     } else {
-            //       return false;
-            //     }
-            //   });
-            //   if (receiptAcc === -1) {
-            //     isValid = false;
-            //     this._toaster.errorToast('At least one debit account is required in Receipt (debit side).');
-            //   }
-            //   break;
         }
         return isValid;
     }

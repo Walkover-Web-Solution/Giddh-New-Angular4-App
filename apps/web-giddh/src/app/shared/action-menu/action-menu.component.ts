@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { GeneralService } from '../../services/general.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../template-froala/template-froala.component';
 import { take } from 'rxjs';
 import { AccountUpdateNewDetailsModule } from '../header/components/account-update-new-details/account-update-new-details.module';
@@ -21,6 +21,10 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
     styleUrls: ['./action-menu.component.scss']
 })
 export class ActionMenuComponent {
+    /** Template for the aside menu */
+    @ViewChild('asideMenuTemplate') public asideMenuTemplate: TemplateRef<any>;
+    /** Reference to the aside menu dialog */
+    public asideMenuDialogRef: MatDialogRef<any>;
     /** Account object for which the action menu is displayed */
     @Input() account: any;
     /** Locale data for displaying button labels */
@@ -57,8 +61,6 @@ export class ActionMenuComponent {
     public purchaseOrSales: string = '';
     /** Voucher API version */
     public voucherApiVersion: number;
-    /** Account aside menu state */
-    public accountAsideMenuState: string = "out";
     /** Active account details */
     public activeAccountDetails: any;
     /** Is update account */
@@ -172,35 +174,16 @@ export class ActionMenuComponent {
         this.activeAccountDetails = account;
         this.isUpdateAccount = true;
         this.selectedGroupForCreateAcc = accountType === "customer" ? "sundrydebtors" : "sundrycreditors";
-        this.toggleAccountAsidePane();
+        this.openAccountAsidePaneDialog();
     }
 
     /**
-     * Toggle body class
+     * Open account aside pane dialog
      *
      * @memberof ActionMenuComponent
      */
-    public toggleBodyClass(): void {
-        if (this.accountAsideMenuState === "in") {
-            document.querySelector("body").classList.add("fixed");
-        } else {
-            document.querySelector("body").classList.remove("fixed");
-        }
-    }
-
-    /**
-     * Toggle account aside pane
-     *
-     * @param {Event} [event]
-     * @memberof ActionMenuComponent
-     */
-    public toggleAccountAsidePane(event?: Event): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
-
-        this.toggleBodyClass();
+    public openAccountAsidePaneDialog(): void {
+        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -213,17 +196,12 @@ export class ActionMenuComponent {
      */
     public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
         const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            ...ASIDE_PANE_CONFIG,
             data: {
                 activeTab: activeTab,
                 accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
-            },
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
-        });dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            }
+        });dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.sendEmail.emit(true);
             }
@@ -239,6 +217,7 @@ export class ActionMenuComponent {
     public getUpdatedList(grpName?: any): void {
         if (grpName) {
             this.editAccount.emit();
+            this.asideMenuDialogRef?.close();
         }
     }
 }

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
@@ -14,6 +13,7 @@ import { cloneDeep } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { TaxAuthorityComponentStore } from '../../theme/tax-authority/utility/tax-authority.store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'aside-menu-create-tax-component',

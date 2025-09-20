@@ -11,7 +11,7 @@
             <a
                 href="javascript:void(0);"
                 aria-label="add nav"
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 id="custom-field-btn"
                 class="mr-0"
@@ -87,22 +87,22 @@
                     <no-data [secondaryMessage]="' '"></no-data>
                 </div>
             </div>
-            <div class="pagination-wrapper mt-5">
-                <pagination
+            <div class="mt-5">
+                <ng-container
                     *ngIf="
-                        customFieldsList?.results?.length && customFieldsList?.totalItems > customFieldsRequest?.count
+                        customFieldsList?.results?.length && customFieldsList?.totalItems > pageSizeOptions[0]
                     "
-                    [totalItems]="customFieldsList?.totalItems"
-                    [maxSize]="5"
-                    [itemsPerPage]="customFieldsList?.count"
-                    [boundaryLinks]="true"
-                    [rotate]="true"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
+                >
+                    <mat-paginator
+                        [length]="customFieldsList?.totalItems"
+                        [pageSize]="customFieldsRequest.count"
+                        [pageIndex]="customFieldsRequest.page - 1"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                        (page)="handlePageEvent($event)">
+                    </mat-paginator>
+                </ng-container>
             </div>
         </div>
     </div>
