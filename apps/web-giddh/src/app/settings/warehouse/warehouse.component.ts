@@ -113,6 +113,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public isAddressInfoOpen: string = '';
     /** True if last address info is open */
     public isLastAddressInfoOpen: boolean = false;
+    /** Voucher API version */
+    public voucherApiVersion: 1 | 2 = 1;
 
     /** @ignore */
     constructor(
@@ -139,6 +141,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();

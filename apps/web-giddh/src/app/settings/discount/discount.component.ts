@@ -11,6 +11,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreateDiscountComponent } from '../../theme/create-discount/create-discount.component';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'setting-discount',
@@ -53,13 +54,16 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public createNewAccountDialogRef: MatDialogRef<any>;
     /** Holds Create/Update discount Dialog Ref */
     public createUpdateDiscountRef: MatDialogRef<any>;
+    /** Voucher API Version */
+    public voucherApiVersion: number = 2;
 
     constructor(
         private salesService: SalesService,
         private store: Store<AppState>,
         private settingsDiscountService: SettingsDiscountService,
         private toaster: ToasterService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private generalService: GeneralService
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
@@ -70,6 +74,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getDiscountAccounts();
         this.getDiscounts();
 

@@ -3,6 +3,7 @@ import { Observable, ReplaySubject, takeUntil, of as observableOf } from "rxjs";
 import { CreateDiscountComponentStore } from "./utility/create-discount.store";
 import { UntypedFormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
     selector: "create-discount",
@@ -31,12 +32,15 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public isUpdateMode: boolean = false;
     /** Holds true if api is in progress */
     public isLoading: boolean = true;
+    /** Voucher API Version */
+    public voucherApiVersion: number = 2;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public discountInfo: any,
         private componentStore: CreateDiscountComponentStore,
         private formBuilder: UntypedFormBuilder,
-        public dialogRef: MatDialogRef<any>
+        public dialogRef: MatDialogRef<any>,
+        private generalService: GeneralService
     ) { }
 
     /**
@@ -45,6 +49,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @memberof CreateDiscountComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         if (this.discountInfo) {
             this.isUpdateMode = true;
             this.initDiscountForm(this.discountInfo);

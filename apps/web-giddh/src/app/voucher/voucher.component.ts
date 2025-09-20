@@ -879,6 +879,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.getOnboardingFormInProcess$ = this.store.pipe(select(s => s.common.getOnboardingFormInProcess), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        if (this.voucherApiVersion === 1) {
+            this.router.navigate(['pages', 'home']);
+        }
     }
 
     public ngOnInit() {

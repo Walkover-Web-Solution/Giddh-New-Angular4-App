@@ -107,10 +107,10 @@
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                         <td mat-cell *matCellDef="let element; let i = index" class="text-right">
-                            <button class="min-width-unset mr-r1" [ngClass]="{'invisible': activeRowIndex !== i}" mat-raised-button color="primary" (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)">
+                            <button class="min-width-unset mr-r1" *ngIf="voucherApiVersion === 2" [ngClass]="{'invisible': activeRowIndex !== i}" mat-raised-button color="primary" (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)">
                                 <i class="icon-edit font-15"></i>
                             </button>
-                            <button class="min-width-unset" [ngClass]="{'invisible': activeRowIndex !== i}" mat-raised-button color="primary" (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)">
+                            <button class="min-width-unset" *ngIf="voucherApiVersion === 2" [ngClass]="{'invisible': activeRowIndex !== i}" mat-raised-button color="primary" (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)">
                                 <i class="icon-trash font-15"></i>
                             </button>
                         </td>

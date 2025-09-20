@@ -30,7 +30,7 @@
                         </button>
                     </div>
                     <button
-                        *ngIf="!isCompany && !isConsolidatedBranch"
+                        *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                         aria-label="create warehouse"
                         mat-raised-button
                         color="primary"

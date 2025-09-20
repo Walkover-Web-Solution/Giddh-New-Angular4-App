@@ -22,6 +22,7 @@
                 color="primary"
                 type="button"
                 class="mr-0"
+                *ngIf="voucherApiVersion === 2"
                 (click)="openAddAndManage()"
                 aria-label="address"
             >
@@ -39,6 +40,7 @@
                 color="primary"
                 type="button"
                 class="mr-0"
+                *ngIf="voucherApiVersion === 2"
                 (click)="openAddAndManage()"
                 aria-label="address"
             >
