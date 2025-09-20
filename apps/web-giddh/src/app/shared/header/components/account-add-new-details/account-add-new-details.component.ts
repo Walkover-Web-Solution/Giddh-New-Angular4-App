@@ -24,7 +24,7 @@ import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -667,7 +667,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @param {string} fieldId
      * @memberof AccountAddNewDetailsComponent
      */
-    public reinitializeMobileField(fieldId: string): void {
+    public reInitializeMobileField(fieldId: string): void {
         const element = document.getElementById(fieldId);
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
         
@@ -1525,7 +1525,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT,
+                count: DROPDOWN_ITEMS_COUNT_LIMIT,
             }
             if (this.isLedgerModule) {
                 // Remove the top hierarchy of groups
@@ -1846,7 +1846,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
                         }
                     });
-                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    dialogRef.afterClosed().subscribe(response => {
                         if (response) {
                             if (addresses?.get('isDefault')?.value) {
                                 this.addAccountForm.get('name')?.patchValue(result.body?.lgnm);
@@ -1877,7 +1877,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             data: data
         });
 
-        bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
+        bulkAddAsideMenuRef.afterClosed().subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;

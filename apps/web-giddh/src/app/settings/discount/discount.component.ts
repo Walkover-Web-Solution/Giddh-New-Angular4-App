@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { IOption } from '../../theme/ng-select/ng-select';
+import { IOption } from '../../app.constant';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
@@ -103,7 +103,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
             ...ASIDE_PANE_CONFIG
         });
 
-        this.createUpdateDiscountRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.createUpdateDiscountRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getDiscounts();
             }

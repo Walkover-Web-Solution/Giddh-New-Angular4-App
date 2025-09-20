@@ -12,7 +12,7 @@ import * as dayjs from 'dayjs';
 import { saveAs } from "file-saver";
 import { IForceClear } from '../../../models/api-models/Sales';
 import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
-import { API_COUNT_LIMIT, IOption, PAGINATION_LIMIT } from '../../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, PAGINATION_LIMIT } from '../../../app.constant';
 import { GroupService } from '../../../services/group.service';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
@@ -411,7 +411,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT,
+                count: DROPDOWN_ITEMS_COUNT_LIMIT,
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {

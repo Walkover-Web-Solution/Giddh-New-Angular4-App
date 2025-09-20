@@ -1382,7 +1382,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         document.querySelector("body").classList.add("new-branch-transfer-page");
         this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
 
-        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+        this.asideMenuStateForProductService.afterClosed().subscribe(response => {
             document.querySelector("body").classList.remove("new-branch-transfer-page");
         });
 
@@ -2245,7 +2245,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public toggleTransporterModel(): void {
         let dialgRef = this.dialog.open(this.asideManageTransport, ASIDE_PANE_CONFIG);
-        dialgRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialgRef.afterClosed().subscribe(response => {
             this.getTransportersList();
         });
     }

@@ -98,7 +98,7 @@
                             Selected ({{ taxTempArray?.length }})
                             <span class="pull-right"><span class="caret"></span></span>
                         </button>
-                        <mat-menu #taxMenu="matMenu" class="tax-selection-menu">
+                        <mat-menu #taxMenu="matMenu">
                             <div
                                 *ngFor="let tax of companyTaxesList$ | async"
                                 [ngClass]="{ 'opacity': tax.isDisabled }"
@@ -123,7 +123,8 @@
                 <div class="clearfix text-left mt-2">
                     <div *ngIf="addGroup">
                         <button
-                            mat-stroked-button
+                            mat-raised-button
+                            color="primary"
                             type="submit"
                             [ladda]="isAddNewGroupInProcess$ | async"
                             (click)="addNewGroup()"

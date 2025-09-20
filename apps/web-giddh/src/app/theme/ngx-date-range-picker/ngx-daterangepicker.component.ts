@@ -2348,7 +2348,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 configuration: this.generalService.deleteConfiguration(this.confirmationMessage, this.commonLocaleData)
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.switch(type, event, range);
             } else {

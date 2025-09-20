@@ -47,7 +47,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public commonLocaleData: any = {};
     @Input() public selectedRowItem: any;
     /** Ledger aside pan modal */
-    private ledgerAsidePaneDialogRef: any;
+    public ledgerAsidePaneDialogRef: any;
+    /** Instance of dialog */
     public dialogRef: any;
     public approveEntryModalRef: any;
     public message: string;

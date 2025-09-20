@@ -33,6 +33,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     @Input() public addStock: boolean = false;
     @Input() public autoFocusInChild: boolean = false;
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
+    /** This will hold dialog reference */
     public dialogRef: MatDialogRef<any>;
 
     public stockListDropDown$: Observable<IOption[]>;

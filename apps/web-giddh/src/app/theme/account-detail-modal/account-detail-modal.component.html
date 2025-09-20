@@ -13,24 +13,22 @@
             <div class="account-detail-modal-header-div" >
                 <div class="account-detail-modal-div">
                     <div class="account-detail-custom-header">
-                        <ng-container>
-                            <div class="d-flex p-0 border-right-0">
-                                <div class="account-detail-padding flex-grow-1 border-right-0">
-                                    <h3 class="account-detail-custom-title">{{ accInfo?.name }}</h3>
-                                </div>
-                                <a
-                                     (click)="performActions(0, $event)"
-                                    class="edit-icon pl-1 pd-t05"
-                                >
-                                    <i *ngIf="!isLoading" class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
-                                </a>
+                        <div class="d-flex p-0 border-right-0">
+                            <div class="account-detail-padding flex-grow-1 border-right-0">
+                                <h3 class="account-detail-custom-title">{{ accInfo?.name }}</h3>
                             </div>
+                            <a
+                                (click)="performActions(0, $event)"
+                                class="edit-icon pl-1 pd-t05"
+                            >
+                                <i *ngIf="!isLoading" class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                            </a>
+                        </div>
 
-                            <div class="custom-detail account-detail-padding">
-                                <h4>{{ accInfo?.mobileNo }}</h4>
-                                <h4>{{ accInfo?.email }}</h4>
-                            </div>
-                        </ng-container>
+                        <div class="custom-detail account-detail-padding">
+                            <h4>{{ accInfo?.mobileNo }}</h4>
+                            <h4>{{ accInfo?.email }}</h4>
+                        </div>
                     </div>
 
                     <div class="height-82px">

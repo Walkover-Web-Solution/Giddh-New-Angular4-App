@@ -6,6 +6,7 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { SalesBifurcationDetailsStore } from './utility/sales-bifurcation-details.store';
 import { SalesBifurcationDetailsService } from './utility/sales-bifurcation-details.service';
 import { SalesBifurcationDetailsActionEnum } from './utility/sales-bifurcation-details.constant';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'sales-bifurcation-details',
@@ -140,7 +141,7 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof SalesBifurcationDetailsComponent
      */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         this.requestParams.page = this.requestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.requestParams.count = event.pageSize;
         this.initApiCall();

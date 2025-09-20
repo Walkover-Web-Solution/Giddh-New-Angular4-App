@@ -236,14 +236,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handlePageEvent(event: PageEvent): void {
         this.showLoader = true;
-        if (event.pageSize !== this.paginationLimit) {
-            this.paginationLimit = event.pageSize;
-            this.currentPage = 1;
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: event.pageSize }));
-        } else {
-            this.currentPage = event.pageIndex + 1;
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.pageIndex + 1, count: this.paginationLimit }));
-        }
+        this.currentPage = event.pageSize !== this.paginationLimit ? 1 : event.pageIndex + 1;
+        this.paginationLimit = event.pageSize;
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: this.currentPage, count: this.paginationLimit }));
     }
 
 

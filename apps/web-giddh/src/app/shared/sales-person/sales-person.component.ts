@@ -18,7 +18,7 @@ import { InputFieldComponent } from '../../theme/form-fields/input-field/input-f
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 
 @Component({
@@ -194,7 +194,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                         )
                     }
                 });
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                dialogRef.afterClosed().subscribe(response => {
                     if (response === this.commonLocaleData?.app_yes) {
                         this.componentStore.deleteSalesPerson(element?.uniqueName);
                     }
@@ -291,7 +291,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      * @param {*} event
      * @memberof SalesPersonComponent
      */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         this.requestParams.page = this.requestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.requestParams.count = event.pageSize;
         this.salesPersonAction(SalesPersonActionEnum.GET_ALL);

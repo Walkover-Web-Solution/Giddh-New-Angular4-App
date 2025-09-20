@@ -618,7 +618,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.stockForm.options = this.stockForm.options?.filter((data, optionIndex) => optionIndex !== index).map((data, optionIndex) => {
                     return {
@@ -1845,7 +1845,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.toggleLoader(true);
                 this.inventoryService.deleteStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {

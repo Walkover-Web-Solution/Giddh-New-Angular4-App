@@ -5,12 +5,12 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountRequestV2, AccountResponseV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../models/api-models/Group';
 import { AccountAddNewDetailsComponent } from '../header/components';
 import { AccountService } from '../../services/account.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'aside-menu-account',

@@ -46,7 +46,6 @@ import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-in
         MatSelectModule,
         MatDialogModule,
         MatSlideToggleModule,
-        
         MatGridListModule,
         FormFieldsModule,
         MatInputModule,

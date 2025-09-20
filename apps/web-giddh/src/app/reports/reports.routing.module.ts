@@ -18,7 +18,7 @@ import { CashFlowStatementComponent } from './components/cash-flow-statement-com
                 canActivate: [NeedsAuthentication],
                 component: ReportsComponent,
                 children: [
-                    { path: '', redirectTo: 'reports-dashboard', pathMatch: 'full' },
+                    { path: '', redirectTo: 'sales-register', pathMatch: 'full' },
                     { path: 'sales-register', component: ReportsDetailsComponent },
                     { path: 'sales-detailed-expand', component: SalesRegisterExpandComponent },
                     { path: 'purchase-register', component: PurchaseRegisterComponent },

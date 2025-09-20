@@ -3,7 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import { Gstr1SummaryErrors } from '../../../../../../models/api-models/GstReconcile';
 import { orderBy } from '../../../../../../lodash-optimized';
 import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../../../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../../../../../app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
@@ -21,7 +21,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     public filteredTransactions: Gstr1SummaryErrors[] = [];
     public imgPath: string = '';
 
-    public itemsPerPage: number = PAGINATION_LIMIT;
+    public itemsPerPage: number = DROPDOWN_ITEMS_COUNT_LIMIT;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

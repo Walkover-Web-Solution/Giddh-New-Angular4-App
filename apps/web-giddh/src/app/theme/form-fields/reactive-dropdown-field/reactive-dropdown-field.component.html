@@ -75,7 +75,7 @@
         <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll
             [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
             [displayWith]="displayLabel" #auto="matAutocomplete">
-            <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()"
+            <a href="javascript:;" *ngIf="showCreateNew && createNewText" (click)="createNewRecord()"
                 class="d-flex justify-content-between px-3 py-2">
                 <div class="item create-new">{{ createNewText }}</div>
                 <div class="item create-new-command" *ngIf="showKeyboardCommand">

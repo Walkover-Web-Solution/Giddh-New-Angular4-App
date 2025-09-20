@@ -524,7 +524,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     /**
-     * open dialog
+     * Open dialog by template
      *
      * @param {TemplateRef<any>} template
      * @memberof InventoryAddGroupComponent
@@ -541,6 +541,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
      * @memberof InventoryAddGroupComponent
      */
     public hideModal(): void {
-        this.dialogRef.close();
+        this.dialogRef?.close();
     }
 }

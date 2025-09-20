@@ -70,7 +70,7 @@ export class TaxAuthorityComponent implements OnInit {
         };
         const createUpdateTaxAuthorityDialogRef = this.dialog.open(CreateComponent, dialogConfig);
 
-        createUpdateTaxAuthorityDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        createUpdateTaxAuthorityDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getSalesTaxReport();
             }
@@ -104,7 +104,7 @@ export class TaxAuthorityComponent implements OnInit {
                 cancel: this.commonLocaleData?.app_no
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.componentStore.deleteTaxAuthority(uniqueName);
             }
