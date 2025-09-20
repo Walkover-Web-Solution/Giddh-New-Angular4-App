@@ -37,7 +37,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** This will use for voucher api version */
-    public voucherApiVersion: number = 2;
+    public voucherApiVersion: number;
 
     constructor(
         private commonService: CommonService,

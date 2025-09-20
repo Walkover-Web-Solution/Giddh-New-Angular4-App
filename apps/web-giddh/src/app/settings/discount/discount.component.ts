@@ -55,7 +55,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     /** Holds Create/Update discount Dialog Ref */
     public createUpdateDiscountRef: MatDialogRef<any>;
     /** Voucher API Version */
-    public voucherApiVersion: number = 2;
+    public voucherApiVersion: number;
 
     constructor(
         private salesService: SalesService,

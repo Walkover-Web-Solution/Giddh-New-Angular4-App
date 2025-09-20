@@ -115,7 +115,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** This will use for selected status */
     public selectedStatus: string = '';
     /** This will use for voucher api version */
-    public voucherApiVersion: number = 2;
+    public voucherApiVersion: number;
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,

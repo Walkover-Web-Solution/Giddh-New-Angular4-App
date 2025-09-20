@@ -1007,7 +1007,7 @@
                             mat-raised-button
                             color="primary"
                             id="saveLedger"
-                            [disabled]="isFileUploading || isReadOnly"
+                            [disabled]="isFileUploading || isReadOnly || (voucherApiVersion === 1)"
                             [ladda]="isLedgerCreateInProcess$ | async"
                             (click)="saveLedger()"
                         >

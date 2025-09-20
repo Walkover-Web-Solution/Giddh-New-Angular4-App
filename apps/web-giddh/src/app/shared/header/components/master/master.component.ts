@@ -74,7 +74,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /** Selected archived option */
     public selectedArchivedOption: object = {};
     /** Voucher API Version */
-    public voucherApiVersion: number = 2;
+    public voucherApiVersion: number;
 
     constructor(
         private groupService: GroupService,

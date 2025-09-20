@@ -913,10 +913,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
                     transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
             }
-            // if (this.generalService.voucherApiVersion === 1) {
-            //     /** From API, for v1 companies, isStock key is creating issue in entry creation */
-            //     delete transaction?.isStock;
-            // }
         });
         this.saveBlankLedger.emit(true);
     }

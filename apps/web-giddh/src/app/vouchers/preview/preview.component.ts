@@ -195,7 +195,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Holds true when need to refresh page */
     private isRefresh: boolean = null;
     /** Voucher api version */
-    public voucherApiVersion: number = 2;
+    public voucherApiVersion: number;
 
     constructor(
         private router: Router,

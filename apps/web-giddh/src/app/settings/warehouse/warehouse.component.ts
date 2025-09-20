@@ -114,7 +114,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     /** True if last address info is open */
     public isLastAddressInfoOpen: boolean = false;
     /** Voucher API version */
-    public voucherApiVersion: 1 | 2 = 1;
+    public voucherApiVersion: number;
 
     /** @ignore */
     constructor(

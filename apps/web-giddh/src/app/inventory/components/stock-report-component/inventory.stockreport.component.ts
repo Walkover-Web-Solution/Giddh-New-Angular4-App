@@ -495,15 +495,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.destroyed$.complete();
     }
 
-    public goToManageStock() {
-        if (this.groupUniqueName && this.stockUniqueName) {
-            this.store.dispatch(this.inventoryAction.showLoaderForStock());
-            this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
-            this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
-            this.setInventoryAsideState(true, false, true);
-        }
-    }
-
     public nextPage() {
         this.stockReportRequest.page++;
         this.getStockReport(false);

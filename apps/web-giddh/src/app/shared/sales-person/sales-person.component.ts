@@ -90,7 +90,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Total results */
     public totalResults: number = 0;
     /** Voucher API Version */
-    public voucherApiVersion: number = 2;
+    public voucherApiVersion: number;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesPersonData: any,

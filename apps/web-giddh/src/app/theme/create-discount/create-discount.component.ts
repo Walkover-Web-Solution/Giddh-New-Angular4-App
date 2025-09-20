@@ -33,7 +33,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     /** Holds true if api is in progress */
     public isLoading: boolean = true;
     /** Voucher API Version */
-    public voucherApiVersion: number = 2;
+    public voucherApiVersion: number;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public discountInfo: any,
