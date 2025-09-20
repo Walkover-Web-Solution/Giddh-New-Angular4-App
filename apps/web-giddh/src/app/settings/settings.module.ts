@@ -40,7 +40,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
-
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
@@ -134,7 +133,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatDialogModule,
         ConfirmModalModule,
         MatSlideToggleModule,
-        
         MatGridListModule,
         FormFieldsModule,
         MatInputModule,

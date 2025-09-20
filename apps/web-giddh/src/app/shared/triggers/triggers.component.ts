@@ -66,7 +66,7 @@ export class TriggersComponent implements OnInit {
         const dialogConfig = ASIDE_PANE_CONFIG;
         dialogConfig.data = { isTrigger: true };
         const dialogRef = this.dialog.open(TemplateFroalaComponent, dialogConfig);
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response) {
                 this.router.navigate(["/pages/settings/trigger/basic"]);
             }

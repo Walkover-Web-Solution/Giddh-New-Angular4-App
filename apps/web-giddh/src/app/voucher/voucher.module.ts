@@ -29,7 +29,6 @@ import { SharedModule } from "../shared/shared.module";
 import { VoucherAddBulkItemsModule } from "../shared/voucher-add-bulk-items/voucher-add-bulk-items.module";
 import { DiscountControlModule } from "../theme/discount-control/discount-control.module";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
-import { SelectModule } from "../theme/ng-select/ng-select";
 import { TaxControlModule } from "../theme/tax-control/tax-control.module";
 import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
@@ -59,7 +58,6 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
             style: "slide-left",
             spinnerSize: 30,
         }),
-        SelectModule.forRoot(),
         SendEmailInvoiceModule,
         VoucherTypeToNamePipeModule,
         CurrencyModule,

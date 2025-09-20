@@ -478,9 +478,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public toggleGiddhDatepicker(isOpen: boolean): void {
         if (this.universalDatepickerTrigger) {
             if (isOpen) {
-                this.universalDatepickerTrigger?.openMenu();
+                this.universalDatepickerTrigger.openMenu();
             } else {
-                this.universalDatepickerTrigger?.closeMenu();
+                this.universalDatepickerTrigger.closeMenu();
             }
         }
     }
@@ -546,7 +546,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.deleteEntry(index);
             }

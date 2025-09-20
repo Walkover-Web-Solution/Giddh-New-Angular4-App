@@ -1,6 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
 import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
@@ -23,7 +22,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
-import { PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { IOption, PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 import { ExportFileNameComponent } from '../export-file-name/export-file-name.component';

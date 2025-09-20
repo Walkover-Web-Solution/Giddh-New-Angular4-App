@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IOption } from '../theme/ng-select/option.interface';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { AppState } from '../store';
 import { Store, select } from '@ngrx/store';
@@ -12,7 +11,7 @@ import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
-import { ASIDE_PANE_CONFIG, GetBifurcationType } from '../app.constant';
+import { ASIDE_PANE_CONFIG, GetBifurcationType, IOption } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 
 @Component({

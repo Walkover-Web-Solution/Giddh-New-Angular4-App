@@ -469,7 +469,7 @@
                                         [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
                                         formControlName="mobileNo"
                                         (change)="openConfirmLeaveDialog()"
-                                        (focus)="reinitializeMobileField('init-contact-add')"
+                                        (focus)="reInitializeMobileField('init-contact-add')"
                                     >
                                     </input-field>
                                 </div>
@@ -565,7 +565,7 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [label]="commonLocaleData?.app_mobile_number"
                                 (input)="portalIndex = i"
-                                (focus)="reinitializeMobileField('init-contact-portal_' + i)"
+                                (focus)="reInitializeMobileField('init-contact-portal_' + i)"
                                 [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
                             ></input-field>
                             <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>

@@ -201,8 +201,7 @@ export class ActionMenuComponent {
                 activeTab: activeTab,
                 accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
             }
-        });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        });dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.sendEmail.emit(true);
             }

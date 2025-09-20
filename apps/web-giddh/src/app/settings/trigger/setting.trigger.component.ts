@@ -7,12 +7,12 @@ import { AppState } from '../../store';
 import * as dayjs from 'dayjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
-import { IOption } from '../../theme/ng-select/ng-select';
+import { IOption } from '../../app.constant';
 import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
 import { SearchService } from '../../services/search.service';
 import { GroupService } from '../../services/group.service';
-import { API_COUNT_LIMIT } from '../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT } from '../../app.constant';
 import { cloneDeep, each } from '../../lodash-optimized';
 import { NgForm } from '@angular/forms';
 import { SettingsTriggersService } from '../../services/settings.triggers.service';
@@ -397,7 +397,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT,
+                count: DROPDOWN_ITEMS_COUNT_LIMIT,
                 onlyTop: true
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {

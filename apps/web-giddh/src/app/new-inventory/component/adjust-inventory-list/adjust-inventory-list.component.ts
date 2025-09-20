@@ -9,7 +9,7 @@ import { AdjustInventoryListResponse, InventorytAdjustReportQueryRequest } from 
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
@@ -520,7 +520,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof AdjustInventoryListComponent
      */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         this.pageIndex = event.pageIndex;
         this.adjustInventoryListRequest.page = this.adjustInventoryListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.adjustInventoryListRequest.count = event.pageSize;
@@ -631,7 +631,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.componentStore.deleteInventoryAdjust(item?.refNo);
             }

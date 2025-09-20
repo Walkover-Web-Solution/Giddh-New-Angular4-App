@@ -409,7 +409,7 @@ constructor(
                 } else {
                     uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
                 }
-                selectedFinancialYear = this.financialOptions?.find(p => p?.value === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions?.find(option => option?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
@@ -433,9 +433,9 @@ constructor(
         });
     }
 
-    public selectFinancialYearOption(v: IOption) {
-        if (v?.value) {
-            let financialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === v?.value);
+    public selectFinancialYearOption(event: IOption) {
+        if (event?.value) {
+            let financialYear = this.selectedCompany.financialYears?.find(option => option?.uniqueName === event?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -729,9 +729,9 @@ constructor(
     public toggleGiddhDatepicker(isOpen: boolean): void {
         if (this.universalDatepickerTrigger) {
             if (isOpen) {
-                this.universalDatepickerTrigger?.openMenu();
+                this.universalDatepickerTrigger.openMenu();
             } else {
-                this.universalDatepickerTrigger?.closeMenu();
+                this.universalDatepickerTrigger.closeMenu();
             }
         }
     }

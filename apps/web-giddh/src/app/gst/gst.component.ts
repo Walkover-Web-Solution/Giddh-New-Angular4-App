@@ -14,7 +14,7 @@ import { GstReconcileService } from '../services/gst-reconcile.service';
 import { ToasterService } from '../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR, GIDDH_DATE_FORMAT_WITH_SPACE } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
-import { IOption } from '../theme/ng-select/ng-select';
+import { IOption } from '../app.constant';
 import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../services/service.config';

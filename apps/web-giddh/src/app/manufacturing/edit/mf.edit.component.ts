@@ -2,7 +2,6 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ToasterService } from './../../services/toaster.service';
-import { IOption } from './../../theme/ng-select/option.interface';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -24,6 +23,7 @@ import { SearchService } from '../../services/search.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { GeneralService } from '../../services/general.service';
 import { cloneDeep, forEach } from '../../lodash-optimized';
+import { IOption } from '../../app.constant';
 
 @Component({
     templateUrl: './mf.edit.component.html',

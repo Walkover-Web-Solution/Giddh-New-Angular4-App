@@ -8,7 +8,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
-import { IOption } from '../../theme/ng-select/ng-select';
+import { IOption } from '../../app.constant';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 

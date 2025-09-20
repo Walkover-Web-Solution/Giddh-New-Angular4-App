@@ -716,7 +716,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     poUniqueName: this.selectedInvoice?.uniqueName
                 };
             }
-            if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+            if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
                 getRequest = {
                     accountUniqueName: this.selectedInvoice.account?.uniqueName,
                     voucherNumber: [this.selectedInvoice.voucherNumber],
@@ -802,8 +802,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             model.postRequestObject[this.voucherType === VoucherTypeEnum.generateProforma ? 'proformaNumber' : 'estimateNumber'] = this.selectedInvoice?.voucherNumber;
         }
         this.dialog.open(this.historyAsideDialog, {
-            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData },
-            ...ASIDE_PANE_CONFIG
+            ...ASIDE_PANE_CONFIG,
+            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData }
         });
     }
 

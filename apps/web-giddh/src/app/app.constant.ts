@@ -117,7 +117,7 @@ export const PAGINATION_LIMIT = 50;
 /** Pagination count options */
 export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 /** API default count limit */
-export const API_COUNT_LIMIT = 20;
+export const DROPDOWN_ITEMS_COUNT_LIMIT = 20;
 /** Vouchers pagination limit  */
 export const ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT = 200;
 

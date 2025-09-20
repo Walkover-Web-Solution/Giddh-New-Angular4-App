@@ -310,7 +310,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                 configuration: this.generalService.deleteConfiguration(this.commonLocaleData?.app_uncheck_all_item_message, this.commonLocaleData)
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.uncheckAll();
             }

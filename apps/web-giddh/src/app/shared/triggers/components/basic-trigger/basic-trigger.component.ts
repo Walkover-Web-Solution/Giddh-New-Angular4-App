@@ -7,6 +7,7 @@ import { ITriggerList } from "../../uitilty/trigger.const";
 import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 import { TriggerComponentStore } from "../../uitilty/trigger.store";
 import { TemplateFroalaComponent } from "../../../template-froala/template-froala.component";
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
     selector: 'app-basic-trigger',
@@ -76,7 +77,7 @@ export class BasicTriggerComponent implements OnInit {
      * @param {*} event
      * @memberof BasicTriggerComponent
      */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         this.triggerListRequest.page = this.triggerListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.triggerListRequest.count = event.pageSize;
         this.getTriggerList();
@@ -98,7 +99,7 @@ export class BasicTriggerComponent implements OnInit {
                 )
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.componentStore.deleteTrigger(element.uniqueName);
             }
@@ -115,7 +116,7 @@ export class BasicTriggerComponent implements OnInit {
         const dialogConfig = ASIDE_PANE_CONFIG;
         dialogConfig.data = { isTrigger: true, ...(triggerUniqueName ? { triggerUniqueName } : {}) };
         const dialogRef = this.dialog.open(TemplateFroalaComponent, dialogConfig);
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getTriggerList();
             }

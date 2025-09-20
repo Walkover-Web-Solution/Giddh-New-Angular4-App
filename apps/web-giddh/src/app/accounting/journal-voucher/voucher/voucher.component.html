@@ -241,7 +241,7 @@
 
             <div class="clearfix row">
                 <div class="col-xs-9 col-sm-9">
-                    <div class="form-group custom-textarea">
+                    <div class="form-group">
                         <mat-form-field appearance="outline" class="w-50" floatLabel="always">
                             <mat-label>{{
                                 localeData?.narration
@@ -529,7 +529,7 @@
                 <giddh-datepicker
                     [name]="'entryDate'"
                     [placeholder]="giddhDateFormat"
-                    [cssClass]="'form-control voucher-date-field'"
+                    [cssClass]="'voucher-date-field'"
                     formControlName="chequeClearanceDate"
                     [showToggleIcon]="false"
                     (keydown.enter)="$event.preventDefault()"

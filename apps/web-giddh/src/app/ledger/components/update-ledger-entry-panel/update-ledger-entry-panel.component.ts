@@ -802,7 +802,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.deleteAttachedFile();
             }
@@ -821,7 +821,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.deleteTrxEntry();
             }
@@ -950,10 +950,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (this.voucherApiVersion === 2) {
                 requestObj.referenceVoucher = null;
             }
-            // Voucher Version 1
-            //  else {
-            //     requestObj.invoiceLinkingRequest = null;
-            // }
         }
         if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) || !this.isAdjustVoucherSelected) {
             // Clear the voucher adjustments if the adjust advance receipt or adjust receipt is not selected
@@ -1033,13 +1029,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.voucherApiVersion === 2) {
             downloadRequest.uniqueName = transaction?.voucherUniqueName;
         }
-
-        // Voucher version 1
-        //  else {
-        //     downloadRequest.invoiceNumber = [transaction?.voucherNumber];
-        // }
         downloadRequest.voucherType = (transaction?.voucherGeneratedType) ? transaction?.voucherGeneratedType : transaction?.voucher?.name;
-
         this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
@@ -1079,10 +1069,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
         }
-        // Voucher Version 1
-        // else {
-        //     this.saveLedgerTransaction();
-        // }
     }
 
     public openBaseAccountModal() {
@@ -1171,14 +1157,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: particularAccount, voucherType: this.vm.selectedLedger?.voucher?.shortCode, ledgerAccount: this.activeAccount });
         }
 
-        // Voucher Version 1
-        // else {
-        //     request = {
-        //         accountUniqueNames: [this.vm.selectedLedger?.particular?.uniqueName, this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName],
-        //         voucherType: this.vm.selectedLedger?.voucher?.shortCode
-        //     };
-        // }
-
         if (!request) {
             return;
         }
@@ -1203,10 +1181,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         } else {
             date = dayjs(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
-
-        // if (this.voucherApiVersion !== 2) {
-        //     this.invoiceList = [];
-        // }
 
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
@@ -1234,11 +1208,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     selectedInvoice = this.vm.selectedLedger?.referenceVoucher ? this.vm.selectedLedger?.referenceVoucher : false;
                 }
 
-                // Voucher Version 1
-                // else {
-                //     selectedInvoice = this.vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices ? this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0] : false;
-                // }
-
                 if (selectedInvoice) {
                     if (this.voucherApiVersion === 2) {
                         selectedInvoice.number = this.generalService.getVoucherNumberLabel(selectedInvoice?.voucherType, selectedInvoice?.number, this.commonLocaleData);
@@ -1255,20 +1224,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         }
 
                     }
-                    // Voucher version 1
-                    // else {
-                    //     selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
-                    //     invoiceSelected = {
-                    //         label: selectedInvoice.invoiceNumber ? selectedInvoice.invoiceNumber : '-',
-                    //         value: selectedInvoice.invoiceUniqueName,
-                    //         additional: selectedInvoice
-                    //     };
-
-                    //     const linkedInvoice = this.invoiceList.find(invoice => invoice?.value === invoiceSelected?.value);
-                    //     if (!linkedInvoice) {
-                    //         this.invoiceList.push(invoiceSelected);
-                    //     }
-                    // }
                 }
                 this.invoiceList = _.uniqBy(this.invoiceList, 'value');
                 this.invoiceList$ = observableOf(this.invoiceList);
@@ -1330,17 +1285,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         uniqueName: event.value
                     }
                 }
-                // Voucher version 1
-                // else {
-                //     this.vm.selectedLedger.invoiceLinkingRequest = {
-                //         linkedInvoices: [
-                //             {
-                //                 invoiceUniqueName: event.value,
-                //                 voucherType: event.additional.voucherType
-                //             }
-                //         ]
-                //     }
-                // }
             }
             this.vm.selectedLedger.generateInvoice = true;
         } else {
@@ -1348,10 +1292,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 if (this.voucherApiVersion === 2) {
                     this.vm.selectedLedger.referenceVoucher = null;
                 }
-                // Voucher version 1
-                // else {
-                //     this.vm.selectedLedger.invoiceLinkingRequest = null;
-                // }
             }
         }
     }
@@ -1363,12 +1303,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.entryAccountUniqueName = this.vm.selectedLedger.particular?.uniqueName;
                 this.openDropDown = true;
             }
-            // Voucher Version 1
-            // else {
-            //     this.openDropDown = false;
-            //     this.toaster.showSnackBar("error", this.localeData?.base_account_change_error);
-            //     return;
-            // }
     }
 
     public keydownPressed(e) {
@@ -1482,7 +1416,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.handleRcmChange(response);
         });
     }
@@ -1530,7 +1464,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
 
-                this.advanceReceiptRemoveDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                this.advanceReceiptRemoveDialogRef.afterClosed().subscribe(response => {
                     this.onAdvanceReceiptRemoveCloseConfirmationModal(response);
                 });
             }
@@ -2565,14 +2499,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
             }));
         }
-        // Voucher Version 1
-        // else {
-        //     if (downloadOption === "VOUCHER") {
-        //         this.downloadInvoice(this.vm.selectedLedger, event);
-        //     } else {
-        //         this.downloadAttachedFile(this.vm.selectedLedger.attachedFile, event);
-        //     }
-        // }
     }
 
     /**
@@ -2591,7 +2517,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             height: '650px'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+        dialogRef.afterClosed().subscribe(() => {
             document.querySelector(".cdk-global-overlay-wrapper")?.classList?.remove("double-popup-zindex");
         });
     }
@@ -2847,7 +2773,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public showCreateDiscountDialog(): void {
         this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
-        this.discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.discountDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getAllDiscounts();
             }
@@ -3068,7 +2994,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 )
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.vm.selectedLedger.salesPerson.name = event?.label;
                 this.vm.selectedLedger.salesPersonUniqueName = event?.value;

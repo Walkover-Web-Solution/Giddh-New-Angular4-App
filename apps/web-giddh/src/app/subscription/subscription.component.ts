@@ -20,6 +20,7 @@ import * as duration from 'dayjs/plugin/duration';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 dayjs.extend(duration)
 @Component({
@@ -316,7 +317,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_single_session, this.commonLocaleData)
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
                 this.store.dispatch(this.sessionAction.getAllSession());
@@ -336,7 +337,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_all_sessions, this.commonLocaleData)
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.store.dispatch(this.sessionAction.deleteAllSession());
                 this.router.navigate(['/login']);
@@ -354,6 +355,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public onTabChanged(): void {
         this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${this.tabName[this.activeTabIndex]}`));
         this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
+    }
+
+    /**
+     * Select tab handler
+     *
+     * @param {MatTabChangeEvent} event
+     * @memberof SubscriptionComponent
+     */
+    public selectTab(event: MatTabChangeEvent): void {
+        this.activeTabIndex = event?.index;
+        this.onTabChanged();
     }
 
     /**

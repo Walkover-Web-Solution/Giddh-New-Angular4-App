@@ -8,6 +8,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { SharedModule } from '../shared/shared.module';
 import { LoaderModule } from '../loader/loader.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         }),
         SharedModule,
         LoaderModule,
-        FormFieldsModule
+        FormFieldsModule,
+        MatDialogModule
     ],
     declarations: [LoginComponent]
 })

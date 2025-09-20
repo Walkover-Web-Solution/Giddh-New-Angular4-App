@@ -1,6 +1,6 @@
 import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import * as dayjs from 'dayjs';
 import { CompanyImportExportFileTypes } from '../../../models/interfaces/company-import-export.interface';
 import { AppState } from '../../../store';

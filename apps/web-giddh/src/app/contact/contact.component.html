@@ -420,7 +420,7 @@
                     <button
                         mat-raised-button
                         color="primary"
-                        class="btn-sm pull-right mr-l1 send-email"
+                        class="pull-right mr-l1"
                         (click)="send('sundrycreditors')"
                         aria-label="set"
                     >
@@ -477,7 +477,7 @@
                     <button
                         mat-stroked-button
                         color="primary"
-                        class="btn-sm pull-right mr-l1 send-email"
+                        class="pull-right mr-l1"
                         (click)="send('sundrydebtors')"
                         aria-label="set"
                     >
@@ -1517,7 +1517,7 @@
                     [pageSizeOptions]="pageSizeOptions"
                     [showFirstLastButtons]="true"
                     [hidePageSize]="false"
-                    (page)="handlePageEvent($event, sundryDebtorsAccountsBackup);">
+                    (page)="handlePageEvent($event);">
                 </mat-paginator>
             </ng-container>
 
@@ -1536,7 +1536,7 @@
                     [pageSizeOptions]="pageSizeOptions"
                     [showFirstLastButtons]="true"
                     [hidePageSize]="false"
-                    (page)="handlePageEvent($event, sundryCreditorsAccountsBackup)">
+                    (page)="handlePageEvent($event)">
                 </mat-paginator>
             </ng-container>
         </div>

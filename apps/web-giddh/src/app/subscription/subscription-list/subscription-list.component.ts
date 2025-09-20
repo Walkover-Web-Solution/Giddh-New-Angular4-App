@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -15,7 +15,7 @@ import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { API_COUNT_LIMIT, IOption, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
@@ -55,7 +55,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         page: 1,
         totalPages: 0,
         totalItems: 0,
-        count: API_COUNT_LIMIT,
+        count: PAGINATION_LIMIT,
     }
     /** Hold table page index number */
     public pageIndex: number = 0;
@@ -405,7 +405,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof SubscriptionComponent
      */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         this.pageIndex = event.pageIndex;
         this.subscriptionRequestParams.page = this.subscriptionRequestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.subscriptionRequestParams.count = event.pageSize;

@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { saveAs } from 'file-saver';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import { CopyType } from '../../../shared/Enums/common.enum';
 import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
 @Component({

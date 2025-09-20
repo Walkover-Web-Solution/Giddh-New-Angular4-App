@@ -1,4 +1,4 @@
-import { API_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
 import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
 import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocks-item.interface';
 
@@ -202,7 +202,7 @@ export class SearchStockTransactionReportRequest {
     public inventoryType?: string;
     public loadMore?: boolean;
     constructor() {
-        this.count = API_COUNT_LIMIT;
+        this.count = DROPDOWN_ITEMS_COUNT_LIMIT;
         this.page = 1;
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];

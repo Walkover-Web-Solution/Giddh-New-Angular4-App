@@ -314,15 +314,6 @@ export class InventorySidebarComponent implements OnDestroy {
     }
 
     /**
-     * This will use for close aside menu
-     *
-     * @memberof InventorySidebarComponent
-     */
-    public closeAsideMenu(): void {
-        this.asideMenuStateForCreateNewInventoryDialogRef.close();
-    }
-
-    /**
     * Releases the memory
     *
     * @memberof InventorySidebarComponent

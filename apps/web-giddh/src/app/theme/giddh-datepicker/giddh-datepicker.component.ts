@@ -65,6 +65,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
+    /** Callback function to notify parent component of value changes */
     private onChangeCallback: (_: any) => void = noop;
     /** This is used to show change date */
     public inputChange: any = '';

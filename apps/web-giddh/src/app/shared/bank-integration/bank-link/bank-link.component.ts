@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
 
 @Component({

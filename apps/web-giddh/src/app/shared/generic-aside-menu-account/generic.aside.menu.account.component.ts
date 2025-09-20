@@ -5,9 +5,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountRequestV2, AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'generic-aside-menu-account',

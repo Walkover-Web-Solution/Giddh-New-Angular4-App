@@ -20,7 +20,7 @@
                 >
                     <i class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                 </button>
-                <button mat-icon-button aria-label="close" mat-dialog-close>
+                <button mat-icon-button aria-label="close" (click)="onCancel()">
                     <i class="icon-cross"></i>
                 </button>
             </div>
@@ -502,7 +502,6 @@
                                                     <giddh-datepicker
                                                         [appearance]="'outline'"
                                                         class="w-100"
-                                                        [cssClass]="'mat-field-border bdr form-control'"
                                                         [placeholder]="commonLocaleData?.app_clearance_date"
                                                         name="from"
                                                         [formControl]="advanceSearchForm?.controls['dateOnCheque']"

@@ -39,7 +39,6 @@
                                     [required]="true"
                                     [disabled]="!editBranchTransferUniqueName"
                                     [appearance]="'outline'"
-                                    class="form-control"
                                 ></giddh-datepicker>
                             </div>
                         </div>
@@ -52,8 +51,7 @@
                                     [name]="'productName'"
                                     [createNewText]="'Create New Product'"
                                     [showCreateNew]="true"
-                                   (createOption)="onProductNoResultsClicked(0)"
-                                    [enableDynamicSearch]="true"
+                                    (createOption)="onProductNoResultsClicked(0)"
                                     [options]="stockList"
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
                                     (selectedOption)="selectProduct($event, branchTransfer.products[0])"
@@ -124,12 +122,12 @@
                                 <reactive-dropdown-field
                                     *ngIf="isUpdateMode"
                                     [name]="'sourceName'"
-                                    [enableDynamicSearch]="true"
                                     [options]="branchList"
                                     [(ngModel)]="branchTransfer.sources[0].uniqueName"
                                     (selectedOption)="selectSource($event, branchTransfer.sources[0])"
                                     [required]="true"
-                                    [disabled]="isBranch || isCompanyWithSingleBranch">
+                                    [disabled]="isUpdateMode"
+                                >
                                 </reactive-dropdown-field>
                             </div>
                         </div>
@@ -270,7 +268,6 @@
                                     [required]="true"
                                     [disabled]="!editBranchTransferUniqueName"
                                     [appearance]="'outline'"
-                                    class="form-control"
                                 ></giddh-datepicker>
                             </div>
                         </div>
@@ -283,8 +280,7 @@
                                     [name]="'productName'"
                                     [createNewText]="'Create New Product'"
                                     [showCreateNew]="true"
-                                   (createOption)="onProductNoResultsClicked(0)"
-                                    [enableDynamicSearch]="true"
+                                    (createOption)="onProductNoResultsClicked(0)"
                                     [options]="stockList"
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
                                     (selectedOption)="selectProduct($event, branchTransfer.products[0])"
@@ -553,7 +549,7 @@
                                                 [name]="'productName' + i"
                                                 [createNewText]="'Add New Product'"
                                                 [showCreateNew]="true"
-                                               (createOption)="onProductNoResultsClicked(i)"
+                                                (createOption)="onProductNoResultsClicked(i)"
                                                 [enableDynamicSearch]="true"
                                                 [options]="stockList"
                                                 [(ngModel)]="product.uniqueName"
@@ -1146,7 +1142,7 @@
                                     [(ngModel)]="branchTransfer.transporterDetails.transporterId"
                                     [createNewText]="'Create New'"
                                     [showCreateNew]="true"
-                                   (createOption)="openTransporterPopupDialog()"
+                                    (createOption)="openTransporterPopupDialog()"
                                 ></reactive-dropdown-field>
                             </div>
                             <div class="col-sm-6 mr-b2">

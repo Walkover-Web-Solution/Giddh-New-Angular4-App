@@ -601,11 +601,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        this.modalDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
+        this.modalDialogRef.afterOpened().subscribe(response => {
             this.updateLedgerComponent?.loadDefaultSearchSuggestions();
         });
 
-        this.modalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.modalDialogRef.afterClosed().subscribe(response => {
             document.querySelector('body').classList.remove('update-ledger-overlay');
             this.getDaybook(this.searchFilterData);
         });
@@ -685,7 +685,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             event.preventDefault();
         }
         this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
-        this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
+        this.ledgerAsidePaneModal.afterClosed().subscribe(response => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();

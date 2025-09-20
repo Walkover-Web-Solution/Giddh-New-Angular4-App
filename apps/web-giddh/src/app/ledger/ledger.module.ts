@@ -18,7 +18,6 @@ import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numbe
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { ValidateSectionPermissionDirectiveModule } from '../shared/validate-section-permission/validate-section-permission.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -103,7 +102,6 @@ import { MatDividerModule } from '@angular/material/divider';
         ConfirmModalModule,
         DecimalDigitsModule,
         ClickOutsideModule,
-        SelectModule.forRoot(),
         NgxMaskModule.forRoot({
             validation: false
         }),

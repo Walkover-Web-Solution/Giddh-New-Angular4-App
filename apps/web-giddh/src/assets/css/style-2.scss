@@ -12208,13 +12208,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
-.table-header-fix {
-    position: sticky;
-    top: 0;
-    background-color: var(--color-white);
-    z-index: 100;
-}
-
 .custom-mat-tabs {
     .mat-tab-label {
         padding: 0 20px !important;
@@ -13783,14 +13776,6 @@ mat-list {
     .mdc-button__label {
         color: var(--color-common-primary-text) !important;
     }
-}
-
-.w150 {
-    width: 150px !important;
-}
-
-.w150 {
-    width: 150px !important;
 }
 
 .bg-white {
