@@ -233,7 +233,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** True if last duplicate email in portal  users */
     public portalIndex: number;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This will hold is portal default */
     public isPortalDefault: boolean;
     /** Holds list of countries which use ZIP Code in address */

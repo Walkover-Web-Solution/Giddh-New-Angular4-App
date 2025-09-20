@@ -69,7 +69,7 @@ export class GstComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Custom selected month */
     public customMonth: string = '';
     /** Holds start month/year */

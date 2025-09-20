@@ -47,7 +47,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds true if current company country is gocardless supported country */
     public isGoCardlessSupportedCountry: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Holds help documentation url for syncing with Tally */
     public syncWithTallyHelpDocUrl: string = "";
 

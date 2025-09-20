@@ -634,7 +634,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** True, if at least a single TDS type (payable or receivable) tax is present */
     public isTdsPresent: boolean;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This holds the voucher uniquename which needs to be copied */
     public voucherUniqueName: string = "";
     /** User filled deposit amount */

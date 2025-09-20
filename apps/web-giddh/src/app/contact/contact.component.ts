@@ -230,7 +230,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Stores the send email bulk request  */
     public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
     /** Observable for bulk email success response */

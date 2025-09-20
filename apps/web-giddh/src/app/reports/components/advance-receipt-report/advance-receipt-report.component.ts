@@ -162,7 +162,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** List of receipt types for filters */
     public receiptTypes: any;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Voucher params */
     public previewVoucherParams: any = {};
     /** List of selected receipts */

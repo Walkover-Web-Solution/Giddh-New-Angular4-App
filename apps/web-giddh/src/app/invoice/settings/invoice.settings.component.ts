@@ -82,7 +82,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** True if user has invoice setting permissions */
     public hasInvoiceSettingPermissions: boolean = true;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Active tab name */
     public activeTab: string;
     /** Active company details */

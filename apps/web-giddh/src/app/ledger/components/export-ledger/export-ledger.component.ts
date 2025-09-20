@@ -86,7 +86,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         showInAccountCurrency: null
     }
     /** Stores the voucher API version of the company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This will show/hide for v2 for bill to bill*/
     public enableBillToBill: boolean = false;
     /** This will use for bill to bill value*/

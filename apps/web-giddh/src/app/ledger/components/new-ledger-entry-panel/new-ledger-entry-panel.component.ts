@@ -237,7 +237,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** True if more details is open */
     public isMoreDetailsOpen: boolean;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** True if user itself checked the generate voucher  */
     public manualGenerateVoucherChecked: boolean = true;
     /** Holds input to get invoice list request params */

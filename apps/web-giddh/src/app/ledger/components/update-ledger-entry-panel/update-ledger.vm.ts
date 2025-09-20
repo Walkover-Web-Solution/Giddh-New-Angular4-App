@@ -89,7 +89,7 @@ export class UpdateLedgerVm {
     /** Is Initial Load */
     private initialLoad: boolean = true;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     /** True if entry value is calculated inclusively */

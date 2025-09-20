@@ -51,7 +51,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     /* This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /*-- mat-table --*/
     displayedColumns: string[] = ['date', 'number', 'name', 'taxamt', 'vat_amt', 'reverse_charge', 'trn_number', 'place_supply'];
 

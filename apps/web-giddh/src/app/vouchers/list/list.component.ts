@@ -315,7 +315,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Form Group for setting form */
     public settingForm: FormGroup;
     /** Hold setting api response */

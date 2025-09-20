@@ -161,7 +161,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** List of icici bank supported countries */
     public iciciBankSupportedCountryList: any[] = ["IN", "NP", "BT"];
     /** True, if is other country in payment integration */
