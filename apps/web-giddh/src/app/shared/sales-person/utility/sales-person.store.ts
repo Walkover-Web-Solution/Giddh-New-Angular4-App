@@ -174,13 +174,13 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
 
-                                    if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ACCOUNT)) {
-                                        this.patchState({
-                                            openTransferAndDeleteDialog: true
-                                        });
-                                    } else if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
+                                    if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                                         this.patchState({
                                             openTransferAndArchiveDialog: true
+                                        });
+                                    } else if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ACCOUNT)) {
+                                        this.patchState({
+                                            openTransferAndDeleteDialog: true
                                         });
                                     }
                                         

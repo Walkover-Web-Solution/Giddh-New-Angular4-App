@@ -53,6 +53,8 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold locale JSON data */
+    public localeData: any = {};
     /** Mobile number library instance */
     public intlClass: any;
     /** Form submission flag */
@@ -129,7 +131,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // Delete which liked with Account Only 
         this.componentStore.openTransferAndDeleteDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
-            this.openTransferAndDeleteDialog(false, "Archive",  "Do you want to delete sales person?", "Transfer and Delete");
+            this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_archive, this.localeData?.delete_confirmation_message, this.localeData?.transfer_and_delete);
             this.componentStore.patchState({openTransferAndDeleteDialog: false});
         })).subscribe();
 
@@ -139,14 +141,14 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 panelClass: ['mat-dialog-sm'],
                 data: {
                     configuration: this.generalService.deleteConfiguration(
-                        "You can not perform this action as Sales person is present on voucher/entry.<br/><strong>Instead of deleting do you want to archive it?</strong>",
+                        this.localeData?.delete_with_voucher_message,
                         this.commonLocaleData
                     )
                 }
             });
             dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                 if (response === this.commonLocaleData?.app_yes) {
-                    this.openTransferAndDeleteDialog(false, "Archive",  "Do you want to Archive sales person?", "Transfer and Archive");
+                    this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_archive, this.localeData?.archive_alternative_message, this.localeData?.transfer_and_archive);
                 } else {
                     this.salesPersonUniqueName = null;
                 }
@@ -255,7 +257,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.componentStore.archiveUnarchiveSalesPerson({ model: { action: ActionTypeEnum.UNARCHIVED }, uniqueName: element?.uniqueName });
                 } else {
                     this.salesPersonUniqueName = element?.uniqueName;
-                    this.openTransferAndDeleteDialog(true, "Archive",  "Are you sure you want to archive sales person ?", "Transfer & Archive");
+                    this.openTransferAndDeleteDialog(true, this.commonLocaleData?.app_archive, this.localeData?.archive_confirmation_message, this.localeData?.transfer_and_archive);
                 }
                 break;
             default:
@@ -363,7 +365,9 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
         this.transferAndDeleteDialogRef.afterClosed().subscribe(model => {
-            this.componentStore.archiveUnarchiveSalesPerson({ model: model, uniqueName: this.salesPersonUniqueName });
+            if (model){
+                this.componentStore.archiveUnarchiveSalesPerson({ model: model, uniqueName: this.salesPersonUniqueName });
+            }
         });
     }
 
