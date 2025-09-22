@@ -13,7 +13,7 @@ import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.cla
 import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 import { ElementViewChildModule } from '../helpers/directives/elementViewChild/elementViewChild.module';
 import { MatTableModule } from '@angular/material/table';
-import { SalesPersonActionEnum, SalesPersonArchiveEnum, SalesPersonCreateUpdate } from './utility/sales-person.constant';
+import { ActionTypeEnum, SalesPersonActionEnum, SalesPersonArchiveEnum, SalesPersonCreateUpdate } from './utility/sales-person.constant';
 import { InputFieldComponent } from '../../theme/form-fields/input-field/input-field.component';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
@@ -21,6 +21,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { MatMenuModule } from '@angular/material/menu';
+import { ArchiveSalesPersonComponent } from './archive/archive.component';
 
 @Component({
     selector: 'app-sales-person',
@@ -92,6 +93,10 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
         count: this.pageSizeOptions[0],
         archive: SalesPersonArchiveEnum.BOTH
     };
+    /** Transfer and delete dialog reference */
+    public transferAndDeleteDialogRef: MatDialogRef<any>;
+    /** Transfer and archive dialog reference */
+    public transferAndArchiveDialogRef: MatDialogRef<any>;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesPersonData: any,
@@ -120,7 +125,41 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
             this.focusInputField();
         })).subscribe();
-        this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => { this.salesPersonListIsModified = true; this.salesPersonAction(SalesPersonActionEnum.GET_ALL); })).subscribe();
+        this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => { this.salesPersonListIsModified = true; console.log("Trap 1");  this.salesPersonAction(SalesPersonActionEnum.GET_ALL); })).subscribe();
+
+        // Delete which liked with Account Only 
+        this.componentStore.openTransferAndDeleteDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
+            this.openTransferAndDeleteDialog(false, "Archive",  "Do you want to delete sales person?", "Transfer and Delete");
+            this.componentStore.patchState({openTransferAndDeleteDialog: false});
+        })).subscribe();
+
+        // Delete which liked with Voucher/ Entry 
+        this.componentStore.openTransferAndArchiveDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: ['mat-dialog-sm'],
+                data: {
+                    configuration: this.generalService.deleteConfiguration(
+                        "You can not perform this action as Sales person is present on voucher/entry.<br/><strong>Instead of deleting do you want to archive it?</strong>",
+                        this.commonLocaleData
+                    )
+                }
+            });
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response === this.commonLocaleData?.app_yes) {
+                    this.openTransferAndDeleteDialog(false, "Archive",  "Do you want to Archive sales person?", "Transfer and Archive");
+                } else {
+                    this.salesPersonUniqueName = null;
+                }
+            });
+            this.componentStore.patchState({openTransferAndArchiveDialog: false});
+        })).subscribe();
+
+        this.componentStore.archiveSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
+            this.transferAndDeleteDialogRef?.close();
+            this.transferAndArchiveDialogRef?.close();
+            this.salesPersonListIsModified = true;
+            this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
+        })).subscribe();
     }
 
     /**
@@ -190,6 +229,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                     if (response === this.commonLocaleData?.app_yes) {
+                        this.salesPersonUniqueName = element?.uniqueName;
                         this.componentStore.deleteSalesPerson(element?.uniqueName);
                     }
                 });
@@ -210,7 +250,13 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 }, 0);
                 break;
             case SalesPersonActionEnum.ARCHIVE:
-                this.componentStore.createUpdateSalesPerson({ model: { ...element, archiveStatus: element.archiveStatus === SalesPersonArchiveEnum.ARCHIVE ? SalesPersonArchiveEnum.UNARCHIVE : SalesPersonArchiveEnum.ARCHIVE }, uniqueName: element?.uniqueName });
+                // this.componentStore.createUpdateSalesPerson({ model: { ...element, archiveStatus: element.archiveStatus === SalesPersonArchiveEnum.ARCHIVE ? SalesPersonArchiveEnum.UNARCHIVED : SalesPersonArchiveEnum.ARCHIVE }, uniqueName: element?.uniqueName });
+                if (element.archiveStatus === SalesPersonArchiveEnum.ARCHIVE) {
+                    this.componentStore.archiveUnarchiveSalesPerson({ model: { action: ActionTypeEnum.UNARCHIVED }, uniqueName: element?.uniqueName });
+                } else {
+                    this.salesPersonUniqueName = element?.uniqueName;
+                    this.openTransferAndDeleteDialog(true, "Archive",  "Are you sure you want to archive sales person ?", "Transfer & Archive");
+                }
                 break;
             default:
                 this.componentStore.getAllSalesPerson({ isDropdown: false, params: this.requestParams});
@@ -292,6 +338,33 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
         this.requestParams.page = event.pageIndex + 1;
         this.requestParams.count = event.pageSize;
         this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
+    }
+
+    /**
+     * Opens transfer and delete dialog for sales person
+     *
+     * @memberof SalesPersonComponent
+     */
+    public openTransferAndDeleteDialog(archiveOnly: boolean,title: string, message: string, primaryText: string, secondaryText: string = this.commonLocaleData?.app_cancel): void {
+        this.transferAndDeleteDialogRef = this.dialog.open(ArchiveSalesPersonComponent, {
+            panelClass: ['mat-dialog-sm'],
+            autoFocus: false,
+            data: {
+                commonLocaleData: this.commonLocaleData,
+                salesPersonList$: this.salesPersonList$,
+                salesPersonUniqueName: this.salesPersonUniqueName,
+                archiveOnly,
+                title,
+                message,
+                button: {
+                    primaryText,
+                    secondaryText
+                }
+            }
+        });
+        this.transferAndDeleteDialogRef.afterClosed().subscribe(model => {
+            this.componentStore.archiveUnarchiveSalesPerson({ model: model, uniqueName: this.salesPersonUniqueName });
+        });
     }
 
     /**

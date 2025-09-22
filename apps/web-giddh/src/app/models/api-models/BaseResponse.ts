@@ -8,6 +8,7 @@ export class BaseResponse<TResponce, TRequest> {
     public queryString?: any;
     public statusCode?: number;
     public statusText?: string;
+    public errorDetails?: string[];
 }
 
 export interface PagedResponse {

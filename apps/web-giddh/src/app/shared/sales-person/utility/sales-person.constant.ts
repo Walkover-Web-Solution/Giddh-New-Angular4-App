@@ -20,6 +20,26 @@ export enum SalesPersonActionEnum {
 /** Sales Person Archive Enum */
 export enum SalesPersonArchiveEnum {
     ARCHIVE = 'ARCHIVED',
-    UNARCHIVE = 'UNARCHIVED',
+    UNARCHIVED = 'UNARCHIVED',
     BOTH = ''
+}
+
+/** Sales Person Error Details Enum */
+export enum SalesPersonErrorDetailsEnum {
+    ACCOUNT = 'account',
+    ENTRY_VOUCHER = 'entry/voucher'
+}
+
+/** Action Type Enum */
+export enum ActionTypeEnum {
+    TRANSFER = 'TRANSFER',
+    UNASSIGNED = 'UNASSIGNED',
+    UNARCHIVED = 'UNARCHIVED'
+}
+
+/** Sales Person Delete Archived Model */
+export interface SalesPersonDeleteArchivedModel {
+    action: ActionTypeEnum,
+    uniqueName?: string,
+    archiveOnly?: boolean // This send true in case archive only, if we proceed from delete and archive do not send this key
 }
