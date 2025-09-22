@@ -948,8 +948,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportDialogRef?.close();
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
-                    ...ASIDE_PANE_CONFIG,
-                    panelClass: 'aside-help-panel'
+                    width: '1000px',
+                    panelClass: 'aside-help-panel',
+                    hasBackdrop: false,
+                    position: {
+                        right: '0',
+                        top: '0'
+                    }
                 });
             }
         } else {

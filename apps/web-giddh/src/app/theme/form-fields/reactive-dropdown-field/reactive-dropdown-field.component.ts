@@ -183,7 +183,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (changes?.options) {
             this.fieldFilteredOptions$ = of(this.options);
             // Always try to set label value when options change, regardless of previous value
-            if (changes?.options?.currentValue?.length > 0) {
+            if (changes?.options) {
                 // Use setTimeout to ensure the value is properly set before trying to find the label
                 setTimeout(() => {
                     this.setLabelValue(null);
@@ -355,7 +355,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 this.controlLabelValue = this.labelValue || "";
             }
         } else {
-            this.controlLabelValue = this.labelValue;
+            this.controlLabelValue = this.labelValue || "";
         }
     }
 
