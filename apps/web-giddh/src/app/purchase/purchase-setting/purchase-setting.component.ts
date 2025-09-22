@@ -275,8 +275,8 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      */
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
-            data: voucherType,
-            ...ASIDE_PANE_CONFIG
+            ...ASIDE_PANE_CONFIG,
+            data: voucherType
         });
     }
 
