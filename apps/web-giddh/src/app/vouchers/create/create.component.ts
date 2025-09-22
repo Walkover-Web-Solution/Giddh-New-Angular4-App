@@ -6809,7 +6809,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {
+            this.getSalesPersonList();
+            // Need to check if sales person exists in the list in create case and clear the sales person field if not exists
+        })).subscribe();
     }
 
     /**

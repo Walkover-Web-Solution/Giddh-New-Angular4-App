@@ -128,7 +128,7 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                                 <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.ARCHIVE, element)">
-                                    {{ element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVE ? commonLocaleData?.app_archive : commonLocaleData?.app_unarchive }} {{commonLocaleData?.app_status}}
+                                    {{ element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED ? commonLocaleData?.app_archive : commonLocaleData?.app_unarchive }}
                                 </button>
                             </mat-menu>
                         </td>
