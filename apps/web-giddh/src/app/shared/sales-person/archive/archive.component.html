@@ -8,7 +8,7 @@
         </h3>
     </div>
     <mat-dialog-content class="dialog-body" [formGroup]="archiveForm">
-        <p>{{ inputData?.message }}</p>
+        <p [innerHTML]="inputData?.message"></p>
 
         <reactive-dropdown-field
             class="d-block w-50 mt-3"

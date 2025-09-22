@@ -1587,6 +1587,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         });
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+            if (salesPersonList && this.invoiceForm.get('salesPersonUniqueName').value && !this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                this.invoiceForm.get('salesPersonName').patchValue('');
+                this.invoiceForm.get('salesPersonUniqueName').patchValue(null);
+            }
+        });
     }
 
     /**
@@ -6809,10 +6816,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public openSalesPersonDialog(): void {
         const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {
-            this.getSalesPersonList();
-            // Need to check if sales person exists in the list in create case and clear the sales person field if not exists
-        })).subscribe();
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
     }
 
     /**

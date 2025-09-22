@@ -1,5 +1,7 @@
 <ng-container
     appTranslate
+    [file]="'sales-person'"
+    (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     [keyboardShortcut]="'esc'"
     (onShortcutPress)="closeDialog()"
