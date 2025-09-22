@@ -3261,7 +3261,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup
             .get("otherTax.amount")
             .patchValue(giddhRoundOff((taxableValue * tax?.taxDetail[0]?.taxValue) / 100, this.highPrecisionRate));
-
+            
         entryFormGroup.get("otherTax.calculationMethod").patchValue(calculationMethod);
         this.calculateReceiptPaymentAmount(entryFormGroup, isUpdate);
         this.changeDetection.detectChanges();
@@ -3985,8 +3985,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {FormGroup} entry
      * @memberof VoucherCreateComponent
      */
-    public updateTotalDiscount(totalDiscount: any, entry: FormGroup): void {
+    public updateTotalDiscount(totalDiscount: any, entry: FormGroup, isActiveEntry: boolean): void {
         entry.get("totalDiscount").patchValue(totalDiscount);
+        this.calculateOtherTaxAmount(entry, isActiveEntry);
+    }
+
+    /**
+     * Calculate other tax amount based on taxable value
+     *
+     * @private
+     * @param {FormGroup} entry
+     * @param {boolean} isActiveEntry
+     * @memberof VoucherCreateComponent
+     */
+    private calculateOtherTaxAmount(entry: FormGroup, isActiveEntry: boolean): void {
+        let taxableValue = 0;
+        if (!entry.get("transactions").value[0]?.amount?.amountForAccount || isActiveEntry) {
+            return;
+        }
+        const amountForAccount = Number(entry.get("transactions").value[0].amount.amountForAccount);
+        const totalDiscount = Number(entry.get("totalDiscount").value);
+
+        if (entry.get("otherTax").value?.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+            taxableValue = amountForAccount - totalDiscount;
+        } else {
+            taxableValue = amountForAccount - totalDiscount + entry.get("totalTaxWithoutCess").value + entry.get("totalCess").value;
+        }
+        const amount = giddhRoundOff(((taxableValue * entry.get("otherTax").value?.taxValue) / 100), HIGH_RATE_FIELD_PRECISION);
+        entry.get("otherTax.amount").patchValue(amount);
     }
 
     /**
