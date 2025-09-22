@@ -1314,7 +1314,7 @@
                                                                         [currency]="account.baseCurrencySymbol"
                                                                         (createNewDiscount)="showCreateDiscountDialog()"
                                                                         (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)"
-                                                                        (totalDiscount)="updateTotalDiscount($event, entry)"></discount-dropdown>
+                                                                        (totalDiscount)="updateTotalDiscount($event, entry, activeEntryIndex === entryIndex)"></discount-dropdown>
                                                                     <span
                                                                         class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
