@@ -355,7 +355,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ razorpaySuccess: null });
-                return this.subscriptionService.saveRazorpayToken(req.subscriptionId, req.paymentId, req.orderId).pipe(
+                return this.subscriptionService.saveRazorpayToken(req.subscriptionId, req.paymentId).pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === 'success') {
@@ -467,7 +467,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
      *
      * @memberof BuyPlanComponentStore
      */
-    readonly activatePlan = this.effect((data: Observable<any>) => {
+    readonly activatePlan = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ activatePlanSuccess: false });
