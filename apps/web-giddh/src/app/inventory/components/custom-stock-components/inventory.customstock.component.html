@@ -27,15 +27,13 @@
                                 [label]="'Unit Name'"
                             >
                                 <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a href="javascript:void(0)" class="list-item d-flex">
-                                            <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">
-                                                    {{ option?.label || "-" }} ({{ option?.value || "-" }})
-                                                </div>
-                                            </span>
-                                        </a>
-                                    </ng-container>
+                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                        <span class="entity-details">
+                                            <div class="item giddh-limit single-line-clamp">
+                                                {{ option?.label || "-" }} ({{ option?.value || "-" }})
+                                            </div>
+                                        </span>
+                                    </a>
                                 </ng-template>
                             </reactive-dropdown-field>
                             <input-field
@@ -83,17 +81,15 @@
                                             }"
                                         >
                                             <ng-template #optionTemplate let-option="option">
-                                                <ng-container>
-                                                    <a href="javascript:void(0)" class="list-item d-flex">
-                                                        <span class="entity-details">
-                                                            <div class="item giddh-limit single-line-clamp">
-                                                                {{ option?.label || "-" }} ({{
-                                                                    option?.value || "-"
-                                                                }})
-                                                            </div>
-                                                        </span>
-                                                    </a>
-                                                </ng-container>
+                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                    <span class="entity-details">
+                                                        <div class="item giddh-limit single-line-clamp">
+                                                            {{ option?.label || "-" }} ({{
+                                                                option?.value || "-"
+                                                            }})
+                                                        </div>
+                                                    </span>
+                                                </a>
                                             </ng-template>
                                         </reactive-dropdown-field>
                                     </div>
@@ -128,17 +124,15 @@
                                             }"
                                         >
                                             <ng-template #optionTemplate let-option="option">
-                                                <ng-container>
-                                                    <a href="javascript:void(0)" class="list-item d-flex">
-                                                        <span class="entity-details">
-                                                            <div class="item giddh-limit single-line-clamp">
-                                                                {{ option?.label || "-" }} ({{
-                                                                    option?.value || "-"
-                                                                }})
-                                                            </div>
-                                                        </span>
-                                                    </a>
-                                                </ng-container>
+                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                    <span class="entity-details">
+                                                        <div class="item giddh-limit single-line-clamp">
+                                                            {{ option?.label || "-" }} ({{
+                                                                option?.value || "-"
+                                                            }})
+                                                        </div>
+                                                    </span>
+                                                </a>
                                             </ng-template>
                                         </reactive-dropdown-field>
                                         <div class="pull-right unit-add">
@@ -244,6 +238,20 @@
                         </td>
                     </ng-container>
 
+                    <!-- Extra Header Row Columns -->
+                    <ng-container matColumnDef="customUnit">
+                        <th mat-header-cell *matHeaderCellDef>Custom Unit</th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="empty1">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="empty2">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="['customUnit', 'empty1', 'empty2']" class="extra-header-row"></tr>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="inventory-units-mapped"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="inventory-units-mapped"></tr>
                 </table>

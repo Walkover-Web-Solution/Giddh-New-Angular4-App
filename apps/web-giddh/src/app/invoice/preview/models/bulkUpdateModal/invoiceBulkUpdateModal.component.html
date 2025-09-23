@@ -1,222 +1,216 @@
 <div>
-    <div class="modal-header">
-        <h3 class="modal-title bg" id="modal-title">{{ localeData?.bulk_update }}</h3>
-        <button mat-stroked-button aria-hidden="true" (click)="onCancel()">×</button>
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ localeData?.bulk_update }}</span>
+        <button mat-icon-button aria-label="close" (click)="onCancel()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <form #bulkUpdateForm="ngForm" autocomplete="off" (ngSubmit)="updateBulkInvoice()">
-        <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
-            <small>{{ localeData?.choose_field_bulk_update }}</small>
-            <div class="row mr-b1 mt-2">
-                <div class="col-md-6 col-sm-6">
-                    <div class="form-group">
-                        <reactive-dropdown-field
-                            [placeholder]="commonLocaleData?.app_select"
-                            [options]="fieldOptions"
-                            [enableDynamicSearch]="true"
-                            [ngModelOptions]="{ standalone: true }"
-                            [(ngModel)]="selectedField"
-                            (selectedOption)="onSelectEntryField($event)"
-                        ></reactive-dropdown-field>
+    <mat-dialog-content class="dialog-body">
+        <form #bulkUpdateForm="ngForm" autocomplete="off" (ngSubmit)="updateBulkInvoice()">
+            <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+                <small>{{ localeData?.choose_field_bulk_update }}</small>
+                <div class="row mr-b1 mt-2">
+                    <div class="col-md-6 col-sm-6">
+                        <div class="form-group">
+                            <reactive-dropdown-field
+                                [placeholder]="commonLocaleData?.app_select"
+                                [options]="fieldOptions"
+                                [ngModelOptions]="{ standalone: true }"
+                                [(ngModel)]="selectedField"
+                                (selectedOption)="onSelectEntryField($event)"
+                            ></reactive-dropdown-field>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6">
+                        <div class="form-group" *ngIf="selectedField === 'pdfTemplate'">
+                            <reactive-dropdown-field
+                                [placeholder]="commonLocaleData?.app_select"
+                                [options]="allTemplatesOptions"
+                                [required]="true"
+                                [name]="'templateUniqueName'"
+                                [(ngModel)]="updateTemplatesRequest.templateUniqueName"
+                            ></reactive-dropdown-field>
+                        </div>
+
+                        <div class="form-group" *ngIf="selectedField === 'notes'">
+                            <textarea
+                                hasFocus
+                                #message2="hasFocus"
+                                class="form-control"
+                                [maxlength]="!showNotesAtLastPage ? 200 : null"
+                                [(ngModel)]="updateNotesRequest.message2"
+                                name="message2"
+                            ></textarea>
+                            <ng-container
+                                *ngIf="updateNotesRequest?.message2?.length && !showNotesAtLastPage && message2?.isFocused"
+                            >
+                                <span class="max-character-label">Characters left:&nbsp;</span
+                                ><span class="max-character-value">{{ 200 - updateNotesRequest?.message2?.length }}</span>
+                            </ng-container>
+                        </div>
+
+                        <div class="form-group" *ngIf="selectedField === 'signature'">
+                            <reactive-dropdown-field
+                                [placeholder]="commonLocaleData?.app_select_option"
+                                [options]="templateSignaturesOptions"
+                                [required]="true"
+                                [name]="'signatureOptions'"
+                                [(ngModel)]="signatureOptions"
+                            ></reactive-dropdown-field>
+                        </div>
+
+                        <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
+                            <giddh-datepicker
+                                [(ngModel)]="updateDueDatesRequest.dueDate"
+                                [appearance]="'outline'"
+                                required
+                            ></giddh-datepicker>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-sm-6">
-                    <div class="form-group" *ngIf="selectedField === 'pdfTemplate'">
-                        <reactive-dropdown-field
-                            [placeholder]="commonLocaleData?.app_select"
-                            [options]="allTemplatesOptions"
-                            [required]="true"
-                            [enableDynamicSearch]="true"
-                            [name]="'templateUniqueName'"
-                            [(ngModel)]="updateTemplatesRequest.templateUniqueName"
-                        ></reactive-dropdown-field>
-                    </div>
+                <div class="width-100">
+                    <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="upload-logo">
+                        <div class="form-group">
+                            <label [hidden]="isSignatureAttached">
+                                <input
+                                    type="file"
+                                    class="d-none"
+                                    name="bulkUploadfileInput"
+                                    id="bulkUploadfileInput"
+                                    (change)="uploadImage()"
+                                />
+                                <label class="cp font-15 text-gray" for="bulkUploadfileInput">
+                                    {{ localeData?.upload_logo }}
+                                </label>
+                            </label>
 
-                    <div class="form-group" *ngIf="selectedField === 'notes'">
+                            <label class="logo-preview" [hidden]="!isSignatureAttached">
+                                <div class="signature-image">
+                                    <img alt="" required id="signatureImage" [src]="signatureSrc" />
+                                </div>
+                                <div class="d-flex mt-1 justify-content-center">
+                                    <button mat-stroked-button type="button" (click)="clearImage()">
+                                        {{ commonLocaleData?.app_clear }}
+                                    </button>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedField === 'signature' && signatureOptions === 'slogan'">
                         <textarea
-                            hasFocus
-                            #message2="hasFocus"
-                            class="form-control"
-                            [maxlength]="!showNotesAtLastPage ? 200 : null"
-                            [(ngModel)]="updateNotesRequest.message2"
-                            name="message2"
-                        ></textarea>
-                        <ng-container
-                            *ngIf="updateNotesRequest?.message2?.length && !showNotesAtLastPage && message2?.isFocused"
-                        >
-                            <span class="max-character-label">Characters left:&nbsp;</span
-                            ><span class="max-character-value">{{ 200 - updateNotesRequest?.message2?.length }}</span>
-                        </ng-container>
-                    </div>
-
-                    <div class="form-group" *ngIf="selectedField === 'signature'">
-                        <reactive-dropdown-field
-                            [placeholder]="commonLocaleData?.app_select_option"
-                            [options]="templateSignaturesOptions"
-                            [required]="true"
-                            [enableDynamicSearch]="true"
-                            [name]="'signatureOptions'"
-                            [(ngModel)]="signatureOptions"
-                        ></reactive-dropdown-field>
-                    </div>
-
-                    <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
-                        <giddh-datepicker
-                            [(ngModel)]="updateDueDatesRequest.dueDate"
-                            [appearance]="'outline'"
                             class="form-control"
                             required
-                        ></giddh-datepicker>
+                            [(ngModel)]="updateSloganRequest.slogan"
+                            name="slogan"
+                        ></textarea>
                     </div>
-                </div>
-            </div>
 
-            <div class="width-100">
-                <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="upload-logo">
-                    <div class="form-group">
-                        <label [hidden]="isSignatureAttached">
-                            <input
-                                type="file"
-                                class="d-none"
-                                name="bulkUploadfileInput"
-                                id="bulkUploadfileInput"
-                                (change)="uploadImage()"
-                            />
-                            <label class="cp font-15 text-gray" for="bulkUploadfileInput">
-                                {{ localeData?.upload_logo }}
-                            </label>
-                        </label>
-
-                        <label class="logo-preview" [hidden]="!isSignatureAttached">
-                            <div class="signature-image">
-                                <img alt="" required id="signatureImage" [src]="signatureSrc" />
+                    <!-- TODO: under discussion -->
+                    <div *ngIf="selectedField === 'shippingDetails'">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" [placeholder]="localeData?.gst_number" />
+                                </div>
                             </div>
-                            <div class="d-flex mt-1 justify-content-center">
-                                <button mat-stroked-button type="button" (click)="clearImage()">
-                                    {{ commonLocaleData?.app_clear }}
-                                </button>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-                <div *ngIf="selectedField === 'signature' && signatureOptions === 'slogan'">
-                    <textarea
-                        class="form-control"
-                        required
-                        [(ngModel)]="updateSloganRequest.slogan"
-                        name="slogan"
-                    ></textarea>
-                </div>
 
-                <!-- TODO: under discussion -->
-                <div *ngIf="selectedField === 'shippingDetails'">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" [placeholder]="localeData?.gst_number" />
+                            <div class="col-md-6">
+                                <div class="relative form-group">
+                                    <reactive-dropdown-field
+                                        [placeholder]="commonLocaleData?.app_state"
+                                        [options]="allTemplatesOptions"
+                                        [required]="true"
+                                        [name]="'templateUniqueName'"
+                                    ></reactive-dropdown-field>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea
+                                        name=""
+                                        class="textarea form-control"
+                                        [placeholder]="commonLocaleData?.app_address"
+                                        rows="3"
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="selectedField === 'customFields'" class="row mb-2">
+                        <div class="col-md-4">
                             <div class="relative form-group">
-                                <reactive-dropdown-field
-                                    [placeholder]="commonLocaleData?.app_state"
-                                    [options]="allTemplatesOptions"
-                                    [required]="true"
-                                    [enableDynamicSearch]="true"
-                                    [name]="'templateUniqueName'"
-                                ></reactive-dropdown-field>
+                                <div class="form-group">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        [placeholder]="localeData?.custom_field1"
+                                        name="customField1"
+                                        [(ngModel)]="updateCustomfieldsRequest.customField1"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <textarea
-                                    name=""
-                                    class="textarea form-control"
-                                    [placeholder]="commonLocaleData?.app_address"
-                                    rows="3"
-                                ></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div *ngIf="selectedField === 'customFields'" class="row mb-2">
-                    <div class="col-md-4">
-                        <div class="relative form-group">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <input
                                     type="text"
                                     class="form-control"
-                                    [placeholder]="localeData?.custom_field1"
-                                    name="customField1"
-                                    [(ngModel)]="updateCustomfieldsRequest.customField1"
+                                    [placeholder]="localeData?.custom_field2"
+                                    name="customField2"
+                                    [(ngModel)]="updateCustomfieldsRequest.customField2"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    [placeholder]="localeData?.custom_field3"
+                                    name="customField3"
+                                    [(ngModel)]="updateCustomfieldsRequest.customField3"
                                 />
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <input
-                                type="text"
-                                class="form-control"
-                                [placeholder]="localeData?.custom_field2"
-                                name="customField2"
-                                [(ngModel)]="updateCustomfieldsRequest.customField2"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <input
-                                type="text"
-                                class="form-control"
-                                [placeholder]="localeData?.custom_field3"
-                                name="customField3"
-                                [(ngModel)]="updateCustomfieldsRequest.customField3"
-                            />
-                        </div>
-                    </div>
+                <div>
+                    <small>{{ localeData?.bulk_invoice_update_note }}</small>
                 </div>
             </div>
-
-            <div>
-                <small>{{ localeData?.bulk_invoice_update_note }}</small>
+            <div class="d-flex column-gap1 justify-content-end">
+                <button
+                    mat-raised-button color="primary"
+                    (click)="updateBulkInvoice()"
+                    [ladda]="updateInProcess"
+                    [disabled]="bulkUpdateForm.invalid"
+                >
+                    {{ commonLocaleData?.app_update }}
+                </button>
+                <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
             </div>
-        </div>
-        <div class="modal-footer d-flex justify-content-start">
-            <button
-                mat-raised-button color="primary"
-                (click)="updateBulkInvoice()"
-                [ladda]="updateInProcess"
-                [disabled]="bulkUpdateForm.invalid"
-            >
-                {{ commonLocaleData?.app_update }}
-            </button>
-            <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
-        </div>
-    </form>
+        </form>
+    </mat-dialog-content>
 </div>
 
 <!--InfoModel-->
 <ng-template #bulkUpdateImageSloganTemplate>
-    <div mat-dialog-title class="modal-header">
-        <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_confirmation }}</h3>
-        <button
-            mat-dialog-close
-            aria-hidden="true"
-            class="close"
-            (click)="onCancelBulkUpdateImageSloganModal()"
-        >
-            ×
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ commonLocaleData?.app_confirmation }}</span>
+        <button mat-icon-button aria-label="close" (click)="onCancelBulkUpdateImageSloganModal()">
+            <i class="icon-cross"></i>
         </button>
     </div>
-    <div mat-dialog-content class="model-body clearfix pd-2">
+    <div mat-dialog-content class="dialog-body">
         <h3>{{ localeData?.bulk_image_note }}</h3>
         <h4 class="mr-t2">
             <b> {{ localeData?.want_proceed }}</b>

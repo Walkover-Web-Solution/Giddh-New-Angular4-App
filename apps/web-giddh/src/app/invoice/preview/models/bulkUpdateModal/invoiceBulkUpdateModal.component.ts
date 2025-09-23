@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
-import { IOption } from '../../../../theme/ng-select/option.interface';
+import { IOption } from '../../../../app.constant';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
@@ -34,6 +34,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     @Input() public commonLocaleData: any = {};
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('bulkUpdateForm', { static: true }) public bulkUpdateForm: NgForm;
+    /* Template for bulk update image/slogan */
     @ViewChild('bulkUpdateImageSloganTemplate', { static: true }) public bulkUpdateImageSloganTemplate: TemplateRef<any>;
     public fieldOptions: IOption[] = [];
     public templateSignaturesOptions: IOption[] = [];
@@ -61,7 +62,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     public showNotesAtLastPage: boolean;
     public isDefaultTemplateSignatureImage: boolean;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Dialog reference for bulk update image/slogan confirmation */
     private bulkUpdateImageSloganDialogRef: MatDialogRef<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

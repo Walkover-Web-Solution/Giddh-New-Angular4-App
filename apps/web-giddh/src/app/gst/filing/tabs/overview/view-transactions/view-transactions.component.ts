@@ -68,7 +68,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Holds gst number */
     public selectedGstNumber: string = '';
     /** Holds table displayed columns name */
@@ -206,16 +206,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             if (invoice && invoice.account) {
                 this.selectedInvoice = invoice;
                 this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
-
-                // if (this.voucherApiVersion !== 2) {
-                //     downloadVoucherRequestObject = {
-                //         voucherNumber: [invoice.voucherNumber],
-                //         voucherType: invoice.voucherType,
-                //         accountUniqueName: invoice.account?.uniqueName
-                //     };
-
-                //     this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
-                // }
             }
             this.openDownloadOrSendMailDialog();
         }

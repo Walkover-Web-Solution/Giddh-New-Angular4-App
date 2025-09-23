@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integration.service';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -218,7 +217,7 @@ export class TriggersComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef?.afterClosed().subscribe(response => {
             if (response) {
                 this.campaignIntegrationService.deleteCommunicationPlatform(platformUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
@@ -446,14 +445,9 @@ export class TriggersComponent implements OnInit, OnDestroy {
      * @memberof TriggersComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (event.pageSize !== this.triggerObj.count) {
-            this.triggerObj.count = event.pageSize;
-            this.triggerObj.page = 1;
-            this.getTriggers();
-        } else {
-            this.triggerObj.page = event.pageIndex + 1;
-            this.getTriggers();
-        }
+        this.triggerObj.page = event.pageSize !== this.triggerObj.count ? 1 : event.pageIndex + 1;
+        this.triggerObj.count = event.pageSize;
+        this.getTriggers();
     }
 
     /**
@@ -741,7 +735,7 @@ export class TriggersComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef?.afterClosed().subscribe(response => {
             if (response) {
                 this.campaignIntegrationService.deleteTrigger(triggerUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {

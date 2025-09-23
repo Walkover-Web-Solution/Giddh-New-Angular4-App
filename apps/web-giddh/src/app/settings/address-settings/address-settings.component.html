@@ -22,6 +22,7 @@
                 color="primary"
                 type="button"
                 class="mr-0"
+                *ngIf="voucherApiVersion === 2"
                 (click)="openAddAndManage()"
                 aria-label="address"
             >
@@ -39,6 +40,7 @@
                 color="primary"
                 type="button"
                 class="mr-0"
+                *ngIf="voucherApiVersion === 2"
                 (click)="openAddAndManage()"
                 aria-label="address"
             >
@@ -374,13 +376,13 @@
     <div class="modal-md">
         <div class="modal-content">
             <div>
-                <div class="modal-header theme-bg pd-2 pl-2 pr-2 clearfix">
-                    <h3 mat-dialog-title class="modal-title bg" id="modal-title">
-                        {{ commonLocaleData?.app_confirmation }}
-                    </h3>
-                    <i mat-dialog-close class="icon-cross text-right close-modal"></i>
+                <div class="dialog-header theme-bg pd-2 pl-2 pr-2 clearfix">
+                    <span mat-dialog-title>{{ commonLocaleData?.app_confirmation }}</span>
+                    <button mat-icon-button aria-label="close" mat-dialog-close>
+                        <i class="icon-cross"></i>
+                    </button>
                 </div>
-                <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+                <mat-dialog-content class="dialog-body" id="export-body">
                     <form name="newRole" novalidate autocomplete="off">
                         <div class="modal-wrap mr-b2">
                             <h3>{{ localeData?.want_to_continue }}</h3>
@@ -406,7 +408,7 @@
                             </button>
                         </div>
                     </form>
-                </div>
+                </mat-dialog-content>
             </div>
         </div>
     </div>

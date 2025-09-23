@@ -7,6 +7,7 @@ import { saveAs } from "file-saver";
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
 import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-response.interface';
+import { PageEvent } from '@angular/material/paginator';
 
 
 @Component({
@@ -180,7 +181,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     * @param {*} event
     * @memberof AccountWiseReportComponent
     */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;

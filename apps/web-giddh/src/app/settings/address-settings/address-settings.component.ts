@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
@@ -325,15 +324,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (event.pageSize !== this.paginationLimit) {
-            this.paginationLimit = event.pageSize;
-            this.paginationConfig.count = event.pageSize;
-            this.paginationConfig.page = 1;
-            this.pageChanged.emit({ page: 1, count: event.pageSize, ...this.addressSearchRequest });
-        } else {
-            this.paginationConfig.page = event.pageIndex + 1;
-            this.pageChanged.emit({ page: event.pageIndex + 1, count: this.paginationLimit, ...this.addressSearchRequest });
-        }
+        this.paginationConfig.page = event.pageSize !== this.paginationLimit ? 1 : event.pageIndex + 1;
+        this.paginationConfig.count = event.pageSize;
+        this.pageChanged.emit({ page: this.paginationConfig.page, count: this.paginationConfig.count, ...this.addressSearchRequest });
     }
 
 

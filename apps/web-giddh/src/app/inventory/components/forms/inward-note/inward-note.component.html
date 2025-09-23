@@ -31,7 +31,7 @@
                         name="entryDate"
                         formControlName="inventoryEntryDate"
                         [appearance]="'outline'"
-                        class="form-control"
+                        [required]="true"
                     ></giddh-datepicker>
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
@@ -52,6 +52,7 @@
                         [disabled]="stock?.disabled"
                         formControlName="stock"
                         (selectedOption)="stockChanged($event)"
+                        [required]="true"
                     >
                     </reactive-dropdown-field>
                 </div>
@@ -63,6 +64,7 @@
                         [placeholder]="'Select Sender'"
                         formControlName="inventoryUser"
                         (selectedOption)="userChanged($event)"
+                        [required]="true"
                     >
                     </reactive-dropdown-field>
                 </div>

@@ -167,6 +167,7 @@
                                 mat-stroked-button
                                 type="button"
                                 (click)="showTallyReportOptions()"
+                                [disabled]="voucherApiVersion === 1"
                             >
                                 <span class="d-inline-block nowrap">{{ localeData?.reconcile_mode }}</span>
                             </button>
@@ -177,6 +178,7 @@
                                 color="primary"
                                 type="button"
                                 (click)="showTallyReportOptions()"
+                                [disabled]="voucherApiVersion === 1"
                             >
                                 <span class="d-inline-block nowrap">{{ localeData?.reconcile_mode }}</span>
                             </button>

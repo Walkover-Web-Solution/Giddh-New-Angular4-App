@@ -13,7 +13,6 @@ import { InwardNoteComponent } from './components/forms/inward-note/inward-note.
 import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { InventoryUserComponent } from './components/forms/inventory-user/inventory-user.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
@@ -47,7 +46,6 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         ReactiveFormsModule,
         FormsModule,
         CommonModule, 
-        SelectModule, 
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

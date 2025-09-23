@@ -1,13 +1,13 @@
 <ng-container appTranslate [file]="'inventory'" (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event">
     <div class="inventory-advance-search">
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">{{ localeData?.advance_search_filter?.advance_search }}</h4>
-            <button mat-stroked-button type="button" class="close pull-right" (click)="advanceFilterClose()" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.advance_search_filter?.advance_search }}</span>
+            <button mat-icon-button aria-label="close" (click)="advanceFilterClose()">
+                <i class="icon-cross"></i>
             </button>
         </div>
-        <div class="modal-body">
+        <mat-dialog-content class="dialog-body">
             <form>
                 <div class="row">
                     <div class="col-lg-12">
@@ -62,13 +62,13 @@
                                 ">
                                 {{ commonLocaleData?.app_search }}
                             </button>
-                            <button id="clear-btn" mat-stroked-button class="mr-0" (click)="initializeForm()">
+                            <button mat-stroked-button class="mr-0" (click)="initializeForm()">
                                 {{ commonLocaleData?.app_reset }}
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
-        </div>
+        </mat-dialog-content>
     </div>
 </ng-container>

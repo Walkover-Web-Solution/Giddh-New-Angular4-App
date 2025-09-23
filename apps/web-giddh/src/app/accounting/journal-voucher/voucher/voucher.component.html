@@ -241,7 +241,7 @@
 
             <div class="clearfix row">
                 <div class="col-xs-9 col-sm-9">
-                    <div class="form-group custom-textarea">
+                    <div class="form-group">
                         <mat-form-field appearance="outline" class="w-50" floatLabel="always">
                             <mat-label>{{
                                 localeData?.narration
@@ -250,7 +250,8 @@
                                 #narrationBox
                                 id="narration"
                                 formControlName="description"
-                                (keydown)="handleEnterKeyPress($event, submitButton)"
+                                (keydown.Enter)="handleEnterAndTabKeyPress($event, submitButton)"
+                                (keydown.Tab)="handleEnterAndTabKeyPress($event, submitButton)"
                                 resize="false"
                                 rows="3"
                                 matInput
@@ -274,6 +275,7 @@
                                         type="button"
                                         [keyboardShortcut]="'ctrl+a'"
                                         (onShortcutPress)="openConfirmBoxFromShortcut(submitButton)"
+                                        [disabled]="voucherApiVersion === 1"
                                     >
                                         {{ commonLocaleData?.app_yes }}
                                     </button>
@@ -493,19 +495,13 @@
 
 <!--Modal for All Items -->
 <ng-template #chequeEntryModal>
-    <div class="modal-header theme-bg pd-l2 pd-r2">
-        <h3 class="modal-title bg" id="modal-title">{{ localeData?.cheque_details }}</h3>
-        <button
-            mat-icon-button
-            aria-hidden="true"
-            class="close"
-            [attr.aria-label]="commonLocaleData?.app_close"
-            (click)="closeChequeDetailForm()"
-        >
-            ×
+    <div class="dialog-header">
+        <span mat-dialog-title>{{ localeData?.cheque_details }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeChequeDetailForm()">
+            <i class="icon-cross"></i>
         </button>
     </div>
-    <div class="modal-body pd-l2 pd-r2 clearfix d-flex">
+    <mat-dialog-content class="dialog-body">
         <form
             *ngIf="chequeDetailForm"
             autocomplete="off"
@@ -533,7 +529,7 @@
                 <giddh-datepicker
                     [name]="'entryDate'"
                     [placeholder]="giddhDateFormat"
-                    [cssClass]="'form-control voucher-date-field'"
+                    [cssClass]="'voucher-date-field'"
                     formControlName="chequeClearanceDate"
                     [showToggleIcon]="false"
                     (keydown.enter)="$event.preventDefault()"
@@ -544,8 +540,6 @@
                 </giddh-datepicker>
             </div>
         </form>
-    </div>
-    <div class="modal-footer">
         <div class="d-flex float-end column-gap15">
             <button
                 mat-raised-button
@@ -560,5 +554,5 @@
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>
-    </div>
+    </mat-dialog-content>
 </ng-template>

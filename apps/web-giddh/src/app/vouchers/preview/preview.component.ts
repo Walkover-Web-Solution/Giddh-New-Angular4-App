@@ -194,6 +194,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public voucherTypeEnum: any = VoucherTypeEnum;
     /** Holds true when need to refresh page */
     private isRefresh: boolean = null;
+    /** Voucher api version */
+    public voucherApiVersion: number;
 
     constructor(
         private router: Router,
@@ -220,6 +222,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @memberof VouchersPreviewComponent
     */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -713,7 +716,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     poUniqueName: this.selectedInvoice?.uniqueName
                 };
             }
-            if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
+            if (this.generalService.voucherApiVersion === 1 && [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.payment, VoucherTypeEnum.receipt].includes(this.voucherType)) {
                 getRequest = {
                     accountUniqueName: this.selectedInvoice.account?.uniqueName,
                     voucherNumber: [this.selectedInvoice.voucherNumber],
@@ -799,8 +802,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             model.postRequestObject[this.voucherType === VoucherTypeEnum.generateProforma ? 'proformaNumber' : 'estimateNumber'] = this.selectedInvoice?.voucherNumber;
         }
         this.dialog.open(this.historyAsideDialog, {
-            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData },
-            ...ASIDE_PANE_CONFIG
+            ...ASIDE_PANE_CONFIG,
+            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData }
         });
     }
 

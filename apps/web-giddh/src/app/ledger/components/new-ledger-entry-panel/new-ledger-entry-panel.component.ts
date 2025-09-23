@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ASIDE_PANE_CONFIG, HIGH_RATE_FIELD_PRECISION, IOption, RATE_FIELD_PRECISION, SubVoucher } from 'apps/web-giddh/src/app/app.constant';
@@ -237,7 +236,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** True if more details is open */
     public isMoreDetailsOpen: boolean;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** True if user itself checked the generate voucher  */
     public manualGenerateVoucherChecked: boolean = true;
     /** Holds input to get invoice list request params */
@@ -919,10 +918,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
                     transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
             }
-            // if (this.generalService.voucherApiVersion === 1) {
-            //     /** From API, for v1 companies, isStock key is creating issue in entry creation */
-            //     delete transaction?.isStock;
-            // }
         });
         this.saveBlankLedger.emit(true);
     }
@@ -944,7 +939,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        this.deleteAttachedFileDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.deleteAttachedFileDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.deleteAttachedFile();
             }
@@ -1043,7 +1038,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.mapBankTransaction();
             }
@@ -1541,7 +1536,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.isRcmPopupOpen = false;
             this.handleRcmChange(response);
         });
@@ -1786,7 +1781,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             panelClass: 'container-modal-class'
         });
 
-        this.adjustmentDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.adjustmentDialogRef.afterClosed().subscribe(response => {
             this.isAdjustmentPopupOpen = false;
         });
     }
@@ -2248,7 +2243,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public showCreateDiscountDialog(): void {
         this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
-        this.discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.discountDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getAllDiscounts();
             }

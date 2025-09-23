@@ -333,6 +333,17 @@
                             "queryParams": { "addVendor" : true }
                         }
                     }
+                },
+                {
+                    "label": "टेम्पलेट",
+                    "link": "/pages/vouchers/preview/purchase/templates",
+                    "icon": "icon-template",
+                    "description": "टेम्पलेटची रचना आणि सामग्री संपादित करा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -645,18 +656,6 @@
                     "label": "आयात करतो",
                     "link": "/pages/import/select-type",
                     "icon": "icon-tally-import1"
-                },
-                {
-                    "label": "बहु-चलन अहवाल",
-                    "link": "/pages/multi-currency-report",
-                    "icon": "icon-multi-currency",
-                    "description": "बहु-चलन अहवाल",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2,
-                            "tabIndex": 0
-                        }
-                    }
                 },
                 {
                     "label": "प्रकल्पनिहाय लेखांकन",

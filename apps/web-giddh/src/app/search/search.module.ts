@@ -49,7 +49,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         }),
         DecimalDigitsModule,
         Daterangepicker,
-        
         ClickOutsideModule,
         CurrencyModule,
         SharedModule,

@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatCommonModule } from "@angular/material/core";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatMenuModule } from "@angular/material/menu";
@@ -28,7 +29,6 @@ import { SharedModule } from "../shared/shared.module";
 import { VoucherAddBulkItemsModule } from "../shared/voucher-add-bulk-items/voucher-add-bulk-items.module";
 import { DiscountControlModule } from "../theme/discount-control/discount-control.module";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
-import { SelectModule } from "../theme/ng-select/ng-select";
 import { TaxControlModule } from "../theme/tax-control/tax-control.module";
 import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
@@ -58,7 +58,6 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
             style: "slide-left",
             spinnerSize: 30,
         }),
-        SelectModule.forRoot(),
         SendEmailInvoiceModule,
         VoucherTypeToNamePipeModule,
         CurrencyModule,
@@ -74,6 +73,7 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         MatCommonModule,
         MatButtonModule,
         MatCheckboxModule,
+        MatDialogModule,
         MatTableModule,
         MatSelectModule,
         MatFormFieldModule,

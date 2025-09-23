@@ -663,7 +663,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.recipeObject.manufacturingDetails[recipeIndex].linkedStocks = this.recipeObject.manufacturingDetails[recipeIndex].linkedStocks?.filter((linkedStock, i) => i !== index);
                 this.changeDetectionRef.detectChanges();
@@ -690,7 +690,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 if (this.recipeObject.manufacturingDetails[0].byProducts.length === 1) {
                     this.recipeObject.manufacturingDetails[0].byProducts = [
@@ -732,7 +732,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.recipeObject.manufacturingDetails = this.recipeObject.manufacturingDetails?.filter((recipe, i) => i !== index);
                 this.changeDetectionRef.detectChanges();

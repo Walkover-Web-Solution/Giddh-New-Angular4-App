@@ -116,6 +116,7 @@
                         <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                         <td mat-cell *matCellDef="let element; let i = index" class="text-right">
                             <button
+                                *ngIf="voucherApiVersion === 2" 
                                 [ngClass]="{'invisible': activeRowIndex !== i}"
                                 mat-icon-button
                                 [matMenuTriggerFor]="menu"

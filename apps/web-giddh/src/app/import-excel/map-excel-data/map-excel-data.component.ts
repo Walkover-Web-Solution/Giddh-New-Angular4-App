@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChildren } from '@angular/core';
 import { HeaderItem, ImportExcelResponseData, Mappings } from '../../models/api-models/import-excel';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 import { cloneDeep } from '../../lodash-optimized';
 import { ServiceConfig } from '../../services/service.config';
 

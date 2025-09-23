@@ -113,6 +113,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public isAddressInfoOpen: string = '';
     /** True if last address info is open */
     public isLastAddressInfoOpen: boolean = false;
+    /** Voucher API version */
+    public voucherApiVersion: number;
 
     /** @ignore */
     constructor(
@@ -139,6 +141,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
@@ -236,14 +239,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handlePageEvent(event: PageEvent): void {
         this.showLoader = true;
-        if (event.pageSize !== this.paginationLimit) {
-            this.paginationLimit = event.pageSize;
-            this.currentPage = 1;
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: event.pageSize }));
-        } else {
-            this.currentPage = event.pageIndex + 1;
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.pageIndex + 1, count: this.paginationLimit }));
-        }
+        this.currentPage = event.pageSize !== this.paginationLimit ? 1 : event.pageIndex + 1;
+        this.paginationLimit = event.pageSize;
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: this.currentPage, count: this.paginationLimit }));
     }
 
 

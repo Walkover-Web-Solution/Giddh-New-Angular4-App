@@ -22,7 +22,7 @@
                 <button
                     mat-raised-button
                     color="primary"
-                    (click)="onUploadFile($event, fileInput)"
+                    (click)="onUploadFile($event, fileInput, true)"
                     *ngIf="!isCompany && !isConsolidatedBranch"
                 >
                     {{ localeData?.upload_button }}
@@ -50,14 +50,13 @@
                     />
                     <button
                         aria-label="show"
-                        mat-raised-button
-                        color="primary"
+                        mat-stroked-button
                         [disabled]="isCompany || isConsolidatedBranch"
                         class="icomoon-ico d-flex align-items-center cursor-pointer"
                         [matTooltip]="commonLocaleData?.app_upload"
                         matTooltipClass="tooltip-black"
                         [matTooltipPosition]="'above'"
-                        (click)="onUploadFile($event, fileInput)"
+                        (click)="onUploadFile($event, fileInput, false)"
                     >
                         <giddh-progress-spinner
                             *ngIf="ocrUploadInProgress$ | async"
@@ -67,7 +66,7 @@
                     </button>
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="overflow-visible">
                         <mat-button-toggle
-                            [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0"
+                            [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0 || voucherApiVersion === 1"
                             value="create"
                             (click)="onToggleChange(ocrAction.Create)"
                             [checked]="selectedToggle === ocrAction.Create"

@@ -269,34 +269,30 @@
                                 <!-- not show content -->
                                 <div class="modal-dialog modal-md">
                                     <div class="modal-content">
-                                        <div class="modal-header clearfix">
-                                            <h3>{{ commonLocaleData?.app_confirmation }}</h3>
-                                            <button
-                                                mat-stroked-button
-                                                aria-hidden="true"
-                                                class="close"
-                                                (click)="onUserConfirmation(false)"
-                                                data-dismiss="modal"
-                                            >
-                                                ×
+                                        <div class="dialog-header clearfix">
+                                            <span mat-dialog-title>{{ commonLocaleData?.app_confirmation }}</span>
+                                            <button mat-icon-button aria-label="close" mat-dialog-close (click)="onUserConfirmation(false)">
+                                                <i class="icon-cross"></i>
                                             </button>
                                         </div>
-                                        <div class="modal-body" [innerHTML]="confirmationMessage"></div>
-                                        <div class="modal-footer clearfix">
-                                            <button
-                                                mat-raised-button
-                                                color="primary"
-                                                (click)="onUserConfirmation(true)"
-                                            >
-                                                {{ commonLocaleData?.app_yes }}
-                                            </button>
-                                            <button
-                                                mat-stroked-button
-                                                (click)="onUserConfirmation(false)"
-                                            >
-                                                {{ commonLocaleData?.app_no }}
-                                            </button>
-                                        </div>
+                                        <mat-dialog-content class="dialog-body">
+                                            <div [innerHTML]="confirmationMessage"></div>
+                                            <div class="d-flex justify-content-end column-gap1 mt-3">
+                                                <button
+                                                    mat-raised-button
+                                                    color="primary"
+                                                    (click)="onUserConfirmation(true)"
+                                                >
+                                                    {{ commonLocaleData?.app_yes }}
+                                                </button>
+                                                <button
+                                                    mat-stroked-button
+                                                    (click)="onUserConfirmation(false)"
+                                                >
+                                                    {{ commonLocaleData?.app_no }}
+                                                </button>
+                                            </div>
+                                        </mat-dialog-content>
                                         <!-- modal footer -->
                                     </div>
                                 </div>

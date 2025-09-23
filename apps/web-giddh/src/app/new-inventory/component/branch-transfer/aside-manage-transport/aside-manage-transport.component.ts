@@ -224,7 +224,7 @@ export class AsideManageTransportComponent implements OnInit {
             }
         });
 
-        this.confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.confirmModalDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.isLoading = true
                 this.invoiceServices.deleteTransporterById(transporter.transporterId).pipe(takeUntil(this.destroyed$)).subscribe(response => {

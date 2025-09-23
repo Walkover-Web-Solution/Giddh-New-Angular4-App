@@ -201,11 +201,13 @@
 </div>
 <!--email varify modal  -->
 <ng-template #emailVerifyTemplate>
-    <div mat-dialog-title class="modal-header">
-        <h3>Sign Up with Giddh</h3>
-        <button mat-dialog-close class="close">×</button>
+    <div class="dialog-header">
+        <span mat-dialog-title>Sign Up with Giddh</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close (click)="hideEmailModal()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <div mat-dialog-content class="modal-body clearfix">
+    <mat-dialog-content class="dialog-body">
         <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
             <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
                 <input
@@ -259,17 +261,19 @@
                 >
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </ng-template>
 <!--email varify modal  -->
 
 <!--mobile varify form  -->
 <ng-template #mobileVerifyTemplate>
-    <div mat-dialog-title class="modal-header">
-        <h3>Sign Up with Giddh</h3>
-        <button mat-dialog-close class="close">×</button>
+    <div class="dialog-header">
+        <span mat-dialog-title>Sign Up with Giddh</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close (click)="hideMobileModal()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <div mat-dialog-content class="modal-body clearfix">
+    <mat-dialog-content class="dialog-body">
         <form
             class="col-xs-12"
             id="verifyMobile"
@@ -332,19 +336,19 @@
                 </button>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </ng-template>
 <!--mobile verify form  -->
 
 <!-- two way auth popup -->
 <ng-template #twoWayAuthTemplate>
-    <div mat-dialog-title class="modal-header">
-        <h3>Sign Up with Giddh</h3>
-        <button mat-dialog-close class="close" (click)="resetTwoWayAuthModal()">
-            ×
+    <div class="dialog-header">
+        <span mat-dialog-title>Sign Up with Giddh</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close (click)="resetTwoWayAuthModal()">
+            <i class="icon-cross"></i>
         </button>
     </div>
-    <div mat-dialog-content class="modal-body clearfix">
+    <mat-dialog-content class="dialog-body">
         <form
             class="col-xs-12"
             id="authModal"
@@ -369,7 +373,7 @@
                 </button>
             </div>
         </form>
-    </div>
+    </mat-dialog-content>
 </ng-template>
 <!-- two way auth popup -->
 <div

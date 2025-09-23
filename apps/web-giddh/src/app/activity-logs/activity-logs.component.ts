@@ -196,9 +196,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.body?.classList?.add("activity-log-page");
-        // if (this.generalService.voucherApiVersion === 1) {
-        //     this.router.navigate(['/pages/home']);
-        // }
+        if (this.generalService.voucherApiVersion === 1) {
+            this.router.navigate(['/pages/home']);
+            return;
+        }
         this.getFormFilter();
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data?.status === 'success') {

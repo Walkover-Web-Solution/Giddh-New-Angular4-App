@@ -62,7 +62,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
-import { IOption } from '../theme/ng-select/option.interface';
+import { IOption } from '../app.constant';
 
 @Component({
     selector: 'ledger',
@@ -261,7 +261,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
     public isMoreDetailsOpened: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Selected entry details */
     public selectedItem: any;
     /** Pagination Object */
@@ -289,7 +289,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds if we need bank ledger popup to be hidden */
     private isHideBankLedgerPopup: boolean = false;
     /** Ledger aside pan modal */
-    private ledgerAsidePaneDialogRef: any;
+    public ledgerAsidePaneDialogRef: any;
     /** Total pages for reference vouchers */
     public referenceVouchersTotalPages: number = 1;
     /** Returns true if account is selected else false */
@@ -359,7 +359,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Hold ledger grid total columns static value */
     public ledgerGridTotalColumns: number = 4;
     /** Hold ledger grid total columns value */
-    public ledgerGridColumnsValue: number[] = [1, 2, 1]
+    public ledgerGridColumnsValue: number[] = [1, 2, 1];
     /** Store ledger account response */
     public ledgerAccountResponse: AccountResponse | AccountResponseV2;
     /** Observable for post balance success response */
@@ -587,7 +587,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);
@@ -1057,7 +1057,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     ariaLabel: 'confirmation'
                 });
 
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                dialogRef.afterClosed().subscribe(response => {
                     if (typeof response === "boolean") {
                         this.entryUniqueNamesForBulkAction = cloneDeep(this.entryUniqueNamesForBulkActionDuplicateCopy);
                         if (response) {
@@ -1093,7 +1093,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     ariaLabel: 'confirmation'
                 });
 
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                dialogRef.afterClosed().subscribe(response => {
                     if (response) {
                         this.confirmMergeEntry();
                     } else {
@@ -1113,7 +1113,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     ariaLabel: 'confirmation'
                 });
 
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                dialogRef.afterClosed().subscribe(response => {
                     if (response) {
                         if (this.updateLedgerModalDialogRef && this.dialog.getDialogById(this.updateLedgerModalDialogRef.id)) {
                             this.generateEInvoice = true;
@@ -1493,7 +1493,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             disableClose: true,
             data: { pincode: this.ledgerAccountResponse?.addresses?.[0]?.pincode, gstNumber: this.ledgerAccountResponse?.addresses?.[0]?.gstNumber }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.saveBlankTransaction(response);
         });
     }
@@ -1536,7 +1536,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 configuration: this.generalService.deleteConfiguration(this.localeData?.convert_entries_message, this.commonLocaleData)
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.saveBulkBankTransaction();
             }
@@ -1908,7 +1908,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'export'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.onShowColumnarReportTable(response);
             }
@@ -2100,7 +2100,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'update'
         })
 
-        this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        this.updateLedgerModalDialogRef.afterClosed().subscribe((response) => {
             this.entryManipulated();
             if (this.isAdvanceSearchImplemented) {
                 this.createLedgerBalance();
@@ -2495,7 +2495,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'confirmation'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.onConfirmationBulkActionConfirmation();
             } else {
@@ -2511,7 +2511,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public showBulkActionGenerateVoucherModal(): void {
         let dialogRef = this.dialog.open(GenerateVoucherConfirmationModalComponent, {
-            width: '630px',
+            panelClass: "mat-dialog-md",
             data: {
                 title: this.commonLocaleData?.app_confirmation,
                 body: this.localeData?.select_voucher_generate,
@@ -2522,7 +2522,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'bulk'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (typeof response === "boolean") {
                 this.onSelectInvoiceGenerateOption(response);
             }
@@ -2585,7 +2585,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public openLedgerAsidePaneDialog(): void {
         this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
 
-        this.ledgerAsidePaneDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.ledgerAsidePaneDialogRef.afterClosed().subscribe(response => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
@@ -3049,7 +3049,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             autoFocus: false
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getBankTransactions();
             }
@@ -3222,7 +3222,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'confirmation'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.deleteBankTransactions();
             }
@@ -3394,7 +3394,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ariaLabel: 'template'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.getTransactionData();
         });
     }
@@ -3435,7 +3435,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 cancel: this.commonLocaleData?.app_no
             }
         });
-        dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef?.afterClosed().subscribe(response => {
             if (response) {
                 this.ledgerService.runAutopaid(this.trxRequest.accountUniqueName, this.trxRequest.branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
@@ -3682,7 +3682,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 width: '600px',
                 disableClose: true
             });
-            this.bankIntegrationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.bankIntegrationDialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     if (response === 'integrate') {
                         this.openInstitutionsDialog();

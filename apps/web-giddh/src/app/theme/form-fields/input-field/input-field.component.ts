@@ -92,14 +92,13 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public labelIconTooltip: string = null;
     /** Emits on change event */
     @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
-    /** Emits on suffix icon click */
-    @Output() public clickOnSuffix: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
     public stateChanges = new Subject<void>();
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
+    /** Callback function to notify parent component of value changes */
     private onChangeCallback: (_: any) => void = noop;
     /** It will show Icon prefix in the text field */
     @Input() public matPrefixIcon: string = "";
@@ -300,15 +299,6 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      */
     public handleFocus(event: Clipboard): void {
         this.onFocus.emit(event);
-    }
-
-    /**
-     * Emits click on suffix icon
-     *
-     * @memberof InputFieldComponent
-     */
-    public clickOnSuffixIcon(): void {
-        this.clickOnSuffix.emit(true);
     }
 
     /**

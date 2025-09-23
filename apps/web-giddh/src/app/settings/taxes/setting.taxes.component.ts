@@ -8,13 +8,14 @@ import * as dayjs from 'dayjs';
 import { CompanyActions } from '../../actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
-import { IOption } from '../../theme/ng-select/ng-select';
+import { IOption } from '../../app.constant';
 import { IForceClear } from '../../models/api-models/Sales';
 import { cloneDeep, each, map } from '../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'setting-taxes',
@@ -58,15 +59,19 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     public createUpdateDialogRef: MatDialogRef<any>;
     /** Holds tax delete confirmation dialog reference */
     public taxConfirmationDialogRef: MatDialogRef<any>;
+    /** Voucher API Version */
+    public voucherApiVersion: number;
 
     constructor(
         private store: Store<AppState>,
         private _companyActions: CompanyActions,
         private _settingsTaxesActions: SettingsTaxesActions,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private generalService: GeneralService
     ) { }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         for (let i = 1; i <= 31; i++) {
             let day = i?.toString();
             this.days.push({ label: day, value: day });
@@ -136,7 +141,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.userConfirmation(response);
         });
     }

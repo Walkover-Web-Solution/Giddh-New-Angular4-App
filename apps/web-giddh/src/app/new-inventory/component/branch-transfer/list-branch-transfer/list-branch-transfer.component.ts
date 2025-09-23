@@ -336,7 +336,11 @@ export class ListBranchTransferComponent implements OnInit {
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferForm.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response?.status === "success") {
-                this.branchTransferPaginationObject.page = response.body.page;
+                if (this.branchTransferPaginationObject.totalItems > 0 && response.body?.items?.length === 0 && this.branchTransferPaginationObject.page > 1) {
+                    this.branchTransferPaginationObject.page = response.body.totalPages;
+                    this.getBranchTransferList(false);
+                    return;
+                }
                 this.branchTransferPaginationObject.totalPages = response.body.totalPages;
                 this.branchTransferPaginationObject.totalItems = response.body.totalItems;
                 this.branchTransferResponse = response.body?.items;
@@ -496,7 +500,7 @@ export class ListBranchTransferComponent implements OnInit {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === 'Yes') {
                 this.deleteNewBranchTransfer()
             } else {
@@ -515,7 +519,6 @@ export class ListBranchTransferComponent implements OnInit {
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", response.body);
-                this.branchTransferPaginationObject.page = this.generalService.adjustPageIndex(this.branchTransferPaginationObject.totalItems, this.branchTransferPaginationObject.page, this.branchTransferPaginationObject.count);
                 this.getBranchTransferList(false);
             } else {
                 this.toaster.showSnackBar("error", response.message);

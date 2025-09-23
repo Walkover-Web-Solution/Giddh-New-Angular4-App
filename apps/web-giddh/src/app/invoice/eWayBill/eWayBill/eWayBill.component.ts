@@ -154,6 +154,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Holds Store Eway Bill from place by pincode API response state as observable*/
     public ewayBillFromPlace$: Observable<any> = this.componentStore.select(state => state.fromPlace);
+    /** Voucher API Version */
+    public voucherApiVersion: number;
 
     constructor(
         private store: Store<AppState>,
@@ -171,6 +173,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private voucherComponentStore: VoucherComponentStore,
         private componentStore: EwayBillComponentStore
     ) {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.EwayBillfilterRequest.count = PAGINATION_LIMIT;
         this.EwayBillfilterRequest.page = 1;
 

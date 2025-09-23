@@ -268,7 +268,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
             
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     if (index === 0) {
                         if (mappingForm.get('uniqueName')?.value) {

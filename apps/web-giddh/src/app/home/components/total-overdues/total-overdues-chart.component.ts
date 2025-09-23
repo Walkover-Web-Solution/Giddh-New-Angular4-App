@@ -69,7 +69,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     /** this will store active company data */
     public activeCompany: any = {};
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
     /** Chart object */

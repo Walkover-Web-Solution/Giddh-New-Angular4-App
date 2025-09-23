@@ -162,7 +162,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Stock search request */
     public stockSearchRequest: any;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Invoice Settings */
     public invoiceSettings: any;
     /** True if round off will be applicable */
@@ -2979,6 +2979,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             data: {
                 voucherType: this.voucherType,
                 exchangeRate: this.invoiceForm.get("exchangeRate")?.value ?? 1,
+                highPrecisionRate: this.highPrecisionRate,
                 customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
             },
         });
@@ -3272,7 +3273,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup
             .get("otherTax.amount")
             .patchValue(giddhRoundOff((taxableValue * tax?.taxDetail[0]?.taxValue) / 100, this.highPrecisionRate));
-
+            
         entryFormGroup.get("otherTax.calculationMethod").patchValue(calculationMethod);
         this.calculateReceiptPaymentAmount(entryFormGroup, isUpdate);
         this.changeDetection.detectChanges();
@@ -3996,8 +3997,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {FormGroup} entry
      * @memberof VoucherCreateComponent
      */
-    public updateTotalDiscount(totalDiscount: any, entry: FormGroup): void {
+    public updateTotalDiscount(totalDiscount: any, entry: FormGroup, isActiveEntry: boolean): void {
         entry.get("totalDiscount").patchValue(totalDiscount);
+        this.calculateOtherTaxAmount(entry, isActiveEntry);
+    }
+
+    /**
+     * Calculate other tax amount based on taxable value
+     *
+     * @private
+     * @param {FormGroup} entry
+     * @param {boolean} isActiveEntry
+     * @memberof VoucherCreateComponent
+     */
+    private calculateOtherTaxAmount(entry: FormGroup, isActiveEntry: boolean): void {
+        let taxableValue = 0;
+        if (!entry.get("transactions").value[0]?.amount?.amountForAccount || isActiveEntry) {
+            return;
+        }
+        const amountForAccount = Number(entry.get("transactions").value[0].amount.amountForAccount);
+        const totalDiscount = Number(entry.get("totalDiscount").value);
+
+        if (entry.get("otherTax").value?.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+            taxableValue = amountForAccount - totalDiscount;
+        } else {
+            taxableValue = amountForAccount - totalDiscount + entry.get("totalTaxWithoutCess").value + entry.get("totalCess").value;
+        }
+        const amount = giddhRoundOff(((taxableValue * entry.get("otherTax").value?.taxValue) / 100), HIGH_RATE_FIELD_PRECISION);
+        entry.get("otherTax.amount").patchValue(amount);
     }
 
     /**
@@ -4394,7 +4421,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.eWayBillResponse = response;
             this.saveVoucher();
         });
@@ -4980,7 +5007,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
             const deposits = this.invoiceForm.get("deposits") as FormArray;
             let accountUniqueName = this.invoiceType.isCashInvoice
-                ? deposits.at(0).get("accountUniqueName")?.value ?? invoiceForm.account?.uniqueName ?? "cash"
+                ? deposits.at(0).get("accountUniqueName")?.value || invoiceForm.account?.uniqueName || "cash"
                 : invoiceForm.account?.uniqueName;
             if (invoiceForm?.account?.uniqueName) {
                 invoiceForm.account.uniqueName = accountUniqueName;

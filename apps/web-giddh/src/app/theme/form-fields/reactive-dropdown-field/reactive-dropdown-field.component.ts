@@ -1,8 +1,9 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
-import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, of, skip, takeUntil } from "rxjs";
+import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { IOption } from "../../../app.constant";
+import { isEqual } from "../../../lodash-optimized";
 
 @Component({
     selector: "reactive-dropdown-field",
@@ -61,8 +62,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showError: boolean = false;
     /** Holds label of value */
     @Input() public labelValue: any = '';
+    /** Holds label of value to show in the field */
+    public controlLabelValue: any = this.labelValue;
     /** Close autocomplete on focus out if true - Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
     @Input() public closeOnFocusOut: boolean = false;
+    /** If we need to clear form control on force clear */
+    @Input() public forceClear: boolean = false;
     /** Show or Hide Label */
     @Input() public showLabel: boolean = true;
     /** Keyboard command label */
@@ -95,8 +100,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public searchFormControl = new BehaviorSubject<any>('');
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions$: Observable<IOption[]>;
-    /** Subject to release subscriptions */
+    /** Flag to track if component is destroyed */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Flag to track if component is destroyed */
+    private isDestroyed: boolean = false;
     /** Function to be called when the control value changes */
     private onChange: (value: any) => void = () => { };
     /** Function to be called when the control is touched */
@@ -115,7 +122,11 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public ngOnInit(): void {
         if (this.enableDynamicSearch) {
-            this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
+            this.searchFormControl.pipe(
+                debounceTime(700), 
+                skip(1), 
+                takeUntil(this.destroyed$)
+            ).subscribe((search: string) => {
                 this.dynamicSearchedQuery.emit(search);
                 if (!search) {
                     this.clearDropdownValue();
@@ -123,7 +134,11 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 }
             });
         } else {
-            this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
+            this.searchFormControl.pipe(
+                debounceTime(700), 
+                skip(1), 
+                takeUntil(this.destroyed$)
+            ).subscribe((search: string) => {
                 if (!search) {
                     this.clearDropdownValue();
                     this.writeValue("");
@@ -178,12 +193,17 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (changes?.options) {
             this.fieldFilteredOptions$ = of(this.options);
             // Always try to set label value when options change, regardless of previous value
-            if (changes?.options?.currentValue?.length > 0) {
+            if (changes?.options) {
                 // Use setTimeout to ensure the value is properly set before trying to find the label
                 setTimeout(() => {
-                    this.setLabelValue();
+                    this.setLabelValue(null);
                 }, 0);
             }
+        }
+        if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
+            this.writeValue("");
+            this.clearDropdownValue();
+            this.controlLabelValue = "";
         }
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
             this.openDropdownPanel();
@@ -191,10 +211,33 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
         if (changes?.labelValue) {
             this.labelValue = changes.labelValue.currentValue;
+            this.controlLabelValue = this.labelValue;
         }
 
         if (changes?.labelValue?.currentValue === null) {
             this.labelValue = "";
+            this.controlLabelValue = "";
+        }
+    }
+
+    /**
+     * Common method to handle dropdown panel operations with error handling
+     *
+     * @private
+     * @param {'open' | 'close'} operation - The operation to perform on the panel
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private handleDropdownPanelOperation(operation: 'open' | 'close'): void {
+        if (!this.isDestroyed && this.trigger) {
+            try {
+                if (operation === 'open') {
+                    this.trigger.openPanel();
+                } else {
+                    this.trigger.closePanel();
+                }
+            } catch (error) {
+                console.warn(`Could not ${operation} dropdown panel:`, error);
+            }
         }
     }
 
@@ -204,7 +247,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public closeDropdownPanel(): void {
-        this.trigger?.closePanel();
+        this.handleDropdownPanelOperation('close');
     }
 
     /**
@@ -213,8 +256,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        // Set destroyed flag first
+        this.isDestroyed = true;
+        
+        // Only complete the subject if it hasn't been completed already
+        if (!this.destroyed$.closed) {
+            this.destroyed$.next(true);
+            this.destroyed$.complete();
+        }
     }
 
     /**
@@ -262,11 +311,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.value = '';
         }
         this.onChange(value);
-
-        // Also try to set label immediately if options are available
-        if (this.options && this.options.length > 0) {
-            this.setLabelValue();
-        }
     }
 
     /**
@@ -277,6 +321,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public optionSelected(event: any): void {
         this.writeValue(event?.option?.value?.value);
+        this.setLabelValue(event?.option?.value);
         this.onTouched();
         this.selectedOption.emit(event?.option?.value);
     }
@@ -317,9 +362,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public openDropdownPanel(): void {
+        if (this.isDestroyed) {
+            return;
+        }
+        
         this.selectField?.nativeElement?.focus();
         setTimeout(() => {
-            this.trigger?.openPanel();
+            this.handleDropdownPanelOperation('open');
         }, 10);
     }
 
@@ -329,23 +378,25 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @private
      * @memberof ReactiveDropdownFieldComponent
      */
-    private setLabelValue(): void {
+    private setLabelValue(event: any): void {
         // Check if we have options and a current value
         if (this.options && this.options.length > 0) {
-            const currentValue = this.value !== undefined && this.value !== null ? this.value : null;
-
-            if (currentValue !== null && currentValue !== '') {
-                if (this.useCustomLabelValue) return; // If useCustomLabelValue is true, do not set labelValue from options
-                
-                const matchedOption = this.options.find(option => option?.value === currentValue);
-                if (matchedOption) {
-                    // Always set labelValue to the string label, not the object
-                    this.labelValue = matchedOption.label || '';
+            if (event) {
+                const currentValue = event?.value;
+                if (currentValue !== null && currentValue !== '') {
+                    this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue) ? this.labelValue : (event?.label || '');
                     this.changeDetection.detectChanges();
+                } else if (currentValue === "") {
+                    this.controlLabelValue = "";
                 }
-            } else if (currentValue === "") {
-                this.labelValue = "";
+            } else if (this.value && this.controlLabelValue.trim() === "") {
+                this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue) ? this.labelValue : (this.options?.find(option => isEqual(option?.value, this.value))?.label || this.value);
+                this.changeDetection.detectChanges();
+            } else if (!this.value) {
+                this.controlLabelValue = this.labelValue || "";
             }
+        } else {
+            this.controlLabelValue = this.labelValue || "";
         }
     }
 

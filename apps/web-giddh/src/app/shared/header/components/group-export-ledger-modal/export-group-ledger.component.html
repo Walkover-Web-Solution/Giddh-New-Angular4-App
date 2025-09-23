@@ -5,9 +5,11 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div>
-        <div class="modal-header">
-            <h3>{{ localeData?.export_group_ledger }}</h3>
-            <i mat-dialog-close aria-label="close icon" class="icon-cross" (click)="closeExportGroupLedgerModal.emit('close')"></i>
+        <div class="dialog-header">
+            <span mat-dialog-title>{{ localeData?.export_group_ledger }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close (click)="closeExportGroupLedgerModal.emit('close')">
+                <i class="icon-cross"></i>
+            </button>
         </div>
         <mat-dialog-content class="dialog-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">

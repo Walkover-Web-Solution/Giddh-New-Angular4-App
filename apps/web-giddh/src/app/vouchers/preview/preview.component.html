@@ -21,7 +21,7 @@
                     </text-field>
                     <i class="icon-search position-absolute"></i>
                 </div>
-                <ng-container *ngIf="(!isCompany && !isConsolidatedBranch)">
+                <ng-container *ngIf="(!isCompany && !isConsolidatedBranch && voucherApiVersion === 2)">
                     <ng-container *ngIf="voucherType === voucherTypeEnum.sales; else other">
                         <button
                             mat-raised-button
@@ -130,6 +130,7 @@
                         <div class="d-flex action-btn">
                             <button
                                 mat-stroked-button
+                                *ngIf="voucherApiVersion === 2"
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
@@ -177,7 +178,7 @@
                                 <i class="icon-download-circle"></i>
                             </button>
                             <button
-                                *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                *ngIf="(!isCompany && !isConsolidatedBranch && voucherApiVersion === 2)"
                                 mat-stroked-button
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_delete"

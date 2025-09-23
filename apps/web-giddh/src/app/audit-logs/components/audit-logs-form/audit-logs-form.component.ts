@@ -4,7 +4,7 @@ import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
-import { API_COUNT_LIMIT, IOption } from '../../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption } from '../../../app.constant';
 import { cloneDeep, flatten, map, omit, union } from '../../../lodash-optimized';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { IForceClear } from '../../../models/api-models/Sales';
@@ -189,19 +189,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
         getAuditLogsRequest = cloneDeep(this.prepareAuditLogFormRequest());
         this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest));
-    }
-
-    /**
-     * Generate  custom users filter
-     *
-     * @param {string} term term to filter with
-     * @param {IOption} item term to filter for
-     * @returns
-     * @memberof AuditLogsFormComponent
-     */
-    public customUserFilter(term: string, item: IOption): any {
-        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 ||
-            (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase()?.indexOf(term) > -1));
     }
 
     /**
@@ -432,7 +419,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {

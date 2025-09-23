@@ -168,8 +168,8 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.stockReportRequest.count = PAGINATION_LIMIT;
 
         this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (this.showAccountSearchInput) {
@@ -447,7 +447,6 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.stockReportRequest.count = PAGINATION_LIMIT;
             this.translationLoaded = true;
             this.voucherTypes = [
                 {

@@ -7,8 +7,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { IOption } from '../../theme/ng-select/option.interface';
-import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
+import { EMAIL_VALIDATION_REGEX, IOption } from '../../app.constant';
 export interface GetDomainList {
     type: any;
     hostName: any;
@@ -379,7 +378,7 @@ export class PortalWhiteLabelComponent implements OnInit {
             width: '600px'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.setPrimaryAndDeleteDomain('delete', this.domain.uniqueName);
             } else {

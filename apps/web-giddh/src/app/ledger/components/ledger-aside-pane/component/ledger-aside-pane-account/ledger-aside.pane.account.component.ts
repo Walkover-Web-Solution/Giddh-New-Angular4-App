@@ -2,10 +2,10 @@ import { takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
-import { IOption } from '../../../../../theme/ng-select/option.interface';
 import { AppState } from '../../../../../store';
 import { AccountsAction } from '../../../../../actions/accounts.actions';
 import { AccountRequestV2 } from '../../../../../models/api-models/Account';
+import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'ledger-aside-pane-account',

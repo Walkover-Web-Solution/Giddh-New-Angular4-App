@@ -103,7 +103,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Reports > Purchase Register', uniqueName: '/pages/reports/purchase-register', hasTabs: false },
     { type: 'MENU', name: 'Reports > Monthly Columnar Report', uniqueName: '/pages/reports/monthly-columnar-report', hasTabs: false },
     { type: 'MENU', name: 'Reports > Cash Flow Statement', uniqueName: '/pages/reports/cash-flow-statement' },
-    { type: 'MENU', name: 'Reports', uniqueName: '/pages/reports/reports-dashboard', hasTabs: false },
     { type: 'MENU', name: 'Petty Cash Management > Pending', uniqueName: '/pages/expenses-manager', additional: { tab: 'pending', tabIndex: 0 }, hasTabs: true },
     { type: 'MENU', name: 'Petty Cash Management > Rejected', uniqueName: '/pages/expenses-manager', additional: { tab: 'rejected', tabIndex: 1 }, hasTabs: true },
 

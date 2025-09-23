@@ -18,8 +18,8 @@ import { LedgerDiscountComponent } from '../../../../ledger/components/ledger-di
 import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT, IOption, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
-
+import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 @Component({
     selector: 'group-update',
     templateUrl: 'group-update.component.html',
@@ -98,6 +98,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public currentTax: any;
     /** Stores the current discount to display in the UI. */
     public currentDiscount: any;
+    /** Stores the voucher api version */
+    public voucherApiVersion: number;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
@@ -107,8 +109,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         private companyActions: CompanyActions,
         private accountsAction: AccountsAction,
         private groupService: GroupService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        public generalService: GeneralService
     ) {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.showEditGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showEditGroup), takeUntil(this.destroyed$));
@@ -611,7 +615,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: DROPDOWN_ITEMS_COUNT_LIMIT
             };
             this.groupService.searchGroups(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {

@@ -6,7 +6,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -70,7 +69,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
             spinnerSize: 30
         }),
         SharedModule,
-        SelectModule.forRoot(),
         ClickOutsideModule,
         DigitsOnlyModule,
         ElementViewChildModule,
