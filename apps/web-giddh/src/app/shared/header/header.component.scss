@@ -175,6 +175,9 @@ ul{
                 }
             }
             &.select-today {
+                button {
+                    color: var(--color-primary-header-icons);
+                }
                 &:hover{
                     button {
                         background-color: var(--color-white-tertiary) !important;
