@@ -3,9 +3,6 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { KeyboardShortutModule } from '../../helpers/directives/keyboardShortcut/keyboardShortut.module';
-import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
-import { GiddhPageLoaderModule } from '../../giddh-page-loader/giddh-page-loader.module';
 import { ActionTypeEnum } from '../utility/sales-person.constant';
 import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
 import { SalesPersonComponentStore } from '../utility/sales-person.store';
@@ -15,7 +12,6 @@ import { IOption } from '../../../app.constant';
 @Component({
     selector: 'archive',
     templateUrl: './archive.component.html',
-    styleUrls: ['./archive.component.scss'],
     providers: [SalesPersonComponentStore],
     standalone: true,
     imports: [
@@ -23,9 +19,6 @@ import { IOption } from '../../../app.constant';
         ReactiveFormsModule,
         MatButtonModule,
         MatDialogModule,
-        KeyboardShortutModule,
-        TranslateDirectiveModule,
-        GiddhPageLoaderModule,
         FormFieldsModule
     ]
 })
@@ -35,7 +28,7 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
     /** Archive form */
     public archiveForm: FormGroup = new FormGroup({
         action: new FormControl<ActionTypeEnum>(ActionTypeEnum.UNASSIGNED, [Validators.required]),
-        uniqueName: new FormControl<string>(null),
+        uniqueName: new FormControl<string>(ActionTypeEnum.UNASSIGNED),
         archiveOnly: new FormControl<boolean>(false)
     });
     public salesPersonList: any[] = [];
@@ -56,7 +49,7 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
         this.salesPersonStore.salesPersonList$.pipe(takeUntil(this.destroyed$), filter(Boolean)).subscribe((salesPersonList: IOption[]) => {
             this.salesPersonList = [{
                 label: this.inputData?.commonLocaleData?.app_unassigned,
-                value: null
+                value: ActionTypeEnum.UNASSIGNED
             }, ...salesPersonList?.filter((item: IOption) => item.value !== this.inputData?.salesPersonUniqueName) || []]; // filter out the current sales person
         });
     }
@@ -69,11 +62,11 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
     public submit(): void {
         const form = this.archiveForm.value;
         form.archiveOnly = Boolean(this.inputData?.archiveOnly);
-        if (form.uniqueName) {
-            form.action = ActionTypeEnum.TRANSFER;
-        } else {
+        if (form.uniqueName === ActionTypeEnum.UNASSIGNED) {
             form.action = ActionTypeEnum.UNASSIGNED;
             delete form.uniqueName;
+        } else {
+            form.action = ActionTypeEnum.TRANSFER;
         }
         this.dialogRef.close(form);
     }
