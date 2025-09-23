@@ -31,7 +31,8 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
         uniqueName: new FormControl<string>(ActionTypeEnum.UNASSIGNED),
         archiveOnly: new FormControl<boolean>(false)
     });
-    public salesPersonList: any[] = [];
+    /** Sales Person List */
+    public salesPersonList: IOption[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -92,7 +93,7 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
     /**
      * Releases memory
      *
-     * @memberof SalesPersonComponent
+     * @memberof ArchiveSalesPersonComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

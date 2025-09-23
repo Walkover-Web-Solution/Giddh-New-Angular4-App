@@ -41,5 +41,5 @@ export enum ActionTypeEnum {
 export interface SalesPersonDeleteArchivedModel {
     action: ActionTypeEnum,
     uniqueName?: string,
-    archiveOnly?: boolean // This send true in case archive only, if we proceed from delete and archive do not send this key
+    archiveOnly?: boolean // This send true in case archive only, if we proceed from delete and archive then do not send this key
 }

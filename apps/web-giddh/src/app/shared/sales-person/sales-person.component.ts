@@ -158,7 +158,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                     )
                 }
             });
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response === this.commonLocaleData?.app_yes) {
                     this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_archive, this.localeData?.archive_alternative_message, this.localeData?.transfer_and_archive);
                 } else {
@@ -241,7 +241,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                         )
                     }
                 });
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                dialogRef.afterClosed().subscribe(response => {
                     if (response === this.commonLocaleData?.app_yes) {
                         this.salesPersonUniqueName = element?.uniqueName;
                         this.componentStore.deleteSalesPerson(element?.uniqueName);
@@ -264,7 +264,6 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 }, 0);
                 break;
             case SalesPersonActionEnum.ARCHIVE:
-                // this.componentStore.createUpdateSalesPerson({ model: { ...element, archiveStatus: element.archiveStatus === SalesPersonArchiveEnum.ARCHIVE ? SalesPersonArchiveEnum.UNARCHIVED : SalesPersonArchiveEnum.ARCHIVE }, uniqueName: element?.uniqueName });
                 if (element.archiveStatus === SalesPersonArchiveEnum.ARCHIVE) {
                     this.componentStore.archiveUnarchiveSalesPerson({ model: { action: ActionTypeEnum.UNARCHIVED }, uniqueName: element?.uniqueName });
                 } else {
@@ -357,6 +356,11 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Opens transfer and delete dialog for sales person
      *
+     * @param {boolean} archiveOnly - if true, then dialog will be opened for transfer and delete
+     * @param {string} title - dialog title
+     * @param {string} message - dialog message
+     * @param {string} primaryText - primary button text
+     * @param {string} [secondaryText=this.commonLocaleData?.app_cancel] - secondary button text
      * @memberof SalesPersonComponent
      */
     public openTransferAndDeleteDialog(archiveOnly: boolean,title: string, message: string, primaryText: string, secondaryText: string = this.commonLocaleData?.app_cancel): void {
