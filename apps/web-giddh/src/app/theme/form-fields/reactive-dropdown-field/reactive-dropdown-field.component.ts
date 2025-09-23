@@ -76,6 +76,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showOptionDivider: boolean = false;
     /** Show Mat Label In with appearance outline Icon */
     @Input() public showMatLabel: boolean = true;
+    /** True if we need to allow custom dropdown value */
+    @Input() public allowCustomDropdownValue: boolean = false;
     /** Show Caret Icon */
     @Input() public showCaretIcon: boolean = true;
     /** Show Cross Icon to clear selection */
@@ -378,6 +380,24 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public clearDropdownValue(value: any = { label: "", value: "" }): void {
         this.onClear.emit(value);
+    }
+
+    /**
+     * Callback event on blur
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public onBlur(): void {
+        setTimeout(() => {
+            if (this.allowCustomDropdownValue && !this.searchFormControl?.value && !this.controlLabelValue) {
+                this.selectedOption.emit({ label: '', value: '' });
+            }
+
+            if (this.allowCustomDropdownValue && this.searchFormControl?.value && typeof this.searchFormControl?.value !== "object") {
+                this.value = this.searchFormControl?.value;
+                this.selectedOption.emit({ label: this.value, value: this.value });
+            }
+        }, 200);
     }
 
     /**
