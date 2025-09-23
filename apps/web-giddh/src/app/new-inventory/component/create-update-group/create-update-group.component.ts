@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
-import { takeUntil, distinctUntilChanged, take } from "rxjs/operators";
+import { takeUntil, distinctUntilChanged, filter } from "rxjs/operators";
 import { CompanyActions } from "../../../actions/company.actions";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -82,6 +82,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Discounts list */
     public discountsList: IDiscountList[] = [];
+    /** Flag to track if navigation is in progress to avoid infinite loops */
+    private isNavigating: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -95,9 +97,50 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private location: Location,
         @Inject(ServiceConfig) private serviceConfig,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private componentStore: InventoryComponentStore
+        private componentStore: InventoryComponentStore,
+        private router: Router
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.setupNavigationListener();
+    }
+
+    /**
+     * Sets up navigation listener to intercept route changes and show confirmation dialog
+     *
+     * @private
+     * @memberof CreateUpdateGroupComponent
+     */
+    private setupNavigationListener(): void {
+        // Listen for navigation attempts
+        this.router.events.pipe(
+            filter(event => event instanceof NavigationStart),
+            takeUntil(this.destroyed$)
+        ).subscribe((event: NavigationStart) => {
+            // Only intercept if we have unsaved changes and this is a different route
+            if (this.showPageLeaveConfirmation && !this.isNavigating && event.url !== this.router.url) {
+                // Set flag to prevent multiple dialogs
+                this.isNavigating = true;
+                
+                // Cancel the current navigation
+                this.router.navigateByUrl(this.router.url, { skipLocationChange: true });
+                
+                // Show confirmation dialog
+                let dialogRef = this.pageLeaveUtilityService.openDialog();
+                
+                dialogRef.afterClosed().subscribe((action) => {
+                    if (action) {
+                        // User confirmed to leave - clean up and navigate
+                        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                        this.groupForm.markAsPristine();
+                        this.isNavigating = false;
+                        this.router.navigateByUrl(event.url);
+                    } else {
+                        // User cancelled - reset navigation flag
+                        this.isNavigating = false;
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -345,6 +388,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     this.toggleLoader(false);
                     this.groupForm.markAsPristine();
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                    this.isNavigating = false;
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_update);
                     if (!this.addGroup) {
                         this.getStockGroups();
@@ -365,6 +409,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.inventoryService.CreateStockGroup(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
+                    this.isNavigating = false;
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_create);
 
                     if (!this.addGroup) {
@@ -450,6 +495,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.groupForm.reset();
         this.groupForm.markAsPristine();
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        this.isNavigating = false;
         this.groupForm?.patchValue({ showCodeType: "hsn" });
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
