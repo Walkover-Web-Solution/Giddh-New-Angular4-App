@@ -523,6 +523,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
         this.onViewReady(true);
         this.loadAccountData();
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+            if (!this.isSalesPersonExists(this.addAccountForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                this.addAccountForm.get('salesPersonName')?.patchValue('');
+                this.addAccountForm.get('salesPersonUniqueName')?.patchValue('');
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -2658,5 +2665,19 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }

@@ -1590,7 +1590,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
-            if (salesPersonList && this.invoiceForm.get('salesPersonUniqueName').value && !this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+            if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
                 this.invoiceForm.get('salesPersonName').patchValue('');
                 this.invoiceForm.get('salesPersonUniqueName').patchValue(null);
             }

@@ -498,6 +498,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }
         });
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+            if (!this.isSalesPersonExists(this.addAccountForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                this.addAccountForm.get('salesPersonUniqueName').patchValue(null);
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -2001,6 +2007,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }
 
