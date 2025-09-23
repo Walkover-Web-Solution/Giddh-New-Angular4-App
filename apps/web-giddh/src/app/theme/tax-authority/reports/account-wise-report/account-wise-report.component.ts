@@ -8,6 +8,7 @@ import { saveAs } from "file-saver";
 import { SalesTaxReport } from '../../utility/tax-authority.const';
 import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-response.interface';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { PageEvent } from '@angular/material/paginator';
 
 
 @Component({
@@ -191,7 +192,7 @@ export class AccountWiseReportComponent implements OnInit {
     * @param {*} event
     * @memberof AccountWiseReportComponent
     */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;

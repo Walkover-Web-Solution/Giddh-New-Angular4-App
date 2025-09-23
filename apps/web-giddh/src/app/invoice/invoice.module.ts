@@ -40,7 +40,6 @@ import { ValidateSubscriptionDirectiveModule } from '../shared/validate-subscrip
 import { ConfirmModalModule } from '../theme';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { VoucherModule } from '../voucher/voucher.module';
@@ -88,7 +87,6 @@ import { MatCardModule } from '@angular/material/card';
         MatTabsModule,
         ReactiveFormsModule,
         KeyboardShortutModule,
-        SelectModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

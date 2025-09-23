@@ -12202,13 +12202,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
-.table-header-fix {
-    position: sticky;
-    top: 0;
-    background-color: var(--color-white);
-    z-index: 100;
-}
-
 .custom-mat-tabs {
     .mat-tab-label {
         padding: 0 20px !important;
@@ -13779,14 +13772,6 @@ mat-list {
     }
 }
 
-.w150 {
-    width: 150px !important;
-}
-
-.w150 {
-    width: 150px !important;
-}
-
 .bg-white {
     background: var(--color-white) !important;
 }
@@ -13892,3 +13877,14 @@ mat-list {
     min-width: 30px !important;
 }
     
+// Global class use to show/hide element on hover
+.hover-trigger {
+    .hover-target {
+        visibility: hidden;
+    }
+    &:hover {
+        .hover-target {
+            visibility: visible;
+        }
+    }
+}

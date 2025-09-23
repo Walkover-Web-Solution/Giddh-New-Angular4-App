@@ -19,6 +19,7 @@
                                 [placeholder]="'Select Group'"
                                 (selectedOption)="groupSelected($event)"
                                 [createNewText]="'+ Add New'"
+                                [showCreateNew]="true"
                                 (createOption)="addNewGroupPane()"
                                 [name]="'parentGroup'"
                             ></reactive-dropdown-field>
@@ -124,7 +125,7 @@
                                                 Selected ({{ taxTempArray?.length }})
                                                 <span class="pull-right"><span class="caret"></span></span>
                                             </button>
-                                            <mat-menu #taxMenu="matMenu" class="tax-selection-menu">
+                                            <mat-menu #taxMenu="matMenu">
                                                 <div
                                                     *ngFor="let tax of companyTaxesList$ | async"
                                                     [ngClass]="{ 'opacity': tax.isDisabled }"
@@ -355,6 +356,7 @@
                                             [placeholder]="'Select Unit'"
                                             [disabled]="!addStockForm.controls['enablePurchase']?.value"
                                             [createNewText]="'+ Add New'"
+                                            [showCreateNew]="true"
                                             (createOption)="addNewStockUnit()"
                                             [name]="'stockUnitUniqueName'"
                                         ></reactive-dropdown-field>
@@ -436,6 +438,7 @@
                                             [disabled]="!addStockForm.controls['enableSales']?.value"
                                             [placeholder]="'Select Unit'"
                                             [createNewText]="'+ Add New'"
+                                            [showCreateNew]="true"
                                             (createOption)="addNewStockUnit()"
                                             [name]="'stockUnitUniqueName'"
                                         ></reactive-dropdown-field>

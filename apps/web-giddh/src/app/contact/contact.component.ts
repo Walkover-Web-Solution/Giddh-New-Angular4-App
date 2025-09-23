@@ -159,7 +159,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Pagination count */
-    public paginationLimit: number = PAGINATION_LIMIT; // 50
+    public paginationLimit: number = PAGINATION_LIMIT;
     /** Giddh decimal places set by user */
     public giddhDecimalPlaces = 2;
     private checkboxInfo: any = {
@@ -230,7 +230,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Stores the send email bulk request  */
     public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
     /** Observable for bulk email success response */
@@ -728,17 +728,14 @@ export class ContactComponent implements OnInit, OnDestroy {
      * Handles pagination events and updates API parameters
      * 
      * @param {PageEvent} event - Contains pagination details
-     * @param {any} variable - Variable to update pagination details
      * @memberof ContactComponent
      */
-    public handlePageEvent(event: PageEvent, variable: any): void {
+    public handlePageEvent(event: PageEvent): void {
         if (this.advanceFilters.count !== event.pageSize) {
             this.advanceFilters.page = 1;
-            variable.page = 1;
             this.checkboxInfo.selectedPage = 1;
         } else {
             this.advanceFilters.page = event.pageIndex + 1;
-            variable.page = event.pageIndex + 1;
             this.checkboxInfo.selectedPage = event.pageIndex + 1;
         }
         this.advanceFilters.count = event.pageSize;
@@ -908,19 +905,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public closeAllDialogs(): void {
         this.dialog.closeAll();
     }
-
-    /**
-     * Open Modal for SMS
-     *
-     * @memberof ContactComponent
-     */
-    // public openSmsDialog() {
-    //     this.messageBody.msg = '';
-    //     this.messageBody.type = 'sms';
-    //     this.messageBody.btn.set = this.messageBody.btn.sms;
-    //     this.messageBody.header.set = this.messageBody.header.sms;
-    //     this.mailModal.show();
-    // }
 
     /**
      * Send Email/Sms for Accounts
@@ -1683,13 +1667,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     */
     public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
         const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            ...ASIDE_PANE_CONFIG,
             data: {
                 activeTab: activeTab,
                 accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
-            },
-           ...ASIDE_PANE_CONFIG
+            }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.selectedCheckedContacts = [];
                 this.selectedAccountsList = [];

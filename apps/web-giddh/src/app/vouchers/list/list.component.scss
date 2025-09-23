@@ -72,13 +72,6 @@ table {
         td {
             max-width: 240px;
             word-break: break-all;
-
-            &.invoice-column-width{
-                min-width: 162px;
-                @media screen and (min-width:992px) {
-                    min-width: 94px;
-                }
-            }
         }
     }
 

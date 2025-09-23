@@ -50,8 +50,7 @@
                     />
                     <button
                         aria-label="show"
-                        mat-raised-button
-                        color="primary"
+                        mat-stroked-button
                         [disabled]="isCompany || isConsolidatedBranch"
                         class="icomoon-ico d-flex align-items-center cursor-pointer"
                         [matTooltip]="commonLocaleData?.app_upload"
@@ -67,7 +66,7 @@
                     </button>
                     <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="overflow-visible">
                         <mat-button-toggle
-                            [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0"
+                            [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0 || voucherApiVersion === 1"
                             value="create"
                             (click)="onToggleChange(ocrAction.Create)"
                             [checked]="selectedToggle === ocrAction.Create"

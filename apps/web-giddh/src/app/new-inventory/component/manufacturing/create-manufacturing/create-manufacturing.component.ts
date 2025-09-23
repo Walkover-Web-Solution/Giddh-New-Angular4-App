@@ -721,7 +721,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                dialogRef.afterClosed().subscribe(response => {
                     if (response) {
                         this.saveRecipe(manufacturingObject, recipeObject);
                     }
@@ -738,7 +738,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 }
             });
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     this.saveRecipe(manufacturingObject, recipeObject);
                 }
@@ -1504,7 +1504,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.manufacturingService.deleteManufacturing(this.manufactureUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
@@ -1547,7 +1547,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                dialogRef.afterClosed().subscribe(response => {
                     if (response) {
                         this.saveRecipe(manufacturingObject, recipeObject);
                     } else {
@@ -1568,7 +1568,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 }
             });
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     this.saveRecipe(manufacturingObject, recipeObject);
                 } else {

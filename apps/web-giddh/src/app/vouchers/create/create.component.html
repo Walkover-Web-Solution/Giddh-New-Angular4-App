@@ -100,31 +100,29 @@
                                                         <mat-spinner class="ml-auto mr-auto my-4"
                                                             [diameter]="30"></mat-spinner>
                                                     </ng-container>
-                                                    <ng-container>
-                                                        <button mat-menu-item
-                                                            *ngFor="let voucher of lastVouchersList$ | async"
-                                                            (click)="copyInvoice(voucher)" class="line-height-initial">
-                                                            <div class="pd">
-                                                                <div class="d-flex flex-column">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <span>{{ invoiceType.isProformaInvoice ?
-                                                                            voucher?.proformaNumber :
-                                                                            invoiceType.isEstimateInvoice ?
-                                                                            voucher?.estimateNumber :
-                                                                            voucher?.voucherNumber ?
-                                                                            voucher?.voucherNumber :
-                                                                            commonLocaleData?.app_not_available
-                                                                            }}</span>
-                                                                        <span>{{
-                                                                            voucher?.grandTotal?.amountForAccount
-                                                                            }}</span>
-                                                                    </div>
-                                                                    <span>{{ voucher?.date }} (
-                                                                        {{ voucher?.account?.name }} )</span>
+                                                    <button mat-menu-item
+                                                        *ngFor="let voucher of lastVouchersList$ | async"
+                                                        (click)="copyInvoice(voucher)" class="line-height-initial">
+                                                        <div class="pd">
+                                                            <div class="d-flex flex-column">
+                                                                <div class="d-flex justify-content-between">
+                                                                    <span>{{ invoiceType.isProformaInvoice ?
+                                                                        voucher?.proformaNumber :
+                                                                        invoiceType.isEstimateInvoice ?
+                                                                        voucher?.estimateNumber :
+                                                                        voucher?.voucherNumber ?
+                                                                        voucher?.voucherNumber :
+                                                                        commonLocaleData?.app_not_available
+                                                                        }}</span>
+                                                                    <span>{{
+                                                                        voucher?.grandTotal?.amountForAccount
+                                                                        }}</span>
                                                                 </div>
+                                                                <span>{{ voucher?.date }} (
+                                                                    {{ voucher?.account?.name }} )</span>
                                                             </div>
-                                                        </button>
-                                                    </ng-container>
+                                                        </div>
+                                                    </button>
                                                     <ng-container
                                                         *ngIf="!(lastVouchersList$ | async)?.length && !(getLastVouchersInProgress$ | async)">
                                                         {{ commonLocaleData?.app_no_result_found }}
@@ -1316,7 +1314,7 @@
                                                                         [currency]="account.baseCurrencySymbol"
                                                                         (createNewDiscount)="showCreateDiscountDialog()"
                                                                         (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)"
-                                                                        (totalDiscount)="updateTotalDiscount($event, entry)"></discount-dropdown>
+                                                                        (totalDiscount)="updateTotalDiscount($event, entry, activeEntryIndex === entryIndex)"></discount-dropdown>
                                                                     <span
                                                                         class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
@@ -1989,14 +1987,12 @@
 
 <!-- region print voucher popup -->
 <ng-template #printVoucherModal>
-    <ng-container>
-        <print-voucher [invoiceType]="invoiceType" [voucherType]="voucherType" [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData" [selectedItem]="{
-            voucherNumber: voucherDetails?.number,
-            uniqueName: voucherDetails?.account?.uniqueName,
-            voucherUniqueName: voucherDetails?.uniqueName
-        }" (cancelEvent)="cancelPrintModal()"></print-voucher>
-    </ng-container>
+    <print-voucher [invoiceType]="invoiceType" [voucherType]="voucherType" [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData" [selectedItem]="{
+        voucherNumber: voucherDetails?.number,
+        uniqueName: voucherDetails?.account?.uniqueName,
+        voucherUniqueName: voucherDetails?.uniqueName
+    }" (cancelEvent)="cancelPrintModal()"></print-voucher>
 </ng-template>
 
 <!-- region send email popup -->

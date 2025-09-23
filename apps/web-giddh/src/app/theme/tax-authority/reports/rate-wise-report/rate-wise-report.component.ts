@@ -8,6 +8,7 @@ import { saveAs } from "file-saver";
 import { ActivatedRoute } from '@angular/router';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-response.interface';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'rate-wise-report',
@@ -187,7 +188,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     * @param {*} event
     * @memberof RateWiseReportComponent
     */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         if (event) {
             this.pageIndex = event.pageIndex;
             this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;

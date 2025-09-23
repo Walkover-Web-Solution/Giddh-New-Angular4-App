@@ -81,7 +81,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /** Portal Domain name validation with regex pattern */
     public isValidDomain: boolean;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** This will hold portal url */
@@ -608,7 +608,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        confirmModalDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
             }
@@ -684,7 +684,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        confirmModalDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
                 this.linkedAccountLabel = '';
@@ -960,7 +960,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        confirmModalDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 // For DELETE
                 this.componentStore.payuCrudOperation({

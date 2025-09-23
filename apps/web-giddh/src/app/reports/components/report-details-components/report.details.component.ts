@@ -19,7 +19,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';
@@ -409,7 +409,7 @@ constructor(
                 } else {
                     uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
                 }
-                selectedFinancialYear = this.financialOptions?.find(p => p?.value === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions?.find(option => option?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
                 if (!this.activeFinacialYr && this.selectedCompany.financialYears?.length) {
@@ -433,9 +433,9 @@ constructor(
         });
     }
 
-    public selectFinancialYearOption(v: IOption) {
-        if (v?.value) {
-            let financialYear = this.selectedCompany.financialYears?.find(p => p?.uniqueName === v?.value);
+    public selectFinancialYearOption(event: IOption) {
+        if (event?.value) {
+            let financialYear = this.selectedCompany.financialYears?.find(option => option?.uniqueName === event?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -700,7 +700,7 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
     }
 
     /**
@@ -712,7 +712,7 @@ constructor(
     public getAccounts(search: string = ''): void {
         const params = {
             page: 1,
-            count: 200,
+            count: API_BULK_FETCH_LIMIT,
             withStocks: false,
             group: 'revenuefromoperations,otherincome',
             q: search
@@ -729,9 +729,9 @@ constructor(
     public toggleGiddhDatepicker(isOpen: boolean): void {
         if (this.universalDatepickerTrigger) {
             if (isOpen) {
-                this.universalDatepickerTrigger?.openMenu();
+                this.universalDatepickerTrigger.openMenu();
             } else {
-                this.universalDatepickerTrigger?.closeMenu();
+                this.universalDatepickerTrigger.closeMenu();
             }
         }
     }

@@ -15,6 +15,7 @@
                 color="primary"
                 id="custom-field-btn"
                 class="mr-0"
+                *ngIf="voucherApiVersion === 2"
                 [routerLink]="['/pages/custom-fields/create']"
             >
                 {{ localeData?.add_new }}
@@ -67,6 +68,7 @@
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
+                                *ngIf="voucherApiVersion === 2"
                                 ><i class="icon-edit"></i
                             ></a>
                             <a
@@ -76,6 +78,7 @@
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
                                 (click)="deleteCustomField(element?.uniqueName)"
+                                *ngIf="voucherApiVersion === 2"
                                 ><i class="icon-trash"></i
                             ></a>
                         </td>

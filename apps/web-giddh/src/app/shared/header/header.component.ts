@@ -44,7 +44,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ServiceConfig } from '../../services/service.config';
 
 interface SubscriptionErrorFlags {
@@ -99,6 +98,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** Stores the current visible on boarding modal instance */
     private dialogRefExpirePlanRef: MatDialogRef<any>;
+    /** Dialog reference for transaction limit exceeded modal */
     private dialogRefCrossLimitRef: MatDialogRef<any>;
 
     public hideAsDesignChanges: boolean = false;
@@ -216,7 +216,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* True if it is redirect to go to branch mode */
     public isGoToBranch: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** True, if login is made with social account */
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* True if we need to show Depreciation Message */
@@ -466,13 +466,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
-                // if (this.voucherApiVersion === 1) {
-                //     this.showDepreciationMessage = true;
-                //     document.querySelector("body")?.classList?.add("depreciation-message");
-                // } else {
-                //     this.showDepreciationMessage = false;
-                //     document.querySelector("body")?.classList?.remove("depreciation-message");
-                // }
                 if (this.voucherApiVersion === 2) {
                     this.showDepreciationMessage = false;
                     document.querySelector("body")?.classList?.remove("depreciation-message");
@@ -955,8 +948,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportDialogRef?.close();
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
-                    ...ASIDE_PANE_CONFIG,
-                    panelClass: 'aside-help-panel'
+                    width: '1000px',
+                    panelClass: 'aside-help-panel',
+                    hasBackdrop: false,
+                    position: {
+                        right: '0',
+                        top: '0'
+                    }
                 });
             }
         } else {
@@ -1113,7 +1111,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             maxHeight: '100vh',
         });
 
-        this.manageGroupsAccountsDialogRef.afterOpened().pipe(take(1)).subscribe(() => {
+        this.manageGroupsAccountsDialogRef.afterOpened().subscribe(() => {
             const instance = this.manageGroupsAccountsDialogRef.componentInstance;
             setTimeout(() => {
                 if (instance.header?.nativeElement) {
@@ -1125,7 +1123,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             });
         });
 
-        this.manageGroupsAccountsDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
+        this.manageGroupsAccountsDialogRef.afterClosed().subscribe(() => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
     }

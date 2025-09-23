@@ -485,7 +485,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             ariaLabel: 'Confirm Dialog'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.deleteItem(uniqueName, type, isTemp, stockFormArrayIndex, variantFormArrayIndex);
             }

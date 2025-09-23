@@ -94,7 +94,7 @@
             ></textarea>
         </div>
 
-        <div class="text-right">
+        <div class="text-right" *ngIf="voucherApiVersion === 2">
             <button
                 mat-stroked-button
                 *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"

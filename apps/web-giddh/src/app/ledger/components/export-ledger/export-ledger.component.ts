@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { saveAs } from 'file-saver';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import { CopyType } from '../../../shared/Enums/common.enum';
 import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
 @Component({
@@ -86,7 +86,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         showInAccountCurrency: null
     }
     /** Stores the voucher API version of the company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This will show/hide for v2 for bill to bill*/
     public enableBillToBill: boolean = false;
     /** This will use for bill to bill value*/

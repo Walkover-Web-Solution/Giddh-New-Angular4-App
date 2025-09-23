@@ -24,7 +24,6 @@ import { SettingIntegrationComponentStore } from "../../settings/integration/uti
 import { ICurrencyResponse } from "../../models/api-models/Company";
 import { AccountResponse, AccountResponseV2 } from "../../models/api-models/Account";
 import { LedgerService } from "../../services/ledger.service";
-import { PageEvent } from "@angular/material/paginator";
 @Component({
     selector: 'ledger-statement',
     templateUrl: './ledger-statement.component.html',
@@ -98,7 +97,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     /** Stores the unique name of the selected bank account */
     public selectedAccountUniquename: any;
     /** Stores the voucher API version used by the current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Stores restricted voucher types for download */
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
     /** Stores the ledger transaction balance */
@@ -402,7 +401,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             ariaLabel: 'template'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.getTransactionData();
         });
     }
@@ -511,8 +510,6 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
     /**
     * Angular lifecycle hook: Called once just before the component is destroyed
     *
@@ -522,5 +519,4 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 }

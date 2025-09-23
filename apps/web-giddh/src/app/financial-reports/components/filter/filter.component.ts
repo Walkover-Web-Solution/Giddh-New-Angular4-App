@@ -16,7 +16,7 @@ import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { cloneDeep } from '../../../lodash-optimized';
+import { cloneDeep, orderBy } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
@@ -111,6 +111,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public fromDate: string;
     /** To date for datepicker */
     public toDate: string;
+    /** Holds voucher api version */
+    public voucherApiVersion: number;
 
     constructor(
         private fb: UntypedFormBuilder,
@@ -170,6 +172,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -339,7 +342,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                         configuration: this.generalService.deleteConfiguration(this.localeData?.reconcile_mode_turned_off_message, this.commonLocaleData)
                     }
                 });
-                dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+                dialogRef.afterClosed().subscribe((response) => {
                     if (response === this.commonLocaleData?.app_yes) {
                         const index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
                         if (financialYear) {
@@ -435,7 +438,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public getTags(): void {
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success") {
-                this.tags = response?.body?.map(tag => {
+                this.tags = orderBy(response?.body, 'name')?.map(tag => {
                     return { label: tag?.name, value: tag?.name };
                 }) as IOption[];
                 this.cd.detectChanges();
@@ -482,7 +485,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                             configuration: this.generalService.deleteConfiguration(this.localeData?.reconcile_mode_turned_off_message, this.commonLocaleData)
                         }
                     });
-                    dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+                    dialogRef.afterClosed().subscribe((response) => {
                         if (response === this.commonLocaleData?.app_yes) {
                             this.filterForm?.patchValue({
                                 from: fromDate,

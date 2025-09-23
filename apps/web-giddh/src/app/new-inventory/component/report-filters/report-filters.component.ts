@@ -754,13 +754,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {
-            if (this.universalDatepickerTrigger) {
-                this.universalDatepickerTrigger?.openMenu();
-            }
-        } else {
-            if (this.universalDatepickerTrigger) {
-                this.universalDatepickerTrigger?.closeMenu();
+        if (this.universalDatepickerTrigger) {
+            if (isOpen) {
+                this.universalDatepickerTrigger.openMenu();
+            } else {
+                this.universalDatepickerTrigger.closeMenu();
             }
         }
     }

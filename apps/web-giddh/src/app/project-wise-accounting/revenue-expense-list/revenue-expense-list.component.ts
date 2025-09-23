@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from '../../services/general.service';
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -69,7 +69,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** Total number of results in the entry list */
     public totalResults: number = 0;
     /** Default result count for account searches */
-    public defaultCount = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
+    public defaultCount = API_BULK_FETCH_LIMIT;
     /** Index of the currently selected tab */
     public selectedTabIndex: number = 0;
     /** Income group categories */
@@ -478,9 +478,9 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public toggleGiddhDatepicker(isOpen: boolean): void {
         if (this.universalDatepickerTrigger) {
             if (isOpen) {
-                this.universalDatepickerTrigger?.openMenu();
+                this.universalDatepickerTrigger.openMenu();
             } else {
-                this.universalDatepickerTrigger?.closeMenu();
+                this.universalDatepickerTrigger.closeMenu();
             }
         }
     }
@@ -546,7 +546,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.deleteEntry(index);
             }

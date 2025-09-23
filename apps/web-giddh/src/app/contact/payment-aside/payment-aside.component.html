@@ -1,6 +1,11 @@
 <div class="dialog-header">
     <span mat-dialog-title>{{ commonLocaleData?.app_payment }}</span>
-    <button mat-icon-button aria-label="close" (click)="closePaymentModel(false)">
+    <button 
+        mat-icon-button 
+        mat-dialog-close 
+        aria-label="close" 
+        (click)="closePaymentModel(false)"
+    >
         <i class="icon-cross"></i>
     </button>
 </div>

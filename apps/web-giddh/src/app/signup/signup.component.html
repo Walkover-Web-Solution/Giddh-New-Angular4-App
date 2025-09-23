@@ -203,7 +203,7 @@
 <ng-template #emailVerifyTemplate>
     <div class="dialog-header">
         <span mat-dialog-title>Sign Up with Giddh</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close>
+        <button mat-icon-button aria-label="close" mat-dialog-close (click)="hideEmailModal()">
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -269,7 +269,7 @@
 <ng-template #mobileVerifyTemplate>
     <div class="dialog-header">
         <span mat-dialog-title>Sign Up with Giddh</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close>
+        <button mat-icon-button aria-label="close" mat-dialog-close (click)="hideMobileModal()">
             <i class="icon-cross"></i>
         </button>
     </div>

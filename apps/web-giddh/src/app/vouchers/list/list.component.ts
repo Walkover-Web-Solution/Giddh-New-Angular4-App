@@ -315,7 +315,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Form Group for setting form */
     public settingForm: FormGroup;
     /** Hold setting api response */
@@ -1606,7 +1606,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response) {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
@@ -2881,7 +2881,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
                 if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                     this.updateSettingsEmail(null);
@@ -3411,7 +3411,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             ariaLabel: 'Confirm Dialog'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.invoiceTemplatesService.deleteTemplate(template.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res?.status === 'success') {
@@ -3478,7 +3478,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.fetchAllCreatedTemplates(templatesType);
             }

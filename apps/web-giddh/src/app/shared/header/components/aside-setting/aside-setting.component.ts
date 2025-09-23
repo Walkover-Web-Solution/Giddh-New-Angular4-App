@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyResponse, Organization } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
@@ -52,9 +52,12 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public isGocardlessSupportedCountry: boolean;
     /** True if we should set language */
     public setLanguage: boolean = false;
+    /** True if current organization is company */
+    public isCompany: boolean = false;
+    /** Observable for branch list */
+    public branchList$: Observable<any>;
 
     constructor(@Inject(ServiceConfig) private serviceConfig, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
-
     }
 
     /**
@@ -86,6 +89,12 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                 });
             }
             this.activeLocale = response?.value;
+        });
+
+        this.store.select(state => state.settings.branches).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+            }
         });
 
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {

@@ -38,6 +38,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 
 export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('dateRangePickerCmp', { static: true }) public dateRangePickerCmp: ElementRef;
+    /** Reference to advance search dialog template */
     @ViewChild('advanceSearchDialog', { static: true }) public advanceSearchDialog: TemplateRef<any>;
     /** Reference to advance search dialog */
     private advanceSearchDialogRef: MatDialogRef<any>;
@@ -222,6 +223,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
+    /** Reference to advance search dialog */
     public dialogRef: MatDialogRef<any>;
 
     constructor(
@@ -821,7 +823,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @memberof InventoryGroupStockReportComponent
      */
     public hideModal(isNoteCreatedSuccessfully?: boolean): void {
-        this.dialogRef.close();
+        this.dialogRef?.close();
         if (isNoteCreatedSuccessfully) {
             this.getGroupReport(true);
         }

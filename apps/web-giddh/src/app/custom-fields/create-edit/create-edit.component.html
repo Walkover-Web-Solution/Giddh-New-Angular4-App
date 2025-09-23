@@ -136,7 +136,7 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="col-8">
-                                    <div class="d-flex align-items-center justify-content-space-between">
+                                    <div class="d-flex align-items-center justify-content-space-between" *ngIf="voucherApiVersion === 2">
                                         <ng-container *ngIf="customFieldUniqueName">
                                             <div class="d-flex column-gap15">
                                                 <button

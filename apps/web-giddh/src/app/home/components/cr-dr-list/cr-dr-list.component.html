@@ -28,7 +28,7 @@
                     </span>
                 </mat-menu>
             </div>
-            <div class="this-week pull-right" 
+            <div class="this-week pull-right custom-datepicker" 
                 [matMenuTriggerFor]="universalDatepicker" 
                 #universalDatepickerTrigger="matMenuTrigger"
                 role="button"
@@ -48,26 +48,24 @@
         <mat-card-content class="cr-dr-body position-relative">
             <div class="top-five-cr-dr-table">
                 <div class="debtors-table">
-                    <ng-container>
-                        <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
-                        <div
-                            class="no-entries"
-                            *ngIf="!isCompany && !isConsolidatedBranch && !isLoading && !drAccounts?.length"
+                    <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
+                    <div
+                        class="no-entries"
+                        *ngIf="!isCompany && !isConsolidatedBranch && !isLoading && !drAccounts?.length"
+                    >
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            class="min-width-130"
+                            [routerLink]="[
+                                voucherApiVersion === 2
+                                    ? '/pages/vouchers/sales/create'
+                                    : '/pages/proforma-invoice/invoice/sales'
+                            ]"
                         >
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                class="min-width-130"
-                                [routerLink]="[
-                                    voucherApiVersion === 2
-                                        ? '/pages/vouchers/sales/create'
-                                        : '/pages/proforma-invoice/invoice/sales'
-                                ]"
-                            >
-                                {{ localeData?.do_sales }}
-                            </button>
-                        </div>
-                    </ng-container>
+                            {{ localeData?.do_sales }}
+                        </button>
+                    </div>
 
                     <table
                         mat-table
@@ -153,26 +151,24 @@
                     </table>
                 </div>
                 <div>
-                    <ng-container>
-                        <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
-                        <div
-                            class="no-entries"
-                            *ngIf="!isCompany && !isConsolidatedBranch && !isLoading && !crAccounts?.length"
+                    <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
+                    <div
+                        class="no-entries"
+                        *ngIf="!isCompany && !isConsolidatedBranch && !isLoading && !crAccounts?.length"
+                    >
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            class="min-width-130"
+                            [routerLink]="[
+                                voucherApiVersion === 2
+                                    ? '/pages/vouchers/purchase/create'
+                                    : '/pages/proforma-invoice/invoice/sales'
+                            ]"
                         >
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                class="min-width-130"
-                                [routerLink]="[
-                                    voucherApiVersion === 2
-                                        ? '/pages/vouchers/purchase/create'
-                                        : '/pages/proforma-invoice/invoice/sales'
-                                ]"
-                            >
-                                {{ localeData?.do_purchase }}
-                            </button>
-                        </div>
-                    </ng-container>
+                            {{ localeData?.do_purchase }}
+                        </button>
+                    </div>
 
                     <table
                         mat-table

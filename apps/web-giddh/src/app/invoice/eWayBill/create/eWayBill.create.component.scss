@@ -19,6 +19,10 @@
     }
 }
 
+.eway-bill-height {
+    min-height: calc(100vh - (var(--header-height) + 20px));
+}
+
 .list-icon-group {
     list-style: none;
     padding: 0;

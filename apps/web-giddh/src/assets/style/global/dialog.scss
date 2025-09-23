@@ -1,8 +1,9 @@
-// This class is used for aside dialog as root element 
-// <section class="aside-dialog-wrapper">
-//     <div class="dialog-header">...</div>
-//     <mat-dialog-content class="dialog-body">...</mat-dialog-content>
-// </section>
+/** Aside dialog example
+<section class="aside-dialog-wrapper">
+    <div class="dialog-header">...</div>
+    <mat-dialog-content class="dialog-body">...</mat-dialog-content>
+</section>
+*/
 .aside-dialog-wrapper {
     height: 100vh;
 }

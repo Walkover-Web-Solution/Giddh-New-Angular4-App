@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from "../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import * as dayjs from "dayjs";
 import * as duration from "dayjs/plugin/duration";
 import { AiOcrStore } from "./utility/ai-ocr.store";
@@ -60,7 +60,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         page: 1,
         totalPages: 0,
         totalItems: 0,
-        count: API_COUNT_LIMIT,
+        count: PAGINATION_LIMIT,
         from: "",
         to: "",
         sort: "",
@@ -209,7 +209,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
         // Call getCompletedCount every 5 seconds
         setInterval(() => {
-            if (this.listCount > 0) {
+            if (this.listCount > 0 || this.initialUploadFile) {
                 this.aiOcrStore.getCompletedCount(null);
             }
         }, 5000);
@@ -268,6 +268,9 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             /** Universal date observer */
             this.aiOcrStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((dateObj) => {
                 if (dateObj) {
+                    if (this.countVariable > 0) {
+                        this.initialUpload = false;
+                    }
                     this.universalDate = _.cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi =

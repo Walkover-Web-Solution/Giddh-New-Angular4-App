@@ -39,7 +39,7 @@
             </mat-grid-tile>
         </form>
     </mat-grid-list>
-    <div class="button-wrapper">
+    <div class="button-wrapper" *ngIf="voucherApiVersion === 2">
         <button (click)="saveMapping()" mat-raised-button color="primary" [disabled]="disabled">Save</button>
     </div>
 </div>

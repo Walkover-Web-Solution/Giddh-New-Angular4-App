@@ -35,9 +35,6 @@
 
             <div class="right-inventory">
                 <div class="btn-group">
-                    <button mat-stroked-button class="icon-btn mr-r15" (click)="editStock()" matTooltip="Edit Stock">
-                        <i class="icon-edit-pencil"></i>
-                    </button>
                     <button
                         type="button"
                         class="cp mr-r15 icon-btn icon-btn"
@@ -55,17 +52,6 @@
                         </button>
                     </mat-menu>
                 </div>
-                <button
-                    *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
-                    mat-raised-button color="primary" class="transfer-btn"
-                    matTooltip="Alt+N"
-                    (click)="openTransferAsidePaneDialog()"
-                >
-                    New Transfer
-                </button>
-                <button mat-raised-button color="primary" class="mr-0" (click)="openAsidePaneDialog()" matTooltip="Alt+i">
-                    Create New
-                </button>
             </div>
         </div>
     </form>
@@ -664,13 +650,13 @@
 
 <!-- Advance search popup -->
 <ng-template #advanceSearchTemplate>
-    <div mat-dialog-title class="theme-bg">
-        <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-        <button mat-stroked-button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
-            ×
+    <div class="dialog-header">
+        <span mat-dialog-title>Advance Search</span>
+        <button mat-icon-button aria-label="close" (click)="advanceSearchAction('cancel')">
+            <i class="icon-cross"></i>
         </button>
     </div>
-    <div mat-dialog-content class="advance-search clearfix" *ngIf="advanceSearchModalShow">
+    <mat-dialog-content class="advance-search clearfix dialog-body" *ngIf="advanceSearchModalShow">
         <form action="" [formGroup]="advanceSearchForm">
             <div class="row">
                 <div class="col-sm-4">Date Range</div>
@@ -715,102 +701,43 @@
                     </mat-menu>
                 </div>
             </div>
-                    <div class="row mr-t2">
-                        <div class="col-sm-4">Select Category</div>
-                        <div class="col-sm-4">
-                            <div class="select-style middle">
-                                <reactive-dropdown-field
-                                    [options]="CategoryOptions"
-                                    (onClear)="clearShSelect('filterCategory')"
-                                    [placeholder]="'Select Category'"
-                                    formControlName="filterCategory"
-                                    (selectedOption)="onDDElementSelect($event, 'filterCategory')"
-                                ></reactive-dropdown-field>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="select-style middle" *ngIf="stockReportRequest.param !== 'qty_closing'">
-                                <reactive-dropdown-field
-                                    [options]="CategoryTypeOptions"
-                                    (onClear)="clearShSelect('filterCategoryType')"
-                                    [placeholder]="'Select Type'"
-                                    formControlName="filterCategoryType"
-                                    (selectedOption)="onDDElementSelect($event, 'filterCategoryType')"
-                                ></reactive-dropdown-field>
-                            </div>
-                            <input
-                                *ngIf="stockReportRequest.param === 'qty_closing'"
-                                readonly
-                                type="text"
-                                class="form-control"
-                                value="Quantity"
-                            />
-                        </div>
+            <div class="row mr-t2">
+                <div class="col-sm-4">Select Category</div>
+                <div class="col-sm-4">
+                    <div class="select-style middle">
+                        <reactive-dropdown-field
+                            [options]="CategoryOptions"
+                            (onClear)="clearShSelect('filterCategory')"
+                            [placeholder]="'Select Category'"
+                            formControlName="filterCategory"
+                            (selectedOption)="onDDElementSelect($event, 'filterCategory')"
+                        ></reactive-dropdown-field>
                     </div>
-                    <div class="row mr-t2">
-                        <div class="col-sm-4">Value</div>
-                        <div class="col-sm-4">
-                            <div class="select-style middle">
-                                <reactive-dropdown-field
-                                    [options]="FilterValueCondition"
-                                    (onClear)="clearShSelect('filterValueCondition')"
-                                    [placeholder]="'Select Type'"
-                                    formControlName="filterValueCondition"
-                                    (selectedOption)="onDDElementSelect($event, 'filterValueCondition')"
-                                ></reactive-dropdown-field>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <input
-                                type="text"
-                                class="form-control"
-                                (keyup)="mapAdvFilters()"
-                                placeholder="Amount"
-                                maxlength="16"
-                                formControlName="filterAmount"
-                            />
-                            <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger"
-                                >input number only
-                            </small>
-                        </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="select-style middle" *ngIf="stockReportRequest.param !== 'qty_closing'">
+                        <reactive-dropdown-field
+                            [options]="CategoryTypeOptions"
+                            (onClear)="clearShSelect('filterCategoryType')"
+                            [placeholder]="'Select Type'"
+                            formControlName="filterCategoryType"
+                            (selectedOption)="onDDElementSelect($event, 'filterCategoryType')"
+                        ></reactive-dropdown-field>
                     </div>
-
-                    <div class="row mr-t4">
-                        <div class="col-12 text-right">
-                            <button
-                                mat-raised-button color="primary"
-                                type="button"
-                                [disabled]="
-                                    !isFilterCorrect ||
-                                    !stockReportRequest.param ||
-                                    !stockReportRequest.expression ||
-                                    !stockReportRequest.val
-                                "
-                                (click)="advanceSearchAction('search')"
-                            >
-                                Search
-                            </button>
-                            <button mat-stroked-button class="mr-0" type="button" (click)="advanceSearchAction('clear')">
-                                Clear
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                    <input
+                        *ngIf="stockReportRequest.param === 'qty_closing'"
+                        readonly
+                        type="text"
+                        class="form-control"
+                        value="Quantity"
+                    />
+                </div>
             </div>
-<!-- Advance  search popup -->
-<!-- aside inwards/outwards/transfer pane -->
-<ng-template #asideTransferPaneTemplate>
-    <aside-branch-transfer-pane
-        (transferType)="openBranchTransferPopup($event)"
-        (closeAsideEvent)="asideTransferPaneDialogRef?.close()"
-    ></aside-branch-transfer-pane>
-</ng-template>
-<!-- aside inwards/outwards/transfer pane -->
 
 <!-- branch transfer modal -->
 <ng-template #template>
     <div class="recept-modal">
-        <div class="modal-body">
+        <div class="dialog-body">
             <new-branch-transfer (hideModal)="hideModal($event)" [branchTransferMode]="branchTransferMode">
             </new-branch-transfer>
         </div>
