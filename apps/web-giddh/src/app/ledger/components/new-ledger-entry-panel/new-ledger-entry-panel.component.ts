@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { ASIDE_PANE_CONFIG, HIGH_RATE_FIELD_PRECISION, IOption, RATE_FIELD_PRECISION, SubVoucher } from 'apps/web-giddh/src/app/app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, HIGH_RATE_FIELD_PRECISION, IOption, RATE_FIELD_PRECISION, SubVoucher } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
@@ -441,6 +441,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.selectedStockVariant = Object.assign({}, currentSelectedVariant ?? res[0]);
                 this.cdRef.detectChanges();
                 this.stockVariantSelected.emit(currentSelectedVariant?.value ?? res[0].value);
+            }
+        });
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe(salesPersonList => {
+            if (salesPersonList?.length && this.blankLedger.salesPersonUniqueName) {
+                this.removeArchivedSalesPerson(salesPersonList);
             }
         });
     }
@@ -2313,6 +2319,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
+    }
+
+    /**
+     * Removes the archived sales person from the blank ledger
+     *
+     * @param {IOption[]} salesPersonList - The list of sales persons
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private removeArchivedSalesPerson(salesPersonList: IOption[]): void {
+        if (!salesPersonList?.some(salesPerson => salesPerson?.value === this.blankLedger.salesPersonUniqueName)) {
+            this.blankLedger.salesPersonName = '';
+            this.blankLedger.salesPersonUniqueName = null;
+        }
     }
 }

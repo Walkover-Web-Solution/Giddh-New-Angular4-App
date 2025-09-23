@@ -1,0 +1,8 @@
+{
+    "archive_confirmation_message": "Are you sure you want to archive sales person ?",
+    "transfer_and_archive": "Transfer & Archive",
+    "delete_confirmation_message": "Do you want to delete sales person?",
+    "transfer_and_delete": "Transfer and Delete",
+    "delete_with_voucher_message": "You can not perform this action as Sales person is present on voucher/entry. <strong>Instead of deleting do you want to archive it?</strong>",
+    "archive_alternative_message": "Do you want to Archive sales person?"
+}

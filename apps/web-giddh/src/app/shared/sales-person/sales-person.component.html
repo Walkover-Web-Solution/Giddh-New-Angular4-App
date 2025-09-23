@@ -1,5 +1,7 @@
 <ng-container
     appTranslate
+    [file]="'sales-person'"
+    (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     [keyboardShortcut]="'esc'"
     (onShortcutPress)="closeDialog()"
@@ -103,16 +105,38 @@
                         <td mat-cell *matCellDef="let element">{{ element.mobileNumber }}</td>
                     </ng-container>
 
+                    <!-- Archive Column -->
+                    <ng-container matColumnDef="archive">
+                        <th mat-header-cell *matHeaderCellDef width="25%">{{ commonLocaleData?.app_archive }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.archiveStatus === salesPersonArchiveEnum.ARCHIVE ? commonLocaleData?.app_archive : commonLocaleData?.app_unarchive }}</td>
+                    </ng-container>
+
                     <!-- Action Column -->
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                         <td mat-cell *matCellDef="let element; let i = index" class="text-right">
-                            <button class="min-width-unset mr-r1" *ngIf="voucherApiVersion === 2" [ngClass]="{'invisible': activeRowIndex !== i}" mat-raised-button color="primary" (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)">
-                                <i class="icon-edit font-15"></i>
+                            <button
+                                *ngIf="voucherApiVersion === 2" 
+                                [ngClass]="{'invisible': activeRowIndex !== i}"
+                                mat-icon-button
+                                [matMenuTriggerFor]="menu"
+                                aria-label="Sales person actions"
+                            >
+                                <i class="icon-dots-three-vertical font-15"></i>
                             </button>
-                            <button class="min-width-unset" *ngIf="voucherApiVersion === 2" [ngClass]="{'invisible': activeRowIndex !== i}" mat-raised-button color="primary" (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)">
-                                <i class="icon-trash font-15"></i>
-                            </button>
+                            <mat-menu #menu="matMenu">
+                                <ng-container *ngIf="element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED">
+                                    <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)">
+                                        {{ commonLocaleData?.app_edit }}
+                                    </button>
+                                    <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)">
+                                        {{ commonLocaleData?.app_delete }}
+                                    </button>
+                                </ng-container>
+                                <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.ARCHIVE, element)">
+                                    {{ element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED ? commonLocaleData?.app_archive : commonLocaleData?.app_unarchive }}
+                                </button>
+                            </mat-menu>
                         </td>
                     </ng-container>
                     

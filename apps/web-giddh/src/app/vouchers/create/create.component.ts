@@ -83,7 +83,9 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
     ZIP_CODE_SUPPORTED_COUNTRIES,
-    ASIDE_PANE_CONFIG
+    ASIDE_PANE_CONFIG,
+    IOption,
+    API_BULK_FETCH_LIMIT
 } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
@@ -1586,6 +1588,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         });
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+            if (salesPersonList && this.invoiceForm.get('salesPersonUniqueName').value && !this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                this.invoiceForm.get('salesPersonName').patchValue('');
+                this.invoiceForm.get('salesPersonUniqueName').patchValue(null);
+            }
+        });
     }
 
     /**
@@ -2516,8 +2525,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         let index = 0;
         if (!this.isUpdateMode) { // Take sales person details only if account is new else assign from get voucher response
-            this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
-            this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+            this.salesPersonList$.pipe(take(1)).subscribe(salesPersonList => {
+                if (this.isSalesPersonExists(accountData?.salesPerson?.uniqueName, salesPersonList)) {
+                    this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+                }
+            });
         }
 
         if (this.useDefaultAccountDetails) {
@@ -6840,6 +6853,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof VoucherCreateComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }

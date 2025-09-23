@@ -4,7 +4,7 @@ import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@
 import { Store, select } from '@ngrx/store';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
-import { IOption } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, IOption } from '../../app.constant';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
@@ -177,7 +177,7 @@ public advanceSearchObject: DayBookRequestModel = null;
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
