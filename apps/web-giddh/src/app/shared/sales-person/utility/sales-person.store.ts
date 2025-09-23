@@ -13,11 +13,11 @@ export interface SalesPersonState {
     salesPersonSaveInProgress: boolean;
     createUpdateSalesPersonSuccess: boolean;
     deleteSalesPersonSuccess: boolean;
-    salesPersonList: CommonPaginatedResponse<any>;
+    salesPersonList: CommonPaginatedResponse<any> | IOption[] | null;
     salesPersonListInProgress: boolean;
     archiveSalesPersonSuccess: boolean;
-    openTransferAndDeleteDialog: boolean; // For sales linked with account only
-    openTransferAndArchiveDialog: boolean; // For sales linked with entry or voucher
+    openTransferAndDeleteDialog: boolean; // For sales person linked with account only
+    openTransferAndArchiveDialog: boolean; // For sales person linked with entry or voucher
 }
 
 export const DEFAULT_STATE: SalesPersonState = {
