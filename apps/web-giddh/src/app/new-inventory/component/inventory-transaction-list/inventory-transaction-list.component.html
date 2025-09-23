@@ -367,7 +367,6 @@
                                     >
                                         <ng-container *ngFor="let item of voucherTypes; let idx = index">
                                             <button
-                                                class="menu-buttons"
                                                 mat-menu-item
                                                 (click)="$event?.stopPropagation()"
                                                 (keydown.enter)="item.checked = !item?.checked"
