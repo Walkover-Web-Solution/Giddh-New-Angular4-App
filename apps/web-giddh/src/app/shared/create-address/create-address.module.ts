@@ -13,7 +13,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatChipsModule } from "@angular/material/chips";
-import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
     declarations: [
@@ -32,8 +31,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
-        MatChipsModule,
-        MatCheckboxModule
+        MatChipsModule
     ],
     exports: [
         CreateAddressComponent
