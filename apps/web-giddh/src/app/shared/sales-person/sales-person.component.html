@@ -123,12 +123,14 @@
                                 <i class="icon-dots-three-vertical font-15"></i>
                             </button>
                             <mat-menu #menu="matMenu">
-                                <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)">
-                                    {{ commonLocaleData?.app_edit }}
-                                </button>
-                                <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)">
-                                    {{ commonLocaleData?.app_delete }}
-                                </button>
+                                <ng-container *ngIf="element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED">
+                                    <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)">
+                                        {{ commonLocaleData?.app_edit }}
+                                    </button>
+                                    <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)">
+                                        {{ commonLocaleData?.app_delete }}
+                                    </button>
+                                </ng-container>
                                 <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.ARCHIVE, element)">
                                     {{ element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED ? commonLocaleData?.app_archive : commonLocaleData?.app_unarchive }}
                                 </button>

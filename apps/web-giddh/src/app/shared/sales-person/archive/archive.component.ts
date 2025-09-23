@@ -6,7 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { KeyboardShortutModule } from '../../helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { GiddhPageLoaderModule } from '../../giddh-page-loader/giddh-page-loader.module';
-import { ActionTypeEnum, SalesPersonArchiveEnum, SalesPersonDeleteArchivedModel } from '../utility/sales-person.constant';
+import { ActionTypeEnum } from '../utility/sales-person.constant';
 import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
 import { SalesPersonComponentStore } from '../utility/sales-person.store';
 import { filter, ReplaySubject, takeUntil } from 'rxjs';
