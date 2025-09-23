@@ -61,9 +61,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Adds red border around field if true */
     @Input() public showError: boolean = false;
     /** Holds label of value */
-    @Input() public labelValue: any = '';
+    @Input() public labelValue: string = '';
     /** Holds label of value to show in the field */
-    public controlLabelValue: any = this.labelValue;
+    public controlLabelValue: string = this.labelValue;
     /** Close autocomplete on focus out if true - Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
     @Input() public closeOnFocusOut: boolean = false;
     /** If we need to clear form control on force clear */
@@ -389,7 +389,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 } else if (currentValue === "") {
                     this.controlLabelValue = "";
                 }
-            } else if (this.value && this.controlLabelValue.trim() === "") {
+            } else if (this.value && this.controlLabelValue?.trim() === "") {
                 this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue) ? this.labelValue : (this.options?.find(option => isEqual(option?.value, this.value))?.label || this.value);
                 this.changeDetection.detectChanges();
             } else if (!this.value) {
