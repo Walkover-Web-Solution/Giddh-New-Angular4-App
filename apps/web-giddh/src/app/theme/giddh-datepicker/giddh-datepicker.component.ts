@@ -133,7 +133,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     public setMonthAndYear(normalizedMonth: any, datepicker: MatDatepicker<any>): void {
         if (this.monthYearMode) {
             const selectedDate = dayjs(normalizedMonth).toDate();
-            this.calendarDate = selectedDate;
+            this.calendarDate = dayjs(selectedDate).format('MMM YYYY');
             this.innerValue = selectedDate;
             this.onChangeCallback(selectedDate);
             this.monthYearSelected.emit(selectedDate);
