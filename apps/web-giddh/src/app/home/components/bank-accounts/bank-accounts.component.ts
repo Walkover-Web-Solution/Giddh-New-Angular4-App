@@ -7,7 +7,7 @@ import { take, takeUntil, tap } from "rxjs/operators";
 import { createSelector } from "reselect";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { BROADCAST_CHANNELS } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, BROADCAST_CHANNELS } from '../../../app.constant';
 import { CommonActions } from '../../../actions/common.actions';
 import { HomeComponentStore } from '../../home.store';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -100,7 +100,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 };
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc');
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', API_BULK_FETCH_LIMIT, '', 'closingBalance', 'desc');
             }
         })), takeUntil(this.destroyed$)).subscribe();
 
@@ -113,7 +113,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         const broadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
         broadcast.onmessage = (event) => {
             if (event?.data) {
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc');
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', API_BULK_FETCH_LIMIT, '', 'closingBalance', 'desc');
             }
         };
 
@@ -135,7 +135,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         this.bankMessage$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc');
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', API_BULK_FETCH_LIMIT, '', 'closingBalance', 'desc');
             }
         });
 
@@ -158,7 +158,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/pages/settings/integration/payment']);
                 } else {
                     this.getAllBanks();
-                    this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc')
+                    this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', API_BULK_FETCH_LIMIT, '', 'closingBalance', 'desc')
                     this.isDirectlyIntegrated = true;
                     this.componentStore.setState(state => ({
                         ...state,
@@ -170,7 +170,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         this.settingIntegrationComponentStore.updateAccount$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
-                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 200, '', 'closingBalance', 'desc');
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', API_BULK_FETCH_LIMIT, '', 'closingBalance', 'desc');
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -230,13 +230,13 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
      * @param {number} [pageNumber]
      * @param {string} [requestedFrom]
      * @param {string} [refresh]
-     * @param {number} [count=200]
+     * @param {number} [count=API_BULK_FETCH_LIMIT]
      * @param {string} [query]
      * @param {string} [sortBy='']
      * @param {string} [order='asc']
      * @memberof BankAccountsComponent
      */
-    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 200, query?: string, sortBy: string = '', order: string = 'asc') {
+    private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = API_BULK_FETCH_LIMIT, query?: string, sortBy: string = '', order: string = 'asc') {
         this.isLoading = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';

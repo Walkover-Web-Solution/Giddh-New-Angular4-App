@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { OtherTaxTypeEnum, SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { VoucherForm } from "../../models/api-models/Voucher";
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM } from "../../app.constant";
+import { API_BULK_FETCH_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
@@ -105,7 +105,7 @@ export class VouchersUtilityService {
         const requestObject = {
             q: encodeURIComponent(query),
             page,
-            count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+            count: API_BULK_FETCH_LIMIT,
             group: encodeURIComponent(group)
         };
         if (withStocks) {

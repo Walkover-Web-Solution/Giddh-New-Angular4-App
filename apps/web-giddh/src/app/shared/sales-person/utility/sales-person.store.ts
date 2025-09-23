@@ -172,7 +172,6 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                             } else {
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
-
                                     if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                                         this.patchState({
                                             openTransferAndArchiveDialog: true
