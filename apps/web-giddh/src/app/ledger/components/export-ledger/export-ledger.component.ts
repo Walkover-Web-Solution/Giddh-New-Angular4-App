@@ -209,34 +209,30 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.from = this.fromDate;
         exportRequest.to = this.toDate;
 
-        let ledgerRequest: any = {
-            type: this.emailTypeSelected,
-            balanceTypeAsSign: this.balanceTypeAsSign,
-            sort: this.exportRequest.sort ? 'ASC' : 'DESC',
-            from: this.fromDate,
-            to: this.toDate,
-            accountUniqueName: this.inputData?.accountUniqueName,
-            exportType: this.exportRequest.exportType,
-            fileType: this.fileType,
-            q: this.inputData?.searchText
-        }
-        if (this.inputData?.advanceSearchRequest?.isAdvanceSearchImplemented) {
-            ledgerRequest['ledgerAdvanceFilter'] = this.inputData?.advanceSearchRequest?.dataToSend;
-        }
-        if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
-            ledgerRequest['showInAccountCurrency'] = this.exportRequest.showInAccountCurrency;
-        }
-        if (this.emailTypeSelected === this.emailTypeDetail) {
-            ledgerRequest['ledgerView'] = this.exportRequest.ledgerView ? 'T_View' : 'Statement_View';
-            if (!this.exportRequest.ledgerView) {
-                ledgerRequest['showEntryVoucherNo'] = this.exportRequest.showEntryVoucherNo;
-                ledgerRequest['showVoucherNumber'] = this.exportRequest.showVoucherNumber;
-                ledgerRequest['showVoucherTotal'] = this.exportRequest.showVoucherTotal;
-                ledgerRequest['showEntryVoucher'] = this.exportRequest.showEntryVoucher;
-                ledgerRequest['showDescription'] = this.exportRequest.showDescription;
+        let body = _.cloneDeep(this.inputData?.advanceSearchRequest);
+        if (body && body.dataToSend) {
+            body.dataToSend.type = this.emailTypeSelected;
+            body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
+            body.dataToSend.sort = this.exportRequest.sort ? 'ASC' : 'DESC';
+            body.dataToSend.from = this.fromDate;
+            body.dataToSend.to = this.toDate;
+            body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
+            body.dataToSend.exportType = this.exportRequest.exportType;
+            body.dataToSend.fileType = this.fileType;
+            if (this.inputData?.isLedgerAccountAllowsMultiCurrency) {
+                body.dataToSend.showInAccountCurrency = this.exportRequest.showInAccountCurrency;
+            }
+            if (this.emailTypeSelected === this.emailTypeDetail) {
+                body.dataToSend.ledgerView = this.exportRequest.ledgerView ? 'T_View' : 'Statement_View';
+                if (!this.exportRequest.ledgerView) {
+                    body.dataToSend.showEntryVoucherNo = this.exportRequest.showEntryVoucherNo;
+                    body.dataToSend.showVoucherNumber = this.exportRequest.showVoucherNumber;
+                    body.dataToSend.showVoucherTotal = this.exportRequest.showVoucherTotal;
+                    body.dataToSend.showEntryVoucher = this.exportRequest.showEntryVoucher;
+                    body.dataToSend.showDescription = this.exportRequest.showDescription;
+                }
             }
         }
-
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
             this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 this.isLoading = false;
@@ -288,7 +284,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }
-            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, ledgerRequest, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body?.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === 'success') {
