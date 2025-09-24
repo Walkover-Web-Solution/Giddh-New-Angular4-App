@@ -2423,7 +2423,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const entries = this.invoiceForm.get("entries") as FormArray;
             const account = entries.at(entryIndex)?.value?.transactions?.[0]?.account;
             // Delete entry if account is not selected
-            if (!(account?.uniqueName &&account?.name)) {
+            if (!(account?.uniqueName && account?.name)) {
                 this.deleteLineEntry(entryIndex);
             }
             return;
