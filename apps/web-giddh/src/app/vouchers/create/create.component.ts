@@ -108,6 +108,7 @@ import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
+import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
 
 @Component({
     selector: "create",
@@ -130,6 +131,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("printVoucherModal", { static: true }) public printVoucherModal: any;
     /* Selector for adjustment modal */
     @ViewChild("adjustmentModal", { static: true }) public adjustmentModal: any;
+    /** Selector for account dropdown */
+    @ViewChild("accountDropdown") accountDropdown: ReactiveDropdownFieldComponent;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -2417,7 +2420,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public selectStock(event: any, entryIndex: number, isClear: boolean = false): void {
         if (this.isBarcodeMachineTyping) {
-            this.deleteLineEntry(entryIndex);
             return;
         }
 
@@ -6424,7 +6426,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         );
                         return;
                     }
-
+                    this.accountDropdown?.closeDropdownPanel();
                     let isExistingEntry = -1;
                     this.invoiceForm.get("entries")["controls"]?.forEach((control: any, entryIndex: number) => {
                         if (
