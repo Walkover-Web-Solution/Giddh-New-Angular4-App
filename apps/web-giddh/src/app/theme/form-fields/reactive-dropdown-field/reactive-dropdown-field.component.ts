@@ -78,6 +78,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showMatLabel: boolean = true;
     /** True if we need to allow custom dropdown value */
     @Input() public allowCustomDropdownValue: boolean = false;
+    /** No results found message */
+    @Input() public noResultsFoundMessage: string = "";
     /** Show Caret Icon */
     @Input() public showCaretIcon: boolean = true;
     /** Show Cross Icon to clear selection */
