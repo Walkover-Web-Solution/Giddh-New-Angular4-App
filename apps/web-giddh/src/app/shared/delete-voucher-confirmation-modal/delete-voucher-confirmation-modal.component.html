@@ -7,7 +7,7 @@
 >
     <div *ngIf="translationLoaded">
         <div class="dialog-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
-            <span mat-dialog-title>{{ confirmationMessages[module]?.title }}</span>
+            <span>{{ confirmationMessages[module]?.title }}</span>
             <button mat-icon-button aria-label="close" (click)="onCancel()">
                 <i class="icon-cross"></i>
             </button>

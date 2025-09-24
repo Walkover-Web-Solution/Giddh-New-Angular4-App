@@ -61,9 +61,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Adds red border around field if true */
     @Input() public showError: boolean = false;
     /** Holds label of value */
-    @Input() public labelValue: any = '';
+    @Input() public labelValue: string = '';
     /** Holds label of value to show in the field */
-    public controlLabelValue: any = this.labelValue;
+    public controlLabelValue: string = this.labelValue;
     /** Close autocomplete on focus out if true - Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
     @Input() public closeOnFocusOut: boolean = false;
     /** If we need to clear form control on force clear */
@@ -76,6 +76,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showOptionDivider: boolean = false;
     /** Show Mat Label In with appearance outline Icon */
     @Input() public showMatLabel: boolean = true;
+    /** True if we need to allow custom dropdown value */
+    @Input() public allowCustomDropdownValue: boolean = false;
+    /** No results found message */
+    @Input() public noResultsFoundMessage: string = "";
     /** Show Caret Icon */
     @Input() public showCaretIcon: boolean = true;
     /** Show Cross Icon to clear selection */
@@ -389,7 +393,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 } else if (currentValue === "") {
                     this.controlLabelValue = "";
                 }
-            } else if (this.value && this.controlLabelValue.trim() === "") {
+            } else if (this.value && this.controlLabelValue && this.controlLabelValue?.trim() === "") {
                 this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue) ? this.labelValue : (this.options?.find(option => isEqual(option?.value, this.value))?.label || this.value);
                 this.changeDetection.detectChanges();
             } else if (!this.value) {
@@ -419,6 +423,24 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public clearDropdownValue(value: any = { label: "", value: "" }): void {
         this.onClear.emit(value);
+    }
+
+    /**
+     * Callback event on blur
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public onBlur(): void {
+        setTimeout(() => {
+            if (this.allowCustomDropdownValue && !this.searchFormControl?.value && !this.controlLabelValue) {
+                this.selectedOption.emit({ label: '', value: '' });
+            }
+
+            if (this.allowCustomDropdownValue && this.searchFormControl?.value && typeof this.searchFormControl?.value !== "object") {
+                this.value = this.searchFormControl?.value;
+                this.selectedOption.emit({ label: this.value, value: this.value });
+            }
+        }, 200);
     }
 
     /**

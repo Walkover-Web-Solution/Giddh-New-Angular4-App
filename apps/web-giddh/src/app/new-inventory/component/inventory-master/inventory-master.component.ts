@@ -1,13 +1,17 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { InventoryService } from "../../../services/inventory.service";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { ActivatedRoute } from "@angular/router";
+import { debounceTime, distinctUntilChanged, takeUntil, filter } from "rxjs/operators";
+import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { UntypedFormControl } from "@angular/forms";
 import { cloneDeep } from "../../../lodash-optimized";
 import { MatDialog } from "@angular/material/dialog";
 import { ExportInventoryMasterComponent } from "../export-inventory-master/export-inventory-master.component";
+import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
+import { CreateUpdateGroupComponent } from "../create-update-group/create-update-group.component";
+import { GeneralService } from "../../../services/general.service";
+import { StockCreateEditComponent } from "../stock-create-edit/stock-create-edit.component";
 
 @Component({
     selector: "inventory-master",
@@ -53,14 +57,86 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** False if we did not need to show Export button */
     public showExportButton: boolean = true;
+    /** Reference to create update group component */
+    @ViewChild(CreateUpdateGroupComponent) createUpdateGroupComponent: CreateUpdateGroupComponent;
+    /** Reference to create update stock component */
+    @ViewChild(StockCreateEditComponent) createUpdateStockComponent: StockCreateEditComponent;
+    /** Flag to track if navigation is in progress to avoid infinite loops */
+    private isNavigatingRef = { value: false };
 
     constructor(
         private inventoryService: InventoryService,
         private route: ActivatedRoute,
         private scrollDispatcher: ScrollDispatcher,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private router: Router,
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private generalService: GeneralService
     ) {
+        this.setupNavigationListener();
+    }
 
+    /**
+     * Sets up navigation listener to intercept route changes and show confirmation dialog
+     * Uses common method from GeneralService
+     *
+     * @private
+     * @memberof InventoryMasterComponent
+     */
+    private setupNavigationListener(): void {
+        this.generalService.setupNavigationListener(
+            this.router,
+            this.pageLeaveUtilityService,
+            this.destroyed$,
+            () => this.hasUnsavedChanges(),
+            () => this.markFormsAsPristine(),
+            this.isNavigatingRef
+        );
+    }
+
+    /**
+     * Checks if there are unsaved changes in child components
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof InventoryMasterComponent
+     */
+    private hasUnsavedChanges(): boolean {
+        // Check if create-update-group component has unsaved changes
+        if (this.createUpdateGroupComponent && this.createUpdateGroupComponent.showPageLeaveConfirmation) {
+            return true;
+        }
+        
+        // Add checks for other child components if needed (like stock-create-edit)
+        if (this.createUpdateStockComponent && this.createUpdateStockComponent.showPageLeaveConfirmation) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Marks all forms as pristine to prevent further confirmation dialogs
+     *
+     * @private
+     * @memberof InventoryMasterComponent
+     */
+    private markFormsAsPristine(): void {
+        if (this.createUpdateGroupComponent && this.createUpdateGroupComponent.groupForm) {
+            this.createUpdateGroupComponent.groupForm.markAsPristine();
+            // Update initial form values to current values to prevent false positive unsaved changes
+            this.createUpdateGroupComponent.captureInitialFormValues();
+        }
+        
+        // Add similar logic for other child components if needed
+        if (this.createUpdateStockComponent && this.createUpdateStockComponent.stockCreateEditForm) {
+            this.createUpdateStockComponent.stockCreateEditForm.form.markAsPristine();
+            // Update initial form values to current values to prevent false positive unsaved changes
+            this.createUpdateStockComponent.captureInitialFormValues();
+        }
+        
+        // Common cleanup for page leave confirmation
+        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
     }
 
     /**
@@ -160,6 +236,36 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public getMasters(stockGroup: any, currentIndex: number, isRefresh: boolean = false, isLoadMore: boolean = false): void {
+        // Check for unsaved changes before proceeding
+        if (!isLoadMore && this.hasUnsavedChanges()) {
+            let dialogRef = this.pageLeaveUtilityService.openDialog();
+            
+            dialogRef.afterClosed().subscribe((action) => {
+                if (action) {
+                    // User confirmed to proceed - clean up and continue
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                    this.markFormsAsPristine();
+                    this.proceedWithGetMasters(stockGroup, currentIndex, isRefresh, isLoadMore);
+                }
+                // If user cancelled, do nothing - stay on current state
+            });
+            return;
+        }
+        
+        this.proceedWithGetMasters(stockGroup, currentIndex, isRefresh, isLoadMore);
+    }
+
+    /**
+     * Proceeds with getting masters after confirmation check
+     *
+     * @private
+     * @param {*} stockGroup
+     * @param {number} currentIndex
+     * @param {boolean} isRefresh
+     * @param {boolean} isLoadMore
+     * @memberof InventoryMasterComponent
+     */
+    private proceedWithGetMasters(stockGroup: any, currentIndex: number, isRefresh: boolean, isLoadMore: boolean): void {
         if(stockGroup.entity === 'STOCK_GROUP') {
             this.showExportButton = true;
         }
@@ -361,6 +467,34 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public editStock(masterData: any, index: number): void {
+        // Check for unsaved changes before proceeding
+        if (this.hasUnsavedChanges()) {
+            let dialogRef = this.pageLeaveUtilityService.openDialog();
+            
+            dialogRef.afterClosed().subscribe((action) => {
+                if (action) {
+                    // User confirmed to proceed - clean up and continue
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                    this.markFormsAsPristine();
+                    this.proceedWithEditStock(masterData, index);
+                }
+                // If user cancelled, do nothing - stay on current state
+            });
+            return;
+        }
+        
+        this.proceedWithEditStock(masterData, index);
+    }
+
+    /**
+     * Proceeds with editing stock after confirmation check
+     *
+     * @private
+     * @param {*} masterData
+     * @param {number} index
+     * @memberof InventoryMasterComponent
+     */
+    private proceedWithEditStock(masterData: any, index: number): void {
         if(masterData.entity === 'STOCK') {
             this.showExportButton = false;
         }
@@ -387,6 +521,34 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public editGroup(masterData: any, index): void {
+        // Check for unsaved changes before proceeding
+        if (this.hasUnsavedChanges()) {
+            let dialogRef = this.pageLeaveUtilityService.openDialog();
+            
+            dialogRef.afterClosed().subscribe((action) => {
+                if (action) {
+                    // User confirmed to proceed - clean up and continue
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                    this.markFormsAsPristine();
+                    this.proceedWithEditGroup(masterData, index);
+                }
+                // If user cancelled, do nothing - stay on current state
+            });
+            return;
+        }
+        
+        this.proceedWithEditGroup(masterData, index);
+    }
+
+    /**
+     * Proceeds with editing group after confirmation check
+     *
+     * @private
+     * @param {*} masterData
+     * @param {*} index
+     * @memberof InventoryMasterComponent
+     */
+    private proceedWithEditGroup(masterData: any, index): void {
         if (index === -1) {
             this.isTopLevel = true;
         } else {

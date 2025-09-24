@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/helpers/defaultDateFormat';
 
 const noop = () => { };
 
@@ -133,7 +133,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     public setMonthAndYear(normalizedMonth: any, datepicker: MatDatepicker<any>): void {
         if (this.monthYearMode) {
             const selectedDate = dayjs(normalizedMonth).toDate();
-            this.calendarDate = selectedDate;
+            this.calendarDate = dayjs(selectedDate).format(GIDDH_DATE_FORMAT_MONTH_YEAR);
             this.innerValue = selectedDate;
             this.onChangeCallback(selectedDate);
             this.monthYearSelected.emit(selectedDate);

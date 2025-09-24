@@ -1203,8 +1203,8 @@
                                         [pageSizeOptions]="pageSizeOptions" 
                                         [pageIndex]="bankTransactionsResponse.page - 1" 
                                         (page)="handlePageEvent($event)"
-                                        [hidePageSize]="true"
-                                        [showFirstLastButtons]="false">
+                                        [hidePageSize]="false"
+                                        [showFirstLastButtons]="true">
                                     </mat-paginator>
                                 </div>
                                 <table class="w-100">

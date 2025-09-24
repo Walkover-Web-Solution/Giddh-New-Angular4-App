@@ -862,6 +862,7 @@
                                                                             : localeData?.select_account }}</div>
                                                                     </ng-container>
                                                                     <reactive-dropdown-field
+                                                                        #accountDropdown
                                                                         (click)="setUserManuallyClicked()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
                                                                         (keydown.enter)="$event.preventDefault()"

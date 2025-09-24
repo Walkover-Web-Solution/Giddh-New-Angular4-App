@@ -166,6 +166,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
+                                typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
                                 this.patchState({
                                     deleteSalesPersonSuccess: true
                                 });

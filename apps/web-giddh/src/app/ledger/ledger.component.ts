@@ -596,6 +596,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+
+        /* Here, we filtered the pagination size to a maximum of 50 to avoid performance issues. */
+        this.pageSizeOptions = this.pageSizeOptions.filter(size => size <= 50);
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

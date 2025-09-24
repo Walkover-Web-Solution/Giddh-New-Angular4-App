@@ -85,6 +85,8 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     public readonly salesPersonArchiveEnum = SalesPersonArchiveEnum;
     /** Sales Person Unique Name in case of user edit or delete */
     public salesPersonUniqueName: string | null = null;
+    /** True if edit mode */
+    public isEditMode: boolean = false;
     /** Sales Person Details in case of user edit */
     public currentSalesPerson: SalesPersonCreateUpdate | null = null;
     /** Holds page Size Options for pagination */
@@ -121,18 +123,19 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.salesPersonUniqueName = this.salesPersonData?.uniqueName || null;
-        this.initForm(this.salesPersonUniqueName ? this.salesPersonData : undefined);
+        this.initForm();
         this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         this.createUpdateSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             this.salesPersonListIsModified = true;
             this.isFormSubmitted = false;
+            this.salesPersonUniqueName = null;
+            this.isEditMode = false;
             this.salesPersonForm.reset();
             this.salesPersonForm.markAsPristine();
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
             this.focusInputField();
         })).subscribe();
-        
+
         this.deleteSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             this.salesPersonListIsModified = true;
             this.requestParams.page = this.generalService.adjustPageIndex(this.totalResults, this.requestParams.page, this.requestParams.count);
@@ -147,13 +150,14 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
         // Delete which liked with Account Only 
         this.componentStore.openTransferAndDeleteDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_archive, this.localeData?.delete_confirmation_message, this.localeData?.transfer_and_delete);
-            this.componentStore.patchState({openTransferAndDeleteDialog: false});
+            this.componentStore.patchState({ openTransferAndDeleteDialog: false });
         })).subscribe();
 
         // Delete which liked with Voucher/ Entry 
         this.componentStore.openTransferAndArchiveDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                 panelClass: ['mat-dialog-sm'],
+                disableClose: true,
                 data: {
                     configuration: this.generalService.deleteConfiguration(
                         this.localeData?.delete_with_voucher_message,
@@ -168,7 +172,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.salesPersonUniqueName = null;
                 }
             });
-            this.componentStore.patchState({openTransferAndArchiveDialog: false});
+            this.componentStore.patchState({ openTransferAndArchiveDialog: false });
         })).subscribe();
 
         this.componentStore.archiveSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
@@ -210,7 +214,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     public onSubmit(): void {
         this.isFormSubmitted = true;
         if (this.salesPersonForm?.valid) {
-            this.salesPersonAction(this.salesPersonUniqueName ? SalesPersonActionEnum.UPDATE : SalesPersonActionEnum.CREATE, this.salesPersonUniqueName);
+            this.salesPersonAction(this.isEditMode ? SalesPersonActionEnum.UPDATE : SalesPersonActionEnum.CREATE, this.salesPersonUniqueName);
         }
     }
 
@@ -237,6 +241,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             case SalesPersonActionEnum.DELETE:
                 const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                     panelClass: ['mat-dialog-sm'],
+                    disableClose: true,
                     data: {
                         configuration: this.generalService.deleteConfiguration(
                             this.commonLocaleData?.app_permanently_delete_message,
@@ -252,6 +257,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
                 break;
             case SalesPersonActionEnum.EDIT:
+                this.isEditMode = true;
                 this.salesPersonUniqueName = element?.uniqueName;
                 this.currentSalesPerson = element;
                 this.initForm(element);
@@ -275,7 +281,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
                 break;
             default:
-                this.componentStore.getAllSalesPerson({ isDropdown: false, params: this.requestParams});
+                this.componentStore.getAllSalesPerson({ isDropdown: false, params: this.requestParams });
                 break;
         }
     }
@@ -366,9 +372,10 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      * @param {string} [secondaryText=this.commonLocaleData?.app_cancel] - secondary button text
      * @memberof SalesPersonComponent
      */
-    public openTransferAndDeleteDialog(archiveOnly: boolean,title: string, message: string, primaryText: string, secondaryText: string = this.commonLocaleData?.app_cancel): void {
+    public openTransferAndDeleteDialog(archiveOnly: boolean, title: string, message: string, primaryText: string, secondaryText: string = this.commonLocaleData?.app_cancel): void {
         this.transferAndDeleteDialogRef = this.dialog.open(ArchiveSalesPersonComponent, {
             panelClass: ['mat-dialog-sm'],
+            disableClose: true,
             autoFocus: false,
             data: {
                 commonLocaleData: this.commonLocaleData,
@@ -384,7 +391,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
         this.transferAndDeleteDialogRef.afterClosed().subscribe(model => {
-            if (model){
+            if (model) {
                 this.componentStore.archiveUnarchiveSalesPerson({ model: model, uniqueName: this.salesPersonUniqueName });
             }
         });

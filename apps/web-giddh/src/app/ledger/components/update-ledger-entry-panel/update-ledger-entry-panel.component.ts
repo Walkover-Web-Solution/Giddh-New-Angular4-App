@@ -522,6 +522,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body')?.classList?.add('update-ledger-entry-panel-popup');
         this.assignStockVariantDetails();
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe(salesPersonList => {
+            if (!this.isSalesPersonExists(this.vm.selectedLedger.salesPersonUniqueName, salesPersonList)) {
+                this.vm.selectedLedger.salesPersonUniqueName = null;
+                this.vm.selectedLedger.salesPerson = this.resetSalesPerson();
+            }
+        });
     }
 
     public toggleShow(): void {
@@ -2313,11 +2320,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.selectedLedger.salesPersonUniqueName = resp[0].salesPerson.uniqueName;
         } else {
             this.vm.selectedLedger.salesPersonUniqueName = null;
-            this.vm.selectedLedger.salesPerson = {
-                name: '',
-                uniqueName: '',
-                email: null
-            };
+            this.vm.selectedLedger.salesPerson = this.resetSalesPerson();
         }
 
         const initialAccounts: Array<IOption> = [];
@@ -3016,5 +3019,32 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public clearSalesPerson(): void {
         this.vm.selectedLedger.salesPerson.name = null;
         this.vm.selectedLedger.salesPersonUniqueName = null;
+    }
+
+    /**
+     * Reset sales person
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private resetSalesPerson(): any {
+        return {
+            name: '',
+            uniqueName: '',
+            email: null
+        };
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }

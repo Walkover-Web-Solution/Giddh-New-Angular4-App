@@ -29,7 +29,7 @@
         <div (click)="$event.stopPropagation()">
             <div>
                 <div class="dialog-header">
-                    <span mat-dialog-title>{{ localeData?.subscription_transfer }}</span>
+                    <span>{{ localeData?.subscription_transfer }}</span>
                     <button mat-icon-button aria-label="close" (click)="closeAllDialogs($event)">
                         <i class="icon-cross"></i>
                     </button>
@@ -55,7 +55,7 @@
         <div (click)="$event.stopPropagation()">
             <div>
                 <div class="dialog-header">
-                    <span mat-dialog-title>{{ localeData?.reject }}</span>
+                    <span>{{ localeData?.reject }}</span>
                     <button mat-icon-button aria-label="close" (click)="closeReject($event)">
                         <i class="icon-cross"></i>
                     </button>
