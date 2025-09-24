@@ -366,7 +366,6 @@ export class ListManufacturingComponent implements OnInit {
         this.isReportLoading = true;
         this.showHideClearFilterButton();
         this.setFiltersInStore();
-console.log(data);
         this.manufacturingService.GetMfReport(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.results?.length) {
                 let reportData = [];
