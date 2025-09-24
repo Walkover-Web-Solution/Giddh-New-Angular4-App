@@ -6,7 +6,7 @@ import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil, distinctUntilChanged, filter } from "rxjs/operators";
 import { CompanyActions } from "../../../actions/company.actions";
-import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
+import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
@@ -16,6 +16,7 @@ import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-
 import { Location } from '@angular/common';
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 import { InventoryComponentStore } from "../inventory.store";
+import { GeneralService } from "../../../services/general.service";
 import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 import { ServiceConfig } from "../../../services/service.config";
 import { IOption } from "../../../app.constant";
@@ -74,16 +75,25 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public processedTaxes: any[] = [];
     /** True if we need to show tax field. We are maintaining this because taxes are not getting reset on form reset */
     public showTaxField: boolean = true;
-    /** Returns true if form is dirty else false */
+    /** Returns true if form has actual unsaved changes else false */
     public get showPageLeaveConfirmation(): boolean {
-        return this.groupForm?.dirty;
+        
+        if (!this.groupForm || !this.initialFormValues) {
+            return false;
+        }
+        
+        // Use lodash isEqual for deep comparison of form values
+        const currentValues = this.groupForm.value;
+        return !isEqual(currentValues, this.initialFormValues);
     }
     /** Discounts list Observable */
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Discounts list */
     public discountsList: IDiscountList[] = [];
     /** Flag to track if navigation is in progress to avoid infinite loops */
-    private isNavigating: boolean = false;
+    private isNavigatingRef = { value: false };
+    /** Store initial form values to compare for actual changes */
+    private initialFormValues: any = null;
 
     constructor(
         private store: Store<AppState>,
@@ -98,7 +108,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private componentStore: InventoryComponentStore,
-        private router: Router
+        private router: Router,
+        private generalService: GeneralService
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         this.setupNavigationListener();
@@ -111,36 +122,14 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     private setupNavigationListener(): void {
-        // Listen for navigation attempts
-        this.router.events.pipe(
-            filter(event => event instanceof NavigationStart),
-            takeUntil(this.destroyed$)
-        ).subscribe((event: NavigationStart) => {
-            // Only intercept if we have unsaved changes and this is a different route
-            if (this.showPageLeaveConfirmation && !this.isNavigating && event.url !== this.router.url) {
-                // Set flag to prevent multiple dialogs
-                this.isNavigating = true;
-                
-                // Cancel the current navigation
-                this.router.navigateByUrl(this.router.url, { skipLocationChange: true });
-                
-                // Show confirmation dialog
-                let dialogRef = this.pageLeaveUtilityService.openDialog();
-                
-                dialogRef.afterClosed().subscribe((action) => {
-                    if (action) {
-                        // User confirmed to leave - clean up and navigate
-                        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                        this.groupForm.markAsPristine();
-                        this.isNavigating = false;
-                        this.router.navigateByUrl(event.url);
-                    } else {
-                        // User cancelled - reset navigation flag
-                        this.isNavigating = false;
-                    }
-                });
-            }
-        });
+        this.generalService.setupNavigationListener(
+            this.router,
+            this.pageLeaveUtilityService,
+            this.destroyed$,
+            () => this.showPageLeaveConfirmation,
+            () => this.groupForm.markAsPristine(),
+            this.isNavigatingRef
+        );
     }
 
     /**
@@ -180,6 +169,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             }
         });
 
+
         this.groupForm.controls['isSubGroup'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.groupForm.controls['parentStockGroupUniqueName'].enable();
@@ -190,6 +180,24 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.stockGroupUniqueName = '';
             }
         });
+
+        // Listen to form value changes to update initial values when form is cleared
+        this.groupForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(formValues => {
+            // Check if all important form fields are blank/empty
+            const isFormBlank = this.isFormCompletelyBlank(formValues);
+            
+            if (isFormBlank) {
+                // Update initial values to current blank state to prevent popup
+                setTimeout(() => {
+                    this.captureInitialFormValues();
+                }, 100);
+            }
+        });
+        
+        // Capture initial form values after component is fully initialized
+        setTimeout(() => {
+            this.captureInitialFormValues();
+        }, 1000);
     }
 
     /**
@@ -387,8 +395,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.groupForm.markAsPristine();
-                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                    this.isNavigating = false;
+                    this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_update);
                     if (!this.addGroup) {
                         this.getStockGroups();
@@ -409,7 +416,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.inventoryService.CreateStockGroup(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
-                    this.isNavigating = false;
+                    this.isNavigatingRef.value = false;
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_create);
 
                     if (!this.addGroup) {
@@ -494,8 +501,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.isFormSubmitted = false;
         this.groupForm.reset();
         this.groupForm.markAsPristine();
-        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-        this.isNavigating = false;
+        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
         this.groupForm?.patchValue({ showCodeType: "hsn" });
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
@@ -506,11 +512,18 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         }
         this.selectedTaxes = [];
         this.processedTaxes = [];
+        this.showTaxField = true;
+        
+        // Capture initial form values for comparison after form is fully initialized
+        setTimeout(() => {
+            this.captureInitialFormValues();
+        }, 500);
+        
         this.changeDetection.detectChanges();
     }
 
     /**
-     * This will reset the taxes list
+     * Resets the taxes
      *
      * @memberof CreateUpdateGroupComponent
      */
@@ -584,6 +597,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 });
                 this.groupForm.get('discountLabel').patchValue(this.discountsList?.find(discount => discount.uniqueName === response.body.discounts[0])?.name);
                 this.groupForm.updateValueAndValidity();
+                
+                // Capture initial form values for comparison
+                this.captureInitialFormValues();
+                
                 this.changeDetection.detectChanges();
             } else {
                 this.toggleLoader(false);
@@ -630,6 +647,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.inventoryService.DeleteStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
+                        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
                         this.toaster.showSnackBar("success", this.localeData?.group_delete);
                         if (this.addGroup) {
                             this.closeAsideEvent.emit();
@@ -665,6 +683,50 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         if (event) {
             this.translationLoaded = true;
         }
+    }
+
+    /**
+     * Captures the current form values as initial values for comparison
+     *
+     * @public
+     * @memberof CreateUpdateGroupComponent
+     */
+    public captureInitialFormValues(): void {
+        if (this.groupForm) {
+            this.initialFormValues = cloneDeep(this.groupForm.value);
+        }
+    }
+
+    /**
+     * Checks if the form is completely blank (all important fields are empty)
+     *
+     * @private
+     * @param {any} formValues
+     * @returns {boolean}
+     * @memberof CreateUpdateGroupComponent
+     */
+    private isFormCompletelyBlank(formValues: any): boolean {
+        if (!formValues) return true;
+        
+        // Check important form fields that indicate user input
+        const importantFields = [
+            'name',
+            'uniqueName',
+            'hsnNumber',
+            'sacNumber'
+        ];
+        
+        // Check if all important fields are empty/null/undefined
+        const allImportantFieldsEmpty = importantFields.every(field => {
+            const value = formValues[field];
+            return !value || value.toString().trim() === '';
+        });
+        
+        // Also check if taxes and discounts arrays are empty
+        const taxesEmpty = !formValues.taxes || formValues.taxes.length === 0;
+        const discountsEmpty = !formValues.discounts || formValues.discounts.length === 0;
+        
+        return allImportantFieldsEmpty && taxesEmpty && discountsEmpty;
     }
 
     /**
