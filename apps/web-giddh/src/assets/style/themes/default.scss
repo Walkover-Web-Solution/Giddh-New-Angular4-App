@@ -1,520 +1,546 @@
 body,
 body.default-theme {
+    /************************ COLOR NAME VARIABLES ************************/
+    --color-white: #ffffff;
+    --color-black: #212528;
+    --color-light-gray: #f5f5f5;
+    --color-medium-gray: #9b9b9e;
+    --color-dark-gray: #505159;
+    --color-silver: #cbcfd2;
+    --color-blue-primary: #1a237e;
+    --color-blue-secondary: none;
+    --color-orange: #e58a00;
+    --color-orange-light: #e58a0026;
+    --color-red: #C51E3A;
+    --color-red-light: #e5455626;
+    --color-green: #098757;
+    --color-green-light: #36b28326;
+    --color-deep-orange: #ff9933;
+    --color-transparent: transparent;
+    --color-shadow-light: #00000033;
+    --color-shadow-dark: #00000080;
+    --color-border-light: #e7e9eb;
+    --color-border-medium: #dee2e6;
+    --color-blue-light: #1a237e26;
+    --color-success-light: #e0f3e5;
+    --color-danger-light: #e545561a;
+
     // Body Color Variables
-    --color-body-background: #ffffff;
+    --color-body-background: var(--color-white);
 
     // Common variable (Mostly Used)
-    --color-common-primary-text: #212528;
-    --color-common-primary-text-hover: #1a237e;
-    --color-common-secondary-text: #505159;
-    --color-common-tertiary-text: #505159;
-    --color-common-quaternary-text: #212528;
-    --color-common-quinary-text: #212528;
-    --color-common-senary-text: #1a237e;
-    --color-common-septenary-text: #212528;
-    --color-common-octonary-text: #1a237e;
-    --color-common-primary-background-for-all-components: #ffffff;
-    --color-common-secondary-background-for-all-components: #f5f5f5;
-    --color-common-tertiary-background-for-all-components: #f5f5f5;
-    --color-common-quaternary-background-for-all-components: #1a237e26;
-    --color-common-quinary-background-for-all-components: #f5f5f5;
-    --color-common-senary-background-for-all-components: #cbcfd2;
-    --color-common-septenary-background-for-all-components: #f5f5f5;
+    --color-common-primary-text: var(--color-black);
+    --color-common-primary-text-hover: var(--color-blue-primary);
+    --color-common-secondary-text: var(--color-dark-gray);
+    --color-common-tertiary-text: var(--color-dark-gray);
+    --color-common-quaternary-text: var(--color-black);
+    --color-common-quinary-text: var(--color-black);
+    --color-common-senary-text: var(--color-blue-primary);
+    --color-common-septenary-text: var(--color-black);
+    --color-common-octonary-text: var(--color-blue-primary);
+    
+    --color-common-primary-background-for-all-components: var(--color-white);
+    --color-common-secondary-background-for-all-components: var(--color-light-gray);
+    --color-common-tertiary-background-for-all-components: var(--color-light-gray);
+    --color-common-quaternary-background-for-all-components: var(--color-blue-light);
+    --color-common-quinary-background-for-all-components: var(--color-light-gray);
+    --color-common-senary-background-for-all-components: var(--color-silver);
+    --color-common-septenary-background-for-all-components: var(--color-light-gray);
 
     // Signup Login Page Color Components
-    --color-primary-login-page-background: #1a237e;
-    --color-primary-login-box-header-background: #1a237e;
-    --color-primary-login-box-body-background: #ffffff;
-    --color-primary-login-box-body-text: #1a237e;
-    --color-secondary-login-box-body-text: #9b9b9e;
-    --color-tertiary-login-box-body-text: #ffffff;
-    --color-primary-google-box-background: #e58a0026;
-    --color-primary-login-with-google-box-background: #1a237e;
-    --color-primary-login-signup-linkedin-icon: #1a237e;
-    --color-primary-login-slide-content-btn-white: #e58a0026;
-    --color-primary-signup-ico-google-background: #e58a0026;
-    --color-primary-login-hash-tag: #C51E3A;
-    --color-primary-login-signup-body-unresponsive-background: #212528;
-    --color-primary-login-signup-mobile-background: #212528;
-    --color-primary-login-signup-slide-content-background: #212528;
-    --color-primary-login-signup-download-app-ul-li-a-hover: #212528;
-    --color-primary-login-signup-twitter-background: #1a237e;
-    --color-primary-login-signup-google-background: #C51E3A;
-    --color-primary-login-signup-linkedin-background: #1a237e;
-    --color-primary-login-signup-login-box-h1: #212528;
-    --color-primary-login-signup-slide-content-btn-white-hover: #212528;
-    --color-primary-login-signup-input-box: #212528;
-    --color-primary-login-signup-body-border: #ffffff;
+    --color-primary-login-page-background: var(--color-blue-primary);
+    --color-primary-login-box-header-background: var(--color-blue-primary);
+    --color-primary-login-box-body-background: var(--color-white);
+    --color-primary-login-box-body-text: var(--color-blue-primary);
+    --color-secondary-login-box-body-text: var(--color-medium-gray);
+    --color-tertiary-login-box-body-text: var(--color-white);
+    --color-primary-google-box-background: var(--color-orange-light);
+    --color-primary-login-with-google-box-background: var(--color-blue-primary);
+    --color-primary-login-signup-linkedin-icon: var(--color-blue-primary);
+    --color-primary-login-slide-content-btn-white: var(--color-orange-light);
+    --color-primary-signup-ico-google-background: var(--color-orange-light);
+    --color-primary-login-hash-tag: var(--color-red);
+    --color-primary-login-signup-body-unresponsive-background: var(--color-black);
+    --color-primary-login-signup-mobile-background: var(--color-black);
+    --color-primary-login-signup-slide-content-background: var(--color-black);
+    --color-primary-login-signup-download-app-ul-li-a-hover: var(--color-black);
+    --color-primary-login-signup-twitter-background: var(--color-blue-primary);
+    --color-primary-login-signup-google-background: var(--color-red);
+    --color-primary-login-signup-linkedin-background: var(--color-blue-primary);
+    --color-primary-login-signup-login-box-h1: var(--color-black);
+    --color-primary-login-signup-slide-content-btn-white-hover: var(--color-black);
+    --color-primary-login-signup-input-box: var(--color-black);
+    --color-primary-login-signup-body-border: var(--color-white);
 
     // Filter Color Variables
-    --color-filter-text-hover: #f5f5f5;
-    --color-filter-background-hover: #1a237e;
-    --color-primary-filter-background: #e7e9eb;
+    --color-filter-text-hover: var(--color-light-gray);
+    --color-filter-background-hover: var(--color-blue-primary);
+    --color-primary-filter-background: var(--color-border-light);
 
     // Loader Color Variables
-    --color-loader-primary-load-bar-and-nth-3rd-child-background: #e58a00;
+    --color-loader-primary-load-bar-and-nth-3rd-child-background: var(--color-orange);
 
     // Header Color Variables
-    --color-primary-icon-support-dropdown-toggle: #1a237e;
-    --color-primary-header-universal-date: #1a237e;
-    --color-primary-header-account-search-form-control-focus: #9b9b9e;
-    --color-primary-header-sub-menu-li-a: #9b9b9e;
+    --color-primary-icon-support-dropdown-toggle: var(--color-blue-primary);
+    --color-primary-header-universal-date: var(--color-blue-primary);
+    --color-primary-header-account-search-form-control-focus: var(--color-medium-gray);
+    --color-primary-header-sub-menu-li-a: var(--color-medium-gray);
     --color-primary-header-icons: #e5e5e5;
-    --color-primary-header-notification-text: #212528;
-    --color-primary-header-notification-background: #ffffff;
-    --color-primary-header-border-bottom: #ffffff;
-    --color-deep-saffron: #ff9933;
+    --color-primary-header-notification-text: var(--color-black);
+    --color-primary-header-notification-background: var(--color-white);
+    --color-primary-header-border-bottom: var(--color-white);
+    --color-deep-saffron: var(--color-deep-orange);
 
     // Card Color Variables
-    --color-account-card-primary-text: #212528;
-    --color-account-card-background: #f5f5f5;
-    --color-account-card-background-hover: #ffffff;
-    --color-upgrade-plan-primary: #1a237e;
-    --color-upgrade-plan-primary-background: #e7e9eb;
-    --color-upgrade-plan-secondary-background: #ffffff;
-    --color-upgrade-plan-tertiary-background: #e7e9eb;
-    --color-upgrade-plan-card-primary-background-hover: #e7e9eb;
-    --color-upgrade-plan-card-primary-border-hover: #1a237e;
-    --color-csv-or-excel-file-card-text: #1a237e;
-    --color-primary-card-text: #212528;
-    --color-primary-card-background: #ffffff;
-    --color-primary-card-box-shadow: #00000033;
+    --color-account-card-primary-text: var(--color-black);
+    --color-account-card-background: var(--color-light-gray);
+    --color-account-card-background-hover: var(--color-white);
+    --color-upgrade-plan-primary: var(--color-blue-primary);
+    --color-upgrade-plan-primary-background: var(--color-border-light);
+    --color-upgrade-plan-secondary-background: var(--color-white);
+    --color-upgrade-plan-tertiary-background: var(--color-border-light);
+    --color-upgrade-plan-card-primary-background-hover: var(--color-border-light);
+    --color-upgrade-plan-card-primary-border-hover: var(--color-blue-primary);
+    --color-csv-or-excel-file-card-text: var(--color-blue-primary);
+    --color-primary-card-text: var(--color-black);
+    --color-primary-card-background: var(--color-white);
+    --color-primary-card-box-shadow: var(--color-shadow-light);
 
     // Button Color Variables
-    --color-primary-button-text: #1a237e;
-    --color-primary-button-background: #ffffff;
-    --color-secondary-button-text: #ffffff;
-    --color-secondary-button-background: #1a237e;
-    --color-secondary-button-background-hover: #1a237e;
-    --color-tertiary-button-text: #505159;
-    --color-tertiary-button-background: transparent;
+    --color-primary-button-text: var(--color-blue-primary);
+    --color-primary-button-background: var(--color-white);
+    --color-secondary-button-text: var(--color-white);
+    --color-secondary-button-background: var(--color-blue-primary);
+    --color-secondary-button-background-hover: var(--color-blue-primary);
+    --color-tertiary-button-text: var(--color-dark-gray);
+    --color-tertiary-button-background: var(--color-transparent);
     --color-tertiary-button-background-hover: #1a237e0f;
-    --color-quaternary-button-text: #ffffff;
-    --color-quaternary-button-background: #1a237e;
-    --color-quinary-button-background: #1a237e;
-    --color-senary-button-text: #ffffff;
-    --color-senary-button-background: #1a237e;
-    --color-senary-button-background-hover: #1a237e;
-    --color-septenary-button-text: #212528;
-    --color-octonary-button-text: #9b9b9e;
-    --color-nonary-button-text: #ffffff;
-    --color-nonary-button-background: #098757;
-    --color-nonary-button-background-hover: #098757;
-    --color-denary-button-text: #212528;
-    --color-denary-button-background: #f5f5f5;
-    --color-primary-basic-button-opacity: #1a237e26;
-    --color-primary-filter-button-text: #505159;
-    --color-primary-basic-button-text: #505159;
-    --color-primary-cancel-button-background-hover: #9b9b9e;
-    --color-primary-button-border: #cbcfd2;
-    --color-secondary-button-border: #1a237e;
-    --color-primary-button-border-hover: #cbcfd2;
-    --color-default-button: #000000;
+    --color-quaternary-button-text: var(--color-white);
+    --color-quaternary-button-background: var(--color-blue-primary);
+    --color-quinary-button-background: var(--color-blue-primary);
+    --color-senary-button-text: var(--color-white);
+    --color-senary-button-background: var(--color-blue-primary);
+    --color-senary-button-background-hover: var(--color-blue-primary);
+    --color-septenary-button-text: var(--color-black);
+    --color-octonary-button-text: var(--color-medium-gray);
+    --color-nonary-button-text: var(--color-white);
+    --color-nonary-button-background: var(--color-green);
+    --color-nonary-button-background-hover: var(--color-green);
+    --color-denary-button-text: var(--color-black);
+    --color-denary-button-background: var(--color-light-gray);
+    --color-primary-basic-button-opacity: var(--color-blue-light);
+    --color-primary-filter-button-text: var(--color-dark-gray);
+    --color-primary-basic-button-text: var(--color-dark-gray);
+    --color-primary-cancel-button-background-hover: var(--color-medium-gray);
+    --color-primary-button-border: var(--color-silver);
+    --color-secondary-button-border: var(--color-blue-primary);
+    --color-primary-button-border-hover: var(--color-silver);
+    --color-default-button: var(--color-black);
 
     // Dropdown Color Variables
-    --color-dropdown-list: #212528;
-    --color-dropdown-list-secondary: #212528;
-    --color-dropdown-list-tertiary: #212528;
+    --color-dropdown-list: var(--color-black);
+    --color-dropdown-list-secondary: var(--color-black);
+    --color-dropdown-list-tertiary: var(--color-black);
     --color-dropdown-list-quaternary: #212529;
-    --color-dropdown-list-quinary: #212528;
-    --color-dropdown-list-senary: #1a237e;
+    --color-dropdown-list-quinary: var(--color-black);
+    --color-dropdown-list-senary: var(--color-blue-primary);
     --color-dropdown-list-icon: #212529;
     --color-dropdown-secondary-list-icon: #212529;
-    --color-dropdown-list-hover-text: #1a237e;
-    --color-dropdown-primary-background: #ffffff;
-    --color-dropdown-secondary-background: #e7e9eb;
-    --color-dropdown-terniary-background: #e7e9eb;
-    --color-dropdown-list-hover-background: #1a237e26;
-    --color-dropdown-secondary-list-hover-background: #f5f5f5;
-    --color-dropdown-tertiary-list-hover-background: #e7e9eb;
-    --color-dropdown-list-box-shadow: #cbcfd2;
-    --color-dropdown-primary-bar-border: #1a237e;
-    --color-primary-dropdown-placeholder: #9b9b9e;
+    --color-dropdown-list-hover-text: var(--color-blue-primary);
+    --color-dropdown-primary-background: var(--color-white);
+    --color-dropdown-secondary-background: var(--color-border-light);
+    --color-dropdown-terniary-background: var(--color-border-light);
+    --color-dropdown-list-hover-background: var(--color-blue-light);
+    --color-dropdown-secondary-list-hover-background: var(--color-light-gray);
+    --color-dropdown-tertiary-list-hover-background: var(--color-border-light);
+    --color-dropdown-list-box-shadow: var(--color-silver);
+    --color-dropdown-primary-bar-border: var(--color-blue-primary);
+    --color-primary-dropdown-placeholder: var(--color-medium-gray);
 
     // Checkbox, Radio Button, Mat-Expansion Panel Down Arrow and Icon Color Variables
-    --color-primary-icon: #212528;
-    --color-secondary-icon: #ffffff;
-    --color-primary-chips-cross-icon: #212528;
+    --color-primary-icon: var(--color-black);
+    --color-secondary-icon: var(--color-white);
+    --color-primary-chips-cross-icon: var(--color-black);
     --color-primary-checkbox-background-filter: invert(0);
-    --color-primary-checkbox-and-expansion-panel-arrow: #212528;
+    --color-primary-checkbox-and-expansion-panel-arrow: var(--color-black);
 
     // Expansion Panel Color Variables
-    --color-primary-expansion-panel-background: #f5f5f5;
+    --color-primary-expansion-panel-background: var(--color-light-gray);
 
     // Search Bar Color Variables
-    --color-sidebar-search-bar-text: #505159;
-    --color-sidebar-primary-search-bar-background: #f5f5f5;
-    --color-sidebar-secondary-search-bar-background: #f5f5f5;
-    --color-active-search-bar-border: #1a237e;
-    --color-company-profile-input-label: #212528;
-    --color-discount-search-bar-background: #ffffff;
-    --color-input-primary-background: #e7e9eb;
-    --color-input-secondary-background: #ffffff;
-    --color-input-tertiary-background: #f5f5f5;
-    --color-search-bar-primary-border: #cbcfd2;
-    --color-primary-search-bar-placeholder: #1a237e;
-    --color-secondary-search-bar-placeholder: #9b9b9e;
+    --color-sidebar-search-bar-text: var(--color-dark-gray);
+    --color-sidebar-primary-search-bar-background: var(--color-light-gray);
+    --color-sidebar-secondary-search-bar-background: var(--color-light-gray);
+    --color-active-search-bar-border: var(--color-blue-primary);
+    --color-company-profile-input-label: var(--color-black);
+    --color-discount-search-bar-background: var(--color-white);
+    --color-input-primary-background: var(--color-border-light);
+    --color-input-secondary-background: var(--color-white);
+    --color-input-tertiary-background: var(--color-light-gray);
+    --color-search-bar-primary-border: var(--color-silver);
+    --color-primary-search-bar-placeholder: var(--color-blue-primary);
+    --color-secondary-search-bar-placeholder: var(--color-medium-gray);
 
     // Input Bar Variables
-    --color-primary-input-bar-text: #212528;
-    --color-secondary-input-bar-text: #9b9b9e;
-    --color-primary-input-bar-border: #f5f5f5;
-    --color-secondary-input-bar-border: #cbcfd2;
-    --color-tertiary-input-bar-border: #cbcfd2;
-    --color-primary-input-bar-background: #f5f5f5;
-    --color-secondary-input-bar-background: #ffffff;
-    --color-tertiary-input-bar-background: #e7e9eb;
-    --color-primary-input-bar-background-focus: #1a237e26;
-    --color-secondary-input-bar-button: #9b9b9e;
-    --color-primary-input-placeholder: #9b9b9e;
+    --color-primary-input-bar-text: var(--color-black);
+    --color-secondary-input-bar-text: var(--color-medium-gray);
+    --color-primary-input-bar-border: var(--color-light-gray);
+    --color-secondary-input-bar-border: var(--color-silver);
+    --color-tertiary-input-bar-border: var(--color-silver);
+    --color-primary-input-bar-background: var(--color-light-gray);
+    --color-secondary-input-bar-background: var(--color-white);
+    --color-tertiary-input-bar-background: var(--color-border-light);
+    --color-primary-input-bar-background-focus: var(--color-blue-light);
+    --color-secondary-input-bar-button: var(--color-medium-gray);
+    --color-primary-input-placeholder: var(--color-medium-gray);
 
     // Datepicker Color Variables
-    --color-datepicker-title-text: #212528;
-    --color-datepicker-title-background: #e7e9eb;
-    --color-datepicker-header: #1a237e;
-    --color-datepicker-month-name: #212528;
-    --color-datepicker-date: #1a237e;
-    --color-datepicker-secondary-date: #212528;
-    --color-datepicker-ternary-date: #212528;
-    --color-datepicker-quaternary-date: #ffffff;
-    --color-datepicker-date-icon: #212528;
-    --color-datepicker-rightside-list-text: #212528;
-    --color-datepicker-rightside-list-primary-text-hover: #1a237e26;
-    --color-datepicker-right-side-list-secondary-text-hover: #f5f5f5;
-    --color-datepicker-input-label: #505159;
-    --color-primary-datepicker-input-bottom-border: #1a237e;
-    --color-datepicker-unselected-month: #212528;
-    --color-datepicker-background: #ffffff;
-    --color-main-content-datepicker: #212528;
-    --color-primary-head-datepicker-text: #212528;
-    --color-datepicker-box-shadow: #00000033;
-    --color-datepicker-selected-date-background: #1a237e26;
-    --color-datepicker-selected-date-range-background: #1a237e26;
-    --color-primary-datepicker-in-range-end-date-background: #1a237e26;
-    --color-primary-datepicker-btn-success-hover-active-focus: #1a237e;
-    --color-datepicker-mat-select-arrow-active: #1a237e;
-    --color-primary-datepicker-btn-angle-down: #cbcfd2;
-    --color-primary-datepicker-btn-btn-danger: #C51E3A;
-    --color-primary-datepicker-btn-btn-danger-hover-active-focus: #C51E3A;
-    --color-primary-datepicker-drop-down-box-shadow: #9b9b9e;
-    --color-primary-datepicker-in-range-background: #1a237e26;
-    --color-primary-datepicker-activated-date: #1a237e26;
-    --color-primary-datepicker-md-drppicker-th-div: #9b9b9e;
-    --color-primary-datepicker-unselected-date-hover: #f5f5f5;
-    --color-primary-datepicker-dropdown-color-active: #1a237e;
-    --color-primary-datepicker-dropdown-input: #212528;
+    --color-datepicker-title-text: var(--color-black);
+    --color-datepicker-title-background: var(--color-border-light);
+    --color-datepicker-header: var(--color-blue-primary);
+    --color-datepicker-month-name: var(--color-black);
+    --color-datepicker-date: var(--color-blue-primary);
+    --color-datepicker-secondary-date: var(--color-black);
+    --color-datepicker-ternary-date: var(--color-black);
+    --color-datepicker-quaternary-date: var(--color-white);
+    --color-datepicker-date-icon: var(--color-black);
+    --color-datepicker-rightside-list-text: var(--color-black);
+    --color-datepicker-rightside-list-primary-text-hover: var(--color-blue-light);
+    --color-datepicker-right-side-list-secondary-text-hover: var(--color-light-gray);
+    --color-datepicker-input-label: var(--color-dark-gray);
+    --color-primary-datepicker-input-bottom-border: var(--color-blue-primary);
+    --color-datepicker-unselected-month: var(--color-black);
+    --color-datepicker-background: var(--color-white);
+    --color-main-content-datepicker: var(--color-black);
+    --color-primary-head-datepicker-text: var(--color-black);
+    --color-datepicker-box-shadow: var(--color-shadow-light);
+    --color-datepicker-selected-date-background: var(--color-blue-light);
+    --color-datepicker-selected-date-range-background: var(--color-blue-light);
+    --color-primary-datepicker-in-range-end-date-background: var(--color-blue-light);
+    --color-primary-datepicker-btn-success-hover-active-focus: var(--color-blue-primary);
+    --color-datepicker-mat-select-arrow-active: var(--color-blue-primary);
+    --color-primary-datepicker-btn-angle-down: var(--color-silver);
+    --color-primary-datepicker-btn-btn-danger: var(--color-red);
+    --color-primary-datepicker-btn-btn-danger-hover-active-focus: var(--color-red);
+    --color-primary-datepicker-drop-down-box-shadow: var(--color-medium-gray);
+    --color-primary-datepicker-in-range-background: var(--color-blue-light);
+    --color-primary-datepicker-activated-date: var(--color-blue-light);
+    --color-primary-datepicker-md-drppicker-th-div: var(--color-medium-gray);
+    --color-primary-datepicker-unselected-date-hover: var(--color-light-gray);
+    --color-primary-datepicker-dropdown-color-active: var(--color-blue-primary);
+    --color-primary-datepicker-dropdown-input: var(--color-black);
 
     // SH-SELECT Color Variables
-    --color-primary-sh-select-disabled: #212528;
+    --color-primary-sh-select-disabled: var(--color-black);
 
     // Profit Loss Color Variables
     --color-primary-profit-loss-total-expenses-text: #996515;
-    --color-primary-profit-loss-total-income-text: #1a237e;
+    --color-primary-profit-loss-total-income-text: var(--color-blue-primary);
 
     // Aside Form Color Variables
-    --color-primary-aside-pane-form-box-shadow: #00000033;
-    --color-primary-aside-pane-back-to-main-slider: #1a237e;
-    --color-primary-aside-pane-unactive-background: #212528;
+    --color-primary-aside-pane-form-box-shadow: var(--color-shadow-light);
+    --color-primary-aside-pane-back-to-main-slider: var(--color-blue-primary);
+    --color-primary-aside-pane-unactive-background: var(--color-black);
 
     // Aside Setting and Aside Help Support Color Variables
-    --color-primary-aside-host-after-background: #f5f5f5;
-    --color-primary-aside-help-support-aside-header-pane-background: #f5f5f5;
+    --color-primary-aside-host-after-background: var(--color-light-gray);
+    --color-primary-aside-help-support-aside-header-pane-background: var(--color-light-gray);
 
     // All In One Menu Color Variables
-    --color-primary-all-in-one-menu-text: #212528;
+    --color-primary-all-in-one-menu-text: var(--color-black);
 
     // Aside Menu Create Tax Color Variables
-    --color-aside-menu-create-tax-custom-tags-span-background: #cbcfd2;
+    --color-aside-menu-create-tax-custom-tags-span-background: var(--color-silver);
 
     // Subscription Plans Color Variables
-    --color-primary-subscription-plans-top-bar-background: #e7e9eb;
-    --color-primary-subscription-plans-selected-background: #1a237e26;
-    --color-primary-subscription-active: #098757;
-    --color-primary-subscription-green-red-orange-dot-background: #098757;
-    --color-primary-tab-header-text: #505159;
-    --color-primary-subscription-search-placeholder-text: #505159;
-    --color-primary-subscription-dropdown-text: #212528;
-    --color-primary-subscription-dropdown-background: #cbcfd2;
-    --color-secondary-subscription-dropdown-background: #ffffff;
-    --color-secondary-subscription-dropdown-background-hover: #e7e9eb;
-    --color-primary-subscription-left-sidebar-box-background: #1a237e26;
-    --color-primary-subscription-left-sidebar-border-right: #cbcfd2;
+    --color-primary-subscription-plans-top-bar-background: var(--color-border-light);
+    --color-primary-subscription-plans-selected-background: var(--color-blue-light);
+    --color-primary-subscription-active: var(--color-green);
+    --color-primary-subscription-green-red-orange-dot-background: var(--color-green);
+    --color-primary-tab-header-text: var(--color-dark-gray);
+    --color-primary-subscription-search-placeholder-text: var(--color-dark-gray);
+    --color-primary-subscription-dropdown-text: var(--color-black);
+    --color-primary-subscription-dropdown-background: var(--color-silver);
+    --color-secondary-subscription-dropdown-background: var(--color-white);
+    --color-secondary-subscription-dropdown-background-hover: var(--color-border-light);
+    --color-primary-subscription-left-sidebar-box-background: var(--color-blue-light);
+    --color-primary-subscription-left-sidebar-border-right: var(--color-silver);
 
     // Proforma Invoice Color Variables
-    --color-primary-performa-invoice-a-copy-invoice: #1a237e;
-    --color-primary-performa-invoice-dissabled-background: #f5f5f5;
+    --color-primary-performa-invoice-a-copy-invoice: var(--color-blue-primary);
+    --color-primary-performa-invoice-dissabled-background: var(--color-light-gray);
 
     // Invoice Setting Color Variables
-    --color-primary-icon-estimate-path1-before: #e5455626;
+    --color-primary-icon-estimate-path1-before: var(--color-red-light);
 
     // Invoice Generate Color Variables
-    --color-invoice-generate-td-search-box-i: #9b9b9e;
-    --color-generate-invoice-primary-background: #f5f5f5;
-    --color-generate-invoice-secondary-background: #cbcfd2;
+    --color-invoice-generate-td-search-box-i: var(--color-medium-gray);
+    --color-generate-invoice-primary-background: var(--color-light-gray);
+    --color-generate-invoice-secondary-background: var(--color-silver);
 
     // Long Code Details Variables
-    --color-primary-long-code-details-background: #f5f5f5;
+    --color-primary-long-code-details-background: var(--color-light-gray);
 
     // Upload File Color Variables
-    --color-primary-select-file: #098757;
+    --color-primary-select-file: var(--color-green);
 
     // Jobwork Color Variables
-    --color-primary-inward-note: #098757;
+    --color-primary-inward-note: var(--color-green);
 
     // Update Ledger Entry Panel Color Variables
-    --color-primary-update-ledger-entry-panel-advanced-background: #f5f5f5;
+    --color-primary-update-ledger-entry-panel-advanced-background: var(--color-light-gray);
 
     // Primary Sidebar Color Variables
-    --color-primary-sidebar-company-branch-block-h3: #505159;
-    --color-primary-sidebar-branch-connection-outer-span-background: #9b9b9e;
-    --color-primary-sidebar-account-collapse-i: #9b9b9e;
-    --color-primary-sidebar-current-branch-name-anchor: #505159;
-    --color-primary-sidebar-menu-item-wrapper-list-anchor: #505159;
-    --color-primary-sidebar-account-dropdown-i: #505159;
-    --color-primary-sidebar-account-dropdown-collapse: #1a237e;
-    --color-primary-sidebar-menu-item-anchor-active-hover-highlight: #1a237e;
-    --color-primary-sidebar-menu-item-wrapper-sub-menu-border: #1a237e;
-    --color-primary-sidebar-show-more: #1a237e;
+    --color-primary-sidebar-company-branch-block-h3: var(--color-dark-gray);
+    --color-primary-sidebar-branch-connection-outer-span-background: var(--color-medium-gray);
+    --color-primary-sidebar-account-collapse-i: var(--color-medium-gray);
+    --color-primary-sidebar-current-branch-name-anchor: var(--color-dark-gray);
+    --color-primary-sidebar-menu-item-wrapper-list-anchor: var(--color-dark-gray);
+    --color-primary-sidebar-account-dropdown-i: var(--color-dark-gray);
+    --color-primary-sidebar-account-dropdown-collapse: var(--color-blue-primary);
+    --color-primary-sidebar-menu-item-anchor-active-hover-highlight: var(--color-blue-primary);
+    --color-primary-sidebar-menu-item-wrapper-sub-menu-border: var(--color-blue-primary);
+    --color-primary-sidebar-show-more: var(--color-blue-primary);
 
     // Import Excel and Wizard Color Variables
-    --color-import-excel-and-wizard-steps-wizard-li-label: #9b9b9e;
+    --color-import-excel-and-wizard-steps-wizard-li-label: var(--color-medium-gray);
 
     // Purchase Order Preview Color Variables
-    --color-primary-purchase-order-preview-eastern-blue-text: #098757;
-    --color-primary-purchase-order-preview-invoice-title-after-before-background: #098757;
+    --color-primary-purchase-order-preview-eastern-blue-text: var(--color-green);
+    --color-primary-purchase-order-preview-invoice-title-after-before-background: var(--color-green);
 
     // Purchase Register Expand Color Variables
-    --color-primary-purchase-register-expand-account-detail-custom-header-background: #f5f5f5;
+    --color-primary-purchase-register-expand-account-detail-custom-header-background: var(--color-light-gray);
 
     // Account Create Edit Color Variables
-    --color-account-create-edit-icici-account-create-edit: #505159;
+    --color-account-create-edit-icici-account-create-edit: var(--color-dark-gray);
 
     // Edit Template Color Variables
-    --color-primary-edit-template-btn-warning: #e58a00;
-    --color-primary-edit-template-badge-btn-success-hover: #cbcfd2;
+    --color-primary-edit-template-btn-warning: var(--color-orange);
+    --color-primary-edit-template-badge-btn-success-hover: var(--color-silver);
 
     // Payor Create Edit Color Variables
-    --color-payor-create-edit-icici-payor-account-create-edit: #505159;
+    --color-payor-create-edit-icici-payor-account-create-edit: var(--color-dark-gray);
 
     // Payment Aside Color Variables
-    --color-primary-payment-aside-creditors-detail: #212528;
-    --color-primary-payment-aside-contact-details: #212528;
+    --color-primary-payment-aside-creditors-detail: var(--color-black);
+    --color-primary-payment-aside-contact-details: var(--color-black);
 
     // Setting Intergation Color Variables
-    --color-primary-setting-integration-account-wrapper-border: #1a237e26;
-    --color-primary-setting-integration-account-approval-status-approved: #098757;
-    --color-primary-setting-integration-icici-button: #e58a00;
-    --color-primary-setting-integration-account-approval-status-pending-approval: #e58a00;
-    --color-primary-setting-integration-field-label: #505159;
-    --color-primary-setting-integration-action-anchor: #9b9b9e;
+    --color-primary-setting-integration-account-wrapper-border: var(--color-blue-light);
+    --color-primary-setting-integration-account-approval-status-approved: var(--color-green);
+    --color-primary-setting-integration-icici-button: var(--color-orange);
+    --color-primary-setting-integration-account-approval-status-pending-approval: var(--color-orange);
+    --color-primary-setting-integration-field-label: var(--color-dark-gray);
+    --color-primary-setting-integration-action-anchor: var(--color-medium-gray);
 
     // Company Import Export Color Variables
-    --color-primary-company-import-export-card-background: #f5f5f5;
+    --color-primary-company-import-export-card-background: var(--color-light-gray);
 
     // Expense Details Color Variables
-    --color-primary-expense-details-span-close-modal-cp-pull-right-background: #cbcfd2;
+    --color-primary-expense-details-span-close-modal-cp-pull-right-background: var(--color-silver);
 
     // Design Filters Color Variables
-    --color-design-filters-swatch-ul-li-nth-child5-background: #9b9b9e;
-    --color-design-filters-swatch-ul-li-nth-child7-background: #098757;
-    --color-design-filters-swatch-ul-li-nth-child8-background: #098757;
-    --color-design-filters-swatch-ul-li-nth-child9-background: #212528;
-    --color-design-filters-swatch-ul-li-nth-child10-background: #098757;
-    --color-design-filters-swatch-ul-li-nth-child12-background: #505159;
-    --color-design-filters-swatch-ul-li-nth-child13-background: #e58a00;
-    --color-design-filters-swatch-ul-li-nth-child14-background: #C51E3A;
-    --color-design-filters-swatch-ul-li-nth-child15-background: #505159;
-    --color-design-filters-swatch-ul-li-nth-child16-background: #C51E3A;
-    --color-design-filters-swatch-ul-li-nth-child17-background: #C51E3A;
-    --color-design-filters-swatch-ul-li-nth-child18-background: #505159;
+    --color-design-filters-swatch-ul-li-nth-child5-background: var(--color-medium-gray);
+    --color-design-filters-swatch-ul-li-nth-child7-background: var(--color-green);
+    --color-design-filters-swatch-ul-li-nth-child8-background: var(--color-green);
+    --color-design-filters-swatch-ul-li-nth-child9-background: var(--color-black);
+    --color-design-filters-swatch-ul-li-nth-child10-background: var(--color-green);
+    --color-design-filters-swatch-ul-li-nth-child12-background: var(--color-dark-gray);
+    --color-design-filters-swatch-ul-li-nth-child13-background: var(--color-orange);
+    --color-design-filters-swatch-ul-li-nth-child14-background: var(--color-red);
+    --color-design-filters-swatch-ul-li-nth-child15-background: var(--color-dark-gray);
+    --color-design-filters-swatch-ul-li-nth-child16-background: var(--color-red);
+    --color-design-filters-swatch-ul-li-nth-child17-background: var(--color-red);
+    --color-design-filters-swatch-ul-li-nth-child18-background: var(--color-dark-gray);
 
     // Company Branch Color Variables
-    --color-primary-company-branch-dropdown-total-company-count: #505159;
-    --color-primary-company-branch-digit-orange: #e58a00;
-    --color-primary-company-branch-company-list-btn-group-active-hover: #e58a0026;
-    --color-primary-company-branch-branch-list-active-hover: #1a237e26;
-    --color-primary-company-branch-company-list-btn-group-open-background: #1a237e26;
-    --color-primary-company-branch-company-list-btn-group-open-span-active: #1a237e26;
-    --color-primary-company-branch-wrap-company-refresh-small-background: #e7e9eb;
-    --color-primary-company-branch-company-list-li-hover-span-background: #1a237e26;
-    --color-primary-company-branch-dropdown-menu-anchor-hover: #505159;
-    --color-primary-company-branch-company-branches-list: #505159;
-    --color-primary-company-branch-branch-list-anchor: #505159;
-    --color-primary-company-branch-icon-reload: #505159;
-    --color-primary-company-branch-btn-group-dropdown-toggle-span: #505159;
-    --color-primary-company-branch-wrap-company-refresh-small: #505159;
-    --color-primary-company-branch-input-group-append: #9b9b9e;
-    --color-primary-company-branch-dropdown-menu-head-branch: #1a237e;
-    --color-primary-company-branch-digit-blue: #1a237e;
+    --color-primary-company-branch-dropdown-total-company-count: var(--color-dark-gray);
+    --color-primary-company-branch-digit-orange: var(--color-orange);
+    --color-primary-company-branch-company-list-btn-group-active-hover: var(--color-orange-light);
+    --color-primary-company-branch-branch-list-active-hover: var(--color-blue-light);
+    --color-primary-company-branch-company-list-btn-group-open-background: var(--color-blue-light);
+    --color-primary-company-branch-company-list-btn-group-open-span-active: var(--color-blue-light);
+    --color-primary-company-branch-wrap-company-refresh-small-background: var(--color-border-light);
+    --color-primary-company-branch-company-list-li-hover-span-background: var(--color-blue-light);
+    --color-primary-company-branch-dropdown-menu-anchor-hover: var(--color-dark-gray);
+    --color-primary-company-branch-company-branches-list: var(--color-dark-gray);
+    --color-primary-company-branch-branch-list-anchor: var(--color-dark-gray);
+    --color-primary-company-branch-icon-reload: var(--color-dark-gray);
+    --color-primary-company-branch-btn-group-dropdown-toggle-span: var(--color-dark-gray);
+    --color-primary-company-branch-wrap-company-refresh-small: var(--color-dark-gray);
+    --color-primary-company-branch-input-group-append: var(--color-medium-gray);
+    --color-primary-company-branch-dropdown-menu-head-branch: var(--color-blue-primary);
+    --color-primary-company-branch-digit-blue: var(--color-blue-primary);
 
     // Popup Color Variables
-    --color-popup-list-head-text: #ffffff;
-    --color-popup-secondary-list-head-text: #212528;
-    --color-popup-body-text: #212528;
-    --color-popup-list-input-text: #212528;
-    --color-popup-list-input-text-hover: #ffffff;
-    --color-popup-list-hover: #1a237e;
-    --color-popup-background: #ffffff;
-    --color-popup-secondary-background: #e58a0026;
-    --color-popup-footer-text: #212528;
-    --color-popup-footer-background: #f5f5f5;
-    --color-popup-list-all-features-text: #505159;
-    --color-primary-popup-list-header-bottom-border: #1a237e;
-    --color-primary-popup-background-hover: #f5f5f5;
+    --color-popup-list-head-text: var(--color-white);
+    --color-popup-secondary-list-head-text: var(--color-black);
+    --color-popup-body-text: var(--color-black);
+    --color-popup-list-input-text: var(--color-black);
+    --color-popup-list-input-text-hover: var(--color-white);
+    --color-popup-list-hover: var(--color-blue-primary);
+    --color-popup-background: var(--color-white);
+    --color-popup-secondary-background: var(--color-orange-light);
+    --color-popup-footer-text: var(--color-black);
+    --color-popup-footer-background: var(--color-light-gray);
+    --color-popup-list-all-features-text: var(--color-dark-gray);
+    --color-primary-popup-list-header-bottom-border: var(--color-blue-primary);
+    --color-primary-popup-background-hover: var(--color-light-gray);
 
     // Common Chips Variables
     --color-chips-primary: #212529;
-    --color-chips-primary-background: #f5f5f5;
-    --color-chips-secondary-background: #cbcfd2;
+    --color-chips-primary-background: var(--color-light-gray);
+    --color-chips-secondary-background: var(--color-silver);
 
     // Tabs Color Variables
-    --color-tab-primary-text: #1a237e;
-    --color-tab-secondary-text: #212528;
-    --color-tab-tertiary-text: #212528;
-    --color-tab-tertiary-text-hover: #1a237e;
-    --color-tab-primary-selected-tab-bottom-border: #1a237e;
-    --color-tab-primary-background: #ffffff;
-    --color-tab-secondary-background: #f5f5f5;
-    --color-tab-primary-active: #1a237e;
-    --color-tab-primary-inactive: #505159;
-    --color-tab-primary-border-bottom: #cbcfd2;
+    --color-tab-primary-text: var(--color-blue-primary);
+    --color-tab-secondary-text: var(--color-black);
+    --color-tab-tertiary-text: var(--color-black);
+    --color-tab-tertiary-text-hover: var(--color-blue-primary);
+    --color-tab-primary-selected-tab-bottom-border: var(--color-blue-primary);
+    --color-tab-primary-background: var(--color-white);
+    --color-tab-secondary-background: var(--color-light-gray);
+    --color-tab-primary-active: var(--color-blue-primary);
+    --color-tab-primary-inactive: var(--color-dark-gray);
+    --color-tab-primary-border-bottom: var(--color-silver);
 
     // Rectangular Tabs Color Variables
-    --color-rectangular-tab-active-primary-text: #1a237e;
-    --color-rectangular-tab-active-primary-border: #1a237e;
-    --color-rectangular-tab-primary-background: #ffffff;
-    --color-rectangular-tab-inactive-primary-icon: #212528;
-    --color-rectangular-tab-inactive-primary-text: #212528;
-    --color-rectangular-tab-box-shadow: #cbcfd2;
-    --color-rectangular-tab-inactive-primary-border: #1a237e;
-    --color-rectangular-tab-inactive-secondary-border: #cbcfd2;
+    --color-rectangular-tab-active-primary-text: var(--color-blue-primary);
+    --color-rectangular-tab-active-primary-border: var(--color-blue-primary);
+    --color-rectangular-tab-primary-background: var(--color-white);
+    --color-rectangular-tab-inactive-primary-icon: var(--color-black);
+    --color-rectangular-tab-inactive-primary-text: var(--color-black);
+    --color-rectangular-tab-box-shadow: var(--color-silver);
+    --color-rectangular-tab-inactive-primary-border: var(--color-blue-primary);
+    --color-rectangular-tab-inactive-secondary-border: var(--color-silver);
 
     // Invoice Preview Color Variables
-    --color-primary-invoice-preview-text: #212528;
-    --color-primary-invoice-preview-background: #ffffff;
+    --color-primary-invoice-preview-text: var(--color-black);
+    --color-primary-invoice-preview-background: var(--color-white);
 
     // Pagination Color Variables
-    --color-pagination-button: #212528;
-    --color-pagination-background: #1a237e;
-    --color-pagination-border: #1a237e;
-    --color-pagination-active-button: #ffffff;
-    --color-pagination-button-hover-background: #cbcfd2;
+    --color-pagination-button: var(--color-black);
+    --color-pagination-background: var(--color-blue-primary);
+    --color-pagination-border: var(--color-blue-primary);
+    --color-pagination-active-button: var(--color-white);
+    --color-pagination-button-hover-background: var(--color-silver);
 
     // Header and Footer Color Variables
-    --color-primary-header-background: #1a237e;
-    --color-primary-header-icon-traingle-info: #C51E3A;
-    --color-primary-footer-background: #cbcfd2;
-    --color-secondary-footer-background: #e7e9eb;
+    --color-primary-header-background: var(--color-blue-primary);
+    --color-primary-header-icon-traingle-info: var(--color-red);
+    --color-primary-footer-background: var(--color-silver);
+    --color-secondary-footer-background: var(--color-border-light);
 
     // Ledger Heading Color Variable
-    --color-ledger-heading: #1a237e;
-    --color-ledger-grid-border-color: #cbcfd2;
-    --color-primary-ledger-box-shadow: #00000033;
-    --color-primary-ledger-stat-block-border: #1a237e26;
+    --color-ledger-heading: var(--color-blue-primary);
+    --color-ledger-grid-border-color: var(--color-silver);
+    --color-primary-ledger-box-shadow: var(--color-shadow-light);
+    --color-primary-ledger-stat-block-border: var(--color-blue-light);
 
     // Invoice Preview Details Color Variables
-    --color-invoice-preview-details-default-header: #C51E3A;
-    --color-invoice-preview-giddh-table-tbody-tr-background-hover: #1a237e26;
-    --color-invoice-preview-giddh-table-border-right: #cbcfd2;
-    --color-invoice-preview-span-close-modal-background: #cbcfd2;
-    --color-invoice-preview-default-footer-border: #098757;
-    --color-primary-invoice-preview-details-left-sidebar-list-background-active-hover: #f5f5f5;
-    --color-primary-invoice-preview-details-background: #f5f5f5;
+    --color-invoice-preview-details-default-header: var(--color-red);
+    --color-invoice-preview-giddh-table-tbody-tr-background-hover: var(--color-blue-light);
+    --color-invoice-preview-giddh-table-border-right: var(--color-silver);
+    --color-invoice-preview-span-close-modal-background: var(--color-silver);
+    --color-invoice-preview-default-footer-border: var(--color-green);
+    --color-primary-invoice-preview-details-left-sidebar-list-background-active-hover: var(--color-light-gray);
+    --color-primary-invoice-preview-details-background: var(--color-light-gray);
 
     // Contact Color Variables
-    --color-primary-contact-icon-dots-three-vertical: #505159;
-    --color-primary-contact-total-customer-vendor-count: #505159;
-    --color-primary-contact-aging-table-thead-tr-th-border: #cbcfd2;
-    --color-primary-contact-aging-table-text-lowercase-word-wrap: #9b9b9e;
-    --color-primary-contact-p-modal-tooltip-border: #9b9b9e;
+    --color-primary-contact-icon-dots-three-vertical: var(--color-dark-gray);
+    --color-primary-contact-total-customer-vendor-count: var(--color-dark-gray);
+    --color-primary-contact-aging-table-thead-tr-th-border: var(--color-silver);
+    --color-primary-contact-aging-table-text-lowercase-word-wrap: var(--color-medium-gray);
+    --color-primary-contact-p-modal-tooltip-border: var(--color-medium-gray);
 
     // Master Page Color Variables
-    --color-master-page-input-clear-text: #1a237e;
-    --color-master-page-input-no-result-text: #505159;
-    --color-master-page-tab-background: #f5f5f5;
-    --color-master-page-primary-tab: #212528;
-    --color-master-page-secondary-tab: #212528;
-    --color-master-page-primary-text-hover: #1a237e;
-    --color-master-page-text-secondary-hover: #1a237e;
-    --color-master-page-sidebar-active-list: #1a237e;
-    --color-master-page-input-label: #212528;
-    --color-master-page-left-sidebar-primary-background: #f5f5f5;
-    --color-master-page-left-sidebar-secondary-background: #ffffff;
-    --color-master-page-main-content-primary-background: #f5f5f5;
-    --color-master-page-main-content-secondary-background: #ffffff;
-    --color-master-page-sidebar-active-list-text: #212528;
-    --color-master-page-sidebar-active-list-background: #f5f5f5;
-    --color-master-page-sidebar-primary-group: #9b9b9e;
+    --color-master-page-input-clear-text: var(--color-blue-primary);
+    --color-master-page-input-no-result-text: var(--color-dark-gray);
+    --color-master-page-tab-background: var(--color-light-gray);
+    --color-master-page-primary-tab: var(--color-black);
+    --color-master-page-secondary-tab: var(--color-black);
+    --color-master-page-primary-text-hover: var(--color-blue-primary);
+    --color-master-page-text-secondary-hover: var(--color-blue-primary);
+    --color-master-page-sidebar-active-list: var(--color-blue-primary);
+    --color-master-page-input-label: var(--color-black);
+    --color-master-page-left-sidebar-primary-background: var(--color-light-gray);
+    --color-master-page-left-sidebar-secondary-background: var(--color-white);
+    --color-master-page-main-content-primary-background: var(--color-light-gray);
+    --color-master-page-main-content-secondary-background: var(--color-white);
+    --color-master-page-sidebar-active-list-text: var(--color-black);
+    --color-master-page-sidebar-active-list-background: var(--color-light-gray);
+    --color-master-page-sidebar-primary-group: var(--color-medium-gray);
 
     // Left Sidebar Color Variables
-    --color-sidebar-content-text: #212528;
-    --color-sidebar-primary-anchor-text: #505159;
-    --color-sidebar-secondary-anchor-text: #505159;
-    --color-sidebar-menu-list-items: #ffffff;
-    --color-sidebar-list-head: #212528;
-    --color-sidebar-anchor-text-hover: #1a237e;
-    --color-sidebar-company-background: #1a237e26;
-    --color-sidebar-secondary-company-background: #f5f5f5;
-    --color-sidebar-background: #ffffff;
-    --color-sidebar-footer-logout-section-background: #ffffff;
-    --color-sidebar-company-count-text: #505159;
-    --color-sidebar-company-count-background: #e7e9eb;
-    --color-sidebar-create-company-list-text: #505159;
+    --color-sidebar-content-text: var(--color-black);
+    --color-sidebar-primary-anchor-text: var(--color-dark-gray);
+    --color-sidebar-secondary-anchor-text: var(--color-dark-gray);
+    --color-sidebar-menu-list-items: var(--color-white);
+    --color-sidebar-list-head: var(--color-black);
+    --color-sidebar-anchor-text-hover: var(--color-blue-primary);
+    --color-sidebar-company-background: var(--color-blue-light);
+    --color-sidebar-secondary-company-background: var(--color-light-gray);
+    --color-sidebar-background: var(--color-white);
+    --color-sidebar-footer-logout-section-background: var(--color-white);
+    --color-sidebar-company-count-text: var(--color-dark-gray);
+    --color-sidebar-company-count-background: var(--color-border-light);
+    --color-sidebar-create-company-list-text: var(--color-dark-gray);
     --color-sidebar-create-company-list-background: #f0f4ff;
-    --color-sidebar-list-background-hover: #1a237e26;
-    --color-sidebar-primary-box-shadow: #00000033;
+    --color-sidebar-list-background-hover: var(--color-blue-light);
+    --color-sidebar-primary-box-shadow: var(--color-shadow-light);
 
     // Giddh Logo Color Variable
     --color-primary-giddh-logo: ;
 
     // Tax Sidebar Color Variables
-    --color-primary-tax-sidebar-text: #505159;
-    --color-primary-tax-sidebar-list-active: #1a237e;
-    --color-primary-tax-sidebar-list-hover: #e7e9eb;
-    --color-primary-tax-sidebar-gst-menu-items-ul: #505159;
+    --color-primary-tax-sidebar-text: var(--color-dark-gray);
+    --color-primary-tax-sidebar-list-active: var(--color-blue-primary);
+    --color-primary-tax-sidebar-list-hover: var(--color-border-light);
+    --color-primary-tax-sidebar-gst-menu-items-ul: var(--color-dark-gray);
 
     // MF Report Color Variables
-    --color-primary-mf-report-row-gray-th-background: #e7e9eb;
+    --color-primary-mf-report-row-gray-th-background: var(--color-border-light);
 
     // New Branch Transfer Color Variables
-    --color-new-branch-table-delivery-basic-thead-tbody-tr-th-last-child: #cbcfd2;
+    --color-new-branch-table-delivery-basic-thead-tbody-tr-th-last-child: var(--color-silver);
 
     // Branch Color Variables
-    --color-primary-branch-active-status: #098757;
+    --color-primary-branch-active-status: var(--color-green);
 
     // All Items Page Color Variables
-    --color-primary-all-items-page-heading: #1a237e;
-    --color-primary-all-items-page-single-menu-items-hover-active: #1a237e;
-    --color-primary-all-items-page-single-menu-items-heading: #505159;
-    --color-primary-all-items-page-single-menu-items-body: #9b9b9e;
-    --color-primary-all-items-page-wrapper-block-border: #e7e9eb;
-    --color-primary-all-items-input-group-input-background: #e7e9eb;
+    --color-primary-all-items-page-heading: var(--color-blue-primary);
+    --color-primary-all-items-page-single-menu-items-hover-active: var(--color-blue-primary);
+    --color-primary-all-items-page-single-menu-items-heading: var(--color-dark-gray);
+    --color-primary-all-items-page-single-menu-items-body: var(--color-medium-gray);
+    --color-primary-all-items-page-wrapper-block-border: var(--color-border-light);
+    --color-primary-all-items-input-group-input-background: var(--color-border-light);
 
     // Grid Row Color Variables
-    --color-grid-row-tb-pl-custom-header-background: #f5f5f5;
+    --color-grid-row-tb-pl-custom-header-background: var(--color-light-gray);
 
     // GST Color Variables
-    --color-gst-primary-background-color: #f5f5f5;
-    --color-gst-primary-doc-actions: #C51E3A;
-    --color-gst-primary-return-body-notification-faq-list-li-a-hover: #1a237e;
-    --color-gst-primary-return-content-return-filed: #098757;
-    --color-gst-primary-c-tab-nav-tabs-active-hover-focus-border-bottom: #1a237e;
-    --color-gst-primary-filing-due-date-return-details-table-tbody-tr-td-first-child-before: #1a237e;
-    --color-gst-primary-table-text: #212528;
-    --color-gst-primary-table-background: #f5f5f5;
-    --color-gst-secondary-table-background: #ffffff;
+    --color-gst-primary-background-color: var(--color-light-gray);
+    --color-gst-primary-doc-actions: var(--color-red);
+    --color-gst-primary-return-body-notification-faq-list-li-a-hover: var(--color-blue-primary);
+    --color-gst-primary-return-content-return-filed: var(--color-green);
+    --color-gst-primary-c-tab-nav-tabs-active-hover-focus-border-bottom: var(--color-blue-primary);
+    --color-gst-primary-filing-due-date-return-details-table-tbody-tr-td-first-child-before: var(--color-blue-primary);
+    --color-gst-primary-table-text: var(--color-black);
+    --color-gst-primary-table-background: var(--color-light-gray);
+    --color-gst-secondary-table-background: var(--color-white);
 
     // GSTR3 Color Variables
-    --color-primary-tax-engine-summary-gstr-3b-report-table-tbody-thead-td-border: #9b9b9e;
-    --color-primary-gstr3-page-main-button: #ffffff;
+    --color-primary-tax-engine-summary-gstr-3b-report-table-tbody-thead-td-border: var(--color-medium-gray);
+    --color-primary-gstr3-page-main-button: var(--color-white);
 
     // Inventory Stock Report Color Variables
-    --color-primary-credit: #1a237e;
-    --color-primary-inventory-stock-report-journal: #098757;
-    --color-primary-inventory-stock-balance-list-background: #f5f5f5;
-    --color-primary-inventory-stock-balance-text: #505159;
-    --color-primary-inventory-stock-expanded-list-background: #1a237e26;
-    --color-primary-inventory-stock-dropdown-button-background: #ffffff;
+    --color-primary-credit: var(--color-blue-primary);
+    --color-primary-inventory-stock-report-journal: var(--color-green);
+    --color-primary-inventory-stock-balance-list-background: var(--color-light-gray);
+    --color-primary-inventory-stock-balance-text: var(--color-dark-gray);
+    --color-primary-inventory-stock-expanded-list-background: var(--color-blue-light);
+    --color-primary-inventory-stock-dropdown-button-background: var(--color-white);
 
     // All Features Color Variables
     --color-all-features-money-back-guarantee: #9b9b9e;
@@ -668,26 +694,26 @@ body.default-theme {
     --color-upload-btn-background: #e58a0026;
     --color-pop-panel-form-control-background: #e58a0026;
     --color-ledger-row-td-select2-container-select2-search__field-background: #e58a0026;
-    --color-ratio-chart-block-nth-child2-span-pie-text-center: #e58a00;
-    --color-ratio-chart-block-nth-child3-span-pie-text-center: #C51E3A;
-    --color-ratio-chart-block-nth-child4-span-pie-text-center: #098757;
-    --color-scroll-auto-webkit-scrollbar-track-background: #cbcfd2;
-    --color-primary-virtual-scroll-scrollable-content-item-a-item-stock: #9b9b9e;
-    --color-manufacture-source-tbody-tr-td-nth-child1-before-background: #cbcfd2;
-    --color-primary-text-warning: #e58a00;
-    --color-primary-tax-engine-reconciliation-accepted: #098757;
-    --color-primary-thumbnail-border: #e5455626;
-    --color-primary-daterangepicker-input-mini-active-border: #e5455626;
-    --color-primary-selection-none-header-selection: #f5f5f5;
-    --color-primary-sky-blue-bg-background: #1a237e26;
-    --color-primary-square-switch-input-checked-label: #098757;
-    --color-primary-add-company-detail-add-mailer-form-background: #ffffff;
+    --color-ratio-chart-block-nth-child2-span-pie-text-center: var(--color-orange);
+    --color-ratio-chart-block-nth-child3-span-pie-text-center: var(--color-red);
+    --color-ratio-chart-block-nth-child4-span-pie-text-center: var(--color-green);
+    --color-scroll-auto-webkit-scrollbar-track-background: var(--color-silver);
+    --color-primary-virtual-scroll-scrollable-content-item-a-item-stock: var(--color-medium-gray);
+    --color-manufacture-source-tbody-tr-td-nth-child1-before-background: var(--color-silver);
+    --color-primary-text-warning: var(--color-orange);
+    --color-primary-tax-engine-reconciliation-accepted: var(--color-green);
+    --color-primary-thumbnail-border: var(--color-red-light);
+    --color-primary-daterangepicker-input-mini-active-border: var(--color-red-light);
+    --color-primary-selection-none-header-selection: var(--color-light-gray);
+    --color-primary-sky-blue-bg-background: var(--color-blue-light);
+    --color-primary-square-switch-input-checked-label: var(--color-green);
+    --color-primary-add-company-detail-add-mailer-form-background: var(--color-white);
 
     // Virtual Scroll Color Variables
-    --color-primary-virtual-scroll-background: #ffffff;
+    --color-primary-virtual-scroll-background: var(--color-white);
 
     // Common Leftout Text Color Variables
-    --color-common-primary-dark-blue: #1a237e;
+    --color-common-primary-dark-blue: var(--color-blue-primary);
 
     // Common Image Filter Variable
     --color-image-filter: invert(0);
@@ -699,34 +725,29 @@ body.default-theme {
     --color-caret-image: url("../../images/caret-light.svg");
     --color-image-filter-white: brightness(0) invert(1);
 
-    /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
-    --color-blue: #1a237e;
-    --color-black: #212528;
-    --color-giddh-blue: #1a237e;
-    --color-wild-sand: #f5f5f5;
-    --color-skeleton-loading-gradient-inner: #f5f5f5;
-    --color-white: #ffffff;
-    --color-white-secondary: #f5f5f5;
-    --color-white-tertiary: #ffffff;
-    --color-dark-fog: #e7e9eb;
-    --color-lavender: #e7e9eb;
-    --color-filter-background: #e7e9eb;
-    --color-iron: #cbcfd2;
-    --color-black-russian: #cbcfd2;
-    --color-gray: #9b9b9e;
+    /************************ ADDITIONAL COLOR ALIASES ************************/
+    --color-blue: var(--color-blue-primary);
+    --color-giddh-blue: var(--color-blue-primary);
+    --color-wild-sand: var(--color-light-gray);
+    --color-skeleton-loading-gradient-inner: var(--color-light-gray);
+    --color-white-secondary: var(--color-light-gray);
+    --color-white-tertiary: var(--color-white);
+    --color-dark-fog: var(--color-border-light);
+    --color-lavender: var(--color-border-light);
+    --color-filter-background: var(--color-border-light);
+    --color-iron: var(--color-silver);
+    --color-black-russian: var(--color-silver);
+    --color-gray: var(--color-medium-gray);
     --color-gray-dark: #696969;
-    --color-abbey: #505159;
-    --color-nero: #212528;
-    --color-teal: #098757;
-    --color-foam: #36b28326;
-    --color-chardon: #e58a0026;
-    --color-red: #C51E3A;
+    --color-abbey: var(--color-dark-gray);
+    --color-nero: var(--color-black);
+    --color-teal: var(--color-green);
+    --color-foam: var(--color-green-light);
+    --color-chardon: var(--color-orange-light);
     --color-red-border: #e54556;
-    --color-orange: #e58a00;
-    --color-solitude-light: #1a237e26;
-    --color-dark-gray: #505159;
-    --color-tutu: #e5455626;
-    --color-slate: #505159;
+    --color-solitude-light: var(--color-blue-light);
+    --color-tutu: var(--color-red-light);
+    --color-slate: var(--color-dark-gray);
 
     /*---- box-shadow ----*/
     --color-search-box-shadow: #00000040;
