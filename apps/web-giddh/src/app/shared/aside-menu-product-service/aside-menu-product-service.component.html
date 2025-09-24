@@ -1,7 +1,7 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <section class="aside-dialog-wrapper">
         <div class="dialog-header">
-            <span mat-dialog-title>
+            <span>
                 {{ commonLocaleData?.app_add }}
                 <span *ngIf="voucherApiVersion === 2">{{
                     stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"

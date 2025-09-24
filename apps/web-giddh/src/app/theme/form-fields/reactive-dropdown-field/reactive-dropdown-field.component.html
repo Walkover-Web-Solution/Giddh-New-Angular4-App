@@ -32,7 +32,7 @@
                             <mat-divider *ngIf="showOptionDivider"></mat-divider>
                         </ng-container>
                         <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
-                            {{ commonLocaleData?.app_no_result_found }}
+                            {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
                         </mat-option>
                         <a href="javascript:;" *ngIf="showCreateNew && createNewText" (click)="createNewRecord()"
                             class="position-sticky create-new-wrapper d-flex justify-content-between px-3 py-2">
@@ -88,7 +88,7 @@
                 {{option?.label}}
             </mat-option>
             <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
-                {{ commonLocaleData?.app_no_result_found }}
+                {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
             </mat-option>
         </mat-autocomplete>
     </ng-container>

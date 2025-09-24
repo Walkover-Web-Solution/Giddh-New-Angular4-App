@@ -366,7 +366,7 @@ export class ListManufacturingComponent implements OnInit {
         this.isReportLoading = true;
         this.showHideClearFilterButton();
         this.setFiltersInStore();
-
+console.log(data);
         this.manufacturingService.GetMfReport(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.results?.length) {
                 let reportData = [];
@@ -562,7 +562,7 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (PAGINATION_LIMIT !== event.pageSize) {
+        if (this.manufacturingSearchRequest.count !== event.pageSize) {
             this.currentPage = 0;
             this.manufacturingSearchRequest.page = 1;
         } else {
