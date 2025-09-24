@@ -382,7 +382,7 @@
     <ng-template #mailModal *ngIf="activeTab === 'vendor'" tabindex="1">
         <div>
             <div class="dialog-header">
-                <span mat-dialog-title>{{ messageBody.header.set }}</span>
+                <span>{{ messageBody.header.set }}</span>
                 <button mat-icon-button aria-label="close"  (click)="closeAllDialogs()">
                     <i class="icon-cross"></i>
                 </button>
@@ -436,7 +436,7 @@
     <ng-template #mailModal *ngIf="activeTab === 'customer'" tabindex="-1" class="email-dialog-box">
         <div>
             <div class="dialog-header">
-                <span mat-dialog-title>{{ messageBody.header.set }}</span>
+                <span>{{ messageBody.header.set }}</span>
                 <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
                     <i class="icon-cross"></i>
                 </button>
@@ -1060,7 +1060,7 @@
                                     <ng-template #mailModal>
                                         <div (click)="$event.stopPropagation()">
                                             <div class="dialog-header">
-                                                <span mat-dialog-title>{{ messageBody.header.set }}</span>
+                                                <span>{{ messageBody.header.set }}</span>
                                                 <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
                                                     <i class="icon-cross"></i>
                                                 </button>

@@ -3442,12 +3442,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateDiscountDialog(): void {
-        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, {
-            position: {
-                right: "0",
-                top: "0",
-            },
-        });
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
         this.discountDialogRef
             .afterClosed()

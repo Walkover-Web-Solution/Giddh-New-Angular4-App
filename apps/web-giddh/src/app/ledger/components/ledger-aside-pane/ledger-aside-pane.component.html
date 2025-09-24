@@ -1,6 +1,6 @@
 <section class="aside-dialog-wrapper">
     <div class="dialog-header">
-        <span mat-dialog-title>
+        <span>
             {{ isAddAccountOpen ? commonLocaleData?.app_create_account : commonLocaleData?.app_add }}
             <span *ngIf="voucherApiVersion === 2 && !isAddAccountOpen">{{
                 stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"

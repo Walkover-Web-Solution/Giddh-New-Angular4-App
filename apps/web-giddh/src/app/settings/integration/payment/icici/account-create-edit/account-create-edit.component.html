@@ -14,7 +14,7 @@
         (ngSubmit)="actionAccount()"
     >
         <div class="dialog-header" *ngIf="localeData?.payment">
-            <span mat-dialog-title>
+            <span>
                 {{ activeBankAccount ? localeData?.payment?.edit_account : localeData?.payment?.connect_icici_account }}
             </span>
             <button
