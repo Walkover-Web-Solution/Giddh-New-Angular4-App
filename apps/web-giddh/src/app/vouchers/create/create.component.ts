@@ -1598,7 +1598,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
-            if (!this.isUpdateMode && !this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+            if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
                 let salesPersonName = "";
                 let salesPersonUniqueName = null;
 
@@ -1609,8 +1609,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         salesPersonUniqueName = salesPerson.value
                     }
                 }
-                this.invoiceForm.get('salesPersonName').patchValue(salesPersonName);
-                this.invoiceForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
+                if (!(this.isUpdateMode && salesPersonUniqueName === null)) {
+                    this.invoiceForm.get('salesPersonName').patchValue(salesPersonName);
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
+                }
             }
         });
     }

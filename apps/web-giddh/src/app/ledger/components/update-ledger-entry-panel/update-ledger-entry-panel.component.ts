@@ -523,12 +523,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         document.querySelector('body')?.classList?.add('update-ledger-entry-panel-popup');
         this.assignStockVariantDetails();
 
-        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe(salesPersonList => {
-            if (!this.isSalesPersonExists(this.vm.selectedLedger.salesPersonUniqueName, salesPersonList)) {
-                this.vm.selectedLedger.salesPersonUniqueName = null;
-                this.vm.selectedLedger.salesPerson = this.resetSalesPerson();
-            }
-        });
+        // this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe(salesPersonList => {
+        //     if (!this.isSalesPersonExists(this.vm.selectedLedger.salesPersonUniqueName, salesPersonList)) {
+        //         this.vm.selectedLedger.salesPersonUniqueName = null;
+        //         this.vm.selectedLedger.salesPerson = this.resetSalesPerson();
+        //     }
+        // });
     }
 
     public toggleShow(): void {
