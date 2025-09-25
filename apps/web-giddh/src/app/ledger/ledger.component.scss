@@ -1293,3 +1293,11 @@ input#ledger-search {
         right: 10px;
     }
 }
+
+:host ::ng-deep mat-paginator {
+    &.hide-total-items {
+        .mat-mdc-paginator-range-label {
+            display: none;
+        }
+    }
+}
