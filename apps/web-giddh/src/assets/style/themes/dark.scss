@@ -744,7 +744,7 @@ body.dark-theme {
     --color-teal: var(--color-green);
     --color-foam: var(--color-green-light);
     --color-chardon: var(--color-orange-light);
-    --color-red-border: #e54556;
+    --color-red-border: var(--color-red);
     --color-solitude-light: var(--color-blue-light);
     --color-tutu: var(--color-red-light);
     --color-slate: var(--color-medium-gray);
@@ -759,9 +759,9 @@ body.dark-theme {
     --color-fields-border: #ced4da;
     --color-field-hover: #ced4da;
     --color-border-focus: #3f51b5;
-    --color-transparent-background: #00000000;
+    --color-transparent-background: var(--color-transparent);
     --color-header-icon-background: #11185c;
-    --color-primary-common : #3f51b5;
+    --color-primary-common : var(--color-blue-primary);
     --color-mat-option: #0000000a;
     --color-list: var(--color-white);
     --mat-menu-box-shadow: 0px 5px 5px -3px var(--color-drag-shadow), 0px 8px 10px 1px var(--color-drag-bottom-shadow),
