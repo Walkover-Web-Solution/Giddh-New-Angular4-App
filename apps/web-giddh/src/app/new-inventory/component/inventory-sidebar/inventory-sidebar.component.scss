@@ -33,7 +33,7 @@
                 bottom: 25px;
                 z-index: 1;
                 font-size: var(--font-size-16);
-                font-family: var(--font-regular);
+                font-family: var(--font-family);
                 text-transform: uppercase !important;
             }
             .icon-pull-top {
@@ -96,7 +96,7 @@
                         letter-spacing: 0.14px;
                         height: 27px;
                         align-items: center;
-                        font: normal normal 600 var(--font-size-15) / 30px var(--font-regular);
+                        font: normal normal 600 var(--font-size-15) / 30px var(--font-family);
                         &:hover {
                             color: var(--color-white-tertiary);
                             background-color: var(--color-giddh-blue);
@@ -130,7 +130,7 @@
                         letter-spacing: 0.14px;
                         height: 27px;
                         font: normal normal 600 var(--font-size-15) / 30px;
-                        font-family: var(--font-regular);
+                        font-family: var(--font-family);
                         color: var(--color-sidebar-content-text);
                         &:last-child {
                             min-height: 37px;
@@ -162,7 +162,7 @@
         padding: 0;
         list-style: none;
         font-size: var(--font-size-15);
-        font-family: var(--font-semibold);
+        font-weight: var(--font-weight-semibold);
 
         li {
             padding: 6px 20px;
@@ -206,7 +206,7 @@
 }
 
 .inventory-sub-bar {
-    font-family: var(--font-regular) !important;
+    font-family: var(--font-family) !important;
 
     li {
         a {

@@ -270,7 +270,7 @@ table.ledger-footer-1 td[class*="col-"] {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     text-transform: capitalize;
 }
 
@@ -364,7 +364,7 @@ table.ledger-footer-1 td[class*="col-"] {
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid var(--color-iron);
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-15);
     border-top: 1px solid var(--color-iron);
 }
@@ -767,7 +767,7 @@ sh-select:focus {
 
             .transaction-date {
                 font-size: var(--font-size-15);
-                font-family: var(--font-semibold);
+                font-weight: var(--font-weight-semibold);
             }
 
             td {
@@ -1007,7 +1007,7 @@ input#ledger-search {
             text-align: left;
 
             .item {
-                font-family: var(--font-semibold);
+                font-weight: var(--font-weight-semibold);
             }
         }
 

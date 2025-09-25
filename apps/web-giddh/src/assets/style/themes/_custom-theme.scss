@@ -1,0 +1,57 @@
+@use "@angular/material" as mat;
+@use "./_custom-palette" as palette;
+@use "./custom_typography" as typography;
+// Base theme styles (common to all themes)
+@include mat.core();
+
+// Use Giddh default palettes for compilation
+$primary-palette: palette.$exported-primary-palette;
+$accent-palette: palette.$exported-accent-palette;
+$warn-palette: palette.$exported-warn-palette;
+$typography: typography.$exported-custom-typography;
+
+// Dark theme palettes - using lighter variants for better contrast
+$primary-palette-dark: palette.$exported-primary-palette-dark;
+$accent-palette-dark: palette.$exported-accent-palette-dark;
+$warn-palette-dark: palette.$exported-warn-palette-dark;
+
+// Light Theme Configuration
+$light-theme: mat.define-light-theme(
+    (
+        color: (
+            primary: $primary-palette,
+            accent: $accent-palette,
+            warn: $warn-palette,
+        ),
+        typography: typography.$exported-custom-typography,
+    )
+);
+
+// Dark Theme Configuration - using lighter color variants for proper dark theme contrast
+$dark-theme: mat.define-dark-theme(
+    (
+        color: (
+            primary: $primary-palette-dark,
+            accent: $accent-palette-dark,
+            warn: $warn-palette-dark,
+        ),
+        typography: typography.$exported-custom-typography,
+    )
+);
+
+@include mat.all-component-themes($light-theme);
+@include mat.typography-hierarchy(typography.$exported-custom-typography);
+
+// Common styles that don't change between themes
+@include mat.all-component-densities($light-theme);
+
+// Specific Angular Material component overrides
+body.mat-typography {
+    font-family: var(--font-family), sans-serif !important;
+}
+
+// Override any inherited font families for nested elements
+[class*="mat-"] *,
+[class^="mat-"] * {
+    font-family: inherit !important;
+}

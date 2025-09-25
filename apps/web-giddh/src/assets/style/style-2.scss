@@ -1,57 +1,51 @@
 @charset "utf-8";
-@import "@angular/material/theming";
-@import "../css/giddh-common.scss";
-@import "@angular/material/prebuilt-themes/indigo-pink.css";
+@use './themes/_custom-theme.scss';
 @import "./json-tree.scss";
 @import "./json-diff.scss";
 @import "./intl.scss";
-$custom-typography: mat-typography-config(
-    $font-family: var(--font-regular),
-);
-@include angular-material-typography($custom-typography);
-@import "../css/global/utility.scss";
-@import "../css/ngx-bs-datepicker.scss";
-@import "../css/global/add-company.scss";
-@import "../css/global/aside-modal.scss";
-@import "../css/global/onboarding.scss";
-@import "../css/global/setting.profile.scss";
-@import "../css/global/user-details.scss";
-@import "../css/global/permission-list.scss";
-@import "../css/global/aside-menu-account.scss";
-@import "../css/global/subscription.component.scss";
-@import "../css/global/custom-fields.scss";
-@import "../css/global/inventory.scss";
-@import "../css/global/all-items.scss";
-@import "../css/global/header.scss";
-@import "../css/global/search.scss";
-@import "../css/global/mat-button.scss";
-@import "../css/global/vat-report.scss";
-@import "../css/global/help-support.scss";
-@import "../css/global/sales-register-expand.scss";
-@import "../css/global/setting-integration.scss";
-@import "../css/global/input-dropdown-field.scss";
-@import "../css/global/voucher.scss";
-@import "../css/global/tabs.scss";
-@import "../css/global/table.scss";
-@import "../css/global/custom-price.scss";
-@import "../css/global/inventory-adjustment.scss";
-@import "../css/global/global-variable.scss";
-@import "../css/global/vouchers.scss";
-@import "../css/global/tax-dropdown.scss";
-@import "../css/global/discount-dropdown.scss";
-@import "../css/global/dialog.scss";
-@import "../css/global/add-bulk-entry.scss";
-@import "../css/global/settings-sidebar.scss";
-@import "../css/global/mat-menu.scss";
-@import "../css/global/tax-authority.scss";
-@import "../css/global/adjustment-inventory.scss";
-@import "../css/global/d3-tree-chart.scss";
-@import "../css/global/vouchers-preview.scss";
-@import "../css/global/custom-paginator.scss";
-@import "../css/global/mat-chip.scss";
-@import "../css/global/select-multiple-fields.scss";
-@import "../css/global/override-material-theme-variables";
-@import "../css/global/tribute-js.scss";
+@import "./global/utility.scss";
+@import "./ngx-bs-datepicker.scss";
+@import "./global/add-company.scss";
+@import "./global/aside-modal.scss";
+@import "./global/onboarding.scss";
+@import "./global/setting.profile.scss";
+@import "./global/user-details.scss";
+@import "./global/permission-list.scss";
+@import "./global/aside-menu-account.scss";
+@import "./global/subscription.component.scss";
+@import "./global/custom-fields.scss";
+@import "./global/inventory.scss";
+@import "./global/all-items.scss";
+@import "./global/header.scss";
+@import "./global/search.scss";
+@import "./global/mat-button.scss";
+@import "./global/vat-report.scss";
+@import "./global/help-support.scss";
+@import "./global/sales-register-expand.scss";
+@import "./global/setting-integration.scss";
+@import "./global/input-dropdown-field.scss";
+@import "./global/voucher.scss";
+@import "./global/tabs.scss";
+@import "./global/table.scss";
+@import "./global/custom-price.scss";
+@import "./global/inventory-adjustment.scss";
+@import "./global/global-variable.scss";
+@import "./global/vouchers.scss";
+@import "./global/tax-dropdown.scss";
+@import "./global/discount-dropdown.scss";
+@import "./global/dialog.scss";
+@import "./global/add-bulk-entry.scss";
+@import "./global/settings-sidebar.scss";
+@import "./global/mat-menu.scss";
+@import "./global/tax-authority.scss";
+@import "./global/adjustment-inventory.scss";
+@import "./global/d3-tree-chart.scss";
+@import "./global/vouchers-preview.scss";
+@import "./global/custom-paginator.scss";
+@import "./global/mat-chip.scss";
+@import "./global/select-multiple-fields.scss";
+@import "./global/override-material-theme-variables";
+@import "./global/tribute-js.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -64,7 +58,7 @@ input,
 optgroup,
 select,
 textarea {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
 }
 
 .basic > tbody > tr > td,
@@ -96,7 +90,7 @@ textarea {
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid var(--color-table-primary-content-bar-border);
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-15);
 }
 
@@ -1522,7 +1516,7 @@ aside-create-group {
 }
 
 body {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     font-display: block;
     -webkit-font-smoothing: auto;
     padding: 0 !important;
@@ -2012,11 +2006,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
 }
 
 .font-bold {
-    font-family: var(--font-bold);
+    font-weight: var(--font-weight-bold);
 }
 
 .modal-open {
@@ -2043,7 +2037,7 @@ ul.sub-list {
 
 .top-heading > h4 {
     font-size: var(--font-size-16);
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -2186,7 +2180,7 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     text-align: left !important;
 }
 
@@ -2247,7 +2241,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: var(--font-regular) !important;
+    font-family: var(--font-family) !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -2508,7 +2502,7 @@ modal-container.modal {
 }
 
 .table-modal thead tr th {
-    font-family: var(--font-regular) !important;
+    font-family: var(--font-family) !important;
     font-family: cursive;
     border-right: 1px solid var(--color-iron);
 }
@@ -5845,7 +5839,7 @@ input[type="checkbox"][disabled] {
 
 .section-head {
     padding-bottom: 10px;
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-16);
     color: var(--color-common-quaternary-text);
 }
@@ -6046,13 +6040,13 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container section div .group {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     text-transform: uppercase;
 }
 
 .welcome-header h2 {
     font-size: var(--font-size-24);
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     color: var(--color-common-primary-text);
 }
 
@@ -6352,7 +6346,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .welcome-header h1 {
     font-size: var(--font-size-32);
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     color: var(--color-giddh-blue);
 }
 
@@ -6384,7 +6378,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .welcome-header h2 {
     font-size: var(--font-size-24);
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     color: var(--color-common-primary-text);
     position: relative;
 }
@@ -7092,7 +7086,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: var(--color-giddh-blue);
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     vertical-align: middle;
 }
 
@@ -8014,7 +8008,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 }
 
 .border-radius-0 {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
 }
 
 .border-radius-0 small.mr-t05.mr-b05.grey {
@@ -8317,7 +8311,7 @@ span.red-text {
 }
 
 .total-sales-tabs .nav-tabs > li.active a {
-    font-family: var(--font-bold);
+    font-weight: var(--font-weight-bold);
 }
 
 .total-sales-tabs .nav-tabs > li.active > a,
@@ -8444,7 +8438,7 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid var(--color-tab-primary-selected-tab-bottom-border) !important;
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     background-color: inherit;
 }
 
@@ -8485,7 +8479,7 @@ ul.dropdown-menu p.lead.pd {
 
 #invoice-setting ul.nav.nav-tabs a {
     border-bottom: 1px solid !important;
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     color: var(--color-rectangular-tab-inactive-primary-icon) !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
@@ -8602,7 +8596,7 @@ ul.dropdown-menu p.lead.pd {
 
 #tab-integration .nav-tabs > li a.active {
     border: 1px solid var(--color-rectangular-tab-active-primary-border) !important;
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     color: var(--color-rectangular-tab-active-primary-text) !important;
     border-color: var(--color-rectangular-tab-active-primary-border) !important;
     background-color: var(--color-rectangular-tab-primary-background);
@@ -9862,7 +9856,7 @@ span#HW_badge_cont:nth-child(3) {
             margin-bottom: 0;
             font-size: var(--font-size-15);
             border-bottom: none;
-            font-family: var(--font-semibold);
+            font-weight: var(--font-weight-semibold);
             background-color: var(--color-popup-background);
         }
 
@@ -9897,7 +9891,7 @@ span#HW_badge_cont:nth-child(3) {
             flex: 1;
 
             .item {
-                font-family: var(--font-semibold);
+                font-weight: var(--font-weight-semibold);
             }
         }
 
@@ -10592,7 +10586,7 @@ body {
                                 #sales-info-check {
                                     .mat-checkbox-label {
                                         font: normal normal 600 var(--font-size-15) / 17px;
-                                        font-family: var(--font-regular);
+                                        font-family: var(--font-family);
                                         letter-spacing: 0px;
                                         position: relative;
                                         bottom: 1px;
@@ -10898,7 +10892,7 @@ body.update-scroll-hidden {
 
                     a {
                         min-width: 110px;
-                        font-family: var(--font-regular);
+                        font-family: var(--font-family);
                         color: var(--color-common-primary-text) !important;
                         padding-top: 5px !important;
                         padding-left: 20px !important;
@@ -13274,7 +13268,7 @@ voucher-component {
 .mat-mdc-dialog-container {
     .mdc-dialog__title {
         font-size: var(--font-size-16) !important;
-        font-family: var(--font-semibold) !important;
+        font-weight: var(--font-weight-semibold) !important;
         color: var(--color-toast-primary-text) !important;
         padding: 0 15px 0 15px;
         line-height: 55px !important;

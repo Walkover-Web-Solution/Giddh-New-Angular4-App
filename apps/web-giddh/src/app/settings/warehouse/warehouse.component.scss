@@ -10,7 +10,7 @@
 }
 .create-warehouse h2 {
     font-size: var(--font-size-16);
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     margin: 10px 0;
 }
 .create-warehouse p {
@@ -96,7 +96,7 @@
 
 .warehouse-card h3 {
     font-size: var(--font-size-15);
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     float: left;
     width: 66%;
     word-break: break-all;
@@ -114,7 +114,7 @@ span.set-as-default {
     font-size: var(--font-size-15);
 }
 .warehouse-details label {
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
     width: 70px;
     color: var(--color-abbey);
     &.cursor-pointer,
