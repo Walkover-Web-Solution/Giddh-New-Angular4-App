@@ -155,7 +155,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             .subscribe((searchedText) => {
                 if (this.isNotNullOrUndefined(searchedText)) {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.getAllOcrDocuments(true);
+                    this.aiOcrService.mainPage$.next(false);
                 }
                 if (this.isNullOrEmpty(searchedText)) {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
@@ -168,7 +168,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             .subscribe((searchedText) => {
                 if (this.isNotNullOrUndefined(searchedText)) {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.getAllOcrDocuments(true);
+                    this.aiOcrService.mainPage$.next(false);
                 }
                 if (this.isNullOrEmpty(searchedText)) {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
@@ -181,7 +181,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             .subscribe((searchedText) => {
                 if (this.isNotNullOrUndefined(searchedText)) {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.getAllOcrDocuments(true);
+                    this.aiOcrService.mainPage$.next(false);
                 }
                 if (this.isNullOrEmpty(searchedText)) {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
@@ -194,7 +194,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             .subscribe((searchedText) => {
                 if (this.isNotNullOrUndefined(searchedText)) {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.getAllOcrDocuments(true);
+                    this.aiOcrService.mainPage$.next(false);
                 }
                 if (this.isNullOrEmpty(searchedText)) {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
