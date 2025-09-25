@@ -5,7 +5,7 @@ import { NgForm } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { GenerateEwayBill, IEwayBillTransporter, IAllTransporterDetails, IEwayBillfilter } from '../../../models/api-models/Invoice';
-import { IOption } from '../../../theme/ng-select/ng-select';
+import { IOption } from '../../../app.constant';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { Router } from '@angular/router';
@@ -27,14 +27,21 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Holds eWayBillCredentialsTemplate reference */
     @ViewChild('eWayBillCredentialsTemplate', { static: true }) public eWayBillCredentialsTemplate: TemplateRef<any>;
+    /** Holds generateInvForm reference */
     @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
+    /** Holds generateTransporterForm reference */
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
+    /** Holds invoiceRemoveConfirmationTemplate reference */
     @ViewChild('invoiceRemoveConfirmationTemplate', { static: true }) public invoiceRemoveConfirmationTemplate: TemplateRef<any>;
+    /** Holds subgrp reference */
     @ViewChild('subgrp', { static: true }) public subgrp: any;
+    /** Holds doctypes reference */
     @ViewChild('doctypes', { static: true }) public doctype: any;
+    /** Holds trans reference */
     @ViewChild('trans', { static: true }) public transport: any;
-    /** Element reference for transaction sub type */
+    /** Holds transSubType reference */
     @ViewChild('transSubType', { static: true }) public transSubType: any;
     /** Transporter template reference */
     @ViewChild('transporterTemplate', { static: true }) public transporterTemplate: TemplateRef<any>;
@@ -153,6 +160,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        if (this.generalService.voucherApiVersion === 1) {
+            this.router.navigate(['pages', 'home']);
+            return;
+        }
         this.transporterFilterRequest.page = 1;
         this.transporterFilterRequest.count = PAGINATION_LIMIT;
         this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {

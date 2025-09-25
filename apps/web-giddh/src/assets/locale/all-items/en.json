@@ -513,6 +513,18 @@
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
                     ]
+                },
+                {
+                    "label": "Template",
+                    "link": "/pages/vouchers/preview/purchase/templates",
+                    "icon": "icon-template",
+                    "description": "Edit design & content of the template",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },

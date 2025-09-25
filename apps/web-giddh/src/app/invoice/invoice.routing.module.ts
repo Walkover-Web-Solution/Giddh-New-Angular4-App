@@ -14,7 +14,6 @@ const INVOICE_ROUTES: Routes = [
         children: [
             { path: '', redirectTo: 'preview/sales', pathMatch: 'full' },
             { path: 'ewaybill/create', component: EWayBillCreateComponent },
-
         ]
     },
     { path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent },

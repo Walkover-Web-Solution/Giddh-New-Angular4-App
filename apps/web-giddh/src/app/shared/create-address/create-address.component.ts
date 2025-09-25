@@ -159,7 +159,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                             permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
                         }
                     });
-                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    dialogRef.afterClosed().subscribe(response => {
                         if (response) {
                             let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
                             this.addressForm.get('name')?.patchValue(result.body?.lgnm);

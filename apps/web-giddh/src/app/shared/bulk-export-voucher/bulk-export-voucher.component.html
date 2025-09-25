@@ -1,16 +1,15 @@
 <ng-container appTranslate [file]="'bulk-export-voucher'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
 
-    <div class="modal-header">
-        <h4 class="modal-title pull-left">
+    <div class="dialog-header">
+        <span>
             {{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ totalItems }}
-        </h4>
-        <button mat-stroked-button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
-            (click)="closeModal()">
-            <span aria-hidden="true">&times;</span>
+        </span>
+        <button mat-icon-button aria-label="close" (click)="closeModal()">
+            <i class="icon-cross"></i>
         </button>
     </div>
-    <div class="modal-body">
+    <mat-dialog-content class="dialog-body">
         <div class="export-modal-wrapper" *ngIf="isLoading">
             <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>
@@ -63,4 +62,4 @@
                 </div>
             </div>
         </div>
-    </div>
+    </mat-dialog-content>

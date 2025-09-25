@@ -5,9 +5,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountRequestV2, AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -24,6 +24,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
     @Output() public updateEvent: EventEmitter<UpdateAccountRequest> = new EventEmitter();
+    /** Emitted when the back button is pressed */
+    @Output() public backButtonPressedEvent: EventEmitter<void> = new EventEmitter();
     /** Emitted when the update via patch api . */
     @Output() public updateViaPatchApi: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2, isAccountArchived?: boolean }>
         = new EventEmitter();
@@ -68,6 +70,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Input() public isCustomerCreation: boolean;
     /** True if creating account from cmd+k */
     @Input() public allGroups: boolean;
+    /** True if back button is visible */
+    @Input() public backButtonVisible: boolean = false;
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
@@ -150,6 +154,16 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
                 this.closeAsideEvent.emit(event);
             }
         }
+    }
+
+    /**
+     * This will use for back button pressed
+     * 
+     * @memberof GenericAsideMenuAccountComponent
+     * @returns {void}
+     */
+    public backButtonPressed(): void {
+        this.backButtonPressedEvent.emit();
     }
 
     public isGroupSelected(event) {

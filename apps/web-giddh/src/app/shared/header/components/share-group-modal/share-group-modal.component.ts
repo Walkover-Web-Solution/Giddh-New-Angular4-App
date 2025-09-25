@@ -12,8 +12,7 @@ import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
 import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
-import { RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
+import { IOption, RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({

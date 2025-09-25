@@ -118,7 +118,7 @@ export class ListManufacturingComponent implements OnInit {
     /** Holds Total Pages Count*/
     public totalPages: number = 1;
     /** Holds Current Page Number */
-    public currentPage: number = 1;
+    public currentPage: number = 0;
 
     constructor(
         private dialog: MatDialog,
@@ -366,7 +366,6 @@ export class ListManufacturingComponent implements OnInit {
         this.isReportLoading = true;
         this.showHideClearFilterButton();
         this.setFiltersInStore();
-
         this.manufacturingService.GetMfReport(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.results?.length) {
                 let reportData = [];
@@ -464,6 +463,7 @@ export class ListManufacturingComponent implements OnInit {
         if ((this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) && this.allWarehouses?.length) {
             this.warehouses = this.allWarehouses[selectedEntity?.value];
         }
+        this.getReport();
     }
 
     /**
@@ -561,11 +561,11 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (PAGINATION_LIMIT !== event.pageSize) {
-            this.currentPage = 1;
+        if (this.manufacturingSearchRequest.count !== event.pageSize) {
+            this.currentPage = 0;
             this.manufacturingSearchRequest.page = 1;
         } else {
-            this.currentPage = event.pageIndex + 1;
+            this.currentPage = event.pageIndex;
             this.manufacturingSearchRequest.page = event.pageIndex + 1;
         }
         this.manufacturingSearchRequest.count = event.pageSize;

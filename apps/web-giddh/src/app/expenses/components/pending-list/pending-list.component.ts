@@ -201,11 +201,12 @@ export class PendingListComponent implements OnInit, OnChanges {
             this.approveEntryRequestInProcess = false;
             if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", res?.body);
+                this.pettycashRequest.page = this.generalService.adjustPageIndex(this.pettyCashPendingReportResponse?.totalItems, this.pettyCashPendingReportResponse?.page, this.pettyCashPendingReportResponse?.count);
+                this.getPettyCashPendingReports(this.pettycashRequest);
             } else {
                 this.toaster.showSnackBar("error", res?.message);
             }
             this.selectedEntryForApprove = null;
-            this.getPettyCashPendingReports(this.pettycashRequest);
             this.hideApproveConfirmPopup(false);
         });
     }
@@ -408,6 +409,7 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.approveEntryModalRef.close();
 
         if (isRejected) {
+            this.pettycashRequest.page = this.generalService.adjustPageIndex(this.pettyCashPendingReportResponse?.totalItems, this.pettyCashPendingReportResponse?.page, this.pettyCashPendingReportResponse?.count);
             this.getPettyCashPendingReports(this.pettycashRequest);
             this.getPettyCashRejectedReports(this.pettycashRequest);
         }

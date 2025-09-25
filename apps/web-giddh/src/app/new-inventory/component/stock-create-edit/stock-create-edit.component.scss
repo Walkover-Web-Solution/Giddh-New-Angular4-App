@@ -53,7 +53,7 @@
 
         .select-puchase-info {
             padding: 6px 0px;
-            font-family: var(--font-semibold);
+            font-weight: var(--font-weight-semibold);
         }
 
         .add-new-field {
@@ -73,10 +73,10 @@
                 display: flex;
                 align-items: center;
                 overflow: hidden;
-                font-family: var(--font-regular) !important;
+                font-family: var(--font-family) !important;
 
                 .add-new-text-container {
-                    font-family: var(--font-regular);
+                    font-family: var(--font-family);
                     position: relative;
                     cursor: pointer;
                     font-size: var(--font-size-12);
@@ -122,7 +122,7 @@
     .stock-made-with {
         margin-bottom: 15px;
         position: relative;
-        font-family: var(--font-semibold);
+        font-weight: var(--font-weight-semibold);
 
         &:after {
             position: absolute;
@@ -308,7 +308,8 @@
                         align-items: center;
                         justify-content: center;
                         position: absolute;
-                        bottom: 0px;
+                        bottom: 50%;
+                        transform: translateY(50%);
                         left: 95%;
                         min-width: 95px;
                     }
@@ -363,14 +364,6 @@
 
 .inner-content-footer {
     padding: 0px 22px 15px;
-
-    .clear-btn {
-        width: 89px;
-        height: 36px;
-        color: var(--color-primary-button-text);
-        margin-right: 15px;
-        border: 1px solid var(--color-secondary-button-border);
-    }
 
     .create-inventory-btn {
         width: 198px;

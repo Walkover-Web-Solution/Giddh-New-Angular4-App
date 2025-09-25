@@ -8,7 +8,7 @@ import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
@@ -24,8 +24,6 @@ import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../mo
 export class TemplateEditFilterComponent implements OnInit {
     /** Ng form instance of content filter component */
     @ViewChild(NgForm) templateForm: NgForm;
-    /** File input element reference for logo upload */
-    @ViewChild('fileInput', { static: true }) logoFile: ElementRef;
     /** Input data passed to the component */
     @Input() public dialogData: any;
     /** Current mode of the component (e.g., 'create', 'edit') */
@@ -38,8 +36,6 @@ export class TemplateEditFilterComponent implements OnInit {
     public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
     /** True, if a logo is attached */
     public logoAttached: boolean = false;
-    /** True, if logo should be displayed */
-    public showLogo: boolean = true;
     /** Unique name of the selected template */
     public selectedTemplateUniqueName: string = TemplateTypeEnum.GstTemplateA;
     /** List of preset font options */
@@ -107,7 +103,7 @@ export class TemplateEditFilterComponent implements OnInit {
     /** Stores the active company name */
     public activeCompanyName: string;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Holds the value if company is Indian */
     public isIndianCompany: boolean = false;
     /** Hold list of suggestion items for Tribute.js */
@@ -122,10 +118,46 @@ export class TemplateEditFilterComponent implements OnInit {
     public activeTab: string;
     /** This will hold local JSON data */
     public localeData: any = {};
+    /** Selected signature type for radio button group */
+    public selectedSignatureType: string = '';
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds voucher type enum */
     public voucherTypeEnum: any = VoucherTypeEnum;
+    /** Holds images folder path */
+    public imgPath: string = "";
+    /** Timer for debouncing field changes */
+    private fieldChangeTimer: any;
+    /** Color palette for template customization */
+    public readonly colorPalette = [
+        { primary: '#bdbdbd', secondary: '#fcfcfc' },
+        { primary: '#636363', secondary: '#f7f7f7' },
+        { primary: '#000000', secondary: '#f2f2f2' },
+        { primary: '#e34818', secondary: '#f2f3f4' },
+        { primary: '#7889a1', secondary: '#f8f9fa' },
+        { primary: '#48565f', secondary: '#f6f6f7' },
+        { primary: '#79bd58', secondary: '#f8fcf6' },
+        { primary: '#0e909a', secondary: '#f3f9fa' },
+        { primary: '#202e5a', secondary: '#f4f4f7' },
+        { primary: '#96bc2d', secondary: '#fafcf4' },
+        { primary: '#2a651d', secondary: '#f4f7f3' },
+        { primary: '#004254', secondary: '#f2f5f6' },
+        { primary: '#ff8c00', secondary: '#fffaf3' },
+        { primary: '#82001d', secondary: '#f9f2f3' },
+        { primary: '#6b1438', secondary: '#f7f3f5' },
+        { primary: '#f4749b', secondary: '#fef8fa' },
+        { primary: '#950069', secondary: '#faf2f7' },
+        { primary: '#542852', secondary: '#f6f4f6' }
+    ];
+    /** Selected file for image upload */
+    public footerSelectedFile: any;
+    /** Holds the file object after selection */
+    public footerFile: any;
+    /** Selected file for image upload */
+    public mainLogoSelectedFile: any;
+    /** Holds the file object after selection */
+    public mainLogoFile: any;
+
 
     constructor(
         private generalService: GeneralService,
@@ -137,12 +169,50 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
+     * TrackBy function for color palette to optimize ngFor performance
+     *
+     * @param {number} index
+     * @param {any} color
+     * @returns {string}
+     * @memberof TemplateEditFilterComponent
+     */
+    public trackByColor(index: number, color: any): string {
+        return color.primary;
+    }
+
+    /**
+     * Gets remaining character count for a field
+     *
+     * @param {number} maxLength Maximum allowed length
+     * @param {string} currentValue Current field value
+     * @returns {number} Remaining character count
+     * @memberof TemplateEditFilterComponent
+     */
+    public getRemainingCharacters(maxLength: number, currentValue: string): number {
+        const currentLength = currentValue?.length || 0;
+        return Math.max(0, maxLength - currentLength);
+    }
+
+    /**
+     * Checks if character limit is exceeded for a field
+     *
+     * @param {number} maxLength Maximum allowed length
+     * @param {string} currentValue Current field value
+     * @returns {boolean} True if character limit is exceeded
+     * @memberof TemplateEditFilterComponent
+     */
+    public isCharacterLimitExceeded(maxLength: number, currentValue: string): boolean {
+        const currentLength = currentValue?.length || 0;
+        return currentLength > maxLength;
+    }
+
+    /**
      * Angular lifecycle hook that is called after data-bound properties are initialized.
-     * Initializes company, template, and UI data for the template editor.
      *
      * @memberof TemplateEditFilterComponent
      */
     public ngOnInit(): void {
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         // Initialize dialog data
         const { templateType, voucherType, templateList, mode, localeData, commonLocaleData } = this.dialogData || {};
         this.templateType = templateType;
@@ -208,6 +278,9 @@ export class TemplateEditFilterComponent implements OnInit {
                 footer: this.customTemplate?.sections?.footer?.data || {}
             };
             this.templateService.setFieldsAndVisibility(section);
+
+            // Initialize selected signature type based on current template state
+            this.initializeSelectedSignatureType();
 
             // Set logo size and preview
             if (this.customTemplate?.logoSize) {
@@ -283,9 +356,18 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onValueChange(fieldName: string, value: string) {
-        const template = cloneDeep(this.customTemplate);
-        if (fieldName) template[fieldName] = value;
-        this.templateService.setCustomTemplate(template);
+        // Clear existing timer
+        if (this.fieldChangeTimer) {
+            clearTimeout(this.fieldChangeTimer);
+        }
+
+        // Set new timer with 500ms delay
+        this.fieldChangeTimer = setTimeout(() => {
+            const template = cloneDeep(this.customTemplate);
+            if (fieldName) template[fieldName] = value;
+            this.templateService.setCustomTemplate(template);
+        }, 1500);
+
     }
 
     /**
@@ -294,7 +376,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @param {object} validation Validation result with isValid and value
      * @memberof TemplateEditFilterComponent
      */
-    public onPatternValidation(validation: {isValid: boolean, value: string}): void {
+    public onPatternValidation(validation: { isValid: boolean, value: string }): void {
         if (!validation.isValid) {
             this.toasty.showSnackBar("error", `Invalid UPI ID: ${validation.value}`);
         }
@@ -345,6 +427,8 @@ export class TemplateEditFilterComponent implements OnInit {
         if (template?.sections?.['footer']?.data?.['companyName']) {
             template.sections['footer'].data['companyName'].label = this.activeCompanyName;
         }
+       this.deleteLogo();
+       this.removeFile();
         this.templateService.setCustomTemplate(cloneDeep(template));
     }
 
@@ -394,10 +478,10 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public uploadLogo(): void {
-        const selectedFile: any = document.getElementById("logo-edit");
-        if (selectedFile?.files?.length) {
-            const file = selectedFile.files[0];
-            this.generalService.getSelectedFile(file, (blob, fileObj) => {
+        this.mainLogoSelectedFile = document.getElementById("logo-edit");
+        if (this.mainLogoSelectedFile?.files?.length) {
+            this.mainLogoFile = this.mainLogoSelectedFile.files[0];
+            this.generalService.getSelectedFile(this.mainLogoFile, (blob, fileObj) => {
                 this.isFileUploadInProgress = true;
                 this.templateService.isLogoUpdateInProgress = true;
                 this.previewFile(fileObj);
@@ -460,31 +544,29 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
-     * Toggles the visibility of the logo in the template.
-     *
-     * @param {boolean} [show] Optional flag to explicitly set visibility
-     * @memberof TemplateEditFilterComponent
-     */
-    public toogleLogoVisibility(show?: boolean): void {
-        if (!this.isFileUploaded) {
-            this.showLogo = show ?? !this.showLogo;
-            this.templateService.setLogoVisibility(this.showLogo);
-        }
-    }
-
-    /**
      * Deletes the logo from the template and resets related UI state.
      *
      * @memberof TemplateEditFilterComponent
      */
     public deleteLogo(): void {
-        this.onValueChange('logoUniqueName', null);
         this.templateService.setLogoPath('');
         this.logoAttached = false;
         this.isFileUploaded = false;
         this.isFileUploadInProgress = false;
         this.showDeleteButton = false;
-        this.logoFile?.nativeElement && (this.logoFile.nativeElement.value = "");
+        this.mainLogoFile = null;
+        this.mainLogoSelectedFile = null;
+
+        // Clear the file input element to allow re-uploading the same file
+        const logoInput = document.getElementById("logo-edit") as HTMLInputElement;
+        if (logoInput) {
+            logoInput.value = "";
+        }
+
+        if (this.customTemplate?.logoUniqueName) {
+            this.customTemplate.logoUniqueName = '';
+        }
+        this.templateService.setCustomTemplate(this.customTemplate);
     }
 
     /**
@@ -543,18 +625,8 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public onChangeDesignFieldVisibility(fieldName: string, value: string): void {
         const template = cloneDeep(this.customTemplate);
-        if (fieldName) template[fieldName] = value;
+        template[fieldName] = value;
         this.templateService.setCustomTemplate(template);
-    }
-
-    /**
-     * Angular lifecycle hook that is called when the component is destroyed. Releases memory and cleans up subscriptions.
-     *
-     * @memberof TemplateEditFilterComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 
     /**
@@ -582,7 +654,7 @@ export class TemplateEditFilterComponent implements OnInit {
 
 
     /**
-     * Handles field changes within a template section.
+     * Handles field changes within a template section with debounce delay.
      *
      * @param {string} sectionName The name of the section
      * @param {string} fieldName The name of the field
@@ -590,8 +662,16 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onFieldChange(): void {
-        let template = cloneDeep(this.customTemplate);
-        this.templateService.setCustomTemplate(template);
+        // Clear existing timer
+        if (this.fieldChangeTimer) {
+            clearTimeout(this.fieldChangeTimer);
+        }
+
+        // Set new timer with 500ms delay
+        this.fieldChangeTimer = setTimeout(() => {
+            let template = cloneDeep(this.customTemplate);
+            this.templateService.setCustomTemplate(template);
+        }, 1500);
     }
 
     /**
@@ -656,17 +736,17 @@ export class TemplateEditFilterComponent implements OnInit {
     /**
      * Uploads signature
      *
-     * @memberof ContentFilterComponent
+     * @memberof TemplateEditFilterComponent
      */
     public uploadImage(): void {
-        const selectedFile: any = document.getElementById("signatureImg-edit");
-        if (selectedFile?.files?.length) {
-            const file = selectedFile?.files[0];
+        this.footerSelectedFile = document.getElementById("signatureImg-edit");
+        if (this.footerSelectedFile?.files?.length) {
+            this.footerFile = this.footerSelectedFile?.files[0];
 
-            this.generalService.getSelectedFileBase64(file, (base64) => {
+            this.generalService.getSelectedFileBase64(this.footerFile, (base64) => {
                 this.isSignatureUploadInProgress = true;
 
-                this.commonService.uploadImageBase64({ base64: base64, format: file.type, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.commonService.uploadImageBase64({ base64: base64, format: this.footerFile.type, fileName: this.footerFile.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isSignatureUploadInProgress = false;
 
                     if (response?.status === 'success') {
@@ -696,6 +776,17 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public removeFile(): void {
         this.signatureImgAttached = false;
+        this.signatureSrc = '';
+        this.isSignatureUploadInProgress = false;
+        this.footerFile = null;
+        this.footerSelectedFile = null;
+
+        // Clear the file input element to allow re-uploading the same file
+        const signatureInput = document.getElementById("signatureImg-edit") as HTMLInputElement;
+        if (signatureInput) {
+            signatureInput.value = "";
+        }
+
         if (this.customTemplate?.sections?.footer?.data?.imageSignature) {
             this.customTemplate.sections.footer.data.imageSignature.label = '';
         }
@@ -728,6 +819,33 @@ export class TemplateEditFilterComponent implements OnInit {
         }
         this.templateService.setCustomTemplate(template);
 
+    }
+
+    /**
+     * Initializes the selected signature type based on current template state
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    private initializeSelectedSignatureType(): void {
+        if (this.customTemplate?.sections?.footer?.data?.imageSignature?.display) {
+            this.selectedSignatureType = 'image';
+        } else if (this.customTemplate?.sections?.footer?.data?.slogan?.display) {
+            this.selectedSignatureType = 'slogan';
+        } else {
+            this.selectedSignatureType = '';
+        }
+    }
+
+    /**
+     * Handles radio button selection for signature type
+     *
+     * @param {string} signatureType The selected signature type ('image' or 'slogan')
+     * @memberof TemplateEditFilterComponent
+     */
+    public onSignatureTypeChange(signatureType: string): void {
+        this.selectedSignatureType = signatureType;
+        this.chooseSigntureType(signatureType);
+        this.onFieldChange();
     }
 
     /**
@@ -811,13 +929,13 @@ export class TemplateEditFilterComponent implements OnInit {
     public handleInvoiceDateNumberChange(isDate: boolean = true): void {
         if (isDate) {
             if (this.customTemplate?.sections?.['header']?.data?.['voucherDate'] && this.customTemplate?.sections?.['header']?.data?.['invoiceDate']) {
-                this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate.sections['header'].data['invoiceDate'].label;
-                this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate.sections['header'].data['invoiceDate'].display;
+                this.customTemplate.sections['header'].data['voucherDate'].label = this.customTemplate?.sections['header']?.data['invoiceDate']?.label;
+                this.customTemplate.sections['header'].data['voucherDate'].display = this.customTemplate?.sections['header']?.data['invoiceDate']?.display;
             }
         } else {
             if (this.customTemplate?.sections?.['header']?.data?.['voucherNumber'] && this.customTemplate?.sections?.['header']?.data?.['invoiceNumber']) {
-                this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate.sections['header'].data['invoiceNumber'].label;
-                this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate.sections['header'].data['invoiceNumber'].display;
+                this.customTemplate.sections['header'].data['voucherNumber'].label = this.customTemplate?.sections['header']?.data['invoiceNumber']?.label;
+                this.customTemplate.sections['header'].data['voucherNumber'].display = this.customTemplate?.sections['header']?.data['invoiceNumber']?.display;
             }
         }
     }
@@ -846,7 +964,7 @@ export class TemplateEditFilterComponent implements OnInit {
         const currentCompany = companies?.find(company => company?.uniqueName === companyUniqueName);
         let companyName = '';
         let companyAddress = '';
-        
+
         if (currentCompany) {
             companyName = currentCompany?.name || '';
             companyAddress = currentCompany?.address || '';
@@ -858,9 +976,9 @@ export class TemplateEditFilterComponent implements OnInit {
                 this.templateService.companyPAN.next(currentCompany.panNumber);
             }
         }
-        
+
         this.templateService.setCompanyNameVisibility(true);
-        
+
         if (defaultTemplate) {
             const processedTemplate = cloneDeep(defaultTemplate);
             if (companyName) {
@@ -878,8 +996,8 @@ export class TemplateEditFilterComponent implements OnInit {
      * @param {boolean} event True if the header should be displayed
      * @memberof TemplateEditFilterComponent
      */
-        public changeInvoiceHeader(event: boolean): void {
-            this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
-        }
+    public changeInvoiceHeader(event: boolean): void {
+        this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
+    }
 
 }

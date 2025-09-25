@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
-import { IOption, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
@@ -1380,16 +1380,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public onProductNoResultsClicked(idx?: number): void {
         this.innerEntryIndex = idx;
         document.querySelector("body").classList.add("new-branch-transfer-page");
-        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: '760px',
-            height: '100vh !important'
-        });
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
 
-        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+        this.asideMenuStateForProductService.afterClosed().subscribe(response => {
             document.querySelector("body").classList.remove("new-branch-transfer-page");
         });
 
@@ -2251,15 +2244,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public toggleTransporterModel(): void {
-        let dialgRef = this.dialog.open(this.asideManageTransport, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: '760px',
-            height: '100vh !important'
-        });
-        dialgRef.afterClosed().pipe(take(1)).subscribe(response => {
+        let dialgRef = this.dialog.open(this.asideManageTransport, ASIDE_PANE_CONFIG);
+        dialgRef.afterClosed().subscribe(response => {
             this.getTransportersList();
         });
     }

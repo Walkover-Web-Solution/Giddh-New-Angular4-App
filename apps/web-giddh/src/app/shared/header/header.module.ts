@@ -40,7 +40,6 @@ import { TagsModule } from "../../settings/tags/tags.module";
         ElementViewChildModule,
         ScrollingModule,
         PrimarySidebarModule,
-        
         DatepickerWrapperModule,
         LaddaModule.forRoot({
             style: 'slide-left',

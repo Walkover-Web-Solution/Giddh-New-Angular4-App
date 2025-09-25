@@ -17,7 +17,7 @@ import {
 import { InventoryAction } from "../../../actions/inventory/inventory.actions";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { CommonActions } from "../../../actions/common.actions";
-import { IOption } from "../../../theme/ng-select/option.interface";
+import { IOption } from '../../../app.constant';
 import { ToasterService } from "../../../services/toaster.service";
 import { IForceClear } from "../../../models/api-models/Sales";
 import { IEwayBillfilter, IEwayBillTransporter, IAllTransporterDetails } from "../../../models/api-models/Invoice";
@@ -1267,16 +1267,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         document.querySelector("body").classList.add("new-branch-transfer-page");
 
-        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: '760px',
-            height: '100vh !important'
-        });
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
 
-        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+        this.asideMenuStateForProductService.afterClosed().subscribe(response => {
             document.querySelector("body").classList.remove("new-branch-transfer-page");
         });
 
@@ -1349,6 +1342,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public deleteTransporter(transporter: IEwayBillTransporter): void {
         this.store.dispatch(this.invoiceActions.deleteTransporter(transporter.transporterId));
+        this.transporterFilterRequest.page = this._generalService.adjustPageIndex(this.transporterListDetails.totalItems, this.transporterListDetails.page, this.transporterListDetails.count);
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.transporterPopupDialogRef?.close();
         this.detectChanges();

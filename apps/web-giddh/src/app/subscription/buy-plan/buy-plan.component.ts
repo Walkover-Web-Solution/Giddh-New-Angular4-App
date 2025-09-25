@@ -547,7 +547,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         const reqObj = {
                             subscriptionId: this.upgradeSubscriptionId,
                             billingRequestId: this.goCardLessBillingRequestId
-                        }
+                        };
                         this.componentStore.activatePlan(reqObj);
                         setTimeout(() => {
                             this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -728,7 +728,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             const reqObj = {
                 subscriptionId: this.upgradeSubscriptionId,
                 goCardLessBillingRequestId : this.goCardLessBillingRequestId
-            }
+            };
             this.componentStore.activatePlan(reqObj);
             this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
@@ -1367,6 +1367,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             });
         }
         this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
+        this.thirdStepForm.get('paymentProvider')?.patchValue(null);
         this.setFinalAmount();
         this.changeDetection.detectChanges();
     }
@@ -1391,8 +1392,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
-
-        if (!this.removePromoCode) {
+        if (!this.removePromoCode && !this.thirdStepForm.get('paymentProvider')?.value) {
             // Clear the payment provider initially
             this.thirdStepForm.get('paymentProvider')?.patchValue(null);
         }
@@ -1568,7 +1568,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public activateDialog(): void {
         this.dialog.open(ActivateDialogComponent, {
-            width: 'var(--aside-pane-width)',
+            panelClass: 'mat-dialog-md'
         })
     }
 

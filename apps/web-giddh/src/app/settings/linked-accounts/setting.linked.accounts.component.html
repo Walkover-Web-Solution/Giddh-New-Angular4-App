@@ -111,7 +111,7 @@
                                     <div class="position-absolute datepicker-account">
                                         <giddh-datepicker
                                             *ngIf="card.isDatePickerOpen"
-                                            name="transactionDate"
+                                            [name]="'transactionDate'"
                                             [placeholder]="'Transaction Date'"
                                             [(ngModel)]="card.transactionDate"
                                             (dateSelected)="onUpdateDate($event, card)"
@@ -250,28 +250,24 @@
     </div>
     <!-- Connect-Bank-Modal -->
     <ng-template #connectBankTemplate>
-        <div mat-dialog-content>
-            <connect-bank-modal
-                (modalCloseEvent)="closeModal()"
-                [providerId]="selectedProvider"
-                [isRefreshWithCredentials]="isRefreshWithCredentials"
-                (refreshAccountEvent)="onRefreshToken($event, true)"
-                [providerAccountId]="providerAccountId"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-            >
-            </connect-bank-modal>
-        </div>
+        <connect-bank-modal
+            (modalCloseEvent)="closeModal()"
+            [providerId]="selectedProvider"
+            [isRefreshWithCredentials]="isRefreshWithCredentials"
+            (refreshAccountEvent)="onRefreshToken($event, true)"
+            [providerAccountId]="providerAccountId"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+        >
+        </connect-bank-modal>
     </ng-template>
 
     <!-- Confirmation Modal -->
     <ng-template #confirmationTemplate>
-        <div mat-dialog-content>
-            <setting-l-acc-confirmation-modal
-                [message]="confirmationMessage"
-                [commonLocaleData]="commonLocaleData"
-                (closeModelEvent)="closeConfirmationModal($event)"
-            ></setting-l-acc-confirmation-modal>
-        </div>
+        <setting-l-acc-confirmation-modal
+            [message]="confirmationMessage"
+            [commonLocaleData]="commonLocaleData"
+            (closeModelEvent)="closeConfirmationModal($event)"
+        ></setting-l-acc-confirmation-modal>
     </ng-template>
 </ng-container>

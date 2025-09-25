@@ -93,12 +93,6 @@
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                             [labelValue]="entryAgainstObject?.name"
                                         >
-                                            <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">{{ option.label }}</div>
-                                                    <div class="item-unique">{{ option?.value }}</div>
-                                                </a>
-                                            </ng-template>
                                         </reactive-dropdown-field>
                                     </div>
                                 </div>
@@ -124,6 +118,7 @@
                                     [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
                                     [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular?.uniqueName"
                                     (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+                                    (showQuickAccountModalFromUpdateLedger)="openLedgerAsidePaneDialog()"
                                 ></update-ledger-entry-panel>
                             </div>
                         </div>
@@ -172,3 +167,15 @@
     </app-aside-menu-sales-other-taxes>
 </ng-template>
 <!-- endregion -->
+
+<!-- region ledger aside pane -->
+<ng-template #ledgerAsidePane>
+    <ledger-aside-pane
+        [keyboardShortcut]="'esc'"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (onShortcutPress)="ledgerAsidePaneDialogRef?.close()"
+        (closeAsideEvent)="ledgerAsidePaneDialogRef?.close()"
+    >
+    </ledger-aside-pane>
+</ng-template>

@@ -73,9 +73,9 @@ export class TemplateFroalaComponent implements OnInit {
     /** Retry counter for Froala initialization */
     private froalaInitRetryCount: number = 0;
     /** Maximum retry attempts for Froala initialization */
-    private readonly maxFroalaInitRetries: number = 5;
+    private maxFroalaInitRetries: number = 5;
     /** Retry delay in milliseconds */
-    private readonly froalaInitRetryDelay: number = 500;
+    private froalaInitRetryDelay: number = 500;
     /** Hold to email options */
     public toEmails: any[] = [];
     /** Hold selected to email options */
@@ -253,12 +253,10 @@ export class TemplateFroalaComponent implements OnInit {
                     key: item
                 }));
 
-                console.log('froalaEditor-in', this.froalaEditor);
                 if (!this.froalaEditor) {
                     this.froalaOptions = this.getFroalaOptions();
                 }
                 setTimeout(() => {
-                    console.log('initializeFroalaEditor', 'froalaEditor-set', this.froalaEditor);
                     this.initializeTribute(tributeSuggestions);
                 }, 300);
 
@@ -338,9 +336,19 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private updateFormControl(): void {
-        this.emailForm.get('html')?.patchValue(this.froalaEditor.html.get());
+        if (this.froalaEditor) {
+            const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
+            const htmlContent = this.froalaEditor.html.get();
+            currentForm.get('html')?.patchValue(htmlContent, { emitEvent: false });
+        }
     }
 
+    /**
+     * This will return the froala options
+     *
+     * @return {*}  {*}
+     * @memberof TemplateFroalaComponent
+     */
     public getFroalaOptions() : any {
         return {
             key: FROALA_EDITOR_KEY,
@@ -392,6 +400,16 @@ export class TemplateFroalaComponent implements OnInit {
                     const setupDelay = this.isElectron ? 200 : 0;
                     setTimeout(() => {
                         this.setupFroalaEventHandlers();
+                        
+                        // Set initial content from form control with additional delay for Electron
+                        const contentDelay = this.isElectron ? 300 : 0;
+                        setTimeout(() => {
+                            const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
+                            const htmlValue = currentForm?.get('html')?.value;
+                            if (htmlValue) {
+                                this.froalaEditor.html.set(htmlValue);
+                            }
+                        }, contentDelay);
                     }, setupDelay);
                 },
                 blur: () => { // Handles changes made in the code view when focus is lost
@@ -400,9 +418,11 @@ export class TemplateFroalaComponent implements OnInit {
                         this.updateFormControl();
                     }
                 },
+                'contentChanged': () => {
+                    this.updateFormControl();
+                },
                 // Add error handling for Electron
                 'error': (error) => {
-                    console.error('Froala editor error:', error);
                     if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
                         this.retryFroalaInitialization();
                     }
@@ -421,17 +441,6 @@ export class TemplateFroalaComponent implements OnInit {
         this.emailFocusStates.isTo = emailType === EmailType.To;
         this.emailFocusStates.isCc = emailType === EmailType.Cc;
         this.emailFocusStates.isBcc = emailType === EmailType.Bcc;
-    }
-
-    /**
-     * Detects if the application is running in Electron environment
-     *
-     * @private
-     * @returns {boolean}
-     * @memberof TemplateFroalaComponent
-     */
-    private isElectronEnvironment(): boolean {
-        return !!(window && (window as any).require && (window as any).process && (window as any).process.type);
     }
 
     /**
@@ -462,8 +471,6 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private retryFroalaInitialization(): void {
         this.froalaInitRetryCount++;
-        console.log(`Retrying Froala initialization (attempt ${this.froalaInitRetryCount}/${this.maxFroalaInitRetries})`);
-        
         setTimeout(() => {
             this.froalaOptions = this.getFroalaOptions();
         }, this.froalaInitRetryDelay * this.froalaInitRetryCount);
@@ -478,24 +485,16 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private initializeTributeWithRetry(tributeSuggestions: any[]): void {
         if (!tributeSuggestions || tributeSuggestions.length === 0) {
-            console.log('No tribute suggestions available');
             return;
         }
 
         const attemptInitialization = (attempt: number = 1) => {
-            console.log(`Attempting tribute initialization (attempt ${attempt})`);
-            
             if (this.froalaEditor && this.froalaEditor.el) {
                 this.initializeTribute(tributeSuggestions);
-                console.log('Tribute initialization successful');
             } else if (attempt < this.maxFroalaInitRetries) {
-                console.log(`Froala editor not ready, retrying in ${this.froalaInitRetryDelay}ms`);
                 setTimeout(() => attemptInitialization(attempt + 1), this.froalaInitRetryDelay);
-            } else {
-                console.error('Failed to initialize tribute after maximum retries');
-            }
+            } 
         };
-
         attemptInitialization();
     }
 
@@ -532,8 +531,6 @@ export class TemplateFroalaComponent implements OnInit {
             values: tributeSuggestions,
             selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
         });
-        
-        console.log('froalaEditor', 'froalaEditor', this.froalaEditor);
         
         if (this.froalaEditor) {
             this.froalaTribute.attach(this.froalaEditor.el);

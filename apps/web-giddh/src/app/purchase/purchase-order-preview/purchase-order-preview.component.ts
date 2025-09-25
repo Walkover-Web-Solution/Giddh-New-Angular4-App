@@ -103,7 +103,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     /** This will hold po for bulk convert */
     public selectedPurchaseOrders: any[] = [];
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
 
     constructor(
         private store: Store<AppState>,

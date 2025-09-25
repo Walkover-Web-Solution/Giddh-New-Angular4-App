@@ -19,6 +19,7 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
 import { WarehouseActions } from '../action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { ServiceConfig } from '../../../services/service.config';
+import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 @Component({
     selector: 'create-warehouse',
@@ -387,15 +388,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     */
     public handleShortcutPress(): void  {
         this.loadLinkedEntities(() => {
-            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, {
-                width: '760px',
-                height: '100vh !important',
-                disableClose: true,
-                position: {
-                    right: '0',
-                    top: '0'
-                }
-            });
+            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, ASIDE_PANE_CONFIG);
         });
     }
 

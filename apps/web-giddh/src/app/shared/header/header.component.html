@@ -453,7 +453,7 @@
                             </button>
                         </li>
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
-                            <button mat-raised-button class="p-1" (click)="dateSelectedCallback()">
+                            <button mat-button class="p-1 font-15" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
@@ -675,18 +675,13 @@
         </div>
     </div>
     <ng-template #expiredPlanModel>
-        <div class="modal-header">
-            <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
-            <button mat-stroked-button
-                type="button"
-                class="close pull-right"
-                [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="dialogRefExpirePlanRef?.close()"
-            >
-                <span aria-hidden="true">&times;</span>
+        <div class="dialog-header">
+            <span>{{ localeData?.ready_to_upgrade }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
             </button>
         </div>
-        <div class="modal-body pd-2 font-15">
+        <mat-dialog-content class="dialog-body">
             <div class="clearfix mb-3">
                 <p [innerHTML]="getPlanExpiredNote()"></p>
             </div>
@@ -714,22 +709,17 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </mat-dialog-content>
     </ng-template>
     <!-- modal second -->
     <ng-template #crossedTxLimitModel>
-        <div class="modal-header">
-            <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
-            <button mat-stroked-button
-                type="button"
-                class="close pull-right"
-                [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="dialogRefCrossLimitRef?.close()"
-            >
-                <span aria-hidden="true">&times;</span>
+        <div class="dialog-header">
+            <span>{{ localeData?.ready_to_upgrade }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
             </button>
         </div>
-        <div class="modal-body pd-2 font-15">
+        <mat-dialog-content class="dialog-body">
             <div class="clearfix mb-3">
                 <p class="mb-2" [innerHTML]="getTransactionLimitCrossedNote()"></p>
                 <p>{{ localeData?.continue_giddh_note }}</p>
@@ -753,7 +743,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </mat-dialog-content>
     </ng-template>
 
     <!--help & support sidebar  -->

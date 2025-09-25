@@ -11,8 +11,8 @@ import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interf
 import { GeneralService } from '../../../services/general.service';
 import { GroupService } from '../../../services/group.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { IOption } from '../../../theme/ng-select/option.interface';
-import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { MatAccordion } from '@angular/material/expansion';
@@ -244,7 +244,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
     }
 
     public resetAdvanceSearchModal() {
@@ -726,7 +726,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
@@ -789,7 +789,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);

@@ -1,4 +1,4 @@
-@import "../../assets/css/mixin-common.scss";
+@import "../../assets/style/mixin-common.scss";
 @mixin all-table {
     td {
         .mat-cell {
@@ -112,7 +112,7 @@ button.mat-menu-item {
 }
 
 .account-detail-custom-title {
-    font-family: var(--font-semibold) !important;
+    font-weight: var(--font-weight-semibold) !important;
     font-size: var(--font-size-15) !important;
     word-break: break-word !important;
     margin-top: 5%;
@@ -131,7 +131,7 @@ button.mat-menu-item {
     color: var(--color-abbey);
     margin-top: 7px;
     font-size: var(--font-size-15) !important;
-    font-family: var(--font-regular) !important;
+    font-family: var(--font-family) !important;
 }
 
 ul.list-unstyled li a {
@@ -236,7 +236,7 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
 
     &:hover {
         .table-menu-first-td {
-            display: block;
+            display: inline-block;
             line-height: 1;
         }
         .checkbox-left-side-in-table {
@@ -373,15 +373,6 @@ span.input-addon {
 
 .comment-field {
     min-width: 170px;
-}
-
-.customer-name-filed,
-.vendor-name-field {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    float: left;
-    width: 200px;
 }
 
 .customer-name .icon-ellipse {
@@ -587,6 +578,10 @@ button.btn.btn-filter {
 .customer-img {
     height: 360px;
     width: 489px;
+}
+
+.name-column {
+    min-width: max(150px, 10%);
 }
 
 /*responsive*/
@@ -968,10 +963,6 @@ button.btn.btn-filter {
     .mat-mdc-checkbox {
         left: 20px;
     }
-}
-.select-single-checkbox-wrapper {
-    display: flex;
-    align-items: center;
 }
 .mat-chip-wrapper {
     border: unset;

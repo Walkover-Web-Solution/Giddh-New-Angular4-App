@@ -3,6 +3,9 @@ import { GenerateEWayBillComponent } from "./generateEWayBill.component";
 import { CommonModule } from "@angular/common";
 import { TranslateDirectiveModule } from "apps/web-giddh/src/app/theme/translate/translate.directive.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatBadgeModule } from "@angular/material/badge";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -11,7 +14,10 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     imports: [
         CommonModule,
         MatTooltipModule, 
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        MatBadgeModule,
+        MatDialogModule,
+        MatButtonModule
     ],
     exports: [
         GenerateEWayBillComponent

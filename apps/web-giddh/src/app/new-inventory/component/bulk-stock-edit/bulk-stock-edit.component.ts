@@ -266,7 +266,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             purchaseRate: [controlValue.purchaseRate, Validators.required],
             purchaseTaxInclusive: [controlValue.purchaseTaxInclusive, Validators.required],
 
-            salesUnits: [(controlValue.salesUnits?.length && controlValue.salesUnits[0] !== null ? controlValue.salesUnits[0]?.uniqueName : ""), Validators.required],
+            salesUnits: [(controlValue.salesUnits?.length && controlValue.salesUnits[0] !== null ? controlValue.salesUnits[0]?.code : ""), Validators.required],
             salesAccountName: [controlValue.salesAccountName, Validators.required],
             salesAccountUniqueName: [controlValue.salesAccountUniqueName, Validators.required],
             salesRate: [controlValue.salesRate, Validators.required],
@@ -274,7 +274,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
             fixedAssetTaxInclusive: [controlValue.fixedAssetTaxInclusive, Validators.required],
             fixedAssetRate: [controlValue.fixedAssetRate, Validators.required],
-            fixedAssetUnits: [(controlValue.fixedAssetUnits?.length && controlValue.fixedAssetUnits[0] !== null ? controlValue.fixedAssetUnits[0]?.uniqueName : ""), Validators.required],
+            fixedAssetUnits: [(controlValue.fixedAssetUnits?.length && controlValue.fixedAssetUnits[0] !== null ? controlValue.fixedAssetUnits[0]?.code : ""), Validators.required],
             fixedAssetAccountName: [controlValue.fixedAssetAccountName, Validators.required],
             fixedAssetAccountUniqueName: [controlValue.fixedAssetAccountUniqueName, Validators.required],
 
@@ -355,11 +355,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public handlePageEvent(event: PageEvent): void {
         if (this.pageCount !== event.pageSize) {
             this.pagination.currentPage = 1;
-            this.pageCount = event.pageSize;
         } else {
             this.pagination.currentPage = event.pageIndex + 1;
         }
-        
+        this.pageCount = event.pageSize;
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
             inventoryType: this.inventoryType, 
@@ -564,56 +563,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: bodyObj
         }));
     }
-
-    /**
-     * Get stock groups
-     *
-     * @memberof StockCreateEditComponent
-     */
-    // public getStockGroups(): void {
-
-    //     this.inventoryService.GetGroupsWithStocksFlatten(this.inventoryType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-    //         if (response?.status === "success") {
-    //             let stockGroups: IOption[] = [];
-    //             this.arrangeStockGroups(response.body?.results, stockGroups);
-    //             this.stockGroups = stockGroups;
-    //             // this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
-    //         }
-    //     });
-    //     this.changeDetection.detectChanges();
-    // }
-
-    /**
-     * Arrange stock groups
-     *
-     * @private
-     * @param {IGroupsWithStocksHierarchyMinItem[]} groups
-     * @param {IOption[]} [parents=[]]
-     * @memberof StockCreateEditComponent
-     */
-    // private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
-    //     groups.map(group => {
-    //         if (group) {
-    //             let newOption: IOption = { label: '', value: '', additional: {} };
-    //             newOption.label = group?.name;
-    //             newOption.value = group?.uniqueName;
-    //             newOption.additional = group;
-    //             parents.push(newOption);
-    //             if (group?.childStockGroups?.length > 0) {
-    //                 this.arrangeStockGroups(group?.childStockGroups, parents);
-    //             }
-    //         }
-    //     });
-    //     this.changeDetection.detectChanges();
-    // }
-
-    /**
-    * Get taxes
-    *
-    * @memberof BulkStockEditComponent
-    */
-    // public getTaxes(): void {
-    //     this.store.dispatch(this.companyAction.getTax());
 
     /**
      * Open advance search Dialog

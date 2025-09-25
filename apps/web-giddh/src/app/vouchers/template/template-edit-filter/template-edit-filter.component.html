@@ -13,7 +13,7 @@
                         [placeholder]="localeData?.enter_template_name"
                         [name]="'fieldName'"
                         [(ngModel)]="customTemplate.name"
-                        (ngModelChange)="onValueChange(null, null)"
+                        (ngModelChange)="onChangeFieldVisibility()"
                         [label]="localeData?.template_name"
                         [maxlength]="'18'"
                         [autocomplete]="'off'"
@@ -30,7 +30,7 @@
                                 templateType !== voucherTypeEnum.purchase_order &&
                                 templateType !== voucherTypeEnum.purchase_bill
                             "
-                            [expanded]="templateMode === templateModeEnum.Update ? true : false"
+                            [expanded]="templateMode === templateModeEnum.Update"
                         >
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
@@ -38,7 +38,7 @@
                                     {{ localeData?.change_up_to_template }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            <div class="template-view px-3 pb-3">
+                            <div class="template-view d-flex column-gap1 px-3 pb-3">
                                 <ng-container *ngFor="let template of sampleTemplates">
                                     <div
                                         class="template-view-design bdr position-relative cursor-pointer"
@@ -49,7 +49,7 @@
                                         "
                                     >
                                         <img
-                                            src="./assets/images/templates/{{ template?.templateType }}.png"
+                                            src="{{ imgPath }}templates/{{ template?.templateType }}.png"
                                             alt="template"
                                             class="view-img w-100 h-100 border-radius-5"
                                         />
@@ -58,7 +58,7 @@
                                             class="beta-img position-absolute"
                                             *ngIf="template?.templateType !== templateTypeEnum.GstTemplateA"
                                         >
-                                            <img src="./assets/images/templates/beta.png" alt="beta" />
+                                            <img src="{{ imgPath }}templates/beta.png" alt="beta" />
                                         </div>
                                     </div>
                                 </ng-container>
@@ -85,7 +85,6 @@
                                         >
                                             <input
                                                 type="file"
-                                                #fileInput
                                                 name="logo-edit"
                                                 id="logo-edit"
                                                 accept="image/png, image/jpeg"
@@ -98,7 +97,7 @@
                                         </label>
                                     </span>
                                     <span
-                                        class="start-upload-btn floar-right mr-l2 position-relative"
+                                        class="start-upload-btn float-right mr-l2 position-relative"
                                         *ngIf="isFileUploadInProgress"
                                         ><b>{{ localeData?.uploading }}</b></span
                                     >
@@ -108,7 +107,6 @@
                                         class="start-upload-btn mr-l2"
                                         (click)="deleteLogo()"
                                         mat-stroked-button
-                                        color="warn"
                                         [matTooltip]="localeData?.delete_image_from_server"
                                     >
                                         {{ commonLocaleData?.app_delete }}
@@ -119,7 +117,9 @@
                                             <div class="d-flex column-gap1">
                                                 <button
                                                     *ngFor="let size of imageSizes"
+                                                    [disabled]="!customTemplate?.logoUniqueName"
                                                     mat-mini-fab
+                                                    [disabled]="!customTemplate?.logoUniqueName"
                                                     [color]="defaultImageSize === size?.label ? 'primary' : ''"
                                                     (click)="
                                                         defaultImageSize = size?.label;
@@ -129,16 +129,6 @@
                                                     <span>{{ size.label }}</span>
                                                 </button>
                                             </div>
-                                        </div>
-                                        <div class="d-block mr-t1">
-                                            <a
-                                                class="primary-color cursor-pointer"
-                                                [hidden]="!logoAttached"
-                                                (click)="toogleLogoVisibility()"
-                                                ><span [hidden]="showLogo">{{ localeData?.show }}</span
-                                                ><span [hidden]="!showLogo">{{ localeData?.hide }}</span
-                                                >{{ localeData?.logo }}</a
-                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -165,24 +155,13 @@
                                 </span>
                                 <div class="mr-l1 pull-left">
                                     <ul>
-                                        <li (click)="changeColor('#bdbdbd', '#fcfcfc')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#636363', '#f7f7f7')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#000000', '#f2f2f2')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#e34818', '#f2f3f4')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#7889a1', '#f8f9fa')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#48565f', '#f6f6f7')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#79bd58', '#f8fcf6')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#0e909a', '#f3f9fa')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#202e5a', '#f4f4f7')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#96bc2d', '#fafcf4')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#2a651d', '#f4f7f3')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#004254', '#f2f5f6')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#ff8c00', '#fffaf3')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#82001d', '#f9f2f3')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#6b1438', '#f7f3f5')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#f4749b', '#fef8fa')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#950069', '#faf2f7')" class="cursor-pointer"></li>
-                                        <li (click)="changeColor('#542852', '#f6f4f6')" class="cursor-pointer"></li>
+                                        <li
+                                            *ngFor="let color of colorPalette; trackBy: trackByColor"
+                                            (click)="changeColor(color.primary, color.secondary)"
+                                            class="cursor-pointer"
+                                            [style.background-color]="color.primary"
+                                            [title]="color.primary"
+                                        ></li>
                                     </ul>
                                 </div>
                             </div>
@@ -252,7 +231,7 @@
                                         [customDecimalPlaces]="1"
                                         [(ngModel)]="customTemplate.topMargin"
                                         (keyup)="
-                                            onValueChange(null, null);
+                                            onChangeFieldVisibility();
                                             validatePrintSetting(customTemplate?.topMargin, 0, 'topMargin')
                                         "
                                         [type]="'number'"
@@ -266,7 +245,7 @@
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
                                         (keyup)="
-                                            onValueChange(null, null);
+                                            onChangeFieldVisibility();
                                             validatePrintSetting(customTemplate?.leftMargin, 0, 'leftMargin')
                                         "
                                         [(ngModel)]="customTemplate.leftMargin"
@@ -281,7 +260,7 @@
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
                                         (keyup)="
-                                            onValueChange(null, null);
+                                            onChangeFieldVisibility();
                                             validatePrintSetting(customTemplate?.bottomMargin, 0, 'bottomMargin')
                                         "
                                         [(ngModel)]="customTemplate.bottomMargin"
@@ -296,7 +275,7 @@
                                         [allowDecimalDigitsOnly]="true"
                                         [customDecimalPlaces]="1"
                                         (keyup)="
-                                            onValueChange(null, null);
+                                            onChangeFieldVisibility();
                                             validatePrintSetting(customTemplate?.rightMargin, 0, 'rightMargin')
                                         "
                                         [(ngModel)]="customTemplate.rightMargin"
@@ -379,7 +358,7 @@
                                                             "
                                                             class="ml-2"
                                                         >
-                                                            {{ localeData?.company_name }}</span
+                                                            {{ commonLocaleData?.app_company_name }}</span
                                                         >
                                                     </mat-checkbox>
                                                     <div
@@ -403,7 +382,9 @@
                                                                         'companyName'
                                                                     ].label
                                                                 "
-                                                                (ngModelChange)="onFieldChange(null, null, null)"
+                                                                (ngModelChange)="
+                                                                    onChangeFieldVisibility()
+                                                                "
                                                                 [readonly]="
                                                                     !customTemplate?.sections?.['header']?.data?.[
                                                                         'companyName'
@@ -416,10 +397,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                50 -
-                                                                    customTemplate?.sections?.['header']?.data?.[
-                                                                        'companyName'
-                                                                    ]?.label?.length
+                                                                getRemainingCharacters(
+                                                                    50,
+                                                                    customTemplate?.sections?.['header']?.data?.['companyName']?.label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -441,8 +422,9 @@
                                                             .display
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
-                                                    >{{ localeData?.exchange_conversion_rate }}</mat-checkbox
                                                 >
+                                                    <span class="ml-2">{{ localeData?.exchange_conversion_rate }}</span>
+                                                </mat-checkbox>
                                             </div>
                                             <!-- place of supply -->
                                             <div
@@ -460,8 +442,8 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.place_of_supply }}</mat-checkbox
-                                                >
+                                                    <span class="ml-2">{{ localeData?.place_of_supply }}</span>
+                                                </mat-checkbox>
                                             </div>
                                             <!-- place of country -->
                                             <div
@@ -480,8 +462,8 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.country_of_supply }}</mat-checkbox
-                                                >
+                                                    <span class="ml-2">{{ localeData?.country_of_supply }}</span>
+                                                </mat-checkbox>
                                             </div>
                                             <!-- lut number -->
                                             <div
@@ -496,12 +478,13 @@
                                                     color="primary"
                                                     name="lutNumberCheckbox"
                                                     [(ngModel)]="
-                                                        customTemplate.sections['header'].data['displayLutNumber'].display
+                                                        customTemplate.sections['header'].data['displayLutNumber']
+                                                            .display
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.lut_number }}</mat-checkbox
-                                                >
+                                                    <span class="ml-2">{{ localeData?.lut_number }}</span>
+                                                </mat-checkbox>
                                             </div>
                                             <!-- export message -->
                                             <div
@@ -524,7 +507,7 @@
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     class="d-block"
                                                 >
-                                                    {{ localeData?.show_export_message }}
+                                                    <span class="ml-2">{{ localeData?.show_export_message }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- irn and ack number -->
@@ -547,7 +530,9 @@
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     class="d-block"
                                                 >
-                                                    {{ localeData?.show_irn_and_ack_number_of_e_invoice }}
+                                                    <span class="ml-2">{{
+                                                        localeData?.show_irn_and_ack_number_of_e_invoice
+                                                    }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- qr code -->
@@ -569,7 +554,7 @@
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     class="d-block"
                                                 >
-                                                    {{ localeData?.show_qr_code }}
+                                                    <span class="ml-2">{{ localeData?.show_qr_code }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- company address -->
@@ -593,7 +578,7 @@
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     class="d-block"
                                                 >
-                                                    {{ localeData?.company_address }}
+                                                    <span class="ml-2">{{ localeData?.company_address }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- warehouse address -->
@@ -615,7 +600,7 @@
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     class="d-block"
                                                 >
-                                                    {{ localeData?.warehouse_address }}
+                                                    <span class="ml-2">{{ localeData?.warehouse_address }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- gstin -->
@@ -629,7 +614,10 @@
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                     class="d-block"
                                                 >
-                                                    {{ customTemplate?.sections?.["header"]?.data?.["gstin"]?.label }}
+                                                    <span
+                                                        class="ml-2"
+                                                        >{{ customTemplate?.sections?.["header"]?.data?.["gstin"]?.label }}</span
+                                                    >
                                                 </mat-checkbox>
                                             </div>
                                             <!-- gst composition -->
@@ -684,7 +672,9 @@
                                                                         'gstComposition'
                                                                     ].label
                                                                 "
-                                                                (ngModelChange)="onFieldChange(null, null, null)"
+                                                                (ngModelChange)="
+                                                                    onChangeFieldVisibility()
+                                                                "
                                                                 [readonly]="
                                                                     !customTemplate.sections['header'].data[
                                                                         'gstComposition'
@@ -697,10 +687,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                70 -
-                                                                    customTemplate.sections["header"].data[
-                                                                        "gstComposition"
-                                                                    ].label?.length
+                                                                getRemainingCharacters(
+                                                                    70,
+                                                                    customTemplate?.sections?.["header"]?.data?.["gstComposition"]?.label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -749,7 +739,7 @@
                                                                     "
                                                                     (ngModelChange)="
                                                                         handleInvoiceDateNumberChange(true);
-                                                                        onFieldChange()
+                                                                        onChangeFieldVisibility()
                                                                     "
                                                                     [readonly]="
                                                                         !customTemplate.sections['header'].data[
@@ -776,14 +766,14 @@
                                                                 }}</span>
                                                                 {{
                                                                     customTemplate.templateType === "thermal_template"
-                                                                        ? 12 -
-                                                                          customTemplate.sections["header"].data[
-                                                                              "invoiceDate"
-                                                                          ].label?.length
-                                                                        : 15 -
-                                                                          customTemplate.sections["header"].data[
-                                                                              "invoiceDate"
-                                                                          ].label?.length
+                                                                        ? getRemainingCharacters(
+                                                                            12,
+                                                                            customTemplate?.sections?.["header"]?.data?.["invoiceDate"]?.label
+                                                                          )
+                                                                        : getRemainingCharacters(
+                                                                            15,
+                                                                            customTemplate?.sections?.["header"]?.data?.["invoiceDate"]?.label
+                                                                          )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -825,7 +815,7 @@
                                                                     "
                                                                     (ngModelChange)="
                                                                         handleInvoiceDateNumberChange(false);
-                                                                        onFieldChange(null, null, null)
+                                                                        onChangeFieldVisibility()
                                                                     "
                                                                     [readonly]="
                                                                         !customTemplate.sections['header'].data[
@@ -853,14 +843,14 @@
                                                                 {{
                                                                     customTemplate.templateType ===
                                                                     templateTypeEnum.ThermalTemplate
-                                                                        ? 14 -
-                                                                          customTemplate.sections["header"].data[
-                                                                              "invoiceNumber"
-                                                                          ].label?.length
-                                                                        : 15 -
-                                                                          customTemplate.sections["header"].data[
-                                                                              "invoiceNumber"
-                                                                          ].label?.length
+                                                                        ? getRemainingCharacters(
+                                                                            14,
+                                                                            customTemplate?.sections?.["header"]?.data?.["invoiceNumber"]?.label
+                                                                          )
+                                                                        : getRemainingCharacters(
+                                                                            15,
+                                                                            customTemplate?.sections?.["header"]?.data?.["invoiceNumber"]?.label
+                                                                          )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -899,7 +889,7 @@
                                                                             'voucherDate'
                                                                         ].label
                                                                     "
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [readonly]="
                                                                         !customTemplate.sections['header'].data[
                                                                             'voucherDate'
@@ -913,10 +903,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "voucherDate"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["voucherDate"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -947,7 +937,7 @@
                                                                             'voucherNumber'
                                                                         ].label
                                                                     "
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [readonly]="
                                                                         !customTemplate.sections['header'].data[
                                                                             'voucherNumber'
@@ -961,10 +951,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "voucherNumber"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["voucherNumber"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1002,7 +992,7 @@
                                                                     customTemplate.sections['header'].data['dueDate']
                                                                         .label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['header'].data['dueDate']
                                                                         .display
@@ -1014,9 +1004,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                15 -
-                                                                    customTemplate.sections["header"].data["dueDate"]
-                                                                        .label?.length
+                                                                getRemainingCharacters(
+                                                                    15,
+                                                                    customTemplate?.sections?.["header"]?.data?.["dueDate"]?.label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -1062,7 +1053,7 @@
                                                                             'formNameInvoice'
                                                                         ].label
                                                                     "
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [readonly]="
                                                                         !customTemplate.sections['header'].data[
                                                                             'formNameInvoice'
@@ -1077,10 +1068,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "formNameInvoice"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["formNameInvoice"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1097,7 +1088,7 @@
                                                                             'formNameTaxInvoice'
                                                                         ].label
                                                                     "
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [readonly]="
                                                                         !customTemplate.sections['header'].data[
                                                                             'formNameTaxInvoice'
@@ -1110,10 +1101,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "formNameTaxInvoice"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["formNameTaxInvoice"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1134,7 +1125,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.customer_name }}
+                                                    <span class="ml-2">{{ localeData?.customer_name }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- attention to -->
@@ -1153,7 +1144,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.attention_to }}
+                                                    <span class="ml-2">{{ localeData?.attention_to }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- email id -->
@@ -1172,7 +1163,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.email_id }}
+                                                    <span class="ml-2">{{ localeData?.email_id }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <!-- mobile number -->
@@ -1192,7 +1183,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.mobile_number }}
+                                                    <span class="ml-2">{{ localeData?.mobile_number }}</span>
                                                 </mat-checkbox>
                                             </div>
                                         </div>
@@ -1244,7 +1235,7 @@
                                                                         'billingAddress'
                                                                     ].label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['header'].data[
                                                                         'billingAddress'
@@ -1263,12 +1254,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    (customTemplate?.templateType === "tally_template"
-                                                                        ? 20
-                                                                        : 18) -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "billingAddress"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                    customTemplate?.templateType === "tally_template" ? 20 : 18,
+                                                                    customTemplate?.sections?.["header"]?.data?.["billingAddress"]?.label
+                                                                )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1290,7 +1279,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.state }}
+                                                    {{ commonLocaleData?.app_state }}
                                                 </mat-checkbox>
                                             </div>
                                             <!-- billing gstin -->
@@ -1321,7 +1310,11 @@
                                                                 <input-field
                                                                     type="text"
                                                                     name="billingGstin"
-                                                                    [label]="localeData?.gstin"
+                                                                    [label]="
+                                                                        customTemplate.sections['header'].data[
+                                                                            'billingGstin'
+                                                                        ].label
+                                                                    "
                                                                     maxlength="15"
                                                                     cssClass="form-control"
                                                                     [(ngModel)]="
@@ -1329,7 +1322,7 @@
                                                                             'billingGstin'
                                                                         ].label
                                                                     "
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [readonly]="
                                                                         !customTemplate.sections['header'].data[
                                                                             'billingAddress'
@@ -1352,10 +1345,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "billingGstin"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["billingGstin"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1407,7 +1400,7 @@
                                                                         'shippingAddress'
                                                                     ].label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['header'].data[
                                                                         'shippingAddress'
@@ -1421,12 +1414,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    (customTemplate?.templateType === "tally_template"
-                                                                        ? 20
-                                                                        : 18) -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "shippingAddress"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                    customTemplate?.templateType === "tally_template" ? 20 : 18,
+                                                                    customTemplate?.sections?.["header"]?.data?.["shippingAddress"]?.label
+                                                                )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1448,7 +1439,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.state }}
+                                                    {{ commonLocaleData?.app_state }}
                                                 </mat-checkbox>
                                             </div>
                                             <!-- shipping gstin -->
@@ -1472,7 +1463,11 @@
                                                         <div>
                                                             <input-field
                                                                 type="text"
-                                                                [label]="localeData?.gstin"
+                                                                [label]="
+                                                                    customTemplate.sections['header'].data[
+                                                                        'shippingGstin'
+                                                                    ].label
+                                                                "
                                                                 name="shippingGstin"
                                                                 maxlength="15"
                                                                 cssClass="form-control"
@@ -1481,7 +1476,7 @@
                                                                         'shippingGstin'
                                                                     ].label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['header'].data[
                                                                         'shippingAddress'
@@ -1498,10 +1493,10 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    15 -
-                                                                        customTemplate.sections["header"].data[
-                                                                            "shippingGstin"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        15,
+                                                                        customTemplate?.sections?.["header"]?.data?.["shippingGstin"]?.label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -1549,7 +1544,7 @@
                                                                                 'shippingDate'
                                                                             ].label
                                                                         "
-                                                                        (ngModelChange)="onFieldChange()"
+                                                                        (ngModelChange)="onChangeFieldVisibility()"
                                                                         [readonly]="
                                                                             !customTemplate.sections['header'].data[
                                                                                 'shippingDate'
@@ -1565,10 +1560,10 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
-                                                                                customTemplate.sections["header"].data[
-                                                                                    "shippingDate"
-                                                                                ].label?.length
+                                                                            getRemainingCharacters(
+                                                                                15,
+                                                                                customTemplate?.sections?.["header"]?.data?.["shippingDate"]?.label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1599,7 +1594,7 @@
                                                                                 'shippedVia'
                                                                             ].label
                                                                         "
-                                                                        (ngModelChange)="onFieldChange()"
+                                                                        (ngModelChange)="onChangeFieldVisibility()"
                                                                         [disabled]="
                                                                             !customTemplate.sections['header'].data[
                                                                                 'shippedVia'
@@ -1615,10 +1610,10 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
-                                                                                customTemplate.sections["header"].data[
-                                                                                    "shippedVia"
-                                                                                ].label?.length
+                                                                            getRemainingCharacters(
+                                                                                15,
+                                                                                customTemplate?.sections?.["header"]?.data?.["shippedVia"]?.label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1657,7 +1652,7 @@
                                                                                 'trackingNumber'
                                                                             ].label
                                                                         "
-                                                                        (ngModelChange)="onFieldChange()"
+                                                                        (ngModelChange)="onChangeFieldVisibility()"
                                                                         [readonly]="
                                                                             !customTemplate.sections['header'].data[
                                                                                 'trackingNumber'
@@ -1673,10 +1668,12 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
+                                                                            getRemainingCharacters(
+                                                                                15,
                                                                                 customTemplate.sections["header"].data[
                                                                                     "trackingNumber"
-                                                                                ].label?.length
+                                                                                ].label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1726,7 +1723,7 @@
                                                                                 'customField1'
                                                                             ].label
                                                                         "
-                                                                        (ngModelChange)="onFieldChange()"
+                                                                        (ngModelChange)="onChangeFieldVisibility()"
                                                                         [readonly]="
                                                                             !customTemplate.sections['header'].data[
                                                                                 'customField1'
@@ -1742,10 +1739,12 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
+                                                                            getRemainingCharacters(
+                                                                                15,
                                                                                 customTemplate.sections["header"].data[
                                                                                     "customField1"
-                                                                                ].label?.length
+                                                                                ].label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1778,7 +1777,7 @@
                                                                                 'customField2'
                                                                             ].label
                                                                         "
-                                                                        (ngModelChange)="onFieldChange()"
+                                                                        (ngModelChange)="onChangeFieldVisibility()"
                                                                         [readonly]="
                                                                             !customTemplate.sections['header'].data[
                                                                                 'customField2'
@@ -1792,10 +1791,12 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
+                                                                            getRemainingCharacters(
+                                                                                15,
                                                                                 customTemplate.sections["header"].data[
                                                                                     "customField2"
-                                                                                ].label?.length
+                                                                                ].label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1828,7 +1829,7 @@
                                                                                 'customField3'
                                                                             ].label
                                                                         "
-                                                                        (ngModelChange)="onFieldChange()"
+                                                                        (ngModelChange)="onChangeFieldVisibility()"
                                                                         [readonly]="
                                                                             !customTemplate.sections['header'].data[
                                                                                 'customField3'
@@ -1842,10 +1843,12 @@
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
-                                                                            15 -
+                                                                            getRemainingCharacters(
+                                                                                15,
                                                                                 customTemplate.sections["header"].data[
                                                                                     "customField3"
-                                                                                ].label?.length
+                                                                                ].label
+                                                                            )
                                                                         }}
                                                                     </p>
                                                                 </div>
@@ -1899,7 +1902,7 @@
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['sNo'].label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['sNo'].display
                                                             "
@@ -1911,9 +1914,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
+                                                                getRemainingCharacters(
+                                                                    10,
                                                                     customTemplate.sections["table"].data["sNo"].label
-                                                                        ?.length
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -1956,8 +1960,13 @@
                                                             customTemplate.templateType ===
                                                             templateTypeEnum.TallyTemplate
                                                         "
+                                                        [ngClass]="{
+                                                            'ml-2':
+                                                                customTemplate.templateType ===
+                                                                templateTypeEnum.TallyTemplate
+                                                        }"
                                                     >
-                                                        {{ localeData?.date }}</span
+                                                        {{ commonLocaleData?.app_date }}</span
                                                     >
                                                 </mat-checkbox>
                                                 <div class="w-100 ml-2">
@@ -1969,14 +1978,14 @@
                                                     >
                                                         <input-field
                                                             [type]="'text'"
-                                                            [label]="localeData?.date"
+                                                            [label]="commonLocaleData?.app_date"
                                                             [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="dt1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['date'].label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['date'].display
                                                             "
@@ -1993,9 +2002,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
+                                                                getRemainingCharacters(
+                                                                    10,
                                                                     customTemplate.sections["table"].data["date"].label
-                                                                        ?.length
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2035,7 +2045,7 @@
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['table'].data['item'].label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['table'].data['item']
                                                                         .display
@@ -2048,11 +2058,13 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    (customTemplate.templateType === "tally_template"
-                                                                        ? 20
-                                                                        : 12) -
+                                                                    getRemainingCharacters(
+                                                                        customTemplate.templateType === "tally_template"
+                                                                            ? 20
+                                                                            : 12,
                                                                         customTemplate.sections["table"].data["item"]
-                                                                            .label?.length
+                                                                            .label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -2079,7 +2091,7 @@
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['item'].label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['item'].display
                                                             "
@@ -2091,11 +2103,12 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                (customTemplate.templateType === "tally_template"
-                                                                    ? 20
-                                                                    : 12) -
+                                                                getRemainingCharacters(
+                                                                    customTemplate.templateType === "tally_template"
+                                                                        ? 20
+                                                                        : 12,
                                                                     customTemplate.sections["table"].data["item"].label
-                                                                        ?.length
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2151,7 +2164,7 @@
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['hsnSac'].label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['hsnSac'].display
                                                             "
@@ -2163,9 +2176,11 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                8 -
+                                                                getRemainingCharacters(
+                                                                    8,
                                                                     customTemplate.sections["table"].data["hsnSac"]
-                                                                        .label?.length
+                                                                        .label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2194,7 +2209,7 @@
                                                         <div>
                                                             <input-field
                                                                 [type]="'text'"
-                                                                [label]="localeData?.quantity"
+                                                                [label]="commonLocaleData?.app_quantity"
                                                                 [name]="'quantity'"
                                                                 [cssClass]="'form-control'"
                                                                 [maxlength]="
@@ -2208,7 +2223,7 @@
                                                                     customTemplate.sections['table'].data['quantity']
                                                                         .label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['table'].data['quantity']
                                                                         .display
@@ -2221,12 +2236,14 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    (customTemplate.templateType === "tally_template"
-                                                                        ? 8
-                                                                        : 6) -
+                                                                    getRemainingCharacters(
+                                                                        customTemplate.templateType === "tally_template"
+                                                                            ? 8
+                                                                            : 6,
                                                                         customTemplate.sections["table"].data[
                                                                             "quantity"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -2240,7 +2257,7 @@
                                                     <div>
                                                         <input-field
                                                             [type]="'text'"
-                                                            [label]="localeData?.quantity"
+                                                            [label]="commonLocaleData?.app_quantity"
                                                             [name]="'quantity'"
                                                             [cssClass]="'form-control'"
                                                             [maxlength]="
@@ -2253,7 +2270,7 @@
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['quantity'].label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['quantity']
                                                                     .display
@@ -2266,11 +2283,13 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                (customTemplate.templateType === "tally_template"
-                                                                    ? 8
-                                                                    : 6) -
+                                                                getRemainingCharacters(
+                                                                    customTemplate.templateType === "tally_template"
+                                                                        ? 8
+                                                                        : 6,
                                                                     customTemplate.sections["table"].data["quantity"]
-                                                                        .label?.length
+                                                                        .label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2291,7 +2310,7 @@
                                                 <div class="w-100 ml-2">
                                                     <div>
                                                         <input-field
-                                                            [label]="localeData?.description"
+                                                            [label]="commonLocaleData?.app_description"
                                                             [type]="'text'"
                                                             [cssClass]="'form-control'"
                                                             maxlength="10"
@@ -2300,7 +2319,7 @@
                                                                 customTemplate.sections['table'].data['description']
                                                                     .label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['description']
                                                                     .display
@@ -2313,9 +2332,11 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
+                                                                getRemainingCharacters(
+                                                                    10,
                                                                     customTemplate.sections["table"].data["description"]
-                                                                        .label?.length
+                                                                        .label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2349,7 +2370,7 @@
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['table'].data['rate'].label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['table'].data['rate']
                                                                         .display
@@ -2362,9 +2383,11 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    10 -
+                                                                    getRemainingCharacters(
+                                                                        10,
                                                                         customTemplate.sections["table"].data["rate"]
-                                                                            .label?.length
+                                                                            .label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -2385,7 +2408,7 @@
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['rate'].label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['rate'].display
                                                             "
@@ -2397,9 +2420,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
+                                                                getRemainingCharacters(
+                                                                    10,
                                                                     customTemplate.sections["table"].data["rate"].label
-                                                                        ?.length
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2454,7 +2478,7 @@
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['discount'].label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['discount']
                                                                     .display
@@ -2467,9 +2491,11 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
+                                                                getRemainingCharacters(
+                                                                    10,
                                                                     customTemplate.sections["table"].data["discount"]
-                                                                        .label?.length
+                                                                        .label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2498,7 +2524,7 @@
                                                     <div>
                                                         <input-field
                                                             [type]="'text'"
-                                                            [label]="localeData?.taxable_value"
+                                                            [label]="commonLocaleData?.app_taxable_value"
                                                             maxlength="14"
                                                             [cssClass]="'form-control'"
                                                             name="tv1"
@@ -2506,7 +2532,7 @@
                                                                 customTemplate.sections['table'].data['taxableValue']
                                                                     .label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['taxableValue']
                                                                     .display
@@ -2519,10 +2545,12 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                14 -
+                                                                getRemainingCharacters(
+                                                                    14,
                                                                     customTemplate.sections["table"].data[
                                                                         "taxableValue"
-                                                                    ].label?.length
+                                                                    ].label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2543,13 +2571,13 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             maxlength="10"
-                                                            [label]="localeData?.tax"
+                                                            [label]="commonLocaleData?.app_tax"
                                                             [cssClass]="'form-control'"
                                                             name="t1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['tax'].label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['tax'].display
                                                             "
@@ -2561,9 +2589,10 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                10 -
+                                                                getRemainingCharacters(
+                                                                    10,
                                                                     customTemplate.sections["table"].data["tax"].label
-                                                                        ?.length
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2591,7 +2620,7 @@
                                                     <div>
                                                         <input-field
                                                             [type]="'text'"
-                                                            [label]="localeData?.total"
+                                                            [label]="commonLocaleData?.app_total"
                                                             [maxlength]="
                                                                 customTemplate.templateType ===
                                                                 templateTypeEnum.ThermalTemplate
@@ -2603,25 +2632,34 @@
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['total'].label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['total'].display
                                                             "
                                                         ></input-field>
                                                     </div>
                                                     <div>
-                                                        <p class="mt-1">
+                                                        <p
+                                                            class="mt-1"
+                                                            [ngClass]="{
+                                                                'mb-4':
+                                                                    customTemplate.templateType ===
+                                                                    templateTypeEnum.ThermalTemplate
+                                                            }"
+                                                        >
                                                             <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
                                                                 customTemplate.templateType === "thermal_template"
-                                                                    ? 5 -
-                                                                      customTemplate.sections["table"].data["total"]
-                                                                          .label?.length
-                                                                    : 6 -
-                                                                      customTemplate.sections["table"].data["total"]
-                                                                          .label?.length
+                                                                    ? getRemainingCharacters(
+                                                                        5,
+                                                                        customTemplate?.sections?.["table"]?.data?.["total"]?.label
+                                                                      )
+                                                                    : getRemainingCharacters(
+                                                                        6,
+                                                                        customTemplate?.sections?.["table"]?.data?.["total"]?.label
+                                                                      )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2658,7 +2696,7 @@
                                                                 customTemplate.sections['table'].data['previousDue']
                                                                     .label
                                                             "
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
                                                                 !customTemplate.sections['table'].data['previousDue']
                                                                     .display
@@ -2671,9 +2709,11 @@
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
-                                                                14 -
+                                                                getRemainingCharacters(
+                                                                    14,
                                                                     customTemplate.sections["table"].data["previousDue"]
-                                                                        .label?.length
+                                                                        .label
+                                                                )
                                                             }}
                                                         </p>
                                                     </div>
@@ -2695,7 +2735,7 @@
                                                 "
                                                 (ngModelChange)="onChangeFieldVisibility()"
                                             >
-                                                {{ localeData?.invoice_total_in_words }}
+                                                <span class="ml-2">{{ localeData?.invoice_total_in_words }}</span>
                                             </mat-checkbox>
                                         </div>
                                         <div
@@ -2759,6 +2799,7 @@
                                                     </mat-checkbox>
                                                     <div class="w-100 ml-2">
                                                         <input-field
+                                                            [floatLabel]="'always'"
                                                             [label]="localeData?.show_bank_qr_code"
                                                             [type]="'text'"
                                                             [name]="'qrcode'"
@@ -2766,7 +2807,7 @@
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
-                                                            (ngModelChange)="onValueChange('qrCodeId', $event)"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [pattern]="
                                                                 '^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'
                                                             "
@@ -2777,6 +2818,7 @@
                                             </div>
                                             <div
                                                 *ngIf="customTemplate?.templateType === templateTypeEnum.TallyTemplate"
+                                                class="mb-4"
                                             >
                                                 <mat-checkbox
                                                     color="primary"
@@ -2837,7 +2879,7 @@
                                                                         customTemplate.sections['footer'].data['tcs']
                                                                             .label
                                                                     "
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [readonly]="
                                                                         !customTemplate.sections['footer'].data['tcs']
                                                                             .display
@@ -2850,10 +2892,12 @@
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
-                                                                        10 -
+                                                                        getRemainingCharacters(
+                                                                            10,
                                                                             customTemplate.sections["footer"].data[
                                                                                 "tcs"
-                                                                            ].label?.length
+                                                                            ].label
+                                                                        )
                                                                     }}
                                                                 </p>
                                                             </div>
@@ -2889,7 +2933,7 @@
                                                                         customTemplate.sections['footer'].data['tds']
                                                                             .label
                                                                     "
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [readonly]="
                                                                         !customTemplate.sections['footer'].data['tds']
                                                                             .display
@@ -2902,10 +2946,12 @@
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
-                                                                        10 -
+                                                                        getRemainingCharacters(
+                                                                            10,
                                                                             customTemplate.sections["footer"].data[
                                                                                 "tds"
-                                                                            ].label?.length
+                                                                            ].label
+                                                                        )
                                                                     }}
                                                                 </p>
                                                             </div>
@@ -2935,7 +2981,7 @@
                                                             <div>
                                                                 <input-field
                                                                     [type]="'text'"
-                                                                    [label]="localeData?.total_due"
+                                                                    [label]="commonLocaleData?.app_total_due"
                                                                     maxlength="40"
                                                                     name="totalDue"
                                                                     [cssClass]="'form-control'"
@@ -2944,7 +2990,7 @@
                                                                             'totalDue'
                                                                         ].label
                                                                     "
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [readonly]="
                                                                         !customTemplate.sections['footer'].data[
                                                                             'totalDue'
@@ -2958,10 +3004,12 @@
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
-                                                                        40 -
+                                                                        getRemainingCharacters(
+                                                                            40,
                                                                             customTemplate.sections["footer"].data[
                                                                                 "totalDue"
-                                                                            ].label?.length
+                                                                            ].label
+                                                                        )
                                                                     }}
                                                                 </p>
                                                             </div>
@@ -2998,7 +3046,7 @@
                                                             "
                                                         >
                                                             <input-field
-                                                                [label]="localeData?.company_name"
+                                                                [label]="commonLocaleData?.app_company_name"
                                                                 [type]="'text'"
                                                                 [maxlength]="50"
                                                                 [cssClass]="'form-control'"
@@ -3008,7 +3056,7 @@
                                                                         'companyName'
                                                                     ].label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['footer'].data[
                                                                         'companyName'
@@ -3029,10 +3077,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    50 -
+                                                                    getRemainingCharacters(
+                                                                        50,
                                                                         customTemplate.sections["footer"].data[
                                                                             "companyName"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3053,7 +3103,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.show_qr_code }}
+                                                    <span class="ml-2">{{ localeData?.show_qr_code }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <div
@@ -3093,7 +3143,7 @@
                                                                         ].label
                                                                     "
                                                                     name="cmpAdd"
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [disabled]="
                                                                         !customTemplate.sections['footer'].data[
                                                                             'companyAddress'
@@ -3108,34 +3158,17 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    124 -
+                                                                    getRemainingCharacters(
+                                                                        124,
                                                                         customTemplate.sections["footer"].data[
                                                                             "companyAddress"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div
-                                                *ngIf="
-                                                    sectionSettings?.footer.taxableAmount &&
-                                                    customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
-                                                    customTemplate?.templateType !== templateTypeEnum.TallyTemplate
-                                                "
-                                            >
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    class="d-block"
-                                                    name="tam"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['footer'].data['taxableAmount'].display
-                                                    "
-                                                    (ngModelChange)="onChangeFieldVisibility()"
-                                                >
-                                                    <span class="ml-2">{{ localeData?.taxable_amount }}</span>
-                                                </mat-checkbox>
                                             </div>
                                             <div *ngIf="sectionSettings?.footer.totalTax" [hidden]="true">
                                                 <mat-checkbox
@@ -3147,7 +3180,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    <span class="ml-2">{{ localeData?.total_tax }}</span>
+                                                    <span class="ml-2">{{ commonLocaleData?.app_total_tax }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <div *ngIf="sectionSettings?.footer.total">
@@ -3193,7 +3226,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 [placeholder]="localeData?.total_quantity"
                                                                 [disabled]="!sectionSettings?.table.quantity?.display"
-                                                                (keyup)="onFieldChange()"
+                                                                (keyup)="onChangeFieldVisibility()"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['table'].data[
                                                                         'totalQuantity'
@@ -3207,10 +3240,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    13 -
+                                                                    getRemainingCharacters(
+                                                                        13,
                                                                         customTemplate.sections["table"].data[
                                                                             "totalQuantity"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3246,7 +3281,7 @@
                                                                     customTemplate.sections['table'].data['discount']
                                                                         .label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['table'].data['discount']
                                                                         .display
@@ -3259,10 +3294,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    10 -
+                                                                    getRemainingCharacters(
+                                                                        10,
                                                                         customTemplate.sections["table"].data[
                                                                             "discount"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3290,20 +3327,22 @@
                                                     <div class="w-100 ml-2">
                                                         <div>
                                                             <input-field
-                                                                [label]="localeData?.taxable_amount"
+                                                                [label]="customTemplate.sections['footer'].data[
+                                                                'taxableAmount'
+                                                            ].label"
                                                                 [type]="'text'"
                                                                 maxlength="14"
                                                                 [cssClass]="'form-control'"
                                                                 name="tv1"
                                                                 [(ngModel)]="
-                                                                    customTemplate.sections['table'].data[
-                                                                        'taxableValue'
+                                                                    customTemplate.sections['footer'].data[
+                                                                        'taxableAmount'
                                                                     ].label
                                                                 "
-                                                                (ngModelChange)="onFieldChange()"
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
-                                                                    !customTemplate.sections['table'].data[
-                                                                        'taxableValue'
+                                                                    !customTemplate.sections['footer'].data[
+                                                                        'taxableAmount'
                                                                     ].display
                                                                 "
                                                             ></input-field>
@@ -3314,10 +3353,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    14 -
-                                                                        customTemplate.sections["table"].data[
-                                                                            "taxableValue"
-                                                                        ].label?.length
+                                                                    getRemainingCharacters(
+                                                                        14,
+                                                                        customTemplate.sections["footer"].data[
+                                                                            "taxableAmount"
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3362,7 +3403,7 @@
                                             <div
                                                 *ngIf="
                                                     customTemplate?.templateType === templateTypeEnum.GstTemplateA &&
-                                                    voucherType === voucherTypeEnum.sales &&
+                                                    (voucherType === voucherTypeEnum.sales || voucherType === voucherTypeEnum.voucher) &&
                                                     customTemplate.sections['footer'].data['taxBifurcation']
                                                 "
                                             >
@@ -3390,7 +3431,7 @@
                                                             value="1"
                                                             class="d-block w-100"
                                                             name="tax-rate"
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             (change)="
                                                                 checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                                             "
@@ -3403,13 +3444,13 @@
                                                                     'taxBifurcation'
                                                                 ].display
                                                             "
-                                                            >{{ localeData?.tax_rate }}</mat-radio-button
+                                                            >{{ commonLocaleData?.app_tax_rate }}</mat-radio-button
                                                         >
                                                         <mat-radio-button
                                                             value="2"
                                                             class="d-block w-100"
                                                             name="tax-rate"
-                                                            (ngModelChange)="onValueChange('taxBifurcation', $event)"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             (change)="checkedTaxBifurcation('hsnSac', 'footer')"
                                                             [checked]="
                                                                 customTemplate.sections['footer'].data['taxBifurcation']
@@ -3440,12 +3481,13 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [label]="localeData?.show_bank_qr_code"
+                                                            [floatLabel]="'always'"
                                                             name="bankQrCode"
                                                             [cssClass]="'form-control'"
+                                                            [readonly]="!customTemplate.showBankQrCode"
                                                             [placeholder]="localeData?.enter_upi_id"
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             [(ngModel)]="customTemplate.qrCodeId"
-                                                            [disabled]="!customTemplate.showBankQrCode"
                                                             [pattern]="
                                                                 '^[a-zA-Z0-9._%+\-]{2,256}@[a-zA-Z0-9.\-]{2,64}$'
                                                             "
@@ -3456,7 +3498,7 @@
                                             </ng-container>
                                             <div
                                                 *ngIf="
-                                                    customTemplate?.type === 'invoice' &&
+                                                    (customTemplate?.type === 'invoice' || customTemplate?.type === 'voucher') &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
                                                     customTemplate.sections['footer'].data['showNotesAtLastPage']
@@ -3476,7 +3518,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    {{ localeData?.show_notes_at_last_page }}
+                                                    <span class="ml-2"> {{ localeData?.show_notes_at_last_page }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <div
@@ -3534,7 +3576,7 @@
                                                             value="1"
                                                             class="d-block w-100"
                                                             name="tax-rate"
-                                                            (ngModelChange)="onFieldChange()"
+                                                            (ngModelChange)="onChangeFieldVisibility()"
                                                             (change)="
                                                                 checkedTaxBifurcation('taxRateBifurcation', 'footer')
                                                             "
@@ -3547,7 +3589,7 @@
                                                                     'taxBifurcation'
                                                                 ].display
                                                             "
-                                                            >{{ localeData?.tax_rate }}</mat-radio-button
+                                                            >{{ commonLocaleData?.app_tax_rate }}</mat-radio-button
                                                         >
                                                     </mat-radio-group>
                                                 </div>
@@ -3581,6 +3623,14 @@
                                                                             ? null
                                                                             : 200
                                                                     "
+                                                                    [class.error-box]="
+                                                                        isCharacterLimitExceeded(
+                                                                            200,
+                                                                            customTemplate.sections['footer'].data[
+                                                                                'message1'
+                                                                            ].label
+                                                                        )
+                                                                    "
                                                                     [placeholder]="localeData?.footer_text"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['footer'].data[
@@ -3588,7 +3638,7 @@
                                                                         ].label
                                                                     "
                                                                     name="msg11"
-                                                                    (ngModelChange)="onFieldChange()"
+                                                                    (ngModelChange)="onChangeFieldVisibility()"
                                                                     [disabled]="
                                                                         !customTemplate.sections['footer'].data[
                                                                             'message1'
@@ -3603,16 +3653,24 @@
                                                                 ></textarea>
                                                             </mat-form-field>
                                                         </div>
-                                                        <div>
+                                                        <div
+                                                            *ngIf="
+                                                                !customTemplate.sections['footer'].data[
+                                                                    'showNotesAtLastPage'
+                                                                ].display
+                                                            "
+                                                        >
                                                             <p class="mt-1">
                                                                 <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    200 -
+                                                                    getRemainingCharacters(
+                                                                        200,
                                                                         customTemplate.sections["footer"].data[
                                                                             "message1"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3666,7 +3724,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 placeholder="{{ localeData?.thanks }}"
                                                                 [readonly]="!sectionSettings?.footer.thanks?.display"
-                                                                (keyup)="onFieldChange()"
+                                                                (keyup)="onChangeFieldVisibility()"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['footer'].data['thanks']
                                                                         .label
@@ -3679,9 +3737,11 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    30 -
+                                                                    getRemainingCharacters(
+                                                                        30,
                                                                         customTemplate.sections["footer"].data["thanks"]
-                                                                            .label?.length
+                                                                            .label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3693,6 +3753,7 @@
                                                     sectionSettings?.footer.companyName &&
                                                     customTemplate?.templateType === templateTypeEnum.ThermalTemplate
                                                 "
+                                                class="mb-4"
                                             >
                                                 <mat-checkbox
                                                     color="primary"
@@ -3702,7 +3763,7 @@
                                                     "
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
-                                                    <span class="ml-2"> {{ localeData?.company_name }}</span>
+                                                    <span class="ml-2"> {{ commonLocaleData?.app_company_name }}</span>
                                                 </mat-checkbox>
                                             </div>
                                             <div
@@ -3734,7 +3795,7 @@
                                                                 [readonly]="
                                                                     !sectionSettings?.footer.textUnderSlogan?.display
                                                                 "
-                                                                (keyup)="onFieldChange()"
+                                                                (keyup)="onChangeFieldVisibility()"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['footer'].data[
                                                                         'textUnderSlogan'
@@ -3749,10 +3810,12 @@
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
-                                                                    50 -
+                                                                    getRemainingCharacters(
+                                                                        50,
                                                                         customTemplate.sections["footer"].data[
                                                                             "textUnderSlogan"
-                                                                        ].label?.length
+                                                                        ].label
+                                                                    )
                                                                 }}
                                                             </p>
                                                         </div>
@@ -3763,142 +3826,153 @@
                                                 *ngIf="
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
-                                                class="clearfix mr-t1 row"
+                                                class="clearfix mr-t1"
                                             >
-                                                <div class="clearfix" class="col-lg-6 col-md-12">
-                                                    <div
-                                                        class="mb-4px"
-                                                        *ngIf="
-                                                            customTemplate?.templateType !==
-                                                            templateTypeEnum.TallyTemplate
-                                                        "
-                                                    >
-                                                        <mat-checkbox
-                                                            color="primary"
-                                                            name="signatureType"
-                                                            (change)="chooseSigntureType('image')"
-                                                            (ngModelChange)="onFieldChange()"
-                                                            [checked]="
-                                                                customTemplate.sections.footer.data.imageSignature
-                                                                    .display
-                                                            "
-                                                        >
-                                                            {{ localeData?.image_signature }}
-                                                        </mat-checkbox>
-                                                    </div>
-                                                    <div class="form-group mr-l3 clearfix">
-                                                        <span class="clearfix">
-                                                            <label
-                                                                class="upload-button"
-                                                                for="signatureImg-edit"
-                                                                [hidden]="signatureImgAttached"
-                                                            >
-                                                                <input
-                                                                    type="file"
-                                                                    [disabled]="
-                                                                        customTemplate.sections.footer.data.slogan
-                                                                            .display
-                                                                    "
-                                                                    accept="image/png, image/jpeg"
-                                                                    id="signatureImg-edit"
-                                                                    (change)="uploadImage()"
-                                                                />
-                                                                <small>{{ localeData?.upload_signature }}</small>
-                                                            </label>
-                                                            <label
-                                                                for="signatureImg-edit"
-                                                                class="logo-preview"
-                                                                [hidden]="!signatureImgAttached"
-                                                            >
-                                                                <img
-                                                                    [src]="signatureSrc"
-                                                                    alt=""
-                                                                    id="signatureImage"
-                                                                    (ngModelChange)="onFieldChange()"
-                                                                />
-                                                            </label>
-                                                            <label
-                                                                *ngIf="isSignatureUploadInProgress"
-                                                                class="logo-preview"
-                                                                [hidden]="!signatureImgAttached"
-                                                            >
-                                                                <span
-                                                                    ><b>{{ localeData?.uploading }}</b></span
-                                                                >
-                                                            </label>
-                                                        </span>
-                                                        <button
-                                                            *ngIf="signatureImgAttached"
-                                                            type="button"
-                                                            class="start-upload-btn mr-l2"
-                                                            (click)="removeFile()"
-                                                            mat-stroked-button
-                                                            color="warn"
-                                                            [matTooltip]="localeData?.delete_image_from_server"
-                                                        >
-                                                            {{ commonLocaleData?.app_delete }}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    class="clearfix"
-                                                    class="col-lg-6 col-md-12"
-                                                    *ngIf="
-                                                        customTemplate?.templateType !== templateTypeEnum.TallyTemplate
-                                                    "
+                                                <mat-radio-group
+                                                    [(ngModel)]="selectedSignatureType"
+                                                    (ngModelChange)="onSignatureTypeChange($event)"
+                                                    name="signatureType"
+                                                    class="d-flex flex-wrap w-100"
                                                 >
-                                                    <div>
-                                                        <mat-checkbox
-                                                            color="primary"
-                                                            name="signatureType"
-                                                            (change)="chooseSigntureType('slogan')"
-                                                            (ngModelChange)="onFieldChange()"
-                                                            [checked]="
-                                                                customTemplate.sections.footer.data.slogan.display
+                                                    <div class="d-flex w-100">
+                                                        <div class="clearfix" class="w-50">
+                                                            <div
+                                                                *ngIf="
+                                                                    customTemplate?.templateType !==
+                                                                    templateTypeEnum.TallyTemplate
+                                                                "
+                                                            >
+                                                                <mat-radio-button color="primary" value="image">
+                                                                    <span class="ml-2">
+                                                                        {{ localeData?.image_signature }}</span
+                                                                    >
+                                                                </mat-radio-button>
+                                                            </div>
+                                                            <div
+                                                                class="mb-3"
+                                                                *ngIf="
+                                                                    customTemplate?.templateType ===
+                                                                    templateTypeEnum.TallyTemplate
+                                                                "
+                                                            >
+                                                                {{ localeData?.image_signature }}
+                                                            </div>
+                                                            <div class="form-group mr-l3 clearfix d-flex column-gap15">
+                                                                <span class="clearfix">
+                                                                    <label
+                                                                        class="upload-button text-center cursor-pointer"
+                                                                        for="signatureImg-edit"
+                                                                        [hidden]="signatureImgAttached"
+                                                                    >
+                                                                        <input
+                                                                            type="file"
+                                                                            [disabled]="
+                                                                                customTemplate.sections.footer.data
+                                                                                    .slogan.display
+                                                                            "
+                                                                            [ngClass]="{
+                                                                                'cursor-disable': !customTemplate.sections.footer.data.slogan.display
+                                                                            }"
+                                                                            accept="image/png, image/jpeg"
+                                                                            id="signatureImg-edit"
+                                                                            (change)="uploadImage()"
+                                                                        />
+                                                                        <small>{{
+                                                                            localeData?.upload_signature
+                                                                        }}</small>
+                                                                    </label>
+                                                                    <label
+                                                                        for="signatureImg-edit"
+                                                                        class="logo-preview"
+                                                                        [hidden]="!signatureImgAttached"
+                                                                    >
+                                                                        <img
+                                                                            [src]="signatureSrc"
+                                                                            alt="signature"
+                                                                            id="signatureImage"
+                                                                            (ngModelChange)="onChangeFieldVisibility()"
+                                                                        />
+                                                                    </label>
+                                                                    <label
+                                                                        *ngIf="isSignatureUploadInProgress"
+                                                                        class="logo-preview"
+                                                                        [hidden]="!signatureImgAttached"
+                                                                    >
+                                                                        <span
+                                                                            ><b>{{ localeData?.uploading }}</b></span
+                                                                        >
+                                                                    </label>
+                                                                </span>
+                                                                <button
+                                                                    *ngIf="signatureImgAttached"
+                                                                    type="button"
+                                                                    class="start-upload-btn mr-l2"
+                                                                    (click)="removeFile()"
+                                                                    mat-stroked-button
+                                                                    [matTooltip]="localeData?.delete_image_from_server"
+                                                                >
+                                                                    {{ commonLocaleData?.app_delete }}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            class="clearfix"
+                                                            class="col-lg-6 col-md-12"
+                                                            *ngIf="
+                                                                customTemplate?.templateType !==
+                                                                templateTypeEnum.TallyTemplate
                                                             "
                                                         >
-                                                            {{ localeData?.slogan }}
-                                                        </mat-checkbox>
-
-                                                        <div class="form-group ml-3 clearfix">
                                                             <div>
-                                                                <div>
-                                                                    <textarea
-                                                                        class="form-control"
-                                                                        maxlength="30"
-                                                                        [disabled]="
-                                                                            customTemplate.sections.footer.data
-                                                                                .imageSignature.display
-                                                                        "
-                                                                        name="slogan"
-                                                                        [(ngModel)]="
-                                                                            customTemplate.sections['footer'].data[
-                                                                                'slogan'
-                                                                            ].label
-                                                                        "
-                                                                        (ngModelChange)="
-                                                                            onFieldChange(null, null, null)
-                                                                        "
-                                                                    >
+                                                                <mat-radio-button color="primary" value="slogan">
+                                                                    {{ localeData?.slogan }}
+                                                                </mat-radio-button>
+
+                                                                <div class="form-group ml-3 clearfix">
+                                                                    <div>
+                                                                        <div>
+                                                                            <textarea
+                                                                                class="form-control"
+                                                                                maxlength="30"
+                                                                                [disabled]="
+                                                                                    customTemplate.sections.footer.data
+                                                                                        .imageSignature.display
+                                                                                "
+                                                                                name="slogan"
+                                                                                rows="3"
+                                                                                [(ngModel)]="
+                                                                                    customTemplate.sections['footer']
+                                                                                        .data['slogan'].label
+                                                                                "
+                                                                                (ngModelChange)="
+                                                                                    onChangeFieldVisibility(
+                                                                                        null,
+                                                                                        null,
+                                                                                        null
+                                                                                    )
+                                                                                "
+                                                                            >
                                                                         {{ localeData?.slogan_note }}
                                                                     </textarea>
-                                                                    <ng-container>
-                                                                        <span class="max-character-label"
-                                                                            >{{
-                                                                                localeData?.characters_left
-                                                                            }}&nbsp;</span
-                                                                        ><span class="max-character-value">{{
-                                                                            30 -
-                                                                                customTemplate.sections["footer"].data[
-                                                                                    "slogan"
-                                                                                ].label?.length
-                                                                        }}</span>
-                                                                    </ng-container>
+                                                                            <span class="max-character-label"
+                                                                                >{{
+                                                                                    localeData?.characters_left
+                                                                                }}&nbsp;</span
+                                                                            ><span class="max-character-value">{{
+                                                                                getRemainingCharacters(
+                                                                                    30,
+                                                                                    customTemplate.sections[
+                                                                                        "footer"
+                                                                                    ].data["slogan"].label
+                                                                                )
+                                                                            }}</span>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </mat-radio-group>
                                             </div>
                                         </div>
                                     </div>

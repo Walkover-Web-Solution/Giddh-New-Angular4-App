@@ -40,7 +40,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
-
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
@@ -77,6 +76,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
 import { ExportFileNameComponent } from './export-file-name/export-file-name.component';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replaceAll.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
@@ -133,7 +133,6 @@ import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replace
         MatDialogModule,
         ConfirmModalModule,
         MatSlideToggleModule,
-        
         MatGridListModule,
         FormFieldsModule,
         MatInputModule,
@@ -164,7 +163,7 @@ import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replace
         TributeMentionModule,
         ReplaceAllPipeModule,
         TitleCasePipe,
-        OverlayModule
+        MatPaginatorModule
     ],
 })
 

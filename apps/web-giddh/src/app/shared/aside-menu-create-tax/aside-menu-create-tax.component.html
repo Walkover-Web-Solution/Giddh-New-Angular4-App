@@ -5,8 +5,8 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="dialog-header theme-bg d-flex justify-content-between">
-        <h3 class="modal-title bg" id="modal-title" mat-dialog-title>
+    <div class="dialog-header">
+        <h3 class="modal-title bg" id="modal-title">
             {{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}
         </h3>
         <i mat-dialog-close (click)="closeEvent?.emit()" aria-label="close icon" class="icon-cross"></i>

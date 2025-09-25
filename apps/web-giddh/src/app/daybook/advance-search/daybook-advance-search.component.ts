@@ -4,12 +4,12 @@ import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@
 import { Store, select } from '@ngrx/store';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
+import { API_BULK_FETCH_LIMIT, IOption } from '../../app.constant';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from '../../services/general.service';
 import { SearchService } from '../../services/search.service';
@@ -177,7 +177,7 @@ public advanceSearchObject: DayBookRequestModel = null;
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -657,7 +657,7 @@ public advanceSearchObject: DayBookRequestModel = null;
             const requestObject = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
             this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {

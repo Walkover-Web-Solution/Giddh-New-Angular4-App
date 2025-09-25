@@ -7,29 +7,13 @@ import { saveAs } from 'file-saver';
 import { GstReconcileService } from "../../services/gst-reconcile.service";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from 'dayjs';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatDatepicker } from "@angular/material/datepicker";
 import { FormControl } from "@angular/forms";
-
-export const MY_FORMATS = {
-    parse: {
-        dateInput: 'MM/YYYY',
-    },
-    display: {
-        dateInput: 'MM/YYYY',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY',
-    },
-};
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
     selector: 'filing-status',
     templateUrl: './filing-status.component.html',
-    styleUrls: ['./filing-status.component.scss'],
-    providers: [
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    ]
+    styleUrls: ['./filing-status.component.scss']
 })
 export class FilingStatusComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */
@@ -149,7 +133,20 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         this.getGstrReferences();
     }
 
-
+    /**	
+     * Handle Page Change Event	
+     *	
+     * @param {*} event	
+     * @memberof FilingStatusComponent	
+     */	
+     public pageChanged(event: PageEvent): void {	
+        if (event) {	
+            this.pageIndex = event.pageIndex;	
+            this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            this.pagination.count = event.pageSize;	
+            this.getGstrReferences();	
+        }	
+    }
 
     /**
      * Get GST Filing Status form API
@@ -235,14 +232,12 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Sets month/year
+     * Handles month and year selection from giddh-datepicker
      *
-     * @param {*} date
-     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @param {*} date - Selected date from datepicker
      * @memberof FilingStatusComponent
      */
-    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker?.close();
+    public setMonthAndYear(date: any): void {
         const selectedMonth = new Date(date);
         const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
         const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);

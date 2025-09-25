@@ -9,7 +9,7 @@ import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,7 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { RestrictedModules } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, RestrictedModules } from '../../app.constant';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
@@ -30,7 +30,7 @@ import { ServiceConfig } from '../../services/service.config';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
-
+    /** Selected tab index for Material tabs */
     @ViewChild('staticTabsSettings', { static: true }) public staticTabs: MatTabGroup;
     /** Selected tab index for Material tabs */
     public selectedTabIndex: number = 0;
@@ -82,7 +82,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** True if user has invoice setting permissions */
     public hasInvoiceSettingPermissions: boolean = true;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Active tab name */
     public activeTab: string;
     /** Active company details */
@@ -621,14 +621,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
-            data: voucherType,
-            width: 'var(--aside-pane-width)',
-            height: '70vh',
-            position: {
-                right: '0',
-                bottom: '0'
-            },
-            disableClose: true
+            ...ASIDE_PANE_CONFIG,
+            data: voucherType
         });
     }
 

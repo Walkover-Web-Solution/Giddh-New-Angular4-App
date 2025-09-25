@@ -5,15 +5,18 @@ import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-model
 import { ToasterService } from "../../../services/toaster.service";
 import { LocaleService } from "../../../services/locale.service";
 import { SalesPersonService } from "./sales-person.service";
-import { HttpMethod } from "../../../app.constant";
-import { SalesPersonCreateUpdate } from "./sales-person.constant";
+import { HttpMethod, IOption } from "../../../app.constant";
+import { SalesPersonCreateUpdate, SalesPersonDeleteArchivedModel, SalesPersonErrorDetailsEnum } from "./sales-person.constant";
 
 export interface SalesPersonState {
     salesPersonSaveInProgress: boolean;
     createUpdateSalesPersonSuccess: boolean;
     deleteSalesPersonSuccess: boolean;
-    salesPersonList: CommonPaginatedResponse<any>;
-    salesPersonListInProgress: boolean
+    salesPersonList: CommonPaginatedResponse<any> | IOption[] | null;
+    salesPersonListInProgress: boolean;
+    archiveSalesPersonSuccess: boolean;
+    openTransferAndDeleteDialog: boolean; // For sales person linked with account only
+    openTransferAndArchiveDialog: boolean; // For sales person linked with entry or voucher
 }
 
 export const DEFAULT_STATE: SalesPersonState = {
@@ -21,7 +24,10 @@ export const DEFAULT_STATE: SalesPersonState = {
     createUpdateSalesPersonSuccess: false,
     deleteSalesPersonSuccess: false,
     salesPersonList: null,
-    salesPersonListInProgress: false
+    salesPersonListInProgress: false,
+    archiveSalesPersonSuccess: false,
+    openTransferAndDeleteDialog: false,
+    openTransferAndArchiveDialog: false
 };
 
 @Injectable()
@@ -35,7 +41,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
     }
 
     /** Sales Person List */
-    public salesPersonList$: Observable<CommonPaginatedResponse<any>> = this.select((state) => state.salesPersonList);
+    public salesPersonList$: Observable<CommonPaginatedResponse<any> | IOption[]> = this.select((state) => state.salesPersonList);
     /** Sales Person Save In Progress */
     public salesPersonSaveInProgress$: Observable<boolean> = this.select((state) => state.salesPersonSaveInProgress);
     /** Save Sales Person Success */
@@ -44,6 +50,12 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
     public deleteSalesPersonSuccess$: Observable<boolean> = this.select((state) => state.deleteSalesPersonSuccess);
     /** Sales Person List In Progress */
     public salesPersonListInProgress$: Observable<boolean> = this.select((state) => state.salesPersonListInProgress);
+    /** Archive Sales Person Success */
+    public archiveSalesPersonSuccess$: Observable<boolean> = this.select((state) => state.archiveSalesPersonSuccess);
+    /** Open Transfer and Delete Dialog */
+    public openTransferAndDeleteDialog$: Observable<boolean> = this.select((state) => state.openTransferAndDeleteDialog);
+    /** Open Transfer and Archive Dialog */
+    public openTransferAndArchiveDialog$: Observable<boolean> = this.select((state) => state.openTransferAndArchiveDialog);
 
     /**
      * Get All Sales Person
@@ -154,12 +166,23 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
+                                typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
                                 this.patchState({
                                     deleteSalesPersonSuccess: true
                                 });
                             } else {
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
+                                    if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
+                                        this.patchState({
+                                            openTransferAndArchiveDialog: true
+                                        });
+                                    } else if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ACCOUNT)) {
+                                        this.patchState({
+                                            openTransferAndDeleteDialog: true
+                                        });
+                                    }
+                                        
                                 }
                                 return this.patchState({
                                     deleteSalesPersonSuccess: false,
@@ -170,6 +193,43 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                             this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
                                 deleteSalesPersonSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Archive/Unarchive sales person
+     *
+     * @memberof SalesPersonComponentStore
+     */
+    readonly archiveUnarchiveSalesPerson = this.effect((data: Observable<{ model: SalesPersonDeleteArchivedModel, uniqueName: string }>) => {
+        return data.pipe(
+            switchMap((model) => {
+                this.patchState({ archiveSalesPersonSuccess: false });
+                return this.salesPersonService.salesPersonArchive(model.model, model.uniqueName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
+                                this.patchState({
+                                    archiveSalesPersonSuccess: true
+                                });
+                            } else {
+                                res.message && this.toasterService.showSnackBar('error', res.message);
+                                return this.patchState({
+                                    archiveSalesPersonSuccess: false,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+                            return this.patchState({
+                                archiveSalesPersonSuccess: false
                             });
                         }
                     ),

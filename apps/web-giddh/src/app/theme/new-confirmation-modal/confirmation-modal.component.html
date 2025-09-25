@@ -1,11 +1,13 @@
 <div class="custom-confirmation-modal">
-    <div class="modal-header flex-row-reverse">
-        <span class="close font-15"><span class="icon-cross" (click)="sendResponse('Close')"></span></span>
-        <h3 mat-dialog-title [ngClass]="inputData?.configuration?.headerCssClass">
+    <div class="dialog-header">
+        <span [ngClass]="inputData?.configuration?.headerCssClass">
             {{ inputData?.configuration?.headerText }}
-        </h3>
+        </span>
+        <button mat-icon-button aria-label="close" (click)="sendResponse('Close')">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <div class="modal-body font-15">
+    <mat-dialog-content class="dialog-body font-15">
         <p
             [ngClass]="inputData?.configuration?.messageCssClass"
             [innerHTML]="inputData?.configuration?.messageText"
@@ -61,5 +63,5 @@
                 </ng-template>
             </ng-container>
         </div>
-    </div>
+    </mat-dialog-content>
 </div>

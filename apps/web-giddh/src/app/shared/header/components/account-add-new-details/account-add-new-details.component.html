@@ -469,6 +469,7 @@
                                         [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
                                         formControlName="mobileNo"
                                         (change)="openConfirmLeaveDialog()"
+                                        (focus)="reInitializeMobileField('init-contact-add')"
                                     >
                                     </input-field>
                                 </div>
@@ -564,6 +565,7 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [label]="commonLocaleData?.app_mobile_number"
                                 (input)="portalIndex = i"
+                                (focus)="reInitializeMobileField('init-contact-portal_' + i)"
                                 [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
                             ></input-field>
                             <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
@@ -896,7 +898,7 @@
     </form>
 </ng-container>
 <ng-template #templateForSaveButton>
-    <div class="row pd-t2">
+    <div class="row pd-t2" *ngIf="voucherApiVersion === 2">
         <div class="col-sm-12">
             <button
                 mat-raised-button

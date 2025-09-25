@@ -12,13 +12,16 @@
             <div class="py-2">
                 <div class="d-flex align-items-center">
                     <div class="form-group date-picker-invoice invoice-lock-date mb-0 custom-input-field">
-                        <mat-form-field [appearance]="'fill'" [floatLabel]="'auto'">
-                            <input matInput [matDatepicker]="picker" [placeholder]="date?.value" autocomplete="off"
-                                (focus)="picker?.open()" (click)="picker?.open()"
-                                [class]="'mat-field-border month-selection form-control text-align-center'" name="date" readonly />
-                            <mat-datepicker (monthSelected)="setMonthAndYear($event, picker)" [startView]="'multi-year'"
-                                [startAt]="startAt" #picker></mat-datepicker>
-                        </mat-form-field>
+                        <giddh-datepicker
+                            [monthYearMode]="true"
+                            [startView]="'multi-year'"
+                            [cssClass]="'text-center w150'"
+                            [startAt]="startAt"
+                            [placeholder]="date?.value"
+                            [appearance]="'outline'"
+                            (monthYearSelected)="setMonthAndYear($event)"
+                        >
+                        </giddh-datepicker>
                     </div>
 
                     <button class="ml-5" mat-stroked-button (click)="initializeForm()" *ngIf="customMonthSelected">
@@ -53,8 +56,8 @@
                                 commonLocaleData?.app_status }} </th>
                             <td mat-cell *matCellDef="let element" width="10%" class="text-center"> 
                                 <button
-                                    mat-stroked-button
-                                    mat-raised-button color="primary"
+                                    mat-raised-button 
+                                    color="primary"
                                     (click)="getGstFilingStatus(element.referenceId)"
                                 >
                                     {{ localeData?.filing?.get_status }}

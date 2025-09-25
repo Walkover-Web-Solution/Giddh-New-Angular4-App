@@ -1,14 +1,16 @@
 <div>
-    <div class="modal-header">
-        <h2 class="modal-title">{{ title }}</h2>
-        <button aria-label="cross" mat-icon-button class="close" data-dismiss="modal" (click)="onCancel($event)">×</button>
+    <div class="dialog-header">
+        <span>{{ title }}</span>
+        <button mat-icon-button aria-label="close" (click)="onCancel($event)">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <div class="modal-body">
+    <mat-dialog-content class="dialog-body">
         {{ body }}
         <p class="font-15 mr-t05">{{ permanentlyDeleteMessage }}</p>
-    </div>
-    <div class="modal-footer">
-        <button aria-label="yes" mat-raised-button color="primary" (click)="onSuccess($event)">{{ ok }}</button>
-        <button aria-label="no" mat-stroked-button (click)="onCancel($event)">{{ cancel }}</button>
-    </div>
+        <div class="d-flex column-gap1 justify-content-end mt-3">
+            <button aria-label="yes" mat-raised-button color="primary" (click)="onSuccess($event)">{{ ok }}</button>
+            <button aria-label="no" mat-stroked-button (click)="onCancel($event)">{{ cancel }}</button>
+        </div>
+    </mat-dialog-content>
 </div>

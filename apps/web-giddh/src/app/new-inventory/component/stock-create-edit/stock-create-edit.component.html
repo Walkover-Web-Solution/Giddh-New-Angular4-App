@@ -166,8 +166,7 @@
                                             <button 
                                                 aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
-                                                mat-raised-button
-                                                color="primary"
+                                                mat-stroked-button
                                                 class="min-width-100 move-stock mr-0"
                                                 (click)="moveStock()"
                                                 [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
@@ -536,7 +535,7 @@
                                                                                             )
                                                                                         "
                                                                                         [labelValue]="
-                                                                                            variantPurchaseUnitRate?.stockUnitName ?? ''
+                                                                                            variantPurchaseUnitRate?.stockUnitName
                                                                                         "
                                                                                         [cssClass]="
                                                                                             !variantPurchaseUnitRate?.stockUnitName &&
@@ -809,14 +808,14 @@
                                                                         </div>
                                                                     </div>
                                                                     <div
-                                                                        class="row align-items-center"
+                                                                        class="row align-items-center mt-2"
                                                                         *ngFor="
                                                                             let optionValue of option.values;
                                                                             trackBy: trackByFn;
                                                                             let j = index
                                                                         "
                                                                     >
-                                                                        <div class="col-lg-4 option-delete pr-0 mt-2">
+                                                                        <div class="col-lg-4 option-delete pr-0">
                                                                             <div class="w-100 option-value-field">
                                                                                 <text-field
                                                                                     [name]="
@@ -853,7 +852,8 @@
                                                                     <div class="done-btn my-3">
                                                                         <button
                                                                             aria-label="done"
-                                                                            mat-stroked-button
+                                                                            mat-raised-button
+                                                                            color="primary"
                                                                             (click)="updateOptionValues(option, i)"
                                                                         >
                                                                             {{ commonLocaleData?.app_done }}

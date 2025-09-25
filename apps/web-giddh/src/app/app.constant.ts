@@ -16,6 +16,17 @@ export enum BranchHierarchyType {
     Tree = 'tree'
 };
 
+/** PDF Zoom Configuration Constants */
+export const IFRAME_ZOOM_CONFIG = {
+    FIT_PAGE: '#view=Fit',
+    FIT_HORIZONTAL: '#view=FitH',
+    FIT_VERTICAL: '#view=FitV',
+    ZOOM_50: '#zoom=50&view=FitH',
+    ZOOM_75: '#zoom=75&view=FitH',
+    ZOOM_100: '#zoom=100&view=FitH',
+    ZOOM_125: '#zoom=125&view=FitV'
+};
+
 /** Date Regex for 'MMM D, YYYY' */
 export const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -106,9 +117,9 @@ export const PAGINATION_LIMIT = 50;
 /** Pagination count options */
 export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 /** API default count limit */
-export const API_COUNT_LIMIT = 20;
+export const DROPDOWN_ITEMS_COUNT_LIMIT = 20;
 /** Vouchers pagination limit  */
-export const ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT = 200;
+export const API_BULK_FETCH_LIMIT = 200;
 
 /** SubVoucher type */
 export enum SubVoucher {

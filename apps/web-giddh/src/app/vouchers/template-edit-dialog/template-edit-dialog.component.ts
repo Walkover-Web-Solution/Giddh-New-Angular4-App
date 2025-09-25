@@ -9,7 +9,6 @@ import { InvoiceTemplatesService } from '../../services/invoice.templates.servic
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { TemplateModeEnum, TemplateTypeEnum } from '../../models/api-models/Sales';
-import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { CountryNames } from '../../shared/Enums/common.enum';
 
@@ -32,7 +31,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   /* Destroyed$ subject*/
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   /** Current mode of the component (e.g., 'create', 'edit') */
-  public templateModeEnum = TemplateModeEnum;
+  public readonly templateModeEnum = TemplateModeEnum;
   /* This will hold the value if Gst Composition will show/hide */
   public showGstComposition: boolean = false;
 
@@ -108,7 +107,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
       data.sections['footer'].data['grandTotal'].field = 'grandTotal';
     }
     data.copyFrom = copiedTemplate?.uniqueName;
-    this.setFontSizes(data);
+    this.setFontSizesUpdate(data);
     this.ensureTextUnderSlogan(data);
     delete data['uniqueName'];
     this.cleanTemplateFields(data);
@@ -138,21 +137,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * setFontSizes method
-   *
-   * @private
-   * @param {*} data
-   * @memberof TemplateEditDialogComponent
-   */
-  private setFontSizes(data: any): void {
-    if (data?.fontSize) {
-      data.fontSmall = data.fontSize - 4;
-      data.fontDefault = data.fontSize;
-      data.fontMedium = data.fontSize - 2;
-    }
-  }
-
-  /**
    * ensureTextUnderSlogan method
    *
    * @private
@@ -160,13 +144,13 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
    * @memberof TemplateEditDialogComponent
    */
   private ensureTextUnderSlogan(data: any): void {
-    const tus = data?.sections?.['footer']?.data?.['textUnderSlogan'];
-    if (!tus?.display || !tus?.label) {
-      if (!tus && data?.sections?.['footer']?.data) {
+    const textUnderSlogan = data?.sections?.['footer']?.data?.['textUnderSlogan'];
+    if (!textUnderSlogan?.display || !textUnderSlogan?.label) {
+      if (!textUnderSlogan && data?.sections?.['footer']?.data) {
         data.sections['footer'].data['textUnderSlogan'] = { label: '', display: false };
-      } else if (tus) {
-        tus.display = false;
-        tus.label = '';
+      } else if (textUnderSlogan) {
+        textUnderSlogan.display = false;
+        textUnderSlogan.label = '';
       }
     }
   }
@@ -240,7 +224,7 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     }
     this.setFontSizesUpdate(data);
     this.ensureMessage1(data);
-    this.ensureTextUnderSloganUpdate(data);
+    this.ensureTextUnderSlogan(data);
     data = this.newLineToBR(data);
     this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       if (res?.status === 'success') {
@@ -283,21 +267,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     if (msg1 && (!msg1?.display || !msg1?.label)) {
       msg1.display = false;
       msg1.label = '';
-    }
-  }
-
-  /**
-   * ensureTextUnderSloganUpdate method
-   *
-   * @private
-   * @param {*} data
-   * @memberof TemplateEditDialogComponent
-   */
-  private ensureTextUnderSloganUpdate(data: any): void {
-    const tus = data?.sections?.['footer']?.data?.['textUnderSlogan'];
-    if (tus && (!tus?.display || !tus?.label)) {
-      tus.display = false;
-      tus.label = '';
     }
   }
 

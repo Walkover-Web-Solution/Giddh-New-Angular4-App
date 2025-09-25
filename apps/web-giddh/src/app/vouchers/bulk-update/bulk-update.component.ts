@@ -9,13 +9,13 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../services/toaster.service';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'app-bulk-update',
@@ -452,7 +452,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.onConfirmationUpdateImageSlogan();
             } else {

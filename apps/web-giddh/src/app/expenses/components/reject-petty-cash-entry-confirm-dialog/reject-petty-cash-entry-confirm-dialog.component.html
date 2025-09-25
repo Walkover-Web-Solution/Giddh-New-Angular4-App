@@ -1,16 +1,10 @@
-<div class="modal-header">
-    <h3 mat-dialog-title class="modal-title pull-left">{{ localeData?.rejection_reason }}</h3>
-    <button
-        mat-button
-        type="button"
-        class="close pull-right"
-        [attr.aria-label]="commonLocaleData?.app_close"
-        (click)="rejectEntry?.emit(false)"
-    >
-        <span aria-hidden="true">&times;</span>
+<div class="dialog-header">
+    <span>{{ localeData?.rejection_reason }}</span>
+    <button mat-icon-button aria-label="close" (click)="rejectEntry?.emit(false)">
+        <i class="icon-cross"></i>
     </button>
 </div>
-<div class="modal-body petty-cash-reject-modal">
+<mat-dialog-content class="dialog-body petty-cash-reject-modal">
     <div class="clearfix modal-top">
         <p class="font-12 text-gray mr-b1">
             <span>{{ selectedItem?.entryDate }} </span> |
@@ -60,4 +54,4 @@
     <button mat-raised-button color="primary" [disabled]="!rejectReason?.value" (click)="submitReject()">
         {{ commonLocaleData?.app_submit }}
     </button>
-</div>
+</mat-dialog-content>

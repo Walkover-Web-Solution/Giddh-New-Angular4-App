@@ -143,13 +143,13 @@ export class ListBranchTransferComponent implements OnInit {
     public get shouldShowElement(): boolean {
         return (
             (this.branchTransferForm?.controls['sender']?.value ||
-            this.branchTransferForm?.controls['receiver']?.value ||
-            this.branchTransferForm?.controls['senderReceiver']?.value ||
-            this.branchTransferForm?.controls['fromWarehouse']?.value ||
-            this.branchTransferForm?.controls['toWarehouse']?.value) &&
+                this.branchTransferForm?.controls['receiver']?.value ||
+                this.branchTransferForm?.controls['senderReceiver']?.value ||
+                this.branchTransferForm?.controls['fromWarehouse']?.value ||
+                this.branchTransferForm?.controls['toWarehouse']?.value) &&
             (!this.branchTransferForm?.controls['voucherType']?.value &&
-            !this.branchTransferForm?.controls['amountOperator']?.value &&
-            !this.branchTransferForm?.controls['amount']?.value)
+                !this.branchTransferForm?.controls['amountOperator']?.value &&
+                !this.branchTransferForm?.controls['amount']?.value)
         );
     }
 
@@ -332,13 +332,17 @@ export class ListBranchTransferComponent implements OnInit {
         }
         this.changeDetection.detectChanges();
         this.branchTransferGetRequestParams.page = this.branchTransferPaginationObject.page;
+        this.branchTransferGetRequestParams.count = this.branchTransferPaginationObject.count;
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferForm.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response?.status === "success") {
-                this.branchTransferPaginationObject.page = response.body.page;
+                if (this.branchTransferPaginationObject.totalItems > 0 && response.body?.items?.length === 0 && this.branchTransferPaginationObject.page > 1) {
+                    this.branchTransferPaginationObject.page = response.body.totalPages;
+                    this.getBranchTransferList(false);
+                    return;
+                }
                 this.branchTransferPaginationObject.totalPages = response.body.totalPages;
                 this.branchTransferPaginationObject.totalItems = response.body.totalItems;
-                this.branchTransferPaginationObject.count = response.body.count;
                 this.branchTransferResponse = response.body?.items;
             } else {
                 this.branchTransferResponse = [];
@@ -496,7 +500,7 @@ export class ListBranchTransferComponent implements OnInit {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response === 'Yes') {
                 this.deleteNewBranchTransfer()
             } else {
@@ -557,7 +561,7 @@ export class ListBranchTransferComponent implements OnInit {
         this.branchTransferPaginationObject.count = event.pageSize;
         this.getBranchTransferList(false);
     }
-    
+
 
 
     /**

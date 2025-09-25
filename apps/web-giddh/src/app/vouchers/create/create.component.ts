@@ -83,7 +83,9 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
     ZIP_CODE_SUPPORTED_COUNTRIES,
-    ASIDE_PANE_CONFIG
+    ASIDE_PANE_CONFIG,
+    IOption,
+    API_BULK_FETCH_LIMIT
 } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
@@ -106,6 +108,7 @@ import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
+import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
 
 @Component({
     selector: "create",
@@ -128,6 +131,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("printVoucherModal", { static: true }) public printVoucherModal: any;
     /* Selector for adjustment modal */
     @ViewChild("adjustmentModal", { static: true }) public adjustmentModal: any;
+    /** Selector for account dropdown */
+    @ViewChild("accountDropdown") accountDropdown: ReactiveDropdownFieldComponent;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -161,7 +166,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Stock search request */
     public stockSearchRequest: any;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Invoice Settings */
     public invoiceSettings: any;
     /** True if round off will be applicable */
@@ -377,6 +382,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAmountBeforeUpdate: number = 0;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
+    /** Cached voucher account results for pagination */
+    private cachedVoucherAccountResults: OptionInterface[] = [];
     /** Total pages for reference vouchers */
     private referenceVouchersTotalPages: number = 1;
     /** Reference voucher search field */
@@ -1586,6 +1593,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         });
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+            if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                this.invoiceForm.get('salesPersonName').patchValue('');
+                this.invoiceForm.get('salesPersonUniqueName').patchValue(null);
+            }
+        });
     }
 
     /**
@@ -2131,6 +2145,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
+        // Clear cache if this is a new search (page 1) or if search parameters changed
+        if (page === 1) {
+            this.cachedVoucherAccountResults = [];
+            this.voucherAccountResults$ = observableOf(null);
+        }
+
         let accountSearchRequest = this.vouchersUtilityService.getSearchRequestObject(
             this.voucherType,
             query,
@@ -2149,13 +2169,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .subscribe((response) => {
                 if (response?.body?.results?.length) {
                     this.accountSearchRequest.loadMore = true;
-                    let voucherAccountResults = [];
-                    if (page > 1) {
-                        this.voucherAccountResults$.subscribe((res) => (voucherAccountResults = res));
-                    }
                     const newResults = response?.body?.results?.map((res) => {
                         return { label: res.name, value: res.uniqueName, additional: res };
                     });
+
+                    // Use cached results for pagination instead of synchronous subscription
+                    if (page > 1) {
+                        this.cachedVoucherAccountResults = [...this.cachedVoucherAccountResults, ...newResults];
+                    } else {
+                        this.cachedVoucherAccountResults = newResults;
+                    }
 
                     if (selectAccount) {
                         this.invoiceForm.controls["account"]?.get("uniqueName")?.patchValue(query);
@@ -2168,10 +2191,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.openAccountDropdown = false;
                     }
 
-                    this.voucherAccountResults$ = observableOf(voucherAccountResults.concat(...newResults));
+                    // Update Observable with fresh data
+                    this.voucherAccountResults$ = observableOf([...this.cachedVoucherAccountResults]);
                 } else {
                     this.accountSearchRequest.loadMore = false;
                     if (page === 1) {
+                        this.cachedVoucherAccountResults = [];
                         this.voucherAccountResults$ = observableOf(null);
                     }
 
@@ -2395,13 +2420,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public selectStock(event: any, entryIndex: number, isClear: boolean = false): void {
         if (this.isBarcodeMachineTyping) {
-            this.deleteLineEntry(entryIndex);
+            const entries = this.invoiceForm.get("entries") as FormArray;
+            const account = entries.at(entryIndex)?.value?.transactions?.[0]?.account;
+            // Delete entry if account is not selected
+            if (!(account?.uniqueName && account?.name)) {
+                this.deleteLineEntry(entryIndex);
+            }
             return;
         }
 
-        if (event && !isClear) {
+        if (event) {
             const entryFormGroup = this.getEntryFormGroup(entryIndex);
             const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+            if (isClear) {
+                transactionFormGroup.reset();
+                return;
+            }
 
             transactionFormGroup.get("account.name")?.patchValue(event?.label);
             transactionFormGroup.get("account.uniqueName")?.patchValue(event?.account?.uniqueName || event?.value);
@@ -2516,8 +2551,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         let index = 0;
         if (!this.isUpdateMode) { // Take sales person details only if account is new else assign from get voucher response
-            this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
-            this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+            this.salesPersonList$.pipe(take(1)).subscribe(salesPersonList => {
+                if (this.isSalesPersonExists(accountData?.salesPerson?.uniqueName, salesPersonList)) {
+                    this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+                }
+            });
         }
 
         if (this.useDefaultAccountDetails) {
@@ -2967,6 +3006,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             data: {
                 voucherType: this.voucherType,
                 exchangeRate: this.invoiceForm.get("exchangeRate")?.value ?? 1,
+                highPrecisionRate: this.highPrecisionRate,
                 customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
             },
         });
@@ -3161,13 +3201,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.otherTaxAsideMenuRef = this.dialog.open(OtherTaxComponent, {
+            ...ASIDE_PANE_CONFIG,
             data: {
                 entryIndex: entryIndex,
                 appliedOtherTax: entry.get("otherTax")?.value,
-            },
-            position: {
-                top: "0",
-                right: "0",
             },
         });
 
@@ -3263,7 +3300,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup
             .get("otherTax.amount")
             .patchValue(giddhRoundOff((taxableValue * tax?.taxDetail[0]?.taxValue) / 100, this.highPrecisionRate));
-
+            
         entryFormGroup.get("otherTax.calculationMethod").patchValue(calculationMethod);
         this.calculateReceiptPaymentAmount(entryFormGroup, isUpdate);
         this.changeDetection.detectChanges();
@@ -3294,13 +3331,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.accountParentGroup = "bankaccounts";
         }
 
-        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true,
-        });
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
 
         this.accountAsideMenuRef
             .afterClosed()
@@ -3424,12 +3455,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateDiscountDialog(): void {
-        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, {
-            position: {
-                right: "0",
-                top: "0",
-            },
-        });
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
         this.discountDialogRef
             .afterClosed()
@@ -3993,8 +4019,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {FormGroup} entry
      * @memberof VoucherCreateComponent
      */
-    public updateTotalDiscount(totalDiscount: any, entry: FormGroup): void {
+    public updateTotalDiscount(totalDiscount: any, entry: FormGroup, isActiveEntry: boolean): void {
         entry.get("totalDiscount").patchValue(totalDiscount);
+        this.calculateOtherTaxAmount(entry, isActiveEntry);
+    }
+
+    /**
+     * Calculate other tax amount based on taxable value
+     *
+     * @private
+     * @param {FormGroup} entry
+     * @param {boolean} isActiveEntry
+     * @memberof VoucherCreateComponent
+     */
+    private calculateOtherTaxAmount(entry: FormGroup, isActiveEntry: boolean): void {
+        let taxableValue = 0;
+        if (!entry.get("transactions").value[0]?.amount?.amountForAccount || isActiveEntry) {
+            return;
+        }
+        const amountForAccount = Number(entry.get("transactions").value[0].amount.amountForAccount);
+        const totalDiscount = Number(entry.get("totalDiscount").value);
+
+        if (entry.get("otherTax").value?.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+            taxableValue = amountForAccount - totalDiscount;
+        } else {
+            taxableValue = amountForAccount - totalDiscount + entry.get("totalTaxWithoutCess").value + entry.get("totalCess").value;
+        }
+        const amount = giddhRoundOff(((taxableValue * entry.get("otherTax").value?.taxValue) / 100), HIGH_RATE_FIELD_PRECISION);
+        entry.get("otherTax.amount").patchValue(amount);
     }
 
     /**
@@ -4391,7 +4443,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.eWayBillResponse = response;
             this.saveVoucher();
         });
@@ -4977,7 +5029,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
             const deposits = this.invoiceForm.get("deposits") as FormArray;
             let accountUniqueName = this.invoiceType.isCashInvoice
-                ? deposits.at(0).get("accountUniqueName")?.value ?? invoiceForm.account?.uniqueName ?? "cash"
+                ? deposits.at(0).get("accountUniqueName")?.value || invoiceForm.account?.uniqueName || "cash"
                 : invoiceForm.account?.uniqueName;
             if (invoiceForm?.account?.uniqueName) {
                 invoiceForm.account.uniqueName = accountUniqueName;
@@ -6125,25 +6177,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             entryFormGroup.get("hsnNumber")?.patchValue(response.stock.hsnNumber || response.hsnNumber);
             entryFormGroup.get("sacNumber")?.patchValue(response.stock.sacNumber || response.sacNumber);
-            entryFormGroup
-                .get("showCodeType")
-                ?.patchValue(response.stock.hsnNumber || response.hsnNumber ? "hsn" : "sac");
+            entryFormGroup.get("showCodeType")?.patchValue(response.stock.hsnNumber || response.hsnNumber ? "hsn" : "sac");
 
-            const rate = Number(
-                (
-                    (response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0) /
-                    (this.invoiceForm.get("exchangeRate")?.value ?? 1)
-                ).toFixed(this.highPrecisionRate)
-            );
+            transactionFormGroup.get("stock.stockUnit.code")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
+            transactionFormGroup.get("stock.stockUnit.uniqueName")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
+            
+            let baseRate: number;
+            if (response.stock.variant?.unitRates?.length) {
+                baseRate = this.getRateByUnit(transactionFormGroup.get("stock.stockUnit.uniqueName")?.value,response.stock.variant?.unitRates);
+            } else {
+                baseRate = response.stock.rate;
+            }
+            const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value ?? 1;
+            const rate = Number((baseRate / exchangeRateValue).toFixed(this.highPrecisionRate));
             transactionFormGroup.get("stock.rate.rateForAccount")?.patchValue(rate);
             transactionFormGroup.get("stock.skuCode")?.patchValue(response.stock.skuCode);
             transactionFormGroup.get("stock.skuCodeHeading")?.patchValue(response.stock.skuCodeHeading);
-            transactionFormGroup
-                .get("stock.stockUnit.code")
-                ?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
-            transactionFormGroup
-                .get("stock.stockUnit.uniqueName")
-                ?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
 
             if (response.stock.variant?.name) {
                 transactionFormGroup.get("stock.variant.name")?.patchValue(response.stock.variant?.name);
@@ -6265,6 +6314,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Get rate by unit
+     *
+     * @param {string} stockUnitUniqueName
+     * @param {any[]} unitRates
+     * @returns {number}
+     * @memberof VoucherCreateComponent
+     */
+    private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
+        return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
+    }
+
+    /**
      * Set barcode machine typing to false if user clicked on dropdown
      *
      * @memberof VoucherCreateComponent
@@ -6376,7 +6437,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         );
                         return;
                     }
-
+                    this.accountDropdown?.closeDropdownPanel();
                     let isExistingEntry = -1;
                     this.invoiceForm.get("entries")["controls"]?.forEach((control: any, entryIndex: number) => {
                         if (
@@ -6518,37 +6579,37 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.componentStore.getEstimateProformaDetails({
                 voucherType: this.voucherType,
                 payload: {
-                    accountUniqueName: params?.accountUniqueName,
-                    estimateNumber: params?.uniqueName,
-                    voucherType: this.voucherType,
-                },
-            });
-        } else if (this.invoiceType.isProformaInvoice) {
-            this.componentStore.getEstimateProformaDetails({
-                voucherType: this.voucherType,
-                payload: {
-                    accountUniqueName: params?.accountUniqueName,
-                    proformaNumber: params?.uniqueName,
-                    voucherType: this.voucherType,
-                },
-            });
-        } else {
-            this.componentStore.getVoucherDetails({
-                isCopyVoucher: false,
                 accountUniqueName: params?.accountUniqueName,
-                payload: { uniqueName: params?.uniqueName, voucherType: this.voucherType },
-            });
-        }
+                estimateNumber: params?.uniqueName,
+                voucherType: this.voucherType,
+            },
+        });
+    } else if (this.invoiceType.isProformaInvoice) {
+        this.componentStore.getEstimateProformaDetails({
+            voucherType: this.voucherType,
+            payload: {
+                accountUniqueName: params?.accountUniqueName,
+                proformaNumber: params?.uniqueName,
+                voucherType: this.voucherType,
+            },
+        });
+    } else {
+        this.componentStore.getVoucherDetails({
+            isCopyVoucher: false,
+            accountUniqueName: params?.accountUniqueName,
+            payload: { uniqueName: params?.uniqueName, voucherType: this.voucherType },
+        });
     }
+}
 
-    /**
+/**
      * Calculates amount if advance receipt
-     *
-     * @private
+ *
+ * @private
      * @param {FormGroup} entryFormGroup
      * @param {boolean} isUpdate
-     * @memberof VoucherCreateComponent
-     */
+ * @memberof VoucherCreateComponent
+ */
     private calculateReceiptPaymentAmount(entryFormGroup: FormGroup, isUpdate: boolean = false): void {
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             if (
@@ -6793,6 +6854,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         )?.stockUnitCode;
         if (selectedUnitCode) {
             transaction.get("stock.stockUnit.code")?.patchValue(selectedUnitCode);
+            transaction.get("stock.rate.rateForAccount")?.patchValue(this.getRateByUnit(selectedUnitCode, resolvedUnits));
         }
     }
 
@@ -6812,6 +6874,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof VoucherCreateComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }

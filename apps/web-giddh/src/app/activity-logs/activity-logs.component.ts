@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { Observable, ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityLogsService } from '../services/activity-logs.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../app.constant';
+import { API_BULK_FETCH_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { takeUntil } from 'rxjs/operators';
 import { ActivityLogsJsonComponent } from './components/activity-logs-json/activity-logs-json.component';
@@ -196,9 +196,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.body?.classList?.add("activity-log-page");
-        // if (this.generalService.voucherApiVersion === 1) {
-        //     this.router.navigate(['/pages/home']);
-        // }
+        if (this.generalService.voucherApiVersion === 1) {
+            this.router.navigate(['/pages/home']);
+            return;
+        }
         this.getFormFilter();
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data?.status === 'success') {
@@ -635,7 +636,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public getHistory(event: any, row: any): void {
         if (!row.hasHistory) {
-            let activityObj = { entityId: row.entityId, entity: row.entity, count: 200 };
+            let activityObj = { entityId: row.entityId, entity: row.entity, count: API_BULK_FETCH_LIMIT };
             this.activityService.getActivityLogs(activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;
                 row.hasHistory = true;

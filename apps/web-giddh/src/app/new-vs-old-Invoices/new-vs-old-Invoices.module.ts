@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { SharedModule } from '../shared/shared.module';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
 import { NewVsOldInvoicesRoutingModule } from './new-vs-old-Invoices.routing.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -43,7 +42,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
             spinnerSize: 30
         }),
         SharedModule,
-        SelectModule.forRoot(),
         CurrencyModule,
         FormFieldsModule,
         MatButtonModule,

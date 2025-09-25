@@ -55,7 +55,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     /** Portal Domain name validation with regex pattern */
     public isValidDomain: boolean;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** This will hold portal url */

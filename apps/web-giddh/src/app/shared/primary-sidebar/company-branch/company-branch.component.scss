@@ -1,5 +1,5 @@
 .company-branch-dropdown {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     .search-box {
         padding: 0 20px;
         .input-group-text {
@@ -52,7 +52,7 @@
     }
     tab {
         position: relative;
-        font-family: var(--font-regular) !important;
+        font-family: var(--font-family) !important;
     }
     tab.icon-company {
         margin: 0 -20px;
@@ -454,7 +454,7 @@
     margin-right: 2px;
 }
 .font-semibold {
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
 }
 
 ::ng-deep {

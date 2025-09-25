@@ -1,8 +1,10 @@
-<div class="modal-header d-flex align-items-center activity-header">
-    <h3>{{ localeData?.manage_payment_methods }}</h3>
-    <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+<div class="dialog-header">
+    <span>{{ localeData?.manage_payment_methods }}</span>
+    <button mat-icon-button aria-label="close" mat-dialog-close>
+        <i class="icon-cross"></i>
+    </button>
 </div>
-<mat-dialog-content class="w-100">
+<mat-dialog-content class="dialog-body">
     <div #paymentMethod class="logs-content">
         <div class="col-12">
             <div class="d-flex pd-t15 pd-b15 align-items-center justify-content-between">

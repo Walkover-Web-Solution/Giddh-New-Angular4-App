@@ -283,13 +283,11 @@
     </div>
     <!-- Trigger Confirmation Model template -->
     <ng-template #triggerConfirmationTemplate>
-        <div mat-dialog-content>
-            <delete-tax-confirmation-model
-                [message]="confirmationMessage"
-                [commonLocaleData]="commonLocaleData"
-                (userConfirmationEvent)="userConfirmation($event)"
-            >
-            </delete-tax-confirmation-model>
-        </div>
+        <delete-tax-confirmation-model
+            [message]="confirmationMessage"
+            [commonLocaleData]="commonLocaleData"
+            (userConfirmationEvent)="userConfirmation($event)"
+        >
+        </delete-tax-confirmation-model>
     </ng-template>
 </ng-container>

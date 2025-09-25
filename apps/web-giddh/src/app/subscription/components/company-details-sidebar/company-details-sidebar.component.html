@@ -1,10 +1,12 @@
-<div class="aside-pane" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
-    <div class="form-header">
-        <h3 class="aside-title">{{ localeData?.subscription?.company_details }}</h3>
+<section [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
+    <div class="dialog-header">
+        <span>{{ localeData?.subscription?.company_details }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeEvent?.emit()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
-    <button mat-stroked-button (click)="closeEvent?.emit()"><i class="icon-cross"></i></button>
 
-    <div class="aside-body aside-create-tax-component">
+    <mat-dialog-content class="dialog-body">
         <div class="aside-pane-form">
             <h4 class="text-blue bold font-16 mr-b1 wb">{{ selectedCompany?.name }}</h4>
             <div class="row pd-b1 bd-rb mb-2">
@@ -61,5 +63,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </mat-dialog-content>
+</section>

@@ -4,6 +4,7 @@ import { takeUntil } from "rxjs/operators";
 import { ReplaySubject } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ToasterService } from "../../../services/toaster.service";
+import { ASIDE_PANE_CONFIG } from "../../../app.constant";
 
 @Component({
     selector: "custom-units",
@@ -79,13 +80,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
      * @memberof CustomUnitsComponent
      */
     public openCreateUnitModal(): void {
-        this.matDialogRef = this.dialog.open(this.createUnit, {
-            width: '1000px',
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.matDialogRef = this.dialog.open(this.createUnit, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -196,13 +191,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
      * @memberof CustomUnitsComponent
      */
     public openCreateUnitGroupModal(): void {
-        this.matDialogRef = this.dialog.open(this.createUnitGroup, {
-            width: '760px',
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.matDialogRef = this.dialog.open(this.createUnitGroup, ASIDE_PANE_CONFIG);
     }
 
     /**

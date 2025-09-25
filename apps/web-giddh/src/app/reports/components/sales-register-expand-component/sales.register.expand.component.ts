@@ -19,6 +19,7 @@ import * as dayjs from 'dayjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
+import { PageEvent } from '@angular/material/paginator';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
@@ -72,7 +73,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /* This will hold module type */
     public moduleType = 'SALES_REGISTER';
     /** This will use for sales register column check values */
@@ -508,9 +509,9 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public toggleGiddhDatepicker(isOpen: boolean): void {
         if (this.universalDatepickerTrigger) {
             if (isOpen) {
-                this.universalDatepickerTrigger?.openMenu();
+                this.universalDatepickerTrigger.openMenu();
             } else {
-                this.universalDatepickerTrigger?.closeMenu();
+                this.universalDatepickerTrigger.closeMenu();
             }
         }
     }
@@ -562,7 +563,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
       * @param {*} event
       * @memberof SalesRegisterExpandComponent
       */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         if (event) {
             this.getDetailedsalesRequestFilter.page = this.getDetailedsalesRequestFilter.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.getDetailedsalesRequestFilter.count = event.pageSize;

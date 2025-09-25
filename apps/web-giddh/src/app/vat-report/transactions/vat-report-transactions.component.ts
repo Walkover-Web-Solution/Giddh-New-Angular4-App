@@ -51,7 +51,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     /* This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /*-- mat-table --*/
     displayedColumns: string[] = ['date', 'number', 'name', 'taxamt', 'vat_amt', 'reverse_charge', 'trn_number', 'place_supply'];
 
@@ -154,38 +154,17 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public onSelectInvoice(invoice: any): void {
         const uniqueName =  invoice.voucherUniqueName;
-        // (this.voucherApiVersion !== 2) ? invoice.purchaseRecordUniqueName : invoice.voucherUniqueName
-        // if (invoice.voucherType === VoucherTypeEnum.purchase) {
-        //     if (uniqueName) {
-        //         if (this.voucherApiVersion !== 2) {
-        //             this.router.navigate(['pages', 'proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
-        //         } else {
-        //             this.router.navigate(['pages', 'vouchers', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
-        //         }
-        //     }
-        // } else {
-            if (invoice.voucherNumber) {
-                this.selectedInvoice = invoice;
-                this.selectedInvoice.uniqueName = uniqueName;
-
-                // if (this.voucherApiVersion !== 2) {
-                //     let downloadVoucherRequestObject = {
-                //         voucherNumber: [invoice.voucherNumber],
-                //         voucherType: invoice.voucherType,
-                //         accountUniqueName: invoice.accountUniqueName
-                //     };
-                //     this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
-                // }
-
-                this.dialog.open(this.downloadOrSendMailModel, {
-                    height: '80vh',
-                    width: '80vw',
-                    maxWidth: '800px',
-                    disableClose: true,
-                    autoFocus: false
-                });
-            }
-        // }
+        if (invoice.voucherNumber) {
+            this.selectedInvoice = invoice;
+            this.selectedInvoice.uniqueName = uniqueName;
+            this.dialog.open(this.downloadOrSendMailModel, {
+                height: '80vh',
+                width: '80vw',
+                maxWidth: '800px',
+                disableClose: true,
+                autoFocus: false
+            });
+        }
     }
 
     /**

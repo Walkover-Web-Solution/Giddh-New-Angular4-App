@@ -16,7 +16,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
-import { OnBoardingType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { OnBoardingType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -113,6 +113,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public isAddressInfoOpen: string = '';
     /** True if last address info is open */
     public isLastAddressInfoOpen: boolean = false;
+    /** Voucher API version */
+    public voucherApiVersion: number;
 
     /** @ignore */
     constructor(
@@ -139,6 +141,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
@@ -218,15 +221,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                 linkedEntities: warehouse.addresses || []
             };
 
-            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, {
-                width: '760px',
-                height: '100vh !important',
-                disableClose: true,
-                position: {
-                    right: '0',
-                    top: '0'
-                }
-            });
+            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, ASIDE_PANE_CONFIG);
         });
     }
 
@@ -244,14 +239,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handlePageEvent(event: PageEvent): void {
         this.showLoader = true;
-        if (event.pageSize !== this.paginationLimit) {
-            this.paginationLimit = event.pageSize;
-            this.currentPage = 1;
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: event.pageSize }));
-        } else {
-            this.currentPage = event.pageIndex + 1;
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.pageIndex + 1, count: this.paginationLimit }));
-        }
+        this.currentPage = event.pageSize !== this.paginationLimit ? 1 : event.pageIndex + 1;
+        this.paginationLimit = event.pageSize;
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: this.currentPage, count: this.paginationLimit }));
     }
 
 

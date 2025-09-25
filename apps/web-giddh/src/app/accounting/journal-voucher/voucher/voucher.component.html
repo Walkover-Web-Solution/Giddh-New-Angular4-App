@@ -241,17 +241,22 @@
 
             <div class="clearfix row">
                 <div class="col-xs-9 col-sm-9">
-                    <div class="form-group custom-textarea">
-                        <label>{{ localeData?.narration }}:</label>
-                        <textarea
-                            #narrationBox
-                            id="narration"
-                            class="form-control"
-                            formControlName="description"
-                            (keydown)="handleEnterKeyPress($event, submitButton)"
-                            resize="false"
-                            rows="3"
-                        ></textarea>
+                    <div class="form-group">
+                        <mat-form-field appearance="outline" class="w-50" floatLabel="always">
+                            <mat-label>{{
+                                localeData?.narration
+                            }}</mat-label>
+                            <textarea
+                                #narrationBox
+                                id="narration"
+                                formControlName="description"
+                                (keydown.Enter)="handleEnterAndTabKeyPress($event, submitButton)"
+                                (keydown.Tab)="handleEnterAndTabKeyPress($event, submitButton)"
+                                resize="false"
+                                rows="3"
+                                matInput
+                            ></textarea>
+                        </mat-form-field>
                     </div>
                 </div>
                 <div class="col-xs-3 col-sm-3">
@@ -270,6 +275,7 @@
                                         type="button"
                                         [keyboardShortcut]="'ctrl+a'"
                                         (onShortcutPress)="openConfirmBoxFromShortcut(submitButton)"
+                                        [disabled]="voucherApiVersion === 1"
                                     >
                                         {{ commonLocaleData?.app_yes }}
                                     </button>
@@ -489,19 +495,13 @@
 
 <!--Modal for All Items -->
 <ng-template #chequeEntryModal>
-    <div class="modal-header theme-bg pd-l2 pd-r2">
-        <h3 class="modal-title bg" id="modal-title">{{ localeData?.cheque_details }}</h3>
-        <button
-            mat-icon-button
-            aria-hidden="true"
-            class="close"
-            [attr.aria-label]="commonLocaleData?.app_close"
-            (click)="closeChequeDetailForm()"
-        >
-            ×
+    <div class="dialog-header">
+        <span>{{ localeData?.cheque_details }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeChequeDetailForm()">
+            <i class="icon-cross"></i>
         </button>
     </div>
-    <div class="modal-body pd-l2 pd-r2 clearfix d-flex">
+    <mat-dialog-content class="dialog-body">
         <form
             *ngIf="chequeDetailForm"
             autocomplete="off"
@@ -529,7 +529,7 @@
                 <giddh-datepicker
                     [name]="'entryDate'"
                     [placeholder]="giddhDateFormat"
-                    [cssClass]="'form-control voucher-date-field'"
+                    [cssClass]="'voucher-date-field'"
                     formControlName="chequeClearanceDate"
                     [showToggleIcon]="false"
                     (keydown.enter)="$event.preventDefault()"
@@ -540,9 +540,7 @@
                 </giddh-datepicker>
             </div>
         </form>
-    </div>
-    <div class="modal-footer">
-        <div class="d-flex float-end column-gap15">
+        <div class="d-flex float-end column-gap15 mr-t1">
             <button
                 mat-raised-button
                 color="primary"
@@ -556,5 +554,5 @@
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>
-    </div>
+    </mat-dialog-content>
 </ng-template>

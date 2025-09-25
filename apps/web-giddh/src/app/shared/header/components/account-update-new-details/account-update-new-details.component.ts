@@ -43,7 +43,7 @@ import { AppState } from '../../../../store';
 import { digitsOnly } from '../../../helpers';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -233,7 +233,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** True if last duplicate email in portal  users */
     public portalIndex: number;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This will hold is portal default */
     public isPortalDefault: boolean;
     /** Holds list of countries which use ZIP Code in address */
@@ -523,15 +523,38 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
         this.onViewReady(true);
         this.loadAccountData();
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+            if (!this.isSalesPersonExists(this.addAccountForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                this.addAccountForm.get('salesPersonName')?.patchValue('');
+                this.addAccountForm.get('salesPersonUniqueName')?.patchValue('');
+            }
+        });
     }
 
     public ngAfterViewInit() {
+        // Increase timeout and add more robust checking
         const interval = setInterval(() => {
-            if (document.getElementById('init-contact-update')) {
+            const element = document.getElementById('init-contact-update');
+            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
+            
+            if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-update');
                 clearInterval(interval);
             }
-        }, 500);
+        }, 500); // Reduced interval for faster detection
+        
+        // Add fallback timeout to prevent infinite loop
+        setTimeout(() => {
+            clearInterval(interval);
+            // Try one more time after a longer delay
+            setTimeout(() => {
+                const element = document.getElementById('init-contact-update');
+                if (element && !this.intl['init-contact-update']) {
+                    this.onlyPhoneNumber('init-contact-update');
+                }
+            }, 1000);
+        }, 10000); // Clear after 10 seconds max
 
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
@@ -825,6 +848,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
+     * Reinitialize mobile number field if flag is not showing
+     *
+     * @param {string} fieldId
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public reInitializeMobileField(fieldId: string): void {
+        const element = document.getElementById(fieldId);
+        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
+        
+        if (element && intlTelInput && !this.intl[fieldId]) {
+            this.onlyPhoneNumber(fieldId);
+        }
+    }
+
+    /**
      * This will be use for add new portal user
      *
      * @param {*} [user]
@@ -860,11 +898,26 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         const lastIndex = mappings.controls.length - 1;
         const interval = setInterval(() => {
-            if (document.getElementById('init-contact-portal_' + lastIndex)) {
+            const element = document.getElementById('init-contact-portal_' + lastIndex);
+            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
+            
+            if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
             }
-        }, 500);
+        }, 200); // Faster checking for dynamic elements
+        
+        // Add fallback timeout
+        setTimeout(() => {
+            clearInterval(interval);
+            // Try one more time after a longer delay
+            setTimeout(() => {
+                const element = document.getElementById('init-contact-portal_' + lastIndex);
+                if (element && !this.intl['init-contact-portal_' + lastIndex]) {
+                    this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
+                }
+            }, 500);
+        }, 5000); // Clear after 5 seconds max
     }
 
     /**
@@ -1501,7 +1554,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             },
             disableClose: true
         });
-        confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+        confirnationDialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.deleteMergedAccount();
             }
@@ -1895,7 +1948,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT,
+                count: DROPDOWN_ITEMS_COUNT_LIMIT,
             }
             this.groupService.searchGroups(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
@@ -2476,17 +2529,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : this.accountOpeningBalance
         }
         const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true,
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            maxHeight: '100vh',
+            ...ASIDE_PANE_CONFIG,
             data: data
         });
-        bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
+        bulkAddAsideMenuRef.afterClosed().subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;
@@ -2618,6 +2664,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }

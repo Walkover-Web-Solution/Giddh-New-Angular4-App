@@ -156,7 +156,7 @@
 </div>
 
 <div
-    *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0]"
+    *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashRejectedReportLoading"
     class="mt-4"
 >
     <mat-paginator
@@ -174,7 +174,7 @@
     <giddh-page-loader></giddh-page-loader>
 </div>
 
-<div class="no-data" *ngIf="!rejectedItems?.length && !isPettyCashRejectedReportLoading">
+<div class="no-data" *ngIf="!pettyCashRejectedReportResponse?.totalItems && !isPettyCashRejectedReportLoading">
     <no-data></no-data>
 </div>
 

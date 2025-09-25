@@ -6,9 +6,8 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
-import { BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIES } from "../../app.constant";
+import { BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIES, IOption } from "../../app.constant";
 import { SalesService } from "../../services/sales.service";
-import { IOption } from '../../theme/ng-select/option.interface';
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { cloneDeep, isEmpty } from '../../lodash-optimized';
@@ -132,13 +131,12 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         }
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
-            width: 'var(--aside-pane-width)',
-            panelClass: 'subscription-sidebar',
+            panelClass: ['subscription-sidebar', 'mat-dialog-md'],
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);
@@ -470,7 +468,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
             }

@@ -116,7 +116,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
                     configuration: this.generalService.deleteConfiguration(this.localeData?.delete_user_permission, this.commonLocaleData)
                 }
             });
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response === this.commonLocaleData?.app_yes) {
                     this.store.dispatch(this.accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
                     this.waitAndReloadCompany();

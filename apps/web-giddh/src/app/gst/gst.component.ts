@@ -14,10 +14,9 @@ import { GstReconcileService } from '../services/gst-reconcile.service';
 import { ToasterService } from '../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR, GIDDH_DATE_FORMAT_WITH_SPACE } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
-import { IOption } from '../theme/ng-select/ng-select';
+import { IOption } from '../app.constant';
 import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
-import { MatDatepicker } from '@angular/material/datepicker';
 import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './gst.component.html',
@@ -70,7 +69,7 @@ export class GstComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Custom selected month */
     public customMonth: string = '';
     /** Holds start month/year */
@@ -331,12 +330,10 @@ export class GstComponent implements OnInit, OnDestroy {
     /**
      * Sets month/year
      *
-     * @param {*} date
-     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @param {*} date - Selected date from giddh-datepicker
      * @memberof GstComponent
      */
-    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker?.close();
+    public setMonthAndYear(date: any): void {
         const selectedMonth = new Date(date);
         const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
         const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);

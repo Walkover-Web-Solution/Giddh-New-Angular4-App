@@ -175,6 +175,9 @@ ul{
                 }
             }
             &.select-today {
+                button {
+                    color: var(--color-primary-header-icons);
+                }
                 &:hover{
                     button {
                         background-color: var(--color-white-tertiary) !important;
@@ -322,7 +325,7 @@ ul.sub-list {
     color: var(--color-primary-header-notification-text);
 
     p {
-        font-family: var(--font-semibold);
+        font-weight: var(--font-weight-semibold);
         font-size: var(--font-size-15);
     }
 

@@ -14,6 +14,7 @@ import { ConfirmModalComponent } from "apps/web-giddh/src/app/theme/new-confirm-
 import { ReplaySubject, debounceTime, take, takeUntil } from "rxjs";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BREAKPOINT_SCREEN_SIZE } from "apps/web-giddh/src/app/app.constant";
+import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 
 /** Inteface for create payload for getAllDiscount API */
 export interface CustomerVendorDiscountBasic {
@@ -107,7 +108,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         private formBuilder: UntypedFormBuilder,
         private changeDetectorRef: ChangeDetectorRef,
         private scrollDispatcher: ScrollDispatcher,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService
     ) { }
 
     /**
@@ -360,7 +362,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         };
         this.isStockLoading = true;
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && response?.body?.results?.length) {
+            if (response && response?.status === 'success') {
                 this.initialiseAllDiscounts(userData, cloneDeep(response));
             } else {
                 this.currentUserStocks = [];
@@ -483,7 +485,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             ariaLabel: 'Confirm Dialog'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.deleteItem(uniqueName, type, isTemp, stockFormArrayIndex, variantFormArrayIndex);
             }
@@ -532,6 +534,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.inventoryService.deleteDiscountRecord(model).pipe(take(1)).subscribe((response) => {
                 if (response && response?.status === "success") {
                     this.showSaveDiscardButton = false;
+                    this.pagination.stock.page = this.generalService.adjustPageIndex(this.pagination.stock.totalItems, this.pagination.stock.page, this.pagination.stock.count);
                     if (type === 'variant') {
                         const stock = discounts.at(stockFormArrayIndex).get('variants') as UntypedFormArray;
                         var variant = stock.at(variantFormArrayIndex)?.value;
@@ -552,6 +555,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         this.currentUserStocks = [];
                     }
                     if (type === 'stock') {
+                        let currentUser = this.currentUser;
                         discounts.removeAt(stockFormArrayIndex);
                         if (discounts.length === 0) {
                             let indexInUserListArray = this.checkUserList(this.currentUser.uniqueName);
@@ -562,6 +566,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         }
                         this.currentUserStocks.splice(stockFormArrayIndex, 1);
                         this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
+                        this.getAllDiscount(currentUser, this.stockSearchQuery);
                     }
                     this.toaster.successToast(response?.body);
                 } else {
@@ -607,6 +612,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
                 const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
+                this.getAllDiscount(this.currentUser, this.stockSearchQuery);
             }
         }
     }

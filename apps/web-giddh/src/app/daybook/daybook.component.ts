@@ -11,7 +11,7 @@ import { TaxResponse } from '../models/api-models/Company';
 import { DaybookQueryRequest, DayBookRequestModel, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { GeneralService } from '../services/general.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
@@ -601,11 +601,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        this.modalDialogRef.afterOpened().pipe(take(1)).subscribe(response => {
+        this.modalDialogRef.afterOpened().subscribe(response => {
             this.updateLedgerComponent?.loadDefaultSearchSuggestions();
         });
 
-        this.modalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.modalDialogRef.afterClosed().subscribe(response => {
             document.querySelector('body').classList.remove('update-ledger-overlay');
             this.getDaybook(this.searchFilterData);
         });
@@ -619,15 +619,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
-            position: {
-                right: '0'
-            },
-            maxWidth: '760px',
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh'
-        })
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, ASIDE_PANE_CONFIG)
     }
 
     /**
@@ -692,15 +684,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
-            position: {
-                right: '0',
-                top: '0',
-            },
-            width: '760px',
-            disableClose: true
-        });
-        this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
+        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
+        this.ledgerAsidePaneModal.afterClosed().subscribe(response => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();

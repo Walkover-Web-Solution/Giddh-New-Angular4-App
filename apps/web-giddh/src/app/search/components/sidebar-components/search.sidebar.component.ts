@@ -8,7 +8,7 @@ import * as dayjs from 'dayjs';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { API_COUNT_LIMIT, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -227,9 +227,9 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     public toggleGiddhDatepicker(isOpen: boolean): void {
         if (this.universalDatepickerTrigger) {
             if (isOpen) {
-                this.universalDatepickerTrigger?.openMenu();
+                this.universalDatepickerTrigger.openMenu();
             } else {
-                this.universalDatepickerTrigger?.closeMenu();
+                this.universalDatepickerTrigger.closeMenu();
             }
         }
     }
@@ -287,7 +287,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT,
+                count: DROPDOWN_ITEMS_COUNT_LIMIT,
                 branchUniqueName: this.currentBranch?.uniqueName
             };
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {

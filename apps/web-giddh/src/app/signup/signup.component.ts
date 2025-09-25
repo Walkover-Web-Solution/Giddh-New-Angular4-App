@@ -39,8 +39,11 @@ declare var initSendOTP: any;
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
     public isLoginWithEmailSubmited$: Observable<boolean>;
+    /** Template reference for email verification dialog */
     @ViewChild('emailVerifyTemplate', { static: true }) public emailVerifyTemplate: TemplateRef<any>;
+    /** Template reference for mobile verification dialog */
     @ViewChild('mobileVerifyTemplate', { static: true }) public mobileVerifyTemplate: TemplateRef<any>;
+    /** Template reference for two-way authentication dialog */
     @ViewChild('twoWayAuthTemplate', { static: true }) public twoWayAuthTemplate: TemplateRef<any>;
     /** Dialog reference for email verify modal */
     private emailVerifyDialogRef: MatDialogRef<any>;

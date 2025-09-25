@@ -5,7 +5,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { TemplateRef } from "@angular/core";
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL } from "../app.constant";
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -370,7 +370,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         
         // Handle dialog close event to replace onHidden functionality
         this.twoWayAuthDialogRef.afterClosed().subscribe(() => {
-            this.onHiddenAuthModal(null);
+            this.onHiddenAuthModal({dismissReason: KeyCodesEnum.ESC});
         });
     }
 

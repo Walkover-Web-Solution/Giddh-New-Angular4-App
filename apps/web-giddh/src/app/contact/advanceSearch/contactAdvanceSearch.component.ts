@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 import { ContactAdvanceSearchCommonModal } from '../../models/api-models/Contact';
 
 @Component({
@@ -76,7 +76,7 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
      */
     public save() {
         this.applyAdvanceSearchEvent.emit(this.request);
-        this.dialogRef.close(this.request);
+        this.dialogRef?.close(this.request);
     }
 
     /**
@@ -86,6 +86,6 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
      */
     public onCancel() {
         this.closeModelEvent.emit(true);
-        this.dialogRef.close();
+        this.dialogRef?.close();
     }
 }

@@ -1,6 +1,7 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -8,7 +9,7 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
-import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
 import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
@@ -20,6 +21,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
+import { PageLeaveUtilityService } from './page-leave-utility.service';
 
 @Injectable()
 export class GeneralService {
@@ -34,7 +36,7 @@ export class GeneralService {
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     /** Stores the version number for new voucher APIs (1 for old APIs and 2 for new APIs) */
-    public voucherApiVersion: 1 | 2 = 1;
+    public voucherApiVersion: number;
 
     get user(): UserDetails {
         return this._user;
@@ -1147,9 +1149,6 @@ export class GeneralService {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
-                // if (this.voucherApiVersion !== 2) {
-                //     item.exchangeRate = balanceDueAmountConversionRate;
-                // }
             }
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
@@ -2417,6 +2416,94 @@ export class GeneralService {
             return { fromDate, toDate };
         }
         return { fromDate: '', toDate: '' };
+    }
+
+    /**
+     * Adjusts the page index based on the total number of items and the number of items to remove.
+     * If the total number of items minus the number of items to remove is a multiple of the count,
+     * and the page is greater than 1, the page index is decremented by 1.
+     *
+     * @param totalItems The total number of items.
+     * @param page The current page index.
+     * @param count The number of items per page.
+     * @param removeCount The number of items to remove (default is 1).
+     * @returns The adjusted page index.
+     */
+    public adjustPageIndex(totalItems: number, page: number, count: number, removeCount: number = 1) {
+        if (((totalItems - removeCount) % count === 0) && page > 1) {
+            page = page - 1;
+        }
+        return page;
+    }
+
+    /**
+     * Sets up navigation listener to intercept route changes and show confirmation dialog
+     * This is a common method that can be used by any component to handle page leave confirmation
+     *
+     * @param {Router} router - Angular Router instance
+     * @param {PageLeaveUtilityService} pageLeaveUtilityService - Service for handling page leave dialogs
+     * @param {Subject<boolean>} destroyed$ - Subject to handle component destruction
+     * @param {() => boolean} hasUnsavedChangesCallback - Callback function to check if there are unsaved changes
+     * @param {() => void} cleanupCallback - Callback function to clean up forms/state after user confirmation
+     * @param {{ value: boolean }} isNavigatingRef - Reference to navigation flag to prevent multiple dialogs
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public setupNavigationListener(
+        router: Router,
+        pageLeaveUtilityService: PageLeaveUtilityService,
+        destroyed$: Subject<boolean>,
+        hasUnsavedChangesCallback: () => boolean,
+        cleanupCallback: () => void,
+        isNavigatingRef: { value: boolean }
+    ): void {
+        // Listen for navigation attempts
+        router.events.pipe(
+            filter(event => event instanceof NavigationStart),
+            takeUntil(destroyed$)
+        ).subscribe((event: NavigationStart) => {
+            // Only intercept if we have unsaved changes and this is a different route
+            if (hasUnsavedChangesCallback() && !isNavigatingRef.value && event.url !== router.url) {
+                // Set flag to prevent multiple dialogs
+                isNavigatingRef.value = true;
+                
+                // Cancel the current navigation
+                router.navigateByUrl(router.url, { skipLocationChange: true });
+                
+                // Show confirmation dialog
+                let dialogRef = pageLeaveUtilityService.openDialog();
+                
+                dialogRef.afterClosed().subscribe((action) => {
+                    if (action) {
+                        // User confirmed to leave - clean up and navigate
+                        pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                        cleanupCallback();
+                        isNavigatingRef.value = false;
+                        router.navigateByUrl(event.url);
+                    } else {
+                        // User cancelled - reset navigation flag
+                        isNavigatingRef.value = false;
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Common cleanup method for page leave confirmation
+     * Removes browser confirmation dialog and resets navigation flag
+     *
+     * @param {PageLeaveUtilityService} pageLeaveUtilityService - Service for handling page leave dialogs
+     * @param {{ value: boolean }} isNavigatingRef - Reference to navigation flag
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public cleanupPageLeaveConfirmation(
+        pageLeaveUtilityService: PageLeaveUtilityService,
+        isNavigatingRef: { value: boolean }
+    ): void {
+        pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        isNavigatingRef.value = false;
     }
 }
 

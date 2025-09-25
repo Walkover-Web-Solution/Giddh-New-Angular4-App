@@ -4,6 +4,7 @@ import { TaxAuthorityComponentStore } from './utility/tax-authority.store';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { CreateComponent } from './create/create.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'tax-authority',
@@ -64,17 +65,12 @@ export class TaxAuthorityComponent implements OnInit {
      */
     public openCreateUpdateTaxAuthorityDialog(isUpdateMode: boolean = false, taxAuthorityInfo?: any): void {
         const dialogConfig: MatDialogConfig = {
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            position: {
-                top: '0',
-                right: '0'
-            },
+            ...ASIDE_PANE_CONFIG,
             data: isUpdateMode ? taxAuthorityInfo : null
         };
         const createUpdateTaxAuthorityDialogRef = this.dialog.open(CreateComponent, dialogConfig);
 
-        createUpdateTaxAuthorityDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        createUpdateTaxAuthorityDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getSalesTaxReport();
             }
@@ -108,7 +104,7 @@ export class TaxAuthorityComponent implements OnInit {
                 cancel: this.commonLocaleData?.app_no
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.componentStore.deleteTaxAuthority(uniqueName);
             }

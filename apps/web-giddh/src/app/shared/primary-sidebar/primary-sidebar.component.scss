@@ -68,7 +68,7 @@
             }
         }
         h3 {
-            font-family: var(--font-semibold);
+            font-weight: var(--font-weight-semibold);
             color: var(--color-primary-sidebar-company-branch-block-h3);
             .company-alice {
                 width: 30px;
@@ -106,7 +106,7 @@
                     width: 140px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    font-family: var(--font-regular);
+                    font-family: var(--font-family);
                     font-size: var(--font-size-12);
                     margin-left: 18px;
                     margin-top: 7px;
@@ -170,7 +170,7 @@
         }
         p {
             color: var(--color-sidebar-list-head);
-            font-family: var(--font-semibold);
+            font-weight: var(--font-weight-semibold);
         }
         ul {
             li {
@@ -200,7 +200,7 @@
     }
     .menu-block {
         .menu-item {
-            font-family: var(--font-semibold);
+            font-weight: var(--font-weight-semibold);
             p {
                 display: flex;
                 justify-content: space-between;
@@ -298,7 +298,7 @@
                         align-items: center;
                         padding: 0;
                         margin-top: 15px;
-                        font-family: var(--font-semibold);
+                        font-weight: var(--font-weight-semibold);
                         letter-spacing: 0;
                         font-size: var(--font-size-15);
                         height: 36px;
@@ -315,7 +315,7 @@
                     align-items: center;
                     padding: 0;
                     margin-top: 15px;
-                    font-family: var(--font-semibold);
+                    font-weight: var(--font-weight-semibold);
                     letter-spacing: 0;
                     font-size: var(--font-size-15);
                     height: 36px;
@@ -351,7 +351,7 @@
                 }
             }
         }
-        
+
         .wrap-menus {
             overflow: initial !important;
             .menu-block {
@@ -498,10 +498,7 @@ cdk-tree {
                     line-height: 18px;
 
                     &:hover {
-                        @include highlight-color(
-                            var(--color-white-tertiary),
-                            var(--color-common-primary-text)
-                        );
+                        @include highlight-color(var(--color-white-tertiary), var(--color-common-primary-text));
                     }
                 }
                 .rotate-270 {
@@ -548,24 +545,21 @@ cdk-tree {
     cdk-tree {
         cdk-tree-node {
             .main-item-wrapper {
-    
                 .main-item {
-    
                     .item-label {
                         .item-name {
                             display: none;
                         }
                     }
-                    .create-new, .icon-right {
+                    .create-new,
+                    .icon-right {
                         display: none;
                     }
                 }
             }
         }
-    } 
+    }
 }
-    
-
 
 /*responsive starts here*/
 @media (min-height: 800px) and (max-height: 1024px) {

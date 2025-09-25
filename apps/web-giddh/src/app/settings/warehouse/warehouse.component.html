@@ -30,7 +30,7 @@
                         </button>
                     </div>
                     <button
-                        *ngIf="!isCompany && !isConsolidatedBranch"
+                        *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                         aria-label="create warehouse"
                         mat-raised-button
                         color="primary"
@@ -74,7 +74,7 @@
                                         <span class="icon-dots-three-vertical mr-0 font-14 d-block"></span>
                                     </button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item (click)="editWarehouse(warehouse)">
+                                        <button mat-menu-item (click)="editWarehouse(warehouse)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_edit }}
                                         </button>
                                         <button mat-menu-item (click)="confirmStatusUpdate(warehouse)">

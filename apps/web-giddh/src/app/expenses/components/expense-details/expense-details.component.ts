@@ -19,7 +19,7 @@ import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 import { ServiceConfig } from '../../../services/service.config';
-import { IOption } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
 
 @Component({
     selector: 'app-expense-details',
@@ -34,6 +34,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Instance of approve confirm dialog */
     @ViewChild("rejectionReason") public rejectionReason;
+    /** Instance of ledger aside pane modal */
+    @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
     @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
@@ -44,6 +46,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public selectedRowItem: any;
+    /** Ledger aside pan modal */
+    public ledgerAsidePaneDialogRef: any;
+    /** Instance of dialog */
     public dialogRef: any;
     public approveEntryModalRef: any;
     public message: string;
@@ -279,7 +284,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             return;
         }
         this.approveEntryModalRef = this.dialog.open(ref, {
-            width: '500px',
+            panelClass: "mat-dialog-sm",
             disableClose: true
         });
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
@@ -350,7 +355,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             if (res?.status === 'success') {
                 this.hideApproveConfirmPopup(false);
                 this.toaster.showSnackBar("success", res?.body);
-                this.processNextRecord();
+                this.processNextRecord(true);
             } else {
                 this.toaster.showSnackBar("error", res?.message);
                 this.approveEntryRequestInProcess = false;
@@ -452,15 +457,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
-            position: {
-                right: '0'
-            },
-            maxWidth: '760px',
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh'
-        });
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -925,5 +922,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.accountEntryPettyCash.particular.uniqueName = "";
         this.accountEntryPettyCash.particular.name = "";
         this.entryAgainstObject.model = "";
+    }
+
+    /**
+     * Open ledger aside pane
+     *
+     * @memberof LedgerComponent
+     */
+    public openLedgerAsidePaneDialog(): void {
+        this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
     }
 }

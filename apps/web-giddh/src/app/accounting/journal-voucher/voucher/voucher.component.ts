@@ -29,9 +29,8 @@ import { SalesActions } from '../../../actions/sales/sales.action';
 import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import { KeyboardService } from '../../keyboard.service';
 import { KEYS } from '../journal-voucher.component';
 import { AdjustmentTypesEnum } from "../../../shared/helpers/adjustmentTypes";
@@ -73,8 +72,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
-
-    @ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
     /** Instance of all items dialog */
     @ViewChild("chequeEntryModal") public dialogBox: TemplateRef<any>;
     @ViewChild('particular', { static: false }) public accountField: ElementRef;
@@ -102,6 +99,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public totalCreditAmount: number = 0;
     public totalDebitAmount: number = 0;
+    /** Flag to track if initial calculation has been done */
+    private isInitialCalculationDone: boolean = false;
+    /** Previous total debit value to track changes */
+    private previousTotalDebit: number = 0;
     public showConfirmationBox: boolean = false;
     public dayjs = dayjs;
     public accountSearch: string;
@@ -278,6 +279,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Output() public salesEntry: EventEmitter<boolean> = new EventEmitter();
     /** True if api call in progress  */
     public loadMoreInProgress: boolean = false;
+    /** Holds voucher api version */
+    public voucherApiVersion: number;
   
     constructor(
         private _ledgerActions: LedgerActions,
@@ -377,6 +380,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event && event?.getDataLength() - event?.getRenderedRange().end < 20 && !this.loadMoreInProgress) {
                 this.loadMoreInProgress = true;
@@ -440,6 +444,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     description: ''
                 });
                 this.dateField?.nativeElement?.focus();
+                this.isInitialCalculationDone = false;
+                this.previousTotalDebit = 0;
                 this.salesEntry.emit(false);
             }
         });
@@ -1470,8 +1476,77 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         totalCredit = this.generalService.roundOffValueByCompanyDecimalPlace(totalCredit);
         totalDebit = this.generalService.roundOffValueByCompanyDecimalPlace(totalDebit);
+        // Count the number of 'by' and 'to' entries (excluding discount applied entries)
+        let byEntryCount = 0;
+        let toEntryCount = 0;
+        
+        (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
+            if (!control.get('isDiscountApplied')?.value) {
+                if (control.get('type').value.toLowerCase() === 'to') {
+                    toEntryCount++;
+                } else {
+                    byEntryCount++;
+                }
+            }
+        });
 
+        // Apply the business logic only if there's exactly one 'by' and one 'to' entry
+        if (byEntryCount === 1 && toEntryCount === 1) {
+            if (!this.isInitialCalculationDone) {
+                // First time calculation - if both have values, don't change anything
+                if (totalCredit > 0 && totalDebit > 0) {
+                    this.isInitialCalculationDone = true;
+                    this.previousTotalDebit = totalDebit;
+                }
+            } else {
+                // After first time - if totalDebit has changed, set totalCredit to same value as totalDebit
+                if (totalDebit !== this.previousTotalDebit && totalDebit > 0) {
+                    totalCredit = totalDebit;
+                    this.previousTotalDebit = totalDebit;
+                    
+                    // Update the form controls for 'to' (credit) entries to match the new totalCredit
+                    this.updateCreditControlsToMatchTotal(totalCredit);
+                }
+            }
+        }
         return { totalCredit, totalDebit };
+    }
+
+    /**
+     * Updates the credit (TO) form controls to match the new total credit amount
+     * Distributes the total credit amount proportionally among all 'to' entries
+     *
+     * @private
+     * @param {number} newTotalCredit
+     * @memberof AccountAsVoucherComponent
+     */
+    private updateCreditControlsToMatchTotal(newTotalCredit: number): void {
+        const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        const creditControls: FormGroup[] = [];
+        
+        // Find all credit (TO) controls that are not discount applied
+        transactionsFormArray.controls.forEach((control: FormGroup) => {
+            if (control.get('type').value.toLowerCase() === 'to' && !control.get('isDiscountApplied')?.value) {
+                creditControls.push(control);
+            }
+        });
+
+        if (creditControls.length > 0) {
+            // Distribute the new total credit amount equally among all credit entries
+            const amountPerEntry = this.generalService.roundOffValueByCompanyDecimalPlace(newTotalCredit / creditControls.length);
+            
+            creditControls.forEach((control, index) => {
+                // For the last entry, adjust for any rounding differences
+                if (index === creditControls.length - 1) {
+                    const remainingAmount = newTotalCredit - (amountPerEntry * (creditControls.length - 1));
+                    control.get('amount').patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(remainingAmount));
+                    control.get('total').patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(remainingAmount));
+                } else {
+                    control.get('amount').patchValue(amountPerEntry);
+                    control.get('total').patchValue(amountPerEntry);
+                }
+            });
+        }
     }
 
     /**
@@ -1481,8 +1556,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {HTMLButtonElement} submitButton
      * @memberof AccountAsVoucherComponent
      */
-    public handleEnterKeyPress(event: KeyboardEvent, submitButton: HTMLButtonElement): void {
-        if (event.key === 'Enter' && !this.showDiscountSidebar && !this.showTaxSidebar) {
+    public handleEnterAndTabKeyPress(event: KeyboardEvent, submitButton: HTMLButtonElement): void {
+        if ((event.key === 'Enter' || event.key === 'Tab') && !this.showDiscountSidebar && !this.showTaxSidebar) {
             const descriptionControl = this.journalVoucherForm.get('description');
             if (!descriptionControl?.value || descriptionControl.value.trim() === '') {
                 event.preventDefault();
@@ -1538,61 +1613,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     if (!this.isValidForm) {
                         return false;
                     }
-
-                    // let voucherAdjustments = this.receiptEntries;
-                    // if (voucherAdjustments && voucherAdjustments.length > 0) {
-                    //     let dataVoucherAdjustments = [];
-                    //     let byEntry = data.transactions[1];
-                    //     let totalTransactions = data.transactions?.length;
-                    //     let adjustmentsCount = 0;
-
-                    //     voucherAdjustments.forEach(adjustment => {
-                    //         if (adjustment.type === AdjustmentTypesEnum.receipt || adjustment.type === AdjustmentTypesEnum.advanceReceipt) {
-                    //             let taxAmount = 0;
-                    //             let advanceReceiptAmount = 0;
-
-                    //             if (adjustment.type === AdjustmentTypesEnum.advanceReceipt) {
-                    //                 taxAmount = adjustment.tax?.value;
-                    //                 advanceReceiptAmount = Number(adjustment.amount) - Number(taxAmount);
-                    //             }
-
-                    //             data.transactions[totalTransactions] = {
-                    //                 advanceReceiptAmount: advanceReceiptAmount,
-                    //                 amount: Number(adjustment.amount),
-                    //                 applyApplicableTaxes: byEntry.applyApplicableTaxes,
-                    //                 currentBalance: byEntry.applyApplicableTaxes,
-                    //                 discounts: [],
-                    //                 inventory: [],
-                    //                 isInclusiveTax: byEntry.isInclusiveTax,
-                    //                 particular: byEntry.particular,
-                    //                 selectedAccount: byEntry.selectedAccount,
-                    //                 stocks: null,
-                    //                 tax: taxAmount,
-                    //                 taxes: adjustment.tax?.uniqueName ? [adjustment.tax?.uniqueName] : [],
-                    //                 total: Number(adjustment.amount),
-                    //                 type: byEntry.type,
-                    //                 subVoucher: (adjustment.type === AdjustmentTypesEnum.advanceReceipt) ? SubVoucher.AdvanceReceipt : ""
-                    //             };
-                    //             totalTransactions++;
-                    //         } else {
-                    //             dataVoucherAdjustments[adjustmentsCount] = this.pendingInvoiceList[adjustment.invoice?.uniqueName];
-                    //             dataVoucherAdjustments[adjustmentsCount].adjustmentAmount = {
-                    //                 amountForAccount: Number(adjustment.amount),
-                    //                 amountForCompany: Number(adjustment.amount)
-                    //             };
-                    //             adjustmentsCount++;
-                    //         }
-                    //     });
-
-                    //     if (dataVoucherAdjustments && dataVoucherAdjustments.length > 0) {
-                    //         if (data.transactions[2]) {
-                    //             data.transactions[2].voucherAdjustments = { adjustments: [] };
-                    //             data.transactions[2].voucherAdjustments.adjustments = dataVoucherAdjustments;
-                    //         }
-                    //     }
-                    // }
-
-                    // data.transactions[1].type = "to"; // changing it to "to" so that it becomes debit in loop below
                 }
                 let salesAmount;
                 data.transactions.forEach((element: any) => {
@@ -1851,9 +1871,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.isComponentLoaded = true;
         this.activeRowIndex = 0;
         this.activeRowType = "account";
-        // this.dialog.afterAllClosed.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-        //     this.focusDebitCreditAmount();
-        // });
         setTimeout(() => {
             this.isNoAccFound = false;
         }, 3000);
@@ -2055,9 +2072,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
 
         this.changeDetectionRef.detectChanges();
-        //else if (this.selectedField === 'stock') {
-        //     this.onSelectStock(ev.additional);
-        // }
     }
 
 

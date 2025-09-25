@@ -8,6 +8,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 export interface transporterDetails {
     name: string;
@@ -66,6 +67,7 @@ export class AsideManageTransportComponent implements OnInit {
         private formBuilder: UntypedFormBuilder,
         private invoiceServices: InvoiceService,
         public dialog: MatDialog,
+        private generalService: GeneralService,
         private toasty: ToasterService) {
     }
 
@@ -145,10 +147,8 @@ export class AsideManageTransportComponent implements OnInit {
             this.isLoading = false;
             if (response && response.status === "success" && response.body) {
                 this.transporterListDetails = response.body.results;
-                this.transporterObj.page = response.body?.page;
                 this.transporterObj.totalItems = response.body?.totalItems;
                 this.transporterObj.totalPages = response.body?.totalPages;
-                this.transporterObj.count = response.body?.count;
             } else {
                 this.dataSource = [];
                 this.transporterObj.totalItems = 0;
@@ -224,13 +224,14 @@ export class AsideManageTransportComponent implements OnInit {
             }
         });
 
-        this.confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.confirmModalDialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.isLoading = true
                 this.invoiceServices.deleteTransporterById(transporter.transporterId).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.status === "success" && response.body) {
                         this.toasty.showSnackBar("success", response.body);
+                        this.transporterObj.page = this.generalService.adjustPageIndex(this.transporterObj.totalItems, this.transporterObj.page, this.transporterObj.count);
                         this.getTransportersList();
                     } else {
                         this.toasty.showSnackBar("error", response.message);

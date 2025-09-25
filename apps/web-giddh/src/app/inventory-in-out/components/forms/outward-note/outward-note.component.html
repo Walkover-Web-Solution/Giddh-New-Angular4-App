@@ -33,7 +33,6 @@
                         formControlName="inventoryEntryDate"
                         [minDate]="today"
                         [appearance]="'outline'"
-                        class="form-control"
                     ></giddh-datepicker>
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"

@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
@@ -6,7 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { combineLatest, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { BranchFilterRequest } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
@@ -277,15 +276,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public toggleAccountAsidePane(): void {
         this.isAddressChangeInProgress = false;
         this.isAddressChangeInProgressChange.emit(this.isAddressChangeInProgress);
-        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
-            width: '1000px',
-            height: '100vh !important',
-            disableClose: true,
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -333,15 +324,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public handlePageEvent(event: PageEvent): void {
-        if (event.pageSize !== this.paginationLimit) {
-            this.paginationLimit = event.pageSize;
-            this.paginationConfig.count = event.pageSize;
-            this.paginationConfig.page = 1;
-            this.pageChanged.emit({ page: 1, count: event.pageSize, ...this.addressSearchRequest });
-        } else {
-            this.paginationConfig.page = event.pageIndex + 1;
-            this.pageChanged.emit({ page: event.pageIndex + 1, count: this.paginationLimit, ...this.addressSearchRequest });
-        }
+        this.paginationConfig.page = event.pageSize !== this.paginationLimit ? 1 : event.pageIndex + 1;
+        this.paginationConfig.count = event.pageSize;
+        this.pageChanged.emit({ page: this.paginationConfig.page, count: this.paginationConfig.count, ...this.addressSearchRequest });
     }
 
 

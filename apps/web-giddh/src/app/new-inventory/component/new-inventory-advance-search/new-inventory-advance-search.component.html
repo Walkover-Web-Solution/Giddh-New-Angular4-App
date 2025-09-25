@@ -6,13 +6,13 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="inventory-advance-search">
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">{{ localeData?.advance_search_filter?.advance_search }}</h4>
-            <button mat-stroked-button type="button" class="close pull-right" (click)="advanceSearchAction('cancel')" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+        <div class="dialog-header">
+            <span>{{ localeData?.advance_search_filter?.advance_search }}</span>
+            <button mat-icon-button aria-label="close" (click)="advanceSearchAction('cancel')">
+                <i class="icon-cross"></i>
             </button>
         </div>
-        <div class="modal-body">
+        <mat-dialog-content class="dialog-body">
             <form>
                 <div class="row mr-b15">
                     <div class="col-lg-12">
@@ -117,7 +117,6 @@
                                 {{ commonLocaleData?.app_search }}
                             </button>
                             <button
-                                id="clear-btn"
                                 mat-stroked-button
                                 class="mr-0"
                                 (click)="advanceSearchAction('clear')"
@@ -128,7 +127,7 @@
                     </div>
                 </div>
             </form>
-        </div>
+        </mat-dialog-content>
     </div>
     <!-- Angular Material datepicker menu -->
     <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

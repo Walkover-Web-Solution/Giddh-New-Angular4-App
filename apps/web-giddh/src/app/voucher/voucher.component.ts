@@ -26,7 +26,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, IOption } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, API_BULK_FETCH_LIMIT, BranchHierarchyType, IOption, ASIDE_PANE_CONFIG } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -491,31 +491,31 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Stores the search results pagination details for customer */
     public searchCustomerResultsPaginationData = {
         page: 0,
-        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+        count: API_BULK_FETCH_LIMIT,
         query: ''
     };
     /** Stores the search results pagination details for stock or service  */
     public searchItemResultsPaginationData = {
         page: 0,
-        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+        count: API_BULK_FETCH_LIMIT,
         query: ''
     };
     /** Stores the search results pagination details for bank */
     public searchBankResultsPaginationData = {
         page: 0,
-        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+        count: API_BULK_FETCH_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for customer */
     public defaultCustomerResultsPaginationData = {
         page: 0,
-        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+        count: API_BULK_FETCH_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for stock or service */
     public defaultItemResultsPaginationData = {
         page: 0,
-        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+        count: API_BULK_FETCH_LIMIT,
         query: ''
     };
     /** No results found label for dynamic search */
@@ -634,7 +634,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** True, if at least a single TDS type (payable or receivable) tax is present */
     public isTdsPresent: boolean;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This holds the voucher uniquename which needs to be copied */
     public voucherUniqueName: string = "";
     /** User filled deposit amount */
@@ -879,6 +879,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.getOnboardingFormInProcess$ = this.store.pipe(select(s => s.common.getOnboardingFormInProcess), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        if (this.voucherApiVersion === 1) {
+            this.router.navigate(['pages', 'home']);
+        }
     }
 
     public ngOnInit() {
@@ -2982,17 +2985,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!isUndefined(idx)) {
             this.innerEntryIdx = idx;
         }
-        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: '760px',
-            height: '100vh !important',
-            disableClose: true
-        });
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
 
-        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+        this.asideMenuStateForProductService.afterClosed().subscribe(response => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
@@ -6656,7 +6651,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             });
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     this.invFormData.generateEInvoice = true;
                 } else {
@@ -7074,7 +7069,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             } else {
                 if (this.isAccountSearchData) {
                     this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                        if (!data?.body?.results?.length || (data?.body?.results?.length && ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT !== data?.body?.count)) {
+                        if (!data?.body?.results?.length || (data?.body?.results?.length && API_BULK_FETCH_LIMIT !== data?.body?.count)) {
                             this.isAccountSearchData = false;
                         }
                         if (data && data.body && data.body.results) {
@@ -7186,7 +7181,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             q: encodeURIComponent(query),
             page,
             group: encodeURIComponent(group),
-            count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT
+            count: API_BULK_FETCH_LIMIT
         };
         if (withStocks) {
             requestObject['withStocks'] = withStocks;
@@ -7219,13 +7214,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (searchType === SEARCH_TYPE.CUSTOMER) {
                 this.searchCustomerResultsPaginationData = {
                     page: 0,
-                    count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+                    count: API_BULK_FETCH_LIMIT,
                     query: ''
                 };
             } else if (searchType === SEARCH_TYPE.ITEM) {
                 this.searchItemResultsPaginationData = {
                     page: 0,
-                    count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+                    count: API_BULK_FETCH_LIMIT,
                     query: ''
                 };
             }
@@ -7236,27 +7231,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.defaultItemSuggestions = [];
             this.searchCustomerResultsPaginationData = {
                 page: 0,
-                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+                count: API_BULK_FETCH_LIMIT,
                 query: ''
             };
             this.searchItemResultsPaginationData = {
                 page: 0,
-                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+                count: API_BULK_FETCH_LIMIT,
                 query: ''
             };
             this.searchBankResultsPaginationData = {
                 page: 0,
-                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+                count: API_BULK_FETCH_LIMIT,
                 query: ''
             };
             this.defaultCustomerResultsPaginationData = {
                 page: 0,
-                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+                count: API_BULK_FETCH_LIMIT,
                 query: ''
             };
             this.defaultItemResultsPaginationData = {
                 page: 0,
-                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+                count: API_BULK_FETCH_LIMIT,
                 query: ''
             };
             this.noResultsFoundLabel = SearchResultText.NewSearch;
@@ -8952,7 +8947,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             document.querySelector('body').classList.remove('fixed');
             this.handleRcmChange(response);
         });
@@ -9058,7 +9053,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.handleAttachmentDelete(response);
         });
     }

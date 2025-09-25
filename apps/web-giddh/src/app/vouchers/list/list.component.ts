@@ -15,7 +15,7 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
@@ -315,7 +315,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Form Group for setting form */
     public settingForm: FormGroup;
     /** Hold setting api response */
@@ -353,10 +353,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** True if datepicker menu is open */
     public isDatepickerMenuOpen: boolean = false;
     /** List of all created templates for a given type */
-    public purchaseTemplatesList: any[] = [
-        { label: "Purchase Bill", value: "purchase_bill" },
-        { label: "Purchase Order", value: "purchase_order" }
-    ];
+    public purchaseTemplatesList: any[] = [];
     /** Selected template */
     public selectedTemplate: any;
     /** True if columns loading */
@@ -497,13 +494,23 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
 
                 if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-                    this.fetchTemplates('purchase_bill');
-                    this.fetchAllCreatedTemplates('purchase_bill');
-                    this.selectedTemplate = this.purchaseTemplatesList[0];
+                    this.fetchTemplates(VoucherTypeEnum.purchase_bill);
+                    this.fetchAllCreatedTemplates(VoucherTypeEnum.purchase_bill);
                 } else {
                     this.fetchTemplates(templateType);
                     this.fetchAllCreatedTemplates(templateType);
                 }
+                setTimeout(() => {
+                    if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                        this.purchaseTemplatesList = [
+                            { label: this.commonLocaleData?.app_purchase_bill, value: this.voucherTypeEnum.purchase_bill },
+                            { label: this.commonLocaleData?.app_voucher_types?.purchase_order, value: this.voucherTypeEnum.purchase_order }
+                        ]; 
+                        this.selectedTemplate = this.purchaseTemplatesList[0];
+                    }  else {
+                        this.selectedTemplate = null;
+                    }
+                }, 100);
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                     this.setModuleType();
                 }
@@ -699,7 +706,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.dialog.closeAll();
-                this.toasterService.showSnackBar("success", (this.voucherType === 'estimates' || this.voucherType === 'proformas') ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
+                this.toasterService.showSnackBar("success", (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -880,7 +887,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (res) {
                 this.toasterService.showSnackBar('success', this.localeData?.gmail_account_added);
                 this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-                if (this.urlVoucherType === 'invoice') {
+                if (this.urlVoucherType === VoucherTypeEnum.invoice) {
                     this.router.navigateByUrl('/pages/invoice/preview/settings/email');
                 }
             }
@@ -958,11 +965,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private handleGetAllVoucherResponse(response: any): void {
         if (response && response.voucherType === this.voucherType) {
-            if (response.totalItems > 0 && response.totalPages < response.page) {
-                this.advanceFilters.page = response.totalPages;
-                this.getAllVouchers();
-                return;
-            }
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             this.selectAllVouchers({ checked: false });
@@ -1071,21 +1073,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
                     this.selectedTabIndex = 3;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'settings') {
+                } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'settings') {
                     this.selectedTabIndex = 4;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
+                } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'templates') {
                     this.selectedTabIndex = 5;
                 }
             } else if (this.activeTabGroup === 1) {
-                if (this.voucherType === 'debit note' && this.activeModule === 'list') {
+                if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'credit note' && this.activeModule === 'list') {
+                } else if (this.voucherType === VoucherTypeEnum.creditNote && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
+                } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'pending') {
                     this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'settings') {
+                } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'settings') {
                     this.selectedTabIndex = 3;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
+                } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'templates') {
                     this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 2) {
@@ -1604,7 +1606,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response) {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
@@ -1722,6 +1724,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
+                this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.componentStore.deleteVoucher({
                         accountUniqueName: voucher?.account?.uniqueName, model: {
@@ -2246,13 +2249,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.voucherDetails = voucher;
         this.accountParentGroup = this.getParentGroupForAccountCreate(this.voucherType);
 
-        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true
-        });
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -2773,13 +2770,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
             data: voucherType,
-            width: 'var(--aside-pane-width)',
-            height: '70vh',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
+            ...ASIDE_PANE_CONFIG
         });
     }
 
@@ -2890,7 +2881,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
                 if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                     this.updateSettingsEmail(null);
@@ -3353,7 +3344,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public fetchTemplates(templateType?: string): void {
         this.invoiceTemplatesService.getTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                this.templatesList = res.body;
+                this.templatesList = res.body || [];
             } else {
                 this.templatesList = [];
             }
@@ -3369,7 +3360,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.createdTemplatesList = [];
         this.invoiceTemplatesService.getAllCreatedTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                this.createdTemplatesList = res?.body;
+                this.createdTemplatesList = res?.body || [];
             } else {
                 this.createdTemplatesList = [];
             }
@@ -3385,7 +3376,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public setTemplateAsDefault(templateUniqueName: string, templateType: string): void {
         this.invoiceTemplatesService.setTemplateAsDefault(templateUniqueName, templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                this.toasterService.showSnackBar('success', 'Template set as default successfully');
+                this.toasterService.showSnackBar('success', this.localeData?.template_set_as_default_successfully);
                 // Update the UI immediately
                 this.createdTemplatesList.forEach(template => {
                     if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
@@ -3410,21 +3401,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: `Are you sure you want to delete "<b>${template.name}</b>" template?`,
+                body: this.localeData?.are_you_sure_you_want_to_delete.replace('${template.name}', template.name),
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no,
                 permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message
             },
-            width: '600px',
+            panelClass: ['mat-dialog-sm'],
             role: 'alertdialog',
             ariaLabel: 'Confirm Dialog'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.invoiceTemplatesService.deleteTemplate(template.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res?.status === 'success') {
-                        this.toasterService.showSnackBar('success', 'Template deleted successfully');
+                        this.toasterService.showSnackBar('success', this.localeData?.template_deleted_successfully);
                         this.fetchAllCreatedTemplates(templateType);
                         this.fetchTemplates(templateType);
                     } else {
@@ -3441,15 +3432,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {*} template
      * @memberof VoucherListComponent
      */
-    public templateDialog(template: any): void {
+    public previewTemplate(template: any): void {
         const reqObj = {
             ...template,
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData
         };
         this.dialog.open(TemplatePreviewDialogComponent, {
-            width: '980px',
+           panelClass: ['mat-dialog-lg'],
             height: '90vh',
+            maxHeight: '90vh',
             data: reqObj
         });
     }
@@ -3461,12 +3453,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {string} type
      * @memberof VoucherListComponent
      */
-    public templateEdit(template: any, type: string): void {
+    public templateAction(template: any, type: string): void {
         const templateType =
             this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
                 : this.voucherType === VoucherTypeEnum.purchaseOrder ? VoucherTypeEnum.purchase_order : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase_bill : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
         const voucherType = this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher : VoucherTypeEnum.sales;
-        const templatesType = this.urlVoucherType === VoucherTypeEnum.purchase ? this.selectedTemplate.value : templateType;
+        const templatesType = this.urlVoucherType === VoucherTypeEnum.purchase ? this.selectedTemplate?.value : templateType;
         const dataToSend = {
             templateList: this.templatesList,
             voucherType: voucherType,
@@ -3480,12 +3472,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
             height: '95vh',
+            maxHeight: '95vh',
             maxWidth: '90vw',
             data: dataToSend,
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.fetchAllCreatedTemplates(templatesType);
             }
@@ -3511,14 +3504,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-     /**
-     * This will show the datepicker
-     *
-     * @param {boolean} isOpen
-     * @memberof VoucherListComponent
-     */
-     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+    /**
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();

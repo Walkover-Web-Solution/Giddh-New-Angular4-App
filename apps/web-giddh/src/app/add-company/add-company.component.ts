@@ -17,7 +17,7 @@ import { GeneralService } from "../services/general.service";
 import { ToasterService } from "../services/toaster.service";
 import { AppState } from "../store";
 import { ItemOnBoardingState } from "../store/item-on-boarding/item-on-boarding.reducer";
-import { IOption } from "../theme/ng-select/option.interface";
+import { IOption } from '../app.constant';
 import { PageLeaveUtilityService } from "../services/page-leave-utility.service";
 import { MatDialog } from "@angular/material/dialog";
 import { VerifyMobileActions } from "../actions/verify-mobile.actions";
@@ -137,7 +137,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Hold state gst code list */
     public stateGstCode: any[] = [];
     /** Hold states list */
-    public states: IOption[] = [];
+    public states: any[] = [];
     /** True if gstin number valid */
     public isGstinValid: boolean = false;
     /** Hold selected country */
@@ -793,7 +793,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                             permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
                         }
                     });
-                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    dialogRef.afterClosed().subscribe(response => {
                         if (response) {
                             let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
                             this.firstStepForm.get('name')?.patchValue(result.body?.lgnm);
@@ -1403,7 +1403,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;

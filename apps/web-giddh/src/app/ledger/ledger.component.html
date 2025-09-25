@@ -1195,18 +1195,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex flex-column justify-content-center align-items-center mr-t2 page-count position-absolute">
-                                    <ng-container *ngIf="bankTransactionsResponse?.totalItems > pageSizeOptions[0]">
-                                        <mat-paginator 
-                                            [length]="bankTransactionsResponse?.totalItems" 
-                                            [pageSize]="bankTransactionsResponse.countPerPage" 
-                                            [pageSizeOptions]="pageSizeOptions" 
-                                            [pageIndex]="bankTransactionsResponse.page - 1" 
-                                            (page)="handlePageEvent($event)"
-                                            [hidePageSize]="true"
-                                            [showFirstLastButtons]="false">
-                                        </mat-paginator>
-                                    </ng-container>
+                                <div class="d-flex flex-column justify-content-center align-items-center mr-t2 page-count position-absolute" 
+                                    *ngIf="bankTransactionsResponse?.totalItems > pageSizeOptions[0]">
+                                    <mat-paginator 
+                                        [length]="bankTransactionsResponse?.totalPages * bankTransactionsResponse.countPerPage" 
+                                        [pageSize]="bankTransactionsResponse.countPerPage" 
+                                        [pageSizeOptions]="pageSizeOptions" 
+                                        [pageIndex]="bankTransactionsResponse.page - 1" 
+                                        (page)="handlePageEvent($event)"
+                                        [hidePageSize]="false"
+                                        [showFirstLastButtons]="true">
+                                    </mat-paginator>
                                 </div>
                                 <table class="w-100">
                                     <tr>

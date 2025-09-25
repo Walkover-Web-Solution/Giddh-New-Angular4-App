@@ -16,7 +16,7 @@
         [placeholder]="giddhDateFormat"
         [(ngModel)]="vm.selectedFromDate"
         [appearance]="'outline'"
-        class="form-control"
+        class="w-100"
     ></giddh-datepicker>
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '1'">
@@ -26,11 +26,11 @@
         [placeholder]="giddhDateFormat"
         [(ngModel)]="vm.selectedToDate"
         [appearance]="'outline'"
-        class="form-control"
+        class="w-100"
     ></giddh-datepicker>
 </div>
 <div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '0'">
-    <div class="mb-2 select-log">
+    <div class="mb-4 select-log">
         <mat-radio-group name="entryDate" [(ngModel)]="vm.logOrEntry" class="d-flex">
             <mat-radio-button color="primary" value="entryDate" class="mr-3">
                 {{ localeData?.entry_date }}
@@ -47,7 +47,7 @@
             [placeholder]="giddhDateFormat"
             [(ngModel)]="vm.selectedLogDate"
             [appearance]="'outline'"
-            class="form-control"
+            class="w-100"
         ></giddh-datepicker>
     </div>
 </div>

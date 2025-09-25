@@ -212,7 +212,16 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     variants: this.stockVariants[index]
                 };
 
-                item.rate = this.giddhCurrencyPipe.transform(((data.body?.stock?.rate ?? data.body?.stock?.variant?.unitRates?.[0].rate ?? 0) / (this.inputData.exchangeRate ?? 1)));
+                const stockUnitUniqueName = data.body.stock.variant?.unitRates[0]?.stockUnitUniqueName;
+                let baseRate: number;
+                if (data.body.stock.variant?.unitRates?.length) {
+                    baseRate = this.getRateByUnit(stockUnitUniqueName, data.body.stock.variant?.unitRates);
+                } else {
+                    baseRate = data.body.stock.rate;
+                }
+                const exchangeRateValue = this.inputData.exchangeRate ?? 1;
+                const rate = Number((baseRate / exchangeRateValue).toFixed(this.inputData.highPrecisionRate));
+                item.rate = this.giddhCurrencyPipe.transform(rate);
                 item.quantity = 1;
 
                 let itemFormGroup = this.getStockFormGroup(item);
@@ -301,5 +310,17 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     public saveBulkItems(): void {
         this.dialogRef.close(this.addBulkForm.value?.data);
+    }
+
+     /**
+     * Get rate by unit
+     *
+     * @param {string} stockUnitUniqueName
+     * @param {any[]} unitRates
+     * @returns {number}
+     * @memberof AddBulkItemsComponent
+     */
+     private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
+        return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
     }
 }

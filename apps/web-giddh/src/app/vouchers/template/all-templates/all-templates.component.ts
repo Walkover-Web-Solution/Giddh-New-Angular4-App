@@ -6,7 +6,7 @@ import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { FILE_ATTACHMENT_TYPE } from '../../../app.constant';
+import { IFRAME_ZOOM_CONFIG } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { ToasterService } from '../../../services/toaster.service';
 
@@ -41,7 +41,7 @@ export class AllTemplatesComponent implements OnInit {
      * @memberof AllTemplatesComponent
      */
     public ngOnInit(): void {
-        this.invoiceUiDataService.customTemplate.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+        this.invoiceUiDataService.customTemplate.pipe(debounceTime(1500), takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             if (template?.uniqueName) {
                 this.inputTemplate = cloneDeep(template);
                 this.invoiceTemplatesService.saveTemplateSettings(this.inputTemplate).subscribe((response) => {
@@ -50,7 +50,9 @@ export class AllTemplatesComponent implements OnInit {
                         const file = new Blob([setting], { type: 'application/pdf' });
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
-                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        // Use fit entire page configuration from constants
+                        const pdfUrlWithZoom = `${this.pdfFileURL}${IFRAME_ZOOM_CONFIG.ZOOM_100}`;
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfUrlWithZoom);
                         this.isFileUploading = false;
                     } else {
                         this.isFileUploading = false;

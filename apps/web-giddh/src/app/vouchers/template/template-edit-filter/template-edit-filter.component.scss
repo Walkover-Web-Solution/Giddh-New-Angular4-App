@@ -2,16 +2,14 @@
     width: 300px !important;
     background: var(--color-white);
     display: table-cell;
-    height: 100px;
+    height: 80px;
     vertical-align: middle;
     border: 4px dashed var(--color-gray);
-    text-align: center;
 }
 
-.template-view {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+.template-view-design {
+    height: 350px;
+    width: 250px;
 }
 
 .beta-img {

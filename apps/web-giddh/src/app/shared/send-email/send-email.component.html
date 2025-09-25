@@ -4,12 +4,14 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
-        <h3 class="modal-title bg" mat-dialog-title>{{ localeData?.page_heading }}</h3>
-        <i aria-hidden="true" class="icon-cross text-right close-modal" mat-dialog-close></i>
+    <div class="dialog-header">
+        <span>{{ localeData?.page_heading }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
     </div>
 
-    <div class="modal-body">
+    <mat-dialog-content class="dialog-body">
         <div class="row mr-b1">
             <div class="col-sm-12">
                 <text-field
@@ -77,5 +79,5 @@
             </div>
         </div>
         <!-- endregion -->
-    </div>
+    </mat-dialog-content>
 </ng-container>

@@ -6,9 +6,9 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="d-flex align-items-stretch pd-15">
+    <div class="d-flex align-items-stretch eway-bill-height">
         <!--Left panel-->
-        <form #generateInvForm="ngForm" autocomplete="off" class="flex-grow-1">
+        <form #generateInvForm="ngForm" autocomplete="off" class="flex-grow-1 pd-15">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-8 col-md-10 col-12">
@@ -91,7 +91,8 @@
                         <strong class="d-block mr-t15 mr-b15 text-center">{{ commonLocaleData?.app_transport_details }}</strong>
 
                         <div class="row row-gap15">
-                            <div class="col-6">
+                            <div class="col-6" [keyboardShortcut]="'alt+c'"
+                            (onShortcutPress)="openTransporterDialog()">
                                 <reactive-dropdown-field
                                     class="input"
                                     [options]="transporterDropdown$ | async"
@@ -103,6 +104,7 @@
                                     [showCreateNew]="true"
                                     [createNewText]="commonLocaleData?.app_create_new"
                                     (createOption)="openTransporterDialog()"
+                                    [showKeyboardCommand]="commonLocaleData?.app_alt_c"
                                 >
                                 </reactive-dropdown-field>
                             </div>

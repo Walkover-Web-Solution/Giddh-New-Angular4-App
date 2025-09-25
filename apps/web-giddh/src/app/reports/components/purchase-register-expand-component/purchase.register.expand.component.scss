@@ -1,4 +1,4 @@
-@import "../../../../assets/css/mixin-common.scss";
+@import "../../../../assets/style/mixin-common.scss";
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -65,7 +65,7 @@
 }
 
 .account-detail-custom-title {
-    font-family: var(--font-semibold) !important;
+    font-weight: var(--font-weight-semibold) !important;
     font-size: var(--font-size-15) !important;
 }
 
@@ -78,7 +78,7 @@
     color: var(--color-abbey);
     margin-top: 7px;
     font-size: var(--font-size-15) !important;
-    font-family: var(--font-regular) !important;
+    font-family: var(--font-family) !important;
 }
 
 .height-82px {
@@ -288,7 +288,7 @@ table th {
     border-bottom: 1px solid var(--color-iron);
     .nav-report {
         li {
-            font-family: var(--font-semibold);
+            font-weight: var(--font-weight-semibold);
             font-size: var(--font-size-16);
             a {
                 color: var(--color-giddh-blue);
@@ -296,14 +296,14 @@ table th {
         }
     }
     .custom-month-select {
-        font-family: var(--font-semibold);
+        font-weight: var(--font-weight-semibold);
         color: var(--color-giddh-blue);
         .btn {
             font-size: var(--font-size-16);
             padding: 0;
         }
         li {
-            font-family: var(--font-regular);
+            font-family: var(--font-family);
         }
     }
 }

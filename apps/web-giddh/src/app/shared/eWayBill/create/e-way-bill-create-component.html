@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="dialog-header">
-        <span mat-dialog-title class="font-16">{{ localeData?.create_e_way_bill }}</span>
+        <span class="font-16">{{ localeData?.create_e_way_bill }}</span>
         <i mat-dialog-close class="icon-cross"></i>
     </div>
     <div mat-dialog-content class="dialog-body">
@@ -63,6 +63,7 @@
                                 (selectedOption)="$event && generateEwayBillform.get('transName').patchValue($event.label)"
                                 (onClear)="generateEwayBillform.get('transName').patchValue(null); generateEwayBillform.get('transId').patchValue(null)"
                                 [createNewText]="commonLocaleData?.app_create_new"
+                                [showCreateNew]="true"
                                 (createOption)="openTransporterModel()"
                                 [showError]="isFormInvalid && !generateEwayBillform.get('transId').value"
                             >
@@ -190,7 +191,7 @@
 <!-- Account Aside Menu -->
 <ng-template #accountAsideMenu>
     <div class="dialog-header">
-        <span mat-dialog-title class="font-16">{{ commonLocaleData?.app_manage_transporter }}</span>
+        <span class="font-16">{{ commonLocaleData?.app_manage_transporter }}</span>
         <i mat-dialog-close class="icon-cross"></i>
     </div>
     <div mat-dialog-content class="dialog-body">

@@ -513,6 +513,18 @@
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
                     ]
+                },
+                {
+                    "label": "टेम्पलेट",
+                    "link": "/pages/vouchers/preview/purchase/templates",
+                    "icon": "icon-template",
+                    "description": "टेम्पलेट का डिज़ाइन और सामग्री संपादित करें",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },

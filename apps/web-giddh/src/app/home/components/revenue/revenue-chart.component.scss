@@ -237,7 +237,7 @@ span.date-wise-sale {
     padding-left: 3px;
 }
 .total-sales-tabs a.active-graph {
-    font-family: var(--font-semibold);
+    font-weight: var(--font-weight-semibold);
 }
 input:read-only {
     border-color: var(--color-secondary-input-bar-border) !important;

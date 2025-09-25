@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -15,7 +15,7 @@ import { IStocksItem } from "../../models/interfaces/stocks-item.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { IOption, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -33,10 +33,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
     @ViewChild('receiverName', { static: false }) public receiverName: ElementRef;
     @ViewChild('productName', { static: false }) public productName: ElementRef;
     @ViewChild(DaterangePickerComponent, { static: true }) public datePicker: DaterangePickerComponent;
-    /** Template reference for aside menu */
-    @ViewChild('asideMenuTemplate', { static: true }) public asideMenuTemplate: TemplateRef<any>;
-    /** Dialog reference for aside menu */
-    public asideMenuDialogRef: MatDialogRef<any>;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
 
@@ -409,24 +405,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
                 break;
         }
         this.checkFilters();
-    }
-
-    @HostListener('document:keyup', ['$event'])
-    public handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.altKey && event.which === 73) { // Alt + i
-            event.preventDefault();
-            event.stopPropagation();
-            this.openTransferAsidePaneDialog();
-        }
-    }
-
-    /**
-     * Opens the aside pane dialog
-     *
-     * @memberof JobworkComponent
-     */
-    public openTransferAsidePaneDialog(): void {
-        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     /**

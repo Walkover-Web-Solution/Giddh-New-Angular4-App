@@ -7,15 +7,12 @@
 >
     <div id="entryModal" class="w-100">
         <!-- region header -->
-        <div
-            class="modal-header d-flex justify-content-between align-items-center row gap-3 mr-rl"
-            *ngIf="!isPettyCash"
-        >
+        <div class="dialog-header gap-3" *ngIf="!isPettyCash">
             <!-- Left Section -->
             <div class="col d-flex justify-content-start align-items-center pl-0">
                 <span class="update-entry-transaction-date">
                     <giddh-datepicker
-                        [disabled]="isEinvoiceGenerated"
+                       [disabled]="isEinvoiceGenerated"
                         [cssClass]="'text-color-white text-underline cursor-pointer'"
                         name="entryDate"
                         [showToggleIcon]="false"
@@ -98,7 +95,7 @@
         </div>
         <!-- endregion -->
         <!-- region main body -->
-        <div mat-dialog-content>
+        <mat-dialog-content>
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
                     <h1>{{ localeData?.no_transaction_found_message }}</h1>
@@ -2476,8 +2473,7 @@
                                                     !((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && branches?.length > 1)
                                                 "
                                                 aria-label="Duplicate entry button"
-                                                mat-raised-button
-                                                color="primary"
+                                                mat-stroked-button
                                                 (click)="duplicateEntry()"
                                             >
                                                 {{ localeData?.duplicate }}
@@ -2485,8 +2481,7 @@
 
                                             <button
                                                 class="ml-auto"
-                                                mat-raised-button
-                                                color="primary"
+                                                mat-stroked-button
                                                 id="update-ledger-delete-button"
                                                 (click)="showDeleteEntryModal()"
                                             >
@@ -2500,7 +2495,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </mat-dialog-content>
     </div>
     <!-- endregion -->
 
@@ -2599,5 +2594,6 @@
         [createNewText]="commonLocaleData?.app_create_new"
         (createOption)="openSalesPersonDialog()"
         (selectedOption)="handleSalesPersonSelection($event)"
+        (onClear)="clearSalesPerson()"
     ></reactive-dropdown-field>
 </ng-template>

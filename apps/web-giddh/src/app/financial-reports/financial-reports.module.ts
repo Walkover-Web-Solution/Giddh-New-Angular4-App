@@ -101,7 +101,6 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         RecTypeModule,
         FormFieldsModule,
         ClickOutsideModule,
-        
         CurrencyModule,
         AccountDetailModalModule,
         ScrollingModule,
