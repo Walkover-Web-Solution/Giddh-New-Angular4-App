@@ -5,48 +5,6 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="relative">
-        <hamburger-menu [pageHeading]="isMobileScreen ? localeData?.page_heading_single : ''"></hamburger-menu>
-        <div class="report-breadcrum d-md-none d-lg-none">
-            <ul class="list-inline d-inline-block middle nav-report">
-                <li class="active" id="giddh-page-heading-link">
-                    <a href="javascript:void(0)" (click)="goToDashboard(true)">{{ commonLocaleData?.app_report }}</a>
-                    <span class="d-inline-block pl-1"> ></span>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" (click)="goToDashboard(false)">{{ localeData?.page_heading }}</a
-                    ><span class="d-inline-block pl-1"> ></span>
-                </li>
-            </ul>
-            <div class="btn-group custom-month-select" dropdown>
-                <button
-                    id="button-custom-html"
-                    dropdownToggle
-                    type="button"
-                    class="btn dropdown-toggle"
-                    aria-controls="dropdown-custom-html"
-                >
-                    {{ selectedMonth }} <span class="caret"></span>
-                </button>
-                <ul
-                    id="dropdown-custom-html"
-                    *dropdownMenu
-                    class="dropdown-menu"
-                    role="menu"
-                    aria-labelledby="button-custom-html"
-                >
-                    <ng-container *ngFor="let item of monthYear; let i = index">
-                        <li role="menuitem">
-                            <a class="dropdown-item cursor-pointer" (click)="selectedFilterMonth(item, i + 1)">{{
-                                item
-                            }}</a>
-                        </li>
-                    </ng-container>
-                </ul>
-            </div>
-        </div>
-    </div>
-
     <div class="position-sticky position-left">
         <div class="top-bar">
             <div class="form-inline d-flex justify-content-between top-bar-content">
@@ -55,9 +13,8 @@
                         <a
                             class="cp"
                             (click)="emitExpand()"
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title="{{ commonLocaleData?.app_expand_all }}"
+                            matTooltip="{{ commonLocaleData?.app_expand_all }}"
+                            matTooltipPosition="above"
                             *ngIf="!expand"
                         >
                             <span class="icon-expandIcon"></span>
@@ -65,21 +22,28 @@
                         <a
                             class="cp"
                             (click)="emitExpand()"
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title="{{ commonLocaleData?.app_collapse_all }}"
+                            matTooltip="{{ commonLocaleData?.app_collapse_all }}"
+                            matTooltipPosition="above"
                             *ngIf="expand"
                         >
                             <span class="icon-collapse"></span>
                         </a>
                     </div>
                     <div class="d-flex">
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div class="custom-datepicker"
+                             [matMenuTriggerFor]="universalDatepicker"
+                             #universalDatepickerTrigger="matMenuTrigger"
+                             role="button"
+                             aria-haspopup="true"
+                             aria-controls="universalDatepicker">
                             <input
+                                matInput
                                 type="text"
                                 name="selectedDateRange"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker"
+                                aria-label="Select date range"
+                                readonly
                             />
                         </div>
                     </div>
@@ -88,7 +52,7 @@
                     class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                     *ngIf="showClearFilter"
                 >
-                    <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+                    <button mat-stroked-button (click)="resetAdvanceSearch()">
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
@@ -103,7 +67,7 @@
                         {{ commonLocaleData?.app_back }}
                     </button>
                     <button 
-                        mat-stroked-button 
+                        mat-raised-button 
                         color="primary" 
                         (click)="export()"
                         [matTooltip]="commonLocaleData?.app_export"
@@ -138,119 +102,117 @@
                         </div>
                     </h5>
                 </div>
-                <ng-container>
-                    <div class="total-details-box mr-r05 border-none opening-box" *ngIf="displayedColumns?.includes('purchase')">
-                        <h5>
-                            {{ commonLocaleData?.app_purchase }}
-                            <div>
-                                <span class="d-inline-flex number-total">
-                                    <amount-field
-                                        [amount]="(purchaseRegisteDetailedResponse$ | async).debitTotal"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </h5>
-                    </div>
-                    <div class="total-details-box mr-r05 border-none sales-purchase" *ngIf="displayedColumns?.includes('return')">
-                        <h5>
-                            {{ commonLocaleData?.app_return }}
-                            <div>
-                                <span class="d-inline-flex number-total">
-                                    <amount-field
-                                        [amount]="(purchaseRegisteDetailedResponse$ | async).creditTotal"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </h5>
-                    </div>
-                    <div class="total-details-box mr-r05 border-none payment-receipt" *ngIf="displayedColumns?.includes('discount')">
-                        <h5>
-                            {{ localeData?.net_discount }}
-                            <div>
-                                <span class="d-inline-flex number-total">
-                                    <amount-field
-                                        [amount]="(purchaseRegisteDetailedResponse$ | async).discountTotal"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </h5>
-                    </div>
-                    <div
-                        class="total-details-box mr-r05 border-none due-box"
-                        *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tcsTotal"
-                    >
-                        <h5>
-                            {{ localeData?.net_tcs }}
-                            <div>
-                                <span class="d-inline-flex number-total">
-                                    <amount-field
-                                        [amount]="(purchaseRegisteDetailedResponse$ | async).tcsTotal"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </h5>
-                    </div>
-                    <div
-                        class="total-details-box mr-r05 border-none due-box"
-                        *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tdsTotal"
-                    >
-                        <h5>
-                            {{ localeData?.net_tds }}
-                            <div>
-                                <span class="d-inline-flex number-total">
-                                    <amount-field
-                                        [amount]="(purchaseRegisteDetailedResponse$ | async).tdsTotal"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </h5>
-                    </div>
-                    <div class="total-details-box mr-r05 border-none due-box" *ngIf="displayedColumns?.includes('tax')">
-                        <h5>
-                            {{ localeData?.net_tax }}
-                            <div>
-                                <span class="d-inline-flex number-total">
-                                    <amount-field
-                                        [amount]="(purchaseRegisteDetailedResponse$ | async).taxTotal"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </h5>
-                    </div>
-                    <div class="total-details-box border-none closing-box" *ngIf="displayedColumns?.includes('net_purchase')">
-                        <h5>
-                            {{ commonLocaleData?.app_net_purchase }}
-                            <div>
-                                <span class="d-inline-flex number-total">
-                                    <amount-field
-                                        [amount]="(purchaseRegisteDetailedResponse$ | async).netTotal.amount"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
-                        </h5>
-                    </div>
-                </ng-container>
+                <div class="total-details-box mr-r05 border-none opening-box" *ngIf="displayedColumns?.includes('purchase')">
+                    <h5>
+                        {{ commonLocaleData?.app_purchase }}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field
+                                    [amount]="(purchaseRegisteDetailedResponse$ | async).debitTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box mr-r05 border-none sales-purchase" *ngIf="displayedColumns?.includes('return')">
+                    <h5>
+                        {{ commonLocaleData?.app_return }}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field
+                                    [amount]="(purchaseRegisteDetailedResponse$ | async).creditTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box mr-r05 border-none payment-receipt" *ngIf="displayedColumns?.includes('discount')">
+                    <h5>
+                        {{ localeData?.net_discount }}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field
+                                    [amount]="(purchaseRegisteDetailedResponse$ | async).discountTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div
+                    class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tcsTotal"
+                >
+                    <h5>
+                        {{ localeData?.net_tcs }}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field
+                                    [amount]="(purchaseRegisteDetailedResponse$ | async).tcsTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div
+                    class="total-details-box mr-r05 border-none due-box"
+                    *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tdsTotal"
+                >
+                    <h5>
+                        {{ localeData?.net_tds }}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field
+                                    [amount]="(purchaseRegisteDetailedResponse$ | async).tdsTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box mr-r05 border-none due-box" *ngIf="displayedColumns?.includes('tax')">
+                    <h5>
+                        {{ localeData?.net_tax }}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field
+                                    [amount]="(purchaseRegisteDetailedResponse$ | async).taxTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
+                <div class="total-details-box border-none closing-box" *ngIf="displayedColumns?.includes('net_purchase')">
+                    <h5>
+                        {{ commonLocaleData?.app_net_purchase }}
+                        <div>
+                            <span class="d-inline-flex number-total">
+                                <amount-field
+                                    [amount]="(purchaseRegisteDetailedResponse$ | async).netTotal.amount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                    </h5>
+                </div>
             </div>
         </div>
     </div>
@@ -258,7 +220,7 @@
     <ng-container *ngIf="isGetPurchaseDetailsSuccess$ | async">
         <div class="clearfix sales-register-table mb-5 overflow-visible">
             <div class="responsive table-responsive overflow-visible table-header-sticky">
-                <ng-container *ngIf="(purchaseRegisteDetailedResponse$ | async)?.items?.length > 0">
+                <ng-container *ngIf="(purchaseRegisteDetailedResponse$ | async)?.items?.length">
                     <table mat-table [dataSource]="dataSource" class="manufacturing-table">
                         <!-- Date Column -->
                         <ng-container matColumnDef="date">
@@ -571,7 +533,7 @@
                 </ng-container>
             </div>
         </div>
-        <div class="text-center mt-4 mb-5 position-sticky position-left" *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > paginationLimit">
+        <div class="text-center mt-4 mb-5 position-sticky position-left" *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > pageSizeOptions[0]">
             <mat-paginator
                 (page)="handlePageChange($event)"
                 [length]="(purchaseRegisteDetailedResponse$ | async).totalItems"
@@ -632,27 +594,25 @@
     <!-- endregion -->
 </ng-container>
 
-<!-- Universal Date Picker -->
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
+<!-- Universal Date Picker Menu -->
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

@@ -27,6 +27,7 @@
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
             [maxlength]="maxlength"
+            [minlength]="minlength"
             [readonly]="readonly"
             [disabled]="disabled"
             [attr.pattern]="pattern"
@@ -88,6 +89,7 @@
             [attr.min]="min"
             [attr.max]="max"
             [maxlength]="maxlength"
+            [minlength]="minlength"
             *ngIf="allowDigitsOnly && !useMask"
             [customDecimalPlaces]="customDecimalPlaces"
             digitsOnlyDirective

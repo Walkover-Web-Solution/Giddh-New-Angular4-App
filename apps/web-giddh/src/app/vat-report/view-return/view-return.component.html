@@ -1,8 +1,10 @@
-<div class="modal-header">
-    <span mat-dialog-title class="font-16">{{ localeData?.view_return }}</span>
-    <button mat-icon-button mat-dialog-close class="p-0"><i class="icon-cross font-16"></i></button>
+<div class="dialog-header">
+    <span>{{ localeData?.view_return }}</span>
+    <button mat-icon-button aria-label="close" mat-dialog-close>
+        <i class="icon-cross"></i>
+    </button>
 </div>
-<div mat-dialog-content class="modal-body">
+<mat-dialog-content class="dialog-body">
     <div class="no-data" *ngIf="isLoading">
         <giddh-page-loader></giddh-page-loader>
     </div>
@@ -89,4 +91,4 @@
             <h1>{{ localeData?.no_vrn_available }}</h1>
         </div>
     </ng-container>
-</div>
+</mat-dialog-content>

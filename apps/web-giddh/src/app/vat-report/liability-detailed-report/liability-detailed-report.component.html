@@ -3,7 +3,7 @@
     <hamburger-menu></hamburger-menu>
     <div class="relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState === 'in'">
+            *ngIf="asideGstSidebarMenuState">
             <tax-sidebar 
                 (navigateEvent)="handleNavigation()"
                 [exclude]="'#primary-new-header'" 
@@ -101,7 +101,7 @@
                 </div>
             </section>
         </div>
-        <div *ngIf="vatLiabilityDetailedReport?.totalPages > 1" class="mt-3">
+        <div *ngIf="vatLiabilityDetailedReport?.totalItems > pageSizeOptions[0]" class="mt-3">
             <mat-paginator
                 (page)="pageChanged($event)"
                 [length]="vatLiabilityDetailedReport?.totalItems"

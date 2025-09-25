@@ -8,10 +8,10 @@ import {
 } from "@angular/core";
 import { debounceTime, distinctUntilChanged, map, Observable, ReplaySubject, switchMap, takeUntil } from "rxjs";
 import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
-import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { MatSort, Sort } from "@angular/material/sort";
 import { AiOcrStore } from "../utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
@@ -53,7 +53,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         page: 1,
         totalPages: 0,
         totalItems: 0,
-        count: API_COUNT_LIMIT,
+        count: PAGINATION_LIMIT,
         from: "",
         to: "",
         sort: "desc",
@@ -382,10 +382,15 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof AiOcrListComponent
      */
-    public handlePageChange(event: any): void {
-        this.pageIndex = event.pageIndex;
+    public handlePageChange(event: PageEvent): void {
+        if (this.ocrDocumentsRequestParams.count !== event.pageSize) {
+            this.ocrDocumentsRequestParams.page = 1;
+            this.pageIndex = 0;
+        } else {
+            this.ocrDocumentsRequestParams.page = event.pageIndex + 1;
+            this.pageIndex = event.pageIndex;
+        }
         this.ocrDocumentsRequestParams.count = event.pageSize;
-        this.ocrDocumentsRequestParams.page = event.pageIndex + 1;
         this.getAllOcrDocuments(false);
     }
 

@@ -15,18 +15,6 @@
 .aside-pane {
     padding: 0 !important;
 }
-
-#close {
-    display: block;
-    position: absolute;
-    right: 12px;
-    top: 16px;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    color: var(--color-primary-right-side-popup-header-text);
-}
 .aside-body {
     padding: 0 15px;
 }

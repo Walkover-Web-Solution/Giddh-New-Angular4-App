@@ -7,7 +7,7 @@
     <div>
         <!-- Dialog Header -->
         <div class="dialog-header">
-            <span mat-dialog-title class="font-16">{{ inputData?.isCreateFlow ? localeData?.create_project : localeData?.update_project }}</span>
+            <span class="font-16">{{ inputData?.isCreateFlow ? localeData?.create_project : localeData?.update_project }}</span>
             <i mat-dialog-close class="icon-cross"></i>
         </div>
 
@@ -38,10 +38,10 @@
 
                 <!-- Form Buttons -->
                 <div class="col-12 d-flex column-gap1 mr-t2">
-                    <button mat-stroked-button color="primary" type="submit" [disabled]="isSavingProject$ | async">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="isSavingProject$ | async">
                         {{ inputData.isCreateFlow ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
                     </button>
-                    <button mat-stroked-button color="primary" mat-dialog-close>
+                    <button mat-stroked-button mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

@@ -1,13 +1,12 @@
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { TagRequest } from '../../models/api-models/settingsTags';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 import { cloneDeep, orderBy } from '../../lodash-optimized';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
@@ -19,10 +18,8 @@ import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.st
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
-    /** Reference to the modal used for creating tags */
-    @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
-    /** Template reference for the date picker directive */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** A boolean indicating whether all elements are expanded */
     @Input() public expandAll: boolean;
     /** Event emitter for sending the last synchronization date */
@@ -55,8 +52,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     public universalDateICurrent: boolean = false;
     /** Stores the currently active company information */
     public activeCompany: any;
-    /** Reference to the modal for managing its state */
-    public modalRef: BsModalRef;
     /** The selected date range used in API requests */
     public selectedDateRange: any;
     /** The selected date range displayed on the user interface */
@@ -69,8 +64,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     public toDate: string;
     /** The label for the selected date range */
     public selectedRangeLabel: any = "";
-    /** The x and y position of the date field used to position the date picker */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the local JSON data for the component */
     public localeData: any = {};
     /** Stores the common JSON data for the application */
@@ -80,7 +73,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     /** List of currencies available for selection */
     public currencyList: any;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** ReplaySubject used to handle cleanup and prevent memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* Will check if form is valid */
@@ -89,7 +82,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     constructor(private formBuilder: FormBuilder,
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private modalService: BsModalService,
         private componentStore: MultiCurrencyReportsComponentStore
     ) {
         this.filterForm = this.formBuilder.group({
@@ -257,16 +249,6 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Toggle the tags modal visibility
-     *
-     * @returns {void}
-     * @memberof FilterMultiCurrencyComponent
-     */
-    public toggleTagsModal(): void {
-        this.createTagModal.toggle();
-    }
-
-    /**
      * Emit expand event
      *
      * @param {boolean} event - Event value
@@ -278,32 +260,19 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
             this.expandAllChange.emit(event);
         }, 10);
     }
-
+    
     /**
-     * Show the datepicker
-     *
-     * @param {any} element - The target element for the datepicker
-     * @returns {void}
-     * @memberof FilterMultiCurrencyComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof FilterMultiCurrencyComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * Hide the datepicker modal
-     *
-     * @returns {void}
-     * @memberof FilterMultiCurrencyComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -315,7 +284,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.universalDatepickerTrigger?.closeMenu();
             return;
         }
         this.selectedRangeLabel = "";
@@ -323,7 +292,7 @@ export class FilterMultiCurrencyComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.universalDatepickerTrigger?.closeMenu();
 
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };

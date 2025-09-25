@@ -217,7 +217,6 @@
                                 >
                                     {{ commonLocaleData?.app_renew }}
                                 </button>
-                                <!-- <button mat-raised-button color="primary">Buy Add-ons</button> -->
                             </div>
                         </mat-toolbar>
                         <!-- Addons selector  -->
@@ -243,25 +242,6 @@
                                                 >
                                             </p>
                                         </div>
-                                        <!-- <div class="box item-2">
-                                                <div class="box-heading">
-                                                    <img class="set-height" src="{{ imgPath }}branch.png" alt="" /> <span>Branch</span>
-                                                </div>
-                                                <p>
-                                                    Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
-                                                    <span class="balance">-2</span>
-                                                </p>
-                                             </div> -->
-                                        <!-- <div class="box item-3">
-                                            <div class="box-heading">
-                                                <img class="set-height" src="{{ imgPath }}warehouse.png" alt="" />
-                                                <span>Warehouse</span>
-                                            </div>
-                                            <p>
-                                                Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
-                                                <span class="balance">-2</span>
-                                            </p>
-                                            </div> -->
                                         <div class="box item-4">
                                             <div class="box-heading">
                                                 <img src="{{ imgPath }}companies.png" alt="" />
@@ -294,14 +274,6 @@
                                 {{ commonLocaleData?.app_collapse_all }}
                             </button>
                         </div>
-                        <!-- <div class="menu-two accordion-search-box main-content-search-box">
-                        <label for="Search-box">
-                            <img src="{{ imgPath }}search.png" alt="SearchBar" />
-                        </label>
-                        <mat-form-field class="form-field" appearance="none">
-                            <input matInput class="search-bar" placeholder="Search month" />
-                        </mat-form-field>
-                    </div> -->
                         <div class="main-tabs-content">
                             <mat-tab-group>
                                 <!-- <mat-tab label="Monthly">
@@ -339,7 +311,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -393,7 +365,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -447,7 +419,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -501,7 +473,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -555,7 +527,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -609,7 +581,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -663,7 +635,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -717,7 +689,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -771,7 +743,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -825,7 +797,7 @@
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
 
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <table mat-table [dataSource]="dataSource">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
@@ -882,12 +854,6 @@
                                                             {{ localeData?.subscription?.transaction_used }}
                                                         </p>
                                                     </div>
-                                                    <!-- <div class="companies-container-items">
-                                            <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
-                                        </div>
-                                        <div class="companies-container-items">
-                                            <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
-                                        </div> -->
                                                 </div>
                                             </mat-expansion-panel>
                                             <mat-divider

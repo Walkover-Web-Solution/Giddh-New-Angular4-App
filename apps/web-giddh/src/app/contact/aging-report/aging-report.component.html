@@ -11,7 +11,7 @@
         >
             <div class="aging-form-inline">
                 <div class="btn-group pull-left on-desktop-view">
-                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
+                    <button mat-raised-button color="primary" *ngIf="voucherApiVersion === 2" (click)="createNewCustomerEvent.emit(true)">
                         {{ localeData?.new_customer }}
                     </button>
                 </div>
@@ -23,50 +23,15 @@
                     "
                 >
                     <div class="form-group mb-0">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="currentCompanyBranches"
                             [(ngModel)]="currentBranch.uniqueName"
-                            [showClear]="false"
-                            [ItemHeight]="33"
-                            width="100%"
-                            (selected)="handleBranchChange($event)"
-                            [isFilterEnabled]="true"
+                            [name]="'currentBranch'"
+                            (selectedOption)="handleBranchChange($event)"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [fixedValue]="currentBranch?.name"
+                            [labelValue]="currentBranch?.name"
                         >
-                            <ng-template #optionTemplate let-option="option">
-                                <ng-container>
-                                    <a href="javascript:void(0)" class="list-item d-flex">
-                                        <span class="entity-icon">
-                                            <i
-                                                [ngClass]="
-                                                    option?.consolidatedBranch
-                                                        ? 'icon-company-profile'
-                                                        : 'icon-branch-icon'
-                                                "
-                                                *ngIf="!option.isCompany"
-                                                matTooltip="{{ commonLocaleData?.app_branch }}"
-                                                matTooltipPosition="above"
-                                            ></i>
-                                            <i
-                                                class="icon-company-profile"
-                                                *ngIf="option.isCompany"
-                                                matTooltip="{{ commonLocaleData?.app_company }}"
-                                                matTooltipPosition="above"
-                                            ></i>
-                                        </span>
-                                        <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">
-                                                {{ option?.label || "-" }}
-                                            </div>
-                                            <div class="item-unique giddh-limit single-line-clamp">
-                                                {{ option?.name || "-" }}
-                                            </div>
-                                        </span>
-                                    </a>
-                                </ng-container>
-                            </ng-template>
-                        </sh-select>
+                        </reactive-dropdown-field>
                     </div>
                 </div>
             </div>
@@ -96,9 +61,8 @@
                 </div>
                 <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
-                        class="advance-icon"
                         (click)="showAdvanceSearchPopup()"
                         matTooltip="{{ commonLocaleData?.app_advance_search }}"
                         matTooltipPosition="right"
@@ -111,7 +75,7 @@
                     </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="exportReport()"
                         aria-label="export"
@@ -122,9 +86,10 @@
             </div>
             <div class="btn-group mr-t15 pull-left mobile-view">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     color="primary"
                     class="w-100"
+                    *ngIf="voucherApiVersion === 2"
                     (click)="createNewCustomerEvent.emit(true)"
                     aria-label="new customer"
                 >
@@ -200,8 +165,9 @@
                 <div class="align-item-center">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
+                        *ngIf="voucherApiVersion === 2"
                         (click)="createNewCustomerEvent.emit(true)"
                         aria-label="new customer"
                     >
@@ -274,10 +240,10 @@
                     <aging-dropdown
                         (close)="onCloseMenu()"
                         [options]="agingDropDownoptions"
-                        *ngIf="setDueRangeOpen$ | async"
+        *ngIf="setDueRangeOpen$ | async"
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
-                    ></aging-dropdown>
+            ></aging-dropdown>
                 </ng-template>
             </mat-menu>
         </div>
@@ -578,15 +544,19 @@
     </div>
 
     <div
-        *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
-        class="pagination-wrapper mt-4"
+        *ngIf="(dueAmountReportData$ | async)?.totalItems > pageSizeOptions[0]"
+        class="mt-4"
         [hidden]="getAgingReportRequestInProcess$ | async"
     >
-        <div class="xs-pl-0">
-            <div class="text-center unbold pagination-sm">
-                <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>
-            </div>
-        </div>
+        <mat-paginator
+            [length]="(dueAmountReportData$ | async)?.totalItems"
+            [pageSize]="dueAmountReportRequest.count"
+            [pageSizeOptions]="pageSizeOptions"
+            [pageIndex]="dueAmountReportRequest.page - 1"
+            [showFirstLastButtons]="true"
+            (page)="handlePageEvent($event)"
+            aria-label="Select page of aging report results">
+        </mat-paginator>
     </div>
 </ng-template>
 <ng-template

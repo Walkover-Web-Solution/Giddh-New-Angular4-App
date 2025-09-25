@@ -236,7 +236,7 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
 
     &:hover {
         .table-menu-first-td {
-            display: block;
+            display: inline-block;
             line-height: 1;
         }
         .checkbox-left-side-in-table {
@@ -373,15 +373,6 @@ span.input-addon {
 
 .comment-field {
     min-width: 170px;
-}
-
-.customer-name-filed,
-.vendor-name-field {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    float: left;
-    width: 200px;
 }
 
 .customer-name .icon-ellipse {
@@ -589,6 +580,10 @@ button.btn.btn-filter {
     width: 489px;
 }
 
+.name-column {
+    min-width: max(150px, 10%);
+}
+
 /*responsive*/
 @media screen and (max-width: 1280px) {
     .min-width-230 {
@@ -725,9 +720,6 @@ button.btn.btn-filter {
     .btn-group.plus-btn button {
         width: 100%;
     }
-    .pagination-wrapper {
-        margin-bottom: 0px !important;
-    }
     .customer-name,
     .vendor-customer-name {
         padding-right: 20px !important;
@@ -823,10 +815,6 @@ button.btn.btn-filter {
     .top-aging-table-top {
         font-size: var(--font-size-15);
         padding: 8px 3px !important;
-    }
-    .advance-icon {
-        margin-left: auto !important;
-        width: auto !important;
     }
     .on-mobile-view {
         .btn {
@@ -976,10 +964,6 @@ button.btn.btn-filter {
         left: 20px;
     }
 }
-.select-single-checkbox-wrapper {
-    display: flex;
-    align-items: center;
-}
 .mat-chip-wrapper {
     border: unset;
     margin-top: 20px;
@@ -1002,4 +986,8 @@ td.mat-cell {
     white-space: normal !important;
     word-break: keep-all !important;
 }
-
+@media screen and (max-width: 1200px) {
+    .min-width-230 {
+        min-width: 170px !important;
+    }
+}

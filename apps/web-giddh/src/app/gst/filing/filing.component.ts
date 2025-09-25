@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
@@ -23,10 +22,8 @@ import { RestrictedModules } from '../../app.constant';
     encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit, OnDestroy {
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
-    /** Aside pane state*/
-    public asideMenuState: string = 'out';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     public currentPeriod: GstDatePeriod = null;
     public selectedGst: string = null;
     public gstNumber: string = null;

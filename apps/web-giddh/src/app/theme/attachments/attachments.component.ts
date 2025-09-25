@@ -59,8 +59,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public isLoading: boolean = true;
     /** Holds images folder path */
     public imgPath: string = "";
-    /** True if needs to refresh entry */
-    public refreshAfterClose: boolean = false;
     /** True if is company */
     public isCompany: boolean = false;
     /** True if consolidated branch */
@@ -328,13 +326,12 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.ledgerService.removeAttachment(this.attachments[index]?.uniqueName).subscribe((response) => {
                     if (response?.status === 'success') {
                         let updatedAttachments = this.attachments?.filter(attachment => attachment?.uniqueName !== this.attachments[index]?.uniqueName);
                         this.attachments = updatedAttachments;
-                        this.refreshAfterClose = true;
 
                         if (this.fileInputElement && this.fileInputElement.nativeElement) {
                             this.fileInputElement.nativeElement.value = '';
@@ -374,7 +371,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 let bulkDeleteModel = {
                     voucherUniqueNames: [this.selectedItem?.voucherUniqueName],

@@ -5,6 +5,7 @@ import { AllItemRoutingModule } from './all-item.routing.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         SharedModule,
         FormFieldsModule,
         MatCardModule,
-        MatDialogModule
+        MatDialogModule,
+        MatButtonModule
     ],
     exports: [
         AllGiddhItemComponent

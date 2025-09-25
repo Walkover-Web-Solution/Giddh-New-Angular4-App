@@ -3,7 +3,6 @@ import { ReplaySubject, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
-import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from "../../shared/helpers/defaultDateFormat";
@@ -13,6 +12,7 @@ import { ToasterService } from "../../services/toaster.service";
 import { cloneDeep } from "../../lodash-optimized";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { MatDialog } from "@angular/material/dialog";
+import { IOption } from "../../app.constant";
 
 @Component({
     selector: 'gst-setting',
@@ -26,8 +26,8 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** This will use for destroy */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of export types list */
@@ -268,7 +268,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 disableClose: true
             });
             
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     if (index === 0) {
                         if (mappingForm.get('uniqueName')?.value) {
@@ -369,7 +369,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState = 'out';
+        this.asideGstSidebarMenuState = false;
     }
 
 }

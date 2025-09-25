@@ -25,7 +25,7 @@ export class SendEmailInvoiceComponent implements OnInit {
     /** True, when original copy is to be downloaded */
     public isOriginal: boolean = true;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
 
     constructor(
         private generalService: GeneralService

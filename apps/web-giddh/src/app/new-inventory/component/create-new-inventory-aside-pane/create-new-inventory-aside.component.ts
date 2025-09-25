@@ -1,31 +1,16 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
     selector: 'aside-create-new-inventory',
     templateUrl: './create-new-inventory-aside.component.html',
-    styleUrls: ['./create-new-inventory-aside.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./create-new-inventory-aside.component.scss']
 })
 export class CreateNewInventoryAsideComponent implements OnInit {
     /* Close aside menu panel*/
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Holds inventory type module  */
     @Input() public moduleType;
-    /* Aside pane state*/
-    public asideMenuState: string = 'out';
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -63,22 +48,7 @@ export class CreateNewInventoryAsideComponent implements OnInit {
         if (type) {
             this.router.navigate(['/pages', 'inventory', 'v2', type, this.moduleType, 'create']);
         }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
         this.closeAsidePane();
-    }
-
-    /**
-     *Aside pane toggle fixed class
-     *
-     * @memberof CreateNewInventoryAsideComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
     }
 
     /**
@@ -103,8 +73,6 @@ export class CreateNewInventoryAsideComponent implements OnInit {
         if (type) {
             this.router.navigate(['/pages', 'inventory', 'v2', this.moduleType, type, 'create']);
         }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
         this.closeAsidePane();
     }
 }
