@@ -1240,7 +1240,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * 
      * @memberof LedgerComponent
      */
-    public getBankTransactions(): void {
+    public getBankTransactions(isFocusOnLedgerHeader: boolean = false): void {
         this.entryUniqueNamesForBulkAction = [];
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
@@ -1262,6 +1262,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
                             this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
                         });
+
+                        if (isFocusOnLedgerHeader) {
+                            this.focusOnLedgerHeader();
+                        }
                         this.cdRf.detectChanges();
                     }
                 }
@@ -3110,7 +3114,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.bankTransactionsResponse.page = event.pageIndex + 1;
         }
         this.bankTransactionsResponse.countPerPage = event.pageSize;
-        this.getBankTransactions();
+        this.getBankTransactions(true);
+    }
+
+    /**
+     * Focuses on the ledger header element
+     * 
+     * @private
+     * @memberof LedgerComponent
+     */
+    private focusOnLedgerHeader(): void {
+        setTimeout(() => {
+            const element = document.getElementById('ledgerBankTransactionsHeader');
+            if (element) {
+                element.focus();
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
     }
 
     /**
