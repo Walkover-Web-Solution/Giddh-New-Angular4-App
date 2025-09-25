@@ -1,7 +1,9 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
+import { AlertConfig } from 'ngx-bootstrap/alert';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../actions/gst-reconcile/gst-reconcile.actions';
@@ -14,17 +16,36 @@ import { GstReconcileService } from '../services/gst-reconcile.service';
 import { ToasterService } from '../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR, GIDDH_DATE_FORMAT_WITH_SPACE } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
-import { IOption } from '../app.constant';
+import { IOption } from '../theme/ng-select/ng-select';
 import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
 import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './gst.component.html',
-    styleUrls: ['./gst.component.scss']
+    styleUrls: ['./gst.component.scss'],
+    providers: [
+        {
+            provide: AlertConfig, useValue: {}
+        }
+    ],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in <=> out', animate('400ms ease-in-out')),
+        ])
+    ]
 })
 export class GstComponent implements OnInit, OnDestroy {
-    /** This will hold the boolean value to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: boolean = true;
+    /** This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /** Aside pane state*/
+    public asideMenuState: string = 'out';
     public showCalendar: boolean = false;
     public period: any = null;
     public companies: CompanyResponse[] = [];
@@ -69,7 +90,7 @@ export class GstComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2 = 2;
     /** Custom selected month */
     public customMonth: string = '';
     /** Holds start month/year */
@@ -148,6 +169,7 @@ export class GstComponent implements OnInit, OnDestroy {
         });
         this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
     }
+
     /**
      * Unsubscribes from subscription
      *
@@ -159,6 +181,7 @@ export class GstComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState = 'out';
     }
 
     /**
@@ -330,10 +353,12 @@ export class GstComponent implements OnInit, OnDestroy {
     /**
      * Sets month/year
      *
-     * @param {*} date - Selected date from giddh-datepicker
+     * @param {*} date
+     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
      * @memberof GstComponent
      */
-    public setMonthAndYear(date: any): void {
+    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
+        datepicker?.close();
         const selectedMonth = new Date(date);
         const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
         const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);

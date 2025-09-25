@@ -16,9 +16,11 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/he
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.constant';
 import { GeneralService } from '../../services/general.service';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
+import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GstComponentStore } from '../gst.store';
 
@@ -33,8 +35,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     /** Holds cancel confirmation dialog template ref */
     @ViewChild("cancelConfirmationDialog") cancelConfirmationDialog: TemplateRef<any>;
-    /** This will hold the boolean value to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: boolean = true;
+    /** This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /** Aside pane state*/
+    public asideMenuState: string = 'out';
     public gstr3BData: Gstr3bOverviewResult2;
     public currentPeriod: GstDatePeriod = null;
     public selectedGstr: string = null;
@@ -114,6 +118,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private invoicePurchaseActions: InvoicePurchaseActions,
         private generalService: GeneralService,
+        public modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private dialog: MatDialog,
         private componentStore: GstComponentStore
@@ -743,10 +748,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     /**
     * Sets month/year
     *
-    * @param {*} date - Selected date from giddh-datepicker
-    * @memberof FileGstR3Component
+    * @param {*} date
+    * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+    * @memberof FilingHeaderComponent
     */
-    public setMonthAndYear(date: any): void {
+    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
+        datepicker?.close();
         const selectedMonth = new Date(date);
         const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
         const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
@@ -788,7 +795,16 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      */
     public openSettingAsidePane(): void {
         this.selectedService = TaxServiceEnum.TAXPRO;
-        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {...ASIDE_PANE_CONFIG, autoFocus: false});
+        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            disableClose: true,
+            autoFocus: false
+        })
     }
 
     /**

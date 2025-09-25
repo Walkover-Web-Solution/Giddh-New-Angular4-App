@@ -94,18 +94,16 @@
     <!-- Create Account Dialog -->
     <ng-template #editUserModal>
         <div class="modal-content">
-            <div class="dialog-header">
-                <span>{{ localeData?.create_user_permission }}</span>
-                <button mat-icon-button aria-label="close" (click)="closeEditUserModal(true)">
-                    <i class="icon-cross"></i>
-                </button>
+            <div class="modal-header d-flex justify-content-between">
+                <h3 mat-dialog-title>{{ localeData?.create_user_permission }}</h3>
+                <button class="close" (click)="closeEditUserModal(true)" aria-label="close">×</button>
             </div>
-            <mat-dialog-content class="dialog-body">
+            <div class="modal-body pt-4">
                 <setting-permission-form [isOpenedInModal]="true" [userdata]="selectedUser" [isLblShow]="true"
                     [isUpdtCase]="selectedUser ? true : false" [isHorizntl]="false" [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData" (onSubmitForm)="submitPermissionForm($event)"
                     (hasUnsavedChanges)="hasUnsavedChanges = $event"></setting-permission-form>
-            </mat-dialog-content>
+            </div>
         </div>
     </ng-template>
 </ng-container>

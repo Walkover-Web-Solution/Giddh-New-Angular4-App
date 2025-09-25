@@ -33,7 +33,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
     /** Holds the common JSON data */
     public commonLocaleData: any = {};
     /** Observable to indicate if the loader is visible */
-    public showLoader: Observable<boolean> = this.componentStore.inProgressReport$;
+    public showLoader: Observable<boolean> = this.componentStore.inProgressReport$;;
     /** Stores the balance sheet data */
     public data: BalanceSheetData;
     /** Stores the profit and loss request parameters */

@@ -17,7 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 import { CurrencyModule } from '../../../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { MatSortModule } from '@angular/material/sort';
@@ -26,7 +26,6 @@ import { AsideManageTransportComponent } from './aside-manage-transport/aside-ma
 import { AsideMenuProductServiceModule } from '../../../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { CreateBranchTransferComponent } from './create-branch-transfer/create-branch-transfer.component';
 import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-transfer.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
     imports: [
         CommonModule,
@@ -46,13 +45,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         ClickOutsideModule,
         MatFormFieldModule,
         MatInputModule,
+        PaginationModule.forRoot(),
         GiddhPageLoaderModule,
         CurrencyModule,
         MatSortModule,
         ReactiveFormsModule,
         TranslateDirectiveModule,
-        AsideMenuProductServiceModule,
-        MatPaginatorModule
+        AsideMenuProductServiceModule
     ],
     exports: [
         AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent

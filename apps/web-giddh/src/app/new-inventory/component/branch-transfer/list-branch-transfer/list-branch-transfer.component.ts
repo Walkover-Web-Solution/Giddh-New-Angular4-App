@@ -1,10 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from 'apps/web-giddh/src/app/app.constant';
-import { PageEvent } from '@angular/material/paginator';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { NewBranchTransferDownloadRequest, NewBranchTransferListGetRequestParams } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
@@ -13,8 +11,10 @@ import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.serv
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ConfirmationModalConfiguration } from 'apps/web-giddh/src/app/theme/confirmation-modal/confirmation-modal.interface';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
@@ -32,20 +32,24 @@ import { saveAs } from 'file-saver';
 export class ListBranchTransferComponent implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
-    /** MatMenuTrigger directive for datepicker */
-    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Open Account Selection Dropdown instance */
     @ViewChild('voucherTypeDropdown', { static: false }) public voucherTypeDropdown: SelectFieldComponent;
     /** This will store selected date ranges */
     public selectedDateRange: any;
     /** This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Material table elements */
     public displayedColumns: string[] = [];
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
+    /** Instance of bootstrap modal */
+    public modalRef: BsModalRef;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Observable to store the branches of current company */
@@ -82,10 +86,6 @@ export class ListBranchTransferComponent implements OnInit {
         sortBy: '',
         branchUniqueName: ''
     };
-    /** Pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will use for branch transer pagination logs object */
     public branchTransferPaginationObject = {
         page: 1,
@@ -143,18 +143,19 @@ export class ListBranchTransferComponent implements OnInit {
     public get shouldShowElement(): boolean {
         return (
             (this.branchTransferForm?.controls['sender']?.value ||
-                this.branchTransferForm?.controls['receiver']?.value ||
-                this.branchTransferForm?.controls['senderReceiver']?.value ||
-                this.branchTransferForm?.controls['fromWarehouse']?.value ||
-                this.branchTransferForm?.controls['toWarehouse']?.value) &&
+            this.branchTransferForm?.controls['receiver']?.value ||
+            this.branchTransferForm?.controls['senderReceiver']?.value ||
+            this.branchTransferForm?.controls['fromWarehouse']?.value ||
+            this.branchTransferForm?.controls['toWarehouse']?.value) &&
             (!this.branchTransferForm?.controls['voucherType']?.value &&
-                !this.branchTransferForm?.controls['amountOperator']?.value &&
-                !this.branchTransferForm?.controls['amount']?.value)
+            !this.branchTransferForm?.controls['amountOperator']?.value &&
+            !this.branchTransferForm?.controls['amount']?.value)
         );
     }
 
     constructor(
         public dialog: MatDialog,
+        private modalService: BsModalService,
         private generalService: GeneralService,
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
@@ -332,17 +333,13 @@ export class ListBranchTransferComponent implements OnInit {
         }
         this.changeDetection.detectChanges();
         this.branchTransferGetRequestParams.page = this.branchTransferPaginationObject.page;
-        this.branchTransferGetRequestParams.count = this.branchTransferPaginationObject.count;
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferForm.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response?.status === "success") {
-                if (this.branchTransferPaginationObject.totalItems > 0 && response.body?.items?.length === 0 && this.branchTransferPaginationObject.page > 1) {
-                    this.branchTransferPaginationObject.page = response.body.totalPages;
-                    this.getBranchTransferList(false);
-                    return;
-                }
+                this.branchTransferPaginationObject.page = response.body.page;
                 this.branchTransferPaginationObject.totalPages = response.body.totalPages;
                 this.branchTransferPaginationObject.totalItems = response.body.totalItems;
+                this.branchTransferPaginationObject.count = response.body.count;
                 this.branchTransferResponse = response.body?.items;
             } else {
                 this.branchTransferResponse = [];
@@ -500,7 +497,7 @@ export class ListBranchTransferComponent implements OnInit {
             }
         });
 
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === 'Yes') {
                 this.deleteNewBranchTransfer()
             } else {
@@ -546,23 +543,12 @@ export class ListBranchTransferComponent implements OnInit {
      * @param {*} event
      * @memberof ListBranchTransfer
      */
-    /**
-     * Handles pagination events and updates API parameters
-     *
-     * @param {PageEvent} event - Contains pagination details
-     * @memberof ListBranchTransferComponent
-     */
-    public handlePageEvent(event: PageEvent): void {
-        if (this.branchTransferPaginationObject.count !== event.pageSize) {
-            this.branchTransferPaginationObject.page = 1;
-        } else {
-            this.branchTransferPaginationObject.page = event.pageIndex + 1;
+    public pageChanged(event: any): void {
+        if (this.branchTransferPaginationObject.page !== event.page) {
+            this.branchTransferPaginationObject.page = event?.page;
+            this.getBranchTransferList(false);
         }
-        this.branchTransferPaginationObject.count = event.pageSize;
-        this.getBranchTransferList(false);
     }
-
-
 
     /**
      * This will use for open advance filter dialog
@@ -580,17 +566,28 @@ export class ListBranchTransferComponent implements OnInit {
     }
 
     /**
-     * Toggles the datepicker
+     * This will be use for show datepicker
      *
-     * @param {boolean} isOpen
+     * @param {*} element
      * @memberof ListBranchTransfer
      */
-    public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will be use for hide datepicker
+     *
+     * @memberof ListBranchTransfer
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
     }
 
     /**
@@ -601,7 +598,7 @@ export class ListBranchTransferComponent implements OnInit {
     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
@@ -609,7 +606,7 @@ export class ListBranchTransferComponent implements OnInit {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

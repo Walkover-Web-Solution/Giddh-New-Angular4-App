@@ -1,24 +1,25 @@
 <div class="audit-form-wrap mr-t15">
     <div class="clearfix form-field">
         <label>{{ commonLocaleData?.app_entity }} <sup class="text-danger">*</sup></label>
-        <reactive-dropdown-field
+        <sh-select
             [options]="auditLogFormVM.entities"
-            #selectEntity="ngModel"
+            #selectEntity
+            [isFilterEnabled]="true"
             [placeholder]="commonLocaleData?.app_select_option"
-            (selectedOption)="selectedEntityType($event)"
+            (selected)="selectedEntityType($event)"
             [(ngModel)]="auditLogFormVM.selectedEntity"
-            [name]="'selectedEntity'">
-        </reactive-dropdown-field>
+            [forceClearReactive]="forceClearEntity$ | async"
+        ></sh-select>
     </div>
     <div class="clearfix form-field">
         <label>{{ localeData?.operation }}</label>
-        <reactive-dropdown-field
+        <sh-select
             [options]="auditLogFormVM.filters"
             [placeholder]="commonLocaleData?.app_select_option"
             (click)="prepareOperationFormData(selectEntity)"
             [(ngModel)]="auditLogFormVM.selectedOperation"
-            [name]="'selectedOperation'">
-        </reactive-dropdown-field>
+            [forceClearReactive]="forceClearOperations$ | async"
+        ></sh-select>
     </div>
     <div
         class="clearfix form-field"
@@ -30,16 +31,18 @@
         "
     >
         <label>{{ commonLocaleData?.app_account }}</label>
-        <reactive-dropdown-field
+        <sh-select
             [options]="auditLogFormVM.accounts$ | async"
+            [isFilterEnabled]="true"
             [placeholder]="commonLocaleData?.app_select_option"
             [enableDynamicSearch]="true"
             [isPaginationEnabled]="true"
             (scrollEnd)="handleScrollEnd()"
             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
             [(ngModel)]="auditLogFormVM.selectedAccountUniqueName"
-            [name]="'selectedAccountUniqueName'">
-        </reactive-dropdown-field>
+            [forceClearReactive]="forceClearAccount$ | async"
+        >
+        </sh-select>
     </div>
     <div
         class="clearfix form-field"
@@ -50,31 +53,35 @@
         "
     >
         <label>{{ commonLocaleData?.app_group }}</label>
-        <reactive-dropdown-field
+        <sh-select
             [options]="auditLogFormVM.groups$ | async"
+            [isFilterEnabled]="true"
             [placeholder]="commonLocaleData?.app_select_option"
             [enableDynamicSearch]="true"
             [isPaginationEnabled]="true"
             (scrollEnd)="handleGroupScrollEnd()"
             (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
             [(ngModel)]="auditLogFormVM.selectedGroupUniqueName"
-            [name]="'selectedGroupUniqueName'">
-        </reactive-dropdown-field>
+            [forceClearReactive]="forceClearGroup$ | async"
+        >
+        </sh-select>
     </div>
     <div class="clearfix form-field">
         <label>{{ localeData?.user }}</label>
-        <reactive-dropdown-field
+        <sh-select
             [options]="auditLogFormVM.users$ | async"
+            [customFilter]="customUserFilter"
+            [isFilterEnabled]="true"
             [placeholder]="commonLocaleData?.app_select_option"
             [(ngModel)]="auditLogFormVM.selectedUserUniqueName"
-            [name]="'selectedUserUniqueName'">
-        </reactive-dropdown-field>
+            [forceClearReactive]="forceClearUser$ | async"
+        ></sh-select>
     </div>
     <div class="d-flex">
         <div class="form-btn-field">
             <label class="d-block">&nbsp;</label>
             <button
-                mat-raised-button color="primary" class="mr-0"
+                class="btn btn-success mr-0"
                 [ladda]="auditLogFormVM.getLogsInprocess$ | async"
                 [disabled]="!auditLogFormVM.selectedEntity"
                 (click)="getLogFilters()"

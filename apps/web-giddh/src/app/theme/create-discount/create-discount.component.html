@@ -4,9 +4,9 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="aside-dialog-wrapper">
+    <div class="dialog-asidepan">
         <div class="dialog-header">
-            <span class="font-16">{{ localeData?.tab_heading }}</span>
+            <span mat-dialog-title class="font-16">{{ localeData?.tab_heading }}</span>
             <i mat-dialog-close class="icon-cross icon-font-16"></i>
         </div>
         <div mat-dialog-content class="create-discount-aside dialog-body">
@@ -49,12 +49,12 @@
                         </div>
                     </div>
                 </form>
-                <div class="row mt-4" *ngIf="voucherApiVersion === 2">
+                <div class="row mt-4">
                     <div class="col-12 d-flex column-gap1">
-                        <button *ngIf="!isUpdateMode" mat-raised-button color="primary" (click)="saveDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_save }}</button>
-                        <button *ngIf="isUpdateMode" mat-raised-button color="primary" (click)="updateDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_update }}</button>
-                        <button mat-stroked-button (click)="cancelDiscount()">{{ commonLocaleData?.app_cancel }}</button>
-                        <button *ngIf="!isUpdateMode" mat-stroked-button (click)="clearDiscount()">{{ commonLocaleData?.app_clear }}</button>
+                        <button *ngIf="!isUpdateMode" mat-stroked-button color="primary" (click)="saveDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_save }}</button>
+                        <button *ngIf="isUpdateMode" mat-stroked-button color="primary" (click)="updateDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_update }}</button>
+                        <button mat-stroked-button color="primary" (click)="cancelDiscount()">{{ commonLocaleData?.app_cancel }}</button>
+                        <button *ngIf="!isUpdateMode" mat-stroked-button color="primary" (click)="clearDiscount()">{{ commonLocaleData?.app_clear }}</button>
                     </div>
                 </div>
             </ng-container>

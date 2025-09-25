@@ -6,6 +6,7 @@ import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { NgxDaterangepickerDirective } from './ngx-daterangepicker.directive';
 import { LOCALE_CONFIG, LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -28,6 +29,7 @@ import { NewConfirmationModalModule } from '../new-confirmation-modal/confirmati
         FormsModule,
         ReactiveFormsModule,
         NgxMaskModule.forRoot(),
+        ModalModule.forRoot(),
         TranslateDirectiveModule,
         MatButtonModule,
         MatInputModule,

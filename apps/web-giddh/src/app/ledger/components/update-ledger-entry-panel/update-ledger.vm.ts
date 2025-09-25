@@ -5,12 +5,13 @@ import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { HIGH_RATE_FIELD_PRECISION, IOption, RATE_FIELD_PRECISION } from '../../../app.constant';
+import { HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION } from '../../../app.constant';
 import { take } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
@@ -89,7 +90,7 @@ export class UpdateLedgerVm {
     /** Is Initial Load */
     private initialLoad: boolean = true;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     /** True if entry value is calculated inclusively */

@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { PageEvent } from '@angular/material/paginator';
+import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { PAGINATION_LIMIT } from "../../app.constant";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
@@ -34,8 +34,6 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Loader for API request */
     public isLoading: boolean = true;
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Custom fields request */
     public customFieldsRequest: any = {
         page: 1,
@@ -51,7 +49,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stores the voucher API version of company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private toasterService: ToasterService,
@@ -125,7 +123,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.customFieldsService.delete(customFieldUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
@@ -140,14 +138,13 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handles pagination events and updates API parameters
+     * Page change event handler
      *
-     * @param {PageEvent} event - Contains pagination details
+     * @param {PageChangedEvent} event Page changed event
      * @memberof CustomFieldsListComponent
      */
-    public handlePageEvent(event: PageEvent): void {
-        this.customFieldsRequest.page = this.customFieldsRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
-        this.customFieldsRequest.count = event.pageSize;
+    public pageChanged(event: PageChangedEvent): void {
+        this.customFieldsRequest.page = event.page;
         this.getCustomFields();
     }
 

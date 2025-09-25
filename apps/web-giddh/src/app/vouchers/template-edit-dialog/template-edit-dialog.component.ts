@@ -9,6 +9,7 @@ import { InvoiceTemplatesService } from '../../services/invoice.templates.servic
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { TemplateModeEnum, TemplateTypeEnum } from '../../models/api-models/Sales';
+import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { CountryNames } from '../../shared/Enums/common.enum';
 

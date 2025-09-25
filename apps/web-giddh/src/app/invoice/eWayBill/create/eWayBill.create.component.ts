@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NgForm } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { GenerateEwayBill, IEwayBillTransporter, IAllTransporterDetails, IEwayBillfilter } from '../../../models/api-models/Invoice';
-import { IOption } from '../../../app.constant';
+import { IOption } from '../../../theme/ng-select/ng-select';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { Router } from '@angular/router';
@@ -15,8 +14,7 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
-import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -25,28 +23,14 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
     styleUrls: [`./eWayBill.create.component.scss`]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    /** Holds eWayBillCredentialsTemplate reference */
-    @ViewChild('eWayBillCredentialsTemplate', { static: true }) public eWayBillCredentialsTemplate: TemplateRef<any>;
-    /** Holds generateInvForm reference */
+    @ViewChild('eWayBillCredentials', { static: true }) public eWayBillCredentials: ModalDirective;
     @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
-    /** Holds generateTransporterForm reference */
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
-    /** Holds invoiceRemoveConfirmationTemplate reference */
-    @ViewChild('invoiceRemoveConfirmationTemplate', { static: true }) public invoiceRemoveConfirmationTemplate: TemplateRef<any>;
-    /** Holds subgrp reference */
     @ViewChild('subgrp', { static: true }) public subgrp: any;
-    /** Holds doctypes reference */
     @ViewChild('doctypes', { static: true }) public doctype: any;
-    /** Holds trans reference */
     @ViewChild('trans', { static: true }) public transport: any;
-    /** Holds transSubType reference */
+    /** Element reference for transaction sub type */
     @ViewChild('transSubType', { static: true }) public transSubType: any;
-    /** Transporter template reference */
-    @ViewChild('transporterTemplate', { static: true }) public transporterTemplate: TemplateRef<any>;
-    /** Transporter dialog reference */
-    public transporterDialogRef: MatDialogRef<any>;
 
     public invoiceNumber: string = '';
     public invoiceBillingGstinNo: string = '';
@@ -61,6 +45,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public isLoggedInUserEwayBill$: Observable<boolean>;
     public transporterDropdown$: Observable<IOption[]>;
     public keydownClassAdded: boolean = false;
+    public status: boolean = false;
     public transportEditMode: boolean = false;
     public transporterList$: Observable<IEwayBillTransporter[]>;
     public transporterListDetails$: Observable<IAllTransporterDetails>;
@@ -68,6 +53,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
     public currenTransporterId: string;
     public isUserlogedIn: boolean;
+    public deleteTemplateConfirmationMessage: string;
     public showClear: boolean = false;
     public generateEwayBillform: GenerateEwayBill = {
         supplyType: null,
@@ -94,6 +80,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public selectedInvoices: any[] = [];
     public supplyType: any = [{}];
     public isTransModeRoad: boolean = false;
+    public modalConfig = {
+        animated: true,
+        keyboard: true,
+        backdrop: 'static',
+        ignoreBackdropClick: true
+    };
     public SubsupplyTypesList: IOption[] = [];
     public SupplyTypesList: IOption[] = [];
     public ModifiedTransporterDocType: IOption[] = [];
@@ -114,19 +106,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public voucherDetails: any;
     /** Transaction type dropdown - (Regular [1] | Bill to - ship to [2] | Bill from - Dispatch from [3] | Combination [4]) */
     public transactionSubType: IOption[] = [];
-    /** Dialog reference for eWayBill credentials */
-    private eWayBillCredentialsDialogRef: MatDialogRef<any>;
-    /** Dialog reference for invoice remove confirmation */
-    private invoiceRemoveConfirmationDialogRef: MatDialogRef<any>;
-    /** Data source for transporter table */
-    public transporterDataSource = new MatTableDataSource<IEwayBillTransporter>();
-    /** Displayed columns for transporter table */
-    public displayedColumns: string[] = ['transporterName', 'transporterId', 'actions'];
+    /** Invoice remove dialog reference */
+    public invoiceRemoveDialogRef: any;
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
-        private _cdRef: ChangeDetectorRef, private toaster: ToasterService, private generalService: GeneralService,
-        private dialog: MatDialog) {
+        private dialog: MatDialog,
+        private _cdRef: ChangeDetectorRef, private toaster: ToasterService, private generalService: GeneralService) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
@@ -142,30 +128,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.generateEwayBillform.transactionType = '1'; // transactionType is default 1 for Regular
     }
 
-    /**
-     * Opens or closes the eWayBill credentials dialog
-     *
-     * @memberof EWayBillCreateComponent
-     */
-    public toggleEwayBillCredentialsPopup(): void {
-        if (this.eWayBillCredentialsDialogRef) {
-            this.eWayBillCredentialsDialogRef.close();
-            this.eWayBillCredentialsDialogRef = null;
-        } else {
-            this.eWayBillCredentialsDialogRef = this.dialog.open(this.eWayBillCredentialsTemplate, {
-                panelClass: 'mat-dialog-md',
-                disableClose: true
-            });
-        }
+    public toggleEwayBillCredentialsPopup() {
+        this.eWayBillCredentials.toggle();
     }
 
     public ngOnInit() {
-        if (this.generalService.voucherApiVersion === 1) {
-            this.router.navigate(['pages', 'home']);
-            return;
-        }
         this.transporterFilterRequest.page = 1;
-        this.transporterFilterRequest.count = PAGINATION_LIMIT;
+        this.transporterFilterRequest.count = 10;
         this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.isUserlogedIn = true;
@@ -181,13 +150,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
-        });
-        
-        this.transporterList$.subscribe(transporters => {
-            if (transporters) {
-                this.transporterDataSource.data = transporters;
-            }
-        });
+        })
         this.store.pipe(select(state => state.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
                 let transporterDropdown = null;
@@ -246,13 +209,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
             this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
-            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;     
-            
+            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
+
             if (generateBillform.valid) {
                 this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
             }
         } else {
-            this.toggleEwayBillCredentialsPopup();
+            this.eWayBillCredentials.toggle();
         }
         this.detectChanges();
     }
@@ -280,19 +243,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.keydownClassAdded = true;
         } else if (e.code === 'Enter' && this.keydownClassAdded) {
             this.keydownClassAdded = true;
-            this.openTransporterDialog();
+            this.OpenTransporterModel();
         } else {
             this.keydownClassAdded = false;
         }
     }
 
-    /**
-     * Opens the transporter dialog
-     * 
-     * @memberof EWayBillCreateComponent
-     */
-    public openTransporterDialog(): void {
-        this.transporterDialogRef = this.dialog.open(this.transporterTemplate, ASIDE_PANE_CONFIG);
+    public OpenTransporterModel() {
+        this.status = !this.status;
         this.generateNewTransporterForm.reset();
         this.transportEditMode = false;
     }
@@ -332,33 +290,36 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public deleteTransporter(trans: IEwayBillTransporter) {
         this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.openTransporterDialog();
+        this.OpenTransporterModel();
         this.detectChanges();
     }
 
-    /**
-     * Opens the invoice remove confirmation dialog
-     *
-     * @param {any[]} invoice Invoice to be removed
-     * @memberof EWayBillCreateComponent
-     */
-    public removeInvoice(invoice: any[]): void {
+    public removeInvoice(invoice: any[]) {
         let removeInvoice = this.localeData?.remove_invoice;
         removeInvoice = removeInvoice?.replace("[VOUCHER_NUMBER]", this.selectedInvoices[0]?.voucherNumber);
-        this.invoiceRemoveConfirmationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+        this.deleteTemplateConfirmationMessage = removeInvoice;
+        this.invoiceRemoveDialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-sm'],
             data: {
-                configuration: this.generalService.deleteConfiguration(removeInvoice, this.commonLocaleData)
+                configuration: this.generalService.deleteConfiguration(
+                    removeInvoice,
+                    this.commonLocaleData
+                )
             }
         });
-        this.invoiceRemoveConfirmationDialogRef.afterClosed().subscribe(response => {
-            if (response === this.commonLocaleData?.app_yes) {
-                this.selectedInvoices?.splice(0, 1);
-                if (this.selectedInvoices?.length === 0) {
-                    this.redirectToSalesInvoice();
-                }
+    }
+
+    /**
+     * onCloseConfirmationModal
+     */
+    public onCloseConfirmationModal(userResponse: any) {
+        if (userResponse.response && userResponse.close === 'closeConfirmation') {
+            this.selectedInvoices?.splice(0, 1);
+            if (this.selectedInvoices?.length === 0) {
+                this.redirectToSalesInvoice();
             }
-        });
+        }
+        this.invoiceRemoveDialogRef?.close();
     }
 
     detectChanges() {
@@ -367,33 +328,15 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Handles pagination events and updates API parameters
-     * 
-     * @param {PageEvent} event - Contains pagination details
-     * @memberof EWayBillCreateComponent
-     */
-    public handlePageEvent(event: PageEvent): void {
-        // For transporter list, we always use event.pageIndex + 1 since page size is fixed at 1
-        if (this.transporterFilterRequest.count !== event.pageSize) {
-            this.transporterFilterRequest.page = 1;
-        } else {
-            this.transporterFilterRequest.page = event.pageIndex + 1;
-        }
-        this.transporterFilterRequest.count = event.pageSize;
+    public pageChanged(event: any): void {
+        this.transporterFilterRequest.page = event.page;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
 
-    /**
-     * Handles sorting events and updates API parameters
-     * 
-     * @param {any} event - Contains sorting details
-     * @memberof EWayBillCreateComponent
-     */
-    public sortChange(event: any): void {
-        this.transporterFilterRequest.sort = event?.direction;
-        this.transporterFilterRequest.sortBy = event?.active;
+    public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+        this.transporterFilterRequest.sort = type;
+        this.transporterFilterRequest.sortBy = columnName;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
 

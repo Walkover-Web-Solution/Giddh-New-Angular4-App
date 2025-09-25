@@ -4,23 +4,36 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <a href="javascript:void(0);" aria-label="csv download" [matMenuTriggerFor]="csvDownloadMenu"
-        class="cp new-icon-img">
-        <img [src]="imgPath" alt="csv img" />
-    </a>
-    <!-- Menu -->
-    <mat-menu #csvDownloadMenu="matMenu" xPosition="before" yPosition="below">
-        <button mat-menu-item (click)="downloadCSV('group-wise')" aria-label="group report">
-            {{ localeData?.csv?.group_wise_report }}
-        </button>
-        <button mat-menu-item (click)="downloadCSV('condensed')" aria-label="condensed report">
-            {{ localeData?.csv?.condensed_report }}
-        </button>
-        <button mat-menu-item (click)="downloadCSV('account-wise')" aria-label="account report">
-            {{ localeData?.csv?.account_wise_report }}
-        </button>
-        <button mat-menu-item (click)="exportFlatTrialBalanceReport()" aria-label="flat report">
-            {{ localeData?.csv?.flat_report }}
-        </button>
-    </mat-menu>
+    <div class="btn-group" dropdown>
+        <a href="javascript:void(0);" aria-label="csv download" dropdownToggle class="cp new-icon-img"><img src="{{ imgPath }}" alt="csv img"  /></a>
+        <ul
+            id="dropdown-pdf"
+            *dropdownMenu
+            class="dropdown-menu dropdown-menu-right cp tbpl-dropdown"
+            role="menu"
+            aria-labelledby="button-basic"
+        >
+            <span class="caret"></span>
+            <li>
+                <a href="javascript:void(0);" aria-label="group report" (click)="downloadCSV('group-wise')" data-report="group-wise">{{
+                    localeData?.csv?.group_wise_report
+                }}</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" aria-label="condensed report" (click)="downloadCSV('condensed')" data-report="condensed">{{
+                    localeData?.csv?.condensed_report
+                }}</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" aria-label="account report" (click)="downloadCSV('account-wise')" data-report="account-wise">{{
+                    localeData?.csv?.account_wise_report
+                }}</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" aria-label="flat report" (click)="exportFlatTrialBalanceReport()" data-report="account-wise">{{
+                    localeData?.csv?.flat_report
+                }}</a>
+            </li>
+        </ul>
+    </div>
 </ng-container>

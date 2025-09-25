@@ -21,7 +21,7 @@
                                 "
                                 class="branch-width"
                             >
-                                <reactive-dropdown-field
+                                <dropdown-field
                                     [label]="commonLocaleData?.app_select_entity"
                                     [options]="currentCompanyBranches"
                                     width="100%"
@@ -29,25 +29,21 @@
                                         currentBranch.uniqueName = $event?.value; handleBranchChange($event)
                                     "
                                     [placeholder]="commonLocaleData?.app_select_entity"
-                                    [labelValue]="currentBranch?.name"
-                                ></reactive-dropdown-field>
+                                    [defaultValue]="currentBranch?.name"
+                                ></dropdown-field>
                             </div>
-                            <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <input
-                                    matInput
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                     class="giddh-datepicker date-range-picker"
-                                    readonly
                                 />
                             </div>
                             <div class="text-center d-lg-flex d-none" *ngIf="showClearFilter">
                                 <div class="clear-filter">
-                                    <button mat-stroked-button class="mr-0" (click)="clearFilters()">
-                                        <span class="d-inline-flex align-items-center column-gap5">
-                                            <span class="icon-cross"></span>{{ commonLocaleData?.app_clear_filter }}
-                                        </span>
+                                    <button class="btn btn-filter mr-0" (click)="clearFilters()">
+                                        <span class="icon-cross"></span>{{ commonLocaleData?.app_clear_filter }}
                                     </button>
                                 </div>
                             </div>
@@ -57,7 +53,7 @@
                                     matTooltipPosition="left"
                                     type="button"
                                     (click)="openAdvanceFilterDialog()"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                 >
                                     {{ commonLocaleData?.app_filter }}
@@ -87,8 +83,8 @@
                     class="w-100"
                 >
                     <ng-container matColumnDef="s_no">
-                        <th mat-header-cell *matHeaderCellDef class="serial-no-column">#</th>
-                        <td mat-cell *matCellDef="let element; let i = index" class="serial-no-column">{{ i + 1 }}</td>
+                        <th mat-header-cell *matHeaderCellDef>#</th>
+                        <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="date">
@@ -278,18 +274,23 @@
             </form>
 
             <div
-                class="mt-4"
-                *ngIf="branchTransferPaginationObject?.totalItems > pageSizeOptions[0] && !isLoading"
+                class="pagination-wrapper mt-4"
+                *ngIf="branchTransferPaginationObject?.totalItems > branchTransferPaginationObject?.count && !isLoading"
             >
-                <mat-paginator
-                    [length]="branchTransferPaginationObject?.totalItems"
-                    [pageSize]="branchTransferPaginationObject.count"
-                    [pageIndex]="branchTransferPaginationObject.page - 1"
-                    [pageSizeOptions]="pageSizeOptions"
-                    [showFirstLastButtons]="true"
-                    [hidePageSize]="false"
-                    (page)="handlePageEvent($event)"
-                ></mat-paginator>
+                <pagination
+                    [totalItems]="branchTransferPaginationObject?.totalItems"
+                    [(ngModel)]="branchTransferPaginationObject.page"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="branchTransferPaginationObject.count"
+                    [rotate]="false"
+                    (pageChanged)="pageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                ></pagination>
             </div>
         </section>
 
@@ -306,27 +307,27 @@
     <!--Mat Dialog for Advance Filter-->
     <ng-template #advanceFilterDialog>
         <div class="advance-search-dialog">
-            <div class="dialog-header">
-                <span>{{ commonLocaleData?.app_advanced_filter }}</span>
-                <button mat-icon-button aria-label="close" mat-dialog-close>
-                    <i class="icon-cross"></i>
-                </button>
+            <div class="modal-header theme-bg pd-l2 pd-r2">
+                <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advanced_filter }}</h3>
+                <i mat-dialog-close class="icon-cross color-white"></i>
             </div>
-            <mat-dialog-content class="dialog-body">
+
+            <div class="modal-body clearfix">
                 <form class="col-md-12 pl-0 pr-0 mr-b05">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
                                 <div class="col-12 mr-b15">
-                                    <reactive-dropdown-field
+                                    <dropdown-field
                                         [placeholder]="commonLocaleData?.app_select_voucher + commonLocaleData.app_type"
                                         [options]="voucherTypes"
                                         (selectedOption)="selectVoucherType($event)"
-                                        [labelValue]="branchTransferAdvanceSearchFormObj?.voucherType"
+                                        [defaultValue]="branchTransferAdvanceSearchFormObj?.voucherType"
+                                        [allowValueReset]="true"
                                         (onClear)="branchTransferAdvanceSearchFormObj.voucherType = ''"
                                         [label]="commonLocaleData?.app_voucher_type"
                                     >
-                                    </reactive-dropdown-field>
+                                    </dropdown-field>
                                 </div>
                             </div>
                         </div>
@@ -335,15 +336,16 @@
                         <div class="col-lg-12">
                             <div class="row">
                                 <div class="col-12 mr-b15">
-                                    <reactive-dropdown-field
+                                    <dropdown-field
                                         [placeholder]="localeData?.select_condition"
                                         [options]="amountOperators"
                                         (selectedOption)="selectOperator($event)"
-                                        [labelValue]="branchTransferAdvanceSearchFormObj?.amountOperator"
+                                        [defaultValue]="branchTransferAdvanceSearchFormObj?.amountOperator"
+                                        [allowValueReset]="true"
                                         (onClear)="branchTransferAdvanceSearchFormObj.amountOperator = ''"
                                         [label]="commonLocaleData?.app_select_category"
                                     >
-                                    </reactive-dropdown-field>
+                                    </dropdown-field>
                                 </div>
                             </div>
                         </div>
@@ -370,7 +372,7 @@
 
                     <div class="d-flex justify-content-end mt-4">
                         <div class="mr-2">
-                            <button type="button" class="mr-0" mat-raised-button color="primary" (click)="search()">
+                            <button type="button" class="mr-0" mat-stroked-button color="primary" (click)="search()">
                                 {{ commonLocaleData?.app_search }}
                             </button>
                         </div>
@@ -381,7 +383,7 @@
                         </div>
                     </div>
                 </form>
-            </mat-dialog-content>
+            </div>
         </div>
     </ng-template>
     <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
@@ -401,27 +403,29 @@
             </div>
         </div>
     </ng-template>
-    <!-- Date Picker Menu -->
-    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
-        <ng-template matMenuContent>
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                (closeCalender)="toggleGiddhDatepicker(false)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-            >
-        </app-datepicker-wrapper>
-        </ng-template>
-    </mat-menu>
+    <!-- Date Picker  -->
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                >
+                </app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
 </ng-container>

@@ -60,7 +60,7 @@
                             <input-field
                                 [label]="commonLocaleData?.app_branch_name"
                                 [maxlength]="50"
-                                [showError]="branchForm?.get('name')?.touched && branchForm?.get('name')?.invalid"
+                                [class.error-box]="branchForm?.get('name')?.touched && branchForm?.get('name')?.invalid"
                                 [type]="'text'"
                                 formControlName="name"
                                 [placeholder]="localeData?.enter_name"
@@ -178,7 +178,7 @@
                             <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
-                            <button mat-raised-button color="primary" type="submit" [disabled]="branchForm?.invalid">
+                            <button mat-stroked-button color="primary" type="submit" [disabled]="branchForm?.invalid">
                                 {{ localeData?.create_branch }}
                             </button>
                         </div>

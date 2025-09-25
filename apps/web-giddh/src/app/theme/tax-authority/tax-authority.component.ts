@@ -4,7 +4,6 @@ import { TaxAuthorityComponentStore } from './utility/tax-authority.store';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { CreateComponent } from './create/create.component';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'tax-authority',
@@ -21,8 +20,8 @@ export class TaxAuthorityComponent implements OnInit {
     public commonLocaleData: any = {};
     /** Holds table columns */
     public displayedColumns: string[] = ['name', 'uniqueName', 'description', 'action'];
-    /** This will hold the boolean value to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: boolean = true;
+    /** This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Tax Authority List Observable */
@@ -65,12 +64,17 @@ export class TaxAuthorityComponent implements OnInit {
      */
     public openCreateUpdateTaxAuthorityDialog(isUpdateMode: boolean = false, taxAuthorityInfo?: any): void {
         const dialogConfig: MatDialogConfig = {
-            ...ASIDE_PANE_CONFIG,
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            position: {
+                top: '0',
+                right: '0'
+            },
             data: isUpdateMode ? taxAuthorityInfo : null
         };
         const createUpdateTaxAuthorityDialogRef = this.dialog.open(CreateComponent, dialogConfig);
 
-        createUpdateTaxAuthorityDialogRef.afterClosed().subscribe(response => {
+        createUpdateTaxAuthorityDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.getSalesTaxReport();
             }
@@ -104,7 +108,7 @@ export class TaxAuthorityComponent implements OnInit {
                 cancel: this.commonLocaleData?.app_no
             }
         });
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.componentStore.deleteTaxAuthority(uniqueName);
             }
@@ -119,6 +123,6 @@ export class TaxAuthorityComponent implements OnInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.asideGstSidebarMenuState = false;
+        this.asideGstSidebarMenuState === 'out';
     }
 }

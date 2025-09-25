@@ -8,7 +8,6 @@
                     </span>
                 </div>
                 <input
-                    matInput
                     type="text"
                     class="form-control"
                     [placeholder]="localeData?.search_company"
@@ -18,7 +17,6 @@
                     *ngIf="activeTab === 'company'"
                 />
                 <input
-                    matInput
                     type="text"
                     class="form-control"
                     [placeholder]="localeData?.search_branch"
@@ -31,16 +29,13 @@
         </div>
     </div>
     <!-- branch design option 1 -->
-    <div class="company-branch-opt-1">  
-        <mat-tab-group
-            mat-stretch-tabs="true"
-            mat-align-tabs="center"
-            animationDuration="0ms"
-            [selectedIndex]="selectedTabIndex"
-            (selectedTabChange)="tabChanged($event)"
-            [ngClass]="{ 'hide-mat-tab-header': companyBranches?.branchCount <= 1 }"
+    <div class="company-branch-opt-1">
+        <tabset
+            class="custom-tabs position-relative"
+            [ngClass]="{ 'branch-hide-tab': companyBranches?.branchCount <= 1 }"
+            #staticTabs
         >
-            <mat-tab [label]="commonLocaleData?.app_company">
+            <tab [heading]="commonLocaleData?.app_company" (selectTab)="tabChanged('company')">
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mr-t1">
                         <span
@@ -48,7 +43,7 @@
                         >
                         <span
                             class="cursor-pointer"
-                            [matTooltip]="localeData?.refresh_manually"
+                            [tooltip]="localeData?.refresh_manually"
                             (click)="refreshCompanies($event)"
                             ><i class="icon-reload refresh-manually font-22"></i
                         ></span>
@@ -65,8 +60,8 @@
                             class="btn-group"
                             *ngFor="let company of companyListForFilter; let i = index"
                             [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
-                            [matTooltip]="company?.name + (company?.alias ? ' ( ' + company?.alias + ' ) ' : '')"
-                            matTooltipPosition="right"
+                            [tooltip]="company?.name + (company?.alias ? ' ( ' + company?.alias + ' ) ' : '')"
+                            [placement]="i === 0 ? 'bottom' : 'top'"
                             aria-hidden="true"
                         >
                             <span
@@ -87,10 +82,11 @@
                     </ul>
                     <giddh-page-loader *ngIf="isCompanyRefreshInProcess$ | async"></giddh-page-loader>
                 </div>
-            </mat-tab>
-            <mat-tab 
+            </tab>
+            <tab
+                [heading]="commonLocaleData?.app_branch"
+                (selectTab)="tabChanged('branch')"
                 *ngIf="companyBranches?.branchCount > 1 && companyBranches?.unarchivedBranchCount >= 1"
-                [label]="commonLocaleData?.app_branch"
             >
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mr-t1">
@@ -106,16 +102,14 @@
                         >
                         <span
                             class="cursor-pointer"
-                            [matTooltip]="localeData?.refresh_manually"
+                            [tooltip]="localeData?.refresh_manually"
                             (click)="getCompanyBranches(companyBranches, true)"
                         >
                             <i class="icon-reload refresh-manually font-22"></i>
                         </span>
                     </p>
                     <button
-                        mat-raised-button
-                        color="primary"
-                        class="mr-0"
+                        class="btn btn-sky-blue mr-0"
                         (click)="createBranch()"
                         *ngIf="activeCompany.uniqueName && companyBranches.uniqueName && activeCompany.uniqueName === companyBranches.uniqueName && !currentBranchUniqueName"
                     >
@@ -156,8 +150,8 @@
                                     [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
                                     (click)="changeBranch(companyBranches, branch?.uniqueName, $event, branch)"
-                                    [matTooltip]="branch?.name"
-                                    matTooltipPosition="right"
+                                    [tooltip]="branch?.name"
+                                    placement="top"
                                 >
                                     <i class="icon-branch-connect mr-2"></i>
                                     <span class="d-flex flex-column">
@@ -174,8 +168,8 @@
                                     [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
                                     (click)="changeBranch(companyBranches, branch?.uniqueName, $event, branch)"
-                                    [matTooltip]="branch?.name"
-                                    matTooltipPosition="right"
+                                    [tooltip]="branch?.name"
+                                    placement="top"
                                 >
                                     <i class="icon-branch-connect mr-2"></i>
                                     <span class="d-flex flex-column">
@@ -199,7 +193,7 @@
                     </ul>
                     <giddh-page-loader *ngIf="branchRefreshInProcess"></giddh-page-loader>
                 </div>
-            </mat-tab>
-        </mat-tab-group>
+            </tab>
+        </tabset>
     </div>
 </div>

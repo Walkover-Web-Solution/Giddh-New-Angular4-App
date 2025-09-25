@@ -110,7 +110,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        confirnationDialogRef.afterClosed().subscribe(response => {
+        confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === this.localeData?.submit_file_return) {
                 this.vatService.fileVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res.status === 'success') {

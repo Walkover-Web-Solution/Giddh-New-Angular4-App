@@ -1,10 +1,8 @@
-<div class="dialog-header">
-    <span>{{ localeData?.company_list }}</span>
-    <button mat-icon-button aria-label="close" mat-dialog-close>
-        <i class="icon-cross"></i>
-    </button>
+<div class="modal-header d-flex align-items-center activity-header">
+    <h3>{{ localeData?.company_list }}</h3>
+    <button aria-hidden="true" class="close" mat-dialog-close>×</button>
 </div>
-<mat-dialog-content class="dialog-body">
+<mat-dialog-content class="w-100">
     <div #companyList class="logs-content">
         <div class="col-lg-12">
             <div class="d-flex pd-t15 pd-b15 align-items-center justify-content-between">
@@ -23,6 +21,7 @@
                         *ngIf="showClearFilter"
                         mat-stroked-button
                         class="min160 mr-l1"
+                        color="primary"
                         (click)="clearFilter()"
                         aria-label="clear"
                     >
@@ -35,7 +34,7 @@
                         inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
                     "
                     (click)="createCompanyInSubscription()"
-                    mat-raised-button
+                    mat-stroked-button
                     [matTooltip]="localeData?.add_company_subscription"
                     [matTooltipPosition]="'above'"
                     matTooltipClass="tooltip-black"

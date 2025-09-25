@@ -4,8 +4,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VatDetailedReportRequest } from '../../models/api-models/Vat';
 import { ReplaySubject, takeUntil } from 'rxjs';
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
-import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 
 @Component({
     selector: 'liability-detailed-report',
@@ -25,7 +24,7 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         to: '',
         taxNumber: '',
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: this.pageSizeOptions[2],
         section: '',
         currencyCode: 'BWP'
     };
@@ -35,8 +34,8 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold the boolean value to open/close setting gst sidebar */
-    public asideGstSidebarMenuState: boolean = true;
+    /** This will hold the value out/in to open/close setting gst sidebar */
+    public asideGstSidebarMenuState: string = 'in';
     /** Hold table display columns */
     public displayedColumns: string[] = ['date', 'type', 'rate', 'reference', 'accountName', 'description', 'period', 'exclusive', 'inclusive', 'vat'];
     /** Holds Current Currency Map Amount Decimal currency wise for Zimbabwe report */
@@ -100,7 +99,20 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         });
     }
 
-
+    /**
+     * This function will change the page of vat report
+     *
+     * @param {*} event
+     * @memberof LiabilityDetailedReportComponent
+     */
+    public pageChanged(event: any): void {
+        if (event) {
+            this.vatLiabilityReportRequest.page = event.pageIndex + 1;
+            this.vatLiabilityReportRequest.count = event.pageSize;
+            this.vatLiabilityDetailedReport.results = [];
+            this.getVatLiabilityReport();
+        }
+    }
 
     /**
      * Back to liability report report page with same query params
@@ -130,18 +142,6 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState = false;
-    }
-
-    /**
-     * This will use for page change
-     *
-     * @param {*} event
-     * @memberof LiabilityDetailedReportComponent
-     */
-    public pageChanged(event: PageEvent): void {
-        this.vatLiabilityReportRequest.page = this.vatLiabilityReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.vatLiabilityReportRequest.count = event.pageSize;
-        this.getVatLiabilityReport();
+        this.asideGstSidebarMenuState === 'out';
     }
 }

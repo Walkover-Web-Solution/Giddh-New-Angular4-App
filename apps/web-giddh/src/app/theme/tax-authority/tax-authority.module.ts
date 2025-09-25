@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaxAuthorityComponent } from './tax-authority.component';
-
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FormFieldsModule } from '../form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';

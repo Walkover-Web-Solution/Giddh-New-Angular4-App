@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChildren } from '@angular/core';
 import { HeaderItem, ImportExcelResponseData, Mappings } from '../../models/api-models/import-excel';
-import { IOption } from '../../app.constant';
+import { IOption } from '../../theme/ng-select/option.interface';
 import { cloneDeep } from '../../lodash-optimized';
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { ServiceConfig } from '../../services/service.config';
 
 interface DataModel {
@@ -34,6 +35,7 @@ export class MapExcelDataComponent implements OnInit {
     @Output() public onNext = new EventEmitter<ImportExcelResponseData>();
     @Output() public onBack = new EventEmitter();
     @Input() public dataModel: DataModel[];
+    @ViewChildren(ShSelectComponent) public shSelectComponents: ShSelectComponent[];
     public imgPath: string;
     private importRequestData: ImportExcelResponseData;
     private _importData: ImportExcelResponseData;

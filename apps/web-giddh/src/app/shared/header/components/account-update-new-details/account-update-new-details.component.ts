@@ -19,6 +19,7 @@ import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyT
 import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
 import { take, takeUntil, debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -40,10 +41,11 @@ import { CompanyResponse, StateList, StatesRequest, TaxResponse } from '../../..
 import { IForceClear } from '../../../../models/api-models/Sales';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { digitsOnly } from '../../../helpers';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, ASIDE_PANE_CONFIG, BootstrapToggleSwitch, BranchHierarchyType, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -97,6 +99,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public taxGroupForm: FormGroup;
     /** Instance of delete account modal */
     @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: TemplateRef<any>;
+    @ViewChild('moveMergedAccountModal', { static: false }) public moveMergedAccountModal: ModalDirective;
+
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2, salesPersonCreated: boolean }>
         = new EventEmitter();
@@ -224,6 +228,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     };
     /** Available field types list */
     public availableFieldTypes: any = FieldTypes;
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
@@ -233,7 +239,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** True if last duplicate email in portal  users */
     public portalIndex: number;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
     /** This will hold is portal default */
     public isPortalDefault: boolean;
     /** Holds list of countries which use ZIP Code in address */
@@ -282,14 +288,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public salesPersonCreated: boolean = false;
     /** Flag to determine if the parent group is "sundrycreditors". */
     @Input() public showBankDetailPreview: boolean = false;
-    /** Flag to determine if the parent group is "sundrycreditors". */
     @Input() public contactPreview: boolean = false;
-    /** True if action menu is open */
+    /** True if action menu is opened */
     @Input() public isActionMenu: boolean = false;
-    /** Stores the current tax to display in the UI. */
-    public currentTax: any;
-    /** Stores the current discount to display in the UI. */
-    public currentDiscount: any;
 
     constructor(
         private _fb: FormBuilder,
@@ -526,28 +527,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
-        // Increase timeout and add more robust checking
         const interval = setInterval(() => {
-            const element = document.getElementById('init-contact-update');
-            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-            
-            if (element && intlTelInput) {
+            if (document.getElementById('init-contact-update')) {
                 this.onlyPhoneNumber('init-contact-update');
                 clearInterval(interval);
             }
-        }, 500); // Reduced interval for faster detection
-        
-        // Add fallback timeout to prevent infinite loop
-        setTimeout(() => {
-            clearInterval(interval);
-            // Try one more time after a longer delay
-            setTimeout(() => {
-                const element = document.getElementById('init-contact-update');
-                if (element && !this.intl['init-contact-update']) {
-                    this.onlyPhoneNumber('init-contact-update');
-                }
-            }, 1000);
-        }, 10000); // Clear after 10 seconds max
+        }, 2000);
 
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
@@ -841,21 +826,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * Reinitialize mobile number field if flag is not showing
-     *
-     * @param {string} fieldId
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public reInitializeMobileField(fieldId: string): void {
-        const element = document.getElementById(fieldId);
-        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-        
-        if (element && intlTelInput && !this.intl[fieldId]) {
-            this.onlyPhoneNumber(fieldId);
-        }
-    }
-
-    /**
      * This will be use for add new portal user
      *
      * @param {*} [user]
@@ -891,26 +861,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         const lastIndex = mappings.controls.length - 1;
         const interval = setInterval(() => {
-            const element = document.getElementById('init-contact-portal_' + lastIndex);
-            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-            
-            if (element && intlTelInput) {
+            if (document.getElementById('init-contact-portal_' + lastIndex)) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
             }
-        }, 200); // Faster checking for dynamic elements
-        
-        // Add fallback timeout
-        setTimeout(() => {
-            clearInterval(interval);
-            // Try one more time after a longer delay
-            setTimeout(() => {
-                const element = document.getElementById('init-contact-portal_' + lastIndex);
-                if (element && !this.intl['init-contact-portal_' + lastIndex]) {
-                    this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
-                }
-            }, 500);
-        }, 5000); // Clear after 5 seconds max
+        }, 500);
     }
 
     /**
@@ -948,6 +903,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         }
     }
+
 
     public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -1547,7 +1503,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             },
             disableClose: true
         });
-        confirnationDialogRef.afterClosed().subscribe(result => {
+        confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(result => {
             if (result) {
                 this.deleteMergedAccount();
             }
@@ -1630,8 +1586,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content;
         this.moveMergedAccountModalBody = this.moveMergedAccountModalBody?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
         this.moveMergedAccountModalBody = this.moveMergedAccountModalBody?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
+        this.moveMergedAccountModal?.show();
     }
 
+    public hideMoveMergedAccountModal() {
+        this.moveMergedAccountModal.hide();
+    }
     public moveMergeAccountTo() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
@@ -1640,6 +1600,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         obj.moveTo = this.selectedAccountForMove;
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
+        this.hideMoveMergedAccountModal();
     }
 
     public getAccount() {
@@ -1941,7 +1902,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: DROPDOWN_ITEMS_COUNT_LIMIT,
+                count: API_COUNT_LIMIT,
             }
             this.groupService.searchGroups(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
@@ -1999,6 +1960,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
     }
+
 
     /**
      * Scroll end handler for group dropdown
@@ -2522,10 +2484,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : this.accountOpeningBalance
         }
         const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
-            ...ASIDE_PANE_CONFIG,
+            position: {
+                right: '0',
+                top: '0'
+            },
+            disableClose: true,
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            maxHeight: '100vh',
             data: data
         });
-        bulkAddAsideMenuRef.afterClosed().subscribe(result => {
+        bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;
@@ -2634,7 +2603,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => accountRequest['uniqueName'] = activeAccountState?.uniqueName);
         }
         accountRequest['archive'] = !this.addAccountForm.get('archive')?.value;
-        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));  
         this.updateViaPatchApi.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: accountRequest['uniqueName'] },
             accountRequest

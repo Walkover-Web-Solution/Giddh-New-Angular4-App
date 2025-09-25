@@ -956,11 +956,6 @@
                     "icon": "icon-tally-import1"
                 },
                 {
-                    "label": "Multi-currency Report",
-                    "link": "/pages/multi-currency-report",
-                    "icon": "icon-multi-currency"
-                },
-                {
                     "label": "Project wise accounting",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new",

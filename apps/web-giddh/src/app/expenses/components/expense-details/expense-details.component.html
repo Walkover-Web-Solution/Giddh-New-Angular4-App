@@ -7,7 +7,7 @@
             <div class="col-sm-6 text-right xs-left">
                 <div class="d-flex justify-content-end align-items-center column-gap1">
                     <button
-                        mat-raised-button
+                        mat-stroked-button
                         color="primary"
                         class="mr-b05 d-flex align-items-center"
                         type="button"
@@ -17,6 +17,7 @@
                     </button>
                     <button
                         mat-stroked-button
+                        color="warn"
                         class="mr-b05"
                         type="button"
                         (click)="openModal(rejectionReason)"
@@ -78,22 +79,35 @@
                                         {{ entryAgainstObject.base }}<span class="text-danger">*</span>
                                     </label>
                                     <div class="clearfix">
-                                        <reactive-dropdown-field
+                                        <sh-select
                                             [ngClass]="{ 'error-box': showEntryAgainstRequired }"
                                             class="text-left multi-select entry-against"
-                                            [name]="'depositAccountUniqueName'"
+                                            name="depositAccountUniqueName"
+                                            #entryAgainstAccountDropDown
                                             [options]="entryAgainstObject.dropDownOption"
                                             [(ngModel)]="entryAgainstObject.model"
-                                            (selectedOption)="onSelectEntryAgainstAccount($event)"
+                                            (selected)="onSelectEntryAgainstAccount($event)"
                                             (onClear)="onClearEntryAgainstAccount()"
                                             [placeholder]="commonLocaleData?.app_select_account"
+                                            [notFoundLink]="false"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
                                             (scrollEnd)="handleAccountScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                            [labelValue]="entryAgainstObject?.name"
+                                            [defaultValue]="entryAgainstObject?.name"
+                                            [fixedValue]="entryAgainstObject?.name"
+                                            [forceClearReactive]="forceClear$ | async"
+                                            [multiple]="false"
+                                            [ItemHeight]="33"
+                                            [useInBuiltFilterForIOptionTypeItems]="true"
                                         >
-                                        </reactive-dropdown-field>
+                                            <ng-template #optionTemplate1 let-option="option">
+                                                <a href="javascript:void(0)" class="list-item">
+                                                    <div class="item">{{ option.label }}</div>
+                                                    <div class="item-unique">{{ option?.value }}</div>
+                                                </a>
+                                            </ng-template>
+                                        </sh-select>
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +132,6 @@
                                     [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
                                     [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular?.uniqueName"
                                     (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
-                                    (showQuickAccountModalFromUpdateLedger)="openLedgerAsidePaneDialog()"
                                 ></update-ledger-entry-panel>
                             </div>
                         </div>
@@ -167,15 +180,3 @@
     </app-aside-menu-sales-other-taxes>
 </ng-template>
 <!-- endregion -->
-
-<!-- region ledger aside pane -->
-<ng-template #ledgerAsidePane>
-    <ledger-aside-pane
-        [keyboardShortcut]="'esc'"
-        [localeData]="localeData"
-        [commonLocaleData]="commonLocaleData"
-        (onShortcutPress)="ledgerAsidePaneDialogRef?.close()"
-        (closeAsideEvent)="ledgerAsidePaneDialogRef?.close()"
-    >
-    </ledger-aside-pane>
-</ng-template>

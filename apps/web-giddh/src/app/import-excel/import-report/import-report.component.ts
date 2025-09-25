@@ -6,7 +6,7 @@ import { ImportExcelStatusPaginatedResponse, ImportExcelStatusResponse } from '.
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
-import { PageEvent } from '@angular/material/paginator';
+import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc' // load on demand
@@ -14,7 +14,6 @@ dayjs.extend(utc) // use plugin
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../../services/general.service';
 import { ImportExcelService } from '../../services/import-excel.service';
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 
 @Component({
     selector: 'import-report',
@@ -23,8 +22,6 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 })
 
 export class ImportReportComponent implements OnInit, OnDestroy {
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public importStatusResponse: ImportExcelStatusPaginatedResponse;
     public importPaginatedRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     /** Stores the current company */
@@ -44,7 +41,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         private importExcelService: ImportExcelService
     ) {
         this.importPaginatedRequest.page = 1;
-        this.importPaginatedRequest.count = PAGINATION_LIMIT;
+        this.importPaginatedRequest.count = 10;
     }
 
     public ngOnInit() {
@@ -61,15 +58,8 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         this.router.navigate(['pages', 'import']);
     }
 
-    /**
-     * Handles pagination events and updates API parameters
-     * 
-     * @param {PageEvent} event - Contains pagination details
-     * @memberof ImportReportComponent
-     */
-    public handlePageEvent(event: PageEvent): void {
-        this.importPaginatedRequest.page = this.importPaginatedRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.importPaginatedRequest.count = event.pageSize;
+    public pageChanged(event: PageChangedEvent) {
+        this.importPaginatedRequest.page = event.page;
         this.getStatus();
     }
 

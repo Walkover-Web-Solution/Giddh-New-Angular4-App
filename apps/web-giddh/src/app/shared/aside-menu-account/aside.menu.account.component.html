@@ -1,49 +1,61 @@
-<section class="aside-dialog-wrapper">
-    <div class="dialog-header">
-        <span>{{ isUpdateAccount ? commonLocaleData?.app_account_details : commonLocaleData?.app_create_account}}</span>
-        <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
-            <i class="icon-cross"></i>
-        </button>
-    </div>
-    
-    <mat-dialog-content class="dialog-body">
-        <account-add-new-details
-            #addAccountNewComponent
-            *ngIf="activeGroupUniqueName && !isUpdateAccount"
-            class="mr-t4"
-            [activeGroupUniqueName]="activeGroupUniqueName"
-            [isDebtorCreditor]="isDebtorCreditor"
-            [createAccountInProcess$]="createAccountInProcess$"
-            (submitClicked)="addNewAcSubmit($event)"
-            (isGroupSelected)="isGroupSelected($event)"
-            [isGstEnabledAcc]="isGstEnabledAcc"
-            [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-            [showBankDetail]="showBankDetail"
-            [isCustomerCreation]="true"
-        >
-        </account-add-new-details>
+<div class="aside-wrapper">
+    <div class="aside-pane" [ngClass]="{ 'text-left': isActionMenu }">
+        <div class="form-header">
+            <div>
+                <h3>
+                    <span>{{ isUpdateAccount ? commonLocaleData?.app_account_details : commonLocaleData?.app_create_account}}</span>
+                </h3>
+            </div>
+            <div>
+                <button mat-icon-button id="close" aria-label="close" (click)="closeAsidePane($event)">
+                    <i class="icon-cross"></i>
+                </button>
+            </div>
+        </div>
 
-        <account-update-new-details
-            *ngIf="activeGroupUniqueName && isUpdateAccount"
-            [activeGroupUniqueName]="activeGroupUniqueName"
-            [isGstEnabledAcc]="isGstEnabledAcc"
-            [activeAccount$]="activeAccount$"
-            [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-            [updateAccountInProcess$]="updateAccountInProcess$"
-            [accountDetails]="accountDetails"
-            [updateAccountIsSuccess$]="updateAccountIsSuccess$"
-            (deleteClicked)="showDeleteAccountModal()"
-            (submitClicked)="updateAccount($event)"
-            (updateViaPatchApi)="updateAccount($event, true)"
-            (isGroupSelected)="isGroupSelected($event)"
-            [showBankDetail]="showBankDetail"
-            [flatGroupsOptions]="flatGroupsOptions"
-            [showVirtualAccount]="showVirtualAccount"
-            [isDebtorCreditor]="isDebtorCreditor"
-        >
-        </account-update-new-details>
-    </mat-dialog-content>
-</section>
+        <mat-dialog-content>
+            <div class="aside-body">
+                <div class="aside-pane-form">
+                    <account-add-new-details
+                        #addAccountNewComponent
+                        *ngIf="activeGroupUniqueName && !isUpdateAccount"
+                        class="mr-t4"
+                        [activeGroupUniqueName]="activeGroupUniqueName"
+                        [isDebtorCreditor]="isDebtorCreditor"
+                        [createAccountInProcess$]="createAccountInProcess$"
+                        (submitClicked)="addNewAcSubmit($event)"
+                        (isGroupSelected)="isGroupSelected($event)"
+                        [isGstEnabledAcc]="isGstEnabledAcc"
+                        [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                        [showBankDetail]="showBankDetail"
+                        [isCustomerCreation]="true"
+                    >
+                    </account-add-new-details>
+
+                    <account-update-new-details
+                        *ngIf="activeGroupUniqueName && isUpdateAccount"
+                        [activeGroupUniqueName]="activeGroupUniqueName"
+                        [isGstEnabledAcc]="isGstEnabledAcc"
+                        [activeAccount$]="activeAccount$"
+                        [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                        [updateAccountInProcess$]="updateAccountInProcess$"
+                        [accountDetails]="accountDetails"
+                        [updateAccountIsSuccess$]="updateAccountIsSuccess$"
+                        (deleteClicked)="showDeleteAccountModal()"
+                        (submitClicked)="updateAccount($event)"
+                        (updateViaPatchApi)="updateAccount($event, true)"
+                        (isGroupSelected)="isGroupSelected($event)"
+                        [showBankDetail]="showBankDetail"
+                        [flatGroupsOptions]="flatGroupsOptions"
+                        [showVirtualAccount]="showVirtualAccount"
+                        [isDebtorCreditor]="isDebtorCreditor"
+                    >
+                    </account-update-new-details>
+                </div>
+            </div>
+        </mat-dialog-content>
+    </div>
+</div>
 
 <!--delete Account modal  -->
 <ng-template #deleteAccountModal>

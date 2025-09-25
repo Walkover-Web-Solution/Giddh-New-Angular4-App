@@ -2,6 +2,10 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { SharedModule } from '../shared/shared.module';
@@ -24,7 +28,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -45,11 +49,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         CommonModule,
         FormsModule,
         HomeRoutingModule,
+        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
-        
+        BsDropdownModule.forRoot(),
+        TabsModule.forRoot(),
+        TooltipModule.forRoot(),
         Daterangepicker,
         CurrencyModule,
         SharedModule,

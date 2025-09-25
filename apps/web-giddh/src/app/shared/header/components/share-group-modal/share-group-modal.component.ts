@@ -12,7 +12,8 @@ import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
 import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
-import { IOption, RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
+import { RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -77,7 +78,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                if (activeCompany.subscription?.planDetails?.restrictedModules && Object.hasOwn(activeCompany.subscription.planDetails.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
+                if (Object.hasOwn(activeCompany.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                     const module = activeCompany.moduleRestrictionStatus.find(
                         (module) => module?.moduleName === this.restrictedModules.Users
                     );

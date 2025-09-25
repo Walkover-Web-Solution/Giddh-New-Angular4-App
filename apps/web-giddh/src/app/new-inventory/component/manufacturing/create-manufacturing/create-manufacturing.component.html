@@ -32,7 +32,7 @@
                                     </giddh-datepicker>
                                 </div>
                                 <div class="col responsive-width" *ngIf="warehouses?.length > 1">
-                                    <reactive-dropdown-field
+                                    <dropdown-field
                                         [name]="'warehouseUniqueName'"
                                         [placeholder]="commonLocaleData?.app_select_warehouse"
                                         [options]="warehouses"
@@ -41,10 +41,10 @@
                                                 $event.value;
                                             selectedWarehouseName = $event.label
                                         "
-                                        [labelValue]="selectedWarehouseName"
+                                        [defaultValue]="selectedWarehouseName"
                                         [readonly]="isCompany || isConsolidatedBranch"
                                     >
-                                    </reactive-dropdown-field>
+                                    </dropdown-field>
                                 </div>
                                 <div class="col responsive-width">
                                     <div class="custom-card bg-green">
@@ -81,11 +81,10 @@
                                 <div class="d-flex flex-column flex-wrap gap-between w-100">
                                     <h1 class="section-head">{{ localeData?.finished_stock }}</h1>
                                     <div>
-                                        <reactive-dropdown-field
+                                        <dropdown-field
                                             [cssClass]="errorFields.finishedStockName ? ' required-field-error' : ''"
                                             [name]="'stockUniqueName'"
                                             [scrollableElementId]="'finishedStockDropdown'"
-                                            [label]="commonLocaleData?.app_stock"
                                             [placeholder]="commonLocaleData?.app_select_stock"
                                             [options]="manufacturingObject.manufacturingDetails[0].stocks"
                                             (selectedOption)="
@@ -101,21 +100,22 @@
                                                 );
                                                 loadStockVariantsByStockUniqueName($event?.value)
                                             "
-                                            [labelValue]="manufacturingObject.manufacturingDetails[0].stockName"
+                                            [defaultValue]="manufacturingObject.manufacturingDetails[0].stockName"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
                                             (dynamicSearchedQuery)="
                                                 getStocks(manufacturingObject.manufacturingDetails[0], 1, $event)
                                             "
                                             (scrollEnd)="stockScrollEnd(manufacturingObject.manufacturingDetails[0])"
+                                            [allowValueReset]="true"
                                             (onClear)="resetStocks(manufacturingObject.manufacturingDetails[0])"
                                             [readonly]="isCompany || isConsolidatedBranch"
                                         >
-                                        </reactive-dropdown-field>
+                                        </dropdown-field>
                                     </div>
 
                                     <div *ngIf="stockVariants?.length > 1">
-                                        <reactive-dropdown-field
+                                        <dropdown-field
                                             [cssClass]="errorFields.finishedStockVariant ? ' required-field-error' : ''"
                                             [name]="'variantUniqueName'"
                                             [placeholder]="commonLocaleData?.app_select_variant"
@@ -127,10 +127,10 @@
                                                     $event.value;
                                                 getVariantRecipe()
                                             "
-                                            [labelValue]="manufacturingObject.manufacturingDetails[0].variant.name"
+                                            [defaultValue]="manufacturingObject.manufacturingDetails[0].variant.name"
                                             [readonly]="isCompany || isConsolidatedBranch"
                                         >
-                                        </reactive-dropdown-field>
+                                        </dropdown-field>
                                     </div>
 
                                     <div>
@@ -159,6 +159,12 @@
                                             "
                                         >
                                         </input-field>
+                                        <!-- <small
+                                            >{{ localeData?.multiple_of }}
+                                            <span>{{
+                                                manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf
+                                            }}</span>
+                                        </small> -->
                                     </div>
 
                                     <div
@@ -166,7 +172,7 @@
                                         *ngIf="!isCompany && !isConsolidatedBranch"
                                     >
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
                                             color="primary"
                                             class="mt-2"
                                             [disabled]="isLoading"
@@ -184,7 +190,7 @@
                                             {{ commonLocaleData?.app_clear }}
                                         </button>
                                         <button
-                                            mat-raised-button
+                                            mat-stroked-button
                                             color="primary"
                                             class="mt-2"
                                             [disabled]="isLoading"
@@ -196,6 +202,7 @@
                                         <button
                                             mat-stroked-button
                                             class="mt-2"
+                                            color="warn"
                                             (click)="deleteManufacturing()"
                                             *ngIf="manufactureUniqueName"
                                         >

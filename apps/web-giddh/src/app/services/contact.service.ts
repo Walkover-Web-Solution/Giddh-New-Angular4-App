@@ -144,7 +144,7 @@ export class ContactService {
 
     /**
      * Refresh go-cardless bank transactions
-     *
+     * 
      * . @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
      * @memberof ContactService
      */

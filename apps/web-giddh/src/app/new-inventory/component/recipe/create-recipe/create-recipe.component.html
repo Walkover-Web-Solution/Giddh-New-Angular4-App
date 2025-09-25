@@ -12,14 +12,14 @@
             <!-- <div class="row">
                 <div class="col-3 mt-2">
                     <div>
-                        <reactive-dropdown-field
+                        <dropdown-field
                             class="width-280"
                             [name]="''"
                             [placeholder]="'Select Stock'"
                             [options]="stock"
-                            [labelValue]=""
+                            [defaultValue]=""
                         >
-                        </reactive-dropdown-field>
+                        </dropdown-field>
                     </div>
                 </div>
             </div> -->
@@ -31,20 +31,20 @@
                                 <div class="d-flex flex-column flex-wrap w-100 row-gap">
                                     <h1 class="section-head pb-2 w-100">{{ localeData?.finished_stock }}</h1>
                                     <div *ngIf="stock?.variants?.length > 1" class="w-100">
-                                        <reactive-dropdown-field
+                                        <dropdown-field
                                             class="width-280"
                                             [name]="'variant_' + i"
                                             [scrollableElementId]="'variant_' + i"
                                             [placeholder]="localeData?.select_output_variant"
                                             [options]="variantsList"
-                                            [labelValue]="recipe.variant?.name"
+                                            [defaultValue]="recipe.variant?.name"
                                             (selectedOption)="
                                                 recipe.variant.name = $event.label;
                                                 recipe.variant.uniqueName = $event.value;
                                                 checkIfVariantIsAlreadyUsed(recipe, $event, i)
                                             "
                                         >
-                                        </reactive-dropdown-field>
+                                        </dropdown-field>
                                     </div>
                                     <div class="w-100">
                                         <input-field
@@ -56,18 +56,18 @@
                                         ></input-field>
                                     </div>
                                     <div class="w-100">
-                                        <reactive-dropdown-field
+                                        <dropdown-field
                                             [name]="'unit_' + i"
                                             [scrollableElementId]="'unit_' + i"
                                             [placeholder]="localeData?.select_output_stock_unit"
                                             [options]="recipe.units"
-                                            [labelValue]="recipe.manufacturingUnitCode"
+                                            [defaultValue]="recipe.manufacturingUnitCode"
                                             (selectedOption)="
                                                 recipe.manufacturingUnitCode = $event.label;
                                                 recipe.manufacturingUnitUniqueName = $event.value
                                             "
                                         >
-                                        </reactive-dropdown-field>
+                                        </dropdown-field>
                                     </div>
                                 </div>
                             </div>
@@ -488,4 +488,17 @@
         </div>
     </section>
 
+    <!-- view-mode -->
+    <!-- <section class="create-recipe">
+        <div class="recipe-wrapper">
+            <div class="row">
+                <div class="col-3 pb-3">
+                    <div>
+                        <p>Stock</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section> -->
 </ng-container>

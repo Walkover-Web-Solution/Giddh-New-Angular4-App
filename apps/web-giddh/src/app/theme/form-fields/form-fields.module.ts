@@ -23,6 +23,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatButtonModule } from "@angular/material/button";
 import { InputFieldComponent } from "./input-field/input-field.component";
+import { DropdownFieldComponent } from "./dropdown-field/dropdown-field.component";
 import { ReactiveDropdownFieldComponent } from "./reactive-dropdown-field/reactive-dropdown-field.component";
 import { OptionsScrollDirective } from "./reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 import { MatDividerModule } from "@angular/material/divider";
@@ -33,6 +34,7 @@ import { MatDividerModule } from "@angular/material/divider";
         SelectFieldComponent,
         SelectMultipleFieldsComponent,
         InputFieldComponent,
+        DropdownFieldComponent,
         ReactiveDropdownFieldComponent,
         OptionsScrollDirective
     ],
@@ -66,6 +68,7 @@ import { MatDividerModule } from "@angular/material/divider";
         SelectMultipleFieldsComponent,
         MatFormFieldModule,
         InputFieldComponent,
+        DropdownFieldComponent,
         ReactiveDropdownFieldComponent
     ]
 })

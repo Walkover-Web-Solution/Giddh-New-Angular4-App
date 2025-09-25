@@ -6,13 +6,13 @@ import * as dayjs from 'dayjs';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flatten-accounts-result-item.interface';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
 import { INameUniqueName } from '../models/api-models/Inventory';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { ICurrencyResponse } from '../models/api-models/Company';
 import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { ITaxControlData } from '../models/interfaces/tax.interface';
-import { IOption } from '../app.constant';
 
 export class LedgerVM {
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;

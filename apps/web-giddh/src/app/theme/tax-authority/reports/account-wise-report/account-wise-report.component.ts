@@ -7,8 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { saveAs } from "file-saver";
 import { SalesTaxReport } from '../../utility/tax-authority.const';
 import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-response.interface';
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
-import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
 
 
 @Component({
@@ -33,12 +32,12 @@ export class AccountWiseReportComponent implements OnInit {
     /** Holds pagination request  */
     public pagination: IPagination = {
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: this.pageSizeOptions[2],
         totalItems: null,
         totalPages: null
     };
-    /** This will hold the boolean value to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: boolean = true;
+    /** This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Account Wise Report Observable */
@@ -192,11 +191,11 @@ export class AccountWiseReportComponent implements OnInit {
     * @param {*} event
     * @memberof AccountWiseReportComponent
     */
-    public handlePageChange(event: PageEvent): void {
+    public handlePageChange(event: any): void {
         if (event) {
             this.pageIndex = event.pageIndex;
-            this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.pagination.count = event.pageSize;
+            this.pagination.page = event.pageIndex + 1;
             this.getSalesTaxReport();
         }
     }
@@ -209,6 +208,6 @@ export class AccountWiseReportComponent implements OnInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.asideGstSidebarMenuState = false;
+        this.asideGstSidebarMenuState === 'out';
     }
 }

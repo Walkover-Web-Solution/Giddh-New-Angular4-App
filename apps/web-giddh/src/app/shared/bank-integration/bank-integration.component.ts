@@ -6,8 +6,9 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
-import { BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIES, IOption } from "../../app.constant";
+import { BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIES } from "../../app.constant";
 import { SalesService } from "../../services/sales.service";
+import { IOption } from '../../theme/ng-select/option.interface';
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
 import { cloneDeep, isEmpty } from '../../lodash-optimized';
@@ -18,8 +19,6 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { NgForm } from '@angular/forms';
 import { InstitutionsListComponent } from "./institutions-list/institutions-list.component";
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { ServiceConfig } from "../../services/service.config";
-
 @Component({
     selector: 'bank-integration',
     templateUrl: './bank-integration.component.html',
@@ -59,7 +58,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Holds array of company uniqueNames which ICICI allowed companies */
-    public iciciAllowedCompanies: any[] = [];
+    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
     /** Holds image path */
     public imgPath: string = '';
     /** Holds Create New Account Dialog Ref */
@@ -103,7 +102,6 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         private _companyActions: CompanyActions,
         private router: Router,
         private store: Store<AppState>,
-        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService,
         private settingsPermissionActions: SettingsPermissionActions,
         private activateRoute: ActivatedRoute,
@@ -113,11 +111,8 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         private changeDetectionRef: ChangeDetectorRef,
         private toasty: ToasterService,
         public dialog: MatDialog
-    ) {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
-    }
-    
+    ) { }
+
     /**
     * This function will use for get institutions details
     *
@@ -131,12 +126,13 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         }
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
-            panelClass: ['subscription-sidebar', 'mat-dialog-md'],
+            width: 'var(--aside-pane-width)',
+            panelClass: 'subscription-sidebar',
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);
@@ -163,7 +159,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.loadPaymentData();
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 res.userEntityRoles.forEach(role => {
@@ -468,7 +464,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
             }

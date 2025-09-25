@@ -10,11 +10,11 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { InventoryService } from '../../../services/inventory.service';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store/roots';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { StockUnits } from './stock-unit';
 import { ToasterService } from '../../../services/toaster.service';
 import { cloneDeep, isEmpty } from '../../../lodash-optimized';
 import { NgForm } from '@angular/forms';
-import { IOption } from '../../../app.constant';
 
 @Component({
     selector: 'inventory-custom-stock',
@@ -65,8 +65,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public stockUnitsList = [...StockUnits];
     /** Holds list of create units */
     public stockMappedUnits: any;
-    /** Displayed columns for custom stock units mat-table */
-    public displayedColumns: string[] = ['unitName', 'mappedUnit', 'actions'];
 
     constructor(
         private store: Store<AppState>,

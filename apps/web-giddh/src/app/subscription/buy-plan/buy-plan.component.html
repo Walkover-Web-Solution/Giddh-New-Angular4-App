@@ -85,6 +85,10 @@
                                         class="d-flex column-gap15 align-items-center ml-auto"
                                         *ngIf="inputData?.length"
                                     >
+                                        <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
+                                        Activate Via Key
+                                    </button> -->
+                                        <!-- <div class="form-group col-md-2" *ngIf="isNewUserLoggedIn"> -->
                                         <div class="custom-tab w-100">
                                             <mat-button-toggle-group
                                                 *ngIf="monthlyPlans?.length && yearlyPlans?.length"
@@ -108,7 +112,17 @@
                                     </div>
                                 </div>
                                 <ng-container *ngIf="!(planListInProgress$ | async) && !isLoading && inputData?.length">
-                                    <div #tableContent class="plan-table">
+                                    <!-- <div class="scroll-left">
+                                        <button mat-stroked-button color="primary" (click)="scrollLeft()">
+                                            <i class="icon-left"></i>
+                                        </button>
+                                    </div>
+                                    <div class="scroll-right">
+                                        <button mat-stroked-button color="primary" (click)="scrollRight()">
+                                            <i class="icon-right"></i>
+                                        </button>
+                                    </div> -->
+                                    <div #tableContent class="plan-table mat-elevation-z8">
                                         <div class="grid-list-div top-heading">
                                             <div class="grid-title-left grid-title-left-top">
                                                 <span class="inner-name inner-name-bold mat-table-sticky"> </span>
@@ -346,8 +360,7 @@
                                                             </p>
                                                         </ng-container>
                                                         <button
-                                                            *ngIf="firstStepForm.get('planUniqueName').value === plan?.uniqueName"
-                                                            mat-raised-button
+                                                            mat-stroked-button
                                                             color="primary"
                                                             class="selected-plan-button mt-auto"
                                                             aria-label="monthly"
@@ -363,27 +376,12 @@
                                                             (click)="selectPlan(plan)"
                                                         >
                                                             <span class="font-14">
-                                                                {{ localeData?.select_plan }}
-                                                            </span>
-                                                        </button>
-                                                        <button
-                                                            *ngIf="firstStepForm.get('planUniqueName').value !== plan?.uniqueName"
-                                                            mat-stroked-button
-                                                            class="selected-plan-button mt-auto"
-                                                            aria-label="monthly"
-                                                            [class.selected]="
-                                                                firstStepForm.get('planUniqueName').value ===
-                                                                plan?.uniqueName
-                                                            "
-                                                            [ngClass]="{
-                                                                'selected-plan':
-                                                                    firstStepForm.get('planUniqueName').value ===
-                                                                    plan?.uniqueName
-                                                            }"
-                                                            (click)="selectPlan(plan)"
-                                                        >
-                                                            <span class="font-14">
-                                                                {{ localeData?.select_plan }}
+                                                                {{
+                                                                    firstStepForm.get("planUniqueName").value ===
+                                                                    plan.uniqueName
+                                                                        ? localeData?.selected
+                                                                        : localeData?.select_plan
+                                                                }}
                                                             </span>
                                                         </button>
                                                     </div>
@@ -768,20 +766,20 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="width-100">
-                                                    <reactive-dropdown-field
+                                                    <dropdown-field
                                                         [name]="'subscriptionCountry' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_country + '*'"
                                                         [placeholder]="commonLocaleData?.app_country"
                                                         class="mb-3 d-block"
                                                         [options]="commonCountrySource"
                                                         (selectedOption)="selectCountry($event)"
-                                                        [labelValue]="selectedCountry"
+                                                        [defaultValue]="selectedCountry"
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('country')?.value
                                                         "
                                                         [autocomplete]="'subscriptionCountry' + currentTimeStamp"
                                                     >
-                                                    </reactive-dropdown-field>
+                                                    </dropdown-field>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -805,7 +803,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div *ngIf="!countyList?.length">
-                                                    <reactive-dropdown-field
+                                                    <dropdown-field
                                                         [name]="'subscriptionState' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_state + '*'"
                                                         [placeholder]="commonLocaleData?.app_state"
@@ -814,15 +812,15 @@
                                                             isFormSubmitted && !secondStepForm.get('state')?.value
                                                         "
                                                         [readonly]="disabledState"
-                                                        [labelValue]="selectedState"
+                                                        [defaultValue]="selectedState"
                                                         (selectedOption)="selectState($event)"
                                                         [ngClass]="{ 'readonly-field': disabledState }"
                                                         [autocomplete]="'subscriptionState' + currentTimeStamp"
                                                     >
-                                                    </reactive-dropdown-field>
+                                                    </dropdown-field>
                                                 </div>
                                                 <div *ngIf="countyList?.length">
-                                                    <reactive-dropdown-field
+                                                    <dropdown-field
                                                         [name]="'subscriptionCounty' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_region + '*'"
                                                         [placeholder]="commonLocaleData?.app_select_region"
@@ -830,11 +828,11 @@
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('state')?.value
                                                         "
-                                                        [labelValue]="selectedState"
+                                                        [defaultValue]="selectedState"
                                                         (selectedOption)="selectState($event)"
                                                         [autocomplete]="'subscriptionCounty' + currentTimeStamp"
                                                     >
-                                                    </reactive-dropdown-field>
+                                                    </dropdown-field>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -1095,7 +1093,7 @@
                         <div class="mt-3">
                             <button
                                 [disabled]="isChangePlan && !isUserManualChangePlan && !isRenewPlan && !isTrialPlan"
-                                mat-raised-button
+                                mat-stroked-button
                                 aria-label="next"
                                 color="primary"
                                 class="w-100"
@@ -1105,7 +1103,7 @@
                                 {{ localeData?.continue_billing_account }}
                             </button>
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 aria-label="next-step"
                                 color="primary"
                                 class="w-100"
@@ -1116,7 +1114,7 @@
                             </button>
                             <button
                                 aria-label="submit"
-                                mat-raised-button
+                                mat-stroked-button
                                 color="primary"
                                 class="w-100"
                                 *ngIf="selectedStep === 2 && !isChangePlan"
@@ -1126,7 +1124,7 @@
                             </button>
                             <button
                                 aria-label="submit"
-                                mat-raised-button
+                                mat-stroked-button
                                 color="primary"
                                 class="w-100 mt-2"
                                 *ngIf="selectedStep === 2"

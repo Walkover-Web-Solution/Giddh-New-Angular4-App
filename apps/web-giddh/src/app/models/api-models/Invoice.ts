@@ -9,7 +9,6 @@ import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interfa
 import { IPagination } from '../interfaces/paginated-response.interface';
 import { AmountClassMulticurrency, OtherSalesItemClass, VoucherTypeEnum } from './Sales';
 import { INameUniqueName } from './Inventory';
-import { PAGINATION_LIMIT } from '../../app.constant';
 
 export interface IInvoiceResult {
     companyName: string;
@@ -28,7 +27,7 @@ export interface IInvoiceResult {
 export class CommonPaginatedRequest {
     public from?: string;
     public to?: string;
-    public count?: number = PAGINATION_LIMIT;
+    public count?: number;
     public page?: number;
     public dateRange?: Date[];
     public size?: number;
@@ -672,7 +671,7 @@ export class IEwayBillfilter {
     fromDate?: any;
     toDate?: any;
     page?: number;
-    count?: number = PAGINATION_LIMIT;
+    count?: number;
     branchUniqueName?: string;
     gstin?: string;
     failedRequestLog?: boolean;

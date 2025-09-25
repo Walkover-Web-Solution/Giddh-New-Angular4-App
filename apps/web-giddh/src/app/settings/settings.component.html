@@ -6,7 +6,7 @@
 >
     <div
         class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState"
+        *ngIf="asideGstSidebarMenuState === 'in'"
     >
         <tax-sidebar
             (navigateEvent)="handleNavigation()"

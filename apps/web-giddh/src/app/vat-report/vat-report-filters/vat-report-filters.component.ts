@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GeneralService } from '../../services/general.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { MatMenuTrigger } from '@angular/material/menu';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, RestrictedModules, SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, RestrictedModules, SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../../models/user-login-state';
@@ -79,12 +80,12 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     @Output() public taxAuthorityUniqueName: EventEmitter<string> = new EventEmitter<string>();
     /** Emits selected taxUniqueName */
     @Output() public taxUniqueName: EventEmitter<string> = new EventEmitter<string>();
-    /** Universal Datepicker menu trigger reference */
-    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** Universal Datepicker template reference */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Hold selected from date */
     public from: string = '';
     /** Hold selected to date */
@@ -107,7 +108,11 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
-/** Selected range label */
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Datepicker modal reference */
+    public modalRef: BsModalRef;
+    /** Selected range label */
     public selectedRangeLabel: any = "";
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -184,6 +189,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
+        private modalService: BsModalService,
         public settingsFinancialYearService: SettingsFinancialYearService,
         private commonService: CommonService,
         private toaster: ToasterService,
@@ -195,6 +201,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     ) {
         this.getFinancialYears();
     }
+
 
     /**
      * Initializes the component
@@ -486,29 +493,40 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Toggles the datepicker menu
-     *
-     * @param {boolean} isOpen
-     * @memberof VatReportFiltersComponent
-     */
-    public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
-           this.universalDatepickerTrigger?.openMenu();
-        } else {
-           this.universalDatepickerTrigger?.closeMenu();
+    * To show the datepicker
+    *
+    * @param {*} element
+    * @memberof VatReportFiltersComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
-     }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
 
     /**
-     * Callback function for date/range selection in datepicker
+     * This will hide the datepicker
      *
-     * @param {*} value Selected date range value
      * @memberof VatReportFiltersComponent
      */
+    public hideGiddhDatepicker(): void {
+        this.modalRef?.hide();
+    }
+
+    /**
+    * Call back function for date/range selection in datepicker
+    *
+    * @param {*} value
+    * @memberof VatReportFiltersComponent
+    */
     public dateSelectedCallback(value?: any): void {
         this.hasQueryParams = false;
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
@@ -519,7 +537,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -560,7 +578,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             let endYear = endDate.split('-');
             endYear = endYear[endYear?.length - 1];
             for (let year = startYear; year <= endYear; year++) {
-                this.financialYears.push({ label: year.toString(), value: year.toString() });
+                this.financialYears.push({ label: year, value: year });
             }
             return { startYear: startYear, endYear: endYear };
         }

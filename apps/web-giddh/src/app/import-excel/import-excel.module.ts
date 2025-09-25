@@ -9,6 +9,10 @@ import { MapExcelDataComponent } from './map-excel-data/map-excel-data.component
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { UploadSuccessComponent } from './upload-success/upload-success.component';
 import { ImportReportComponent } from './import-report/import-report.component';
 import { SharedModule } from '../shared/shared.module';
@@ -18,10 +22,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
+        // Components / Directives/ Pipes
         ImportComponent,
         ImportTypeSelectComponent,
         ImportProcessComponent,
@@ -41,14 +45,17 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
             style: 'slide-left',
             spinnerSize: 30
         }),
+        ShSelectModule,
+        TooltipModule.forRoot(),
+        BsDropdownModule.forRoot(),
         ScrollingModule,
+        PaginationModule.forRoot(),
         SharedModule,
         WatchVideoModule,
         MatSlideToggleModule,
         MatButtonModule,
         MatTooltipModule,
-        FormFieldsModule,
-        MatCheckboxModule
+        FormFieldsModule
     ],
 })
 export class ImportExcelModule {

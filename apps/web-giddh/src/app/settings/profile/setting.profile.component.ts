@@ -1,5 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
+import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
 import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
@@ -7,6 +8,8 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { ToasterService } from '../../services/toaster.service';
 import { Organization, States, StatesRequest } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
+import { animate, style, transition, trigger, state } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { CountryRequest, OnboardingFormRequest } from "../../models/api-models/Common";
 import { GeneralActions } from '../../actions/general/general.actions';
@@ -22,7 +25,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
-import { IOption, PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 import { ExportFileNameComponent } from '../export-file-name/export-file-name.component';
@@ -37,7 +40,25 @@ export interface IGstObj {
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
     styleUrls: ['./setting.profile.component.scss'],
-    host: { 'class': 'settings-profile' }
+    host: { 'class': 'settings-profile' },
+    animations: [
+        trigger('fadeInAndSlide', [
+            transition(':enter', [
+                style({ opacity: '0', marginTop: '100px' }),
+                animate('.1s ease-out', style({ opacity: '1', marginTop: '20px' })),
+            ]),
+        ]),
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
     /** True if we need to hide tab and show manage address section only */
@@ -116,7 +137,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         page: 0,
         totalPages: 0,
         totalItems: 0,
-        count: PAGINATION_LIMIT
+        count: 0
     };
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -153,6 +174,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** True if initial data is fetched */
     private initialDataFetched: boolean = false;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
     /* This will hold list of tax (trn/vat) supported countries */
     public taxSupportedCountries = TAX_SUPPORTED_COUNTRIES;
     /* This will hold list of vat supported countries */
@@ -166,7 +189,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     /** True if initial data is fetched */
     public showTaxColumn: boolean;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
     /** Holds Active Tab Index */
     public activeTabIndex: number = 0;
     /** Holds true if get Linkied Entities API call in progress */
@@ -200,6 +223,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
+            }
+        });
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
             }
         });
 
@@ -561,6 +592,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.asideGstSidebarMenuState === 'out';
     }
 
     public isValidPAN(ele: HTMLInputElement) {
@@ -651,6 +683,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             delete obj['contactNo'];
         }
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+    }
+
+    public typeaheadOnSelect(e: TypeaheadMatch): void {
+        this.dataSourceBackup.forEach(item => {
+            if (item.city === e.item) {
+                this.companyProfileObj.country = item.country;
+                this.patchProfile({ city: this.companyProfileObj.city });
+            }
+        });
     }
 
     public pushToUpdate(event) {
@@ -1069,11 +1110,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public handleDeleteAddress(addressDetails: any): void {
         this.settingsProfileService.deleteAddress(addressDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
-                this.addressTabPaginationData.page = this.generalService.adjustPageIndex(this.addresses.length, this.addressTabPaginationData.page, this.addressTabPaginationData.count);
-                this.loadAddresses('GET');
-                this._toasty.successToast('Address deleted successfully');
-            }
+            this.loadAddresses('GET');
+            this._toasty.successToast('Address deleted successfully');
         });
     }
 
@@ -1232,12 +1270,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private loadAddresses(method: string, params?: any): void {
         if (this.currentOrganizationType === OrganizationType.Company) {
             this.shouldShowAddressLoader = true;
-            const paginationParams = {
-                page: this.addressTabPaginationData.page,
-                count: this.addressTabPaginationData.count,
-                ...params
-            };
-            this.settingsProfileService.getCompanyAddresses(method, paginationParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.shouldShowAddressLoader = false;
                 if (response && response.body && response.status === 'success') {
                     this.updateAddressPagination(response.body);
@@ -1308,6 +1341,16 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
                         this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
                     }
+
+                    this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+                        if (this.isMobileScreen) {
+                            if (shouldOpen) {
+                                this.asideGstSidebarMenuState = 'in';
+                            } else {
+                                this.asideGstSidebarMenuState = 'out';
+                            }
+                        }
+                    });
 
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                         if (activeCompany) {

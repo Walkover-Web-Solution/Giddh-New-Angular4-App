@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -12,6 +11,7 @@ import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged 
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MMM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GeneralService } from '../../../services/general.service';
@@ -19,7 +19,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';
@@ -29,6 +29,8 @@ import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.
 import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
 @Component({
     selector: 'purchase-register-component',
     templateUrl: './purchase.register.component.html',
@@ -37,7 +39,7 @@ import { GroupBy } from '../../constants/reports.constant';
 })
 export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     /** Directive to get reference of element */
-    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     bsValue = new Date();
     public reportRespone: PurchaseReportsModel[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -123,15 +125,20 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         salesPersonUniqueNames: new FormControl<string[]>([]),
         interval: new FormControl<DurationEnum | null>(null)
     });
+    /** Hold Bootstrap Modal Reference */
+    public modalRef: BsModalRef;
     /** Holds selected date range */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-constructor(
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+
+    constructor(
         private router: Router,
         private activeRoute: ActivatedRoute,
         private store: Store<AppState>,
@@ -145,7 +152,8 @@ constructor(
         private ledgerService: LedgerService,
         private dialog: MatDialog,
         private componentStore: ReportsComponentStore,
-        private salesPersonStore: SalesPersonComponentStore) {
+        private salesPersonStore: SalesPersonComponentStore,
+        private modalService: BsModalService) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -259,6 +267,7 @@ constructor(
             takeUntil(this.destroyed$), distinctUntilChanged()).subscribe((search: string) => {
                 this.getAccounts(search ? search : '');
             });
+
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -706,37 +715,48 @@ constructor(
         };
         this.componentStore.getAccounts(params);
     }
-    
+
     /**
-     * This will toggle the datepicker
-     *
-     * @param {boolean} isOpen
-     * @memberof PurchaseRegisterComponent
-     */
-    public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
+    * To show the datepicker
+    *
+    * @param {*} element
+    * @memberof ReportsDetailsComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof ReportsDetailsComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof PurchaseRegisterComponent
+     * @memberof ReportsDetailsComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

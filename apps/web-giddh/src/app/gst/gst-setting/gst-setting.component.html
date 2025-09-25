@@ -7,11 +7,11 @@
 >
     <div
         class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState"
+        *ngIf="asideGstSidebarMenuState === 'in'"
     >
         <div
             class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState"
+            *ngIf="asideGstSidebarMenuState === 'in'"
         >
             <tax-sidebar
                 (navigateEvent)="handleNavigation()"
@@ -25,15 +25,15 @@
                 <div class="w-100">
                     <div class="mr-t2 payment-dropdown">
                         <div class="form-group">
-                            <reactive-dropdown-field
+                            <dropdown-field
                                 [label]="localeData?.export_type"
                                 [cssClass]="'theme-selection'"
                                 [options]="exportTypes"
-                                [labelValue]="exportType"
+                                [defaultValue]="exportType"
                                 [placeholder]="localeData?.select_export_type"
                                 [name]="'exportType'"
                                 (selectedOption)="setExportType($event)"
-                            ></reactive-dropdown-field>
+                            ></dropdown-field>
                         </div>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                             <div class="lut-form-wrapper">
                                 <div class="d-flex justify-content-end pd-t15">
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         color="primary"
                                         aria-label="save"
                                         (click)="saveLutNumbers()"

@@ -22,11 +22,13 @@ import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-wa
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 import { AddressSettingsComponent } from './address-settings/address-settings.component';
 import { OtherSettingsComponent } from './other-settings/other-settings.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
+import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
@@ -40,6 +42,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
@@ -60,10 +63,10 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { TagsModule } from './tags/tags.module';
 import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
-import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
-import { MatListModule } from '@angular/material/list';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
+import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
+import { MatListModule } from '@angular/material/list';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
 import { NewConfirmModalModule } from '../theme/new-confirm-modal';
@@ -71,12 +74,9 @@ import { ShopifyIntegrationComponent } from './shopify-integration/shopify.inter
 import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
 import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
 import { MatDividerModule } from '@angular/material/divider';
-import { OverlayModule } from '@angular/cdk/overlay';
-import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { ExportFileNameComponent } from './export-file-name/export-file-name.component';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replaceAll.module';
-import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     declarations: [
@@ -119,6 +119,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         CurrencyModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
+        ShSelectModule,
+        SalesShSelectModule,
         TaxSidebarModule,
         ReplacePipeModule,
         NoDataModule,
@@ -133,6 +135,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatDialogModule,
         ConfirmModalModule,
         MatSlideToggleModule,
+        BsDropdownModule.forRoot(),
         MatGridListModule,
         FormFieldsModule,
         MatInputModule,
@@ -158,12 +161,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         BankIntegrationModule,
         SerialNumberPipe,
         NewConfirmModalModule,
-        OverlayModule,
-        GiddhDatepickerModule,
         TributeMentionModule,
         ReplaceAllPipeModule,
-        TitleCasePipe,
-        MatPaginatorModule
+        TitleCasePipe
     ],
 })
 

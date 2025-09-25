@@ -3,7 +3,7 @@ import { Observable, of as observableOf } from 'rxjs';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { GeneralService } from '../../../services/general.service';
 import { SearchService } from '../../../services/search.service';
-import { IOption } from '../../../app.constant';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
     selector: 'petty-cash-approve-confirm-dialog',

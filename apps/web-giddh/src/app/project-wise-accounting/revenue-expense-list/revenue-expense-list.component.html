@@ -32,27 +32,19 @@
 <ng-template #commonTemplateForIncomeAndExpense>
     <div class="section-center pd-15">
        <header class="d-flex align-items-center justify-content-space-between">
-            <div class="custom-datepicker" 
-                 [matMenuTriggerFor]="universalDatepicker" 
-                 #universalDatepickerTrigger="matMenuTrigger"
-                 role="button"
-                 aria-haspopup="true"
-                 aria-controls="universalDatepicker">
+            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                 <input
-                    matInput
                     type="text"
                     name="selectedDateRange"
-                    aria-label="Select date range"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                     class="giddh-datepicker date-range-picker"
-                    readonly
                 />
             </div>
             <div>
-                <span *ngIf="totalRevenueAndExpense$ | async as tre">
-                    <span>{{ defaultParamsValue.category === projectWiseAccountingType.Income ? localeData?.total_revenue : localeData?.total_expense }} : {{ tre.nonAssetsTotal }}</span>
+                <span *ngIf="totalRevenueAndExpense$ | async as totalRevenueExpense">
+                    <span>{{ defaultParamsValue.category === projectWiseAccountingType.Income ? localeData?.total_revenue : localeData?.total_expense }} : {{ totalRevenueExpense.nonAssetsTotal }}</span>
                     <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>
-                    <span>{{ localeData?.total_fixed_asset }} : {{ tre.assetsTotal }}</span>&nbsp;&nbsp;
+                    <span>{{ localeData?.total_fixed_asset }} : {{ totalRevenueExpense.assetsTotal }}</span>&nbsp;&nbsp;
                 </span>
                 <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
                     {{ commonLocaleData?.app_back }}
@@ -170,7 +162,7 @@
                         </td>
                         <td>
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 color="primary"
                                 (click)="createEntry(createAccountEntryForm.get('value')?.value)"
                             >
@@ -287,7 +279,7 @@
                                     </td>
                                     <td *ngIf="!isCompany" class="position-relative">
                                         <span class="editable-table-hide-element">
-                                            <button mat-raised-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
+                                            <button mat-stroked-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
                                             <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
                                         </span>
                                     </td>
@@ -320,14 +312,15 @@
     </div>
 </ng-template>
 
-<!-- Date Picker Menu -->
-<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
-    <ng-template matMenuContent>
-        <app-datepicker-wrapper
+<!-- Date Picker  -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
             [inputStartDate]="selectedDateRange?.startDate"
             [inputEndDate]="selectedDateRange?.endDate"
             [alwaysShowCalendars]="true"
-            [ranges]="datePickerOptions"
+            [ranges]="datePickerOption"
             [selectedRangeLabel]="selectedRangeLabel"
             [showCustomRangeLabel]="true"
             [showClearButton]="false"
@@ -336,10 +329,10 @@
             [showDropdowns]="true"
             (rangeClicked)="dateSelectedCallback($event)"
             (datesUpdated)="dateSelectedCallback($event)"
-            (closeCalender)="toggleGiddhDatepicker(false)"
             [keepCalendarOpeningWithRange]="false"
             [showRangeLabelOnInput]="false"
-            >
-        </app-datepicker-wrapper>
-    </ng-template>
-</mat-menu>
+            [dateFieldPosition]="dateFieldPosition">
+            </app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

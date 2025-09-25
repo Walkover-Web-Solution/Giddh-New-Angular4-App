@@ -1,11 +1,9 @@
 <ng-container appTranslate [file]="'activity-logs'" (localeData)="localeData = $event">
-    <div class="dialog-header">
-        <span>{{ localeData?.activity_logs }}</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close>
-            <i class="icon-cross"></i>
-        </button>
+    <div class="modal-header d-flex align-items-center activity-header">
+        <h3>{{ localeData?.activity_logs }}</h3>
+        <button aria-hidden="true" class="close" mat-dialog-close>×</button>
     </div>
-    <mat-dialog-content class="dialog-body">
+    <mat-dialog-content class="all-activity-content w-100">
         <div #activityLogs class="logs-content"></div>
     </mat-dialog-content>
 </ng-container>

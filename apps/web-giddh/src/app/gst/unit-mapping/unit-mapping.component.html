@@ -4,10 +4,10 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-<div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+<div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
     <div
         class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState"
+        *ngIf="asideGstSidebarMenuState === 'in'"
     >
         <tax-sidebar
             (navigateEvent)="handleNavigation()"
@@ -28,18 +28,18 @@
             <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of unitsArray">
                 <div class="unit-value overflow-hidden pd-l1">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
                 <div class="map-unit-value pd-r1">
-                    <reactive-dropdown-field
+                    <dropdown-field
                         [label]="commonLocaleData?.app_unit"
                         [placeholder]="localeData?.select_unit"
                         [options]="units"
-                        [labelValue]="unit?.mappedGstUnit ?? ''"
+                        [defaultValue]="unit?.mappedGstUnit ?? ''"
                         (selectedOption)="unit.mappedGstUnit = $event?.value"
-                    ></reactive-dropdown-field>
+                    ></dropdown-field>
                 </div>
             </mat-grid-tile>
         </form>
     </mat-grid-list>
-    <div class="button-wrapper" *ngIf="voucherApiVersion === 2">
-        <button (click)="saveMapping()" mat-raised-button color="primary" [disabled]="disabled">Save</button>
+    <div class="button-wrapper">
+        <button (click)="saveMapping()" mat-stroked-button color="primary" [disabled]="disabled">Save</button>
     </div>
 </div>

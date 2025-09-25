@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { SettingsProfileService } from '../../services/settings.profile.service';
+import { IOption } from '../../theme/ng-select/option.interface';
 import { TributeConfig } from '../../shared/helpers/directives/tributeMention/tributeType';
 import { ToasterService } from '../../services/toaster.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IOption } from '../../app.constant';
 
 interface ExportSettingType {
     exportName: string;

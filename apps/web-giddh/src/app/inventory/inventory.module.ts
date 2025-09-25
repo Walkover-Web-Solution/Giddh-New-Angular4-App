@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AsideBranchTransferPaneComponent } from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
 import { AsideCustomStockComponent } from '../inventory/components/aside-custom-stock.components/aside-custom-stock.component';
 import { AsideInventoryComponent } from '../inventory/components/aside-inventory.components/aside-inventory.components';
@@ -43,17 +42,11 @@ import { InventoryRoutingModule } from './inventory.routing.module';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
+import { VoucherModule } from '../voucher/voucher.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MatTableModule } from '@angular/material/table';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     declarations: [
@@ -117,14 +110,14 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
     ],
     providers: [ExceptionLogService],
     imports: [
-        MatButtonModule,
         InventoryRoutingModule,
+        TooltipModule.forRoot(),
         SharedModule,
         Daterangepicker,
         TextCaseChangeModule,
-        
+        BsDropdownModule.forRoot(),
         CurrencyModule,
-        MatTabsModule,
+        TabsModule.forRoot(),
         ReactiveFormsModule,
         DigitsOnlyModule,
         NgxMaskModule.forRoot(),
@@ -133,19 +126,10 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         ConfirmModalModule,
         ScrollingModule,
         AsideMenuProductServiceModule,
+        VoucherModule,
         FormFieldsModule,
         MatSlideToggleModule,
-        MatDialogModule,
-        MatPaginatorModule,
-        GiddhDatepickerModule,
-        MatMenuModule,
-        MatButtonModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatTableModule,
-        MatCheckboxModule,
-        MatRadioModule,
-        MatExpansionModule
+        MatDialogModule
     ]
 })
 export class InventoryModule { }

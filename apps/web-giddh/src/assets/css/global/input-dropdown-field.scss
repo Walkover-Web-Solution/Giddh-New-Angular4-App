@@ -3,6 +3,7 @@ voucher-component,
 create-update-group,
 giddh-datepicker,
 stock-create-edit,
+dropdown-field,
 input-field,
 stock-balance,
 mat-form-field,
@@ -234,8 +235,16 @@ report-filters,
 }
 
 .mat-mdc-form-field {
+    &.mat-focused {
+        background-color: transparent;
+
+        .mat-text-field--focused {
+            background-color: transparent;
+        }
+    }
 
     &:hover {
+        background-color: transparent;
 
         .mat-mdc-form-field-focus-overlay {
             opacity: 0;
@@ -302,36 +311,17 @@ giddh-datepicker,
                 }
             }
         }
-
-        .mat-datepicker-input {
-            position: absolute;
-            margin-top: 12px;
-        }
-
-        .mat-datepicker-toggle {
-            position: relative;
-            left: 86px;
-
-            .mdc-icon-button {
-                svg {
-                    position: absolute;
-                    top: 12px;
-                    left: 0px;
-                }
-            }
-        }
     }
 }
-
-.mat-mdc-form-field-subscript-wrapper {
-    display: none;
-}
-
 
 .mdc-text-field--filled {
     &:not(.mdc-text-field--disabled) {
         background-color: transparent !important;
     }
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+    display: none;
 }
 
 .stock-option-fields {
@@ -425,6 +415,14 @@ add-company {
     &.mat-pseudo-checkbox-minimal {
         &::after {
             color: var(--color-giddh-blue);
+        }
+    }
+}
+
+.mat-mdc-option {
+    &:focus {
+        &.mdc-list-item {
+            background-color: transparent !important;
         }
     }
 }
@@ -549,7 +547,7 @@ body {
             }
         }
     }
-
+    
     /*----- dropdown-color ----*/
     div {
         &.mat-mdc-select-panel {
@@ -699,17 +697,6 @@ input-field {
     }
 }
 
-.readonly-field {
-    .dropdown-bg {
-        display: none !important;
-    }
-
-    .mat-mdc-form-field,
-    .mat-mdc-form-field input{
-        background-color: var(--color-primary-input-bar-background) !important;
-    }
-}
-
 reactive-dropdown-field {
     .dropdown-without-label {
         mat-form-field {
@@ -718,13 +705,6 @@ reactive-dropdown-field {
                 padding-right: 0;
             }
         }
-    }
-}
-
-@media screen and (max-width: 1024px) {
-    .mat-mdc-radio-group {
-        display: flex;
-        column-gap: 5px;
     }
 }
 

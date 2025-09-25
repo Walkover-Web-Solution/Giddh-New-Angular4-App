@@ -8,8 +8,8 @@ import { AppState } from '../../../store';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcile.actions';
 import { ToasterService } from '../../../services/toaster.service';
 import { GstReport, TaxServiceEnum, TaxServiceType } from '../../constants/gst.constant';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { cloneDeep, isEqual } from '../../../lodash-optimized';
-import { IOption } from '../../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector

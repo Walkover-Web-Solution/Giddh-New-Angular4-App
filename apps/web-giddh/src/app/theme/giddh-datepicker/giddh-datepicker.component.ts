@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 const noop = () => { };
 
@@ -65,20 +65,11 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
-    /** Callback function to notify parent component of value changes */
     private onChangeCallback: (_: any) => void = noop;
     /** This is used to show change date */
     public inputChange: any = '';
     /** True if datepicker has to be closed on focus */
     @Input() public closeDatepickerOnFocus: boolean = false;
-    /** Enable month and year selection mode */
-    @Input() public monthYearMode: boolean = false;
-    /** Start view for month/year picker */
-    @Input() public startView: 'month' | 'year' | 'multi-year' = 'month';
-    /** Start date for month/year picker */
-    @Input() public startAt: Date | null = null;
-    /** Emitting month and year selection */
-    @Output() public monthYearSelected: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(
         private adapter: DateAdapter<any>,
@@ -121,38 +112,6 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
         let selectedDate = (typeof (event?.value) === "object" && event?.value !== null) ? dayjs(event?.value).toDate() : dayjs(this.inputChange, GIDDH_DATE_FORMAT).toDate();
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
-    }
-
-    /**
-     * Handles month selection for month/year picker mode
-     *
-     * @param {any} normalizedMonth - Selected month from datepicker
-     * @param {MatDatepicker<any>} datepicker - Datepicker instance
-     * @memberof GiddhDatepickerComponent
-     */
-    public setMonthAndYear(normalizedMonth: any, datepicker: MatDatepicker<any>): void {
-        if (this.monthYearMode) {
-            const selectedDate = dayjs(normalizedMonth).toDate();
-            this.calendarDate = dayjs(selectedDate).format(GIDDH_DATE_FORMAT_MONTH_YEAR);
-            this.innerValue = selectedDate;
-            this.onChangeCallback(selectedDate);
-            this.monthYearSelected.emit(selectedDate);
-            this.dateSelected.emit(selectedDate);
-            datepicker.close();
-        }
-    }
-
-    /**
-     * Handles year selection for month/year picker mode - keeps datepicker open
-     *
-     * @param {any} normalizedYear - Selected year from datepicker
-     * @memberof GiddhDatepickerComponent
-     */
-    public setYear(normalizedYear: any): void {
-        if (this.monthYearMode) {
-            // Don't close datepicker, just update the view to show months for selected year
-            // The datepicker will automatically navigate to month view
-        }
     }
 
     /**
@@ -257,7 +216,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      *
      * @memberof GiddhDatepickerComponent
      */
-    public toggleDatepicker(): void {
+    public toggleDatepicker() {
         if (this.showToggleIcon) {
             this.emitDatepickerState(false);
             this.picker?.close();

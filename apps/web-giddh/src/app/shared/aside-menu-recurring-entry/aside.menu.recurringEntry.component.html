@@ -9,7 +9,7 @@
         <div class="form-header">
             <h3 class="aside-title">{{ localeData?.recurring_account }}</h3>
         </div>
-        <button mat-button (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+        <button mat-button id="closedialog" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="aside-body">
             <div class="aside-pane-form">
                 <form [formGroup]="form">
@@ -70,11 +70,12 @@
                         </select-field>
                     </div>
                     <div class="clearfix text-right" *ngIf="mode === 'create'">
-                        <button mat-stroked-button class="mat-field-border" (click)="closeAsidePane($event)">
+                        <button mat-stroked-button class="btn-sm mat-field-border" (click)="closeAsidePane($event)">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                         <button
-                            mat-raised-button color="primary"
+                            mat-buttton
+                            class="btn btn-success btn-sm"
                             [ladda]="isLoading"
                             (click)="saveRecurringInvoice()"
                         >
@@ -84,6 +85,7 @@
                     <div class="clearfix text-right" *ngIf="mode === 'update'">
                         <button
                             mat-stroked-button
+                            color="warn"
                             *ngIf="(!isCompany && !isConsolidatedBranch)"
                             class="btn-sm"
                             [ladda]="isDeleteLoading"
@@ -92,7 +94,7 @@
                             {{ commonLocaleData?.app_delete }}
                         </button>
                         <button
-                            mat-raised-button
+                            mat-stroked-button
                             color="primary"
                             *ngIf="(!isCompany && !isConsolidatedBranch)"
                             class="btn-sm"

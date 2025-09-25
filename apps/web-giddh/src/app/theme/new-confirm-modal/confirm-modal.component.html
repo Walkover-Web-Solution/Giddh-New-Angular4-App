@@ -1,18 +1,16 @@
 <div>
-    <div class="dialog-header">
-        <span>{{ inputData?.title }}</span>
-        <button mat-icon-button aria-label="close" (click)="sendResponse(null)">
-            <i class="icon-cross"></i>
-        </button>
+    <div class="modal-header">
+        <h3 class="modal-title">{{ inputData?.title }}</h3>
+        <button aria-hidden="true" class="close" (click)="sendResponse(null)">×</button>
     </div>
-    <mat-dialog-content class="dialog-body">
+    <div class="modal-body">
         <p [innerHTML]="inputData?.body"></p>
         <p class="text-gray font-15 mr-t05" *ngIf="inputData?.permanentlyDeleteMessage">
             {{ inputData?.permanentlyDeleteMessage }}
         </p>
-        <div class="d-flex column-gap1 mt-3 justify-content-end">
-            <button mat-raised-button color="primary" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
-            <button mat-stroked-button (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
-        </div>
-    </mat-dialog-content>
+    </div>
+    <div class="modal-footer">
+        <button mat-stroked-button color="primary" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
+        <button mat-stroked-button (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
+    </div>
 </div>

@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angu
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permission.utility';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
@@ -13,7 +14,8 @@ import { forEach, omit } from '../../../lodash-optimized';
 @Component({
     selector: 'permission-model',
     templateUrl: './permission.model.component.html',
-    styleUrls: ['./permission.model.component.scss']
+    styleUrls: ['./permission.model.component.scss'],
+    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 
 export class PermissionModelComponent implements OnInit, OnDestroy {

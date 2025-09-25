@@ -5,7 +5,7 @@ import * as dayjs from 'dayjs';
 import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { AdjustmentUtilityService } from '../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
-import { IOption } from '../../app.constant';
+import { IOption } from '../../theme/ng-select/ng-select';
 import { AdjustAdvancePaymentModal, Adjustment, AdvanceReceiptRequest, VoucherAdjustments } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GeneralService } from '../../services/general.service';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';

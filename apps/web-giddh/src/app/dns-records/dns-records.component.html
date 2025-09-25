@@ -45,7 +45,7 @@
                                                 <i
                                                     class="icon-copy-file cursor-pointer"
                                                     (click)="copyUrl(element.hostName, element, 'host')"
-                                                    [matTooltip]="commonLocaleData?.app_copy"
+                                                    [tooltip]="commonLocaleData?.app_copy"
                                                 ></i>
                                             </span>
                                             <span class="success mr-l05 copied-url" *ngIf="element.isCopiedHostName">{{
@@ -64,7 +64,7 @@
                                             <i
                                                 class="icon-copy-file cursor-pointer"
                                                 (click)="copyUrl(element.value, element, 'value')"
-                                                [matTooltip]="commonLocaleData?.app_copy"
+                                                [tooltip]="commonLocaleData?.app_copy"
                                             ></i>
                                         </span>
                                         <span class="success mr-l05 copied-url" *ngIf="element.isCopiedValue">{{

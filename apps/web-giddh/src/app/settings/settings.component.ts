@@ -56,10 +56,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public activeLocale: string = "";
     /** This holds heading for profile tab */
     public profileTabHeading: string = "";
-    /* This will hold the boolean value to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: boolean = true;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
     /** True if permission form has unsaved changes */
     public hasUnsavedChanges: boolean = true;
     /** Returns true if form is dirty else false */
@@ -142,11 +142,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             }
             if (this.activeTab === "taxes" || this.activeTab === "addresses" || this.activeTab === "reports") {
-                this.asideGstSidebarMenuState = true;
+                this.asideGstSidebarMenuState = "in";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
                 document.querySelector('body').classList.add('gst-sidebar-open');
             } else {
-                this.asideGstSidebarMenuState = false;
+                this.asideGstSidebarMenuState = "out";
                 document.querySelector('body').classList.add('setting-sidebar-open');
                 document.querySelector('body').classList.remove('gst-sidebar-open');
             }
@@ -304,7 +304,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('setting-sidebar-open');
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState = false;
+        this.asideGstSidebarMenuState = "out";
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -315,8 +315,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       * @memberof SettingsComponent
       */
     public toggleGstPane(): void {
-        if (this.asideGstSidebarMenuState) {
-            this.asideGstSidebarMenuState = false;
+        if (this.asideGstSidebarMenuState === 'in') {
+            this.asideGstSidebarMenuState = "out";
         }
     }
 

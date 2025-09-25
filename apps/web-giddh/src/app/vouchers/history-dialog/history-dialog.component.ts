@@ -6,7 +6,6 @@ import { GeneralService } from '../../services/general.service';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { GIDDH_DATE_FORMAT_TIME } from '../../shared/helpers/defaultDateFormat';
 import { PAGE_SIZE_OPTIONS } from '../../app.constant';
-import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-history-dialog',
@@ -77,10 +76,10 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
     * @param {*} event
     * @memberof HistoryDialogComponent
     */
-    public handlePageChange(event: PageEvent): void {
+    public handlePageChange(event: any): void {
         if (event) {
-            this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.pagination.count = event.pageSize;
+            this.pagination.page = event.pageIndex + 1;
             this.getVoucherVersions();
         }
     }

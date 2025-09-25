@@ -4,6 +4,9 @@
     "income": "Income",
     "expenses": "Expenses",
     "reload_data": "Reload Data",
+    "create_new_tag": "Create New Tag",
+    "tag_name": "Tag Name",
+    "tag_description": "Tag Desciption (optional)",
     "reconcile_mode": "Reconcile Mode",
     "switch_back_to_reconcile_mode": "Switch back to reconcile mode",
     "reconcile_mode_turned_off_message": "Reconcile mode will be turned off if the date is changed. Do you wish to continue?"

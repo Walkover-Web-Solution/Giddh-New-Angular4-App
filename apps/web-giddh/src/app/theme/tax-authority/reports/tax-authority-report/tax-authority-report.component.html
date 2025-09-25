@@ -4,7 +4,7 @@
     <!-- Tax Sidebar code  -->
     <div class="relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState">
+            *ngIf="asideGstSidebarMenuState === 'in'">
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
@@ -164,7 +164,7 @@
                         </ng-template>
 
                         <!-- Pagination  -->
-                        <div *ngIf="pagination?.totalItems > pageSizeOptions[0]">
+                        <div class="pagination-wrapper justify-content-end" *ngIf="pagination?.totalPages > 1">
                             <mat-paginator
                                 (page)="handlePageChange($event)"
                                 [length]="pagination?.totalItems"

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { ReportType } from './multi-currency.const';

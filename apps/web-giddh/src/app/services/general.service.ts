@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -18,6 +18,7 @@ import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/
 import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LedgerViewEnum } from '../models/api-models/Ledger';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 
@@ -34,7 +35,7 @@ export class GeneralService {
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     /** Stores the version number for new voucher APIs (1 for old APIs and 2 for new APIs) */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2 = 1;
 
     get user(): UserDetails {
         return this._user;
@@ -1147,6 +1148,9 @@ export class GeneralService {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
+                if (this.voucherApiVersion !== 2) {
+                    item.exchangeRate = balanceDueAmountConversionRate;
+                }
             }
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
@@ -2241,6 +2245,18 @@ export class GeneralService {
     }
 
     /**
+     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+     *
+     * @param {string} text - The string containing placeholders.
+     * @param {string[]} args - The list of values to replace the placeholders.
+     * @returns {string} A string where placeholders are replaced with corresponding arguments.
+     * @memberof GeneralService
+     */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    }
+
+    /**
      * Replaces placeholders in a URL with corresponding values from a model object.
      * @param url - The URL containing placeholders like `:key`.
      * @param model - An object containing key-value pairs to replace in the URL.
@@ -2258,18 +2274,6 @@ export class GeneralService {
             const placeholder = `:${key}`;
             return updatedUrl.replace(placeholder, encodeURIComponent(updatedModel[key]) || '');
         }, url);
-    }
-
-    /**
-    * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
-    *
-    * @param {string} text - The string containing placeholders.
-    * @param {string[]} args - The list of values to replace the placeholders.
-    * @returns {string} A string where placeholders are replaced with corresponding arguments.
-    * @memberof GeneralService
-    */
-    public replacePlaceholders(text: string, ...args: string[]): string {
-        return text.replace(/\[.*?\]/g, () => args.shift() || '');
     }
 
     /**
@@ -2414,24 +2418,6 @@ export class GeneralService {
             return { fromDate, toDate };
         }
         return { fromDate: '', toDate: '' };
-    }
-
-    /**
-     * Adjusts the page index based on the total number of items and the number of items to remove.
-     * If the total number of items minus the number of items to remove is a multiple of the count,
-     * and the page is greater than 1, the page index is decremented by 1.
-     *
-     * @param totalItems The total number of items.
-     * @param page The current page index.
-     * @param count The number of items per page.
-     * @param removeCount The number of items to remove (default is 1).
-     * @returns The adjusted page index.
-     */
-    public adjustPageIndex(totalItems: number, page: number, count: number, removeCount: number = 1) {
-        if (((totalItems - removeCount) % count === 0) && page > 1) {
-            page = page - 1;
-        }
-        return page;
     }
 }
 

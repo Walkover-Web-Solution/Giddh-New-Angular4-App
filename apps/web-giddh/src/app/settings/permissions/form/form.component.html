@@ -151,7 +151,7 @@
             </div>
             <div class="action-button text-right text-xl-left" [ngClass]="{ 'text-xl-right': isUpdtCase }">
                 <div class="add-btn">
-                    <button mat-raised-button color="primary" [ladda]="createPermissionInProcess$ | async" [disabled]="
+                    <button mat-stroked-button color="primary" [ladda]="createPermissionInProcess$ | async" [disabled]="
                             permissionForm?.invalid || isUserRestricted
                         " class="btn custom-btn">
                         <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
@@ -161,7 +161,7 @@
             </div>
         </div>
         <div class="ml-auto" *ngIf="isSuperAdminCompany">
-            <button mat-raised-button type="button" color="primary" *ngIf="!isUpdtCase"
+            <button mat-stroked-button type="button" color="primary" *ngIf="!isUpdtCase"
                 class="btn pull-right create-btn mr-0" [routerLink]="['/pages/permissions/list']"
                 [queryParams]="{ tab: 'settings' }">
                 {{ localeData?.add_custom_role }}

@@ -2,19 +2,16 @@ import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../../app.constant';
-import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute } from "@angular/router";
 import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
 import { CreateDiscount } from "apps/web-giddh/src/app/models/api-models/Inventory";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
 import { SettingsDiscountService } from "apps/web-giddh/src/app/services/settings.discount.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
-import { ActivatedRoute } from "@angular/router";
 import { ConfirmModalComponent } from "apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component";
 import { ReplaySubject, debounceTime, take, takeUntil } from "rxjs";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BREAKPOINT_SCREEN_SIZE } from "apps/web-giddh/src/app/app.constant";
-import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 
 /** Inteface for create payload for getAllDiscount API */
 export interface CustomerVendorDiscountBasic {
@@ -41,10 +38,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Pagination limit, items per page */
+    public paginationLimit: number = 100;
     /** Holds Pagination Information of (Account & Group) and Stocks  */
-    public pagination: any = this.paginationInit();
+    public pagination: any;
     /** Holds Mat Dailog Reference*/
     public dialogRef: MatDialogRef<any>;
     /* Observable to unsubscribe all the store listeners */
@@ -108,8 +105,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         private formBuilder: UntypedFormBuilder,
         private changeDetectorRef: ChangeDetectorRef,
         private scrollDispatcher: ScrollDispatcher,
-        private breakPointObservar: BreakpointObserver,
-        private generalService: GeneralService
+        private breakPointObservar: BreakpointObserver
     ) { }
 
     /**
@@ -181,14 +177,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             user: {
                 page: 1,
                 totalPages: null,
-                totalItems: null,
-                count: PAGINATION_LIMIT
+                totalItems: null
             },
             stock: {
                 page: 1,
                 totalPages: null,
-                totalItems: null,
-                count: PAGINATION_LIMIT
+                totalItems: null
             }
         }
     }
@@ -204,7 +198,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         let model: CustomerVendorDiscountBasic = {
             page: this.pagination.user.page,
-            count: this.pagination.user.count,
+            count: this.paginationLimit,
             group: this.groupUniqueName,
             userType: this.userFilterType,
             query: this.userSearchQuery
@@ -356,13 +350,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     private getAllDiscount(userData: any, query: string = ''): void {
         let model = {
             page: this.pagination.stock.page,
-            count: this.pagination.stock.count,
+            count: this.paginationLimit,
             uniqueName: userData?.uniqueName,
             query: query
         };
         this.isStockLoading = true;
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && response?.status === 'success') {
+            if (response && response?.body?.results?.length) {
                 this.initialiseAllDiscounts(userData, cloneDeep(response));
             } else {
                 this.currentUserStocks = [];
@@ -485,7 +479,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             ariaLabel: 'Confirm Dialog'
         });
 
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.deleteItem(uniqueName, type, isTemp, stockFormArrayIndex, variantFormArrayIndex);
             }
@@ -534,7 +528,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.inventoryService.deleteDiscountRecord(model).pipe(take(1)).subscribe((response) => {
                 if (response && response?.status === "success") {
                     this.showSaveDiscardButton = false;
-                    this.pagination.stock.page = this.generalService.adjustPageIndex(this.pagination.stock.totalItems, this.pagination.stock.page, this.pagination.stock.count);
                     if (type === 'variant') {
                         const stock = discounts.at(stockFormArrayIndex).get('variants') as UntypedFormArray;
                         var variant = stock.at(variantFormArrayIndex)?.value;
@@ -555,7 +548,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         this.currentUserStocks = [];
                     }
                     if (type === 'stock') {
-                        let currentUser = this.currentUser;
                         discounts.removeAt(stockFormArrayIndex);
                         if (discounts.length === 0) {
                             let indexInUserListArray = this.checkUserList(this.currentUser.uniqueName);
@@ -566,7 +558,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         }
                         this.currentUserStocks.splice(stockFormArrayIndex, 1);
                         this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
-                        this.getAllDiscount(currentUser, this.stockSearchQuery);
                     }
                     this.toaster.successToast(response?.body);
                 } else {
@@ -612,7 +603,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
                 const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
-                this.getAllDiscount(this.currentUser, this.stockSearchQuery);
             }
         }
     }
@@ -826,7 +816,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             type: type,
             group: this.groupUniqueName,
             page: 1,
-            count: PAGINATION_LIMIT
+            count: this.paginationLimit
         }
         this.dialogRef = this.dialog.open(this.addSearchModal, {
             width: '580px',
@@ -902,15 +892,16 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handles pagination events and updates API parameters
+     * Handle page change event for list of Default Stock and Variants
      *
-     * @param {PageEvent} event - Contains pagination details
+     * @param {*} event
      * @memberof CustomerWiseComponent
      */
-    public handlePageEvent(event: PageEvent): void {
-        this.pagination.stock.page = this.pagination.stock.count !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.pagination.stock.count = event.pageSize;
-        this.getAllDiscount(this.currentUser, this.stockSearchQuery);
+    public pageChanged(event: any): void {
+        if (event && this.pagination.stock.page !== event.page) {
+            this.pagination.stock.page = event.page;
+            this.getAllDiscount(this.currentUser, this.stockSearchQuery);
+        }
     }
 
     /**

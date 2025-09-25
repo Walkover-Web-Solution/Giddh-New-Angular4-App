@@ -13,20 +13,22 @@
         class="new-account-form"
         (ngSubmit)="actionAccount()"
     >
-        <div class="dialog-header" *ngIf="localeData?.payment">
-            <span>
+        <div class="modal-header" *ngIf="localeData?.payment">
+            <h3 mat-dialog-title class="modal-title">
                 {{ activeBankAccount ? localeData?.payment?.edit_account : localeData?.payment?.connect_icici_account }}
-            </span>
+            </h3>
             <button
                 mat-icon-button
-                aria-label="close"
+                [attr.aria-label]="commonLocaleData?.app_close"
+                class="close hover-orange"
                 type="button"
                 (click)="closeAccountModal()"
             >
-                <i class="icon-cross"></i>
+                ×
             </button>
         </div>
-        <mat-dialog-content class="dialog-body icici-account-create-edit">
+        <mat-dialog-content>
+            <div class="modal-body icici-account-create-edit">
                 <ng-container *ngIf="!isLoading && localeData?.payment">
                     <div class="" *ngIf="!activeBankAccount">
                         <input-field
@@ -55,24 +57,24 @@
                         ></input-field>
                     </div>
                     <div class="mr-t1">
-                        <reactive-dropdown-field
+                        <dropdown-field
                             [label]="localeData?.payment?.link_account_label"
                             [name]="'accountUniqueName'"
                             [placeholder]="localeData?.payment?.link_account_placeholder"
                             [options]="bankAccounts$ | async"
                             [required]="true"
                             (selectedOption)="accountForm?.get('accountUniqueName').patchValue($event.value)"
-                        ></reactive-dropdown-field>
+                        ></dropdown-field>
                     </div>
                     <div class="mr-t1" *ngIf="!activeBankAccount">
-                        <reactive-dropdown-field
+                        <dropdown-field
                             [label]="localeData?.payment?.user"
                             [name]="'userUniqueName'"
                             [placeholder]="localeData?.payment?.select_user"
                             [options]="usersList"
                             [required]="true"
                             (selectedOption)="accountForm?.get('userUniqueName').patchValue($event.value)"
-                        ></reactive-dropdown-field>
+                        ></dropdown-field>
                     </div>
                     <div class="mr-t1 custom-mat-form-field">
                         <mat-form-field class="w-100" appearance="outline">
@@ -93,9 +95,10 @@
                 <ng-container *ngIf="isLoading || !localeData?.payment">
                     <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                 </ng-container>
-            <div class="d-flex justify-content-end mt-3" *ngIf="!isLoading && localeData?.payment">
+            </div>
+            <div class="modal-footer" *ngIf="!isLoading && localeData?.payment">
                 <button
-                    mat-raised-button
+                    mat-stroked-button
                     color="primary"
                     type="submit"
                     class="btn mr-1"

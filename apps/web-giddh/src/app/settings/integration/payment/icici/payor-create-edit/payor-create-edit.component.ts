@@ -4,11 +4,11 @@ import { select, Store } from "@ngrx/store";
 import { SettingsIntegrationService } from "apps/web-giddh/src/app/services/settings.integration.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { AppState } from "apps/web-giddh/src/app/store";
+import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../constants/settings.constant";
 import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
-import { IOption } from "apps/web-giddh/src/app/app.constant";
 
 @Component({
     selector: 'icici-payor-account-create-edit',

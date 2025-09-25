@@ -2,6 +2,7 @@
     <div class="filter-band">
         <button
             mat-stroked-button
+            color="primary"
             (click)="redirectToGstFilingReturn()"
         >
             <svg
@@ -25,7 +26,7 @@
             <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
                 <button
-                    mat-raised-button
+                    mat-stroked-button
                     color="primary"
                     type="button"
                     [matMenuTriggerFor]="entityTypeMenu"
@@ -45,7 +46,7 @@
                 <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
                 <button
-                    mat-raised-button
+                    mat-stroked-button
                     color="primary"
                     type="button"
                     [matMenuTriggerFor]="entityTypeMenu"
@@ -235,11 +236,11 @@
             </table>
         </div>
         <!-- pagination -->
-        <div *ngIf="(viewTransaction$ | async)?.totalItems > pageSizeOptions[0]">
+        <div class="pagination-wrapper justify-content-end" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
             <mat-paginator
                 (page)="pageChanged($event)"
                 [length]="(viewTransaction$ | async)?.totalItems"
-                [pageSize]="filterParam?.count"
+                [pageSize]="(viewTransaction$ | async)?.count"
                 [showFirstLastButtons]="true"
                 [pageSizeOptions]="pageSizeOptions"
                 [hidePageSize]="false"

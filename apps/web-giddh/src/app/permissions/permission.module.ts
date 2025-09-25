@@ -5,7 +5,6 @@ import { PermissionRoutingModule } from './permission-routing-module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     imports: [
@@ -14,8 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
         PermissionRoutingModule,
         MatTooltipModule,
         FormFieldsModule,
-        MatSelectModule,
-        MatButtonModule
+        MatSelectModule
     ]
 })
 export class PermissionModule {

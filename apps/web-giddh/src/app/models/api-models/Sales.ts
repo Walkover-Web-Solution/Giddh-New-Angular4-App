@@ -6,7 +6,8 @@ import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 import * as dayjs from 'dayjs';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 import { ReferenceVoucher } from '../../ledger/ledger.vm';
-import { HIGH_RATE_FIELD_PRECISION, IOption } from '../../app.constant';
+import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { ITaxControlData } from '../interfaces/tax.interface';
 
 

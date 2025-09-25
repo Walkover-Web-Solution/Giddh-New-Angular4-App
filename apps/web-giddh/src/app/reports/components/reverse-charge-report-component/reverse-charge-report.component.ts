@@ -1,17 +1,18 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, TemplateRef } from '@angular/core';
 import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../../../models/api-models/ReverseCharge';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
+import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { Router } from '@angular/router';
 import { FormControl } from "@angular/forms";
@@ -23,8 +24,10 @@ import { FormControl } from "@angular/forms";
 })
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
-    /* This will hold the boolean value to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: boolean = true;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
     public showEntryDate = true;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -36,7 +39,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         sort: '',
         sortBy: '',
         page: 1,
-        count: PAGINATION_LIMIT
+        count: this.pageSizeOptions[2]
     };
     public reverseChargeReportPostRequest: ReverseChargeReportPostRequest = {
         supplierName: '',
@@ -47,22 +50,27 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public reverseChargeReportResults: any = {};
     public timeout: any;
+    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
     public universalDate: any[] = [];
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** Directive to get reference of datepicker menu trigger */
-    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-/** Observable to store the branches of current company */
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
     public currentCompanyBranches: Array<any>;
@@ -115,6 +123,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private reverseChargeService: ReverseChargeService,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
+        private modalService: BsModalService,
         private router: Router
     ) {
     }
@@ -246,10 +255,23 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState = false;
+        this.asideGstSidebarMenuState === 'out';
     }
 
-
+    /**
+     * Handle page change
+     *
+     * @param {*} event
+     * @memberof ReverseChargeReport
+     */
+    public pageChanged(event: any): void {
+        if (event) {
+            this.reverseChargeReportResults.results = [];
+            this.reverseChargeReportGetRequest.page = event.pageIndex + 1;
+            this.reverseChargeReportGetRequest.count = event.pageSize;
+            this.getReverseChargeReport(false);
+        }
+    }
 
     /**
      * This function will get the data of vat detailed report
@@ -377,30 +399,39 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     }
 
     /**
-     * This will toggle the datepicker
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof ReverseChargeReport
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
      *
-     * @param {boolean} isOpen Set to true to open the datepicker, false to close it
      * @memberof ReverseChargeReport
      */
-    public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (this.universalDatepickerTrigger) {
-            if (isOpen) {
-                this.universalDatepickerTrigger.openMenu();
-            } else {
-                this.universalDatepickerTrigger.closeMenu();
-            }
-        }
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value Selected date range object
+     * @param {*} value
      * @memberof ReverseChargeReport
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
@@ -408,7 +439,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

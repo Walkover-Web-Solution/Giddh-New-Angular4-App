@@ -9,7 +9,7 @@ import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
-import { IOption } from '../../app.constant';
+import { IOption } from '../../theme/ng-select/option.interface';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,8 +17,8 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { ASIDE_PANE_CONFIG, RestrictedModules } from '../../app.constant';
-import { MatTabGroup } from '@angular/material/tabs';
+import { BootstrapToggleSwitch, RestrictedModules } from '../../app.constant';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { ServiceConfig } from '../../services/service.config';
@@ -30,10 +30,8 @@ import { ServiceConfig } from '../../services/service.config';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
-    /** Selected tab index for Material tabs */
-    @ViewChild('staticTabsSettings', { static: true }) public staticTabs: MatTabGroup;
-    /** Selected tab index for Material tabs */
-    public selectedTabIndex: number = 0;
+
+    @ViewChild('staticTabsSettings', { static: true }) public staticTabs: TabsetComponent;
     /* This will hold selected voucher type */
     @Input() public selectedVoucher: string;
     public invoiceSetting: InvoiceSettings = new InvoiceSettings();
@@ -82,7 +80,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** True if user has invoice setting permissions */
     public hasInvoiceSettingPermissions: boolean = true;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** Index of selected tab */
+    public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
     /** Active company details */
@@ -228,6 +230,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             }
         });
     }
+    // public onChangeSendInvoiceViaSms(isChecked) {
+    //     if (!isChecked) {
+    //         this.invoiceSetting.smsContent = '';
+    //     }
+    // }
 
     /**
      * Add New Webhook
@@ -496,7 +503,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             this.invoiceSetting.generateAutoEWayBill = false;
         }
     }
-
+    
     /**
      * setInvoiceLockDate
      */
@@ -606,12 +613,20 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @memberof InvoiceSettingComponent
      */
     public selectTab(id: number) {
-        if (this.staticTabs) {
-            this.staticTabs.selectedIndex = id;
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
+            this.staticTabs.tabs[id].active = true;
         }
     }
 
-
+    /**
+     * Handles tab change
+     *
+     * @param {*} event
+     * @memberof InvoiceSettingComponent
+     */
+    public tabChanged(event: any): void {
+        this.selectedTabIndex = event?.index;
+    }
 
     /**
      * Open custom email dialog
@@ -621,8 +636,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
-            ...ASIDE_PANE_CONFIG,
-            data: voucherType
+            data: voucherType,
+            width: 'var(--aside-pane-width)',
+            height: '70vh',
+            position: {
+                right: '0',
+                bottom: '0'
+            },
+            disableClose: true
         });
     }
 
@@ -635,15 +656,5 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public getWhatsappSettingLabel(voucherType: string): string {
         return this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
-    }
-
-    /**
-     * Callback for tab change event
-     * @param {any} event - Tab change event
-     * @memberof InvoiceSettingComponent
-     */
-    public tabChanged(event: any): void {
-        this.selectedTabIndex = event?.index || 0;
-        this.cdr.detectChanges();
     }
 }

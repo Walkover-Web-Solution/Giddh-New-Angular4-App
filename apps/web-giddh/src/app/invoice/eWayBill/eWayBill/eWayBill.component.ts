@@ -1,5 +1,4 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { AppState } from '../../../store';
@@ -12,10 +11,13 @@ import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, t
 import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBillfilter } from '../../../models/api-models/Invoice';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm, UntypedFormControl } from '@angular/forms';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -45,8 +47,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild("addVehicle") vehicleDialog: TemplateRef<any>;
     /** Holds cancellation dialog template reference */
     @ViewChild("cancellation") cancelDialog: TemplateRef<any>;
-    /* This will hold the boolean value to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: boolean = true;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
@@ -57,6 +59,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public updateEwayvehicleSuccess$: Observable<boolean>;
     /** Holds list of eway bill */
     public ewaybillLists: IEwayBillAllList;
+    public modalRef: BsModalRef;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** True if api call in progress */
     public isLoading: boolean = true;
@@ -95,16 +98,17 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         transMode: null,
         vehicleType: null,
     };
+    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
     public selectedEway: Result;
     public states: any[] = [];
-    /** Reference to the universal datepicker menu trigger */
-    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
     /* Selected from date */
@@ -115,6 +119,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /* Universal date observer */
     public universalDate$: Observable<any>;
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -154,14 +160,13 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Holds Store Eway Bill from place by pincode API response state as observable*/
     public ewayBillFromPlace$: Observable<any> = this.componentStore.select(state => state.fromPlace);
-    /** Voucher API Version */
-    public voucherApiVersion: number;
 
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private invoiceService: InvoiceService,
         private _toaster: ToasterService,
+        private modalService: BsModalService,
         private _location: LocationService,
         private _cd: ChangeDetectorRef,
         private generalService: GeneralService,
@@ -173,7 +178,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private voucherComponentStore: VoucherComponentStore,
         private componentStore: EwayBillComponentStore
     ) {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.EwayBillfilterRequest.count = PAGINATION_LIMIT;
         this.EwayBillfilterRequest.page = 1;
 
@@ -231,6 +235,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.updateEwayvehicleSuccess$.subscribe(p => {
             if (p) {
                 this.updateVehicleForm.reset();
+                this.modalRef.hide();
             }
         });
         this.store.pipe(select(state => state.ewaybillstate.EwayBillList), takeUntil(this.destroyed$)).subscribe((response: IEwayBillAllList) => {
@@ -411,6 +416,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.EwayBillfilterRequest.branchUniqueName = selectedEntity?.value;
         this.getAllFilteredInvoice();
     }
+
 
     /**
      * Search query handler for from place field
@@ -604,27 +610,39 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Toggles the datepicker menu
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof EWayBillComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
      *
      * @memberof EWayBillComponent
      */
-    public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
-        }
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value - Value from the datepicker component
+     * @param {*} value
      * @memberof EWayBillComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
@@ -632,7 +650,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -654,7 +672,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState = false;
+        this.asideGstSidebarMenuState === 'out';
     }
 
     /**
@@ -809,9 +827,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      * @memberof EWayBillComponent
      */
     public handlePageChange(event: PageEvent): void {
-        let isPageSizeChanged = this.EwayBillfilterRequest.count !== event.pageSize;
-        this.EwayBillfilterRequest.page = isPageSizeChanged ? 1 : event.pageIndex + 1;
         this.EwayBillfilterRequest.count = event.pageSize;
+        this.EwayBillfilterRequest.page = event.pageIndex + 1;
         this.getAllFilteredInvoice();
     }
 }

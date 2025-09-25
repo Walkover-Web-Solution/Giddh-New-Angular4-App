@@ -9,7 +9,6 @@ import { Router } from "@angular/router";
 import { cloneDeep } from "../../lodash-optimized";
 import { ToasterService } from "../../services/toaster.service";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { GeneralService } from "../../services/general.service";
 
 
 @Component({
@@ -20,8 +19,8 @@ import { GeneralService } from "../../services/general.service";
 })
 
 export class UnitMappingComponent implements OnInit, OnDestroy {
-    /** This will hold the boolean value to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: boolean = true;
+    /** This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
     /** This will use for destroy */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds active company GST number */
@@ -36,18 +35,8 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will use for voucher api version */
-    public voucherApiVersion: number;
 
-    constructor(
-        private commonService: CommonService,
-        private store: Store<AppState>,
-        private toasty: ToasterService,
-        private customStockAction: CustomStockUnitAction,
-        private router: Router,
-        private changeDetection: ChangeDetectorRef,
-        private generalService: GeneralService
-    ) {
+    constructor(private commonService: CommonService, private store: Store<AppState>, private toasty: ToasterService, private customStockAction: CustomStockUnitAction, private router: Router, private changeDetection: ChangeDetectorRef) {
         this.stockUnit$ = this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
@@ -62,7 +51,6 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
      * @memberof UnitMappingComponent
      */
     public ngOnInit(): void {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getStockUnits();
         this.store.dispatch(this.customStockAction.getStockUnit());
         document.querySelector('body').classList.add('gst-sidebar-open');
@@ -91,7 +79,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
         document.querySelector('body').classList.remove('unit-mapping-page');
-        this.asideGstSidebarMenuState = false;
+        this.asideGstSidebarMenuState = 'out';
     }
 
     /**

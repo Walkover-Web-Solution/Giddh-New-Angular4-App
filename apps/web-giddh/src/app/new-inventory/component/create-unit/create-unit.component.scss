@@ -87,6 +87,12 @@
             }
         }
     }
+    .add-new {
+        color: var(--color-ledger-heading) !important;
+        &:focus {
+            box-shadow: none !important;
+        }
+    }
 }
 
 @media screen and (max-width: 1600px) {

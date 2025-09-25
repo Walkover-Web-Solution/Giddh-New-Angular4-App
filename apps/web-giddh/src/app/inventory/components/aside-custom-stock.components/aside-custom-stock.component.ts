@@ -6,6 +6,43 @@ import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'aside-custom-stock',
+    styles: [`
+    :host {
+      position: fixed;
+      left: auto;
+      top: var(--top-distance);
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width:580px;
+      z-index: 99999;
+    }
+
+    #close {
+      display: none;
+    }
+
+    :host.in #close {
+      display: block;
+      position: fixed;
+      left: -41px;
+      top: var(--top-distance);
+      z-index: 5;
+      border: 0;
+      border-radius: 0;
+    }
+
+    :host .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    :host .aside-pane {
+      width: 100%;
+      max-width:580px;
+      background: #fff;
+    }
+  `],
     templateUrl: './aside-custom-stock.component.html'
 })
 export class AsideCustomStockComponent implements OnInit, OnDestroy {

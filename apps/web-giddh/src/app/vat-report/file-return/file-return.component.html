@@ -1,10 +1,8 @@
-<div class="dialog-header">
-    <span>{{ localeData?.file_return }}</span>
-    <button mat-icon-button mat-dialog-close aria-label="close">
-        <i class="icon-cross"></i>
-    </button>
+<div class="modal-header">
+    <span mat-dialog-title class="font-16">{{ localeData?.file_return }}</span>
+    <button mat-icon-button mat-dialog-close class="p-0" aria-label="close icon"><i class="icon-cross font-16"></i></button>
 </div>
-<mat-dialog-content class="dialog-body" tabindex="0">
+<div mat-dialog-content class="modal-body" tabindex="0">
     <div class="no-data" *ngIf="isLoading">
         <giddh-page-loader></giddh-page-loader>
     </div>
@@ -91,9 +89,10 @@
             <h1>{{ localeData?.no_vrn_available }}</h1>
         </div>
     </ng-container>
-    <div class="d-flex justify-content-end column-gap1 mt-3">
-        <button mat-raised-button color="primary" [disabled]="isLoading" (click)="submitVatReturn()">{{
-            localeData?.submit_file_return }}</button>
-        <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
-    </div>
-</mat-dialog-content>
+</div>
+<div mat-dialog-actions class="modal-footer justify-content-end">
+    <button mat-stroked-button color="primary" [disabled]="isLoading" (click)="submitVatReturn()">{{
+        localeData?.submit_file_return }}</button>
+    <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+    
+</div>

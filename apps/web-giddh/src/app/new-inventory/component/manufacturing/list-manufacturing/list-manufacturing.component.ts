@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep, forEach } from 'apps/web-giddh/src/app/lodash-optimized';
 import { MfStockSearchRequestClass } from 'apps/web-giddh/src/app/manufacturing/manufacturing.utility';
 import { LinkedStocksResponse } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
@@ -20,6 +18,7 @@ import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/acti
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs/internal/Observable';
 import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { takeUntil } from 'rxjs/operators';
@@ -33,8 +32,8 @@ import { takeUntil } from 'rxjs/operators';
 export class ListManufacturingComponent implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
-    /** Reference to universal datepicker menu trigger */
-    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -46,13 +45,17 @@ export class ListManufacturingComponent implements OnInit {
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Datepicker modal reference */
+    public modalRef: BsModalRef;
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
     /** Manufacturing search request */
     public manufacturingSearchRequest: IMfStockSearchRequest = new MfStockSearchRequestClass();
     /** Instance of dayjs */
@@ -118,10 +121,11 @@ export class ListManufacturingComponent implements OnInit {
     /** Holds Total Pages Count*/
     public totalPages: number = 1;
     /** Holds Current Page Number */
-    public currentPage: number = 0;
+    public currentPage: number = 1;
 
     constructor(
         private dialog: MatDialog,
+        private modalService: BsModalService,
         private generalService: GeneralService,
         private store: Store<AppState>,
         private warehouseAction: WarehouseActions,
@@ -153,7 +157,7 @@ export class ListManufacturingComponent implements OnInit {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.getWarehouses();
 
-        this.manufacturingSearchRequest.count = PAGINATION_LIMIT;
+        this.manufacturingSearchRequest.count = this.paginationLimit;
         this.manufacturingSearchRequest.page = this.currentPage;
 
         if (this.currentOrganizationType === OrganizationType.Company || this.isConsolidatedBranch) {
@@ -345,7 +349,7 @@ export class ListManufacturingComponent implements OnInit {
         this.totalItems = 0;
 
         this.manufacturingSearchRequest.page = 1;
-        this.manufacturingSearchRequest.count = PAGINATION_LIMIT;
+        this.manufacturingSearchRequest.count = this.paginationLimit;
         this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
         this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.manufacturingSearchRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -366,6 +370,7 @@ export class ListManufacturingComponent implements OnInit {
         this.isReportLoading = true;
         this.showHideClearFilterButton();
         this.setFiltersInStore();
+
         this.manufacturingService.GetMfReport(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.results?.length) {
                 let reportData = [];
@@ -410,28 +415,39 @@ export class ListManufacturingComponent implements OnInit {
     }
 
     /**
-     * Shows the datepicker
-     *
-     * @param {boolean} isOpen
-     * @memberof ListManufacturingComponent
-     */
-    public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
+      * To show the datepicker
+      *
+      * @param {*} element
+      * @memberof ListManufacturingComponent
+      */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
     }
 
     /**
-     * Callback function for date/range selection in datepicker
+      * This will hide the datepicker
+      *
+      * @memberof ListManufacturingComponent
+      */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
      *
-     * @param {*} value - Selected date range object
+     * @param {*} value
      * @memberof ListManufacturingComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
@@ -439,7 +455,7 @@ export class ListManufacturingComponent implements OnInit {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -555,20 +571,16 @@ export class ListManufacturingComponent implements OnInit {
     }
 
     /**
-     * Handles pagination events and updates API parameters
+     *  Handle Pagination Event to change the page number and call api
      *
-     * @param {PageEvent} event - Contains pagination details
+     * @param {*} event
      * @memberof ListManufacturingComponent
      */
-    public handlePageEvent(event: PageEvent): void {
-        if (this.manufacturingSearchRequest.count !== event.pageSize) {
-            this.currentPage = 0;
-            this.manufacturingSearchRequest.page = 1;
-        } else {
-            this.currentPage = event.pageIndex;
-            this.manufacturingSearchRequest.page = event.pageIndex + 1;
+    public pageChanged(event: any): void {
+        if (this.currentPage !== event.page) {
+            this.currentPage = event.page
+            this.manufacturingSearchRequest.page = event.page;
+            this.getReport();
         }
-        this.manufacturingSearchRequest.count = event.pageSize;
-        this.getReport();
     }
 }

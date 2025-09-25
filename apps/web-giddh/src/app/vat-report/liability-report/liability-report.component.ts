@@ -31,8 +31,8 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     public displayedColumns = ['start', 'end', 'due', 'status', 'action'];
     /** True if API Call is in progress */
     public isLoading: boolean;
-    /** This will hold the boolean value to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: boolean = true;
+    /** This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
     /** Holds Current Currency Symbol for Zimbabwe report */
     public vatReportCurrencySymbol: string = 'P';
     /** True, if API is in progress */
@@ -210,6 +210,6 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState = false;
+        this.asideGstSidebarMenuState === 'out'
     }
 }

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { cloneDeep } from '../../lodash-optimized';
-import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'import-process',

@@ -1,7 +1,7 @@
 import { ITax, ITaxAuthority, ITaxDetail } from '../interfaces/tax.interface';
 import { INameUniqueName } from './Inventory';
 import { OrganizationType } from '../user-login-state';
-import { DROPDOWN_ITEMS_COUNT_LIMIT } from '../../app.constant';
+import { API_COUNT_LIMIT } from '../../app.constant';
 
 export class CompanyRequest {
     public name: string;
@@ -98,7 +98,7 @@ export class SearchCompanyRequest {
     public loadMore?: boolean;
     public subscriptionId: string;
     constructor() {
-        this.count = DROPDOWN_ITEMS_COUNT_LIMIT;
+        this.count = API_COUNT_LIMIT;
         this.page = 1;
     }
 }

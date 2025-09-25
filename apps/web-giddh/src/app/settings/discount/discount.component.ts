@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { IOption } from '../../app.constant';
+import { IOption } from '../../theme/ng-select/ng-select';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
@@ -10,8 +10,6 @@ import { SettingsDiscountService } from '../../services/settings.discount.servic
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreateDiscountComponent } from '../../theme/create-discount/create-discount.component';
-import { ASIDE_PANE_CONFIG } from '../../app.constant';
-import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'setting-discount',
@@ -54,16 +52,13 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public createNewAccountDialogRef: MatDialogRef<any>;
     /** Holds Create/Update discount Dialog Ref */
     public createUpdateDiscountRef: MatDialogRef<any>;
-    /** Voucher API Version */
-    public voucherApiVersion: number;
 
     constructor(
         private salesService: SalesService,
         private store: Store<AppState>,
         private settingsDiscountService: SettingsDiscountService,
         private toaster: ToasterService,
-        public dialog: MatDialog,
-        private generalService: GeneralService
+        public dialog: MatDialog
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
@@ -74,7 +69,6 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public ngOnInit(): void {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getDiscountAccounts();
         this.getDiscounts();
 
@@ -93,7 +87,13 @@ export class DiscountComponent implements OnInit, OnDestroy {
      */
     public openAccountAsidePane(event: any): void {
         if (event) {
-            this.createNewAccountDialogRef = this.dialog.open(this.createNew, ASIDE_PANE_CONFIG);
+            this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
+                width: 'var(--aside-pane-width)',
+                position: {
+                    right: '0',
+                    top: '0'
+                }
+            });
         }
     }
 
@@ -105,10 +105,15 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public openCreateEditDiscountAsidePane(discountInfo?: CreateDiscountRequest): void {
         this.createUpdateDiscountRef = this.dialog.open(CreateDiscountComponent, {
             data: discountInfo ?? null,
-            ...ASIDE_PANE_CONFIG
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            position: {
+                right: '0',
+                top: '0'
+            }
         });
 
-        this.createUpdateDiscountRef.afterClosed().subscribe(response => {
+        this.createUpdateDiscountRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.getDiscounts();
             }

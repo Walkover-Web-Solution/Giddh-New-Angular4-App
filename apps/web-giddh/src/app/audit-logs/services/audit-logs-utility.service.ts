@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuditLogsServiceModule } from './audit-logs.service.module';
-import { IOption } from '../../app.constant';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 
 @Injectable({
     providedIn: AuditLogsServiceModule

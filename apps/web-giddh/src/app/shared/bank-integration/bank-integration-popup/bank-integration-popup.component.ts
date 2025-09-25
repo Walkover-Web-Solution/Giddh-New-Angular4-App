@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, OnDestroy, EventEmitter, Output, Input } fro
 import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { IOption } from '../../../app.constant';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Component({
     selector: 'bank-integration-popup',

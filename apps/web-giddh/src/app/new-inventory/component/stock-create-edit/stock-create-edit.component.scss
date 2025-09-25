@@ -308,8 +308,7 @@
                         align-items: center;
                         justify-content: center;
                         position: absolute;
-                        bottom: 50%;
-                        transform: translateY(50%);
+                        bottom: 0px;
                         left: 95%;
                         min-width: 95px;
                     }
@@ -364,6 +363,14 @@
 
 .inner-content-footer {
     padding: 0px 22px 15px;
+
+    .clear-btn {
+        width: 89px;
+        height: 36px;
+        color: var(--color-primary-button-text);
+        margin-right: 15px;
+        border: 1px solid var(--color-secondary-button-border);
+    }
 
     .create-inventory-btn {
         width: 198px;
@@ -932,6 +939,11 @@ table.stock-table {
         .select-product-type {
             padding-bottom: 10px;
         }
+    }
+
+    .checkbox-custom-label,
+    .radio-custom-label {
+        display: inline-block !important;
     }
 }
 

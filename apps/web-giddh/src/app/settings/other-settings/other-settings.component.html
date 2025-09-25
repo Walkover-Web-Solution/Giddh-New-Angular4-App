@@ -28,7 +28,7 @@
     <div class="row">
         <div class="col-md-4 col-lg-4 col-xl-3 pd-r05">
             <div class="form-group">
-                <reactive-dropdown-field
+                <dropdown-field
                     [label]="localeData?.digits_after_decimal"
                     [options]="decimalDigitSource"
                     [placeholder]="commonLocaleData?.app_select_type"
@@ -36,15 +36,15 @@
                         profileData.balanceDecimalPlaces = $event.value;
                         profileUpdated('balanceDecimalPlaces')
                     "
-                    [labelValue]="getDropdownLabel(decimalDigitSource, profileData.balanceDecimalPlaces)"
+                    [defaultValue]="getDropdownLabel(decimalDigitSource, profileData.balanceDecimalPlaces)"
                     [isFilterEnabled]="true"
                     [name]="'balanceDecimalPlaces'"
-                ></reactive-dropdown-field>
+                ></dropdown-field>
             </div>
         </div>
         <div class="col-md-4 col-lg-4 col-xl-3 pd-l05">
             <div class="form-group">
-                <reactive-dropdown-field
+                <dropdown-field
                     [label]="localeData?.number_system_label"
                     [options]="numberSystemSource"
                     [placeholder]="commonLocaleData?.app_select_type"
@@ -52,57 +52,58 @@
                         profileData.balanceDisplayFormat = $event.value;
                         profileUpdated('balanceDisplayFormat')
                     "
-                    [labelValue]="getDropdownLabel(numberSystemSource, profileData.balanceDisplayFormat)"
+                    [defaultValue]="getDropdownLabel(numberSystemSource, profileData.balanceDisplayFormat)"
                     [isFilterEnabled]="true"
                     [name]="'balanceDisplayFormat'"
-                ></reactive-dropdown-field>
+                ></dropdown-field>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4 col-lg-4 col-xl-3 pd-r05">
             <div class="form-group">
-                <reactive-dropdown-field
+                <dropdown-field
                     [label]="localeData?.language"
                     [cssClass]="'language-selection'"
                     [options]="translationLocales"
                     [placeholder]="localeData?.select_language"
                     (selectedOption)="activeLocale = $event.value; selectLocale($event)"
-                    [labelValue]="getDropdownLabel(translationLocales ,activeLocale)"
+                    [defaultValue]="getDropdownLabel(translationLocales ,activeLocale)"
                     [isFilterEnabled]="true"
                     [name]="'activeLocale'"
-                ></reactive-dropdown-field>
+                ></dropdown-field>
             </div>
         </div>
         <div class="col-md-4 col-lg-4 col-xl-3 pd-l05">
             <div class="form-group">
-                <reactive-dropdown-field
+                <dropdown-field
                     [label]="localeData?.theme"
                     [cssClass]="'theme-selection'"
                     [options]="availableThemes"
-                    [labelValue]="currentThemeLabel"
+                    [defaultValue]="currentThemeLabel"
                     [placeholder]="localeData?.select_theme"
                     [isFilterEnabled]="true"
                     [name]="'activeTheme'"
                     (selectedOption)="setActiveTheme($event)"
-                ></reactive-dropdown-field>
+                ></dropdown-field>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4 col-lg-4 col-xl-3 pd-r05">
             <div class="form-group">
-                <reactive-dropdown-field
+                <dropdown-field
                     [label]="localeData?.ledger_default_view"
                     [options]="availableLedgerView"
-                    [labelValue]="getDropdownLabel(availableLedgerView, profileData.ledgerView)"
+                    [defaultValue]="getDropdownLabel(availableLedgerView, profileData.ledgerView)"
                     [placeholder]="localeData?.select_view"
                     [name]="'activeLedgerView'"
                     (selectedOption)="profileData.ledgerView = $event.value;
                     profileUpdated('ledgerView')"
-                ></reactive-dropdown-field>
+                ></dropdown-field>
             </div>
         </div>
+        <!-- *ngIf="voucherApiVersion === 1" -->
         <div class="col-md-4 col-lg-4 col-xl-3 pd-l05" *ngIf="voucherApiVersion === 1">
             <div class="form-group">
                 <label>{{ localeData?.inventory_type }}</label>

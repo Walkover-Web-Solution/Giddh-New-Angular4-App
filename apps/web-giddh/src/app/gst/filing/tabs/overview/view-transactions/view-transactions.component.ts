@@ -5,6 +5,7 @@ import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../../store';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
 import { GstReconcileActions } from '../../../../../actions/gst-reconcile/gst-reconcile.actions';
@@ -15,18 +16,16 @@ import { GstReport } from '../../../../constants/gst.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.const';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { PageEvent } from '@angular/material/paginator';
-
 export const filterTransaction = {
     entityType: '',
     type: '',
     status: '',
     page: 1,
-    count: PAGINATION_LIMIT
+    count: 20
 };
 
 @Component({
@@ -56,6 +55,13 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public gstr2entityType = [];
     public filterParam: GStTransactionRequest = new GStTransactionRequest();
     public imgPath: string = '';
+    public modalRef: BsModalRef;
+    public modalConfig = {
+        animated: true,
+        keyboard: false,
+        backdrop: 'static',
+        ignoreBackdropClick: true
+    };
     public viewTransactionInProgress$: Observable<boolean> = of(null);
     public selectedFilter: any = filterTransaction;
     /** PDF base 64date */
@@ -68,7 +74,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
     /** Holds gst number */
     public selectedGstNumber: string = '';
     /** Holds table displayed columns name */
@@ -151,7 +157,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         ];
 
         this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
-        this.filterParam.count = PAGINATION_LIMIT;
+        this.filterParam.count = this.pageSizeOptions[2];
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
         this.filterParam.gstin = this.activeCompanyGstNumber;
@@ -192,7 +198,19 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.selectedGstNumber } });
     }
 
-
+    /**
+     * Handle page change
+     *
+     * @param {*} event
+     * @memberof SubscriptionComponent
+     */
+    public pageChanged(event: any): void {
+        if (event) {
+            this.filterParam.count = event.pageSize;
+            this.pageIndex = event.pageIndex;
+            this.viewFilteredTxn('page', event.pageIndex + 1);
+        }
+    }
 
     /**
      * This will handle invoice selection
@@ -206,6 +224,16 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             if (invoice && invoice.account) {
                 this.selectedInvoice = invoice;
                 this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
+
+                if (this.voucherApiVersion !== 2) {
+                    downloadVoucherRequestObject = {
+                        voucherNumber: [invoice.voucherNumber],
+                        voucherType: invoice.voucherType,
+                        accountUniqueName: invoice.account?.uniqueName
+                    };
+
+                    this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+                }
             }
             this.openDownloadOrSendMailDialog();
         }
@@ -376,17 +404,5 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             disableClose: true,
             autoFocus: false
         });
-    }
-
-    /**
-     * This will use for page change
-     *
-     * @param {*} event
-     * @memberof ViewTransactionsComponent
-     */
-    public pageChanged(event: PageEvent): void {
-        this.pageIndex = this.filterParam.count !== event.pageSize ? 0 : event.pageIndex;
-        this.filterParam.count = event.pageSize;
-        this.viewFilteredTxn('page', this.pageIndex + 1);
     }
 }

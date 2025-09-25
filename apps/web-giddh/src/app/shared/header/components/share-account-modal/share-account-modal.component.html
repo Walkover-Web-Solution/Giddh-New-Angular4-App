@@ -1,9 +1,7 @@
 <div>
-    <div class="dialog-header">
-        <span>{{ localeData?.share_account }}</span>
-        <button mat-icon-button aria-label="close" (click)="closeModal()">
-            <i class="icon-cross"></i>
-        </button>
+    <div class="modal-header">
+        <h3>{{ localeData?.share_account }}</h3>
+        <i mat-dialog-close aria-label="close icon" class="icon-cross" (click)="closeModal()"></i>
     </div>
     <mat-dialog-content class="dialog-body">
         <div class="pd-b3">
@@ -41,7 +39,7 @@
                         >
                         </reactive-dropdown-field>
                         <button
-                            mat-raised-button
+                            mat-stroked-button
                             color="primary"
                             [disabled]="shareAccountForm.invalid || isUserRestricted"
                             (click)="shareAccount()">
@@ -83,6 +81,7 @@
 
                                 <button
                                     mat-stroked-button
+                                    color="primary"
                                     (click)="unShareAccount(val?.uniqueName, val?.entityUniqueName)"
                                     aria-label="delete icon"
                                 >

@@ -11,6 +11,7 @@
 <mat-menu #menu="matMenu" [class]="'columns-wrapper ' + additionalMenuCssClass">
     <ng-container *ngFor="let item of (isDynamicMode ? dynamicCustomColumns : customiseColumns)">
         <button
+            class="menu-buttons"
             [ngClass]="{ 'disabled-button': item.checked && (isDynamicMode ? checkedColumnsCount : displayedColumns.length === 2) }"
             mat-menu-item
             (click)="$event.stopPropagation()"

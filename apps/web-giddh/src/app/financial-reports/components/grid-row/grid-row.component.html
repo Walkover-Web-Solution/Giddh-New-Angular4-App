@@ -81,7 +81,7 @@
         class="row-2 account overflow-visible"
         [ngClass]="{'tailed-row': account.checked}"
         *ngIf="account.isVisible"
-        (dblclick)="accountInfo(account, $event); menuTrigger.openMenu()"
+        (dblclick)="accountInfo(account, $event)"
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
@@ -97,27 +97,31 @@
                 <div
                     class="p-0 bd-r-right-none"
                     [innerHTML]="account.name | lowercase | highlight: search"
+                    [popover]="accountDetailModalTemplate"
+                    #accountDetailPopup="bs-popover"
+                    triggers=""
+                    container="body"
+                    containerClass="financial-report-account-detail-container"
+                    placement="bottom"
+                    [isOpen]="modalUniqueName && modalUniqueName === account?.uniqueName"
                 ></div>
-                <span class="position-absolute" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="accountDetailModalTemplate">&nbsp;</span>
-                <!-- Material Menu -->
-                <mat-menu #accountDetailModalTemplate="matMenu">
-                    <ng-container *ngIf="modalUniqueName && modalUniqueName === account?.uniqueName">
-                        <span
-                            account-detail-modal-component
-                            [shouldShowGenerateInvoice]="false"
-                            [accountUniqueName]="account?.uniqueName"
-                            [isModalOpen]="account?.uniqueName === modalUniqueName"
-                            [accInfo]="false"
-                            [from]="from"
-                            [to]="to"
-                            [closeOnEdit]="true"
-                            (modalOpened)="handleModalOpened($event)"
-                            (modalClosed)="hideModal()"
-                            (modalClosedTemporary)="openAccountModal.emit($event); hideModal()"
-                        >
-                        </span>
-                    </ng-container>
-                </mat-menu>
+                <ng-template #accountDetailModalTemplate>
+                    <span
+                        account-detail-modal-component
+                        *ngIf="modalUniqueName && modalUniqueName === account?.uniqueName"
+                        [shouldShowGenerateInvoice]="false"
+                        [accountUniqueName]="account?.uniqueName"
+                        [isModalOpen]="account?.uniqueName === modalUniqueName"
+                        [accInfo]="false"
+                        [from]="from"
+                        [to]="to"
+                        [closeOnEdit]="true"
+                        (modalOpened)="handleModalOpened($event)"
+                        (modalClosed)="hideModal(); accountDetailPopup?.hide()"
+                        (modalClosedTemporary)="openAccountModal.emit($event); hideModal(); accountDetailPopup?.hide()"
+                    >
+                    </span>
+                </ng-template>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">

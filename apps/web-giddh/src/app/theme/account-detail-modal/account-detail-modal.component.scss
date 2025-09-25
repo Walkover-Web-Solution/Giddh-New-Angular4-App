@@ -60,6 +60,9 @@ ul.list-unstyled li a {
 }
 
 .p-modal-tooltip {
+    display: block;
+    position: absolute;
+    background-color: var(--color-white);
     width: 257px;
     @media screen and (max-width: 1870px) {
         width: 225px;
@@ -70,6 +73,9 @@ ul.list-unstyled li a {
     @media screen and (max-width: 1499px) {
         width: 180px;
     }
+    border: 1px solid var(--color-iron);
+    border-radius: 4px;
+    box-shadow: 0 7px 24px var(--color-primary-common-box-shadow);
 }
 
 .model-position {

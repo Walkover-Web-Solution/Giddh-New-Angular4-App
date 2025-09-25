@@ -1,9 +1,8 @@
 import { NgModule } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
-import { MatMenuModule } from "@angular/material/menu";
 import { MatTableModule } from "@angular/material/table";
-import { MatPaginatorModule } from "@angular/material/paginator";
+import { PaginationModule } from "ngx-bootstrap/pagination";
 import { DownloadsRoutingModule } from "./downloads.routing.module";
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
@@ -17,8 +16,6 @@ import { ExportsJsonComponent } from "./components/exports-json/exports-json.com
 import { DownloadsComponent } from "./downloads.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { MatInputModule } from "@angular/material/input";
-import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 
 @NgModule({
     declarations: [
@@ -30,9 +27,8 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
     exports: [],
     imports: [
         CommonModule, 
-        MatPaginatorModule,
+        PaginationModule.forRoot(), 
         MatTableModule, 
-        MatMenuModule,
         DownloadsRoutingModule,
         MatButtonModule, 
         MatDialogModule, 
@@ -42,9 +38,7 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
         GiddhPageLoaderModule,
         SharedModule,
         MatTabsModule,
-        MatTooltipModule,
-        MatInputModule,
-        FormFieldsModule
+        MatTooltipModule
     ]
 })
 

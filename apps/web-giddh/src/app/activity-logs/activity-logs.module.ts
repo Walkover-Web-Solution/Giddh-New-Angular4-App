@@ -8,16 +8,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DataTypeModule } from '../shared/helpers/pipes/dataType/dataType.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatMenuModule } from '@angular/material/menu';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { SharedModule } from '../shared/shared.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatInputModule } from '@angular/material/input';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 
 @NgModule({
@@ -41,13 +39,11 @@ import { ActivityCompareJsonComponent } from './components/activity-compare-json
         NoDataModule,
         GiddhPageLoaderModule,
         TranslateDirectiveModule,
-        MatPaginatorModule,
+        PaginationModule.forRoot(),
         FormFieldsModule,
         HamburgerMenuModule,
         SharedModule,
-        MatCheckboxModule,
-        MatInputModule,
-        MatMenuModule
+        MatCheckboxModule
     ],
 })
 export class ActivityLogsModule {

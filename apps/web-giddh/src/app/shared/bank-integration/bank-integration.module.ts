@@ -12,6 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -46,6 +47,7 @@ import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-in
         MatSelectModule,
         MatDialogModule,
         MatSlideToggleModule,
+        BsDropdownModule.forRoot(),
         MatGridListModule,
         FormFieldsModule,
         MatInputModule,

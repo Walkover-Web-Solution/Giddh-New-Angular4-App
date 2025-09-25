@@ -166,6 +166,11 @@
 .custom-component[disabled] {
     pointer-events: none;
 }
+.collapse-icons {
+    font-size: 10px;
+    border: 1px solid var(--color-nero);
+    padding: 2px;
+}
 
 .mat-expansion-panel-header.mat-expanded {
     background-color: var(--color-tab-primary-background) !important;

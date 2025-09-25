@@ -19,7 +19,7 @@
                                     *ngIf="groupUniqueName"
                                     (click)="backClicked()"
                                     class="mr-0"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                 >
                                     <i class="icon-left back-left"></i>
@@ -150,10 +150,9 @@
                                                 [labelValue]="groupForm?.get('discountLabel')?.value ?? ''"
                                                 (onClear)="groupForm.get('discounts')?.patchValue(null)"
                                                 [options]="discountsList$ | async"
-                                                (selectedOption)="groupForm.get('discountLabel')?.patchValue($event?.label)"
                                                 formControlName="discounts"
                                             >
-                                        </reactive-dropdown-field>
+                                            </reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="row mr-t15">
@@ -179,7 +178,7 @@
                                                     <label>{{ localeData?.is_it_childgroup }}</label>
                                                 </div>
                                                 <div class="input-min-width" *ngIf="groupForm.get('isSubGroup')?.value">
-                                                    <reactive-dropdown-field
+                                                    <dropdown-field
                                                         [name]="'parentStockGroupUniqueName'"
                                                         [placeholder]="commonLocaleData?.app_select_parent_group"
                                                         [options]="stockGroups"
@@ -187,8 +186,8 @@
                                                             stockGroupUniqueName = $event?.value;
                                                             stockGroupName = $event?.label
                                                         "
-                                                        [labelValue]="stockGroupName"
-                                                    ></reactive-dropdown-field>
+                                                        [defaultValue]="stockGroupName"
+                                                    ></dropdown-field>
                                                 </div>
                                             </div>
                                             <div class="d-flex toggle-childgroup pd-t05 mt-1">
@@ -209,7 +208,7 @@
                                 <div class="col-sm-12 col-lg-12 ml-lg-2">
                                     <div class="d-flex align-items-center w-100">
                                         <div>
-                                            <button mat-raised-button color="primary" (click)="saveGroup()">
+                                            <button mat-stroked-button color="primary" (click)="saveGroup()">
                                                 {{
                                                     groupUniqueName
                                                         ? commonLocaleData?.app_update
@@ -238,6 +237,7 @@
                                             <button
                                                 *ngIf="groupUniqueName"
                                                 mat-stroked-button
+                                                color="warn"
                                                 class="min-width-100"
                                                 (click)="deleteGroup()"
                                             >

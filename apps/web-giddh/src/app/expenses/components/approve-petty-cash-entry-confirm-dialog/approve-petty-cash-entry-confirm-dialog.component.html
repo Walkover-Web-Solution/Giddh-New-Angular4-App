@@ -1,12 +1,18 @@
-<div class="dialog-header">
-    <span>{{ localeData?.approve }}</span>
-    <button mat-icon-button aria-label="close"  (click)="approveEntry.emit(false)">
-        <i class="icon-cross"></i>
+<div class="modal-header d-flex align-items-center">
+    <h3 mat-dialog-title class="modal-title pull-left">{{ localeData?.approve }}</h3>
+    <button
+        mat-button
+        type="button"
+        class="close d-flex align-items-center justify-content-end"
+        aria-label="Close"
+        (click)="approveEntry.emit(false)"
+    >
+        <span aria-hidden="true">&times;</span>
     </button>
 </div>
 
-<mat-dialog-content class="dialog-body">
-    <div class="modal-top">
+<div class="modal-body approve-modal">
+    <div class="clearfix modal-top">
         <p class="font-12 text-gray mr-b1">
             <span>{{ selectedEntryForApprove?.entryDate }} </span> |
             <span>{{ byCreator }}</span>
@@ -33,28 +39,36 @@
                             : selectedEntryForApprove?.baseAccount?.name
                     }}
                 </p>
-
-                <reactive-dropdown-field 
+                <sh-select
                     *ngIf="showCategoryOption"
                     [ngClass]="{ 'error-box': showEntryAgainstRequired }"
                     class="text-left multi-select entry-against"
-                    [cssClass]="'border-0'" 
-                    [(ngModel)]="entryAgainstObject.model"
-                    [name]="'depositAccountUniqueName'"
-                    [label]="entryAgainstObject && pettyCashEntry
-                    ? pettyCashEntry?.particular?.name
-                    : selectedEntryForApprove?.baseAccount?.name"
-                    [placeholder]="commonLocaleData?.app_select_account"
+                    name="depositAccountUniqueName"
+                    #entryAgainstAccountDropDown
                     [options]="entryAgainstObject.dropDownOption"
-                    (selectedOption)="onSelectEntryAgainstAccount($event)"
+                    [(ngModel)]="entryAgainstObject.model"
+                    (selected)="onSelectEntryAgainstAccount($event)"
                     (onClear)="onClearEntryAgainstAccount()"
-                    [enableDynamicSearch]="true" 
-                    (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                    [placeholder]="commonLocaleData?.app_select_account"
+                    [notFoundLink]="false"
+                    [enableDynamicSearch]="true"
                     [isPaginationEnabled]="true"
-                    (scrollEnd)="handleAccountScrollEnd()" 
-                    [labelValue]="entryAgainstObject?.name"
+                    (scrollEnd)="handleAccountScrollEnd()"
+                    (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                    [defaultValue]="entryAgainstObject?.name"
+                    [fixedValue]="entryAgainstObject?.name"
+                    [forceClearReactive]="forceClear$ | async"
+                    [multiple]="false"
+                    [ItemHeight]="33"
+                    [useInBuiltFilterForIOptionTypeItems]="true"
                 >
-                </reactive-dropdown-field>
+                    <ng-template #optionTemplate1 let-option="option">
+                        <a href="javascript:void(0)" class="list-item">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item-unique">{{ option?.value }}</div>
+                        </a>
+                    </ng-template>
+                </sh-select>
             </div>
         </div>
         <div class="row mr-b1">
@@ -79,7 +93,7 @@
                 {{ commonLocaleData?.app_no }}
             </button>
             <button
-                mat-raised-button
+                mat-stroked-button
                 color="primary"
                 (click)="confirmApproveEntry()"
                 [ladda]="approveEntryRequestInProcess"
@@ -88,4 +102,4 @@
             </button>
         </div>
     </div>
-</mat-dialog-content>
+</div>

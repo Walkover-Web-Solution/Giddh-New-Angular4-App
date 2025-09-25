@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
 import { cloneDeep } from '../../lodash-optimized';
-import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'app-aside-menu-sales-other-taxes',

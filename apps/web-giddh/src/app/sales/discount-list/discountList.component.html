@@ -64,12 +64,14 @@
                 <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
                     <li *ngIf="idx > 0" class="discount-item cursor-pointer">
                         <label class="checkbox overflow-hidden width-100 m-0" (click)="$event.stopPropagation()">
-                            <mat-checkbox
+                            <input
                                 class="pull-left"
+                                id="{{ 'update-discount-checkbox-' + idx }}"
+                                name="tax_{{ idx }}"
+                                type="checkbox"
                                 [(ngModel)]="discount.isActive"
                                 (change)="change()"
                                 (click)="$event.stopPropagation()"
-                                color="primary"
                             />
                             <span class="pull-left text-ellipsis cp">{{ discount.name }}</span>
                         </label>

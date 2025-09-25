@@ -1,42 +1,70 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { TemplateRef } from '@angular/core';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { BulkEmailRequest } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { AccountService } from '../../services/account.service';
 import { CompanyService } from '../../services/company.service';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 import { Router } from '@angular/router';
-import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: '[account-detail-modal-component]',
     templateUrl: './account-detail-modal.component.html',
-    styleUrls: ['./account-detail-modal.component.scss']
+    styleUrls: ['./account-detail-modal.component.scss'],
+    animations: [
+        trigger("slideInOut", [
+            state("in", style({
+                transform: "translate3d(0, 0, 0)",
+            })),
+            state("out", style({
+                transform: "translate3d(100%, 0, 0)",
+            })),
+            transition("in => out", animate("400ms ease-in-out")),
+            transition("out => in", animate("400ms ease-in-out")),
+        ]),
+    ],
 })
 
 export class AccountDetailModalComponent implements OnChanges, OnDestroy {
-    /** Template reference for aside menu */
-    @ViewChild('asideMenuTemplate') public asideMenuTemplate: TemplateRef<any>;
-    /** Reference to aside menu dialog */
-    public asideMenuDialogRef: MatDialogRef<any>;
     @Input() public isModalOpen: boolean = false;
     @Input() public accountUniqueName: string;
     @Input() public from: string;
     @Input() public to: string;
     /** Required to hide generate invoice from modules that don't support it, for eg. Trial balance */
     @Input() public shouldShowGenerateInvoice: boolean = true;
+
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
     /** Emits when modal needs to be opened */
-    @Output() public modalOpened: EventEmitter<MatDialogRef<any>> = new EventEmitter<MatDialogRef<any>>();
+    @Output() public modalOpened: EventEmitter<ModalDirective> = new EventEmitter<ModalDirective>();
     /** Emits when modal needs to be closed */
     @Output() public modalClosed: EventEmitter<boolean> = new EventEmitter();
     /** Emits when modal needs to be closed temporary */
     @Output() public modalClosedTemporary: EventEmitter<any> = new EventEmitter();
+    @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
+    @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
+
+    public messageBody = {
+        header: {
+            email: '',
+            sms: '',
+            set: ''
+        },
+        btn: {
+            email: '',
+            sms: '',
+            set: '',
+        },
+        type: '',
+        msg: '',
+        subject: ''
+    };
+    public dataVariables = [];
     @Input() public accInfo: IFlattenAccountsResultItem;
     /** This will close modal on edit account icon click */
     @Input() public closeOnEdit: boolean = false;
@@ -45,6 +73,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Account update modal state */
+    public accountAsideMenuState: string = "out";
     /** Account group unique name */
     public activeGroupUniqueName: string = "";
     /** True if api call in progress */
@@ -53,12 +83,12 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     private currentUrl: string = "";
 
     constructor(
+        private _companyServices: CompanyService,
         private _toaster: ToasterService,
         private _accountService: AccountService,
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private router: Router,
-        private dialog: MatDialog
+        private router: Router
     ) {
         this.currentUrl = this.router.url;
     }
@@ -96,7 +126,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             case 0: // go to add and manage
                 if (!this.closeOnEdit) {
                     this.activeGroupUniqueName = this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]?.uniqueName;
-                    this.openAccountAsidePaneDialog();
+                    this.toggleAccountAsidePane();
                     event.stopPropagation();
                 } else {
                     this.modalClosedTemporary.emit(this.accInfo);
@@ -130,9 +160,98 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                     }
                 }
                 break;
+            case 3: // send sms
+                if (event) {
+                    event.stopPropagation();
+                }
+                this.openSmsDialog();
+                this.modalOpened.emit(this.mailModal);
+                break;
+            case 4: // send email
+                if (event) {
+                    event.stopPropagation();
+                }
+                this.openEmailDialog();
+                this.modalOpened.emit(this.mailModal);
+                break;
             default:
                 break;
         }
+    }
+
+    // Open Modal for Email
+    public openEmailDialog() {
+        this.messageBody.msg = '';
+        this.messageBody.subject = '';
+        this.messageBody.type = 'Email';
+        this.messageBody.btn.set = this.messageBody.btn.email;
+        this.messageBody.header.set = this.messageBody.header.email;
+        this.mailModal?.show();
+    }
+
+    // Open Modal for SMS
+    public openSmsDialog() {
+        this.messageBody.msg = '';
+        this.messageBody.type = 'sms';
+        this.messageBody.btn.set = this.messageBody.btn.sms;
+        this.messageBody.header.set = this.messageBody.header.sms;
+        this.mailModal?.show();
+    }
+
+    // Add Selected Value to Message Body
+    public addValueToMsg(val: any) {
+        this.typeInTextarea(val?.value);
+    }
+
+    /**
+     * Prepare message body
+     *
+     * @param {*} newText Shortcut tags
+     * @memberof AccountDetailModalComponent
+     */
+    public typeInTextarea(newText) {
+        let el: HTMLInputElement = this.messageBox?.nativeElement;
+        let start = el.selectionStart;
+        let end = el.selectionEnd;
+        let text = el?.value;
+        let before = text?.substring(0, start);
+        let after = text?.substring(end, text?.length);
+        el.value = (before + newText + after);
+        el.selectionStart = el.selectionEnd = start + newText?.length;
+        el.focus();
+        this.messageBody.msg = el?.value;
+    }
+
+    // Send Email/Sms for Accounts
+    public send() {
+        let request: BulkEmailRequest = {
+            data: {
+                subject: this.messageBody.subject,
+                message: this.messageBody.msg,
+                accounts: [this.accInfo?.uniqueName],
+            },
+            params: {
+                from: this.from,
+                to: this.to,
+                groupUniqueName: this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]?.uniqueName || this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]
+            }
+        };
+
+        if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
+            return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
+                .subscribe((r) => {
+                    r?.status === 'success' ? this._toaster.successToast(r?.body) : this._toaster.errorToast(r?.message);
+                });
+        } else if (this.messageBody.btn.set === this.localeData?.send_sms) {
+            let temp = request;
+            delete temp.data['subject'];
+            return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
+                .subscribe((r) => {
+                    r?.status === 'success' ? this._toaster.successToast(r?.body) : this._toaster.errorToast(r?.message);
+                });
+        }
+
+        this.mailModal.hide();
     }
 
     /**
@@ -175,12 +294,77 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     }
 
     /**
-     * Opens account aside pane dialog
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof AccountDetailModalComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            this.messageBody.header.email = this.commonLocaleData?.app_send_email;
+            this.messageBody.header.sms = this.localeData?.send_sms;
+
+            this.messageBody.btn.email = this.commonLocaleData?.app_send_email;
+            this.messageBody.btn.sms = this.localeData?.send_sms;
+
+            this.dataVariables = [
+                {
+                    name: this.localeData?.opening_balance,
+                    value: '%s_OB',
+                },
+                {
+                    name: this.localeData?.closing_balance,
+                    value: '%s_CB',
+                },
+                {
+                    name: this.localeData?.credit_total,
+                    value: '%s_CT',
+                },
+                {
+                    name: this.localeData?.debit_total,
+                    value: '%s_DT',
+                },
+                {
+                    name: this.localeData?.from_date,
+                    value: '%s_FD',
+                },
+                {
+                    name: this.localeData?.to_date,
+                    value: '%s_TD',
+                },
+                {
+                    name: this.localeData?.magic_link,
+                    value: '%s_ML',
+                },
+                {
+                    name: this.commonLocaleData?.app_account_name,
+                    value: '%s_AN',
+                }
+            ];
+        }
+    }
+
+    /**
+     * Toggle's account update modal
      *
      * @memberof AccountDetailModalComponent
      */
-    public openAccountAsidePaneDialog(): void {
-        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
+    public toggleAccountAsidePane(): void {
+        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
+        this.toggleBodyClass();
+    }
+
+    /**
+     * Toggle's fixed class in body
+     *
+     * @memberof AccountDetailModalComponent
+     */
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === "in") {
+            document.querySelector("body").classList.add("fixed");
+        } else {
+            document.querySelector("body").classList.remove("fixed");
+        }
     }
 
     /**
@@ -190,7 +374,9 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      * @memberof AccountDetailModalComponent
      */
     public getUpdatedList(event: any): void {
+        if (this.accountAsideMenuState === "in") {
+            this.toggleAccountAsidePane();
+        }
         this.modalClosed.emit(event);
-        this.asideMenuDialogRef.close();
     }
 }

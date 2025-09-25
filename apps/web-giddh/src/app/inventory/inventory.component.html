@@ -2,15 +2,12 @@
     <div class="relative">
         <hamburger-menu [pageHeading]="getPageHeading()"></hamburger-menu>
         <div class="inventory-control">
-            <mat-tab-group 
-                #inventoryStaticTabs
-                class="table-header-sticky"
-                mat-stretch-tabs="false" 
-                mat-align-tabs="start"
-                [selectedIndex]="activeTabIndex"
-                (selectedTabChange)="redirectUrlToActiveTab($event)">
-                <mat-tab
-                    label="Inventory"
+            <tabset #inventoryStaticTabs>
+                <tab
+                    heading="Inventory"
+                    (selectTab)="redirectUrlToActiveTab('inventory', $event)"
+                    [active]="activeTabIndex === 0"
+                    [id]="activeTabIndex === 0 ? 'giddh-page-heading' : ''"
                 >
                     <!--sidebar-->
                     <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
@@ -28,7 +25,7 @@
                                 <div *ngIf="shouldShowInventoryReport$ | async" class="wrap-top-inventory">
                                     <div *ngIf="isMobileScreen && activeView === 'group'" class="mr-b15">
                                         <button
-                                            mat-raised-button color="primary"
+                                            class="btn btn-sky-blue"
                                             [routerLink]="['/pages/inventory/']"
                                             (click)="activeView = null"
                                         >
@@ -36,28 +33,28 @@
                                         </button>
                                     </div>
                                     <div *ngIf="activeView" class="d-flex mr-b1 branch-warehouse-filter">
-                                        <reactive-dropdown-field
+                                        <sh-select
                                             *ngIf="
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 branches &&
                                                 branches.length > 2
                                             "
-                                            class="multi-select branch-filter"
+                                            class="multi-select branch-filter sh-select-border"
                                             (ngModelChange)="loadReportByBranch($event)"
                                             [options]="branches"
                                             [placeholder]="'Select Branch'"
                                             [(ngModel)]="currentBranchAndWarehouseFilterValues.branch"
-                                            [name]="'branchFilter'"
-                                        ></reactive-dropdown-field>
-                                        <reactive-dropdown-field
+                                        ></sh-select>
+                                        <sh-select
                                             *ngIf="warehouses && warehouses.length > 1"
-                                            class="multi-select warehouse-filter"
+                                            class="multi-select sh-select-border warehouse-filter"
+                                            #warehouseFilter
                                             (ngModelChange)="loadReportByWarehouse($event)"
+                                            [ItemHeight]="41"
                                             [options]="warehouses"
                                             [placeholder]="'Select Warehouse'"
                                             [(ngModel)]="currentBranchAndWarehouseFilterValues.warehouse"
-                                            [name]="'warehouseFilter'"
-                                        ></reactive-dropdown-field>
+                                        ></sh-select>
                                     </div>
                                 </div>
                                 <div *ngIf="(shouldShowInventoryReport$ | async) && activeView === 'stock'">
@@ -79,32 +76,41 @@
                             </section>
                         </section>
                     </ng-container>
-                </mat-tab>
+                </tab>
 
-                <mat-tab
-                    label="Job Work"
+                <tab
+                    heading="Job Work"
+                    (selectTab)="redirectUrlToActiveTab('jobwork', $event)"
+                    [active]="activeTabIndex === 1"
+                    [id]="activeTabIndex === 1 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 1">
                         <jobwork></jobwork>
                     </ng-container>
-                </mat-tab>
+                </tab>
 
-                <mat-tab
-                    label="Manufacturing"
+                <tab
+                    heading="Manufacturing"
+                    (selectTab)="redirectUrlToActiveTab('manufacturing', $event)"
+                    [active]="activeTabIndex === 2"
+                    [id]="activeTabIndex === 2 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 2">
                         <manufacturing></manufacturing>
                     </ng-container>
-                </mat-tab>
+                </tab>
 
-                <mat-tab
-                    label="Report"
+                <tab
+                    heading="Report"
+                    (selectTab)="redirectUrlToActiveTab('report', $event)"
+                    [active]="activeTabIndex === 3"
+                    [id]="activeTabIndex === 3 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 3">
                         <new-branch-transfer-list> </new-branch-transfer-list>
                     </ng-container>
-                </mat-tab>
-            </mat-tab-group>
+                </tab>
+            </tabset>
         </div>
     </div>
 </div>

@@ -1,14 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../../app.constant';
-import { PageEvent } from '@angular/material/paginator';
+import { PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { IAllTransporterDetails } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
-import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 export interface transporterDetails {
     name: string;
@@ -28,10 +27,6 @@ export class AsideManageTransportComponent implements OnInit {
     public displayedColumns: string[] = ['name', 'transporterId', 'action'];
     /** Hold  transporter id*/
     public currentTransporterId: string;
-    /** Pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Hold table data*/
     public dataSource: any[] = ELEMENT_DATA;
     /* Aside pane state*/
@@ -67,7 +62,6 @@ export class AsideManageTransportComponent implements OnInit {
         private formBuilder: UntypedFormBuilder,
         private invoiceServices: InvoiceService,
         public dialog: MatDialog,
-        private generalService: GeneralService,
         private toasty: ToasterService) {
     }
 
@@ -101,16 +95,11 @@ export class AsideManageTransportComponent implements OnInit {
     * @param {*} event
     * @memberof AsideManageTransportComponent
     */
-    /**
-     * Handles pagination events and updates API parameters
-     *
-     * @param {PageEvent} event - Contains pagination details
-     * @memberof AsideManageTransportComponent
-     */
-    public handlePageEvent(event: PageEvent): void {
-        this.transporterObj.page = this.transporterObj.count !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.transporterObj.count = event.pageSize;
-        this.getTransportersList();
+    public pageChanged(event: any): void {
+        if (this.transporterObj.page !== event.page) {
+            this.transporterObj.page = event.page;
+            this.getTransportersList();
+        }
         this.detectChanges();
     }
 
@@ -147,8 +136,10 @@ export class AsideManageTransportComponent implements OnInit {
             this.isLoading = false;
             if (response && response.status === "success" && response.body) {
                 this.transporterListDetails = response.body.results;
+                this.transporterObj.page = response.body?.page;
                 this.transporterObj.totalItems = response.body?.totalItems;
                 this.transporterObj.totalPages = response.body?.totalPages;
+                this.transporterObj.count = response.body?.count;
             } else {
                 this.dataSource = [];
                 this.transporterObj.totalItems = 0;
@@ -224,14 +215,13 @@ export class AsideManageTransportComponent implements OnInit {
             }
         });
 
-        this.confirmModalDialogRef.afterClosed().subscribe(response => {
+        this.confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.isLoading = true
                 this.invoiceServices.deleteTransporterById(transporter.transporterId).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.status === "success" && response.body) {
                         this.toasty.showSnackBar("success", response.body);
-                        this.transporterObj.page = this.generalService.adjustPageIndex(this.transporterObj.totalItems, this.transporterObj.page, this.transporterObj.count);
                         this.getTransportersList();
                     } else {
                         this.toasty.showSnackBar("error", response.message);

@@ -1,11 +1,9 @@
 <div class="add-new-role-modal">
-    <div class="dialog-header">
-        <span>{{ localeData?.add_role }}</span>
-        <button mat-icon-button aria-label="close" (click)="closePopupEvent()">
-            <i class="icon-cross"></i>
-        </button>
+    <div class="modal-header d-flex justify-content-between">
+        <h3>{{ localeData?.add_role }}</h3>
+        <span class="cursor-pointer font-24 text-black" (click)="closePopupEvent()">×</span>
     </div>
-    <mat-dialog-content class="dialog-body" id="export-body">
+    <div class="modal-body clearfix" id="export-body">
         <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
             <div>
                 <div class="form-group">
@@ -20,13 +18,13 @@
                     ></input-field>
                 </div>
                 <div class="form-group custom-select position-relative bg-transparent">
-                    <reactive-dropdown-field
+                    <dropdown-field
                         [label]="localeData?.role_type_label"
                         [required]="true"
                         (selectedOption)="newRoleObj.isFresh = $event?.value"
                         [name]="'isFresh'"
                         [options]="isFreshOptions"
-                    ></reactive-dropdown-field>
+                    ></dropdown-field>
                 </div>
                 <div class="form-group" *ngIf="newRoleObj.isFresh">
                     <mat-form-field class="w-100" appearance="outline">
@@ -65,14 +63,14 @@
                     </mat-form-field>
                 </div>
                 <div class="clearfix text-right mr-t4">
-                    <button mat-raised-button color="primary" type="submit" [disabled]="!isFormValid">
+                    <button mat-stroked-button color="primary" type="submit" class="btn" [disabled]="!isFormValid">
                         {{ commonLocaleData?.app_next }}
                     </button>
-                    <button mat-stroked-button class="mr-l1" type="button" (click)="closePopupEvent()">
+                    <button mat-stroked-button class="btn custom-btn" type="button" (click)="closePopupEvent()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
             </div>
         </form>
-    </mat-dialog-content>
+    </div>
 </div>

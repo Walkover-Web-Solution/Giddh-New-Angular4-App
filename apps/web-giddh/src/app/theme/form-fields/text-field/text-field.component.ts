@@ -56,7 +56,6 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     public stateChanges = new Subject<void>();
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
-    /** Callback function to notify parent component of value changes */
     private onChangeCallback: (_: any) => void = noop;
     /** True if field is autocomplete */
     @Input() public autocomplete: string;

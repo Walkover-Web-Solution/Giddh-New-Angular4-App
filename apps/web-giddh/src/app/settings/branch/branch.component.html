@@ -8,7 +8,7 @@
     <div class="relative">
         <div class="clearfix">
             <div class="col-sm-12 mt-2 text-right">
-                <button mat-raised-button color="primary" class="mr-0" (click)="openAddBranchModal()">
+                <button mat-stroked-button color="primary" class="mr-0" (click)="openAddBranchModal()">
                     {{ localeData?.create_branch }}
                 </button>
             </div>
@@ -106,12 +106,10 @@
                                                             <button
                                                                 mat-button
                                                                 [matMenuTriggerFor]="menu"
-                                                                class="cursor-pointer mr-0 min-width-unset"
+                                                                class="icon-dots-three-vertical dropdown-toggle cursor-pointer mr-0 min-width-unset"
                                                                 role="button"
                                                                 aria-label="dropdown button"
-                                                            >
-                                                                <span class="icon-dots-three-vertical"></span>
-                                                            </button>
+                                                            ></button>
                                                             <mat-menu #menu="matMenu">
                                                                 <button mat-menu-item (click)="updateBranch(branch)">
                                                                     {{ commonLocaleData?.app_edit }}
@@ -155,13 +153,6 @@
                                                                 class="linked-add"
                                                             >
                                                                 <ng-container *ngIf="address">
-                                                                    <span
-                                                                        class="cursor-pointer"
-                                                                        cdkOverlayOrigin
-                                                                        #addressTemplate="cdkOverlayOrigin"
-                                                                        (mouseenter)="openAddressInfo(true, address?.uniqueName + branch.uniqueName)"
-                                                                        (mouseleave)="openAddressInfo(false)"
-                                                                    >
                                                                     <i
                                                                         (click)="setDefault(address, branch, 'address')"
                                                                         *ngIf="!address?.isDefault"
@@ -172,37 +163,29 @@
                                                                         *ngIf="address?.isDefault"
                                                                         class="cursor-pointer icon-favorite-selected mr-r05"
                                                                     ></i>
-                                                                        {{ address?.name }}
-                                                                    </span>
-                                                                    <ng-template
-                                                                        cdkConnectedOverlay
-                                                                        [cdkConnectedOverlayOrigin]="addressTemplate"
-                                                                        [cdkConnectedOverlayOpen]="isAddressInfoOpen === (address?.uniqueName + branch.uniqueName)"
-                                                                        [cdkConnectedOverlayPositions]="[
-                                                                            {
-                                                                                originX: 'end',
-                                                                                originY: 'center',
-                                                                                overlayX: 'start',
-                                                                                overlayY: 'center',
-                                                                                offsetX: 8
-                                                                            }
-                                                                        ]">
-                                                                        <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper " (mouseenter)="openAddressInfo(true, address?.uniqueName + branch.uniqueName)"
-                                                                        (mouseleave)="openAddressInfo(false)">
-                                                                            {{ address?.address }} {{ address?.stateCode }}
-                                                                            <p
-                                                                                *ngIf="
-                                                                                    address?.taxType && address?.taxNumber
-                                                                                "
-                                                                            >
-                                                                                {{ address?.taxType }} :
-                                                                                {{ address?.taxNumber }}
-                                                                            </p>
-                                                                            <p *ngIf="address?.pincode">
-                                                                                {{ commonLocaleData?.app_pin }}:
-                                                                                {{ address?.pincode }}
-                                                                            </p>
-                                                                        </div>
+                                                                    <label
+                                                                        class="position-static cursor-pointer border-none bg-transparent"
+                                                                        [popover]="popTemplate"
+                                                                        popoverTitle="{{ address?.name }}"
+                                                                        placement="right"
+                                                                        popover
+                                                                        triggers="mouseenter:mouseleave"
+                                                                        >{{ address?.name }}
+                                                                    </label>
+                                                                    <ng-template #popTemplate>
+                                                                        {{ address?.address }} {{ address?.stateCode }}
+                                                                        <p
+                                                                            *ngIf="
+                                                                                address?.taxType && address?.taxNumber
+                                                                            "
+                                                                        >
+                                                                            {{ address?.taxType }} :
+                                                                            {{ address?.taxNumber }}
+                                                                        </p>
+                                                                        <p *ngIf="address?.pincode">
+                                                                            {{ commonLocaleData?.app_pin }}:
+                                                                            {{ address?.pincode }}
+                                                                        </p>
                                                                     </ng-template>
                                                                 </ng-container>
                                                             </div>
@@ -269,30 +252,35 @@
                                 <!-- not show content -->
                                 <div class="modal-dialog modal-md">
                                     <div class="modal-content">
-                                        <div class="dialog-header clearfix">
-                                            <span>{{ commonLocaleData?.app_confirmation }}</span>
-                                            <button mat-icon-button aria-label="close" mat-dialog-close (click)="onUserConfirmation(false)">
-                                                <i class="icon-cross"></i>
+                                        <div class="modal-header clearfix">
+                                            <h3>{{ commonLocaleData?.app_confirmation }}</h3>
+                                            <button
+                                                aria-hidden="true"
+                                                class="close"
+                                                (click)="onUserConfirmation(false)"
+                                                data-dismiss="modal"
+                                            >
+                                                ×
                                             </button>
                                         </div>
-                                        <mat-dialog-content class="dialog-body">
-                                            <div [innerHTML]="confirmationMessage"></div>
-                                            <div class="d-flex justify-content-end column-gap1 mt-3">
-                                                <button
-                                                    mat-raised-button
-                                                    color="primary"
-                                                    (click)="onUserConfirmation(true)"
-                                                >
-                                                    {{ commonLocaleData?.app_yes }}
-                                                </button>
-                                                <button
-                                                    mat-stroked-button
-                                                    (click)="onUserConfirmation(false)"
-                                                >
-                                                    {{ commonLocaleData?.app_no }}
-                                                </button>
-                                            </div>
-                                        </mat-dialog-content>
+                                        <div class="modal-body" [innerHTML]="confirmationMessage"></div>
+                                        <div class="modal-footer clearfix">
+                                            <button
+                                                mat-stroked-button
+                                                color="primary"
+                                                (click)="onUserConfirmation(true)"
+                                                class="btn btn-sm btn-success"
+                                            >
+                                                {{ commonLocaleData?.app_yes }}
+                                            </button>
+                                            <button
+                                                mat-stroked-button
+                                                (click)="onUserConfirmation(false)"
+                                                class="btn btn-sm btn-danger"
+                                            >
+                                                {{ commonLocaleData?.app_no }}
+                                            </button>
+                                        </div>
                                         <!-- modal footer -->
                                     </div>
                                 </div>

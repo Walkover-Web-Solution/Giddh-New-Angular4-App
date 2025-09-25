@@ -10,8 +10,12 @@ import { LiabilityDetailedReportComponent } from "./liability-detailed-report/li
 import { VatReportFiltersComponent } from "./vat-report-filters/vat-report-filters.component";
 import { VatLiabilitiesPayments } from "./vat-liabilities-payments/vat-liabilities-payments.component";
 import { VatReportRoutingModule } from "./vat-report.routing.module";
+import { TabsModule } from "ngx-bootstrap/tabs";
 import { CommonModule } from "@angular/common";
+import { TooltipModule } from "ngx-bootstrap/tooltip";
+import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
+import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { ClickOutsideModule } from "ng-click-outside";
 import { FormsModule } from "@angular/forms";
 import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.module";
@@ -31,6 +35,8 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { NewConfirmationModalModule } from "../theme/new-confirmation-modal/confirmation-modal.module";
 import { MatInputModule } from "@angular/material/input";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { PaginationModule } from "ngx-bootstrap/pagination";
+import { ModalModule } from "ngx-bootstrap/modal";
 
 @NgModule({
     declarations: [
@@ -47,11 +53,17 @@ import { MatPaginatorModule } from "@angular/material/paginator";
     ],
     imports: [
         VatReportRoutingModule,
+        TabsModule.forRoot(),
         CommonModule,
+        TooltipModule.forRoot(),
+        BsDatepickerModule.forRoot(),
         CurrencyModule,
+        BsDropdownModule.forRoot(),
         ClickOutsideModule,
         FormsModule,
         Daterangepicker,
+        PaginationModule.forRoot(),
+        ModalModule.forRoot(),
         ElementViewChildModule,
         InvoiceModule,
         SharedModule,

@@ -22,8 +22,8 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold the boolean value to open/close setting sidebar popup */
-    public asideTaxSidebarMenuState: boolean = true;
+    /** This will hold the value out/in to open/close setting sidebar popup */
+    public asideTaxSidebarMenuState: string = 'in';
     /** Holds Tax Percent */
     public taxPercentage: FormControl = new FormControl('', [Validators.max(100), Validators.required]);
     /** True if api call in progress */
@@ -95,6 +95,6 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideTaxSidebarMenuState = false;
+        this.asideTaxSidebarMenuState === 'out'
     }
 }

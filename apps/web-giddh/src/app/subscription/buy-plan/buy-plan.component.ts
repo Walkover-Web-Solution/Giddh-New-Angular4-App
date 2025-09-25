@@ -6,6 +6,7 @@ import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.comp
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
 import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
@@ -23,7 +24,7 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { Configuration, IOption, PaymentProvider } from '../../app.constant';
+import { Configuration, PaymentProvider } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 
 @Component({
@@ -231,10 +232,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public paymentProvider: typeof PaymentProvider = PaymentProvider;
     /** This will hold razorpay key */
     public razorpayKey: string = '';
-    /** True if promo code is removed */
-    public removePromoCode: boolean = false;
     /** Hold true in production environment */
     public isProdMode: boolean = PRODUCTION_ENV;
+    /** True if promo code is removed */
+    public removePromoCode: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -552,13 +553,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             }
                         });
                     } else {
-                        setTimeout(() => {
                         if (this.subscriptionId && this.isChangePlan) {
                             this.router.navigate(['/pages/user-details/subscription']);
                         } else {
                             this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                         }
-                        }, 100);
                     }
                 }
             }
@@ -1412,7 +1411,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
             // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
-            filterProviders((duration === 'YEARLY' || duration === 'MONTHLY' || duration === 'DAILY') ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
+            filterProviders(duration === 'YEARLY' ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
         }
 
         if (this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY && (duration === 'MONTHLY' || duration === 'DAILY')) {
@@ -1554,7 +1553,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public activateDialog(): void {
         this.dialog.open(ActivateDialogComponent, {
-            panelClass: 'mat-dialog-md'
+            width: 'var(--aside-pane-width)',
         })
     }
 

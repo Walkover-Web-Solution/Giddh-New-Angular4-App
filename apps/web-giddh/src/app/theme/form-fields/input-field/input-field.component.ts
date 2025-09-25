@@ -46,8 +46,6 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public id: any = "";
     /** Max length of input field */
     @Input() public maxlength: number;
-    /** Min length of input field */
-    @Input() public minlength: number;
     /** True if field is read only */
     @Input() public readonly: boolean;
     /** True if field is disabled */
@@ -90,16 +88,6 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public labelIconClass: string = "fa fa-info-circle";
     /** Label icon tooltip */
     @Input() public labelIconTooltip: string = null;
-    /** Emits on change event */
-    @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
-    /** ngModel of input */
-    public ngModel: any;
-    /** Used for change detection */
-    public stateChanges = new Subject<void>();
-    /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
-    private onTouchedCallback: () => void = noop;
-    /** Callback function to notify parent component of value changes */
-    private onChangeCallback: (_: any) => void = noop;
     /** It will show Icon prefix in the text field */
     @Input() public matPrefixIcon: string = "";
     /** It will show tooltip text in suffix icon */
@@ -110,10 +98,19 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Output() public onPaste: EventEmitter<any> = new EventEmitter<any>();
     /** Emits event when content is focus */
     @Output() public onFocus: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits on change event */
+    @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
     /** Emits on suffix icon click */
     @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emits validation status on blur or model change */
     @Output() public patternValidation: EventEmitter<{isValid: boolean, value: string}> = new EventEmitter<{isValid: boolean, value: string}>();
+    /** ngModel of input */
+    public ngModel: any;
+    /** Used for change detection */
+    public stateChanges = new Subject<void>();
+    /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
+    private onTouchedCallback: () => void = noop;
+    private onChangeCallback: (_: any) => void = noop;
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,

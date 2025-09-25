@@ -8,7 +8,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
-import { IOption } from '../../app.constant';
+import { IOption } from '../../theme/ng-select/ng-select';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 
@@ -29,7 +29,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Decides when to emit the value for UPDATE operation */
     public saveProfileSubject: Subject<any> = new Subject();
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
 
     /** Emits the saved value */
     @Output() public saveProfile: EventEmitter<any> = new EventEmitter();

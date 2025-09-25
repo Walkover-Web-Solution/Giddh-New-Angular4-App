@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { SubscriptionsUser } from '../../../models/api-models/Subscriptions';
-import { IOption } from '../../../app.constant';
+import { IOption } from '../../../theme/ng-select/ng-select';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';

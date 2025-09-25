@@ -5,7 +5,7 @@ import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsIntegrationService } from "../../../services/settings.integration.service";
-import { HttpMethod } from "../../../app.constant";
+import { HttpMethod, HttpMethodType } from "../../../app.constant";
 
 export interface CustomerPortalState {
     payuDetails: any;

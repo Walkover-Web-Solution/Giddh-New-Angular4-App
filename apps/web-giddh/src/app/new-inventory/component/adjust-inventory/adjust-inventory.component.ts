@@ -17,7 +17,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { AdjustmentInventory, DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG } from '../../../app.constant';
+import { AdjustmentInventory, API_COUNT_LIMIT } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'adjust-inventory',
@@ -454,7 +454,14 @@ export class AdjustInventoryComponent implements OnInit {
     * @memberof AdjustInventoryComponent
     */
     public openCreateReasonModal(): void {
-        this.matDialogRef = this.dialog.open(this.createReason, ASIDE_PANE_CONFIG);
+        this.matDialogRef = this.dialog.open(this.createReason, {
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
     }
 
     /**
@@ -546,13 +553,13 @@ export class AdjustInventoryComponent implements OnInit {
         let queryParams = {
             from: this.stockReportRequest.from ?? '',
             to: this.stockReportRequest.to ?? '',
-            count: DROPDOWN_ITEMS_COUNT_LIMIT,
+            count: API_COUNT_LIMIT,
             page: this.stockReportRequest.page ?? 1,
             sort: this.stockReportRequest.sort ?? '',
             sortBy: this.stockReportRequest.sortBy ?? ''
 
         };
-        this.stockReportRequest.count = DROPDOWN_ITEMS_COUNT_LIMIT;
+        this.stockReportRequest.count = API_COUNT_LIMIT;
         this.stockReportRequest.inventoryType = this.inventoryType?.toUpperCase();
         this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
         const warehouseUniqueNames = this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value ? [this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value] : [];

@@ -8,11 +8,12 @@ import { ToasterService } from '../services/toaster.service';
 import { CompanyResponse } from '../models/api-models/Company';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ClipboardService } from 'ngx-clipboard';
 import { LoginActions } from '../actions/login.action';
 import { SessionActions } from '../actions/session.action';
-import { API_POSTMAN_DOC_URL } from '../app.constant';
+import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
 import { cloneDeep } from '../lodash-optimized';
 import { AuthenticationService } from '../services/authentication.service';
 import * as dayjs from 'dayjs';
@@ -20,8 +21,6 @@ import * as duration from 'dayjs/plugin/duration';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../services/general.service';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-
 dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
@@ -65,6 +64,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public dayjs = dayjs;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public userSessionId: any = null;
+    public modalRef: BsModalRef;
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
     public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
@@ -73,6 +73,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /* Holds Mat Table Columns*/
     public displayedColumns: string[] = ['ipaddress', 'signindate', 'signintime', 'duration', 'agent', 'action'];
     /** Holds Active Tab Index */
@@ -244,8 +246,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public ngAfterViewInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
-                this.activeTabIndex = val.tabIndex;
-                this.onTabChanged();
+                this.selectTab({ index: val.tabIndex });
             }
         });
     }
@@ -291,7 +292,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
     }
 
-
+    public selectTab(event: any): void {
+        this.activeTabIndex = event?.index;
+        this.onTabChanged();
+    }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
@@ -317,7 +321,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_single_session, this.commonLocaleData)
             }
         });
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
                 this.store.dispatch(this.sessionAction.getAllSession());
@@ -337,7 +341,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_all_sessions, this.commonLocaleData)
             }
         });
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.store.dispatch(this.sessionAction.deleteAllSession());
                 this.router.navigate(['/login']);
@@ -355,17 +359,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public onTabChanged(): void {
         this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${this.tabName[this.activeTabIndex]}`));
         this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
-    }
-
-    /**
-     * Select tab handler
-     *
-     * @param {MatTabChangeEvent} event
-     * @memberof SubscriptionComponent
-     */
-    public selectTab(event: MatTabChangeEvent): void {
-        this.activeTabIndex = event?.index;
-        this.onTabChanged();
     }
 
     /**

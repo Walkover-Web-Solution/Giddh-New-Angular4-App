@@ -97,7 +97,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     /** Stores the unique name of the selected bank account */
     public selectedAccountUniquename: any;
     /** Stores the voucher API version used by the current company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
     /** Stores restricted voucher types for download */
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
     /** Stores the ledger transaction balance */
@@ -401,7 +401,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             ariaLabel: 'template'
         });
 
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             this.getTransactionData();
         });
     }
@@ -519,4 +519,5 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
 }

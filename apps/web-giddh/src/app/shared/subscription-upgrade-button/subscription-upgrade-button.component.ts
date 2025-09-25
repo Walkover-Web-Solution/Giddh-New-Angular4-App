@@ -66,7 +66,7 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
         if (this.restrictedModule === this.restrictedModules.Users) {
             return this.isUserRestricted;
         } else {
-            return Object.hasOwn(this.activeCompany?.subscription?.planDetails?.restrictedModules, this.restrictedModule);
+            return Object.hasOwn(this.activeCompany?.subscription?.planDetails?.restrictedModules, this.restrictedModule);;
         }
     }
 

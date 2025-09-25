@@ -11,11 +11,10 @@
             <a
                 href="javascript:void(0);"
                 aria-label="add nav"
-                mat-raised-button
+                mat-stroked-button
                 color="primary"
                 id="custom-field-btn"
                 class="mr-0"
-                *ngIf="voucherApiVersion === 2"
                 [routerLink]="['/pages/custom-fields/create']"
             >
                 {{ localeData?.add_new }}
@@ -68,7 +67,6 @@
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
-                                *ngIf="voucherApiVersion === 2"
                                 ><i class="icon-edit"></i
                             ></a>
                             <a
@@ -78,7 +76,6 @@
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
                                 (click)="deleteCustomField(element?.uniqueName)"
-                                *ngIf="voucherApiVersion === 2"
                                 ><i class="icon-trash"></i
                             ></a>
                         </td>
@@ -90,22 +87,22 @@
                     <no-data [secondaryMessage]="' '"></no-data>
                 </div>
             </div>
-            <div class="mt-5">
-                <ng-container
+            <div class="pagination-wrapper mt-5">
+                <pagination
                     *ngIf="
-                        customFieldsList?.results?.length && customFieldsList?.totalItems > pageSizeOptions[0]
+                        customFieldsList?.results?.length && customFieldsList?.totalItems > customFieldsRequest?.count
                     "
-                >
-                    <mat-paginator
-                        [length]="customFieldsList?.totalItems"
-                        [pageSize]="customFieldsRequest.count"
-                        [pageIndex]="customFieldsRequest.page - 1"
-                        [pageSizeOptions]="pageSizeOptions"
-                        [showFirstLastButtons]="true"
-                        [hidePageSize]="false"
-                        (page)="handlePageEvent($event)">
-                    </mat-paginator>
-                </ng-container>
+                    [totalItems]="customFieldsList?.totalItems"
+                    [maxSize]="5"
+                    [itemsPerPage]="customFieldsList?.count"
+                    [boundaryLinks]="true"
+                    [rotate]="true"
+                    (pageChanged)="pageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                ></pagination>
             </div>
         </div>
     </div>

@@ -2,12 +2,14 @@ import { ChangeDetectorRef, Component, HostListener, Input, OnInit, TemplateRef,
 import { OrganizationType } from '../../models/user-login-state';
 import { ReplaySubject, debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { EMAIL_VALIDATION_REGEX, IOption } from '../../app.constant';
+import { IOption } from '../../theme/ng-select/option.interface';
+import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
 export interface GetDomainList {
     type: any;
     hostName: any;
@@ -21,7 +23,19 @@ const ELEMENT_DATA: GetDomainList[] = [];
 @Component({
     selector: 'portal-white-label',
     templateUrl: './portal-white-label.component.html',
-    styleUrls: ['./portal-white-label.component.scss']
+    styleUrls: ['./portal-white-label.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class PortalWhiteLabelComponent implements OnInit {
     /** Stores the type of the organization (company or profile)  */
@@ -378,7 +392,7 @@ export class PortalWhiteLabelComponent implements OnInit {
             width: '600px'
         });
 
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.setPrimaryAndDeleteDomain('delete', this.domain.uniqueName);
             } else {

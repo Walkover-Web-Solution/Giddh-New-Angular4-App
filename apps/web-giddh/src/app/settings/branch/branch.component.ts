@@ -1,8 +1,12 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
@@ -22,22 +26,43 @@ import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../app.constant';
+import { BranchHierarchyType } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
-    styleUrls: ['./branch.component.scss']
+    styleUrls: ['./branch.component.scss'],
+    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
+    @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
     /** Holds Status Dialog Template Reference */
     @ViewChild('statusDialog', { static: true }) public statusDialog: any;
     /** Holds Add Company Dialog Template Reference */
     @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: any;
     /** Holds Close Address Dialog Template Reference */
     @ViewChild('addressAsidePane', { static: true }) public addressAsidePane: any;
+    public bsConfig: Partial<BsDatepickerConfig> = {
+        showWeekNumbers: false,
+        dateInputFormat: GIDDH_DATE_FORMAT,
+        rangeInputFormat: GIDDH_DATE_FORMAT,
+        containerClass: 'theme-green myDpClass'
+    };
     public dataSyncOption = [];
     public currentBranch: string = null;
     public companies$: Observable<CompanyResponse[]>;
@@ -93,10 +118,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public activeTab: string;
     /** This will hold tree response data */
     public data: any[] = [];
-    /** True, if address info is open */
-    public isAddressInfoOpen: string = '';
-    /** True, if last address info is open */
-    public isLastAddressInfoOpen: boolean = false;
 
     constructor(
         private router: Router,
@@ -302,6 +323,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         let message = this.localeData?.remove_branch;
         message = message?.replace("[COMPANY_NAME]", companyName);
         this.confirmationMessage = message;
+        this.confirmationModal?.show();
     }
 
     public onUserConfirmation(yesOrNo) {
@@ -310,6 +332,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             this.selectedBranch = null;
         }
+        this.confirmationModal.hide();
     }
 
     public ngOnDestroy() {
@@ -402,7 +425,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.isBranchChangeInProgress = false;
 
-        this.addressAsidePaneRef = this.dialog.open(this.addressAsidePane, ASIDE_PANE_CONFIG);
+        this.addressAsidePaneRef = this.dialog.open(this.addressAsidePane,
+            {
+                position: {
+                    right: '0'
+                },
+                disableClose: true,
+                width: '760px',
+                height: '100vh',
+                maxHeight: '100vh'
+            });
 
     }
 
@@ -584,25 +616,5 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             this.statusDialogRef?.close();
         });
-    }
-    
-    /**
-     * Opens the address info
-     *
-     * @param {boolean} isOpen
-     * @param {string} [uniqueName='']
-     * @memberof BranchComponent
-     */
-    public openAddressInfo(isOpen: boolean, uniqueName: string = ''): void {
-        this.isLastAddressInfoOpen = isOpen;
-        if (isOpen) {
-            this.isAddressInfoOpen = uniqueName;
-        } else {
-            setTimeout(() => {
-                if (!this.isLastAddressInfoOpen) {
-                    this.isAddressInfoOpen = '';
-                }
-            }, 100);
-        }
     }
 }

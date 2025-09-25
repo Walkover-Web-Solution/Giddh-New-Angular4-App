@@ -3,13 +3,14 @@ import { GeneralService } from '../../services/general.service';
 import { PayPalClass, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
 import { cloneDeep, find } from '../../lodash-optimized';
 import { select, Store } from '@ngrx/store';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, of as observableOf, pairwise, ReplaySubject, startWith, Subject, take, takeUntil } from 'rxjs';
 import { AppState } from '../../store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { ToasterService } from '../../services/toaster.service';
-import { EMAIL_VALIDATION_REGEX, HttpMethod, IOption } from '../../app.constant';
+import { EMAIL_VALIDATION_REGEX, HttpMethod } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { ClipboardService } from 'ngx-clipboard';
@@ -81,7 +82,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     /** Portal Domain name validation with regex pattern */
     public isValidDomain: boolean;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** This will hold portal url */
@@ -608,7 +609,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        confirmModalDialogRef.afterClosed().subscribe(response => {
+        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
             }
@@ -684,7 +685,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        confirmModalDialogRef.afterClosed().subscribe(response => {
+        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
                 this.linkedAccountLabel = '';
@@ -960,7 +961,7 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
             }
         });
 
-        confirmModalDialogRef.afterClosed().subscribe(response => {
+        confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 // For DELETE
                 this.componentStore.payuCrudOperation({

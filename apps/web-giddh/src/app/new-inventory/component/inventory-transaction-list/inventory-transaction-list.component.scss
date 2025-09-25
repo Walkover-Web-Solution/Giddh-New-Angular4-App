@@ -1,3 +1,7 @@
+.pagination-wrapper {
+    padding-bottom: 20px !important;
+}
+
 .stock-group-footer {
     background-color: var(--color-white);
     z-index: 3;
@@ -67,9 +71,6 @@
 
     .mat-table-sticky {
         top: 60px !important;
-    }
-    .common-column-width{
-        min-width: 110px;
     }
 }
 
@@ -211,13 +212,6 @@
             .total-stock-value {
                 padding-left: 0;
             }
-        }
-    }
-}
-@media screen and (max-width: 1200px) {
-    .inventory-transaction-list{
-        .total-details-box {
-            min-width: 188px;
         }
     }
 }

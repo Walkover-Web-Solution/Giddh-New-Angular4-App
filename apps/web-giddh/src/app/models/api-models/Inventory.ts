@@ -1,4 +1,4 @@
-import { DROPDOWN_ITEMS_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
+import { API_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
 import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
 import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocks-item.interface';
 
@@ -202,7 +202,7 @@ export class SearchStockTransactionReportRequest {
     public inventoryType?: string;
     public loadMore?: boolean;
     constructor() {
-        this.count = DROPDOWN_ITEMS_COUNT_LIMIT;
+        this.count = API_COUNT_LIMIT;
         this.page = 1;
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];
@@ -650,7 +650,7 @@ export class InventorytAdjustReportQueryRequest {
     public from?: string = '';
     public to?: string = '';
     public page: number = 1;
-    public count: number = PAGINATION_LIMIT;
+    public count: number = API_COUNT_LIMIT;
     public totalPages: number = 0;
     public totalItems: number = 0;
     public sortBy: string = '';

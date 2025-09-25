@@ -6,9 +6,10 @@ import { SearchService } from '../../services/search.service';
 import { ToasterService } from '../../services/toaster.service';
 import { LedgerService } from '../../services/ledger.service';
 import { IVariant } from '../../models/api-models/Ledger';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
 import { cloneDeep } from '../../lodash-optimized';
-import { IOption, PAGINATION_LIMIT } from '../../app.constant';
+import { PAGINATION_LIMIT } from '../../app.constant';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -153,9 +154,13 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
 
     public addItemToSelectedArr(item: SalesAddBulkStockItems) {
         let index;
-        if (this.generalService.voucherApiVersion === 2 && item.variants?.length === 1) {
-            const variant = item.variants[0];
-            index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
+        if (!item.additional.stock || this.generalService.voucherApiVersion === 1) {
+            index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
+        } else {
+            if (this.generalService.voucherApiVersion === 2 && item.variants?.length === 1) {
+                const variant = item.variants[0];
+                index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
+            }
         }
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);

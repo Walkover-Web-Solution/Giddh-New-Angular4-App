@@ -26,10 +26,6 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */
     public isLoading: boolean = false;
-    /** Holds table displayed columns name for transactions */
-    public transactionDisplayedColumns: string[] = ['index', 'date', 'particular', 'amount', 'type'];
-    /** Holds table displayed columns name for account details */
-    public accountDisplayedColumns: string[] = ['openingBalanceDate', 'openingBalance', 'email', 'name', 'uniqueName'];
 
     constructor(private store: Store<AppState>, private auditLogsActions: AuditLogsActions) {
         this.loadMoreInProcess$ = this.store.pipe(select(p => p.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));

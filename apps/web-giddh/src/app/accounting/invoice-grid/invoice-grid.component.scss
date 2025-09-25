@@ -1,0 +1,51 @@
+.max-width-300 {
+    max-width: 300px;
+}
+
+.max-width-350 {
+    max-width: 350px;
+}
+
+.appearance-none:focus {
+    background: var(--color-iron) !important;
+}
+
+.appearance-none {
+    background: var(--color-dark-fog) !important;
+}
+
+.max-height28 {
+    max-height: 28px;
+}
+
+.form-inline .form-control {
+    font-size: var(--font-size-15);
+    padding: 2px 7px !important;
+    text-transform: capitalize;
+    /* height: 24px;
+  line-height: 24px; */
+}
+
+.lh24 {
+    line-height: 24px;
+}
+
+.max-width-300 label {
+    width: 130px;
+}
+
+.max-width-350 label {
+    width: 160px;
+}
+
+.invoice-width {
+    width: 128px !important;
+}
+
+.invoice-no-width {
+    max-width: 200px !important;
+}
+
+.modal-dialog {
+    width: 298px !important;
+}

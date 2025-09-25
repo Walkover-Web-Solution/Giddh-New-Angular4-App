@@ -156,7 +156,7 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.isLoading = true;
                 this.inventoryService.deleteStockUnitGroup(this.unitGroupDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {

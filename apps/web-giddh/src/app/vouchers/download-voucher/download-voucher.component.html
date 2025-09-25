@@ -1,5 +1,5 @@
 <div class="dialog-header">
-    <span class="font-16">{{ localeData?.download_voucher }}</span>
+    <span mat-dialog-title class="font-16">{{ localeData?.download_voucher }}</span>
     <i mat-dialog-close class="icon-cross icon-font-16"></i>
 </div>
 <div mat-dialog-content class="dialog-body">
@@ -14,6 +14,7 @@
                 <mat-checkbox
                     name="originalCopy"
                     formControlName="isOriginal"
+                    type="checkbox"
                     color="primary"
                     value="Original"
                     [checked]="true"
@@ -30,6 +31,7 @@
                     <mat-checkbox
                         (change)="invoiceTypeChanged($event)"
                         formControlName="isTransport"
+                        type="checkbox"
                         color="primary"
                         value="Transport"
                     >
@@ -40,6 +42,7 @@
                     <mat-checkbox
                         (change)="invoiceTypeChanged($event)"
                         formControlName="isCustomer"
+                        type="checkbox"
                         color="primary"
                         value="Customer"
                     >
@@ -52,6 +55,7 @@
                     name="attachment"
                     (change)="invoiceTypeChanged($event)"
                     formControlName="isAttachment"
+                    type="checkbox"
                     color="primary"
                     value="Attachment"
                 >
@@ -62,7 +66,7 @@
 
         <div class="pd-t15">
             <button
-                mat-raised-button
+                mat-stroked-button
                 color="primary"
                 (click)="downloadVouchers()"
                 [disabled]="

@@ -8,49 +8,70 @@
                 >
                     <label class="d-block">{{commonLocaleData?.app_entity}}</label>
                     <div class="form-group">
-                        <reactive-dropdown-field
+                        <sh-select
                             [options]="currentCompanyBranches"
                             [(ngModel)]="currentBranch.uniqueName"
-                            (selectedOption)="handleBranchChange($event)"
-                            [enableDynamicSearch]="true"
+                            [showClear]="false"
+                            [ItemHeight]="33"
+                            width="100%"
+                            (selected)="handleBranchChange($event)"
+                            [isFilterEnabled]="true"
                             [placeholder]="commonLocaleData?.app_select_entity"
-                            [labelValue]="currentBranch?.name"
-                        ></reactive-dropdown-field>
+                            [fixedValue]="currentBranch?.name"
+                        >
+                            <ng-template #optionTemplate let-option="option">
+                                <ng-container>
+                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                        <span class="entity-icon">
+                                            <i
+                                                class="pull-right"
+                                             [ngClass]="option?.consolidatedBranch ? 'icon-company-profile' : 'icon-branch-icon'"
+                                                *ngIf="!option.isCompany"
+                                                tooltip="{{commonLocaleData?.app_branch}}"
+                                            ></i>
+                                            <i
+                                                class="icon-company-profile pull-right"
+                                                *ngIf="option.isCompany"
+                                                tooltip="{{commonLocaleData?.app_company}}"
+                                            ></i>
+                                        </span>
+                                        <span class="entity-details">
+                                            <div class="item giddh-limit single-line-clamp">
+                                                {{ option.label || '-' }}
+                                            </div>
+                                            <div class="item-unique giddh-limit single-line-clamp">
+                                                {{ option.name || '-' }}
+                                            </div>
+                                        </span>
+                                    </a>
+                                </ng-container>
+                            </ng-template>
+                        </sh-select>
                     </div>
                 </div>
                 <div class="mr-r15 file-type-label">
                     <label class="d-block">{{localeData?.file_type}}</label>
-                    <reactive-dropdown-field
-                        [placeholder]="'Select'"
-                        [name]="'file-type'"
+                    <sh-select
+                        placeholder="Select"
+                        name="file-type"
                         [(ngModel)]="fileType"
                         [options]="fileTypes"
-                    ></reactive-dropdown-field>
+                        [ItemHeight]="33"
+                    ></sh-select>
                 </div>
                 <div class="mr-r15" *ngIf="mode === 'export' && fileType === '0'">
                     <label class="d-block">{{localeData?.data_range}}</label>
-                    <div class="custom-datepicker-wrapper">
-                        <div 
-                            class="custom-datepicker" 
-                            [matMenuTriggerFor]="universalDatepicker"
-                            #universalDatepickerTrigger="matMenuTrigger"
-                            role="button"
-                            aria-haspopup="true"
-                            aria-controls="universalDatepicker"
-                        >
-                            <input
-                                matInput
-                                type="text"
-                                name="selectedDateRange"
-                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker"
-                                readonly
-                            />
-                        </div>
+                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <input
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker border-radius-2"
+                        />
                     </div>
                 </div>
                 <button
-                    mat-raised-button color="primary"
+                    class="btn btn-primary"
                     *ngIf="mode === 'export'"
                     (click)="save()"
                     [ladda]="isExportInProcess$ | async"
@@ -79,7 +100,7 @@
                 </div>
                 <div>
                     <button
-                        mat-raised-button color="primary"
+                        class="btn btn-success"
                         *ngIf="mode === 'import'"
                         (click)="save()"
                         [ladda]="isImportInProcess$ | async"
@@ -91,31 +112,33 @@
             </div>
             <div>
                 <label class="d-block">&nbsp;</label>
-                <button mat-stroked-button class="pull-right back-to-import" (click)="backButtonPressed()">
+                <button class="btn btn-default pull-right back-to-import" (click)="backButtonPressed()">
                     {{commonLocaleData?.app_back}}
                 </button>
             </div>
         </div>
     </div>
 </div>
-<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
-    <ng-template matMenuContent>
-        <app-datepicker-wrapper
-            [inputStartDate]="selectedDateRange?.startDate"
-            [inputEndDate]="selectedDateRange?.endDate"
-            [alwaysShowCalendars]="true"
-            [ranges]="datePickerOptions"
-            [selectedRangeLabel]="selectedRangeLabel"
-            [showCustomRangeLabel]="true"
-            [showClearButton]="false"
-            [showCancel]="true"
-            [linkedCalendars]="true"
-            [showDropdowns]="true"
-            (rangeClicked)="dateSelectedCallback($event)"
-            (datesUpdated)="dateSelectedCallback($event)"
-            (closeCalender)="toggleGiddhDatepicker(false)"
-            [keepCalendarOpeningWithRange]="false"
-            [showRangeLabelOnInput]="false"
-        ></app-datepicker-wrapper>
-    </ng-template>
-</mat-menu>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

@@ -1,21 +1,26 @@
 <ng-container appTranslate [file]="'trial-profit-balance/export'" (localeData)="localeData = $event">
-    <a href="javascript:void(0);" aria-label="download" [matMenuTriggerFor]="xlsDownloadMenu"
-        class="cp new-icon-img">
-        <img [src]="imgPath" alt="download img" />
-    </a>
-    <!-- Menu -->
-    <mat-menu #xlsDownloadMenu="matMenu" xPosition="before" yPosition="below">
-        <button mat-menu-item (click)="downloadTbXls('main-group')" aria-label="report">
-            {{ localeData?.xls?.main_group_report }}
-        </button>
-        <button mat-menu-item (click)="downloadTbXls('group')" aria-label="downloadreport">
-            {{ localeData?.xls?.all_group_report }}
-        </button>
-        <button mat-menu-item (click)="downloadTbXls('account')" aria-label="account">
-            {{ localeData?.xls?.all_account_report }}
-        </button>
-        <button mat-menu-item (click)="downloadTbXls('all')" aria-label="report">
-            {{ localeData?.xls?.complete_report }}
-        </button>
-    </mat-menu>
+    <div class="btn-group" dropdown>
+        <a href="javascript:void(0);" aria-label="download" dropdownToggle class="cp new-icon-img"><img src="{{ imgPath }}" alt="download img"  /></a>
+        <ul
+            id="dropdown-xls"
+            *dropdownMenu
+            class="dropdown-menu dropdown-menu-right cp tbpl-dropdown"
+            role="menu"
+            aria-labelledby="button-basic"
+        >
+            <span class="caret"></span>
+            <li>
+                <a href="javascript:void(0);" aria-label="report" (click)="downloadTbXls('main-group')">{{ localeData?.xls?.main_group_report }}</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" aria-label="downloadreport" (click)="downloadTbXls('group')">{{ localeData?.xls?.all_group_report }}</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" aria-label="account" (click)="downloadTbXls('account')">{{ localeData?.xls?.all_account_report }}</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" aria-label="report" (click)="downloadTbXls('all')">{{ localeData?.xls?.complete_report }}</a>
+            </li>
+        </ul>
+    </div>
 </ng-container>

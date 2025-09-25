@@ -27,7 +27,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     public createAccountIsSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stores the voucher API version of company */
-    public voucherApiVersion: number;
+    public voucherApiVersion: 1 | 2;
     /** This will hold stock type */
     public stockType: string = '';
     /** True if account has unsaved changes */

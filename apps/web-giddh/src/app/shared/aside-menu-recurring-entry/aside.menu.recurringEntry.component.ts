@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { IOption } from '../../app.constant';
+import { IOption } from '../../theme/ng-select/ng-select';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { RecurringInvoice } from '../../models/interfaces/recurring-invoice';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from "../../services/toaster.service";
 import { takeUntil } from 'rxjs/operators';
@@ -27,6 +28,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     public isLoading: boolean = false;
     public isDeleteLoading: boolean;
     public form: UntypedFormGroup;
+    public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     @Input() public voucherNumber: string;
     @Input() public voucherType?: string;
     @Input() public mode: 'create' | 'update' = 'create';

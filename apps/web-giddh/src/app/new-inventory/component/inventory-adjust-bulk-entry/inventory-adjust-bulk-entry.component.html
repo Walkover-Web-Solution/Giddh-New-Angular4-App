@@ -1,0 +1,108 @@
+<div class="add-bulk-item-modal">
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Add bulk items</h4>
+        <button type="button" id="close-btn" class="close pull-right" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <!-- region left side -->
+            <div class="col-md-6 col-sm-6">
+                <div class="left-content">
+                    <div class="search-box">
+                        <input
+                            type="text"
+                            id="search-input"
+                            placeholder="Search stock"
+                            class="pd-r1 pd-l1 form-control"
+                        />
+                    </div>
+                    <div class="product-list">
+                        <div class="single-product-wrapper cp">
+                            <h5>Item Name</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- endregion-->
+            <!-- region right side -->
+            <div class="col-md-6 pl-0 col-sm-6">
+                <div class="right-content">
+                    <h4>Selected Stocks <span class="selected-stock-number">Selected </span></h4>
+                    <hr />
+                    <div class="right-side-wrapper">
+                        <div class="wrap-selected-stocks">
+                            <div class="single-selected-stock clearfix d-flex">
+                                <div class="flex-fill">
+                                    <div class="stock-name">
+                                        <p>Item Name</p>
+                                        <p>
+                                            <span class="stockSku"><label>SKU: </label>Item SKU Code</span>
+                                            <span><label>Rate:</label> </span>2000
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="input-group add-item-btn">
+                                        <span class="input-group-btn">
+                                            <button
+                                                id="minus-btn"
+                                                type="button"
+                                                class="btn btn-default btn-number minus-btn"
+                                            >
+                                                <span class="fa fa-minus"></span>
+                                            </button>
+                                        </span>
+
+                                        <input
+                                            type="number"
+                                            id="input-number"
+                                            name="quantity"
+                                            class="form-control input-number"
+                                            value="1"
+                                            min="1"
+                                        />
+
+                                        <span class="input-group-btn">
+                                            <button id="plus-btn" type="button" class="btn btn-default btn-number">
+                                                <span class="fa fa-plus"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+
+                                    <span class="mr-l15">
+                                        <i class="icon-cross"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="template-footer">
+                        <hr />
+
+                        <div class="btn-group bulk-item-btn-group">
+                            <button
+                                id="add-btn"
+                                class="btn btn-sm btn-success bdr-radius-50 min-width-100"
+                                type="button"
+                            >
+                                Add
+                            </button>
+                            <button
+                                id="cancel-btn"
+                                class="btn btn-sm btn-primary bdr-radius-50 min-width-100"
+                                type="button"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- endregion-->
+        </div>
+    </div>
+</div>

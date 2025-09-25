@@ -58,15 +58,11 @@ export interface DayBookRequestModel {
     vouchers: any[];
     inventory: Inventory;
     tags?: any[];
-    defaultVouchersLabel?: string;
-    defaultTagsLabel?: string;
-    defaultParticularsLabel?: string;
 }
 
 export interface Inventory {
     includeInventory: boolean;
     inventories: any[];
-    defaultInventoriesLabel?: any[];
     quantity?: any;
     includeQuantity: boolean;
     quantityLessThan: boolean;

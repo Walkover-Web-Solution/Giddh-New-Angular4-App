@@ -15,8 +15,4 @@ export interface AllItems {
     items: AllItem[];
     link?: string;
     isActive?: boolean;
-    hide?: boolean;
-    expandable?: boolean;
-    level?: number;
-    isExpanded?: boolean;
 }

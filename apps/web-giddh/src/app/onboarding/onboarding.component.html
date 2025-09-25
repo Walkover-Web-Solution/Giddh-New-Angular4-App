@@ -50,7 +50,7 @@
                     <p [innerHTML]="localeData?.giddh_usage"></p>
                     <div class="d-flex column-gap15">
                         <a
-                            mat-raised-button
+                            mat-stroked-button
                             color="primary"
                             class="mt-2"
                             target="_blank"
@@ -59,7 +59,7 @@
                             {{ localeData?.sync_with_tally }}
                         </a>
                         <a
-                            mat-raised-button
+                            mat-stroked-button
                             color="primary"
                             class="mt-2"
                             href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp"
@@ -71,7 +71,7 @@
                     <div class="right-section">
                         <h1 class="border-btm mr-t4">{{ localeData?.ask_question }}</h1>
                         <span>{{ localeData?.request_demo }}</span>
-                        <button mat-raised-button color="primary" class="mr-t1" (click)="scheduleNow()">
+                        <button mat-stroked-button color="primary" class="mr-t1" (click)="scheduleNow()">
                             {{ commonLocaleData?.app_schedule_now }}
                         </button>
                         <br />
@@ -103,14 +103,17 @@
             </div>
         </div>
     </div>
-    <ng-template #asideMenuTemplate>
+    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+    <div *ngIf="accountAsideMenuState === 'in'">
         <aside-menu-account
             [activeGroupUniqueName]="selectedGroupForCreateAcc"
             [activeAccountDetails]="activeAccountDetails"
             [isUpdateAccount]="false"
+            class="account-aside-menu-state transform-inherit"
+            [@slideInOut]="accountAsideMenuState"
             [commonLocaleData]="commonLocaleData"
-            (closeAsideEvent)="asideMenuDialogRef?.close()"
+            (closeAsideEvent)="toggleAccountAsidePane($event)"
         >
         </aside-menu-account>
-    </ng-template>
+    </div>
 </ng-container>

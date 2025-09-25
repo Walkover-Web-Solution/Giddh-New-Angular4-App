@@ -5,7 +5,6 @@ import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardS
 import { AsideMenuSalesOtherTaxes } from "./aside-menu-sales-other-taxes";
 import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
 import { MatButtonModule } from "@angular/material/button";
-import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
     declarations: [AsideMenuSalesOtherTaxes],
@@ -14,8 +13,7 @@ import { MatDialogModule } from "@angular/material/dialog";
         FormsModule,
         KeyboardShortutModule,
         FormFieldsModule,
-        MatButtonModule,
-        MatDialogModule
+        MatButtonModule
     ],
     exports: [AsideMenuSalesOtherTaxes]
 })

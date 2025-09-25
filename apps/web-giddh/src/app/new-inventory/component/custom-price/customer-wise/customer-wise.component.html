@@ -17,7 +17,7 @@
                                     </span>
                                 </div>
                                 <div class="mr-b1">
-                                    <button mat-raised-button aria-label="customer group" color="primary" class="w-100" (click)="openSearchModal('users')">
+                                    <button mat-stroked-button aria-label="customer group" color="primary" class="w-100" (click)="openSearchModal('users')">
                                         {{localeData?.add_customer_group }}
                                     </button>
                                 </div>
@@ -62,7 +62,7 @@
                         </mat-list>
                         <div class="customer-right-side" #stocksContainer>
                                 <div class="right-heading" *ngIf="currentUser?.uniqueName">
-                                    <button mat-raised-button aria-label="inventory" color="primary" (click)="openSearchModal('stocks')"> {{
+                                    <button mat-stroked-button aria-label="inventory" color="primary" (click)="openSearchModal('stocks')"> {{
                                         localeData?.add_inventory }} </button>
                                     <div class="d-flex align-items-center justify-content-end column-gap5 w-50">
                                         <watch-video [cssClass]="'text-primary'" [moduleName]="'MRP_DISCOUNT'" *ngIf="!isTabScreen"></watch-video>
@@ -90,7 +90,7 @@
                                                 </span>
                                                 <div>
                                                     <button mat-stroked-button aria-label="discard" (click)="discardChanges()" class="mr-3">{{ localeData?.discard }}</button>
-                                                    <button mat-raised-button color="primary" aria-label="save" (click)="saveDiscount()">
+                                                    <button mat-raised-button aria-label="save" (click)="saveDiscount()">
                                                         {{ commonLocaleData?.app_save }}
                                                     </button>
                                                 </div>
@@ -166,14 +166,14 @@
                                                                             </div>
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount position-relative">
-                                                                            <reactive-dropdown-field
+                                                                            <dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
                                                                                 [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"
                                                                                 (selectedOption)="updateDiscountInVariant(variant, $event)"
-                                                                                [labelValue]="variant?.get('discountName')?.value">
-                                                                            </reactive-dropdown-field>
+                                                                                [defaultValue]="variant?.get('discountName')?.value">
+                                                                            </dropdown-field>
                                                                         </td>
                                                                         <td class="variant-delete">
                                                                             <div class="delete-show">
@@ -193,14 +193,14 @@
                                                                 <tr>
                                                                     <td colspan="100%">
                                                                         <div class="add-variant">
-                                                                            <reactive-dropdown-field
+                                                                            <dropdown-field
                                                                                 [name]="'variantsWithoutDiscount' + i"
                                                                                 [label]="commonLocaleData?.app_variant"
                                                                                 [placeholder]="commonLocaleData?.app_select_variant"
                                                                                 [options]="variantsWithoutDiscount[i]"
                                                                                 (selectedOption)="selectVariant($event, i)"
-                                                                                [labelValue]="variantsDropdownDefaultValue">
-                                                                            </reactive-dropdown-field>
+                                                                                [defaultValue]="variantsDropdownDefaultValue">
+                                                                            </dropdown-field>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -253,14 +253,14 @@
                                                                             </div>
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount position-relative">
-                                                                            <reactive-dropdown-field
+                                                                            <dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
                                                                                 [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"
                                                                                 (selectedOption)="updateDiscountInVariant(variant, $event)"
-                                                                                [labelValue]="variant?.get('discountName')?.value">
-                                                                            </reactive-dropdown-field>
+                                                                                [defaultValue]="variant?.get('discountName')?.value">
+                                                                            </dropdown-field>
                                                                         </td>
                                                                         <td class="variant-delete">
                                                                             <div class="delete-show">
@@ -282,16 +282,14 @@
                                         </ng-container>
                                     </ng-container>
                                 </div>
-                                <div *ngIf="pagination.stock.totalItems > pageSizeOptions[0]">
-                                    <mat-paginator
-                                        [length]="pagination.stock.totalItems"
-                                        [pageSize]="pagination.stock.count"
-                                        [pageIndex]="pagination.stock.page - 1"
-                                        [pageSizeOptions]="pageSizeOptions"
-                                        [showFirstLastButtons]="true"
-                                        [hidePageSize]="false"
-                                        (page)="handlePageEvent($event)">
-                                    </mat-paginator>
+                                <div class="pagination-wrapper" *ngIf="pagination.stock.totalPages > 1">
+                                    <pagination [totalItems]="pagination.stock.totalItems" [maxSize]="3"
+                                        class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
+                                        (pageChanged)="pageChanged($event)" [(ngModel)]="pagination.stock.page"
+                                        [rotate]="false" [firstText]="commonLocaleData?.app_first"
+                                        [previousText]="commonLocaleData?.app_previous"
+                                        [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
+                                    </pagination>
                                 </div>
                             </ng-container>
                             <div class="text-center mt-5 text-gray font-24"

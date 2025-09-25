@@ -86,13 +86,19 @@
 <!--Modal for All Items -->
 <ng-template #allItemModal>
     <div (click)="$event.stopPropagation()">
-        <div class="dialog-header">
-            <span>{{ createNewModalTitle }}</span>
-            <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
-                <i class="icon-cross"></i>
+        <div class="modal-header theme-bg pd-l2 pd-r2">
+            <h3 class="modal-title bg" id="modal-title">{{ createNewModalTitle }}</h3>
+            <button
+                mat-icon-button
+                aria-hidden="true"
+                class="close"
+                [attr.aria-label]="commonLocaleData?.app_close"
+                (click)="closeAllDialogs()"
+            >
+                ×
             </button>
         </div>
-        <mat-dialog-content class="dialog-body d-flex">
+        <div class="modal-body pd-l2 pd-r2 clearfix d-flex">
             <ng-container *ngFor="let item of subMenuItems">
                 <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional?.queryParams">
                     <mat-card-title>
@@ -103,6 +109,6 @@
                     </mat-card-content>
                 </mat-card>
             </ng-container>
-        </mat-dialog-content>
+        </div>
     </div>
 </ng-template>

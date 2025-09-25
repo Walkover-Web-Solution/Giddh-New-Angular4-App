@@ -3,7 +3,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InstitutionsRequest } from '../../../models/api-models/SettingsIntegraion';
 import { SettingIntegrationComponentStore } from '../utility/setting.integration.store';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
@@ -37,7 +37,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     /** Hold filetered item from bank list*/
     public filteredBanks: any[] = [];
     /** Search field form control */
-    public searchFormControl = new FormControl();
+    public searchFormControl = new UntypedFormControl();
 
     constructor(
         private componentStore: SettingIntegrationComponentStore,

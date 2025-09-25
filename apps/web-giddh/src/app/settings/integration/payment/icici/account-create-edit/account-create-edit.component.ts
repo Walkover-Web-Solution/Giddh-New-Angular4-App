@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
-import { IOption, SELECT_ALL_RECORDS } from "apps/web-giddh/src/app/app.constant";
+import { SELECT_ALL_RECORDS } from "apps/web-giddh/src/app/app.constant";
 import { IForceClear } from "apps/web-giddh/src/app/models/api-models/Sales";
 import { SalesService } from "apps/web-giddh/src/app/services/sales.service";
 import { SettingsIntegrationService } from "apps/web-giddh/src/app/services/settings.integration.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { AppState } from "apps/web-giddh/src/app/store";
+import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../constants/settings.constant";

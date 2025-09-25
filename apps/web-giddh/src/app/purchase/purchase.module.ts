@@ -1,24 +1,37 @@
 import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatButtonModule } from '@angular/material/button';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
+import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
+import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
+import { PurchaseOrderPreviewComponent } from './purchase-order-preview/purchase-order-preview.component';
+import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
+import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DeleteVoucherConfirmationModalModule } from '../shared/delete-voucher-confirmation-modal/delete-voucher-confirmation-modal.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-send-email.module';
+import { RevisionHistoryModule } from '../shared/revision-history/revision-history.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
@@ -28,50 +41,57 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatTabsModule } from '@angular/material/tabs';
+import { BulkConvertComponent } from './bulk-convert/bulk-convert.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRadioModule } from '@angular/material/radio';
 import { PurchaseSettingModule } from './purchase-setting/purchase-setting.module';
 
 @NgModule({
     declarations: [
-        PurchaseComponent
+        PurchaseOrderComponent,
+        CreatePurchaseOrderComponent,
+        PurchaseOrderPreviewComponent,
+        PurchaseComponent,
+        PurchaseRecordComponent,
+        PurchaseAdvanceSearchComponent,
+        BulkConvertComponent
     ],
     imports: [
-        MatButtonModule,
         PurchaseRoutingModule,
         InvoiceModule,
-        MatPaginatorModule,
-        
+        CollapseModule.forRoot(),
+        PaginationModule.forRoot(),
+        BsDropdownModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
+        TooltipModule.forRoot(),
         ClickOutsideModule,
+        TabsModule.forRoot(),
         ElementViewChildModule,
         ScrollingModule,
+        ShSelectModule,
+        SalesShSelectModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
         TaxControlModule,
         DiscountControlModule,
         NoDataModule,
         MatSlideToggleModule,
-        MatTooltipModule,
-        MatTabsModule,
         VoucherAddBulkItemsModule,
         TranslateDirectiveModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
+        ModalModule.forRoot(),
         HamburgerMenuModule,
+        BsDatepickerModule.forRoot(),
         DeleteVoucherConfirmationModalModule,
         GiddhDatepickerModule,
         PurchaseSendEmailModule,
+        RevisionHistoryModule,
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
@@ -82,9 +102,6 @@ import { PurchaseSettingModule } from './purchase-setting/purchase-setting.modul
         FormFieldsModule,
         MatFormFieldModule,
         MatInputModule,
-        MatMenuModule,
-        MatCheckboxModule,
-        MatRadioModule,
         PurchaseSettingModule
     ]
 })

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
-import { IOption } from '../../../../app.constant';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
@@ -14,7 +14,7 @@ import { NgForm } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomTemplateState } from 'apps/web-giddh/src/app/store/invoice/invoice.template.reducer';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
@@ -34,8 +34,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     @Input() public commonLocaleData: any = {};
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('bulkUpdateForm', { static: true }) public bulkUpdateForm: NgForm;
-    /* Template for bulk update image/slogan */
-    @ViewChild('bulkUpdateImageSloganTemplate', { static: true }) public bulkUpdateImageSloganTemplate: TemplateRef<any>;
+    @ViewChild('bulkUpdateImageSlogan', { static: true }) public bulkUpdateImageSlogan: ModalDirective;
     public fieldOptions: IOption[] = [];
     public templateSignaturesOptions: IOption[] = [];
     public signatureOptions: string = 'image'
@@ -58,13 +57,17 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     public updateCustomfieldsRequest: BulkUpdateInvoiceCustomfields = new BulkUpdateInvoiceCustomfields();
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public updateInProcess: boolean = false;
+    public modalConfig: ModalOptions = {
+        animated: true,
+        keyboard: true,
+        backdrop: 'static',
+        ignoreBackdropClick: true
+    };
     /** True, if user has opted to show notes at the last page of sales invoice */
     public showNotesAtLastPage: boolean;
     public isDefaultTemplateSignatureImage: boolean;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: number;
-    /** Dialog reference for bulk update image/slogan confirmation */
-    private bulkUpdateImageSloganDialogRef: MatDialogRef<any>;
+    public voucherApiVersion: 1 | 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -74,8 +77,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private loaderService: LoaderService,
         private generalService: GeneralService,
-        private commonService: CommonService,
-        private dialog: MatDialog
+        private commonService: CommonService
     ) {
         this.allTemplates$ = this.store.pipe(select(s => s.invoiceTemplate.customCreatedTemplates), takeUntil(this.destroyed$));
     }
@@ -272,13 +274,13 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                 case 'signature':
                     if (this.signatureOptions === 'image') {
                         if (!this.isDefaultTemplateSignatureImage) {
-                            this.openBulkUpdateImageSloganDialog();
+                            this.bulkUpdateImageSlogan?.show();
                         } else {
                             this.onConfirmationUpdateImageSlogan();
                         }
                     } else {
                         if (this.isDefaultTemplateSignatureImage) {
-                            this.openBulkUpdateImageSloganDialog();
+                            this.bulkUpdateImageSlogan?.show();
                         } else {
                             this.onConfirmationUpdateImageSlogan();
                         }
@@ -308,27 +310,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     }
 
     /**
-     * Opens the bulk update image/slogan confirmation dialog
-     *
-     * @memberof InvoiceBulkUpdateModalComponent
-     */
-    public openBulkUpdateImageSloganDialog(): void {
-        this.bulkUpdateImageSloganDialogRef = this.dialog.open(this.bulkUpdateImageSloganTemplate, {
-            panelClass: 'mat-dialog-md',
-            disableClose: true
-        });
-    }
-
-    /**
      * Update Image/Slogan confirmation true
      *
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onConfirmationUpdateImageSlogan(): void {
-        if (this.bulkUpdateImageSloganDialogRef) {
-            this.bulkUpdateImageSloganDialogRef.close();
-            this.bulkUpdateImageSloganDialogRef = null;
-        }
+        this.bulkUpdateImageSlogan?.hide();
         if (this.signatureOptions === 'image') {
 
             if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
@@ -349,10 +336,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onCancelBulkUpdateImageSloganModal(): void {
-        if (this.bulkUpdateImageSloganDialogRef) {
-            this.bulkUpdateImageSloganDialogRef.close();
-            this.bulkUpdateImageSloganDialogRef = null;
-        }
+        this.bulkUpdateImageSlogan?.hide();
         this.clearImage();
         this.forceClear$ = observableOf({ status: true });
         this.updateSloganRequest.slogan = '';

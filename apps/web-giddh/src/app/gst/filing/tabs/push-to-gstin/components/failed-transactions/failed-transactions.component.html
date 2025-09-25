@@ -46,16 +46,16 @@
             </table>
         </div>
 
-        <div class="mb-4" *ngIf="failedTransactions?.length > pageSizeOptions[0]">
-            <mat-paginator
-                [length]="failedTransactions?.length"
-                [pageSize]="itemsPerPage"
-                [pageSizeOptions]="pageSizeOptions"
-                [pageIndex]="0"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)"
-            ></mat-paginator>
+        <div class="pagination-wrapper text-center mb-4" [hidden]="!failedTransactions?.length">
+            <pagination
+                [totalItems]="failedTransactions?.length"
+                [itemsPerPage]="itemsPerPage"
+                (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
         </div>
 
         <div *ngIf="!failedTransactions?.length">

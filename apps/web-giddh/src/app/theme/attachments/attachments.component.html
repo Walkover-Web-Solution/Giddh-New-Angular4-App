@@ -6,12 +6,13 @@
 >
     <div class="wrapper">
         <div class="header">
-            <button mat-stroked-button
+            <button
                 aria-hidden="true"
                 class="cursor-pointer font-15 d-flex p-0 attachment-back-button"
                 [attr.aria-label]="commonLocaleData?.app_back"
                 disableRipple
                 type="button"
+                mat-button
                 (click)="closeAttachmentDialog()"
             >
                 <i class="icon-left"></i> {{ commonLocaleData?.app_back }}

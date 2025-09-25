@@ -1,12 +1,10 @@
 <div class="aside-pane">
-    <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
-        <i class="icon-cross"></i>
-    </button>
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
     <div class="aside-body row">
         <inventory-custom-stock
             #customStock
             [isAsideClose]="asideClose"
-            [isAsideOpen]="menuState"
+            [isAsideOpen]="menuState === 'in'"
             (closeAsideEvent)="closeAsidePane($event)"
         >
         </inventory-custom-stock>

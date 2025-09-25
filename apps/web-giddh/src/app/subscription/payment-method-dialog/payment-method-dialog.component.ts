@@ -153,7 +153,7 @@ export class PaymentMethodDialogComponent implements OnInit {
             }
         });
 
-        dialogRef.afterClosed().subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.componentStore.deletePaymentMethod(payment?.uniqueName);
             }

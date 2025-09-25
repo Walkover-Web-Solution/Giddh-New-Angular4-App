@@ -2,7 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { MatTabGroup, MatTabChangeEvent } from '@angular/material/tabs';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CompanyResponse } from '../models/api-models/Company';
@@ -32,9 +32,7 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     public preventTabChangeWithRoute: boolean;
     /** This will store screen size */
     public isMobileScreen: boolean = false;
-    @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: MatTabGroup;
-    /** Selected tab index for Material tabs */
-    public selectedTabIndex: number = 0;
+    @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: TabsetComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -94,24 +92,14 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
                 this.activeTab = val.tab;
                 this.activeTabIndex = val.tabIndex;
                 this.preventTabChangeWithRoute = true;
-                this.selectTab(Number(val.tabIndex));
+                this.selectTab(val.tabIndex);
             }
         });
     }
 
-    /**
-     * Selects a tab by index using Angular Material tabs API
-     *
-     * @param {number} id - The index of the tab to select (0-based)
-     * @memberof FinancialReportsComponent
-     */
     public selectTab(id: number) {
-        if (this.staticTabs) {
-            this.staticTabs.selectedIndex = id;
-            this.selectedTabIndex = id;
-            this.CanTBLoad = id === 0;
-            this.CanPLLoad = id === 1;
-            this.CanBSLoad = id === 2;
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
+            this.staticTabs.tabs[id].active = true;
         }
     }
 
@@ -135,29 +123,6 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     public tabChanged(tab: string, tabIndex: number): void {
         if (!this.preventTabChangeWithRoute) {
             this.router.navigate(['/pages/trial-balance-and-profit-loss'], { queryParams: { tab, tabIndex } });
-        }
-    }
-
-    /**
-     * Handles Material tab change events
-     *
-     * @param {MatTabChangeEvent} event
-     * @memberof FinancialReportsComponent
-     */
-    public onTabChanged(event: MatTabChangeEvent): void {
-        const tabNames = ['trial-balance', 'profit-loss', 'balance-sheet'];
-        const tabName = tabNames[event.index];
-        
-        if (tabName) {
-            this.preventTabChangeWithRoute = false;
-            this.selectedTabIndex = event.index;
-            
-            // Update the loading flags based on selected tab
-            this.CanTBLoad = (event.index === 0);
-            this.CanPLLoad = (event.index === 1);
-            this.CanBSLoad = (event.index === 2);
-            
-            this.tabChanged(tabName, event.index);
         }
     }
 }

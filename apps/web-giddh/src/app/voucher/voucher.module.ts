@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatCommonModule } from "@angular/material/core";
-import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatMenuModule } from "@angular/material/menu";
@@ -12,6 +11,9 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTableModule } from "@angular/material/table";
 import { LaddaModule } from "angular2-ladda";
+import { CollapseModule } from "ngx-bootstrap/collapse";
+import { BsDropdownModule } from "ngx-bootstrap/dropdown";
+import { ModalModule } from "ngx-bootstrap/modal";
 import { AdvanceReceiptAdjustmentModule } from "../shared/advance-receipt-adjustment/advance-receipt-adjustment.module";
 import { AsideMenuOtherTaxesModule } from "../shared/aside-menu-other-taxes/aside-menu-other-taxes.module";
 import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-service/aside-menu-product-service.module";
@@ -29,7 +31,9 @@ import { SharedModule } from "../shared/shared.module";
 import { VoucherAddBulkItemsModule } from "../shared/voucher-add-bulk-items/voucher-add-bulk-items.module";
 import { DiscountControlModule } from "../theme/discount-control/discount-control.module";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+import { SelectModule } from "../theme/ng-select/ng-select";
 import { TaxControlModule } from "../theme/tax-control/tax-control.module";
+import { VoucherPrintInPlaceComponent } from "./components/voucher-print-inplace/voucher-print-in-place.component";
 import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
 import { VoucherRoutingModule } from "./voucher.routing.module";
@@ -48,16 +52,19 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         ReactiveFormsModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        
+        CollapseModule.forRoot(),
+        BsDropdownModule.forRoot(),
         DigitsOnlyModule,
         SharedModule,
         AsideMenuRecurringEntryModule,
+        ModalModule.forRoot(),
         TaxControlModule,
         DiscountControlModule,
         LaddaModule.forRoot({
             style: "slide-left",
             spinnerSize: 30,
         }),
+        SelectModule.forRoot(),
         SendEmailInvoiceModule,
         VoucherTypeToNamePipeModule,
         CurrencyModule,
@@ -73,7 +80,6 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         MatCommonModule,
         MatButtonModule,
         MatCheckboxModule,
-        MatDialogModule,
         MatTableModule,
         MatSelectModule,
         MatFormFieldModule,
@@ -88,7 +94,7 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         OnloadDirectiveModule,
     ],
     exports: [VoucherComponent],
-    declarations: [VoucherRendererComponent, VoucherComponent],
+    declarations: [VoucherRendererComponent, VoucherComponent, VoucherPrintInPlaceComponent],
     providers: [TitleCasePipe],
 })
 export class VoucherModule {}

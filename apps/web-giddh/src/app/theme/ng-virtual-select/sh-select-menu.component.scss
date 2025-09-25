@@ -1,0 +1,72 @@
+.menu {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    background-color: var(--color-white);
+    width: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+    z-index: 102;
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
+    border: 1px solid var(--color-common-secondary-border);
+    border-radius: 4px;
+    min-width: max-content;
+    margin-top: 1px;
+}
+
+.item {
+    cursor: pointer;
+    white-space: inherit;
+    display: table;
+    width: 100%;
+    word-break: break-word;
+    height: auto !important;
+}
+.item:hover a {
+    color: var(--color-blue) !important;
+}
+
+.item.selected {
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
+}
+.item.hilighted {
+    color: var(--color-blue) !important;
+}
+.item.hilighted a {
+    color: var(--color-dropdown-list-hover-text) !important;
+}
+
+.item > a {
+    padding: 5px 10px;
+    font-size: var(--font-size-15);
+}
+.item > a:hover {
+    color: var(--color-dropdown-list) !important;
+    background: var(--color-dropdown-list-hover-background) !important;
+}
+
+.no-result-link > a {
+    color: var(--color-blue) !important;
+}
+
+#noresult:hover {
+    background: transparent;
+}
+.item span {
+    float: left;
+}
+.item span input[type="checkbox"]:after {
+    top: -1px !important;
+    left: -1px !important;
+}
+.disabled a,
+.disabled a .item {
+    cursor: not-allowed !important;
+    color: var(--color-abbey) !important;
+}
+@media (max-width: 767px) {
+    .menu {
+        z-index: 100;
+    }
+}

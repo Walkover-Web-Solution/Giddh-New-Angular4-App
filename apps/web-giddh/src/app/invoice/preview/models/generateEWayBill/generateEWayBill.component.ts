@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SelectedInvoices } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { TemplateRef } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
 @Component({
     selector: 'app-generate-ewaybill-dialog',
     templateUrl: './generateEWayBill.component.html',
@@ -18,10 +19,9 @@ export class GenerateEWayBillComponent {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     public invoiceList: SelectedInvoices[] = [];
-    /** Reference to dialog */
-    public dialogRef: MatDialogRef<any>;
+    public modalRef: BsModalRef;
 
-    constructor(private dialog: MatDialog) {
+    constructor(private modalService: BsModalService) {
 
     }
 
@@ -33,14 +33,8 @@ export class GenerateEWayBillComponent {
         this.createEWayBillEvent.emit();
     }
 
-    /**
-     * Opens the dialog with the provided template
-     *
-     * @param {TemplateRef<any>} template
-     * @memberof GenerateEWayBillComponent
-     */
     public openModal(template: TemplateRef<any>) {
-        this.dialogRef = this.dialog.open(template, { panelClass: 'mat-dialog-md' });
+        this.modalRef = this.modalService.show(template, { class: 'modal-455' });
     }
 
 }

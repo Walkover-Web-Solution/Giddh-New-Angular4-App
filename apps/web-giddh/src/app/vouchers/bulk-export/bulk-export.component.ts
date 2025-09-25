@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
-import { EMAIL_VALIDATION_REGEX, IOption } from '../../app.constant';
+import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
 import { saveAs } from 'file-saver';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
@@ -12,6 +12,7 @@ import { cloneDeep } from '../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { CopyType, FileTypeEnum } from '../../shared/Enums/common.enum';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { VouchersUtilityService } from '../utility/vouchers.utility.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';

@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="dialog-header">
-        <span class="font-16">{{ localeData?.create_e_way_bill }}</span>
+        <span mat-dialog-title class="font-16">{{ localeData?.create_e_way_bill }}</span>
         <i mat-dialog-close class="icon-cross"></i>
     </div>
     <div mat-dialog-content class="dialog-body">
@@ -63,7 +63,6 @@
                                 (selectedOption)="$event && generateEwayBillform.get('transName').patchValue($event.label)"
                                 (onClear)="generateEwayBillform.get('transName').patchValue(null); generateEwayBillform.get('transId').patchValue(null)"
                                 [createNewText]="commonLocaleData?.app_create_new"
-                                [showCreateNew]="true"
                                 (createOption)="openTransporterModel()"
                                 [showError]="isFormInvalid && !generateEwayBillform.get('transId').value"
                             >
@@ -95,20 +94,68 @@
                             <label>{{ localeData?.mode_of_transportation }}</label>
                         </div>
                         <div class="col-md-8 col-lg-8 col-sm-12 mr-t15 pd-t15">
-                            <mat-radio-group formControlName="transMode" class="d-flex flex-wrap">
-                                <mat-radio-button color="primary" value="1" (click)="updateField('vehType', null)" class="mr-3 mb-2">
-                                    <img alt="Road icon" src="assets/icon/4.svg" class="mr-1" /> {{ commonLocaleData?.app_road }}
-                                </mat-radio-button>
-                                <mat-radio-button color="primary" value="2" (click)="updateField('vehType', 'R')" class="mr-3 mb-2">
-                                    <img alt="Railway icon" src="assets/icon/3.svg" class="mr-1" /> {{ commonLocaleData?.app_rail }}
-                                </mat-radio-button>
-                                <mat-radio-button color="primary" value="3" (click)="updateField('vehType', 'R')" class="mr-3 mb-2">
-                                    <img alt="Airway icon" src="assets/icon/1.svg" class="mr-1" /> {{ commonLocaleData?.app_air }}
-                                </mat-radio-button>
-                                <mat-radio-button color="primary" value="4" (click)="updateField('vehType', 'R')" class="mb-2">
-                                    <img alt="Ship icon" src="assets/icon/2.svg" class="mr-1" /> {{ commonLocaleData?.app_ship }}
-                                </mat-radio-button>
-                            </mat-radio-group>
+                            <ul class="list-icon-group list-style-none p-0 d-flex">
+                                <li class="d-flex align-items-center cursor-pointer">
+                                    <input
+                                        id="transMode1"
+                                        type="radio"
+                                        class="d-none"
+                                        name="transMode"
+                                        value="1"
+                                        formControlName="transMode"
+                                        (click)="updateField('vehType', null)"
+                                    />
+                                    <label for="transMode1"
+                                        ><img alt="Road icon" src="assets/icon/4.svg" /> {{ commonLocaleData?.app_road
+                                        }}</label
+                                    >
+                                </li>
+                                <li class="d-flex align-items-center cursor-pointer">
+                                    <input
+                                        id="transMode2"
+                                        type="radio"
+                                        class="d-none"
+                                        name="transMode"
+                                        value="2"
+                                        formControlName="transMode"
+                                        (click)="updateField('vehType', 'R')"
+                                    />
+                                    <label for="transMode2"
+                                        ><img alt="Railway icon" src="assets/icon/3.svg" /> {{
+                                        commonLocaleData?.app_rail }}</label
+                                    >
+                                </li>
+                                <li class="d-flex align-items-center cursor-pointer">
+                                    <input
+                                        id="transMode3"
+                                        type="radio"
+                                        class="d-none"
+                                        name="transMode"
+                                        value="3"
+                                        formControlName="transMode"
+                                        (click)="updateField('vehType', 'R')"
+                                    />
+                                    <label for="transMode3"
+                                        ><img alt="Airway icon" src="assets/icon/1.svg" /> {{ commonLocaleData?.app_air
+                                        }}</label
+                                    >
+                                </li>
+                                <li class="d-flex align-items-center cursor-pointer">
+                                    <input
+                                        id="transMode4"
+                                        type="radio"
+                                        class="d-none"
+                                        name="transMode"
+                                        value="4"
+                                        formControlName="transMode"
+                                        (click)="updateField('vehType', 'R')"
+                                    />
+                                    <label for="transMode4"
+                                        ><img alt="Ship icon" src="assets/icon/2.svg" /> {{ commonLocaleData?.app_ship
+                                        }}</label
+                                    >
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="row">
@@ -173,13 +220,13 @@
                     </div>
                     <div class="row clearfix d-flex justify-content-end column-gap15">
                         <button
-                            mat-raised-button
+                            mat-stroked-button
                             color="primary"
                             (click)="onSubmitEwaybill()"
                         >
                             {{ localeData?.save_generate }}
                         </button>
-                        <button mat-raised-button color="primary" (click)="onResetGenerateBillForm()">
+                        <button mat-stroked-button color="primary" (click)="onResetGenerateBillForm()">
                             {{ commonLocaleData?.app_reset }}
                         </button>
                     </div>
@@ -191,7 +238,7 @@
 <!-- Account Aside Menu -->
 <ng-template #accountAsideMenu>
     <div class="dialog-header">
-        <span class="font-16">{{ commonLocaleData?.app_manage_transporter }}</span>
+        <span mat-dialog-title class="font-16">{{ commonLocaleData?.app_manage_transporter }}</span>
         <i mat-dialog-close class="icon-cross"></i>
     </div>
     <div mat-dialog-content class="dialog-body">
@@ -237,7 +284,7 @@
                 <div class="form-group mt-3">
                     <div class="clearfix d-flex justify-content-end column-gap15" *ngIf="!transportEditMode">
                         <button
-                            mat-raised-button
+                            mat-stroked-button
                             color="primary"
                             [disabled]="generateNewTransporterForm.invalid"
                             (click)="generateTransporter()"
@@ -245,13 +292,13 @@
                         >
                             {{ commonLocaleData?.app_save }}
                         </button>
-                        <button mat-raised-button color="primary" (click)="clearTransportForm()" type="submit">
+                        <button mat-stroked-button color="primary" (click)="clearTransportForm()" type="submit">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>
                     <div class="clearfix d-flex justify-content-end column-gap15" *ngIf="transportEditMode">
                         <button
-                            mat-raised-button
+                            mat-stroked-button
                             color="primary"
                             [disabled]="generateNewTransporterForm.invalid"
                             (click)="updateTransporter()"
@@ -259,7 +306,7 @@
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                        <button mat-raised-button color="primary" (click)="clearTransportForm()">
+                        <button mat-stroked-button color="primary" (click)="clearTransportForm()">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>
@@ -324,26 +371,30 @@
                     <td>{{ item?.transporterName }}</td>
                     <td>{{ item?.transporterId }}</td>
                     <td class="nowrap d-flex column-gap15 border-top-0">
-                        <button mat-raised-button color="primary" class="min-width-unset" (click)="editTransporter(item)">
+                        <button mat-stroked-button color="primary" class="min-width-unset" (click)="editTransporter(item)">
                             <i class="icon-edit"></i>
                         </button>
-                        <button mat-raised-button color="primary" class="min-width-unset" (click)="deleteTransporter(item)">
+                        <button mat-stroked-button color="primary" class="min-width-unset" (click)="deleteTransporter(item)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
                 </tr>
             </table>
         </div>
-        <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
+        <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalPages > 1">
             <mat-paginator
-                [length]="transporterListDetails.totalItems"
-                [pageIndex]="transporterFilterRequest.page - 1"
-                [pageSize]="transporterFilterRequest.count"
-                [pageSizeOptions]="pageSizeOptions"
-                (page)="pageChanged($event)"
-                [hidePageSize]="false"
-                [showFirstLastButtons]="true"
-                aria-label="Select page of transports"
+                [totalItems]="transporterListDetails.totalPages"
+                [(ngModel)]="transporterListDetails.page"
+                [maxSize]="5"
+                class="pagination-sm"
+                [boundaryLinks]="true"
+                [itemsPerPage]="1"
+                [rotate]="false"
+                (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
             ></mat-paginator>
         </div>
     </div>

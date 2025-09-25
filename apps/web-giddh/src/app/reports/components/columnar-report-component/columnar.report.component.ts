@@ -12,10 +12,9 @@ import * as dayjs from 'dayjs';
 import { saveAs } from "file-saver";
 import { IForceClear } from '../../../models/api-models/Sales';
 import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, PAGINATION_LIMIT } from '../../../app.constant';
+import { API_COUNT_LIMIT, BootstrapToggleSwitch, PAGINATION_LIMIT } from '../../../app.constant';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { GroupService } from '../../../services/group.service';
-import { PageEvent } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 @Component({
     selector: 'columnar-report-component',
@@ -24,8 +23,6 @@ import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 })
 
 export class ColumnarReportComponent implements OnInit, OnDestroy {
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public fromMonthNames: any = [];
     public toMonthNames: any = [];
     public selectYear: any = [];
@@ -37,7 +34,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public groupUniqueName: string = '';
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    public forceClear: boolean = false;
+    public forceClearMonths$: Observable<IForceClear> = observableOf({ status: false });
     public fromMonth: any = null;
     public toMonth: any = null;
     public financialYearSelected: any;
@@ -47,6 +44,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public columnarReportResponse: any;
     /** Columnar report table request params object */
     public getColumnarRequestModel: ReportsDetailedRequestFilter;
+    /** report table pagination count constant */
+    public paginationCount: number = PAGINATION_LIMIT;
     /** True, if request for show report  */
     public isShowColumnarReport: boolean = false;
     /** To check cr/dr or +/- checked */
@@ -71,6 +70,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,
@@ -103,7 +104,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
-        this.getColumnarRequestModel.count = PAGINATION_LIMIT;
+        this.getColumnarRequestModel.count = this.paginationCount;
         this.columnarReportResponse = null;
         this.getFinancialYears();
         this.loadDefaultGroupsSuggestions();
@@ -117,13 +118,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public getFinancialYears(): void {
         this.settingsFinancialYearService.GetAllFinancialYears().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.body && res.body.financialYears) {
-                let selectYear = [];
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = dayjs(key?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = dayjs(key?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    selectYear.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
+                    this.selectYear.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
                 });
-                this.selectYear = selectYear;
                 this.selectActiveFinancialYear();
             }
         });
@@ -226,6 +225,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public selectFinancialYear(event): void {
         if (event && event.value) {
+            this.forceClearMonths$ = observableOf({ status: true });
             this.financialYearSelected = event.value;
             this.exportRequest.financialYear = dayjs(event.value?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
 
@@ -236,8 +236,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
 
             this.fromMonthNames = [];
             this.toMonthNames = [];
-            this.fromMonth = null;
-            this.toMonth = null;
 
             this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
@@ -360,17 +358,21 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handles pagination events and updates API parameters
-     * 
-     * @param {PageEvent} event - Contains pagination details
+     * To call API according to pagination
+     *
+     * @param {*} event Pagination page change event
+     * @returns {void}
      * @memberof ColumnarReportComponent
      */
-    public handlePageEvent(event: PageEvent): void {
-        if (this.getColumnarRequestModel) {
-            this.getColumnarRequestModel.page = this.getColumnarRequestModel.count !== event.pageSize ? 1 : event.pageIndex + 1;
-            this.getColumnarRequestModel.count = event.pageSize;
+    public pageChanged(event: any): void {
+        if (event && this.getColumnarRequestModel) {
+            if (event && event.page === this.getColumnarRequestModel.page) {
+                return;
+            }
+            this.getColumnarRequestModel.page = event.page;
             this.exportReport(true);
         }
+
     }
 
     /**
@@ -384,7 +386,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.fromMonth = null;
         this.toMonth = null;
         this.forceClear$ = observableOf({ status: true });
-        this.forceClear = !this.forceClear; 
+        this.forceClearMonths$ = observableOf({ status: true });
         this.fromMonthNames = [];
         this.toMonthNames = [];
         this.selectActiveFinancialYear();
@@ -411,7 +413,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: DROPDOWN_ITEMS_COUNT_LIMIT,
+                count: API_COUNT_LIMIT,
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {

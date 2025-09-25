@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
@@ -5,8 +6,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { combineLatest, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from '../../app.constant';
-import { PageEvent } from '@angular/material/paginator';
+import { PAGINATION_LIMIT } from '../../app.constant';
 import { BranchFilterRequest } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
@@ -16,7 +16,19 @@ import { WarehouseActions } from '../warehouse/action/warehouse.action';
 @Component({
     selector: 'address-settings',
     templateUrl: './address-settings.component.html',
-    styleUrls: ['./address-settings.component.scss']
+    styleUrls: ['./address-settings.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds Aside Account AsidePane Dialog Template Reference */
@@ -33,8 +45,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public addresses: Array<any>;
     /** Stores the pagination count */
     @Input() public paginationLimit: number = PAGINATION_LIMIT;
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Stores the pagination configuration */
     @Input() public paginationConfig: any;
     /** True if API is in progress */
@@ -101,6 +111,8 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public searchTaxInput: UntypedFormControl = new UntypedFormControl();
     /** Search state input field form control */
     public searchStateInput: UntypedFormControl = new UntypedFormControl();
+    /** Stores the current state of side menu */
+    public accountAsideMenuState: string = 'out';
     /** True, if search name input field is to be shown */
     public showSearchName: boolean;
     /** True, if search address input field is to be shown */
@@ -276,7 +288,15 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public toggleAccountAsidePane(): void {
         this.isAddressChangeInProgress = false;
         this.isAddressChangeInProgressChange.emit(this.isAddressChangeInProgress);
-        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, ASIDE_PANE_CONFIG);
+        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
+            width: '1000px',
+            height: '100vh !important',
+            disableClose: true,
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
     }
 
     /**
@@ -312,24 +332,29 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * Adds fixed class to body when aside menu is opened
+     *
+     * @memberof AddressSettingsComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /**
      * Pagination change handler
      *
      * @param {*} event Pagination event
      * @memberof AddressSettingsComponent
      */
-    /**
-     * Handles the page change event from mat-paginator
-     *
-     * @param {PageEvent} event Page event
-     * @memberof AddressSettingsComponent
-     */
-    public handlePageEvent(event: PageEvent): void {
-        this.paginationConfig.page = event.pageSize !== this.paginationLimit ? 1 : event.pageIndex + 1;
-        this.paginationConfig.count = event.pageSize;
-        this.pageChanged.emit({ page: this.paginationConfig.page, count: this.paginationConfig.count, ...this.addressSearchRequest });
+    public handlePageChange(event: any): void {
+        if (event.page !== this.paginationConfig.page) {
+            this.pageChanged.emit({ ...event, ...this.addressSearchRequest });
+        }
     }
-
-
 
     /**
      * Update address handler

@@ -1,0 +1,209 @@
+$hilighted-color: var(--color-blue) !important;
+$text-overflow-ellipsis-width: 255px;
+
+:host {
+    display: block;
+    position: relative;
+    height: 100%;
+}
+
+.virtual-group-list {
+    height: 100%;
+    min-height: 500px;
+}
+
+.text-overflow-ellipsis .list-item {
+    text-overflow: ellipsis;
+    width: 255px;
+}
+
+.grp-list {
+    padding: 0px 0 10px !important;
+}
+
+.hilighted {
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
+}
+
+.account-list:hover {
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
+}
+
+.hilighted {
+    >a {
+        color: $hilighted-color;
+    }
+}
+
+.text-overflow-ellipsis {
+    .list-item {
+        text-overflow: ellipsis;
+        width: $text-overflow-ellipsis-width;
+    }
+}
+
+.no-result-link {
+    >a {
+        color: $hilighted-color;
+    }
+}
+
+.group-list-no-found {
+    min-height: 150px !important;
+}
+
+.grp-list li {
+    .account-list {
+        padding: 9px 12px !important;
+    }
+}
+
+#noresult:hover {
+    background: transparent;
+}
+
+/* .header {
+    width: 100%;
+    margin: 0 !important;
+    padding: 2px 30px 2px 10px;
+    box-sizing: border-box;
+    background-color: white;
+    font-size: 1.0em;
+    border-radius: 2px;
+    border: 1px solid rgba(34, 36, 38, .15);
+    vertical-align: middle;
+    cursor: pointer;
+} */
+
+.header:hover {
+    cursor: text;
+}
+
+.header.inline {
+    background-color: transparent;
+    width: max-content;
+    border: none;
+}
+
+.header.open {
+    border-radius: 2px 2px 0 0;
+    box-shadow: 0 2px 3px 0 var(--color-primary-common-box-shadow);
+    border-bottom: none;
+}
+
+.header:focus {
+    outline: 0;
+}
+
+div {
+    display: block;
+}
+
+/* input[type="text"] {
+    border: none !important;
+    vertical-align: middle !important;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0px !important;
+    box-sizing: border-box;
+    background-color: white;
+    font-size: 1.0rem !important;
+    line-height: 2rem !important;
+    letter-spacing: 0.01rem !important;
+    font-family: 'RobotoDraft', 'Roboto', 'Helvetica Neue, Helvetica, Arial', sans-serif;
+    font-style: normal !important;
+    font-weight: 300 !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
+} */
+
+input[type="text"] {
+    outline: none;
+}
+
+[hidden] {
+    display: none;
+}
+
+i.close.icon.clear::after {
+    content: "✕";
+    padding-right: 8px;
+    font-weight: 800;
+    color: var(--color-abbey);
+}
+
+i.close.icon.clear:hover::after {
+    color: var(--color-danger);
+}
+
+.clear {
+    position: absolute;
+    right: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    top: 47%;
+    cursor: pointer;
+    font-size: var(--font-size-24);
+    font-weight: 500;
+    line-height: 100%;
+    opacity: 0.5;
+    color: var(--color-nero);
+    transform: translateY(-50%);
+}
+
+.sh-select-disabled {
+    background-color: var(--color-dark-fog);
+    color: var(--color-primary-sh-select-disabled);
+    cursor: not-allowed;
+}
+
+.chip {
+    display: inline-block;
+    padding: 0 7px;
+    height: 30px;
+    font-size: var(--font-size-15);
+    line-height: 30px;
+    border-radius: 4px;
+    background-color: var(--color-wild-sand);
+    margin: 8px 0 5px 8px;
+    /* color: white; */
+}
+
+.chip-close-btn {
+    padding-left: 10px;
+    font-weight: 500;
+    float: right;
+    font-size: var(--font-size-16);
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.chip-close-btn:hover {
+    font-weight: 700;
+    opacity: 0.5;
+    color: var(--color-nero);
+}
+
+.sh-select-disabled .selected-val,
+.sh-select-disabled .form-control {
+    background: var(--color-dark-fog) !important;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.selected-val {
+    border: 1px solid var(--color-iron) !important;
+    padding-right: 22px !important;
+    background: var(--color-white) !important;
+}
+
+.header.open>input[type="text"] {
+    border-color: var(--color-iron);
+}
+
+.header .bdr>input[type="text"] {
+    border: 0;
+}

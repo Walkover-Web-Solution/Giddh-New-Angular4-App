@@ -109,6 +109,7 @@
     "purchase_record_note1": "You have already created a purchase record with the same invoice number, invoice date and vendor details.",
     "purchase_record_note2": "Do you want to merge this transaction with the previous one?",
     "purchase_record_footer_note": "If no then change either purchase invoice number or vendor details.",
+    "date_change_confirmation_heading": "Date Change Confirmation",
     "change_single_entry_date": "Do you want to change the entry date as well?",
     "change_all_entry_dates": "Do you want to change the all entries date with this date?",
     "exchange_label": "Exchange",

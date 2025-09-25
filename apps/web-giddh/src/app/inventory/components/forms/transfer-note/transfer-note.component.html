@@ -7,11 +7,15 @@
             <div class="row">
                 <div class="col-6 form-group">
                     <label>Date <sup>*</sup></label>
-                    <giddh-datepicker
-                        name="entryDate"
+                    <input
+                        name="dateRange"
                         formControlName="inventoryEntryDate"
-                        [appearance]="'outline'"
-                    ></giddh-datepicker>
+                        type="text"
+                        autocomplete="off"
+                        class="form-control"
+                        bsDatepicker
+                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                    />
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
                     >
@@ -24,36 +28,43 @@
                 </div>
 
                 <div class="col-6 form-group">
-                    <reactive-dropdown-field
+                    <label>Product Name <sup>*</sup></label>
+                    <sh-select
                         [options]="stockListOptions"
-                        [label]="'Product Name'"
+                        [multiple]="false"
                         [placeholder]="'Select Product'"
-                        (selectedOption)="stockChanged($event)"
+                        (selected)="stockChanged($event)"
+                        [ItemHeight]="'33'"
                         formControlName="stock"
-                        [required]="true"
-                    ></reactive-dropdown-field>
+                        [isRequired]="true"
+                    ></sh-select>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-6 form-group">
-                    <reactive-dropdown-field
+                    <label>Sender's Name <sup>*</sup></label>
+                    <sh-select
                         [options]="userListOptions"
-                        [label]="'Sender\'s Name'"
+                        [multiple]="false"
                         [placeholder]="'Select Sender'"
                         formControlName="inventoryUser"
-                        [required]="true"
-                    ></reactive-dropdown-field>
+                        [ItemHeight]="'33'"
+                        [isRequired]="true"
+                    ></sh-select>
                 </div>
 
                 <div class="col-6 form-group">
-                    <reactive-dropdown-field
+                    <label>Receiver's Name <sup>*</sup></label>
+                    <sh-select
                         [options]="userListOptions"
-                        [label]="'Receiver\'s Name'"
+                        [multiple]="false"
                         [placeholder]="'Select Receiver'"
-                        (selectedOption)="recieverUniqueName = $event.value"
-                        [required]="true"
-                    ></reactive-dropdown-field>
+                        (selected)="recieverUniqueName = $event.value"
+                        [ItemHeight]="'33'"
+                        [isRequired]="true"
+                    >
+                    </sh-select>
                 </div>
             </div>
 
@@ -70,13 +81,15 @@
                 </div>
 
                 <div class="col-6 form-group">
-                    <reactive-dropdown-field
+                    <label>Unit <sup>*</sup></label>
+                    <sh-select
                         [options]="stockUnitsOptions"
-                        [label]="'Unit'"
                         [placeholder]="'Choose unit'"
                         formControlName="stockUnit"
-                        [required]="true"
-                    ></reactive-dropdown-field>
+                        [multiple]="false"
+                        [ItemHeight]="33"
+                        [isRequired]="true"
+                    ></sh-select>
                 </div>
             </div>
 
@@ -89,8 +102,8 @@
 
             <div class="row">
                 <div class="col-md-12 text-left mr-t1">
-                    <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
-                    <button mat-raised-button color="primary" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                    <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
+                    <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save
                     </button>
                 </div>

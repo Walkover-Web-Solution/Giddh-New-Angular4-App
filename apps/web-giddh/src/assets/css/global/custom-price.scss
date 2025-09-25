@@ -1,4 +1,7 @@
 .custom-grid-wrapper {
+    * {
+        color: var(--color-common-primary-text);
+    }
     .mat-list-wrap {
         .custom-tab {
             button {

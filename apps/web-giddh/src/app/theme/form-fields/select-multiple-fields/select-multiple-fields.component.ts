@@ -4,8 +4,9 @@ import { FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
-import { EMAIL_VALIDATION_REGEX, IOption, MOBILE_REGEX_PATTERN } from "../../../app.constant";
+import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN } from "../../../app.constant";
 import { cloneDeep } from "../../../lodash-optimized";
+import { IOption } from "../../ng-virtual-select/sh-options.interface";
 
 @Component({
     selector: "select-multiple-fields",

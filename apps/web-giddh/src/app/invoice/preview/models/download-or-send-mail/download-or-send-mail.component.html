@@ -9,8 +9,8 @@
             <ng-container *ngIf="showPdfWrap">
                 <button
                     type="button"
-                    mat-raised-button
-                    class="mr-r1"
+                    mat-stroked-button
+                    class="btn-default mr-r1"
                     *ngIf="showEditButton"
                     (click)="editVoucher()"
                 >
@@ -18,8 +18,8 @@
                 </button>
                 <button
                     type="button"
-                    mat-raised-button
-                    class="mr-r1"
+                    mat-stroked-button
+                    class="btn-default mr-r1"
                     [matMenuTriggerFor]="showMoreOptions"
                     (click)="showEsign = false"
                 >
@@ -61,7 +61,7 @@
                                         (currentVoucherFilter === invoicesEnum && !invoiceType?.length)
                                     "
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="onSendInvoiceOnMail(emailList?.value)"
                                 >
@@ -78,7 +78,7 @@
                             <div [ngClass]="{'mr-t15': (currentVoucherFilter === invoicesEnum && voucherApiVersion === 2)}">
                                 <button
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="downloadInvoice()"
                                     [disabled]="
@@ -102,7 +102,7 @@
                             <div class="mr-t15">
                                 <button
                                     type="button"
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     (click)="onSendInvoiceOnSms(smsList?.value)"
                                 >
@@ -115,7 +115,7 @@
             </div>
         </mat-menu>
     </div>
-    <mat-dialog-content class="dialog-body">
+    <div mat-dialog-content class="dialog-body">
         <div *ngIf="isErrOccured$ | async">
             <p class="lead text-center">{{ commonLocaleData?.app_oops_something_went_wrong }}</p>
         </div>
@@ -132,7 +132,7 @@
                 [src]="sanitizedPdfFileUrl"
             ></iframe>
         </div>
-    </mat-dialog-content>
+    </div>
 </ng-container>
 
 <!-- Invoice Copy Options (checkbox) -->

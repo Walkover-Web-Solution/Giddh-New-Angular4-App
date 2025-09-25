@@ -49,7 +49,7 @@
                                 class="align-items-center"
                             >
                                 <span
-                                    class="tailed-checkbox pd-1"
+                                    class="tailed-checkbox mr-l1 mr-1"
                                     [matTooltip]="commonLocaleData?.app_clear_selected"
                                     matTooltipPosition="before"
                                     (click)="openConfirmDialog()"
@@ -57,7 +57,7 @@
                                 >
                                     <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
                                 </span> 
-                                <span class="mr-l05 mr-1"
+                                <span class="pd-r1"
                                     ><strong>{{ localeData?.particular }}</strong></span
                                 >
                                 <i class="icon-search" id="showSearch" (click)="toggleSearch()"></i>
@@ -228,15 +228,17 @@
         </div>
     </div>
 </ng-container>
-
-<ng-template #accountAsideMenuTemplate>
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<div *ngIf="accountAsideMenuState === 'in'">
     <aside-menu-account
         [activeGroupUniqueName]="activeGroupUniqueName"
         [activeAccountDetails]="accountDetails"
         [isUpdateAccount]="true"
+        class="account-aside-menu-state transform-inherit"
+        [@slideInOut]="accountAsideMenuState"
         [commonLocaleData]="commonLocaleData"
         (closeAsideEvent)="getUpdatedList(false)"
         (getUpdateList)="getUpdatedList(true)"
     >
     </aside-menu-account>
-</ng-template>
+</div>

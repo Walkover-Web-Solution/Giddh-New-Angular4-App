@@ -37,22 +37,10 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.activeTab = params['type'];
+
                 this.selectedTabIndex = (this.activeTab === "imports") ? 1 : 0;
             }
         });
-    }
-
-    /**
-     * Callback for tab change event
-     * @param {any} event - Tab change event
-     * @memberof DownloadsComponent
-     */
-    public tabChanged(event: any): void {
-        if (event?.index === 0) {
-            this.router.navigate(['/pages/downloads/exports']);
-        } else if (event?.index === 1) {
-            this.router.navigate(['/pages/downloads/imports']);
-        }
     }
 
     /**
@@ -65,5 +53,13 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-
+    /**
+     * Handles tab change
+     *
+     * @param {*} event
+     * @memberof DownloadsComponent
+     */
+    public tabChanged(event: any): void {
+        this.router.navigate(['pages', 'downloads', ((event?.index === 1) ? "imports" : "exports")]);
+    }
 }

@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from 'apps/web-giddh/src/app/app.constant';
-import { PageEvent } from '@angular/material/paginator';
+import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integration.service';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -97,8 +97,6 @@ export class TriggersComponent implements OnInit, OnDestroy {
         totalItems: 0,
         totalPages: 0
     }
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** True if  the variables showing   */
     public showVariableMapping: boolean = false;
     /** Hold instance of destroyed   */
@@ -217,7 +215,7 @@ export class TriggersComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef?.afterClosed().subscribe(response => {
+        dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.campaignIntegrationService.deleteCommunicationPlatform(platformUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
@@ -438,16 +436,11 @@ export class TriggersComponent implements OnInit, OnDestroy {
     * @param {*} event
     * @memberof TriggersComponent
     */
-    /**
-     * Handles the page change event from mat-paginator
-     *
-     * @param {PageEvent} event Page event
-     * @memberof TriggersComponent
-     */
-    public handlePageEvent(event: PageEvent): void {
-        this.triggerObj.page = event.pageSize !== this.triggerObj.count ? 1 : event.pageIndex + 1;
-        this.triggerObj.count = event.pageSize;
-        this.getTriggers();
+    public pageChanged(event: any): void {
+        if (this.triggerObj.page !== event?.page) {
+            this.triggerObj.page = event?.page;
+            this.getTriggers();
+        }
     }
 
     /**
@@ -735,7 +728,7 @@ export class TriggersComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef?.afterClosed().subscribe(response => {
+        dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.campaignIntegrationService.deleteTrigger(triggerUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {

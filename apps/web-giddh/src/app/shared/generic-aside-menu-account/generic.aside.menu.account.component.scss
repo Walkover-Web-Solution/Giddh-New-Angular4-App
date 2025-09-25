@@ -1,0 +1,45 @@
+:host {
+    position: fixed;
+    left: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 760px;
+    width: 100%;
+    z-index: 99999;
+}
+
+#closedialog {
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 18px;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--color-popup-list-head-text);
+    font-size: 17px;
+}
+
+.form-header {
+    height: var(--header-height);
+}
+.aside-body {
+    padding: 0 15px;
+}
+.aside-pane-form {
+    padding: 15px 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+    background-color: var(--color-common-primary-background-for-all-components);
+}
+
+.aside-pane {
+    top: 0;
+    right: 0;
+}

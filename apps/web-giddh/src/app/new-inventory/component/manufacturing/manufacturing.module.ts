@@ -11,9 +11,8 @@ import { ListManufacturingComponent } from './list-manufacturing/list-manufactur
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatMenuModule } from '@angular/material/menu';
 import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
-
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-datepicker.module';
 import { FormsModule } from '@angular/forms';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
@@ -22,7 +21,6 @@ import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-p
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
-import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     imports: [
@@ -35,9 +33,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatTableModule,
         MatDialogModule,
         MatTooltipModule,
-        MatMenuModule,
         DatepickerWrapperModule,
-
+        PaginationModule.forRoot(),
         GiddhDatepickerModule,
         FormsModule,
         TranslateDirectiveModule,
@@ -45,8 +42,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         GiddhPageLoaderModule,
         MatExpansionModule,
         MatSlideToggleModule,
-        WatchVideoModule,
-        MatPaginatorModule
+        WatchVideoModule
     ],
     exports: [
         CreateManufacturingComponent,

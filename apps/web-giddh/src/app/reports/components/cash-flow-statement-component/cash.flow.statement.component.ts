@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { Component, OnInit, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -20,10 +20,12 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 })
 
 export class CashFlowStatementComponent implements OnInit, OnDestroy {
-    /** Instance of universal datepicker menu trigger */
-    @ViewChild('universalDatepickerTrigger', { static: false }) public universalDatepickerTrigger: MatMenuTrigger;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
+
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -50,14 +52,16 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     };
     /* This will store if loading is active or not */
     public isLoading: boolean = false;
-/** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private breakPointObservar: BreakpointObserver, private store: Store<AppState>, private cashFlowStatementService: CashFlowStatementService, private generalService: GeneralService, private toaster: ToasterService) {
+    constructor(private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private store: Store<AppState>, private cashFlowStatementService: CashFlowStatementService, private generalService: GeneralService, private toaster: ToasterService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -105,30 +109,40 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-    
+
     /**
-     * Toggles the datepicker menu
-     * 
-     * @param {boolean} isOpen - Whether to open or close the datepicker
+     * This will show the datepicker
+     *
      * @memberof CashFlowStatementComponent
      */
-    public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {            
-            this.universalDatepickerTrigger?.openMenu();
-         } else {
-            this.universalDatepickerTrigger?.closeMenu();
-         }
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof CashFlowStatementComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value - The value returned from the datepicker
+     * @param {*} value
      * @memberof CashFlowStatementComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
@@ -137,7 +151,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
 
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
 
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };

@@ -5,12 +5,12 @@
             id="hamburger-menu"
             aria-label="hamburger"
             name="hamburger-menu"
-            [matTooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
-            matTooltipPosition="right"
+            [tooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
+            placement="right"
         >
             <i class="icon-bar"></i>
         </button>
-        <h4 class="inline text-capitalize" *ngIf="pageHeading?.trim() && isMobileView">
+        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="pageHeading?.trim() && isMobileView">
             <span>{{ pageHeading }}</span>
         </h4>
     </li>

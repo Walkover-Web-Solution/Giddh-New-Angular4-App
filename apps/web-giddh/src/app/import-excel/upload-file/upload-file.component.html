@@ -17,15 +17,46 @@
         <label class="mt-4 mb-8">{{ localeData?.select_branch_headquarter }} <sup>*</sup></label>
         <div class="form-group linked-entities">
             <div class="form-group">
-                <reactive-dropdown-field
+                <sh-select
                     [options]="currentCompanyBranches"
                     [(ngModel)]="currentBranch.uniqueName"
-                    (selectedOption)="handleBranchChange($event)"
+                    [showClear]="false"
+                    [ItemHeight]="33"
+                    width="100%"
+                    (selected)="handleBranchChange($event)"
+                    [isFilterEnabled]="true"
                     [placeholder]="localeData?.select_branch"
-                    [labelValue]="currentBranch?.name"
-                    [name]="'currentBranch'"
+                    [fixedValue]="currentBranch?.name"
                 >
-                </reactive-dropdown-field>
+                    <ng-template #optionTemplate let-option="option">
+                        <ng-container>
+                            <a href="javascript:void(0)" class="list-item d-flex">
+                                <span class="entity-icon">
+                                    <i
+                                        [ngClass]="{
+                                            'icon-company-profile': option.consolidatedBranch,
+                                            'icon-branch-icon': !option.consolidatedBranch
+                                        }"
+                                        class="pull-right"
+                                        *ngIf="!option.isCompany"
+                                        tooltip="{{ commonLocaleData?.app_branch }}"
+                                    ></i>
+                                    <i
+                                        class="icon-company-profile pull-right"
+                                        *ngIf="option.isCompany"
+                                        tooltip="{{ commonLocaleData?.app_company }}"
+                                    ></i>
+                                </span>
+                                <span class="entity-details">
+                                    <div class="item giddh-limit single-line-clamp">{{ option.label || "-" }}</div>
+                                    <div class="item-unique giddh-limit single-line-clamp">
+                                        {{ option.name || "-" }}
+                                    </div>
+                                </span>
+                            </a>
+                        </ng-container>
+                    </ng-template>
+                </sh-select>
             </div>
         </div>
     </div>
@@ -58,14 +89,10 @@
             </div>
         </div>
     </div>
-    <div class="max-width-500 center-block mr-t05">
+    <div class="max-width-500 center-block mr-t05 clearfix">
         <div class="checkbox mt-1">
-            <mat-checkbox
-                [(ngModel)]="isHeaderProvided"
-                color="primary"
-            >
-                {{ localeData?.header_provided }}
-            </mat-checkbox>
+            <input type="checkbox" name="isHeaderProvided" id="is-header-provided" [(ngModel)]="isHeaderProvided" />
+            {{ localeData?.header_provided }}
             <div class="mr-t1">
                 <reactive-dropdown-field
                     *ngIf="entity === voucherType.AccountWise"
@@ -93,14 +120,12 @@
                 </reactive-dropdown-field>
             </div>
         </div>
-        <div class="d-flex justify-content-between mt-2">
-            <a class="text-underline" href="javascript:void(0)" (click)="downloadSampleFile(entity)">
-                {{ localeData?.download_sample_xls }}
-            </a>
-            <a class="text-underline" href="javascript:void(0)" (click)="downloadSampleFile(entity, true)">
-                {{ localeData?.download_sample_csv }}
-            </a>
-        </div>
+        <button class="btn btn-sm btn-link" type="button" (click)="downloadSampleFile(entity)">
+            {{ localeData?.download_sample_xls }}
+        </button>
+        <button class="btn btn-sm btn-link pull-right" type="button" (click)="downloadSampleFile(entity, true)">
+            {{ localeData?.download_sample_csv }}
+        </button>
 
         <div class="pull-right mr-t2">
             <button 
@@ -113,7 +138,7 @@
                 {{ commonLocaleData?.app_back }}
             </button>
             <button
-                mat-raised-button 
+                mat-stroked-button 
                 [matTooltip]="commonLocaleData?.app_next" 
                 matTooltipPosition="above"
                 color="primary"
@@ -127,4 +152,3 @@
     </div>
 </div>
 <!-- upload And Map Content end-->
- 

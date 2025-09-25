@@ -4,9 +4,7 @@ import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { ReplaySubject } from "rxjs";
 import { select, Store } from "@ngrx/store";
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
-import { PageEvent } from '@angular/material/paginator';
-import { AppState } from '../../../store';
+import { AppState } from "../../../store";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
@@ -57,10 +55,6 @@ export class InventoryTransactionListComponent implements OnInit {
     public commonLocaleData: any = {};
     /* This will hold active company data */
     public activeCompany: any = {};
-    /** Pagination limit */
-
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Image path variable */
     public imgPath: string = '';
     /** This will store selected date range to use in api */
@@ -168,8 +162,8 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
-        this.stockReportRequest.count = PAGINATION_LIMIT;
 
         this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (this.showAccountSearchInput) {
@@ -291,23 +285,12 @@ export class InventoryTransactionListComponent implements OnInit {
     * @param {*} event
     * @memberof InventoryTransactionListComponent
     */
-    /**
-     * Handles pagination events and updates API parameters
-     *
-     * @param {PageEvent} event - Contains pagination details
-     * @memberof InventoryTransactionListComponent
-     */
-    public handlePageEvent(event: PageEvent): void {
-        if (this.stockReportRequest.count !== event.pageSize) {
-            this.stockReportRequest.page = 1;
-        } else {
-            this.stockReportRequest.page = event.pageIndex + 1;
+    public pageChanged(event: any): void {
+        if (this.stockReportRequest.page !== event?.page) {
+            this.stockReportRequest.page = event?.page;
+            this.getStockTransactionalReport(false);
         }
-        this.stockReportRequest.count = event.pageSize;
-        this.getStockTransactionalReport(false);
     }
-    
-
 
     /**
      * This will use for sorting filters

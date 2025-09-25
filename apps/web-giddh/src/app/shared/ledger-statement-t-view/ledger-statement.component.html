@@ -27,403 +27,405 @@
                     <!-- endregion -->
                     <!-- region main transactions-->
                     <div class="ledger-book">
-                        <!-- region debit transaction-->
-                        <div
-                            class="left-col-new active"
-                            [ngClass]="{
-                                'bd-rr':
-                                    (lc.transactionData$ | async)?.debitTransactions?.length >=
-                                    (lc.transactionData$ | async)?.creditTransactions?.length
-                            }"
-                        >
-                            <!-- region debit transaction header-->
-                            <mat-grid-list cols="{{ ledgerGridTotalColumns }}" rowHeight="50px">
-                                <mat-grid-tile class="bold" colspan="{{ ledgerGridColumnsValue[0] }}">
-                                    <span class="cp">{{ commonLocaleData?.app_date }}</span>
-                                </mat-grid-tile>
-                                <mat-grid-tile class="bold" colspan="{{ ledgerGridColumnsValue[1] }}">
-                                    {{ commonLocaleData?.app_particular }}
-                                </mat-grid-tile>
-                                <mat-grid-tile
-                                    class="bold text-right no-right-border"
-                                    colspan="{{ ledgerGridColumnsValue[2] }}"
-                                >
-                                    {{ commonLocaleData?.app_amount }}
-                                </mat-grid-tile>
-                            </mat-grid-list>
-                            <!-- endregion -->
-                            <mat-grid-list
-                                cols="{{ ledgerGridTotalColumns }}"
-                                rowHeight="50px"
-                                tabindex="-1"
-                                *ngIf="
-                                    ledgerTxnBalance?.forwardedBalance?.amount > 0 &&
-                                    ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'
-                                "
+                        <ng-container>
+                            <!-- region debit transaction-->
+                            <div
+                                class="left-col-new active"
+                                [ngClass]="{
+                                    'bd-rr':
+                                        (lc.transactionData$ | async)?.debitTransactions?.length >=
+                                        (lc.transactionData$ | async)?.creditTransactions?.length
+                                }"
                             >
-                                <mat-grid-tile
-                                    [attr.data-title]="commonLocaleData?.app_date"
-                                    colspan="{{ ledgerGridColumnsValue[0] }}"
+                                <!-- region debit transaction header-->
+                                <mat-grid-list cols="{{ ledgerGridTotalColumns }}" rowHeight="50px">
+                                    <mat-grid-tile class="bold" colspan="{{ ledgerGridColumnsValue[0] }}">
+                                        <span class="cp">{{ commonLocaleData?.app_date }}</span>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile class="bold" colspan="{{ ledgerGridColumnsValue[1] }}">
+                                        {{ commonLocaleData?.app_particular }}
+                                    </mat-grid-tile>
+                                    <mat-grid-tile
+                                        class="bold text-right no-right-border"
+                                        colspan="{{ ledgerGridColumnsValue[2] }}"
+                                    >
+                                        {{ commonLocaleData?.app_amount }}
+                                    </mat-grid-tile>
+                                </mat-grid-list>
+                                <!-- endregion -->
+                                <mat-grid-list
+                                    cols="{{ ledgerGridTotalColumns }}"
+                                    rowHeight="50px"
+                                    tabindex="-1"
+                                    *ngIf="
+                                        ledgerTxnBalance?.forwardedBalance?.amount > 0 &&
+                                        ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'
+                                    "
                                 >
-                                </mat-grid-tile>
-                                <mat-grid-tile
-                                    [attr.data-title]="commonLocaleData?.app_particular"
-                                    colspan="{{ ledgerGridColumnsValue[1] }}"
-                                >
-                                    <span *ngIf="(lc.transactionData$ | async)?.page <= 1">{{
-                                        localeData?.to_balance_bf
-                                    }}</span>
-                                </mat-grid-tile>
-                                <mat-grid-tile
-                                    [attr.data-title]="commonLocaleData?.app_amount"
-                                    colspan="{{ ledgerGridColumnsValue[2] }}"
-                                    class="no-right-border"
-                                >
-                                    <div class="d-flex flex-column">
-                                        <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
-                                            <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
-                                                <amount-field
-                                                    [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
-                                                    [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance?.currencyCode"
+                                    <mat-grid-tile
+                                        [attr.data-title]="commonLocaleData?.app_date"
+                                        colspan="{{ ledgerGridColumnsValue[0] }}"
+                                    >
+                                    </mat-grid-tile>
+                                    <mat-grid-tile
+                                        [attr.data-title]="commonLocaleData?.app_particular"
+                                        colspan="{{ ledgerGridColumnsValue[1] }}"
+                                    >
+                                        <span *ngIf="(lc.transactionData$ | async)?.page <= 1">{{
+                                            localeData?.to_balance_bf
+                                        }}</span>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile
+                                        [attr.data-title]="commonLocaleData?.app_amount"
+                                        colspan="{{ ledgerGridColumnsValue[2] }}"
+                                        class="no-right-border"
+                                    >
+                                        <div class="d-flex flex-column">
+                                            <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.currencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.currencyCode"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                                <span
+                                                    class="amount-total text-right"
+                                                    *ngIf="isLedgerAccountAllowsMultiCurrency"
                                                 >
-                                                </amount-field>
-                                            </span>
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">{{
+                                                    commonLocaleData?.app_numbers?.zero
+                                                }}</span>
+                                            </ng-container>
+                                        </div>
+                                    </mat-grid-tile>
+                                </mat-grid-list>
+
+                                <mat-grid-list
+                                    cols="{{ ledgerGridTotalColumns }}"
+                                    rowHeight="50px"
+                                    *ngIf="
+                                        ledgerTxnBalance?.forwardedBalance?.type !== 'DEBIT' ||
+                                        ledgerTxnBalance?.forwardedBalance?.amount == 0
+                                    "
+                                >
+                                    <mat-grid-tile
+                                        [attr.data-title]="commonLocaleData?.app_select_all"
+                                        colspan="{{ ledgerGridColumnsValue[0] }}"
+                                    >
+                                    </mat-grid-tile>
+                                    <mat-grid-tile colspan="{{ ledgerGridColumnsValue[1] }}">&nbsp;</mat-grid-tile>
+                                    <mat-grid-tile class="no-right-border" colspan="{{ ledgerGridColumnsValue[2] }}"
+                                        >&nbsp;</mat-grid-tile
+                                    >
+                                </mat-grid-list>
+                                <!-- endregion -->
+
+                                <!-- region debit transaction loop over transactions -->
+                                <mat-grid-list
+                                    cols="{{ ledgerGridTotalColumns }}"
+                                    rowHeight="50px"
+                                    tabindex="-1"
+                                    class="ledger-row"
+                                    *ngFor="
+                                        let txn of (lc.transactionData$ | async)?.debitTransactions;
+                                        let i = index;
+                                        trackBy: trackByTransactionUniqueName
+                                    "
+                                    [ngClass]="{
+                                        'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName
+                                    }"
+                                    [matTooltip]="txn.description"
+                                    [matTooltipPosition]="'above'"
+                                    matTooltipClass="tooltip-black"
+                                >
+                                    <mat-grid-tile
+                                        [attr.data-title]="commonLocaleData?.app_date"
+                                        colspan="{{ ledgerGridColumnsValue[0] }}"
+                                    >
+                                        <div class="d-flex align-items-center column-gap5">
+                                            <span>{{ txn.entryDate }}</span>
+                                        </div>
+                                    </mat-grid-tile>
+
+                                    <mat-grid-tile
+                                        colspan="{{ ledgerGridColumnsValue[1] }}"
+                                        [attr.data-title]="commonLocaleData?.app_particular"
+                                    >
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <div class="text-ellipsis particular-label">
+                                                {{
+                                                    txn
+                                                        | particular
+                                                            : "to"
+                                                            : localeData?.by_particular
+                                                            : localeData?.to_particular
+                                                }}
+                                            </div>
+
                                             <span
-                                                class="amount-total text-right"
-                                                *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                                class="download-invoice-ledger d-flex cursor-pointer"
+                                                *ngIf="
+                                                    voucherApiVersion === 2 &&
+                                                    (txn?.attachedFileUniqueName ||
+                                                        (txn?.voucherGenerated &&
+                                                            !restrictedVouchersForDownload.includes(
+                                                                txn?.voucherGeneratedType
+                                                            )))
+                                                "
+                                                (click)="openAttachmentsDialog(attachments, txn)"
+                                                [matTooltip]="
+                                                    txn?.attachedFileUniqueName &&
+                                                    txn?.voucherGenerated &&
+                                                    !restrictedVouchersForDownload.includes(txn?.voucherGeneratedType)
+                                                        ? (txn?.voucherNumber || commonLocaleData?.app_not_available) +
+                                                          ', ' +
+                                                          txn?.attachedFileName
+                                                        : txn?.attachedFileUniqueName
+                                                        ? txn?.attachedFileName
+                                                        : txn?.voucherNumber || commonLocaleData?.app_not_available
+                                                "
+                                                [matTooltipPosition]="'right'"
+                                                matTooltipClass="tooltip-black"
                                             >
-                                                <amount-field
-                                                    [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
-                                                    [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
-                                                >
-                                                </amount-field>
+                                                <i class="icon-download-circle pull-left"></i>
                                             </span>
-                                            <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">{{
-                                                commonLocaleData?.app_numbers?.zero
-                                            }}</span>
-                                        </ng-container>
-                                    </div>
-                                </mat-grid-tile>
-                            </mat-grid-list>
-
-                            <mat-grid-list
-                                cols="{{ ledgerGridTotalColumns }}"
-                                rowHeight="50px"
-                                *ngIf="
-                                    ledgerTxnBalance?.forwardedBalance?.type !== 'DEBIT' ||
-                                    ledgerTxnBalance?.forwardedBalance?.amount == 0
-                                "
-                            >
-                                <mat-grid-tile
-                                    [attr.data-title]="commonLocaleData?.app_select_all"
-                                    colspan="{{ ledgerGridColumnsValue[0] }}"
-                                >
-                                </mat-grid-tile>
-                                <mat-grid-tile colspan="{{ ledgerGridColumnsValue[1] }}">&nbsp;</mat-grid-tile>
-                                <mat-grid-tile class="no-right-border" colspan="{{ ledgerGridColumnsValue[2] }}"
-                                    >&nbsp;</mat-grid-tile
-                                >
-                            </mat-grid-list>
-                            <!-- endregion -->
-
-                            <!-- region debit transaction loop over transactions -->
-                            <mat-grid-list
-                                cols="{{ ledgerGridTotalColumns }}"
-                                rowHeight="50px"
-                                tabindex="-1"
-                                class="ledger-row"
-                                *ngFor="
-                                    let txn of (lc.transactionData$ | async)?.debitTransactions;
-                                    let i = index;
-                                    trackBy: trackByTransactionUniqueName
-                                "
-                                [ngClass]="{
-                                    'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName
-                                }"
-                                [matTooltip]="txn.description"
-                                [matTooltipPosition]="'above'"
-                                matTooltipClass="tooltip-black"
-                            >
-                                <mat-grid-tile
-                                    [attr.data-title]="commonLocaleData?.app_date"
-                                    colspan="{{ ledgerGridColumnsValue[0] }}"
-                                >
-                                    <div class="d-flex align-items-center column-gap5">
-                                        <span>{{ txn.entryDate }}</span>
-                                    </div>
-                                </mat-grid-tile>
-
-                                <mat-grid-tile
-                                    colspan="{{ ledgerGridColumnsValue[1] }}"
-                                    [attr.data-title]="commonLocaleData?.app_particular"
-                                >
-                                    <div class="d-flex align-items-center justify-content-between w-100">
-                                        <div class="text-ellipsis particular-label">
-                                            {{
-                                                txn
-                                                    | particular
-                                                        : "to"
-                                                        : localeData?.by_particular
-                                                        : localeData?.to_particular
-                                            }}
                                         </div>
+                                    </mat-grid-tile>
 
-                                        <span
-                                            class="download-invoice-ledger d-flex cursor-pointer"
-                                            *ngIf="
-                                                voucherApiVersion === 2 &&
-                                                (txn?.attachedFileUniqueName ||
-                                                    (txn?.voucherGenerated &&
-                                                        !restrictedVouchersForDownload.includes(
-                                                            txn?.voucherGeneratedType
-                                                        )))
-                                            "
-                                            (click)="openAttachmentsDialog(attachments, txn)"
-                                            [matTooltip]="
-                                                txn?.attachedFileUniqueName &&
-                                                txn?.voucherGenerated &&
-                                                !restrictedVouchersForDownload.includes(txn?.voucherGeneratedType)
-                                                    ? (txn?.voucherNumber || commonLocaleData?.app_not_available) +
-                                                        ', ' +
-                                                        txn?.attachedFileName
-                                                    : txn?.attachedFileUniqueName
-                                                    ? txn?.attachedFileName
-                                                    : txn?.voucherNumber || commonLocaleData?.app_not_available
-                                            "
-                                            [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
-                                        >
-                                            <i class="icon-download-circle pull-left"></i>
-                                        </span>
-                                    </div>
-                                </mat-grid-tile>
-
-                                <mat-grid-tile
-                                    [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
-                                    colspan="{{ ledgerGridColumnsValue[2] }}"
-                                    class="text-right no-right-border flex-column align-items-end"
-                                    [attr.data-title]="commonLocaleData?.app_amount"
-                                >
-                                    <amount-field
-                                        [amount]="txn.amount"
-                                        [currencySymbol]="txn.currencySymbol"
-                                        [currencyCode]="txn.currencyCode"
+                                    <mat-grid-tile
+                                        [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
+                                        colspan="{{ ledgerGridColumnsValue[2] }}"
+                                        class="text-right no-right-border flex-column align-items-end"
+                                        [attr.data-title]="commonLocaleData?.app_amount"
                                     >
-                                    </amount-field>
-                                    <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                         <amount-field
-                                            [amount]="txn.convertedAmount"
-                                            [currencySymbol]="txn.convertedCurrencySymbol"
-                                            [currencyCode]="txn.convertedCurrencyCode"
+                                            [amount]="txn.amount"
+                                            [currencySymbol]="txn.currencySymbol"
+                                            [currencyCode]="txn.currencyCode"
                                         >
                                         </amount-field>
-                                    </p>
-                                </mat-grid-tile>
-                            </mat-grid-list>
-                        </div>
-                        <!-- endregion -->
-
-                        <!-- region credit transaction-->
-                        <div
-                            class="right-col-new"
-                            [ngClass]="{
-                                'bd-rl':
-                                    (lc.transactionData$ | async)?.debitTransactions?.length <
-                                    (lc.transactionData$ | async)?.creditTransactions?.length
-                            }"
-                        >
-                            <!-- region credit transaction header-->
-                            <mat-grid-list cols="{{ ledgerGridTotalColumns }}" rowHeight="50px">
-                                <mat-grid-tile class="bold" colspan="{{ ledgerGridColumnsValue[0] }}">
-                                    <span class="cp">{{ commonLocaleData?.app_date }}</span>
-                                </mat-grid-tile>
-                                <mat-grid-tile class="bold" colspan="{{ ledgerGridColumnsValue[1] }}">
-                                    {{ commonLocaleData?.app_particular }}
-                                </mat-grid-tile>
-                                <mat-grid-tile
-                                    class="bold text-right no-right-border"
-                                    colspan="{{ ledgerGridColumnsValue[2] }}"
-                                >
-                                    {{ commonLocaleData?.app_amount }}
-                                </mat-grid-tile>
-                            </mat-grid-list>
+                                        <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                            <amount-field
+                                                [amount]="txn.convertedAmount"
+                                                [currencySymbol]="txn.convertedCurrencySymbol"
+                                                [currencyCode]="txn.convertedCurrencyCode"
+                                            >
+                                            </amount-field>
+                                        </p>
+                                    </mat-grid-tile>
+                                </mat-grid-list>
+                            </div>
                             <!-- endregion -->
 
-                            <!-- region credit transaction if forwardedBalance -->
-                            <mat-grid-list
-                                cols="{{ ledgerGridTotalColumns }}"
-                                rowHeight="50px"
-                                tabindex="-1"
-                                class="ledger-row"
-                                tabindex="-1"
-                                *ngIf="
-                                    ledgerTxnBalance?.forwardedBalance?.amount > 0 &&
-                                    ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'
-                                "
-                            >
-                                <mat-grid-tile
-                                    colspan="{{ ledgerGridColumnsValue[0] }}"
-                                    [attr.data-title]="commonLocaleData?.app_date"
-                                >
-                                </mat-grid-tile>
-                                <mat-grid-tile
-                                    [attr.data-title]="localeData?.bf_balance"
-                                    colspan="{{ ledgerGridColumnsValue[1] }}"
-                                >
-                                    <!-- <span *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">
-                                        {{ localeData?.by_balance_bf }}
-                                    </span> New Code -->
-                                    <span *ngIf="(lc.transactionData$ | async)?.page <= 1">
-                                        {{ localeData?.by_balance_bf }}
-                                    </span>
-                                </mat-grid-tile>
-                                <mat-grid-tile
-                                    [attr.data-title]="commonLocaleData?.app_amount"
-                                    colspan="{{ ledgerGridColumnsValue[2] }}"
-                                    class="text-right no-right-border"
-                                >
-                                    <div class="d-flex flex-column">
-                                        <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
-                                            <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
-                                                <amount-field
-                                                    [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
-                                                    [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance?.currencyCode"
-                                                >
-                                                </amount-field>
-                                            </span>
-                                            <span class="amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                                <amount-field
-                                                    [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
-                                                    [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
-                                                >
-                                                </amount-field>
-                                            </span>
-                                            <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">{{
-                                                commonLocaleData?.app_numbers?.zero
-                                            }}</span>
-                                        </ng-container>
-                                    </div>
-                                </mat-grid-tile>
-                            </mat-grid-list>
-                            <!-- endregion -->
-
-                            <!-- region credit transaction no forwardedBalance -->
-                            <mat-grid-list
-                                cols="{{ ledgerGridTotalColumns }}"
-                                rowHeight="50px"
-                                class="ledger-row"
-                                *ngIf="
-                                    ledgerTxnBalance?.forwardedBalance?.type !== 'CREDIT' ||
-                                    ledgerTxnBalance?.forwardedBalance?.amount == 0
-                                "
-                            >
-                                <mat-grid-tile colspan="{{ ledgerGridColumnsValue[0] }}"> </mat-grid-tile>
-                                <mat-grid-tile colspan="{{ ledgerGridColumnsValue[1] }}">&nbsp;</mat-grid-tile>
-                                <mat-grid-tile class="no-right-border" colspan="{{ ledgerGridColumnsValue[2] }}"
-                                    >&nbsp;</mat-grid-tile
-                                >
-                            </mat-grid-list>
-                            <!-- endregion -->
-
-                            <!-- region credit transaction loop over transactions -->
-                            <mat-grid-list
-                                cols="{{ ledgerGridTotalColumns }}"
-                                rowHeight="50px"
-                                class="ledger-row"
-                                *ngFor="
-                                    let txn of (lc.transactionData$ | async)?.creditTransactions;
-                                    let i = index;
-                                    trackBy: trackByTransactionUniqueName
-                                "
-                                tabindex="-1"
+                            <!-- region credit transaction-->
+                            <div
+                                class="right-col-new"
                                 [ngClass]="{
-                                    'compound-entry':
-                                        txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
+                                    'bd-rl':
+                                        (lc.transactionData$ | async)?.debitTransactions?.length <
+                                        (lc.transactionData$ | async)?.creditTransactions?.length
                                 }"
-                                [matTooltip]="txn.description"
-                                [matTooltipPosition]="'above'"
-                                matTooltipClass="tooltip-black"
                             >
-                                <mat-grid-tile
-                                    colspan="{{ ledgerGridColumnsValue[0] }}"
-                                    [attr.data-title]="commonLocaleData?.app_date"
-                                >
-                                    <div class="d-flex align-items-center column-gap5">
-                                        <span>{{ txn.entryDate }}</span>
-                                    </div>
-                                </mat-grid-tile>
-                                <mat-grid-tile
-                                    colspan="{{ ledgerGridColumnsValue[1] }}"
-                                    [attr.data-title]="commonLocaleData?.app_particular"
-                                >
-                                    <div class="d-flex align-items-center justify-content-between w-100">
-                                        <div class="text-ellipsis particular-label">
-                                            {{
-                                                txn
-                                                    | particular
-                                                        : "by"
-                                                        : localeData?.by_particular
-                                                        : localeData?.to_particular
-                                            }}
-                                        </div>
-                                        <span
-                                            class="download-invoice-ledger d-flex cursor-pointer"
-                                            *ngIf="
-                                                voucherApiVersion === 2 &&
-                                                (txn?.attachedFileUniqueName ||
-                                                    (txn?.voucherGenerated &&
-                                                        !restrictedVouchersForDownload.includes(
-                                                            txn?.voucherGeneratedType
-                                                        )))
-                                            "
-                                            (click)="openAttachmentsDialog(attachments, txn)"
-                                            [matTooltip]="
-                                                txn?.attachedFileUniqueName &&
-                                                txn?.voucherGenerated &&
-                                                !restrictedVouchersForDownload.includes(txn?.voucherGeneratedType)
-                                                    ? (txn?.voucherNumber || commonLocaleData?.app_not_available) +
-                                                        ', ' +
-                                                        txn?.attachedFileName
-                                                    : txn?.attachedFileUniqueName
-                                                    ? txn?.attachedFileName
-                                                    : txn?.voucherNumber || commonLocaleData?.app_not_available
-                                            "
-                                            [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
-                                        >
-                                            <i class="icon-download-circle pull-left"></i>
-                                        </span>
-                                    </div>
-                                </mat-grid-tile>
-                                <mat-grid-tile
-                                    colspan="{{ ledgerGridColumnsValue[2] }}"
-                                    [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
-                                    [attr.data-title]="commonLocaleData?.app_amount"
-                                    class="position-relative text-right no-right-border flex-column align-items-end"
-                                >
-                                    <amount-field
-                                        [amount]="txn.amount"
-                                        [currencySymbol]="txn.currencySymbol"
-                                        [currencyCode]="txn.currencyCode"
+                                <!-- region credit transaction header-->
+                                <mat-grid-list cols="{{ ledgerGridTotalColumns }}" rowHeight="50px">
+                                    <mat-grid-tile class="bold" colspan="{{ ledgerGridColumnsValue[0] }}">
+                                        <span class="cp">{{ commonLocaleData?.app_date }}</span>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile class="bold" colspan="{{ ledgerGridColumnsValue[1] }}">
+                                        {{ commonLocaleData?.app_particular }}
+                                    </mat-grid-tile>
+                                    <mat-grid-tile
+                                        class="bold text-right no-right-border"
+                                        colspan="{{ ledgerGridColumnsValue[2] }}"
                                     >
-                                    </amount-field>
-                                    <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                        {{ commonLocaleData?.app_amount }}
+                                    </mat-grid-tile>
+                                </mat-grid-list>
+                                <!-- endregion -->
+
+                                <!-- region credit transaction if forwardedBalance -->
+                                <mat-grid-list
+                                    cols="{{ ledgerGridTotalColumns }}"
+                                    rowHeight="50px"
+                                    tabindex="-1"
+                                    class="ledger-row"
+                                    tabindex="-1"
+                                    *ngIf="
+                                        ledgerTxnBalance?.forwardedBalance?.amount > 0 &&
+                                        ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'
+                                    "
+                                >
+                                    <mat-grid-tile
+                                        colspan="{{ ledgerGridColumnsValue[0] }}"
+                                        [attr.data-title]="commonLocaleData?.app_date"
+                                    >
+                                    </mat-grid-tile>
+                                    <mat-grid-tile
+                                        [attr.data-title]="localeData?.bf_balance"
+                                        colspan="{{ ledgerGridColumnsValue[1] }}"
+                                    >
+                                        <!-- <span *ngIf="(lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented">
+                                            {{ localeData?.by_balance_bf }}
+                                        </span> New Code -->
+                                        <span *ngIf="(lc.transactionData$ | async)?.page <= 1">
+                                            {{ localeData?.by_balance_bf }}
+                                        </span>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile
+                                        [attr.data-title]="commonLocaleData?.app_amount"
+                                        colspan="{{ ledgerGridColumnsValue[2] }}"
+                                        class="text-right no-right-border"
+                                    >
+                                        <div class="d-flex flex-column">
+                                            <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.currencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.currencyCode"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                                <span class="amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                                    <amount-field
+                                                        [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
+                                                        [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                                <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">{{
+                                                    commonLocaleData?.app_numbers?.zero
+                                                }}</span>
+                                            </ng-container>
+                                        </div>
+                                    </mat-grid-tile>
+                                </mat-grid-list>
+                                <!-- endregion -->
+
+                                <!-- region credit transaction no forwardedBalance -->
+                                <mat-grid-list
+                                    cols="{{ ledgerGridTotalColumns }}"
+                                    rowHeight="50px"
+                                    class="ledger-row"
+                                    *ngIf="
+                                        ledgerTxnBalance?.forwardedBalance?.type !== 'CREDIT' ||
+                                        ledgerTxnBalance?.forwardedBalance?.amount == 0
+                                    "
+                                >
+                                    <mat-grid-tile colspan="{{ ledgerGridColumnsValue[0] }}"> </mat-grid-tile>
+                                    <mat-grid-tile colspan="{{ ledgerGridColumnsValue[1] }}">&nbsp;</mat-grid-tile>
+                                    <mat-grid-tile class="no-right-border" colspan="{{ ledgerGridColumnsValue[2] }}"
+                                        >&nbsp;</mat-grid-tile
+                                    >
+                                </mat-grid-list>
+                                <!-- endregion -->
+
+                                <!-- region credit transaction loop over transactions -->
+                                <mat-grid-list
+                                    cols="{{ ledgerGridTotalColumns }}"
+                                    rowHeight="50px"
+                                    class="ledger-row"
+                                    *ngFor="
+                                        let txn of (lc.transactionData$ | async)?.creditTransactions;
+                                        let i = index;
+                                        trackBy: trackByTransactionUniqueName
+                                    "
+                                    tabindex="-1"
+                                    [ngClass]="{
+                                        'compound-entry':
+                                            txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
+                                    }"
+                                    [matTooltip]="txn.description"
+                                    [matTooltipPosition]="'above'"
+                                    matTooltipClass="tooltip-black"
+                                >
+                                    <mat-grid-tile
+                                        colspan="{{ ledgerGridColumnsValue[0] }}"
+                                        [attr.data-title]="commonLocaleData?.app_date"
+                                    >
+                                        <div class="d-flex align-items-center column-gap5">
+                                            <span>{{ txn.entryDate }}</span>
+                                        </div>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile
+                                        colspan="{{ ledgerGridColumnsValue[1] }}"
+                                        [attr.data-title]="commonLocaleData?.app_particular"
+                                    >
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <div class="text-ellipsis particular-label">
+                                                {{
+                                                    txn
+                                                        | particular
+                                                            : "by"
+                                                            : localeData?.by_particular
+                                                            : localeData?.to_particular
+                                                }}
+                                            </div>
+                                            <span
+                                                class="download-invoice-ledger d-flex cursor-pointer"
+                                                *ngIf="
+                                                    voucherApiVersion === 2 &&
+                                                    (txn?.attachedFileUniqueName ||
+                                                        (txn?.voucherGenerated &&
+                                                            !restrictedVouchersForDownload.includes(
+                                                                txn?.voucherGeneratedType
+                                                            )))
+                                                "
+                                                (click)="openAttachmentsDialog(attachments, txn)"
+                                                [matTooltip]="
+                                                    txn?.attachedFileUniqueName &&
+                                                    txn?.voucherGenerated &&
+                                                    !restrictedVouchersForDownload.includes(txn?.voucherGeneratedType)
+                                                        ? (txn?.voucherNumber || commonLocaleData?.app_not_available) +
+                                                          ', ' +
+                                                          txn?.attachedFileName
+                                                        : txn?.attachedFileUniqueName
+                                                        ? txn?.attachedFileName
+                                                        : txn?.voucherNumber || commonLocaleData?.app_not_available
+                                                "
+                                                [matTooltipPosition]="'right'"
+                                                matTooltipClass="tooltip-black"
+                                            >
+                                                <i class="icon-download-circle pull-left"></i>
+                                            </span>
+                                        </div>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile
+                                        colspan="{{ ledgerGridColumnsValue[2] }}"
+                                        [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
+                                        [attr.data-title]="commonLocaleData?.app_amount"
+                                        class="position-relative text-right no-right-border flex-column align-items-end"
+                                    >
                                         <amount-field
-                                            [amount]="txn.convertedAmount"
-                                            [currencySymbol]="txn.convertedCurrencySymbol"
-                                            [currencyCode]="txn.convertedCurrencyCode"
+                                            [amount]="txn.amount"
+                                            [currencySymbol]="txn.currencySymbol"
+                                            [currencyCode]="txn.currencyCode"
                                         >
                                         </amount-field>
-                                    </p>
-                                </mat-grid-tile>
-                            </mat-grid-list>
-                            <!-- endregion -->
-                        </div>
-                        <!--endregion-->
+                                        <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                            <amount-field
+                                                [amount]="txn.convertedAmount"
+                                                [currencySymbol]="txn.convertedCurrencySymbol"
+                                                [currencyCode]="txn.convertedCurrencyCode"
+                                            >
+                                            </amount-field>
+                                        </p>
+                                    </mat-grid-tile>
+                                </mat-grid-list>
+                                <!-- endregion -->
+                            </div>
+                            <!--endregion-->
+                        </ng-container>
                         <!-- region pagination -->
                         <div class="text-center mr-t2 page-count position-absolute">
                             <span class="grey"

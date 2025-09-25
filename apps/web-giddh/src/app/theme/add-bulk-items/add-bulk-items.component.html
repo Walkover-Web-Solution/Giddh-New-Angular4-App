@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event">
     <div class="bulk-entry">
         <div class="dialog-header">
-            <span class="font-16">{{ localeData?.add_bulk_items }}</span>
+            <span mat-dialog-title class="font-16">{{ localeData?.add_bulk_items }}</span>
             <i mat-dialog-close class="icon-cross"></i>
         </div>
         <div mat-dialog-content class="bulk-entry-body dialog-body d-flex">
@@ -110,7 +110,7 @@
                                 </ng-container>
                             </div>
                             <div class="selected-item-action d-flex column-gap1">
-                                <button mat-raised-button color="primary" (click)="saveBulkItems()">{{ commonLocaleData?.app_add }}</button>
+                                <button mat-stroked-button color="primary" (click)="saveBulkItems()">{{ commonLocaleData?.app_add }}</button>
                                 <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
                             </div>
                         </div>

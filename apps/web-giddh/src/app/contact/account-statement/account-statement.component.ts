@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, Input, SimpleChanges } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, Input, SimpleChanges, TemplateRef } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -7,8 +7,8 @@ import { debounceTime, delay, distinctUntilChanged, skip, takeUntil } from "rxjs
 import * as dayjs from 'dayjs';
 import { ContactComponentStore } from "../utility/contact.store";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
-import { MatMenuTrigger } from '@angular/material/menu';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from "../../services/general.service";
 import { FormControl } from "@angular/forms";
 import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-request";
@@ -23,9 +23,9 @@ import { saveAs } from 'file-saver';
     providers: [ContactComponentStore]
 })
 export class AccountStatementComponent implements OnInit, OnDestroy {
-    /** Angular Material menu trigger for datepicker */
-    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-/** Template reference for the advance search modal */
+    /** Template reference for the datepicker modal */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Template reference for the advance search modal */
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** Reference to the Material paginator component */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -59,7 +59,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public accountListRequest: any = {
         accountUniqueName: '',
         page: 1,
-        count: PAGINATION_LIMIT,
+        count: '',
         sortBy: 'date',
         sort: '',
         q: '',
@@ -76,6 +76,10 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public selectedDateRange: any;
     /** Stores the selected date range formatted for UI display */
     public selectedDateRangeUi: any;
+    /** Reference to the currently open modal */
+    public modalRef: BsModalRef;
+    /** Stores the x/y position for displaying the datepicker under its field */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Available date range options for the datepicker */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Label for the currently selected date range */
@@ -105,6 +109,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private contactComponentStore: ContactComponentStore,
         private generalService: GeneralService,
+        private modalService: BsModalService
     ) {
         this.advanceSearchRequest = new AdvanceSearchRequest();
     }
@@ -144,9 +149,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.accountListRequest.page = 1;
                 this.advanceFiltersApplied = false;
                 this.clearFilter = true;
-                if (!this.isLoading) {
-                    this.getAccountStatementList();
-                }
+                this.getAccountStatementList();
             }
         });
 
@@ -172,6 +175,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         event.stopPropagation();
     }
 
+
     /**
      * Resets all applied advance filters and optionally fetches the account statement list.
      *
@@ -186,7 +190,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             from: this.from ?? '',
             to: this.to ?? '',
             page: 1,
-            count: PAGINATION_LIMIT,
+            count: this.pageSizeOptions[2], // Set default Count 50
             q: ''
         };
         this.transactionInput.patchValue(null, { emitEvent: false });
@@ -213,8 +217,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public handlePageChange(event: PageEvent): void {
-        this.accountListRequest.page = this.accountListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.accountListRequest.count = event.pageSize;
+        this.accountListRequest.page = event.pageIndex + 1;
         this.getAccountStatementList(true);
     }
 
@@ -231,7 +235,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.clearFilter = false;
             this.isSearching = false;
             this.accountListRequest.accountUniqueName = this.activeAccountUniqueName;
-            this.accountListRequest.count = PAGINATION_LIMIT;
+            this.accountListRequest.count = this.pageSizeOptions[1];
             this.accountListRequest.page = 1;
             this.accountListRequest.q = '';
             this.accountListRequest.sort = 'asc';
@@ -352,17 +356,30 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Toggles the datepicker menu open/close state.
+     * Hides the datepicker modal.
      *
-     * @param {boolean} isOpen Whether to open or close the datepicker menu
      * @memberof AccountStatementComponent
      */
-    public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
+    public hideGiddhDatepicker(): void {
+        this.modalRef?.hide();
+    }
+
+    /**
+     * Shows the datepicker modal at the position of the provided element.
+     *
+     * @param {*} element DOM element triggering the datepicker
+     * @memberof AccountStatementComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            const position = this.generalService.getPosition(element.target);
+            position.y = position.y - 370;
+            this.dateFieldPosition = position;
         }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
     }
 
     /**
@@ -382,7 +399,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             })
         });
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
@@ -390,7 +407,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

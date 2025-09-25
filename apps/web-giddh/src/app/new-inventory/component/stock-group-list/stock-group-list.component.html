@@ -1,75 +1,48 @@
 <div class="stock-group-list-page">
     <div class="table-responsive">
-        <!-- Date Picker Header -->
-        <div class="date-picker-header mb-3">
-            <div class="custom-datepicker">
-                <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
-                    <input
-                        matInput
-                        type="text"
-                        name="selectedDateRange"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                        placeholder="Enter Date"
-                        readonly
-                    />
-                </div>
-            </div>
-        </div>
-
-        <!-- Mat Table -->
-        <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
-            <!-- Date Column -->
-            <ng-container matColumnDef="date">
-                <th mat-header-cell *matHeaderCellDef>Date</th>
-                <td mat-cell *matCellDef="let element" data-title="Date">{{ element.date }}</td>
-            </ng-container>
-
-            <!-- Voucher Type Column -->
-            <ng-container matColumnDef="voucherType">
-                <th mat-header-cell *matHeaderCellDef>Voucher Type</th>
-                <td mat-cell *matCellDef="let element" data-title="Voucher Type">{{ element.voucherType }}</td>
-            </ng-container>
-
-            <!-- Account Name Column -->
-            <ng-container matColumnDef="accountName">
-                <th mat-header-cell *matHeaderCellDef>Account Name</th>
-                <td mat-cell *matCellDef="let element" data-title="Account Name">{{ element.accountName }}</td>
-            </ng-container>
-
-            <!-- Inwards Column -->
-            <ng-container matColumnDef="inwards">
-                <th mat-header-cell *matHeaderCellDef class="text-right">Inwards</th>
-                <td mat-cell *matCellDef="let element" data-title="Inwards" class="text-right">{{ element.inwards }}</td>
-            </ng-container>
-
-            <!-- Outwards Column -->
-            <ng-container matColumnDef="outwards">
-                <th mat-header-cell *matHeaderCellDef class="text-right">Outwards</th>
-                <td mat-cell *matCellDef="let element" data-title="Outwards" class="text-right">{{ element.outwards }}</td>
-            </ng-container>
-
-            <!-- Rate Column -->
-            <ng-container matColumnDef="rate">
-                <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
-                <td mat-cell *matCellDef="let element" data-title="Rate" class="text-right">{{ element.rate }}</td>
-            </ng-container>
-
-            <!-- Value Column -->
-            <ng-container matColumnDef="value">
-                <th mat-header-cell *matHeaderCellDef class="text-right">Value</th>
-                <td mat-cell *matCellDef="let element" data-title="Value" class="text-right">{{ element.value }}</td>
-            </ng-container>
-
-            <!-- Qty Column -->
-            <ng-container matColumnDef="qty">
-                <th mat-header-cell *matHeaderCellDef class="text-right">Qty</th>
-                <td mat-cell *matCellDef="let element" data-title="Qty" class="text-right">{{ element.qty }}</td>
-            </ng-container>
-
-            <!-- Header and Row Definitions -->
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <table class="table giddh-table on-mobile-view">
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        <div class="custom-datepicker">
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <input
+                                    type="text"
+                                    id="select-date"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker bdr-radius-50"
+                                    placeholder="Enter Date"
+                                />
+                            </div>
+                        </div>
+                    </th>
+                    <th class="text-center" colspan="4">Transaction</th>
+                    <th colspan="1">Closing Stock</th>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <th>Voucher Type</th>
+                    <th>Account Name</th>
+                    <th class="text-right">Inwards</th>
+                    <th class="text-right">Outwards</th>
+                    <th class="text-right">Rate</th>
+                    <th class="text-right">Value</th>
+                    <th class="text-right">Qty</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-title="Date">09-10-2020</td>
+                    <td data-title="Voucher Type">SALES</td>
+                    <td data-title="Account Name">USD Account</td>
+                    <td data-title="Inwards" class="text-right">-</td>
+                    <td data-title="Outwards" class="text-right">1.00 Box</td>
+                    <td data-title="Rate" class="text-right">1,02,378.60</td>
+                    <td data-title="Value" class="text-right">1,02,378.60</td>
+                    <td data-title="Qty" class="text-right">432.00box</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>
@@ -116,24 +89,26 @@
         </div>
     </div>
 </div>
-<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
-    <ng-template matMenuContent>
-        <app-datepicker-wrapper
-            [inputStartDate]="selectedDateRange?.startDate"
-            [inputEndDate]="selectedDateRange?.endDate"
-            [alwaysShowCalendars]="true"
-            [ranges]="datePickerOptions"
-            [selectedRangeLabel]="selectedRangeLabel"
-            [showCustomRangeLabel]="true"
-            [showClearButton]="false"
-            [showCancel]="true"
-            [linkedCalendars]="true"
-            [showDropdowns]="true"
-            (rangeClicked)="dateSelectedCallback($event)"
-            (datesUpdated)="dateSelectedCallback($event)"
-            (closeCalender)="toggleGiddhDatepicker(false)"
-            [keepCalendarOpeningWithRange]="false"
-            [showRangeLabelOnInput]="false"
-        ></app-datepicker-wrapper>
-    </ng-template>
-</mat-menu>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

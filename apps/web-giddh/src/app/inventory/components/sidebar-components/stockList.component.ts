@@ -23,6 +23,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
             <span class="d-block mr-r1" *ngIf="item.count" [hidden]="(activeStockUniqueName$ | async) === item?.uniqueName">
          {{item.count}}</span>
           </a>
+          <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="!isMobileScreen && (activeStockUniqueName$ | async) === item?.uniqueName">
+            <i class="icon-edit-pencil"> </i>
+            </button>
         </div>
       </li>
     </ul>
@@ -81,4 +84,19 @@ export class StockListComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.sideBarAction.GetInventoryStock(item?.uniqueName, this.Groups?.uniqueName));
     }
 
+    public goToManageStock(stock) {
+        if (stock && stock?.uniqueName) {
+            this.store.dispatch(this.inventoryAction.showLoaderForStock());
+            this.store.dispatch(this.sideBarAction.GetInventoryStock(stock?.uniqueName, this.Groups?.uniqueName));
+            this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+            this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
+        }
+    }
+
+    /**
+     * setInventoryAsideState
+     */
+    public setInventoryAsideState(isOpen, isGroup, isUpdate) {
+        this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
+    }
 }

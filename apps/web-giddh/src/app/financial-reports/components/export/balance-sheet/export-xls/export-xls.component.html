@@ -4,18 +4,22 @@
     [file]="'trial-profit-balance/export'"
     (localeData)="localeData = $event"
 >
-
-    <a href="javascript:void(0);" aria-label="download" *ngIf="enableDownload" [matMenuTriggerFor]="downloadMenu"
-        class="cp new-icon-img">
-        <img [src]="imgPath" alt="xsl img" />
-    </a>
-    <!-- Menu -->
-    <mat-menu #downloadMenu="matMenu" xPosition="before" yPosition="below">
-        <button mat-menu-item (click)="downloadBsXls(false)" aria-label="group report">
-            {{ localeData?.xls?.main_group_report }}
-        </button>
-        <button mat-menu-item (click)="downloadBsXls(true)" aria-label="complete report">
-            {{ localeData?.xls?.complete_report }}
-        </button>
-    </mat-menu>
+    <div class="btn-group" dropdown>
+        <a href="javascript:void(0);" aria-label="download" dropdownToggle *ngIf="enableDownload" class="cp new-icon-img"><img src="{{ imgPath }}" alt="xsl img" /></a>
+        <ul
+            id="dropdown-xls"
+            *dropdownMenu
+            class="dropdown-menu dropdown-menu-right cp tbpl-dropdown"
+            role="menu"
+            aria-labelledby="button-basic"
+        >
+            <span class="caret"></span>
+            <li>
+                <a href="javascript:void(0);" aria-label="group report"  (click)="downloadBsXls(false)">{{ localeData?.xls?.main_group_report }}</a>
+            </li>
+            <li>
+                <a  href="javascript:void(0);" aria-label="complete report" (click)="downloadBsXls(true)">{{ localeData?.xls?.complete_report }}</a>
+            </li>
+        </ul>
+    </div>
 </div>

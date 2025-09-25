@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -15,11 +15,12 @@ import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
+import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
@@ -55,7 +56,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         page: 1,
         totalPages: 0,
         totalItems: 0,
-        count: PAGINATION_LIMIT,
+        count: API_COUNT_LIMIT,
     }
     /** Hold table page index number */
     public pageIndex: number = 0;
@@ -114,8 +115,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public statusOptions: IOption[] = [];
     /** This will use for selected status */
     public selectedStatus: string = '';
-    /** This will use for voucher api version */
-    public voucherApiVersion: number;
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
@@ -139,7 +138,6 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public ngOnInit(): void {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.body?.classList?.add("subscription-page");
         this.initForm();
         this.getAllSubscriptions(false);
@@ -405,10 +403,10 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof SubscriptionComponent
      */
-    public handlePageChange(event: PageEvent): void {
+    public handlePageChange(event: any): void {
         this.pageIndex = event.pageIndex;
-        this.subscriptionRequestParams.page = this.subscriptionRequestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.subscriptionRequestParams.count = event.pageSize;
+        this.subscriptionRequestParams.page = event.pageIndex + 1;
         this.getAllSubscriptions(false);
     }
 
@@ -448,7 +446,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.menu.closeMenu();
         this.dialog.open(TransferDialogComponent, {
             data: subscriptionId,
-            panelClass: ['transfer-popup', 'mat-dialog-md'],
+            panelClass: 'transfer-popup',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'transferDialog'
         });
@@ -487,7 +486,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.subscriptionMove = true;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
-            panelClass: 'mat-dialog-md',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
@@ -555,7 +554,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 ok: this.commonLocaleData?.app_proceed,
                 cancel: this.commonLocaleData?.app_cancel
             },
-            panelClass: ['cancel-confirmation-modal', 'mat-dialog-md'],
+            panelClass: 'cancel-confirmation-modal',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'confirmDialog'
         });
@@ -653,7 +653,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.subscriptionMove = false;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
-            panelClass: 'mat-dialog-md',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });

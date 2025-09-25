@@ -34,7 +34,6 @@ import { RecurringVoucherService } from '../../services/recurring-voucher.servic
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { LocaleService } from '../../services/locale.service';
 import { GeneralService } from '../../services/general.service';
-import { PAGINATION_LIMIT } from '../../app.constant';
 
 @Injectable()
 export class InvoiceActions {
@@ -822,7 +821,7 @@ export class InvoiceActions {
         return saveAs(blob, `${fileName}.` + type);
     }
 
-    public GetAllRecurringInvoices(filter?, page: number = 1, count: number = PAGINATION_LIMIT): CustomActions {
+    public GetAllRecurringInvoices(filter?, page: number = 1, count: number = 20): CustomActions {
         return {
             type: INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA,
             payload: { filter, page, count }

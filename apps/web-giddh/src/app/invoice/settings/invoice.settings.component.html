@@ -2,23 +2,15 @@
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
-            <mat-tab-group 
-                class="tab-integration"
-                mat-stretch-tabs="false"
-                mat-align-tabs="start"
-                [selectedIndex]="selectedTabIndex"
-                (selectedTabChange)="tabChanged($event)"
-                #staticTabsSettings>
+            <tabset class="tab-integration" #staticTabsSettings>
                 <ng-container *ngIf="selectedVoucher !== 'debit note' && selectedVoucher !== 'credit note'">
                     <!-- region general tab-->
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <i class="icon-chat2 mr-r1"></i>
-                            <span>{{ localeData?.general }}</span>
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-chat2"></span> {{ localeData?.general }}
                         </ng-template>
 
-                        <div class="pd-t15 pd-b15">
-                            <div class="general-tab single-tab-block">
+                        <div class="general-tab single-tab-block">
                             <div class="box clearfix">
                                 <form class="row" autocomplete="off">
                                     <div class="col-sm-12">
@@ -78,19 +70,16 @@
                                 </form>
                             </div>
                         </div>
-                        </div>
-                    </mat-tab>
+                    </tab>
                     <!-- endregion -->
 
                     <!-- region Email tab-->
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <i class="icon-mail mr-r1"></i>
-                            <span>{{ commonLocaleData?.app_email }}</span>
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-mail"></span> {{ commonLocaleData?.app_email }}
                         </ng-template>
 
-                        <div class="pd-t15 pd-b15">
-                            <div class="email-tab single-tab-block">
+                        <div class="email-tab single-tab-block">
                             <div class="box clearfix mb-2">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ localeData?.email_sms }}
@@ -116,11 +105,11 @@
                                                             <span class="input-group-addon"
                                                                 *ngIf="!invoiceSetting.emailVerified"><i
                                                                     class="fa fa-exclamation-circle"
-                                                                    [matTooltip]="localeData?.unverified"></i></span>
+                                                                    [tooltip]="localeData?.unverified"></i></span>
                                                             <span class="input-group-addon verify-tick-icon"
                                                                 *ngIf="invoiceSetting.emailVerified"><i
                                                                     class="icon-tick"
-                                                                    [matTooltip]="localeData?.verified"></i></span>
+                                                                    [tooltip]="localeData?.verified"></i></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -129,8 +118,7 @@
                                                     <div
                                                         class="btn-wrapper d-flex align-items-center justify-content-center">
                                                         <button aria-label="verify"
-                                                            mat-raised-button color="primary"
-                                                            class="mr-l15 mr-r15"
+                                                            class="btn btn-success mr-l15 mr-r15"
                                                             (click)="verfiyEmail(invoiceSetting.email)" [disabled]="
                                                                 !isEmailChanged &&
                                                                 (!invoiceSetting.email ||
@@ -195,19 +183,17 @@
                                 <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>
-                        </div>
-                    </mat-tab>
+                    </tab>
                     <!-- endregion -->
 
                     <!-- region estimate tab -->
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <i class="icon-estimate1 mr-r1"><span class="path1"></span><span class="path2"></span></i>
-                            <span>{{ localeData?.estimate }}</span>
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-estimate1"><span class="path1"></span><span class="path2"></span></span>
+                            {{ localeData?.estimate }}
                         </ng-template>
 
-                        <div class="pd-t15 pd-b15">
-                            <div class="estimate-tab single-tab-block">
+                        <div class="estimate-tab single-tab-block">
                             <div class="box clearfix mb-2">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ localeData?.estimate_quotation }} <span></span>
@@ -267,14 +253,25 @@
                                         <div class="col-sm-12 col-md-12 col-lg-7">
                                             <div class="select-estimate mr-r3">
                                                 <div class="col-md-12 col-xs-12 p-0">
-                                                    <mat-radio-group name="signatureType" [(ngModel)]="estimateSetting.nextStepToEstimate" class="d-flex">
-                                                        <mat-radio-button color="primary" value="salesorder" class="mr-3">
-                                                            {{ localeData?.proforma }}
-                                                        </mat-radio-button>
-                                                        <mat-radio-button color="primary" value="invoice">
-                                                            {{ commonLocaleData?.app_invoice }}
-                                                        </mat-radio-button>
-                                                    </mat-radio-group>
+                                                    <span class="p-0 mr-r3">
+                                                        <input id="radio-5" class="radio-custom cp ml-0"
+                                                            name="signatureType" type="radio"
+                                                            [(ngModel)]="estimateSetting.nextStepToEstimate"
+                                                            [value]="'salesorder'" />
+                                                        <label for="radio-5" class="radio-custom-label">{{
+                                                            localeData?.proforma
+                                                            }}</label>
+                                                    </span>
+
+                                                    <span class="p-0 mr-r3">
+                                                        <input id="radio-6" class="radio-custom cp ml-0"
+                                                            name="signatureType" type="radio"
+                                                            [(ngModel)]="estimateSetting.nextStepToEstimate"
+                                                            [value]="'invoice'" />
+                                                        <label for="radio-6" class="radio-custom-label">{{
+                                                            commonLocaleData?.app_invoice
+                                                            }}</label>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -342,23 +339,47 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- <div class="clearfix pd-t1">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-md-12 col-lg-3">
+                                            <input
+                                                type="checkbox"
+                                                [(ngModel)]="estimateSetting.sendSms"
+                                                class="pull-left"
+                                                name="invoiceCreatePaymentEntry"
+                                                class="show-on-mobile"
+                                            /><label>{{ localeData?.enable_sms_estimate }}</label
+                                            >
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-9">
+                                            <div class="form-group clearfix">
+                                                <input
+                                                    type="checkbox"
+                                                    [(ngModel)]="estimateSetting.sendSms"
+                                                    class="pull-left"
+                                                    name="invoiceCreatePaymentEntry"
+                                                    class="hide-on-mobile"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+
                                     <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                                 </div>
                             </div>
                         </div>
-                        </div>
-                    </mat-tab>
+                    </tab>
                     <!-- endregion -->
 
                     <!-- region sales order tab -->
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <i class="icon-sales-order mr-r1"></i>
-                            <span>{{ localeData?.proforma }}</span>
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-sales-order"></span> {{ localeData?.proforma }}
                         </ng-template>
 
-                        <div class="pd-t15 pd-b15">
-                            <div class="estimate-tab sales-order-tab single-tab-block">
+                        <div class="estimate-tab sales-order-tab single-tab-block">
                             <div class="box clearfix mb-2">
                                 <h4 class="clearfix bd-rb font-16">{{ localeData?.proforma_invoice }} <span></span></h4>
 
@@ -467,23 +488,37 @@
                                         </div>
                                     </div>
 
+                                    <!-- <div class="clearfix pd-t1">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                            <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left"
+                                                name="proformaCreatePaymentEntry" class="show-on-mobile" />
+                                            <label>{{localeData?.enable_sms_proforma}}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-9">
+                                            <div class="form-group clearfix">
+                                                <input type="checkbox" [(ngModel)]="proformaSetting.sendSms"
+                                                    class="pull-left" name="proformaCreatePaymentEntry"
+                                                    class="hide-on-mobile" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+
                                     <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                                 </div>
                             </div>
                         </div>
-                        </div>
-                    </mat-tab>
+                    </tab>
                     <!-- endregion -->
 
                     <!-- region invoice tab -->
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <i class="icon-invoice-icon mr-r1"></i>
-                            <span>{{ commonLocaleData?.app_invoice }}</span>
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-invoice-icon"></span>{{ commonLocaleData?.app_invoice }}
                         </ng-template>
 
-                        <div class="pd-t15 pd-b15">
-                            <div class="estimate-tab invoice-tab single-tab-block">
+                        <div class="estimate-tab invoice-tab single-tab-block">
                             <div class="box clearfix mb-2">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ commonLocaleData?.app_invoice }} <span></span>
@@ -568,6 +603,35 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- <div class="clearfix pd-t1">
+                                    <div class="row">
+
+                                        <div class="col-sm-12 col-md-12 col-lg-3">
+
+                                            <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms"
+                                                (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)"
+                                                name="invoiceSetting.sendInvLinkOnSms" class="pull-left show-on-mobile" />
+
+                                            <label>{{localeData?.enable_sms_invoice}}</label>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-9">
+                                            <div class="form-group clearfix">
+                                                <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms"
+                                                    (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)"
+                                                    name="invoiceSetting.sendInvLinkOnSms"
+                                                    class="pull-left hide-on-mobile" />
+
+                                                <div class="pull-left sms-textarea" *ngIf="invoiceSetting.sendInvLinkOnSms">
+                                                    <textarea [(ngModel)]="invoiceSetting.smsContent"
+                                                        class="pull-left form-control"
+                                                        name="invoiceSetting.sendInvLinkOnSms" rows="3"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
                                     <div class="clearfix pt-4">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
@@ -805,20 +869,18 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
-                    </mat-tab>
+                    </tab>
                 </ng-container>
                 <ng-container *ngIf="
                         voucherApiVersion === 2 &&
                         (selectedVoucher === 'debit note' || selectedVoucher === 'credit note')
                     ">
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <i class="icon-invoice-icon mr-r1"></i>
-                            <span>{{ commonLocaleData?.app_voucher_types?.debit_note }}</span>
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-invoice-icon"></span>
+                            {{ commonLocaleData?.app_voucher_types?.debit_note }}
                         </ng-template>
-                        <div class="pd-t15 pd-b15">
-                            <div class="general-tab single-tab-block">
+                        <div class="general-tab single-tab-block">
                             <div class="box clearfix">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ commonLocaleData?.app_voucher_types?.debit_note }}
@@ -911,15 +973,13 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
-                    </mat-tab>
-                    <mat-tab>
-                        <ng-template mat-tab-label>
-                            <i class="icon-invoice-icon mr-r1"></i>
-                            <span>{{ commonLocaleData?.app_voucher_types?.credit_note }}</span>
+                    </tab>
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-invoice-icon"></span>{{ commonLocaleData?.app_voucher_types?.credit_note
+                            }}
                         </ng-template>
-                        <div class="pd-t15 pd-b15">
-                            <div class="general-tab single-tab-block">
+                        <div class="general-tab single-tab-block">
                             <div class="box clearfix">
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ commonLocaleData?.app_voucher_types?.credit_note }}
@@ -1014,19 +1074,18 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
-                    </mat-tab>
+                    </tab>
                 </ng-container>
                 <!-- endregion -->
-            </mat-tab-group>
+            </tabset>
         </section>
 
         <ng-template #buttonsSection>
             <div class="btn-group mr-t2" role="group" aria-label="Basic example">
-                <button mat-raised-button color="primary" aria-label="save" type="button" class="mr-r1" (click)="UpdateForm()">
+                <button aria-label="save" type="button" class="btn btn-success mr-r1" (click)="UpdateForm()">
                     {{ commonLocaleData?.app_save }}
                 </button>
-                <button mat-stroked-button aria-label="cancel" type="button" (click)="resetForm()">
+                <button aria-label="cancel" type="button" class="btn btn-cancel" (click)="resetForm()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

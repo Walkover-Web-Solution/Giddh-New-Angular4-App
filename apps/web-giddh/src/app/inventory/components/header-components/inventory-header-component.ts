@@ -1,46 +1,46 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { Observable, ReplaySubject } from 'rxjs';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ASIDE_PANE_CONFIG } from '../../../app.constant';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
     selector: 'inventory-header',
     styles: [`
   `],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ],
     template: `
-    <ng-template #asideCustomStockTemplate>
-        <aside-custom-stock [menuState]="true" (closeAsideEvent)="asideCustomStockDialogRef.close()"
-            (onShortcutPress)="toggleCustomUnitAsidePane()"></aside-custom-stock>
-    </ng-template>
-    <ng-template #asideInventoryStockGroupTemplate>
-        <aside-inventory-stock-group [autoFocus]="false" (closeAsideEvent)="asideInventoryStockGroupDialogRef.close()"
-            (onShortcutPress)="toggleGroupStockAsidePane()"></aside-inventory-stock-group>
-    </ng-template>
+    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
+    <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" [menuState]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"
+                        (onShortcutPress)="toggleCustomUnitAsidePane()"></aside-custom-stock>
+    <aside-inventory-stock-group [autoFocus]="false" [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleGroupStockAsidePane($event)"
+                                 (onShortcutPress)="toggleGroupStockAsidePane()"></aside-inventory-stock-group>
   `
 })
+
 export class InventoryHearderComponent implements OnDestroy, OnInit {
     public activeGroupName$: Observable<string>;
-    /** Reference to aside custom stock template */
-    @ViewChild('asideCustomStockTemplate', { static: true }) public asideCustomStockTemplate: TemplateRef<any>;
-    /** Reference to aside custom stock dialog */
-    public asideCustomStockDialogRef: MatDialogRef<any>;
-    /** Reference to aside inventory stock group template */
-    @ViewChild('asideInventoryStockGroupTemplate', { static: true }) public asideInventoryStockGroupTemplate: TemplateRef<any>;
-    /** Reference to aside inventory stock group dialog */
-    public asideInventoryStockGroupDialogRef: MatDialogRef<any>;
+    public accountAsideMenuState: string = 'out';
+    public asideMenuStateForProductService: string = 'out';
     public openGroupStockAsidePane$: Observable<boolean>;
     public openCustomUnitAsidePane$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private router: Router,
-        private store: Store<AppState>,
-        private inventoryAction: InventoryAction,
-        private dialog: MatDialog) {
+    constructor(private router: Router, private store: Store<AppState>, private inventoryAction: InventoryAction) {
 
         this.openGroupStockAsidePane$ = this.store.pipe(select(s => s.inventory.showNewGroupAsidePane), takeUntil(this.destroyed$));
         this.openCustomUnitAsidePane$ = this.store.pipe(select(s => s.inventory.showNewCustomUnitAsidePane), takeUntil(this.destroyed$));
@@ -63,24 +63,6 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
         });
     }
 
-    /**
-     * Opens the custom stock aside pane dialog
-     *
-     * @memberof InventoryHearderComponent
-     */
-    public openAccountAsideMenuDialog() {
-        this.asideCustomStockDialogRef = this.dialog.open(this.asideCustomStockTemplate, ASIDE_PANE_CONFIG);
-    }
-
-    /**
-     * Opens the custom unit aside pane dialog
-     *
-     * @memberof InventoryHearderComponent
-     */
-    public openCustomUnitAsideDialog() {
-        this.asideInventoryStockGroupDialogRef = this.dialog.open(this.asideInventoryStockGroupTemplate, ASIDE_PANE_CONFIG);
-    }
-
     public goToAddGroup() {
         this.router.navigate(['/pages', 'inventory', 'add-group']);
     }
@@ -92,22 +74,28 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
         this.router.navigate(['/pages', 'inventory', 'add-group', groupName, 'add-stock']);
     }
 
-    /**
-     * Toggles the custom unit aside pane
-     *
-     * @memberof InventoryHearderComponent
-     */
-    public toggleCustomUnitAsidePane(): void {
-        this.openAccountAsideMenuDialog();
+    public toggleCustomUnitAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
     }
 
-    /**
-     * Toggles the group stock aside pane
-     *
-     * @memberof InventoryHearderComponent
-     */
-    public toggleGroupStockAsidePane(): void {
-        this.openCustomUnitAsideDialog();
+    public toggleGroupStockAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === 'in' || this.asideMenuStateForProductService === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
     }
 
     /**

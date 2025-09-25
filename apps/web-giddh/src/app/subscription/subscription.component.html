@@ -4,13 +4,13 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="setting-page user-detail-page relative overflow-visible" *ngIf="!isCreateAndSwitchCompanyInProcess">
+    <div class="setting-page user-detail-page relative overflow-visible" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
         <div class="video-link position-absolute mr-r15" *ngIf="activeTabIndex === 1">
             <watch-video [cssClass]="'text-primary pr-0'" [moduleName]="'TWO_FACTOR_AUTHENTICATION'"></watch-video>
         </div>
         <button
             class="buy-plan-btn position-absolute"
-            mat-raised-button
+            mat-stroked-button
             color="primary"
             [routerLink]="['/pages/user-details/subscription/buy-plan/' + subscriptionId]"
             *ngIf="activeTabIndex === 3 && profileData?.planVersion === 1 && !isSubscriptionLoading"
@@ -40,7 +40,7 @@
                                         [readonly]="true"
                                     ></input-field>
                                 </div>
-                                <button type="button" mat-raised-button color="primary" (click)="toggleIsCopied()">
+                                <button type="button" mat-stroked-button color="primary" (click)="toggleIsCopied()">
                                     {{ commonLocaleData?.app_copy }}
                                 </button>
                             </div>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="form-group clearfix mb-0">
                                 <button
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     type="submit"
                                     (click)="regenerateKey()"
@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-lg-4 pd-l05">
                                 <button
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     class="btn mr-l1 margin-top"
                                     [ladda]="isAddNewMobileNoInProcess$ | async"
@@ -113,7 +113,7 @@
                             </div>
                             <div class="col-lg-4 pd-l05 pd-t1">
                                 <button
-                                    mat-raised-button
+                                    mat-stroked-button
                                     color="primary"
                                     class="btn mr-l1 mt-2"
                                     [ladda]="isVerifyAddNewMobileNoInProcess$ | async"

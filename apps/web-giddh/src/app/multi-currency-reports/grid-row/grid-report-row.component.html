@@ -68,7 +68,7 @@
     <section
         class="account overflow-visible"
         *ngIf="account.isVisible"
-        (dblclick)="accountInfo(account, $event); menuTrigger.openMenu()"
+        (dblclick)="accountInfo(account, $event)"
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
@@ -76,9 +76,15 @@
                 <div
                     class="p-0 bd-r-right-none text-danger"
                     [innerHTML]="account.name | lowercase | highlight: search"
+                    [popover]="accountDetailModalTemplate"
+                    #accountDetailPopup="bs-popover"
+                    triggers=""
+                    container="body"
+                    containerClass="financial-report-account-detail-container"
+                    placement="bottom"
+                    [isOpen]="modalUniqueName && modalUniqueName === account?.uniqueName"
                 ></div>
-                <span class="position-absolute" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="accountDetailModalTemplate">&nbsp;</span>
-                <mat-menu #accountDetailModalTemplate>
+                <ng-template #accountDetailModalTemplate>
                     <span
                         account-detail-modal-component
                         *ngIf="modalUniqueName && modalUniqueName === account?.uniqueName"
@@ -88,11 +94,11 @@
                         [accInfo]="false"
                         [closeOnEdit]="true"
                         (modalOpened)="handleModalOpened($event)"
-                        (modalClosed)="hideModal()"
-                        (modalClosedTemporary)="openAccountModal.emit($event); hideModal()"
+                        (modalClosed)="hideModal(); accountDetailPopup?.hide()"
+                        (modalClosedTemporary)="openAccountModal.emit($event); hideModal(); accountDetailPopup?.hide()"
                     >
                     </span>
-                </mat-menu>
+                </ng-template>
             </div>
             <div class="col-2 account text-right">
                 <span class="d-inline-flex">

@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewChild, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from '../../../services/general.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
@@ -19,9 +20,11 @@ import { cloneDeep } from '../../../lodash-optimized';
 })
 
 export class NewInventoryAdvanceSearch implements OnInit {
-    /** Reference of datepicker menu trigger */
-    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     public isMobileScreen: boolean = false;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
     /** This will store universalDate */
     public universalDate: any;
     /** Universal date observer */
@@ -34,7 +37,9 @@ export class NewInventoryAdvanceSearch implements OnInit {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-/** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* dayjs object */
     public dayjs = dayjs;
@@ -59,8 +64,10 @@ export class NewInventoryAdvanceSearch implements OnInit {
 
     constructor(
         private _breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService,
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
+        public modalService: BsModalService,
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -231,14 +238,14 @@ export class NewInventoryAdvanceSearch implements OnInit {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -248,17 +255,27 @@ export class NewInventoryAdvanceSearch implements OnInit {
     }
 
     /**
-     * This will toggle the datepicker
+     * This will use for hide giddh datepicker
      *
-     * @param {boolean} isOpen
      * @memberof NewInventoryAdvanceSearch
      */
-    public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
+    public hideGiddhDatepicker(): void {
+        this.modalRef?.hide();
+    }
+    /**
+     * This will use for show giddh datepicker
+     *
+     * @param {*} element
+     * @memberof NewInventoryAdvanceSearch
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
     }
 
     /**

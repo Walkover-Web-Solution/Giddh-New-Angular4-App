@@ -16,7 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { PaginationModule } from "ngx-bootstrap/pagination";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { NoDataModule } from "../shared/no-data/no-data.module";
@@ -44,7 +44,7 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         FormFieldsModule,
         MatTooltipModule,
         TranslateDirectiveModule,
-        MatPaginatorModule,
+        PaginationModule.forRoot(),
         FormsModule,
         GiddhPageLoaderModule,
         NoDataModule,

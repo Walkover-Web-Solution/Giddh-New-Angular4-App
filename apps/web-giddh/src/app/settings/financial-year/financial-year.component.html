@@ -34,7 +34,7 @@
                                 >
                                 </reactive-dropdown-field>
                             </ng-template>
-                            <button mat-raised-button color="primary" (click)="addFY()">
+                            <button mat-stroked-button color="primary" (click)="addFY()">
                                 {{ localeData?.add_financial_year }}
                             </button>
                         </div>
@@ -65,7 +65,7 @@
                                 >
                                 </reactive-dropdown-field>
                             </ng-template>
-                            <button mat-raised-button color="primary" (click)="updateFYPeriod()">
+                            <button mat-stroked-button color="primary" (click)="updateFYPeriod()">
                                 {{ localeData?.update_financial_year_period }}
                             </button>
                         </div>
@@ -111,7 +111,7 @@
                                             </span>
                                     </td>
                                     </ng-container>
-                                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </div>

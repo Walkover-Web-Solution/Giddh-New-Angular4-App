@@ -33,6 +33,7 @@ import { CompanyListDialogComponent } from './company-list-dialog/company-list-d
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
 import { MoveCompanyComponent } from './move-company/move-company.component';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { MatSelectModule } from '@angular/material/select';
 import { SubscriptionListComponent } from './subscription-list/subscription-list.component';
 import { CompanyDetailsSidebarComponent } from './components/company-details-sidebar/company-details-sidebar.component';
@@ -97,6 +98,7 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
         MatGridListModule,
         MatTabsModule,
         ClickOutsideModule,
+        ShSelectModule,
         MatSelectModule,
         MatExpansionModule,
         DecimalDigitsModule,

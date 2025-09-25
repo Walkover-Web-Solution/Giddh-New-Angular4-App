@@ -9,6 +9,7 @@ import {
 } from '../../../models/api-models/Company';
 import * as dayjs from 'dayjs';
 import { GeneralService } from '../../../services/general.service';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import {
     ILinkedStocksResult,
     LinkedStocksResponse, LinkedStocksVM,
@@ -17,27 +18,39 @@ import {
 import { InventoryAction } from "../../../actions/inventory/inventory.actions";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { CommonActions } from "../../../actions/common.actions";
-import { IOption } from '../../../app.constant';
+import { IOption } from "../../../theme/ng-select/option.interface";
 import { ToasterService } from "../../../services/toaster.service";
 import { IForceClear } from "../../../models/api-models/Sales";
 import { IEwayBillfilter, IEwayBillTransporter, IAllTransporterDetails } from "../../../models/api-models/Invoice";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { transporterModes } from "../../../shared/helpers/transporterModes";
 import { InventoryService } from "../../../services/inventory.service";
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { PageEvent } from '@angular/material/paginator';
-import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { NgForm } from '@angular/forms';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep, isEmpty } from '../../../lodash-optimized';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'new-branch-transfer',
     templateUrl: './new.branch.transfer.add.component.html',
-    styleUrls: ['./new.branch.transfer.component.scss']
+    styleUrls: ['./new.branch.transfer.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 
 export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestroy {
@@ -47,20 +60,27 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('productSkuCode', { static: true }) public productSkuCode;
     @ViewChild('productHsnNumber', { static: true }) public productHsnNumber;
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
+    @ViewChild('selectDropdown', { static: false }) public selectDropdown: ShSelectComponent;
+    @ViewChild('sourceWarehouse', { static: false }) public sourceWarehouse: ShSelectComponent;
+    @ViewChild('destinationWarehouse', { static: false }) public destinationWarehouse: ShSelectComponent;
     @ViewChild('productDescription', { static: true }) public productDescription;
+    @ViewChild('transMode', { static: true }) public transMode: ShSelectComponent;
     @ViewChild('vehicleNumber', { static: true }) public vehicleNumber;
+    @ViewChild('transCompany', { static: true }) public transCompany: ShSelectComponent;
+    @ViewChild('destinationWarehouseList', { static: false }) public destinationWarehouseList: ShSelectComponent;
+    @ViewChild('sourceWarehouses', { static: false }) public sourceWarehouseList: ShSelectComponent;
     @ViewChild('sourceQuantity', { static: false }) public sourceQuantity;
+    @ViewChild('defaultSource', { static: false }) public defaultSource: ShSelectComponent;
+    @ViewChild('defaultProduct', { static: false }) public defaultProduct: ShSelectComponent;
+    @ViewChild('destinationName', { static: false }) public destinationName: ShSelectComponent;
     @ViewChild('destinationQuantity', { static: false }) public destinationQuantity;
     @ViewChild('senderGstNumberField', { static: false }) public senderGstNumberField: HTMLInputElement;
     @ViewChild('receiverGstNumberField', { static: false }) public receiverGstNumberField: HTMLInputElement;
     @ViewChild("asideMenuProductService") public asideMenuProductService: TemplateRef<any>;
-    /** Template reference for transporter popup */
-    @ViewChild("transporterPopupTemplate") public transporterPopupTemplate: TemplateRef<any>;
-    /** Dialog reference for transporter popup */
-    public transporterPopupDialogRef: MatDialogRef<any>;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
+    public asideMenuState: string = 'out';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public branchTransfer: NewBranchTransferRequest;
     public transferType: string = 'products';
@@ -106,8 +126,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public isUpdateMode: boolean = false;
     public allowAutoFocusInField: boolean = false;
     public inventorySettings: any;
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     /** True if current organization is branch */
     public isBranch: boolean;
@@ -140,7 +158,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
-    constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public dialog: MatDialog) {
+    constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig, public dialog: MatDialog) {
+        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.getInventorySettings();
         this.initFormFields();
     }
@@ -175,6 +194,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         if (!this.editBranchTransferUniqueName) {
             this.allowAutoFocusInField = true;
+            this.focusDefaultSource();
         } else {
             this.isDefaultLoad = true;
         }
@@ -197,6 +217,22 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.hideModal.emit(isNoteCreatedSuccessfully);
     }
 
+    public toggleBodyClass(): void {
+        if (this.asideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    public toggleAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
     public changeTransferType(): void {
         this.allowAutoFocusInField = false;
         this.initFormFields();
@@ -204,6 +240,16 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.tempDateParams.dispatchedDate = "";
         this.assignCurrentCompany();
         this.calculateOverallTotal();
+
+        setTimeout(() => {
+            this.allowAutoFocusInField = true;
+
+            if (this.transferType === "products") {
+                this.focusDefaultSource();
+            } else {
+                this.focusDefaultProduct();
+            }
+        }, 200);
     }
 
     public initFormFields(): void {
@@ -399,6 +445,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
 
         let currentIndex = this.branchTransfer.destinations.length - 1;
+        this.focusSelectDropdown(currentIndex);
     }
 
     public addSender(): void {
@@ -421,6 +468,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
 
         let currentIndex = this.branchTransfer.sources.length - 1;
+        this.focusSelectDropdown(currentIndex);
     }
 
     public addProduct(): void {
@@ -442,6 +490,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
 
         let currentIndex = this.branchTransfer.products.length - 1;
+        this.focusSelectDropdown(currentIndex);
     }
 
     public removeProduct(i): void {
@@ -601,6 +650,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
                 this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
                 this.branchTransfer.sources[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
+
+                this.focusDefaultSource();
             }
 
             setTimeout(() => {
@@ -752,6 +803,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.senderWarehouses[this.branchTransfer.sources[index]?.uniqueName].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
+                    if (this.branchTransfer.sources[index].warehouse && this.branchTransfer.sources[index].warehouse?.uniqueName) {
+                        setTimeout(() => {
+                            if (this.sourceWarehouse) {
+                                this.sourceWarehouse.writeValue(this.branchTransfer.sources[index].warehouse?.uniqueName);
+                            }
+                        }, 100);
+                    }
                 }
             }
         } else {
@@ -785,6 +843,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.senderWarehouses[this.branchTransfer.sources[sourceIndex]?.uniqueName].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
+                    if (this.branchTransfer.sources[index].warehouse && this.branchTransfer.sources[index].warehouse?.uniqueName) {
+                        setTimeout(() => {
+                            if (this.sourceWarehouse) {
+                                this.sourceWarehouse.writeValue(this.branchTransfer.sources[index].warehouse?.uniqueName);
+                            }
+                        }, 100);
+                    }
                 }
             }
         }
@@ -829,6 +894,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         }
                     });
                 }
+                if (this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse?.uniqueName) {
+                    setTimeout(() => {
+                        if (this.destinationWarehouse) {
+                            this.destinationWarehouse.writeValue(this.branchTransfer.destinations[index].warehouse?.uniqueName);
+                        }
+                    }, 100);
+                }
             }
         } else {
             if (this.allWarehouses && this.branchTransfer.sources[0] && this.allWarehouses[this.branchTransfer.sources[0]?.uniqueName]) {
@@ -863,6 +935,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.destinationWarehouses[this.branchTransfer.destinations[destinationIndex]?.uniqueName].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
+                }
+                if (this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse?.uniqueName) {
+                    setTimeout(() => {
+                        if (this.destinationWarehouse) {
+                            this.destinationWarehouse.writeValue(this.branchTransfer.destinations[index].warehouse?.uniqueName);
+                        }
+                    }, 100);
                 }
             }
         }
@@ -1267,9 +1346,16 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         document.querySelector("body").classList.add("new-branch-transfer-page");
 
-        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: '760px',
+            height: '100vh !important'
+        });
 
-        this.asideMenuStateForProductService.afterClosed().subscribe(response => {
+        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
             document.querySelector("body").classList.remove("new-branch-transfer-page");
         });
 
@@ -1296,19 +1382,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.keydownClassAdded = true;
         } else if (e.code === 'Enter' && this.keydownClassAdded) {
             this.keydownClassAdded = true;
-            this.openTransporterPopupDialog();
+            this.toggleTransporterModel();
         } else {
             this.keydownClassAdded = false;
         }
     }
 
-    /**
-     * open transporter popup dialog
-     *
-     * @memberof NewBranchTransferAddComponent
-     */
-    public openTransporterPopupDialog(): void {
-        this.transporterPopupDialogRef = this.dialog.open(this.transporterPopupTemplate, ASIDE_PANE_CONFIG);
+    public toggleTransporterModel(): void {
+        this.transporterPopupStatus = !this.transporterPopupStatus;
         this.generateNewTransporterForm?.reset();
         this.transportEditMode = false;
     }
@@ -1342,9 +1423,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public deleteTransporter(transporter: IEwayBillTransporter): void {
         this.store.dispatch(this.invoiceActions.deleteTransporter(transporter.transporterId));
-        this.transporterFilterRequest.page = this._generalService.adjustPageIndex(this.transporterListDetails.totalItems, this.transporterListDetails.page, this.transporterListDetails.count);
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.transporterPopupDialogRef?.close();
+        this.toggleTransporterModel();
         this.detectChanges();
     }
 
@@ -1354,20 +1434,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
-    /**
-     * Handles pagination events and updates API parameters
-     *
-     * @param {PageEvent} event - Contains pagination details
-     * @memberof NewBranchTransferAddComponent
-     */
-    public handlePageEvent(event: PageEvent): void {
-        this.transporterFilterRequest.page = this.transporterFilterRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.transporterFilterRequest.count = event.pageSize;
+    public pageChanged(event: any): void {
+        this.transporterFilterRequest.page = event.page;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
-    
-
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string): void {
         this.transporterFilterRequest.sort = type;
@@ -1392,11 +1463,129 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
     }
 
+    public focusSelectDropdown(index: number, event?: any): void {
+        if (this.allowAutoFocusInField && (!event || event.value)) {
+            setTimeout(() => {
+                this.setActiveRow(index);
+                setTimeout(() => {
+                    this.selectDropdown?.show('');
+                }, 100);
+            }, 100);
+        }
+    }
+
+    /**
+     * Puts focus on source warehouse
+     *
+     * @param {*} event Event of selection, used to avoid focus when event.value is null
+     * @memberof NewBranchTransferAddComponent
+     */
+    public focusSourceWarehouse(event: any): void {
+        if (this.allowAutoFocusInField && event && event.value) {
+            setTimeout(() => {
+                this.sourceWarehouse?.show('');
+            }, 100);
+        }
+    }
+
+    /**
+     * Puts focus on destination warehouse
+     *
+     * @param {*} event Event of selection, used to avoid focus when event.value is null
+     * @memberof NewBranchTransferAddComponent
+     */
+    public focusDestinationWarehouse(event: any): void {
+        if (this.allowAutoFocusInField && event && event.value) {
+            setTimeout(() => {
+                this.destinationWarehouse?.show('');
+            }, 100);
+        }
+    }
+
+    public focusTransporterMode(): void {
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                this.transMode?.show('');
+            }, 100);
+        }
+    }
+
     public focusVehicleNumber(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 if (this.vehicleNumber && this.vehicleNumber.nativeElement) {
                     this.vehicleNumber.nativeElement.focus();
+                }
+            }, 100);
+        }
+    }
+
+    public focusTransportCompany(): void {
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                if (this.tempDateParams.dispatchedDate) {
+                    this.transCompany?.show('');
+                }
+            }, 100);
+        }
+    }
+
+    public focusDestinationWarehouses(): void {
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                this.destinationWarehouseList?.show('');
+            }, 100);
+        }
+    }
+
+    public focusSourceWarehouses(): void {
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                this.sourceWarehouseList?.show('');
+            }, 100);
+        }
+    }
+
+    public focusSourceQuantity(): void {
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                if (this.sourceQuantity && this.sourceQuantity.nativeElement) {
+                    this.sourceQuantity.nativeElement.focus();
+                }
+            }, 100);
+        }
+    }
+
+    public focusDefaultSource(): void {
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                if (this.defaultSource) {
+                    this.defaultSource.show('');
+                } else if (this.sourceWarehouse) {
+                    // Delivery challan, focus on source warehouse instead
+                    this.sourceWarehouse.show('');
+                }
+            }, 100);
+        }
+    }
+
+    public focusDefaultProduct(): void {
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                if (this.defaultProduct) {
+                    this.defaultProduct.show('');
+                }
+            }, 100);
+        }
+    }
+
+    public focusDestinationName(): void {
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                if (this.destinationName) {
+                    this.destinationName.show('');
+                } else {
+                    this.focusSelectDropdown(0);
                 }
             }, 100);
         }

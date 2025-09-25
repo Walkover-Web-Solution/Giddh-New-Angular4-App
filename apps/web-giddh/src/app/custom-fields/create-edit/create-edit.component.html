@@ -9,7 +9,7 @@
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
         <div class="relative create-custom-field-page mr-t2">
-            <button mat-stroked-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
+            <button mat-stroked-button [disableRipple]="true" class="back-to-page" color="primary" (click)="redirectToGetAllPage()">
                 <i class="back-left icon-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>
@@ -35,16 +35,16 @@
                             </div>
                             <div class="row mr-b15">
                                 <div class="col-8">
-                                    <reactive-dropdown-field
+                                    <dropdown-field
                                         [name]="'fieldType'"
                                         [placeholder]="localeData?.field_type_placeholder"
                                         [options]="fieldTypes"
                                         (selectedOption)="selectFieldType($event)"
-                                        [labelValue]="customFieldRequest?.fieldType?.name"
+                                        [defaultValue]="customFieldRequest?.fieldType?.name"
                                         [required]="true"
                                         [label]="localeData?.field_type"
                                     >
-                                    </reactive-dropdown-field>
+                                    </dropdown-field>
                                 </div>
                             </div>
                             <div class="row mr-b15" *ngIf="visibleFields.fieldInfo">
@@ -80,7 +80,7 @@
                                             [(ngModel)]="customFieldRequest.dataRange.max"
                                             [placeholder]="localeData?.max_limit"
                                             [label]="localeData?.field_max_limit"
-                                            [required]="true" 
+                                            [required]="true"
                                         ></input-field>
                                     </div>
                                 </div>
@@ -136,11 +136,11 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="col-8">
-                                    <div class="d-flex align-items-center justify-content-space-between" *ngIf="voucherApiVersion === 2">
+                                    <div class="d-flex align-items-center justify-content-space-between">
                                         <ng-container *ngIf="customFieldUniqueName">
                                             <div class="d-flex column-gap15">
                                                 <button
-                                                    mat-raised-button
+                                                    mat-stroked-button
                                                     color="primary"
                                                     class="min-width-100"
                                                     [disabled]="
@@ -164,7 +164,7 @@
                                         <ng-container *ngIf="!customFieldUniqueName">
                                             <div class="d-flex column-gap15">
                                                 <button
-                                                    mat-raised-button
+                                                    mat-stroked-button
                                                     color="primary"
                                                     class="min-width-100"
                                                     [disabled]="

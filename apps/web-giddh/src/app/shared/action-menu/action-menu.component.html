@@ -4,7 +4,7 @@
   [matMenuTriggerFor]="menu"
   aria-label="actions"
 >
-  <span class="icon-dots-three-vertical font-20"></span>
+  <span class="icon-dots-three-vertical"></span>
 </button>
 
 <mat-menu #menu="matMenu">
@@ -59,15 +59,19 @@
   </button>
 </mat-menu>
 
-<ng-template #asideMenuTemplate>
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+
+<div *ngIf="accountAsideMenuState === 'in'">
     <aside-menu-account
         [activeGroupUniqueName]="selectedGroupForCreateAcc"
         [activeAccountDetails]="activeAccountDetails"
         [isUpdateAccount]="isUpdateAccount"
+        class="account-aside-menu-state transform-inherit"
+        [@slideInOut]="accountAsideMenuState"
         [commonLocaleData]="commonLocaleData"
-        (closeAsideEvent)="asideMenuDialogRef?.close()"
+        (closeAsideEvent)="toggleAccountAsidePane($event)"
         (getUpdateList)="getUpdatedList($event)"
         [isActionMenu]="isActionMenu"
     >
     </aside-menu-account>
-</ng-template>
+</div>

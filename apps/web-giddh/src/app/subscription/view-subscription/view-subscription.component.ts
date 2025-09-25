@@ -109,7 +109,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public transferSubscription(subscriptionId: any): void {
         let transferDialogRef = this.dialog.open(TransferDialogComponent, {
             data: subscriptionId,
-            panelClass: ['transfer-popup', 'mat-dialog-md']
+            panelClass: 'transfer-popup',
+            width: 'var(--aside-pane-width)',
         });
 
         transferDialogRef.afterClosed().subscribe((action) => {
@@ -153,7 +154,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         this.selectedCompany = this.viewSubscriptionData;
         this.subscriptionMove = true;
         this.dialog.open(this.moveCompany, {
-            panelClass: 'mat-dialog-md',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
@@ -173,7 +174,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
                 ok: this.commonLocaleData?.app_proceed,
                 cancel: this.commonLocaleData?.app_cancel
             },
-            panelClass: ['cancel-confirmation-modal', 'mat-dialog-md'],
+            panelClass: 'cancel-confirmation-modal',
+            width: 'var(--aside-pane-width)',
         });
 
         cancelDialogRef.afterClosed().subscribe((action) => {

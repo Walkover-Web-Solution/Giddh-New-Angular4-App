@@ -6,13 +6,19 @@
 >
     <div id="share-modal">
         <div id="share-modal">
-            <div class="dialog-header">
-                <span>{{ localeData?.page_heading }}</span>
-                <button mat-icon-button aria-label="close" mat-dialog-close>
-                    <i class="icon-cross"></i>
+            <div class="modal-header flex-row-reverse">
+                <button
+                    aria-hidden="true"
+                    class="close"
+                    mat-button
+                    mat-dialog-close
+                    [attr.aria-label]="commonLocaleData?.app_close"
+                >
+                    ×
                 </button>
+                <h3 class="unbold px-0" mat-dialog-title>{{ localeData?.page_heading }}</h3>
             </div>
-            <mat-dialog-content class="dialog-body" id="SharePop">
+            <div class="modal-body" id="SharePop">
                 <div class="row">
                     <div class="col-12">
                         <div class="modal-wrap">
@@ -33,7 +39,7 @@
                                         </input-field>
                                         <span class="input-group-btn mr-l3">
                                             <button
-                                                mat-raised-button
+                                                mat-stroked-button
                                                 color="primary"
                                                 class="share-ledger-button d-flex align-items-center"
                                                 type="submit"
@@ -93,7 +99,7 @@
                                 </input-field>
                                 <span class="input-group-btn mr-l3">
                                     <button
-                                        mat-raised-button
+                                        mat-stroked-button
                                         type="button"
                                         color="primary"
                                         [disabled]="!magicLink ? 'disabled' : null"
@@ -110,7 +116,7 @@
                         </div>
                     </div>
                 </div>
-            </mat-dialog-content>
+            </div>
         </div>
     </div>
 </ng-container>

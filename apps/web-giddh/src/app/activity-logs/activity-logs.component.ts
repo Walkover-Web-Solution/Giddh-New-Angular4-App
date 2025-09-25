@@ -1,20 +1,20 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityLogsService } from '../services/activity-logs.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../app.constant';
-import { PageEvent } from '@angular/material/paginator';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../app.constant';
 import { takeUntil } from 'rxjs/operators';
 import { ActivityLogsJsonComponent } from './components/activity-logs-json/activity-logs-json.component';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../services/general.service';
 import { Router } from '@angular/router';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LogsService } from '../services/logs.service';
 import { CompanyService } from '../services/company.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 import { ToasterService } from '../services/toaster.service';
@@ -45,18 +45,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Instance of universal datepicker menu trigger */
-    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-    /** Instance of entry datepicker menu trigger */
-    @ViewChild('entryDatepickerTrigger', { read: MatMenuTrigger }) public entryDatepickerTrigger: MatMenuTrigger;
-    /** Instance of voucher datepicker menu trigger */
-    @ViewChild('voucherDatepickerTrigger', { read: MatMenuTrigger }) public voucherDatepickerTrigger: MatMenuTrigger;
     /** This will use for table heading */
     public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation', 'history'];
     /** Hold the data of activity logs */
     public dataSource = ELEMENT_DATA;
-    /** Holds available page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will use for activity logs object */
     public activityObj = {
         count: PAGINATION_LIMIT,
@@ -105,6 +97,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selectedFromDate: Date;
     /** Selected to date */
     public selectedToDate: Date;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerEntryTemplate') public datepickerEntryTemplate: TemplateRef<any>;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerVoucherTemplate') public datepickerVoucherTemplate: TemplateRef<any>;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
@@ -131,6 +129,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selectedEntryRangeLabel: any = "";
     /** Selected entry range label */
     public selectedVoucherRangeLabel: any = "";
+    /** This will store modal reference */
+    public modalRef: BsModalRef;
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store universalDate */
     public universalDate: any;
     /** To show clear filter */
@@ -183,6 +185,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private ActivityLogsService: LogsService,
         private companyService: CompanyService,
+        private modalService: BsModalService,
         private searchService: SearchService,
         private toaster: ToasterService,
         private store: Store<AppState>) {
@@ -198,7 +201,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         document.body?.classList?.add("activity-log-page");
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['/pages/home']);
-            return;
         }
         this.getFormFilter();
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -359,16 +361,16 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
 
 
     /**
-    * Handles pagination events and updates API parameters
+    * This function will change the page of activity logs
     *
-    * @param {PageEvent} event - Contains pagination details
+    * @param {*} event
     * @memberof ActivityLogsComponent
     */
-    public handlePageEvent(event: PageEvent): void {
-        let newPage = this.activityObj.count !== event.pageSize ? 1 : event.pageIndex + 1;
-        this.activityObj.page = newPage;
-        this.activityObj.count = event.pageSize;
-        this.getActivityLogs();
+    public pageChanged(event: any): void {
+        if (this.activityObj.page !== event.page) {
+            this.activityObj.page = event.page;
+            this.getActivityLogs();
+        }
     }
 
     /**
@@ -516,7 +518,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedRangeLabel = "";
@@ -524,7 +526,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.toggleGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.showDateReport = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -542,7 +544,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public entryDateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleEntryGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedEntryRangeLabel = "";
@@ -550,7 +552,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedEntryRangeLabel = value.name;
         }
-        this.toggleEntryGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.entryShowDateReport = true;
             this.selectedEntryDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -568,7 +570,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public voucherDateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.toggleVoucherGiddhDatepicker(false);
+            this.hideGiddhDatepicker();
             return;
         }
         this.selectedVoucherRangeLabel = "";
@@ -576,7 +578,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedVoucherRangeLabel = value.name;
         }
-        this.toggleVoucherGiddhDatepicker(false);
+        this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.voucherShowDateReport = true;
             this.selectedVoucherDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -587,45 +589,60 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Toggles the universal datepicker menu
-     *
-     * @param {boolean} isOpen
-     * @memberof ActivityLogsComponent
-     */
-    public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
-            this.universalDatepickerTrigger?.openMenu();
-        } else {
-            this.universalDatepickerTrigger?.closeMenu();
-        }
+    * This will hide the datepicker
+    *
+    * @memberof ActivityLogsComponent
+    */
+    public hideGiddhDatepicker(): void {
+        this.modalRef?.hide();
     }
 
     /**
-     * Toggles the entry datepicker menu
+     *To show the datepicker
      *
-     * @param {boolean} isOpen
+     * @param {*} element
      * @memberof ActivityLogsComponent
      */
-    public toggleEntryGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
-            this.entryDatepickerTrigger?.openMenu();
-        } else {
-            this.entryDatepickerTrigger?.closeMenu();
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
     }
 
     /**
-     * Toggles the voucher datepicker menu
+     *To show the entry datepicker
      *
-     * @param {boolean} isOpen
+     * @param {*} element
      * @memberof ActivityLogsComponent
      */
-    public toggleVoucherGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
-            this.voucherDatepickerTrigger?.openMenu();
-        } else {
-            this.voucherDatepickerTrigger?.closeMenu();
+    public showEntryGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
+        this.modalRef = this.modalService.show(
+            this.datepickerEntryTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     *To show the voucher datepicker
+     *
+     * @param {*} element
+     * @memberof ActivityLogsComponent
+     */
+     public showVoucherGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerVoucherTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
     }
 
     /**

@@ -279,6 +279,7 @@
                                         <span class="pd-r1" *ngIf="!firstItem">
                                             <button
                                                 mat-stroked-button
+                                                color="warn"
                                                 (click)="removeGstDetailsForm(i)"
                                                 class="bg-white"
                                             >
@@ -286,9 +287,9 @@
                                             </button>
                                         </span>
                                         <span
-                                            [matTooltip]="localeData?.address_tooltip"
+                                            [tooltip]="localeData?.address_tooltip"
                                             class="pull-right is-default-address"
-                                            matTooltipPosition="left"
+                                            placement="left"
                                         >
                                             <mat-slide-toggle
                                                 aria-label="address"
@@ -400,6 +401,21 @@
                                     >
                                     </reactive-dropdown-field>
                                 </div>
+
+                                <!-- <div
+                                    class="col-sm-4"
+                                    *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
+                                >
+                                    <div class="form-group">
+                                        <label class="d-block">&nbsp;</label>
+                                        <label>
+                                            <input type="checkbox" formControlName="isComposite" /><label
+                                                >&nbsp;
+                                                {{ localeData?.is_composite }}
+                                            </label></label
+                                        >
+                                    </div>
+                                </div> -->
                             </ng-container>
                         </div>
                         <div
@@ -411,7 +427,7 @@
                             "
                         >
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 color="primary"
                                 class="text-left w-50 pd-r2"
                                 (click)="showMoreGst()"
@@ -420,7 +436,7 @@
                                 }})
                             </button>
                             <button
-                                mat-raised-button
+                                mat-stroked-button
                                 color="primary"
                                 class="text-left w-50"
                                 (click)="showLessGst()"
@@ -430,6 +446,7 @@
                         <div *ngIf="lastItem">
                             <button
                                 mat-stroked-button
+                                color="primary"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             >
                                 + {{ localeData?.add_address }}
@@ -469,7 +486,6 @@
                                         [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
                                         formControlName="mobileNo"
                                         (change)="openConfirmLeaveDialog()"
-                                        (focus)="reInitializeMobileField('init-contact-add')"
                                     >
                                     </input-field>
                                 </div>
@@ -565,7 +581,6 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [label]="commonLocaleData?.app_mobile_number"
                                 (input)="portalIndex = i"
-                                (focus)="reInitializeMobileField('init-contact-portal_' + i)"
                                 [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
                             ></input-field>
                             <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
@@ -584,7 +599,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <a href="javascript:void(0);" (click)="addNewPortalUser()">
+                            <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewPortalUser()">
                                 <i class="icon-plus"></i> {{ localeData?.portal_add_user }}
                             </a>
                         </div>
@@ -898,10 +913,10 @@
     </form>
 </ng-container>
 <ng-template #templateForSaveButton>
-    <div class="row pd-t2" *ngIf="voucherApiVersion === 2">
+    <div class="row pd-t2">
         <div class="col-sm-12">
             <button
-                mat-raised-button
+                mat-stroked-button
                 color="primary"
                 aria-label="save"
                 type="submit"
