@@ -4,7 +4,7 @@ import { UntypedFormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { IOption } from "../../ng-virtual-select/sh-options.interface";
+import { IOption } from "../../../app.constant";
 
 @Component({
     selector: "select-field",
@@ -148,7 +148,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             }
         }
         if (changes?.options) {
-            this.fieldFilteredOptions = changes.options.currentValue?.filter(item => item.label !== "" || item.value !== "");;
+            this.fieldFilteredOptions = changes.options.currentValue?.filter(item => item.label !== "" || item.value !== "");
         }
     }
 

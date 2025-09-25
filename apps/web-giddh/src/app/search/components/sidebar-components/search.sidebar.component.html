@@ -8,57 +8,21 @@
                 >
                     <div class="linked-entities">
                         <div class="form-group">
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="currentCompanyBranches"
-                                name="entity"
+                                [name]="'entity'"
                                 [(ngModel)]="currentBranch.uniqueName"
-                                [showClear]="false"
-                                [ItemHeight]="33"
-                                width="100%"
-                                (selected)="handleBranchChange($event)"
-                                [isFilterEnabled]="true"
+                                (selectedOption)="handleBranchChange($event)"
                                 [placeholder]="commonLocaleData?.app_select_entity"
-                                [fixedValue]="currentBranch?.name"
+                                [labelValue]="currentBranch?.name"
                                 class="entity-dropdown"
                             >
-                                <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a href="javascript:;" class="list-item d-flex">
-                                            <span class="entity-icon">
-                                                <i
-                                                    [ngClass]="{
-                                                        'icon-company-profile': option?.consolidatedBranch,
-                                                        'icon-branch-icon': !option?.consolidatedBranch
-                                                    }"
-                                                    class="pull-right"
-                                                    *ngIf="!option.isCompany"
-                                                    [matTooltip]="commonLocaleData?.app_branch"
-                                                    matTooltipClass="tooltip-black"
-                                                ></i>
-                                                <i
-                                                    class="icon-company-profile pull-right"
-                                                    *ngIf="option.isCompany"
-                                                    [matTooltip]="commonLocaleData?.app_company"
-                                                    matTooltipClass="tooltip-black"
-                                                ></i>
-                                            </span>
-                                            <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">
-                                                    {{ option.label || "-" }}
-                                                </div>
-                                                <div class="item-unique giddh-limit single-line-clamp">
-                                                    {{ option.name || "-" }}
-                                                </div>
-                                            </span>
-                                        </a>
-                                    </ng-container>
-                                </ng-template>
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                 </div>
                 <div class="mr-r15">
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [options]="searchedGroups"
                         [name]="'groups'"
                         (selectedOption)="onSelectGroup($event)"
@@ -69,22 +33,30 @@
                         (scrollEnd)="handleGroupScrollEnd()"
                         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                 </div>
                 <div class="form-group mr-r15">
-                    <div class="custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
+                    <div class="custom-datepicker custom-new-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker">
                         <input
+                            matInput
                             type="text"
                             name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker"
+                            readonly
+                            aria-label="Select date range"
                         />
                     </div>
                 </div>
                 <div class="d-flex column-gap15">
                     <button
                         [disabled]="!groupUniqueName"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="getClosingBalance(false, $event)"
                     >
@@ -98,26 +70,24 @@
         </div>
     </div>
 </div>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

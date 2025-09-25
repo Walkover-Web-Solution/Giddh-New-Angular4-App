@@ -6,7 +6,7 @@ import {
     ViewChild,
     HostListener
 } from "@angular/core";
-import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -14,47 +14,43 @@ import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest } from '../../../models/api-models/BranchTransfer';
 import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../../../shared/helpers/branchTransferFilters";
-import { IOption } from '../../../theme/ng-select/ng-select';
+import { IOption } from '../../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { PageEvent } from '@angular/material/paginator';
+import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { saveAs } from "file-saver";
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { Router } from "@angular/router";
+import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
     selector: "new-branch-transfer-list",
     templateUrl: "./new.branch.transfer.list.component.html",
-    styleUrls: ["./new.branch.transfer.component.scss"],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0);'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0);'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ["./new.branch.transfer.component.scss"]
 })
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
-    @ViewChild('deleteBranchTransferModal', { static: true }) public deleteBranchTransferModal: ModalDirective;
+    @ViewChild('searchDialog', { static: true }) public searchDialog: TemplateRef<any>;
+    @ViewChild('deleteBranchTransferDialog', { static: true }) public deleteBranchTransferDialog: TemplateRef<any>;
+    /** Reference to delete branch transfer dialog */
+    private deleteBranchTransferDialogRef: MatDialogRef<any>;
     @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;
     @ViewChild('warehouseNameField', { static: true }) public warehouseNameField;
-
-    public modalRef: BsModalRef;
+    /** Reference to aside transfer pane template */
+    @ViewChild('asideTransferPaneTemplate', { static: true }) public asideTransferPaneTemplate: TemplateRef<any>;
+    /** Reference to aside transfer pane dialog */
+    public asideTransferPaneDialogRef: MatDialogRef<any>;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeCompany: any = {};
     public voucherTypes: IOption[] = [];
@@ -78,27 +74,23 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-
     public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
         to: '',
         page: 1,
-        count: 50,
+        count: PAGINATION_LIMIT,
         sort: '',
         sortBy: '',
         branchUniqueName: ''
@@ -119,8 +111,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         amount: null,
         voucherType: null
     };
-    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
-
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -131,10 +121,12 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     constructor(
         private _generalService: GeneralService,
-        private modalService: BsModalService,
+        private dialog: MatDialog,
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
@@ -214,7 +206,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias  : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias : '',
                             uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
@@ -235,15 +227,34 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Opens the search dialog using Angular Material
+     *
+     * @param {TemplateRef<any>} template - Template reference for the dialog content
+     * @memberof NewBranchTransferListComponent
+     */
     public openSearchModal(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(template);
+        // Open dialog using Angular Material
+        const dialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
 
         setTimeout(() => {
             if (this.clearFilter) {
                 this.forceClear$ = observableOf({ status: true });
                 this.clearFilter = false;
             }
-        }, 100);
+        }, 200);
+    }
+
+    /**
+     * Closes the search dialog
+     *
+     * @memberof NewBranchTransferListComponent
+     */
+    public closeSearchDialog(): void {
+        this.dialog.closeAll();
     }
 
     public initBranchTransferListResponse(): void {
@@ -275,9 +286,16 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public pageChanged(event: any): void {
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof NewBranchTransferListComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
         this.branchTransferResponse.items = [];
-        this.branchTransferGetRequestParams.page = event.page;
+        this.branchTransferGetRequestParams.page = this.branchTransferGetRequestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.branchTransferGetRequestParams.count = event.pageSize;
         this.getBranchTransferList(false);
     }
 
@@ -289,45 +307,57 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Applies search filters and closes the search dialog
+     *
+     * @memberof NewBranchTransferListComponent
+     */
     public search(): void {
         this.branchTransferPostRequestParams.voucherType = this.branchTransferTempPostRequestParams.voucherType;
         this.branchTransferPostRequestParams.amountOperator = this.branchTransferTempPostRequestParams.amountOperator;
         this.branchTransferPostRequestParams.amount = this.branchTransferTempPostRequestParams.amount;
         this.getBranchTransferList(true);
-        this.modalRef.hide();
+        this.closeSearchDialog();
     }
 
-    public toggleTransferAsidePane(event?): void {
+    /**
+     * Opens the transfer aside pane dialog
+     *
+     * @memberof NewBranchTransferListComponent
+     */
+    public openTransferAsidePaneDialog(): void {
         this.editBranchTransferUniqueName = '';
-
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        this.asideTransferPaneDialogRef = this.dialog.open(this.asideTransferPaneTemplate, ASIDE_PANE_CONFIG);
     }
 
-    public toggleBodyClass(): void {
-        if (this.asidePaneState === 'in' || this.asideTransferPaneState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
-    }
-
+    /**
+     * Opens the branch transfer dialog using Angular Material
+     *
+     * @memberof NewBranchTransferListComponent
+     */
     public openModal(): void {
-        this.modalRef = this.modalService.show(
+        this.dialog.open(
             this.branchtransfertemplate,
-            Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pd-t85' })
+            {
+                panelClass: ['mat-dialog-lg', 'receipt-note-modal', 'mb-0', 'pd-t85'],
+                disableClose: true
+            }
         );
     }
 
+    /**
+     * Hides the modal/dialog and optionally refreshes the list
+     *
+     * @param {boolean} refreshList - Whether to refresh the branch transfer list
+     * @memberof NewBranchTransferListComponent
+     */
     public hideModal(refreshList: boolean): void {
         this.router.navigate(['/pages/inventory/report']);
         if (refreshList) {
             this.getBranchTransferList(true);
         }
-        this.modalRef.hide();
+        // Close all open dialogs
+        this.dialog.closeAll();
     }
 
     public columnSearch(): void {
@@ -352,14 +382,30 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Opens the delete branch transfer confirmation dialog
+     *
+     * @param {any} item - Branch transfer item to delete
+     * @memberof NewBranchTransferListComponent
+     */
     public showDeleteBranchTransferModal(item): void {
         this.selectedBranchTransfer = item?.uniqueName;
         this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
-        this.deleteBranchTransferModal?.show();
+
+        // Open the dialog using Angular Material
+        this.deleteBranchTransferDialogRef = this.dialog.open(this.deleteBranchTransferDialog, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
+    /**
+     * Closes the delete branch transfer confirmation dialog
+     *
+     * @memberof NewBranchTransferListComponent
+     */
     public hideBranchTransferModal(): void {
-        this.deleteBranchTransferModal.hide();
+        this.deleteBranchTransferDialogRef?.close();
     }
 
     public sortBranchTransferList(sortBy): void {
@@ -427,7 +473,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public openBranchTransferPopup(event): void {
         this.branchTransferMode = event;
-        this.toggleTransferAsidePane();
+        this.openTransferAsidePaneDialog();
         this.openModal();
     }
 
@@ -468,13 +514,12 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         if (event.altKey && event.which === 78) { // Alt + N
             event.preventDefault();
             event.stopPropagation();
-            this.toggleTransferAsidePane();
+            this.openTransferAsidePaneDialog();
         }
 
         if (event.which === ESCAPE) {
             this.editBranchTransferUniqueName = '';
-            this.asideTransferPaneState = 'out';
-            this.toggleBodyClass();
+            this.asideTransferPaneDialogRef?.close();
         }
     }
 
@@ -495,28 +540,17 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To show the datepicker
-     *
-     * @param {*} element
-     * @memberof NewBranchTransferListComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this._generalService.getPosition(element.target);
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof NewBranchTransferListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof NewBranchTransferListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -527,7 +561,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -535,7 +569,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

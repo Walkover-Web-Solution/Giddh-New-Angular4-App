@@ -207,7 +207,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 panelClass: ['mat-dialog-sm'],
                 disableClose: true
             });
-            this.bankIntegrationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.bankIntegrationDialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     if (response === 'integrate') {
                         this.openInstitutionsDialog();
@@ -306,13 +306,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         }
         const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
-            width: 'var(--aside-pane-width)',
-            panelClass: 'subscription-sidebar',
+            panelClass: ['subscription-sidebar', 'mat-dialog-md'],
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 localStorage.setItem('refNo', response);
                 this.referenceNumber = cloneDeep(response);

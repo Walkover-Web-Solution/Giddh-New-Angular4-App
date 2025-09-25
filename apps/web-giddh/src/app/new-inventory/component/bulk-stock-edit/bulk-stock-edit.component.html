@@ -23,7 +23,6 @@
                 [commonLocaleData]="commonLocaleData"
                 [iconClass]="'icon-options font-16'"
                 [cssClass]="'bulk-stock-hide-show-button'"
-                [additionalMenuCssClass]="'max-height-50'"
             >
             </select-table-column>
         </div>
@@ -34,7 +33,7 @@
             <div class="bulk-stock-header">
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="mr-5">
-                        <button
+                        <button mat-stroked-button
                             *ngIf="
                                 (advanceSearchData !== null ||
                                     sortOrderStatus !== null ||
@@ -606,15 +605,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select formControlName="stockGroupName" class="vertical-margin" [disabled]="true">
-                                                            <mat-option
-                                                                *ngFor="let x of stockGroups"
-                                                                [value]="x?.value"
-                                                                (onSelectionChange)="consoleIt(x)"
-                                                                >
-                                                                {{x?.label}}
-                                                            </mat-option>
-                                                        </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!--  Stock Group Unique Name -->
@@ -631,15 +621,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select formControlName="stockGroupName" class="vertical-margin" [disabled]="true">
-                                                            <mat-option
-                                                                *ngFor="let x of stockGroups"
-                                                                [value]="x?.value"
-                                                                (onSelectionChange)="consoleIt(x)"
-                                                                >
-                                                                {{x?.label}}
-                                                            </mat-option>
-                                                        </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!-- Stock Unit -->
@@ -792,11 +773,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select  disabled="true" formControlName="purchaseUnits" class="vertical-margin">
-                                                        <mat-option
-                                                            *ngFor="let purchaseUnit of dropdownValues[i]?.purchaseUnits"
-                                                            [value]="purchaseUnit?.uniqueName">{{purchaseUnit?.name}}</mat-option>
-                                                    </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!--  Sales Account Name -->
@@ -873,11 +849,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select formControlName="salesUnits" class="vertical-margin" [disabled]="true">
-                                                            <mat-option
-                                                                *ngFor="let salesUnit of dropdownValues[i]?.salesUnits"
-                                                                [value]="salesUnit?.uniqueName">{{salesUnit?.name}}</mat-option>
-                                                        </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Units (Menu)-->
@@ -897,11 +868,6 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <!-- <mat-select formControlName="fixedAssetUnits" class="vertical-margin" [disabled]="true">
-                                                            <mat-option
-                                                                *ngFor="let fixedAssetUnit of dropdownValues[i]?.fixedAssetUnits"
-                                                                [value]="fixedAssetUnit?.uniqueName">{{fixedAssetUnit?.name}}</mat-option>
-                                                        </mat-select> -->
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Rate -->
@@ -983,8 +949,6 @@
                                                                     : commonLocaleData?.app_no
                                                             }}
                                                         </div>
-                                                        <!-- <text-field [type]="'text'" formControlName="archive" [readonly]="true">
-                                                        </text-field> -->
                                                     </div>
                                                 </td>
                                                 <!-- Tax (Menu)-->
@@ -1050,8 +1014,6 @@
                                                                     : localeData?.exclusive
                                                             }}
                                                         </div>
-                                                        <!-- <text-field [type]="'text'" formControlName="salesTaxInclusive" [readonly]="true">
-                                                        </text-field> -->
                                                     </div>
                                                 </td>
                                                 <!-- Purchase Tax Inclusive -->
@@ -1078,9 +1040,6 @@
                                                                     : localeData?.exclusive
                                                             }}
                                                         </div>
-                                                        <!-- <text-field [type]="'text'"
-                                                            formControlName="purchaseTaxInclusive" [readonly]="true">
-                                                        </text-field> -->
                                                     </div>
                                                 </td>
                                                 <!-- FixedAsset Tax Inclusive -->
@@ -1107,9 +1066,6 @@
                                                                     : localeData?.exclusive
                                                             }}
                                                         </div>
-                                                        <!-- <text-field [type]="'text'"
-                                                            formControlName="fixedAssetTaxInclusive" [readonly]="true">
-                                                        </text-field> -->
                                                     </div>
                                                 </td>
                                                 <!-- Custom Fileds (Menu)-->
@@ -1144,21 +1100,16 @@
                             </form>
                         </div>
 
-                        <div class="pagination-wrapper mt-3" *ngIf="pagination?.totalPages > 1 && !isLoading">
-                            <pagination
-                                class="pagination-sm"
-                                [(ngModel)]="pagination.currentPage"
-                                [totalItems]="pagination?.totalItems"
-                                [maxSize]="5"
-                                [boundaryLinks]="true"
-                                [itemsPerPage]="pagination?.itemsPerPage"
-                                [rotate]="false"
-                                (pageChanged)="pageChanged($event)"
-                                [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous"
-                                [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"
-                            ></pagination>
+                        <div class="mt-3" *ngIf="pagination?.totalItems > pageSizeOptions[0] && !isLoading">
+                            <mat-paginator
+                                [length]="pagination?.totalItems"
+                                [pageSize]="pageCount"
+                                [pageIndex]="pagination.currentPage - 1"
+                                [pageSizeOptions]="pageSizeOptions"
+                                [showFirstLastButtons]="true"
+                                [hidePageSize]="false"
+                                (page)="handlePageEvent($event)"
+                            ></mat-paginator>
                         </div>
                     </ng-container>
                     <div *ngIf="!(!noDataFound || searchString) && !isLoading" class="no-data mb-5">

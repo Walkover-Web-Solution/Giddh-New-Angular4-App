@@ -21,7 +21,7 @@
                         <div class="d-flex align-items-center column-gap1">
                             <button
                                 aria-label="buy"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 (click)="buyPlan('trial')"
                                 *ngIf="
@@ -33,7 +33,7 @@
                             </button>
                             <button
                                 aria-label="buy"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 (click)="buyPlan('renew')"
                                 *ngIf="
@@ -240,19 +240,18 @@
                             <button
                                 *ngIf="viewSubscriptionData?.isOwner"
                                 aria-label="buyplan"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 (click)="changePlan()"
                             >
                                 {{ localeData?.change_subscription }}
                             </button>
-                            <button
+                            <button mat-stroked-button
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.period?.toLowerCase() !== 'yearly'
                                 "
                                 aria-label="cancelsubscription"
-                                mat-stroked-button
                                 (click)="cancelSubscription()"
                             >
                                 {{ localeData?.cancel_subscription }}

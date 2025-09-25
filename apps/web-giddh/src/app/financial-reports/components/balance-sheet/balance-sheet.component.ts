@@ -66,7 +66,7 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
     /** True if show Tally Report options */
-    public showReconcileOption: boolean;
+    public showReportTallyOption: boolean;
 
     constructor(
         private store: Store<AppState>, 

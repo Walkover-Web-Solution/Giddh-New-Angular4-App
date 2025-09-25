@@ -16,6 +16,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -232,13 +233,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
         if (account) {
             this.accountDetails = account;
             this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;
-            this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
-                width: 'var(--aside-pane-width)',
-                position: {
-                    right: '0',
-                    top: '0'
-                }
-            });
+            this.createNewAccountDialogRef = this.dialog.open(this.createNew, ASIDE_PANE_CONFIG);
         }
     }
 }

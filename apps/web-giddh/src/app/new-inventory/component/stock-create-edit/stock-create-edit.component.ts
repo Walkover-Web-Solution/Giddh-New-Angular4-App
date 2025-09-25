@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
-import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
 import { SalesService } from "../../../services/sales.service";
 import { ToasterService } from "../../../services/toaster.service";
@@ -12,7 +11,7 @@ import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.a
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
 import { NgForm } from "@angular/forms";
-import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
+import { INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
 import { MatDialog } from "@angular/material/dialog";
@@ -30,6 +29,7 @@ import { NewConfirmationModalComponent } from "../../../theme/new-confirmation-m
 import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store";
 import { PreviewVariantImageComponent } from "../preview-variant-image/preview-variant-image.component";
 import { ServiceConfig } from "../../../services/service.config";
+import { MatTabChangeEvent } from "@angular/material/tabs";
 
 @Component({
     selector: "stock-create-edit",
@@ -618,7 +618,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.stockForm.options = this.stockForm.options?.filter((data, optionIndex) => optionIndex !== index).map((data, optionIndex) => {
                     return {
@@ -1845,7 +1845,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.toggleLoader(true);
                 this.inventoryService.deleteStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -2060,16 +2060,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for on tab changes
-     *
-     * @param {*} event
-     * @memberof StockCreateEditComponent
-     */
-    public onTabChange(event: any): void {
-        this.activeTabIndex = event?.index;
-    }
-
-    /**
      * This will use for validation in name space
      *
      * @param {string} value
@@ -2077,6 +2067,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public checkSpacingValidation(value: string): void {
         this.hasSpacingError = (value?.trim()) ? false : true;
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {MatTabChangeEvent} event
+     * @memberof StockCreateEditComponent
+     */
+    public onTabChange(event: MatTabChangeEvent): void {
+        this.activeTabIndex = event?.index;
     }
 
     /**

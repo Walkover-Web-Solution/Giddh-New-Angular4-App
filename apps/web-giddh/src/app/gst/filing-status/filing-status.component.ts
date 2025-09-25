@@ -2,38 +2,22 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 import { ToasterService } from "../../services/toaster.service";
-import { PAGE_SIZE_OPTIONS } from "../../app.constant";
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { saveAs } from 'file-saver';
 import { GstReconcileService } from "../../services/gst-reconcile.service";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from 'dayjs';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatDatepicker } from "@angular/material/datepicker";
 import { FormControl } from "@angular/forms";
-
-export const MY_FORMATS = {
-    parse: {
-        dateInput: 'MM/YYYY',
-    },
-    display: {
-        dateInput: 'MM/YYYY',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY',
-    },
-};
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
     selector: 'filing-status',
     templateUrl: './filing-status.component.html',
-    styleUrls: ['./filing-status.component.scss'],
-    providers: [
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    ]
+    styleUrls: ['./filing-status.component.scss']
 })
 export class FilingStatusComponent implements OnInit, OnDestroy {
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** This will use for destroy */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -67,7 +51,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     /** Holds pagination data */
     private pagination: any = {
         "page": 1,
-        "count": this.pageSizeOptions[2],
+        "count": PAGINATION_LIMIT,
         "totalPages": 1,
         "totalItems": 1
     }
@@ -149,19 +133,19 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         this.getGstrReferences();
     }
 
-    /**
-     * Handle Page Change Event
-     *
-     * @param {*} event
-     * @memberof FilingStatusComponent
-     */
-    public pageChanged(event: any): void {
-        if (event) {
-            this.pageIndex = event.pageIndex;
-            this.pagination.page = event.pageIndex + 1;
-            this.pagination.count = event.pageSize;
-            this.getGstrReferences();
-        }
+    /**	
+     * Handle Page Change Event	
+     *	
+     * @param {*} event	
+     * @memberof FilingStatusComponent	
+     */	
+     public pageChanged(event: PageEvent): void {	
+        if (event) {	
+            this.pageIndex = event.pageIndex;	
+            this.pagination.page = this.pagination.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            this.pagination.count = event.pageSize;	
+            this.getGstrReferences();	
+        }	
     }
 
     /**
@@ -229,7 +213,6 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.asideGstSidebarMenuState = 'out';
         document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 
@@ -249,14 +232,12 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Sets month/year
+     * Handles month and year selection from giddh-datepicker
      *
-     * @param {*} date
-     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @param {*} date - Selected date from datepicker
      * @memberof FilingStatusComponent
      */
-    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker?.close();
+    public setMonthAndYear(date: any): void {
         const selectedMonth = new Date(date);
         const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
         const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);

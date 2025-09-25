@@ -3,7 +3,7 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import * as dayjs from 'dayjs';
 import { Observable } from 'rxjs';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { IOption } from '../../../app.constant';
 
 export class AuditLogsSidebarVM {
     public user$: Observable<UserDetails>;

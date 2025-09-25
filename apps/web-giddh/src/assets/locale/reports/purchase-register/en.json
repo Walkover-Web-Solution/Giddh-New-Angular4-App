@@ -11,8 +11,6 @@
     "net_tcs": "Net TCS",
     "voucher_type": "Voucher Type",
     "voucher_no": "Voucher No.",
-    "qty_rate": "Rate",
-    "qty_unit": "Unit",
     "discount": "Discount",
     "tax": "Tax",
     "date": "Date",

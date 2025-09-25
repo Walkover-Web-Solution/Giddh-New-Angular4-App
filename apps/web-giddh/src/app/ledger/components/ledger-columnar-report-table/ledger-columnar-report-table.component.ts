@@ -8,7 +8,8 @@ import { ToasterService } from '../../../services/toaster.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ReportsDetailedRequestFilter, ColumnarResponseResult } from '../../../models/api-models/Reports';
-import { PAGINATION_LIMIT } from '../../../app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'ledger-columnar-report-table',
@@ -36,8 +37,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public columnarTableColumn: string[] = [];
     /** Loader for API request */
     public isLoading: boolean = true;
-    /** pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Subject to destroy all observers  */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -72,7 +73,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public ngOnInit(): void {
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
-        this.getColumnarRequestModel.count = this.paginationLimit;
+        this.getColumnarRequestModel.count = PAGINATION_LIMIT;
         this.getColumnarReportTable(this.columnarReportExportRequest);
     }
 
@@ -178,15 +179,18 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      * @returns {void}
      * @memberof LedgerColumnarReportTableComponent
      */
-    public pageChanged(event: any): void {
-        if (event && this.columnarReportExportRequest) {
-            if (event && event.page === this.getColumnarRequestModel.page) {
-                return;
-            }
-            this.getColumnarRequestModel.page = event.page;
+    /**
+     * Handles the page change event from mat-paginator
+     *
+     * @param {PageEvent} event Page event
+     * @memberof LedgerColumnarReportTableComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.columnarReportExportRequest) {
+            this.columnarReportExportRequest.page = this.columnarReportExportRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
+            this.columnarReportExportRequest.count = event.pageSize;
             this.getColumnarReportTable(this.columnarReportExportRequest);
         }
-
     }
 
     /**

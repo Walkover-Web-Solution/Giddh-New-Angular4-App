@@ -7,6 +7,7 @@ import { CompanyActions } from "../../actions/company.actions";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxes.action";
+import { ASIDE_PANE_CONFIG } from "../../app.constant";
 
 @Component({
     selector: "other-tax",
@@ -115,12 +116,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      * @memberof OtherTaxComponent
      */
     public createTaxDialog(): void {
-        this.taxAsideMenuRef = this.dialog.open(this.createTax, {
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.taxAsideMenuRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
         this.otherTax = true;
     }
 

@@ -10,8 +10,11 @@ import { ExpenseService } from '../../../services/expences.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { Lightbox } from 'ngx-lightbox';
 import { ServiceConfig } from '../../../services/service.config';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'app-rejected-list',
@@ -51,6 +54,8 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public deleteEntryModalRef: any;
     /** Holds company uniquename */
     public companyUniqueName: string;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     constructor(
         private store: Store<AppState>,
@@ -59,7 +64,8 @@ export class RejectedListComponent implements OnInit, OnChanges {
         @Inject(ServiceConfig) private serviceConfig,
         private expenseService: ExpenseService,
         public dialog: MatDialog,
-        private lightbox: Lightbox
+        private lightbox: Lightbox,
+        private generalService: GeneralService
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
@@ -151,6 +157,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", res?.body);
+                this.pettycashRequest.page = this.generalService.adjustPageIndex(this.pettyCashRejectedReportResponse?.totalItems, this.pettyCashRejectedReportResponse?.page, this.pettyCashRejectedReportResponse?.count);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
                 this.getPettyCashPendingReports(this.pettycashRequest);
             } else if(res?.message) {
@@ -190,11 +197,15 @@ export class RejectedListComponent implements OnInit, OnChanges {
      * @returns {void}
      * @memberof RejectedListComponent
      */
-    public pageChanged(event: any): void {
-        if (event.page === this.pettycashRequest.page) {
-            return;
-        }
-        this.pettycashRequest.page = event.page;
+    /**
+     * Handles pagination events for petty cash rejected reports
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof RejectedListComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.pettycashRequest.page = this.pettycashRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.pettycashRequest.count = event.pageSize;
         this.getPettyCashRejectedReports(this.pettycashRequest);
     }
 
@@ -247,6 +258,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", res?.body);
+                this.pettycashRequest.page = this.generalService.adjustPageIndex(this.pettyCashRejectedReportResponse?.totalItems, this.pettyCashRejectedReportResponse?.page, this.pettyCashRejectedReportResponse?.count);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
             } else if(res?.message) {
                 this.toaster.showSnackBar("error", res.message);

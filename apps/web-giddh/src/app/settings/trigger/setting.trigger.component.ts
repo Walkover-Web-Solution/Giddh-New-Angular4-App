@@ -5,13 +5,14 @@ import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import * as dayjs from 'dayjs';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IOption } from '../../theme/ng-select/ng-select';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
+import { IOption } from '../../app.constant';
 import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
 import { SearchService } from '../../services/search.service';
 import { GroupService } from '../../services/group.service';
-import { API_COUNT_LIMIT } from '../../app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT } from '../../app.constant';
 import { cloneDeep, each } from '../../lodash-optimized';
 import { NgForm } from '@angular/forms';
 import { SettingsTriggersService } from '../../services/settings.triggers.service';
@@ -24,7 +25,9 @@ import { SettingsTriggersService } from '../../services/settings.triggers.servic
 
 export class SettingTriggerComponent implements OnInit, OnDestroy {
 
-    @ViewChild('triggerConfirmationModel', { static: true }) public triggerConfirmationModel: ModalDirective;
+    @ViewChild('triggerConfirmationTemplate', { static: true }) public triggerConfirmationTemplate: TemplateRef<any>;
+    /** Dialog reference for trigger confirmation modal */
+    private triggerConfirmationDialogRef: MatDialogRef<any>;
     /** Stores the form instance */
     @ViewChild('createTriggerForm', {static: true}) public createTriggerForm: NgForm;
 
@@ -107,7 +110,8 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private searchService: SearchService,
         private toaster: ToasterService,
-        private settingsTriggersService: SettingsTriggersService
+        private settingsTriggersService: SettingsTriggersService,
+        private dialog: MatDialog
     ) {
 
     }
@@ -211,7 +215,10 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         message = message?.replace("[SELECTED_TAX]", this.selectedTax);
         this.confirmationMessage = message;
         this.confirmationFor = 'delete';
-        this.triggerConfirmationModel?.show();
+        this.triggerConfirmationDialogRef = this.dialog.open(this.triggerConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     public updateTrigger(taxIndex: number) {
@@ -221,15 +228,24 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         message = message?.replace("[TRIGGER_NAME]", selectedTrigger.name);
         this.confirmationMessage = message;
         this.confirmationFor = 'edit';
-        this.triggerConfirmationModel?.show();
+        this.triggerConfirmationDialogRef = this.dialog.open(this.triggerConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     public onCancel() {
         this.resetNewFormModel();
     }
 
+    /**
+     * Handles user confirmation response and closes the trigger confirmation dialog
+     *
+     * @param {boolean} userResponse - User's confirmation response (true for confirm, false for cancel)
+     * @memberof SettingTriggerComponent
+     */
     public userConfirmation(userResponse: boolean) {
-        this.triggerConfirmationModel.hide();
+        this.triggerConfirmationDialogRef?.close();
         if (userResponse) {
             if (this.confirmationFor === 'delete') {
                 this.settingsTriggersService.DeleteTrigger(this.newTriggerObj?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -381,7 +397,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT,
+                count: DROPDOWN_ITEMS_COUNT_LIMIT,
                 onlyTop: true
             }
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {

@@ -7,7 +7,7 @@
 >
     <div
         class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState === 'in'"
+        *ngIf="asideGstSidebarMenuState"
     >
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
@@ -79,7 +79,7 @@
                                             <img src="assets/images/return-date.svg" />
                                             <p>{{ localeData?.filing?.click_to_proceed }}</p>
                                             <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
                                                 (click)="fileReturn = { isAuthenticate: true }"
                                                 [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"

@@ -7,7 +7,7 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid clearfix" *ngIf="allRoles?.length > 0">
         <div class="col-sm-12 mr-t2 mr-b2 d-flex justify-content-end column-gap5">
-            <button mat-stroked-button color="primary" (click)="openPermissionDialog()">
+            <button mat-raised-button color="primary" (click)="openPermissionDialog()">
                 {{localeData?.add_new_role}}
             </button>
             <button
@@ -35,13 +35,12 @@
                             </button>
                             <button
                                 mat-stroked-button
-                                color="warn"
                                 *ngIf="!role.isFixed"
                                 (click)="deleteRole(role);"
                             >
                                 {{commonLocaleData?.app_delete}}
                             </button>
-                            <button mat-stroked-button color="primary" (click)="updateRole(role)">
+                            <button mat-raised-button color="primary" (click)="updateRole(role)">
                                 {{commonLocaleData?.app_view}}
                             </button>
                         </div>

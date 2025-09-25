@@ -51,26 +51,33 @@
                                         class="form-inline input-grp-date-range-picker position-relative"
                                     >
                                         <div class="form-group d-flex flex-fill">
-                                            <div
-                                                class="form-group custom-datepicker"
-                                                (click)="showGiddhDatepicker($event)"
-                                            >
-                                                <input
-                                                    matInput
-                                                    type="text"
-                                                    name="selectedDateRange"
-                                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                                    class="giddh-datepicker form-control date-range-picker"
-                                                />
+                                            <div class="custom-datepicker-wrapper">
+                                                <div 
+                                                    class="custom-datepicker" 
+                                                    [matMenuTriggerFor]="universalDatepicker"
+                                                    #universalDatepickerTrigger="matMenuTrigger"
+                                                    role="button"
+                                                    aria-haspopup="true"
+                                                    aria-controls="universalDatepicker"
+                                                >
+                                                    <input
+                                                        matInput
+                                                        type="text"
+                                                        name="selectedDateRange"
+                                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                                        class="giddh-datepicker date-range-picker"
+                                                        readonly
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
                                     <div class="dis pull-left on-desktop-view align-items-center">
                                         <div class="btn-group pull-right d-flex column-gap15">
                                             <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
-                                                *ngIf="activeTab == 'customer'"
+                                                *ngIf="activeTab == 'customer' && voucherApiVersion === 2"
                                                 class="mr-0"
                                                 (click)="openAddAndManage('customer')"
                                                 aria-label="new customer"
@@ -78,9 +85,9 @@
                                                 {{ localeData?.new_customer }}
                                             </button>
                                             <button
-                                                mat-stroked-button
+                                                mat-raised-button
                                                 color="primary"
-                                                *ngIf="activeTab == 'vendor'"
+                                                *ngIf="activeTab == 'vendor' && voucherApiVersion === 2"
                                                 class="mr-0"
                                                 (click)="openAddAndManage('vendor')"
                                                 aria-label="new vendor"
@@ -213,13 +220,6 @@
                                             <span class="icon-arrow-down"></span>
                                         </button>
                                         <mat-menu #downloadCsvEmail="matMenu">
-                                            <!-- <button
-                                                mat-menu-item
-                                                *ngIf="selectedCheckedContacts?.length"
-                                                (click)="openEmailDialog()"
-                                            >
-                                                {{ commonLocaleData?.app_email }}
-                                            </button> -->
                                             <button mat-menu-item (click)="downloadCSV()" aria-label="download csv">
                                                 {{ commonLocaleData?.app_download_csv }}
                                             </button>
@@ -333,10 +333,19 @@
                             class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
                             *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
                         >
-                            <p (click)="showGiddhDatepicker($event)">
+                            <div class="custom-datepicker-wrapper">
+                            <div 
+                                class="custom-datepicker" 
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
+                            >
                                 <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
                                 <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
-                            </p>
+                            </div>
+                        </div>
                         </div>
                     </div>
                     <div class="contact-main customer-page on-mobile-view overflow-visible">
@@ -357,7 +366,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab [label]="localeData?.aging_report" [id]="activeTab === 'aging-report' ? 'giddh-page-heading' : ''">
+            <mat-tab [label]="localeData?.aging_report">
                 <aging-report
                     *ngIf="activeTab === 'aging-report'"
                     [localeData]="localeData"
@@ -369,24 +378,16 @@
         </mat-tab-group>
     </div>
 
-    <!-- region Modal for Mail/SMS for vendore-->
+    <!-- region Modal for Mail/SMS for vendor -->
     <ng-template #mailModal *ngIf="activeTab === 'vendor'" tabindex="1">
         <div>
-            <div class="modal-header theme-bg pd-l2 pd-r2">
-                <h3 class="modal-title bg" id="modal-title-mail-vendor">{{ messageBody.header.set }}</h3>
-                <button
-                    mat-icon-button
-                    aria-hidden="true"
-                    class="close-btn-in-mat-model"
-                    data-dismiss="modal"
-                    [attr.aria-label]="commonLocaleData?.app_close"
-                    (click)="closeAllDialogs()"
-                    aria-label="cross"
-                >
-                    ×
+            <div class="dialog-header">
+                <span>{{ messageBody.header.set }}</span>
+                <button mat-icon-button aria-label="close"  (click)="closeAllDialogs()">
+                    <i class="icon-cross"></i>
                 </button>
             </div>
-            <div class="modal-body pd-l2 pd-r2 clearfix">
+            <mat-dialog-content class="dialog-body">
                 <h1 class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
@@ -417,16 +418,16 @@
                 </div>
                 <div class="mr-t4">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
-                        class="btn-sm pull-right mr-l1 send-email"
+                        class="pull-right mr-l1"
                         (click)="send('sundrycreditors')"
                         aria-label="set"
                     >
                         {{ messageBody.btn.set }}
                     </button>
                 </div>
-            </div>
+            </mat-dialog-content>
         </div>
     </ng-template>
     <!--endregion-->
@@ -434,20 +435,14 @@
     <!--region Modal for Mail/SMS for customer-->
     <ng-template #mailModal *ngIf="activeTab === 'customer'" tabindex="-1" class="email-dialog-box">
         <div>
-            <div class="modal-header theme-bg pd-l2 pd-r2">
-                <h3 class="modal-title bg" id="modal-title-mail-customer">{{ messageBody.header.set }}</h3>
-                <button
-                    mat-icon-button
-                    class="close-btn-in-mat-model"
-                    [attr.aria-label]="commonLocaleData?.app_close"
-                    (click)="closeAllDialogs()"
-                    aria-label="cross"
-                >
-                    ×
+            <div class="dialog-header">
+                <span>{{ messageBody.header.set }}</span>
+                <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
+                    <i class="icon-cross"></i>
                 </button>
             </div>
 
-            <div class="modal-body pd-l2 pd-r2 clearfix">
+            <mat-dialog-content class="dialog-body">
                 <h1 class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
@@ -482,44 +477,38 @@
                     <button
                         mat-stroked-button
                         color="primary"
-                        class="btn-sm pull-right mr-l1 send-email"
+                        class="pull-right mr-l1"
                         (click)="send('sundrydebtors')"
                         aria-label="set"
                     >
                         {{ messageBody.btn.set }}
                     </button>
                 </div>
-            </div>
+            </mat-dialog-content>
         </div>
     </ng-template>
     <!--endregion-->
 
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-
-    <div *ngIf="accountAsideMenuState === 'in'">
+    <ng-template #accountAsideMenuTemplate>
         <aside-menu-account
             [activeGroupUniqueName]="selectedGroupForCreateAcc"
             [activeAccountDetails]="activeAccountDetails"
             [isUpdateAccount]="isUpdateAccount"
-            class="account-aside-menu-state transform-inherit"
-            [@slideInOut]="accountAsideMenuState"
             [commonLocaleData]="commonLocaleData"
-            (closeAsideEvent)="toggleAccountAsidePane($event)"
+            (closeAsideEvent)="accountAsideMenuDialogRef?.close()"
             (getUpdateList)="getUpdatedList($event)"
         >
         </aside-menu-account>
-    </div>
+    </ng-template>
 
-    <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-    <div class="vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
+    <ng-template #paymentAsideMenuTemplate>
         <payment-aside
-            class="account-aside-menu-state transform-inherit"
             [selectedAccForPayment]="selectedAccForPayment"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
         >
         </payment-aside>
-    </div>
+    </ng-template>
 
     <ng-template #mainTable>
         <div class="table-responsive vendor-page all-table overflow-visible">
@@ -535,7 +524,7 @@
                     <ng-container *ngFor="let customerColumn of dynamicCustomColumns">
                         <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.CUSTOMER_NAME" [matColumnDef]="customerColumn.value">
                             <th
-                                class="mat-customer-name position-relative word-wrap"
+                                class="mat-customer-name name-column"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchCustomerContainer
@@ -575,71 +564,69 @@
                             <td
                                 mat-cell
                                 *matCellDef="let account"
-                                class="position-relative word-wrap"
                                 [attr.data-title]="localeData?.customer"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
+                                class="hover-trigger name-column"
                             >
-                                <div class="customer-name-filed cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
-                                    <div class="select-single-checkbox-wrapper">
-                                        <mat-checkbox
-                                            color="primary"
-                                            class="mr-2 checkbox-left-side-in-table"
-                                            [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
-                                            type="checkbox"
-                                            [(ngModel)]="account.isSelected"
-                                            (change)="selectAccount($event, account)"
-                                        >
-                                        </mat-checkbox>
+                                <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
+                                    <mat-checkbox
+                                        color="primary"
+                                        class="mr-2 checkbox-left-side-in-table hover-target"
+                                        [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
+                                        type="checkbox"
+                                        [(ngModel)]="account.isSelected"
+                                        (change)="selectAccount($event, account)"
+                                    >
+                                    </mat-checkbox>
                                     <a
                                         href="javascript:;"
-                                        class="btn-link-2"
+                                        class="btn-link-2 text-ellipsis d-inline-block"
                                         (click)="showAccountPreview(account?.uniqueName)"
                                     >
-                                        <span class="text-ellipsis">{{ account.name }}</span>
+                                        {{ account.name }}
                                     </a>
-                                    </div>
-
                                     <button
                                         mat-icon-button
-                                        id="edit-model-basic"
-                                        class="table-menu-first-td"
+                                        [disableRipple]="true"
                                         [matMenuTriggerFor]="editModelBasic"
                                         #trigger="matMenuTrigger"
                                         aria-label="dots"
+                                        class="w-auto ml-auto hover-target"
                                     >
-                                        <span class="icon-dots-three-vertical"></span>
+                                        <i class="icon-dots-three-vertical font-15"></i>
                                     </button>
 
-                                    <mat-menu #editModelBasic="matMenu">
-                                        <div class="account-detail-custom-header">
-                                            <div class="d-flex p-0">
-                                                <div class="account-detail-padding flex-fill border-right-0">
-                                                    <h3 class="account-detail-custom-title word-break">
-                                                        <span (click)="updateCustomerAcc('customer', account)">
-                                                            {{ account?.name }}
-                                                        </span>
-                                                    </h3>
-                                                </div>
-                                                <a
-                                                    (click)="updateCustomerAcc('customer', account)"
-                                                    class="edit-icon pl-1 pd-t05"
-                                                >
-                                                    <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
-                                                </a>
+                                <mat-menu #editModelBasic="matMenu">
+                                    <div class="account-detail-custom-header">
+                                        <div class="d-flex p-0">
+                                            <div class="account-detail-padding flex-fill border-right-0">
+                                                <h3 class="account-detail-custom-title word-break">
+                                                    <span (click)="updateCustomerAcc('customer', account)">
+                                                        {{ account?.name }}
+                                                    </span>
+                                                </h3>
                                             </div>
-                                            <div class="custom-detail">
-                                                <h4>{{ account?.mobileNo }}</h4>
-                                                <h4>{{ account?.email }}</h4>
-                                                <h4>{{ account?.gstIn }}</h4>
-                                            </div>
+                                            <a
+                                                *ngIf="voucherApiVersion === 2"
+                                                (click)="updateCustomerAcc('customer', account)"
+                                                class="edit-icon pl-1 pd-t05"
+                                            >
+                                                <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            </a>
                                         </div>
-                                        <button
-                                            mat-menu-item
-                                            *ngIf="!isMobileScreen"
-                                            class="menu-table-item"
-                                            (click)="performActions(1, account)"
-                                            aria-label="ledger"
+                                        <div class="custom-detail">
+                                            <h4>{{ account?.mobileNo }}</h4>
+                                            <h4>{{ account?.email }}</h4>
+                                            <h4>{{ account?.gstIn }}</h4>
+                                        </div>
+                                    </div>
+                                    <button
+                                        mat-menu-item
+                                        *ngIf="!isMobileScreen"
+                                        class="menu-table-item"
+                                        (click)="performActions(1, account)"
+                                        aria-label="ledger"
                                         >
                                             {{ commonLocaleData?.app_goto_ledger }}
                                         </button>
@@ -651,13 +638,6 @@
                                         >
                                             {{ commonLocaleData?.app_generate_invoice }}
                                         </button>
-                                        <!-- <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(4, account, $event)"
-                                    >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
                                         <button
                                             mat-menu-item
                                             class="menu-table-item"
@@ -950,7 +930,7 @@
                             [matColumnDef]="col.value"
                         >
                             <th
-                                class="mat-vendor-name"
+                                class="mat-vendor-name name-column"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchCustomerContainer
@@ -991,39 +971,37 @@
                             <td
                                 mat-cell
                                 *matCellDef="let account"
-                                class="position-relative word-wrap"
                                 [attr.data-title]="commonLocaleData?.app_vendor_name"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
+                                class="hover-trigger name-column"
                             >
-                                <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
-                                    <div class="select-single-checkbox-wrapper">
-                                        <mat-checkbox
-                                            [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
-                                            type="checkbox"
-                                            color="primary"
-                                            class="mr-2 checkbox-left-side-in-table"
-                                            (change)="selectAccount($event, account)"
-                                            [(ngModel)]="account.isSelected"
-                                        >
-                                        </mat-checkbox>
+                                <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
+                                    <mat-checkbox
+                                        [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
+                                        type="checkbox"
+                                        color="primary"
+                                        class="mr-2 checkbox-left-side-in-table hover-target"
+                                        (change)="selectAccount($event, account)"
+                                        [(ngModel)]="account.isSelected"
+                                    >
+                                    </mat-checkbox>
                                     <a
                                         href="javascript:;"
-                                        class="btn-link-2"
+                                        class="btn-link-2 text-ellipsis d-inline-block"
                                         (click)="showAccountPreview(account?.uniqueName)"
                                     >
-                                        <span class="text-ellipsis">{{ account.name }}</span>
+                                        {{ account.name }}
                                     </a>
-                                    </div>
                                     <button
                                         mat-icon-button
-                                        id="edit-model-basic2"
-                                        class="table-menu-first-td"
+                                        [disableRipple]="true"
                                         [matMenuTriggerFor]="dropdownBasic2"
                                         #trigger="matMenuTrigger"
                                         aria-label="dot vertical"
+                                        class="w-auto ml-auto hover-target"
                                     >
-                                        <span class="icon-dots-three-vertical"></span>
+                                        <i class="icon-dots-three-vertical font-15"></i>
                                     </button>
 
                                     <mat-menu #dropdownBasic2="matMenu">
@@ -1037,6 +1015,7 @@
                                                     </h3>
                                                 </div>
                                                 <a
+                                                    *ngIf="voucherApiVersion === 2"
                                                     (click)="updateCustomerAcc('vendor', account)"
                                                     class="edit-icon pl-1 pd-t05"
                                                 >
@@ -1074,37 +1053,20 @@
                                         >
                                             {{ commonLocaleData?.app_send_email }}
                                         </button>
-                                        <!-- <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(4, account, $event)"
-                                    >
-                                        {{ commonLocaleData?.app_send_email }}
-                                    </button> -->
                                     </mat-menu>
 
                                     <!--Modal for Mail/SMS-->
 
                                     <ng-template #mailModal>
                                         <div (click)="$event.stopPropagation()">
-                                            <div class="modal-header theme-bg pd-l2 pd-r2">
-                                                <h3 class="modal-title bg" id="modal-title">
-                                                    {{ messageBody.header.set }}
-                                                </h3>
-                                                <button
-                                                    mat-icon-button
-                                                    aria-hidden="true"
-                                                    class="close"
-                                                    data-dismiss="modal"
-                                                    [attr.aria-label]="commonLocaleData?.app_close"
-                                                    (click)="closeAllDialogs()"
-                                                    aria-label="cross"
-                                                >
-                                                    ×
+                                            <div class="dialog-header">
+                                                <span>{{ messageBody.header.set }}</span>
+                                                <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
+                                                    <i class="icon-cross"></i>
                                                 </button>
                                             </div>
 
-                                            <div class="modal-body pd-l2 pd-r2 clearfix">
+                                            <mat-dialog-content class="dialog-body">
                                                 <h1 class="mr-b1 mr-t15" *ngIf="messageBody.type == 'Email'">
                                                     {{ localeData?.enter_subject }}:
                                                 </h1>
@@ -1149,7 +1111,7 @@
                                                         {{ messageBody.btn.set }}
                                                     </button>
                                                 </div>
-                                            </div>
+                                            </mat-dialog-content>
                                         </div>
                                     </ng-template>
                                 </div>
@@ -1476,7 +1438,7 @@
                                 >
                                     <div class="d-flex column-gap15 justify-content-center">
                                         <button
-                                            mat-stroked-button
+                                            mat-raised-button
                                             color="primary"
                                             *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
                                             class="btn-small min-width-150 contact-ipad-responsive"
@@ -1539,60 +1501,44 @@
             </ng-container>
         </div>
 
-        <div colspan="100%" class="xs-pl-0 pagination-wrapper mt-4">
-            <div
+        <div class="mt-4">
+            <ng-container
                 *ngIf="
                     activeTab === 'customer' &&
                     sundryDebtorsAccountsBackup.results &&
                     sundryDebtorsAccountsBackup.results.length &&
-                    totalCustomers >= paginationLimit
+                    totalCustomers > pageSizeOptions[0]
                 "
             >
-                <div class="text-center">
-                    <pagination
-                        [totalItems]="sundryDebtorsAccountsBackup.totalItems"
-                        [(ngModel)]="sundryDebtorsAccountsBackup.page"
-                        [maxSize]="5"
-                        class="pagination-sm"
-                        [boundaryLinks]="true"
-                        [itemsPerPage]="sundryDebtorsAccountsBackup.count"
-                        [rotate]="false"
-                        (pageChanged)="pageChanged($event)"
-                        [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous"
-                        [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last"
-                    >
-                    </pagination>
-                </div>
-            </div>
+                <mat-paginator
+                    [length]="sundryDebtorsAccountsBackup.totalItems"
+                    [pageSize]="advanceFilters.count"
+                    [pageIndex]="advanceFilters.page - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event);">
+                </mat-paginator>
+            </ng-container>
 
-            <div
+            <ng-container
                 *ngIf="
                     activeTab === 'vendor' &&
                     sundryCreditorsAccountsBackup.results &&
                     sundryCreditorsAccountsBackup.results.length &&
-                    totalVendors >= paginationLimit
+                    totalVendors > pageSizeOptions[0]
                 "
             >
-                <div class="text-center">
-                    <pagination
-                        [totalItems]="sundryCreditorsAccountsBackup.totalItems"
-                        [(ngModel)]="sundryCreditorsAccountsBackup.page"
-                        [maxSize]="5"
-                        class="pagination-sm"
-                        [boundaryLinks]="true"
-                        [itemsPerPage]="sundryCreditorsAccountsBackup.count"
-                        [rotate]="false"
-                        (pageChanged)="pageChanged($event)"
-                        [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous"
-                        [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last"
-                    >
-                    </pagination>
-                </div>
-            </div>
+                <mat-paginator
+                    [length]="sundryCreditorsAccountsBackup.totalItems"
+                    [pageSize]="advanceFilters.count"
+                    [pageIndex]="advanceFilters.page - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)">
+                </mat-paginator>
+            </ng-container>
         </div>
         <div
             class="no-data"
@@ -1647,29 +1593,27 @@
     </ng-template>
     <!-- endregion -->
 
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOptions"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="selectedDate($event)"
-                    (datesUpdated)="selectedDate($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                ></app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="selectedDate($event)"
+                (datesUpdated)="selectedDate($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            ></app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
 
     <ng-template
         #searchTemplate
