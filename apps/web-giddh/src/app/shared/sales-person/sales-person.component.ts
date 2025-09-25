@@ -61,6 +61,8 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     public isFormSubmitted: boolean = false;
     /** Sales Person List is modified */
     public salesPersonListIsModified: boolean = false;
+    /** Holds transfer info if active sales person is transfer */
+    public activeSalePersonIsTransfer: any;
     /** True to open mat-expansion-panel */
     public openMatExpansionPanel: boolean = true;
     /** Create form group of Name, Email and Mobile Number */
@@ -175,10 +177,13 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             this.componentStore.patchState({ openTransferAndArchiveDialog: false });
         })).subscribe();
 
-        this.componentStore.archiveSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
+        this.componentStore.archiveSalesPersonSuccess$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap((response: any) => {
             this.transferAndDeleteDialogRef?.close();
             this.transferAndArchiveDialogRef?.close();
             this.salesPersonListIsModified = true;
+            if (this,this.salesPersonData.activeSalePersonUniqueName === response.uniqueName) {
+                this.activeSalePersonIsTransfer = response;
+            }
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         })).subscribe();
     }
@@ -347,7 +352,13 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof SalesPersonComponent
      */
     public closeDialog(): void {
-        this.dialogRef?.close(this.salesPersonListIsModified);
+        let response = null;
+        if (this.salesPersonListIsModified) {
+            response = { 
+                isTransfer: this.activeSalePersonIsTransfer
+            };
+        }
+        this.dialogRef?.close(response);
     }
 
     /**
