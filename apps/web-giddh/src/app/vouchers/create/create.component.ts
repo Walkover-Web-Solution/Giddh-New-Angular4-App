@@ -109,6 +109,7 @@ import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
 
 @Component({
     selector: "create",
@@ -476,6 +477,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** Holds transfer info if active sales person is transfer */
+    private activeSalePersonIsTransfer: any;
     /** True if OCR data is enabled for voucher creation. */
     public ocrDataEnabled: boolean = false;
     /** Get ocr voucher details observable */
@@ -1595,9 +1598,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
-            if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
-                this.invoiceForm.get('salesPersonName').patchValue('');
-                this.invoiceForm.get('salesPersonUniqueName').patchValue(null);
+            if (!this.isUpdateMode && !this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                let salesPersonName = "";
+                let salesPersonUniqueName = null;
+
+                if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
+                    const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
+                    if (salesPerson) {
+                        salesPersonName = salesPerson.label
+                        salesPersonUniqueName = salesPerson.value
+                    }
+                }
+                this.invoiceForm.get('salesPersonName').patchValue(salesPersonName);
+                this.invoiceForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
             }
         });
     }
@@ -6864,8 +6877,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
+        const dialogRef = this.dialog.open(
+            SalesPersonComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: { activeSalePersonUniqueName: this.invoiceForm.get('salesPersonUniqueName').value || "" }
+        }
+        );
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
     }
 
     /**
