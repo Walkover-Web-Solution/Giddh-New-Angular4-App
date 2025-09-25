@@ -28,8 +28,8 @@ export const SUBSCRIPTION_V2_API = {
     GET_PAYMENT_METHODS: 'v2/subscription/:subscriptionId/payment-methods',
     DELETE_PAYMENT_METHOD: 'v2/subscription/payment-method/:paymentUniqueName',
     SET_ARCHIVE_UNARCHIVE_COMPANY: 'company/:companyUniqueName',
-    ACTIVATE_PLAN: 'v2/subscription/:subscriptionId/activate?upgrade=true&billingRequestId=:billingRequestId',
+    ACTIVATE_PLAN: 'v2/subscription/:subscriptionId/activate?upgrade=true',
     CALCULATION_PLAN_AMOUNT: 'v2/subscription/get-amount',
-    SAVE_RAZORPAY_TOKEN: 'v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token?orderId=:orderId',
+    SAVE_RAZORPAY_TOKEN: 'v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token',
     PAYPAL_CAPTURE_PLAN: 'subscription/paypal/order/:orderId/capture?subscriptionId=:subscriptionId'
 };

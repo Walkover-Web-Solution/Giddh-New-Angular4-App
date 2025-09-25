@@ -53,17 +53,14 @@ export class SubscriptionsService {
     /**
      * Save Razorpay Token
      *
-     * @param {string} subscriptionId
-     * @param {string} paymentId
-     * @param {string} orderId
-     * @return {*}  {Observable<any>}
-     * @memberof SubscriptionsService
+     * @param subscriptionId
+     * @param paymentId
+     * @returns
      */
-    public saveRazorpayToken(subscriptionId: string, paymentId: string, orderId: string): Observable<any> {
+    public saveRazorpayToken(subscriptionId: string, paymentId: string): Observable<any> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_RAZORPAY_TOKEN
             ?.replace(':subscriptionId', subscriptionId)
-            ?.replace(':paymentId', paymentId)
-            ?.replace(':orderId', orderId))
+            ?.replace(':paymentId', paymentId))
             .pipe(map((res) => {
                 return res;
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
@@ -591,14 +588,13 @@ export class SubscriptionsService {
     /**
      * Activate plan
      *
-     * @param {*} req
+     * @param {*} subscriptionId
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SubscriptionsService
      */
-    public activatePlan(req: any): Observable<BaseResponse<any, any>> {
+    public activatePlan(subscriptionId: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.ACTIVATE_PLAN
-            ?.replace(':subscriptionId', encodeURIComponent(req?.subscriptionId))
-            ?.replace(':billingRequestId', encodeURIComponent(req?.billingRequestId)))
+            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId)))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;

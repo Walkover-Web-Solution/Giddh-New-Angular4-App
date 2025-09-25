@@ -1640,8 +1640,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 currentlyAddedTransaction.inventory['warehouse'] = { name: '', uniqueName: event.warehouse };
             }
             let newTrx = this.lc.addNewTransaction(event.type);
-            this.lc.blankLedger?.transactions.push(newTrx);
-            this.selectBlankTxn(newTrx);
+                this.lc.blankLedger?.transactions.push(newTrx);
+                this.selectBlankTxn(newTrx);
         }
         this.closeAllAccountDropdown();
 
@@ -1904,11 +1904,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(ExportLedgerComponent, {
             data: {
                 accountUniqueName: this.lc.accountUnq,
-                advanceSearchRequest: { ...this.advanceSearchRequest, isAdvanceSearchImplemented: this.isAdvanceSearchImplemented },
+                advanceSearchRequest: this.advanceSearchRequest,
                 selectEntryUniqueName: this.checkedTrxWhileHovering.map(((entry) => { return entry.uniqueName })),
                 currencyTogglerModel: this.currencyTogglerModel,
-                isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency,
-                searchText: this.searchText
+                isLedgerAccountAllowsMultiCurrency: this.isLedgerAccountAllowsMultiCurrency
             },
             role: 'alertdialog',
             panelClass: ['mat-dialog-md'],
@@ -3567,7 +3566,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                         unitCode = defaultUnit.code;
                         stockUnitUniqueName = unitRate.stockUnitUniqueName;
-
+    
                         const hasMrpDiscount = stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
                         if (hasMrpDiscount?.length) {
                             rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
@@ -3590,7 +3589,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                         unitCode = defaultUnit.code;
                         stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
-
+    
                         const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
                         if (hasMrpDiscount?.length) {
                             rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
@@ -3605,8 +3604,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             name: stockName,
                             uniqueName: stockUniqueName,
                         },
-                        variant: {
-                            uniqueName: variantUniqueName,
+                        variant: { 
+                            uniqueName: variantUniqueName, 
                             variantDiscount: variantDiscount
                         },
                         quantity: quantity,
@@ -3886,7 +3885,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let sumOfTax = 0;
         if (res.transactions?.length) {
             res.transactions.forEach(item => {
-                if (Object.hasOwn(item.particular, 'category') && (['income', 'expenses', 'assets'].includes(item.particular.category) || isJournalVoucher) && item.particular.uniqueName !== "roundoff") {
+                if (Object.hasOwn(item.particular, 'category') && (['income','expenses','assets'].includes(item.particular.category) || isJournalVoucher) && item.particular.uniqueName !== "roundoff") {
                     transactionsParticular = item.particular;
                     if (item.inventory) {
                         transactionsParticular['uniqueName'] = transactionsParticular?.uniqueName?.split('#')[0];
@@ -3929,7 +3928,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
             selectedAccountUniqueName = transactionsParticular?.uniqueName;
         } else {
-            selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')' : ''}`;
+            selectedAccountName = `${res.particular?.name}${transactionsParticular?.stock ? ' (' + transactionsParticular?.stock?.name + ')': ''}`;
             selectedAccountUniqueName = res.particular?.uniqueName;
         }
 
@@ -3956,7 +3955,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     name: discountObj?.name,
                     uniqueName: discountObj?.uniqueName
                 });
-            });
+            }); 
         }
         transaction.discounts = discounts;
         transaction.taxes = res?.taxes ?? [];
@@ -3996,7 +3995,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.salesPersonName = res.salesPerson?.name;
 
         let txnIndex: number;
-
+        
         if (this.ledgerView === LedgerViewEnum.TView) {
             let filterTypedTxn = this.lc.blankLedger.transactions?.filter(txn => txn.type === (transactionType));
             if (filterTypedTxn[filterTypedTxn.length - 1]?.particular) {
@@ -4022,7 +4021,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             const newTrx = this.lc.addNewTransaction(transactionType);
             this.lc.blankLedger?.transactions.push(newTrx);
         }
-
+        
         this.lc.blankLedger.transactions[txnIndex].duplicateEntry = true; // Use this to handle duplicate entry logic every where
         this.lc.blankLedger.transactions[txnIndex].subVoucher = res?.subVoucher;
         this.lc.blankLedger.transactions[txnIndex].inventory = inventory || null;
@@ -4037,19 +4036,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.transactions[txnIndex].particular = selectedAccountUniqueName;
         const particular = (isActiveAccountAndParticularIsSame || transactionsParticular?.stock) ? transactionsParticular : res.particular;
         this.lc.blankLedger.transactions[txnIndex].selectedAccount = {
-            label: selectedAccountName,
-            value: selectedAccountUniqueName,
-            name: selectedAccountName,
-            uniqueName: selectedAccountUniqueName,
-            category: particular?.category,
-            parentGroups: particular?.parentGroups,
-            uNameStr: particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
-            additional: {
-                name: selectedAccountName,
-                uniqueName: selectedAccountUniqueName,
-                stock: particular?.stock || null
-            }
-        };
+                label: selectedAccountName, 
+                value: selectedAccountUniqueName, 
+                name: selectedAccountName, 
+                uniqueName: selectedAccountUniqueName, 
+                category: particular?.category, 
+                parentGroups: particular?.parentGroups,
+                uNameStr : particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
+                additional: {
+                    name: selectedAccountName, 
+                    uniqueName: selectedAccountUniqueName, 
+                    stock: particular?.stock || null
+                }
+            };
         this.lc.blankLedger.transactions[txnIndex].amount = transactionAmount;
         this.lc.blankLedger.transactions[txnIndex].convertedAmount = transactionAmount;
         this.lc.blankLedger.transactions[txnIndex].total = res?.total.amount;
@@ -4075,7 +4074,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.blankLedger.otherTaxModal = otherTaxesModal;
             this.lc.blankLedger.isOtherTaxesApplicable = true;
         }
-
+        
         this.selectAccount(
             this.lc.blankLedger.transactions[txnIndex].selectedAccount,
             this.lc.blankLedger.transactions[txnIndex],
