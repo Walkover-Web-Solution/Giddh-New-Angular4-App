@@ -181,7 +181,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             this.transferAndDeleteDialogRef?.close();
             this.transferAndArchiveDialogRef?.close();
             this.salesPersonListIsModified = true;
-            if (this,this.salesPersonData.activeSalePersonUniqueName === response.uniqueName) {
+            if (this.salesPersonData.activeSalePersonUniqueName === response.uniqueName) {
                 this.activeSalePersonIsTransfer = response;
             }
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
