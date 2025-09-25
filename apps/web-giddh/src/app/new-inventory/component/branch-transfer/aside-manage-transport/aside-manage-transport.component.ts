@@ -187,6 +187,7 @@ export class AsideManageTransportComponent implements OnInit {
     public clearTransportForm(): void {
         this.transportedCreateEditForm?.reset();
         this.isValidForm = true;
+        this.transportEditMode = false;
         this.detectChanges();
     }
 
