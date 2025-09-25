@@ -103,7 +103,7 @@ export class TemplateEditFilterComponent implements OnInit {
     /** Stores the active company name */
     public activeCompanyName: string;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Holds the value if company is Indian */
     public isIndianCompany: boolean = false;
     /** Hold list of suggestion items for Tribute.js */

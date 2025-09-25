@@ -166,7 +166,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     /** True if initial data is fetched */
     public showTaxColumn: boolean;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Holds Active Tab Index */
     public activeTabIndex: number = 0;
     /** Holds true if get Linkied Entities API call in progress */

@@ -3,7 +3,7 @@
         <div class="d-flex flex-column">
             <div class="d-flex date-advance-search justify-content-between">
                 <div class="clearfix d-flex">
-                    <button
+                    <!-- <button
                         *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
                         mat-raised-button color="primary"
                         class="mr-r1 pull-right mobile-none"
@@ -11,7 +11,7 @@
                         (click)="openTransferAsidePaneDialog()"
                     >
                         + New Transfer
-                    </button>
+                    </button> -->
                     <div class="d-flex flex-sm-row flex-column branch-transfer-flex">
                         <div
                             *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
@@ -257,12 +257,12 @@
                                     <button mat-menu-item (click)="downloadBranchTransfer(item)">
                                         Download
                                     </button>
-                                    <button mat-menu-item (click)="showEditBranchTransferPopup(item)">
+                                    <!-- <button mat-menu-item (click)="showEditBranchTransferPopup(item)">
                                         Edit
-                                    </button>
-                                    <button mat-menu-item (click)="showDeleteBranchTransferModal(item)">
+                                    </button> -->
+                                    <!-- <button mat-menu-item (click)="showDeleteBranchTransferModal(item)">
                                         Delete
-                                    </button>
+                                    </button> -->
                                 </mat-menu>
                             </div>
                         </td>
@@ -303,7 +303,7 @@
 <!-- advance search start -->
 <ng-template #searchDialog>
     <div class="dialog-header">
-        <span mat-dialog-title>Advance Search</span>
+        <span>Advance Search</span>
         <button mat-icon-button aria-label="close" (click)="closeSearchDialog()">
             <i class="icon-cross"></i>
         </button>

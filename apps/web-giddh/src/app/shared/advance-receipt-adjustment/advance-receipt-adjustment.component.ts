@@ -103,7 +103,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     /** True, if multi-currency support to voucher adjustment is enabled */
     public enableVoucherAdjustmentMultiCurrency: boolean;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
     /** Reference voucher search field */

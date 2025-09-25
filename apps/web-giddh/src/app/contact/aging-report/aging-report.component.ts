@@ -120,7 +120,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Holds Unpaid invoice Dailog ref */
     public unpaidInvoiceDailogRef: MatDialogRef<any>;
     /** Holds Voucher name constant for Unpaid Invoice Get All API */

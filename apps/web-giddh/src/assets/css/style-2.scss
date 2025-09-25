@@ -734,6 +734,7 @@ textarea {
 }
 
 .columns-wrapper {
+    max-height: 80vh;
     .inventory-checkbox {
         width: 100%;
 
@@ -13891,6 +13892,23 @@ mat-list {
     &:hover {
         .hover-target {
             visibility: visible;
+        }
+    }
+}
+
+// For giddh-datepicker month year picker placeholder color
+giddh-datepicker {
+    .mat-mdc-form-field {
+        &.month-year-picker {
+            .mat-mdc-text-field-wrapper {
+                .mat-mdc-form-field-infix {
+                    .mat-mdc-input-element {
+                        &::placeholder {
+                            color: var(--color-common-primary-text) !important;
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -16,9 +16,9 @@
             </div>
             <div class="clearfix right-inventory d-flex">
                 <div class="btn-group align-items-center">
-                    <button class="btn-link icon-btn mr-r15" (click)="editGroup()" matTooltip="Edit group">
+                    <!-- <button class="btn-link icon-btn mr-r15" (click)="editGroup()" matTooltip="Edit group">
                         <i class="icon-edit-pencil"></i>
-                    </button>
+                    </button> -->
                     <button
                         type="button"
                         class="btn-link cp mr-r15 icon-btn"
@@ -36,17 +36,17 @@
                         </button>
                     </mat-menu>
                 </div>
-                <button
+                <!-- <button
                     mat-raised-button color="primary" class="transfer-btn mr-r15"
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     matTooltip="Alt+N"
                     (click)="openBranchTransferDialog()"
                 >
                     New Transfer
-                </button>
-                <button mat-raised-button color="primary" class="mr-0" matTooltip="Alt+i" (click)="openAsidePaneDialog()">
+                </button> -->
+                <!-- <button mat-raised-button color="primary" class="mr-0" matTooltip="Alt+i" (click)="openAsidePaneDialog()">
                     Create New
-                </button>
+                </button> -->
             </div>
         </div>
     </div>
@@ -792,7 +792,7 @@
 <!-- Advance search popup -->
 <ng-template #advanceSearchDialog>
     <div class="dialog-header">
-        <span mat-dialog-title>Advance Search</span>
+        <span>Advance Search</span>
         <button mat-icon-button aria-label="close" (click)="advanceSearchAction('cancel')">
             <i class="icon-cross"></i>
         </button>

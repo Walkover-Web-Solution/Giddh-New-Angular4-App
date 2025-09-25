@@ -113,9 +113,10 @@ export class BasicTriggerComponent implements OnInit {
      * @memberof BasicTriggerComponent
      */
     public openCreateEditTriggerDialog(triggerUniqueName?: any): void {
-        const dialogConfig = ASIDE_PANE_CONFIG;
-        dialogConfig.data = { isTrigger: true, ...(triggerUniqueName ? { triggerUniqueName } : {}) };
-        const dialogRef = this.dialog.open(TemplateFroalaComponent, dialogConfig);
+        const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: { isTrigger: true, ...(triggerUniqueName ? { triggerUniqueName } : {}) }
+        });
         dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.getTriggerList();

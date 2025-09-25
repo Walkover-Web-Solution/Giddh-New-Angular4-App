@@ -68,7 +68,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Holds gst number */
     public selectedGstNumber: string = '';
     /** Holds table displayed columns name */

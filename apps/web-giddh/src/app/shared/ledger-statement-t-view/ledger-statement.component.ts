@@ -97,7 +97,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     /** Stores the unique name of the selected bank account */
     public selectedAccountUniquename: any;
     /** Stores the voucher API version used by the current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Stores restricted voucher types for download */
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
     /** Stores the ledger transaction balance */

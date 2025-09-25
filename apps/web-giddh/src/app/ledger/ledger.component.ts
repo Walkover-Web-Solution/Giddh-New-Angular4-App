@@ -261,7 +261,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
     public isMoreDetailsOpened: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Selected entry details */
     public selectedItem: any;
     /** Pagination Object */
@@ -596,6 +596,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+
+        /* Here, we filtered the pagination size to a maximum of 50 to avoid performance issues. */
+        this.pageSizeOptions = this.pageSizeOptions.filter(size => size <= 50);
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1237,7 +1240,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * 
      * @memberof LedgerComponent
      */
-    public getBankTransactions(): void {
+    public getBankTransactions(isFocusOnLedgerHeader: boolean = false): void {
         this.entryUniqueNamesForBulkAction = [];
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
@@ -1259,6 +1262,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
                             this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
                         });
+
+                        if (isFocusOnLedgerHeader) {
+                            this.focusOnLedgerHeader();
+                        }
                         this.cdRf.detectChanges();
                     }
                 }
@@ -3107,7 +3114,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.bankTransactionsResponse.page = event.pageIndex + 1;
         }
         this.bankTransactionsResponse.countPerPage = event.pageSize;
-        this.getBankTransactions();
+        this.getBankTransactions(true);
+    }
+
+    /**
+     * Focuses on the ledger header element
+     * 
+     * @private
+     * @memberof LedgerComponent
+     */
+    private focusOnLedgerHeader(): void {
+        setTimeout(() => {
+            const element = document.getElementById('ledgerBankTransactionsHeader');
+            if (element) {
+                element.focus();
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
     }
 
     /**

@@ -453,7 +453,7 @@
                             </button>
                         </li>
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
-                            <button mat-raised-button class="p-1" (click)="dateSelectedCallback()">
+                            <button mat-button class="p-1 font-15" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
@@ -676,7 +676,7 @@
     </div>
     <ng-template #expiredPlanModel>
         <div class="dialog-header">
-            <span mat-dialog-title>{{ localeData?.ready_to_upgrade }}</span>
+            <span>{{ localeData?.ready_to_upgrade }}</span>
             <button mat-icon-button aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
@@ -714,7 +714,7 @@
     <!-- modal second -->
     <ng-template #crossedTxLimitModel>
         <div class="dialog-header">
-            <span mat-dialog-title>{{ localeData?.ready_to_upgrade }}</span>
+            <span>{{ localeData?.ready_to_upgrade }}</span>
             <button mat-icon-button aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>

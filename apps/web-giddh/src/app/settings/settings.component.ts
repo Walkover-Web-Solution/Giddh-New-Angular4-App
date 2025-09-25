@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     /* This will hold the boolean value to open/close setting sidebar popup */
     public asideGstSidebarMenuState: boolean = true;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** True if permission form has unsaved changes */
     public hasUnsavedChanges: boolean = true;
     /** Returns true if form is dirty else false */

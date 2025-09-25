@@ -77,7 +77,7 @@
                                             <button
                                                 mat-raised-button
                                                 color="primary"
-                                                *ngIf="activeTab == 'customer'"
+                                                *ngIf="activeTab == 'customer' && voucherApiVersion === 2"
                                                 class="mr-0"
                                                 (click)="openAddAndManage('customer')"
                                                 aria-label="new customer"
@@ -87,7 +87,7 @@
                                             <button
                                                 mat-raised-button
                                                 color="primary"
-                                                *ngIf="activeTab == 'vendor'"
+                                                *ngIf="activeTab == 'vendor' && voucherApiVersion === 2"
                                                 class="mr-0"
                                                 (click)="openAddAndManage('vendor')"
                                                 aria-label="new vendor"
@@ -382,7 +382,7 @@
     <ng-template #mailModal *ngIf="activeTab === 'vendor'" tabindex="1">
         <div>
             <div class="dialog-header">
-                <span mat-dialog-title>{{ messageBody.header.set }}</span>
+                <span>{{ messageBody.header.set }}</span>
                 <button mat-icon-button aria-label="close"  (click)="closeAllDialogs()">
                     <i class="icon-cross"></i>
                 </button>
@@ -436,7 +436,7 @@
     <ng-template #mailModal *ngIf="activeTab === 'customer'" tabindex="-1" class="email-dialog-box">
         <div>
             <div class="dialog-header">
-                <span mat-dialog-title>{{ messageBody.header.set }}</span>
+                <span>{{ messageBody.header.set }}</span>
                 <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
                     <i class="icon-cross"></i>
                 </button>
@@ -608,6 +608,7 @@
                                                 </h3>
                                             </div>
                                             <a
+                                                *ngIf="voucherApiVersion === 2"
                                                 (click)="updateCustomerAcc('customer', account)"
                                                 class="edit-icon pl-1 pd-t05"
                                             >
@@ -1014,6 +1015,7 @@
                                                     </h3>
                                                 </div>
                                                 <a
+                                                    *ngIf="voucherApiVersion === 2"
                                                     (click)="updateCustomerAcc('vendor', account)"
                                                     class="edit-icon pl-1 pd-t05"
                                                 >
@@ -1058,7 +1060,7 @@
                                     <ng-template #mailModal>
                                         <div (click)="$event.stopPropagation()">
                                             <div class="dialog-header">
-                                                <span mat-dialog-title>{{ messageBody.header.set }}</span>
+                                                <span>{{ messageBody.header.set }}</span>
                                                 <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
                                                     <i class="icon-cross"></i>
                                                 </button>

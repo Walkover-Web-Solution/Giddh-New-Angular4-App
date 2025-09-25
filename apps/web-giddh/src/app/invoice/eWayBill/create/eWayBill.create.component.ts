@@ -160,6 +160,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        if (this.generalService.voucherApiVersion === 1) {
+            this.router.navigate(['pages', 'home']);
+            return;
+        }
         this.transporterFilterRequest.page = 1;
         this.transporterFilterRequest.count = PAGINATION_LIMIT;
         this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {

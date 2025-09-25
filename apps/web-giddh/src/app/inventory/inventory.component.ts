@@ -95,7 +95,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** True if get branches api has initiated once */
     private getBranchesInitiated: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Hold branch transfer mode  */
     public branchTransferMode: string = "";
     /** True if consolidated branch */

@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
 
     <div class="dialog-header">
-        <span mat-dialog-title>
+        <span>
             {{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ totalItems }}
         </span>
         <button mat-icon-button aria-label="close" (click)="closeModal()">

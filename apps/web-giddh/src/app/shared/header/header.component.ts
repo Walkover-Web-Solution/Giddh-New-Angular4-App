@@ -216,7 +216,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* True if it is redirect to go to branch mode */
     public isGoToBranch: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** True, if login is made with social account */
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* True if we need to show Depreciation Message */
@@ -948,8 +948,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportDialogRef?.close();
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
-                    ...ASIDE_PANE_CONFIG,
-                    panelClass: 'aside-help-panel'
+                    width: '1000px',
+                    panelClass: 'aside-help-panel',
+                    hasBackdrop: false,
+                    position: {
+                        right: '0',
+                        top: '0'
+                    }
                 });
             }
         } else {

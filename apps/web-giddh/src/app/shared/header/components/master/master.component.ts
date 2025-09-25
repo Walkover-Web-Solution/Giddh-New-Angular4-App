@@ -73,6 +73,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     public archivedOptions: IOption[] = [];
     /** Selected archived option */
     public selectedArchivedOption: object = {};
+    /** Voucher API Version */
+    public voucherApiVersion: number;
 
     constructor(
         private groupService: GroupService,
@@ -93,6 +95,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));

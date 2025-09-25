@@ -89,6 +89,8 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     /** Total results */
     public totalResults: number = 0;
+    /** Voucher API Version */
+    public voucherApiVersion: number;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesPersonData: any,
@@ -106,6 +108,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof SalesPersonComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.salesPersonUniqueName = this.salesPersonData?.uniqueName || null;
         this.initForm(this.salesPersonUniqueName ? this.salesPersonData : undefined);
         this.salesPersonAction(SalesPersonActionEnum.GET_ALL);

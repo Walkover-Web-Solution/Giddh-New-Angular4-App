@@ -13,7 +13,7 @@
         (ngSubmit)="actionAccountUser()"
     >
         <div class="dialog-header" *ngIf="localeData?.payment">
-            <span mat-dialog-title>
+            <span>
                 {{ activePayorAccount ? localeData?.payment?.edit_user : localeData?.payment?.add_user }}
             </span>
             <button

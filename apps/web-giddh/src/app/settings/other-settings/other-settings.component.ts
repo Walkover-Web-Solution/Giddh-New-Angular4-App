@@ -29,7 +29,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Decides when to emit the value for UPDATE operation */
     public saveProfileSubject: Subject<any> = new Subject();
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
 
     /** Emits the saved value */
     @Output() public saveProfile: EventEmitter<any> = new EventEmitter();

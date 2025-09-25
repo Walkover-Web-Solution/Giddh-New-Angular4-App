@@ -275,6 +275,7 @@
                                         type="button"
                                         [keyboardShortcut]="'ctrl+a'"
                                         (onShortcutPress)="openConfirmBoxFromShortcut(submitButton)"
+                                        [disabled]="voucherApiVersion === 1"
                                     >
                                         {{ commonLocaleData?.app_yes }}
                                     </button>
@@ -495,7 +496,7 @@
 <!--Modal for All Items -->
 <ng-template #chequeEntryModal>
     <div class="dialog-header">
-        <span mat-dialog-title>{{ localeData?.cheque_details }}</span>
+        <span>{{ localeData?.cheque_details }}</span>
         <button mat-icon-button aria-label="close" (click)="closeChequeDetailForm()">
             <i class="icon-cross"></i>
         </button>
@@ -539,7 +540,7 @@
                 </giddh-datepicker>
             </div>
         </form>
-        <div class="d-flex float-end column-gap15">
+        <div class="d-flex float-end column-gap15 mr-t1">
             <button
                 mat-raised-button
                 color="primary"

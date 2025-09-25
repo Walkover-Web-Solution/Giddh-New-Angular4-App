@@ -627,7 +627,7 @@
                                     >
                                 </p>
                                 <div class="d-flex align-items-start justify-content-between">
-                                    <div class="clearfix ledger-top-header-left">
+                                    <div class="clearfix ledger-top-header-left" id="ledgerBankTransactionsHeader">
                                         <h3 class="ledger-main-head">
                                             <span>{{ localeData?.mapped_account_transactions }}</span>
                                         </h3>
@@ -1195,16 +1195,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex flex-column justify-content-center align-items-center mr-t2 page-count position-absolute" 
-                                    *ngIf="bankTransactionsResponse?.totalItems > pageSizeOptions[0]">
-                                    <mat-paginator 
+                                <div class="d-flex flex-column justify-content-center align-items-center mr-t2 page-count position-absolute">
+                                    <div class="mr-b05">
+                                        <span class="grey"
+                                            >{{ bankTransactionsResponse?.totalItems }} {{ localeData?.transactions }},
+                                        </span>
+                                        <span class="black"
+                                            >{{ bankTransactionsResponse?.totalPages }} {{ localeData?.pages }}</span
+                                        >
+                                    </div>
+                                    <mat-paginator
+                                        *ngIf="bankTransactionsResponse?.totalItems > pageSizeOptions[0]"
+                                        class="hide-total-items"
                                         [length]="bankTransactionsResponse?.totalPages * bankTransactionsResponse.countPerPage" 
                                         [pageSize]="bankTransactionsResponse.countPerPage" 
                                         [pageSizeOptions]="pageSizeOptions" 
                                         [pageIndex]="bankTransactionsResponse.page - 1" 
                                         (page)="handlePageEvent($event)"
-                                        [hidePageSize]="true"
-                                        [showFirstLastButtons]="false">
+                                        [hidePageSize]="false"
+                                        [showFirstLastButtons]="true">
                                     </mat-paginator>
                                 </div>
                                 <table class="w-100">

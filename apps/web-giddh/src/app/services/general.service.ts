@@ -34,7 +34,7 @@ export class GeneralService {
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     /** Stores the version number for new voucher APIs (1 for old APIs and 2 for new APIs) */
-    public voucherApiVersion: 1 | 2 = 1;
+    public voucherApiVersion: number;
 
     get user(): UserDetails {
         return this._user;

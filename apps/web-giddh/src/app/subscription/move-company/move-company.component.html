@@ -1,8 +1,8 @@
 <div class="dialog-header">
-    <span mat-dialog-title *ngIf="subscriptionMove">
+    <span *ngIf="subscriptionMove">
         {{ localeData?.subscription?.move_company ? localeData?.subscription?.move_company : localeData?.move_company }}
     </span>
-    <span mat-dialog-title *ngIf="!subscriptionMove">{{ localeData?.add_company }}</span>
+    <span *ngIf="!subscriptionMove">{{ localeData?.add_company }}</span>
     <button mat-icon-button aria-label="close" mat-dialog-close>
         <i class="icon-cross"></i>
     </button>

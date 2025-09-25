@@ -62,7 +62,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     public showNotesAtLastPage: boolean;
     public isDefaultTemplateSignatureImage: boolean;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Dialog reference for bulk update image/slogan confirmation */
     private bulkUpdateImageSloganDialogRef: MatDialogRef<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

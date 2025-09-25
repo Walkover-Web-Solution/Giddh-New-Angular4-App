@@ -185,7 +185,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** True if last duplicate email in portal  users */
     public portalIndex: number;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Hold active index of form group */
     public activeIndex: number = 0;
     /** Holds list of countries which use ZIP Code in address */
