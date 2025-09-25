@@ -2420,12 +2420,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public selectStock(event: any, entryIndex: number, isClear: boolean = false): void {
         if (this.isBarcodeMachineTyping) {
+            const entries = this.invoiceForm.get("entries") as FormArray;
+            const account = entries.at(entryIndex)?.value?.transactions?.[0]?.account;
+            // Delete entry if account is not selected
+            if (!(account?.uniqueName && account?.name)) {
+                this.deleteLineEntry(entryIndex);
+            }
             return;
         }
 
-        if (event && !isClear) {
+        if (event) {
             const entryFormGroup = this.getEntryFormGroup(entryIndex);
             const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+            if (isClear) {
+                transactionFormGroup.reset();
+                return;
+            }
 
             transactionFormGroup.get("account.name")?.patchValue(event?.label);
             transactionFormGroup.get("account.uniqueName")?.patchValue(event?.account?.uniqueName || event?.value);
