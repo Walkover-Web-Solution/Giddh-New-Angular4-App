@@ -107,7 +107,7 @@
 
                     <!-- Archive Column -->
                     <ng-container matColumnDef="archive">
-                        <th mat-header-cell *matHeaderCellDef width="25%">{{ commonLocaleData?.app_archive }}</th>
+                        <th mat-header-cell *matHeaderCellDef width="25%">{{ commonLocaleData?.app_status }}</th>
                         <td mat-cell *matCellDef="let element">{{ element.archiveStatus === salesPersonArchiveEnum.ARCHIVE ? commonLocaleData?.app_archive : commonLocaleData?.app_unarchive }}</td>
                     </ng-container>
 

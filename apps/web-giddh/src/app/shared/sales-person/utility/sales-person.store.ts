@@ -15,7 +15,7 @@ export interface SalesPersonState {
     deleteSalesPersonSuccess: boolean;
     salesPersonList: CommonPaginatedResponse<any> | IOption[] | null;
     salesPersonListInProgress: boolean;
-    archiveSalesPersonSuccess: boolean;
+    archiveSalesPersonSuccess: any;
     openTransferAndDeleteDialog: boolean; // For sales person linked with account only
     openTransferAndArchiveDialog: boolean; // For sales person linked with entry or voucher
 }
@@ -218,7 +218,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
                                 this.patchState({
-                                    archiveSalesPersonSuccess: true
+                                    archiveSalesPersonSuccess: model
                                 });
                             } else {
                                 res.message && this.toasterService.showSnackBar('error', res.message);
