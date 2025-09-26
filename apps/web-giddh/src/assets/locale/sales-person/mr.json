@@ -1,5 +1,6 @@
 {
     "archive_confirmation_message": "तुम्ही खरोखर सेल्स पर्सन आर्काइव्ह करू इच्छिता?",
+    "unarchive_confirmation_message": "तुम्हाला खात्री आहे की तुम्हाला विक्री व्यक्तीचे संग्रहण रद्द करायचे आहे?",
     "transfer_and_archive": "ट्रान्सफर आणि आर्काइव्ह",
     "delete_confirmation_message": "तुम्ही सेल्स पर्सन डिलीट करू इच्छिता?",
     "transfer_and_delete": "ट्रान्सफर आणि डिलीट",

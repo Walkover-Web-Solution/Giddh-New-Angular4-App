@@ -279,7 +279,21 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 break;
             case SalesPersonActionEnum.ARCHIVE:
                 if (element.archiveStatus === SalesPersonArchiveEnum.ARCHIVE) {
-                    this.componentStore.archiveUnarchiveSalesPerson({ model: { action: ActionTypeEnum.UNARCHIVED }, uniqueName: element?.uniqueName });
+                    const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                        panelClass: ['mat-dialog-sm'],
+                        disableClose: true,
+                        data: {
+                            configuration: this.generalService.deleteConfiguration(
+                                this.localeData?.unarchive_confirmation_message,
+                                this.commonLocaleData
+                            )
+                        }
+                    });
+                    dialogRef.afterClosed().subscribe(response => {
+                        if (response === this.commonLocaleData?.app_yes) {
+                            this.componentStore.archiveUnarchiveSalesPerson({ model: { action: ActionTypeEnum.UNARCHIVED }, uniqueName: element?.uniqueName });
+                        }
+                    });
                 } else {
                     this.salesPersonUniqueName = element?.uniqueName;
                     this.openTransferAndDeleteDialog(true, this.commonLocaleData?.app_archive, this.localeData?.archive_confirmation_message, this.localeData?.transfer_and_archive);
