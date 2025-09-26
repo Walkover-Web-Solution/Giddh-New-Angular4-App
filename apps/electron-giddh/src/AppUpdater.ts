@@ -34,21 +34,20 @@ export default class AppUpdaterV1 {
         // Setup handlers first, then check for updates
         this.setupUpdateHandlers();
         
-        // Only check for updates in production environment
-        if (process.env.NODE_ENV === 'production') {
-            this.log.info('Starting initial update check...');
-            autoUpdater.checkForUpdates();
-        } else {
-            this.log.info('Skipping initial update check in development mode');
-        }
+        // Configure update server URL
+        this.configureUpdateServer();
         
-        // Check for updates every 10 minutes in production (for debugging)
-        if (process.env.NODE_ENV === 'production') {
-            setInterval(() => {
-                this.log.info('Periodic update check triggered');
-                autoUpdater.checkForUpdates();
-            }, 10 * 60 * 1000); // 10 minutes
-        }
+        // Allow updates in both development and production for testing
+        this.log.info('Starting initial update check...');
+        setTimeout(() => {
+            autoUpdater.checkForUpdates();
+        }, 2000); // Wait 2 seconds for proper initialization
+        
+        // Check for updates every 5 minutes for debugging
+        setInterval(() => {
+            this.log.info('Periodic update check triggered');
+            autoUpdater.checkForUpdates();
+        }, 5 * 60 * 1000); // 5 minutes
     }
 
     private setupUpdateHandlers() {
@@ -161,6 +160,33 @@ export default class AppUpdaterV1 {
                 }
             });
         });
+    }
+
+    private configureUpdateServer() {
+        try {
+            // Set update server URL based on environment
+            const isDev = process.env.NODE_ENV !== 'production';
+            const updateServerUrl = isDev 
+                ? 'https://giddh-app-builds-test.s3.amazonaws.com'
+                : 'https://giddh-app-builds.s3.amazonaws.com';
+            
+            this.log.info('=== UPDATE SERVER CONFIGURATION ===');
+            this.log.info('Environment:', process.env.NODE_ENV);
+            this.log.info('Is Development:', isDev);
+            this.log.info('Update Server URL:', updateServerUrl);
+            
+            // Configure the feed URL
+            autoUpdater.setFeedURL({
+                provider: 'generic',
+                url: updateServerUrl
+            });
+            
+            this.log.info('Feed URL configured successfully');
+            this.log.info('Current Feed URL:', autoUpdater.getFeedURL());
+            
+        } catch (error) {
+            this.log.error('Failed to configure update server:', error);
+        }
     }
 }
 
