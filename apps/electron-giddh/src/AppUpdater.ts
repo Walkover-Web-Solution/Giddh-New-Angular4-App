@@ -6,6 +6,16 @@ export default class AppUpdaterV1 {
     public isUpdateDownloaded: boolean = false;
     private log: any;
 
+    private formatReleaseNotes(releaseNotes: any): string {
+        if (typeof releaseNotes === 'string') {
+            return releaseNotes;
+        }
+        if (Array.isArray(releaseNotes)) {
+            return releaseNotes.map(note => note.note || '').join('\n');
+        }
+        return 'No release notes available';
+    }
+
     constructor() {
         this.log = require('electron-log');
         this.log.transports.file.level = 'debug';
@@ -61,7 +71,7 @@ export default class AppUpdaterV1 {
                     title: 'Found Updates',
                     message: `New version ${info.version} is available. Current version: ${app.getVersion()}. Do you want to update now?`,
                     buttons: ['Sure', 'No'],
-                    detail: info.releaseNotes || 'No release notes available'
+                    detail: this.formatReleaseNotes(info.releaseNotes)
                 }).then((resp) => {
                     this.log.info('User response to update dialog:', resp.response === 0 ? 'Yes' : 'No');
                     if (resp.response === 0) {
@@ -82,7 +92,7 @@ export default class AppUpdaterV1 {
                     title: 'Update Available',
                     message: `New version ${info.version} is available. Current version: ${app.getVersion()}. Would you like to download it now?`,
                     buttons: ['Download', 'Later'],
-                    detail: info.releaseNotes || 'No release notes available'
+                    detail: this.formatReleaseNotes(info.releaseNotes)
                 }).then((resp) => {
                     this.log.info('User response to fallback dialog:', resp.response === 0 ? 'Download' : 'Later');
                     if (resp.response === 0) {

@@ -611,20 +611,6 @@ export enum SUPPORTED_OPERATING_SYSTEMS {
     Windows = 'Windows'
 };
 
-export const Configuration = {
-    'AppUrl': AppUrl,
-    'ApiUrl': ApiUrl,
-    'PORTAL_URL': PORTAL_URL,
-    'OTP_WIDGET_ID': OTP_WIDGET_ID,
-    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
-    'UkApiUrl': UkApiUrl,
-    'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER,
-    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
-    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
-    'RAZORPAY_KEY': RAZORPAY_KEY
-};
-
 export const ICICI_ALLOWED_COMPANIES = [
     'mitti2in16805084405400lx4s8',
     'walkovin164863366504908yve0',
