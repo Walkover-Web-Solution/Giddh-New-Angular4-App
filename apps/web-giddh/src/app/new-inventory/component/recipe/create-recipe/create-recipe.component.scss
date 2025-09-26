@@ -14,10 +14,10 @@
             font-size: 20px;
 
             .icon-add {
-                color: var(--color-common-senary-text);
+                color: var(--color-blue-primary);
             }
             .icon-cross {
-                color: var(--color-gst-primary-doc-actions);
+                color: var(--color-red);
             }
         }
 
@@ -39,15 +39,15 @@
             max-width: 950px;
         }
         .manufacturing-border {
-            border-bottom: 1px solid var(--color-iron);
+            border-bottom: 1px solid var(--color-silver);
         }
         .section-head {
             font-size: var(--font-size-16);
-            color: var(--color-link);
+            color: var(--color-blue-primary);
         }
         .less-than-text {
             font-size: 32px;
-            color: var(--color-abbey);
+            //color: var(--color-dark-gray);
             position: absolute;
             top: 80px;
         }
@@ -83,10 +83,10 @@
                     }
                 }
                 thead {
-                    border-bottom: 1px solid var(--color-iron);
+                    border-bottom: 1px solid var(--color-silver);
                     tr {
                         th {
-                            color: var(--color-link);
+                            color: var(--color-blue-primary);
                             font-weight: 500;
                         }
                     }
@@ -100,17 +100,17 @@
                                 font-size: var(--font-size-12) !important;
                             }
                             .table-row-delete {
-                                color: var(--color-tertiary-button-text);
+                                //color: var(--color-dark-gray);
                             }
                         }
                     }
                 }
                 tfoot {
-                    border-top: 1px solid var(--color-iron);
-                    border-bottom: 1px solid var(--color-iron);
+                    border-top: 1px solid var(--color-silver);
+                    border-bottom: 1px solid var(--color-silver);
                     tr {
                         td {
-                            color: var(--color-nero);
+                            //color: var(--color-black);
                             font-weight: 100;
                         }
                     }
@@ -134,7 +134,7 @@
             padding: 15px 0;
             &-head {
                 padding: 12px 19px;
-                background-color: var(--color-abbey);
+                //background-color: var(--color-dark-gray);
                 color: var(--color-white);
             }
             &-body {
@@ -162,16 +162,16 @@
             min-width: 280px;
 
             &.bg-green {
-                background-color: var(--color-opening-box-background);
-                color: var(--color-success-enable);
+                background-color: var(--color-green-light);
+                color: var(--color-green);
             }
             &.bg-vivid-gamboge {
-                background-color: var(--color-total-details-secondary-background);
-                color: var(--color-total-details-secondary-content);
+                background-color: var(--color-orange-light);
+                color: var(--color-deep-orange);
             }
             .card-head-text {
                 font-size: var(--font-size-12);
-                color: var(--color-total-details-heading);
+                //color: var(--color-dark-gray);
             }
             .card-text {
                 font-size: var(--font-size-16);
@@ -179,8 +179,8 @@
             }
         }
         .add-recipe {
-            color: var(--color-primary-button-text);
-            border-bottom: 1px solid var(--color-iron);
+            color: var(--color-blue-primary);
+            border-bottom: 1px solid var(--color-silver);
             button {
                 .mat-button-wrapper {
                     display: flex !important;
@@ -216,8 +216,8 @@
     }
 }
 .save-recipe {
-    color: var(--color-primary-header-background);
-    background-color: var(--color-common-septenary-background-for-all-components);
+    color: var(--color-blue-primary);
+    background-color: var(--color-light-gray);
     display: inline-block;
     padding: 5px;
 }
@@ -228,8 +228,8 @@
     height: 35px;
     width: 35px;
     border-radius: 5px;
-    color: var(--color-tertiary-button-text);
-    border: 1px solid var(--color-common-secondary-border);
-    background-color: var(--color-tertiary-button-background);
+    //color: var(--color-dark-gray);
+    border: 1px solid var(--color-silver);
+    background-color: var(--color-transparent);
     margin-left: 15px;
 }

@@ -1,13 +1,13 @@
 .invoice-bg {
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
     padding: 20px;
 }
 
 .invoice-nav.navbar-nav > li > a {
     padding: 6px 30px;
     font-size: var(--font-size-15);
-    color: var(--color-nero);
-    background-color: var(--color-dark-fog);
+    //color: var(--color-black);
+    background-color: var(--color-border-light);
 }
 
 .invoice-nav.navbar-nav > li > a:hover {
@@ -15,5 +15,5 @@
 }
 
 .invoice-nav.navbar-nav > li > a.active {
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
 }

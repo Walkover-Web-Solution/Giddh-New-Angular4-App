@@ -46,7 +46,7 @@ html.lb-disable-scrolling {
 
     /* Background color behind image.
      This is visible during transitions. */
-    background-color: var(--color-transparent-background);
+    background-color: var(--color-transparent);
 }
 
 .lb-outerContainer:after {

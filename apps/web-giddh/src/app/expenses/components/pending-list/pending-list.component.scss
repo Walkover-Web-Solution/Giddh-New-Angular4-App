@@ -5,7 +5,7 @@
 .icon-pointer {
     cursor: pointer;
     .active-text-color {
-        color: var(--color-blue) !important;
+        color: var(--color-blue-primary) !important;
     }
 }
 .icon-sort-asc {
@@ -15,14 +15,14 @@
     margin-left: 6px;
 }
 .icon-sort-asc.active-text-color {
-    color: var(--color-blue) !important;
+    color: var(--color-blue-primary) !important;
 }
 .td-search-box {
     div {
         display: flex;
         i {
             margin-top: 1px;
-            color: var(--color-blue);
+            color: var(--color-blue-primary);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -37,9 +37,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-nero);
+    //color: var(--color-black);
     border: none;
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
 }
 .td-search-box {
     position: relative;

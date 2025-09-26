@@ -43,7 +43,7 @@
 .pl-table-grid {
     th {
         border: none !important;
-        border-bottom: 1px solid var(--color-table-primary-header-bar-border) !important;
+        border-bottom: 1px solid var(--color-silver) !important;
         padding: 13px 0 14px 0 !important;
         min-width: 275px;
 
@@ -57,7 +57,7 @@
             position: relative;
             z-index: 1;
             font-size: 13px;
-            color: var(--color-abbey);
+            //color: var(--color-dark-gray);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -78,7 +78,7 @@
     .col {
         min-width: 275px;
         padding-block: 10px;
-        background: var(--color-table-primary-footer);
+        background: var(--color-light-gray);
     }
 }
 

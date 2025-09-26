@@ -4,20 +4,20 @@
             height: calc(100vh - 200px);
         }
         table {
-            background-color: var(--color-transparent-background);
+            background-color: var(--color-transparent);
             tr {
                 &:hover {
-                    background-color: var(--color-table-row-hover-primary-background);
+                    background-color: var(--color-blue-light);
                 }
             }
         }
     }
 }
 .month-selection {
-    color: var(--color-nero) !important;
-    background: var(--color-denary-button-background) !important;
+    //color: var(--color-black) !important;
+    background: var(--color-light-gray) !important;
 
     &::placeholder {
-        color: var(--color-nero) !important;
+        //color: var(--color-black) !important;
     }
 }

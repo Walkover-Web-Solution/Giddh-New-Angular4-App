@@ -1,7 +1,7 @@
 .bs-table-grid {
     th {
         border: none !important;
-        border-bottom: 1px solid var(--color-table-primary-header-bar-border) !important;
+        border-bottom: 1px solid var(--color-silver) !important;
         padding: 13px 8px 14px 0 !important;
         &:first-child {
             padding: 0 !important;
@@ -10,7 +10,7 @@
             position: relative;
             z-index: 1;
             font-size: 13px;
-            color: var(--color-abbey);
+            //color: var(--color-dark-gray);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -58,7 +58,7 @@
         }
         .pl-grid-row,
         .profit-loss {
-            border-bottom: 1px solid var(--color-dark-fog);
+            border-bottom: 1px solid var(--color-border-light);
             .group {
                 white-space: nowrap;
                 width: 30%;

@@ -4,7 +4,7 @@
     padding: 16px !important;
 }
 .modal-header .close {
-    color: var(--color-popup-list-head-text);
+    color: var(--color-white);
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
@@ -18,7 +18,7 @@
 ::ng-deep {
     .advance-search {
         .clearfix {
-            background-color: var(--color-popup-background) !important;
+            //background-color: var(--color-white) !important;
         }
     }
 }
@@ -39,7 +39,7 @@
         margin-bottom: 20px;
     }
     .amount-total {
-        background: var(--color-dark-fog);
+        background: var(--color-border-light);
     }
     .page-count {
         width: 100%;

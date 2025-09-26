@@ -9,19 +9,19 @@
         .max-width-stock {
             max-width: 1400px;
             .section-head {
-                color: var(--color-primary-header-background);
+                color: var(--color-blue-primary);
             }
         }
         .less-than-text {
             font-size: 32px;
-            color: var(--color-abbey);
+            //color: var(--color-dark-gray);
             position: absolute;
             top: 120px;
         }
 
         .branch-msg {
-            color: var(--color-primary-header-background);
-            background-color: var(--color-common-septenary-background-for-all-components);
+            color: var(--color-blue-primary);
+            background-color: var(--color-light-gray);
             display: flex;
             justify-content: center;
             max-width: 250px;
@@ -70,10 +70,10 @@
                 }
 
                 thead {
-                    border-bottom: 1px solid var(--color-iron);
+                    border-bottom: 1px solid var(--color-silver);
                     tr {
                         th {
-                            color: var(--color-primary-button-text);
+                            color: var(--color-blue-primary);
                             font-weight: 500;
                         }
                     }
@@ -90,7 +90,7 @@
                                     width: 14px;
                                     height: 50px;
                                     border: 2px solid
-                                        var(--color-manufacture-source-tbody-tr-td-nth-child1-before-background);
+                                        var(--color-silver);
                                     border-right: 0px;
                                     border-top: 0px;
                                     border-radius: 3px 0 0 3px;
@@ -112,7 +112,7 @@
                                 &.before-line {
                                     &::before {
                                         border-top: 2px solid
-                                            var(--color-manufacture-source-tbody-tr-td-nth-child1-before-background) !important;
+                                            var(--color-silver) !important;
                                     }
                                 }
                             }
@@ -120,10 +120,10 @@
                     }
                 }
                 tfoot {
-                    border-top: 1px solid var(--color-iron);
+                    border-top: 1px solid var(--color-silver);
                     tr {
                         td {
-                            color: var(--color-nero);
+                            //color: var(--color-black);
                             font-weight: 100;
                             &:nth-child(2) {
                                 text-align: right;
@@ -171,7 +171,7 @@
 
             &-head {
                 padding: 12px 19px;
-                background-color: var(--color-abbey);
+                //background-color: var(--color-dark-gray);
                 color: var(--color-white);
             }
 
@@ -201,20 +201,20 @@
             min-width: 280px;
 
             &.bg-green {
-                background-color: var(--color-opening-box-background);
-                color: var(--color-success-enable);
+                background-color: var(--color-green-light);
+                color: var(--color-green);
             }
             &.bg-vivid-gamboge {
-                background-color: var(--color-total-details-secondary-background);
-                color: var(--color-total-details-secondary-content);
+                background-color: var(--color-orange-light);
+                color: var(--color-deep-orange);
             }
             &.bg-expense {
-                background-color: var(--color-total-details-tertiary-background);
-                color: var(--color-total-details-tertiary-content);
+                background-color: var(--color-border-light);
+                color: var(--color-blue-primary);
             }
             .card-head-text {
                 font-size: var(--font-size-12);
-                color: var(--color-total-details-heading);
+                //color: var(--color-dark-gray);
             }
             .card-text {
                 font-size: var(--font-size-16);

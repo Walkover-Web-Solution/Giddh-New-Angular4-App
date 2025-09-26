@@ -1,5 +1,5 @@
 .bd-rt {
-    border-color: var(--color-iron);
+    border-color: var(--color-silver);
 }
 
 .flex-fill {
@@ -21,7 +21,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -41,9 +41,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-nero);
+    //color: var(--color-black);
     border: none;
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
 }
 
 .td-search-box .input-container i {
@@ -53,7 +53,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-silver);
 }
 
 .icon-pointer .glyphicon {
@@ -61,12 +61,12 @@
 }
 
 .td-search-box div i:hover {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue);
-    background: var(--color-dark-fog);
+    color: var(--color-blue-primary);
+    background: var(--color-border-light);
 }
 .stock-input {
     background-color: transparent !important;
@@ -80,23 +80,23 @@
     color: var(--color-white);
 }
 .inventory-stock-table input.form-control.stock-input {
-    color: var(--color-nero);
+    //color: var(--color-black);
     text-align: left;
 }
 .table-border input.form-control.stock-input {
-    color: var(--color-nero);
+    //color: var(--color-black);
     text-align: left;
 }
 .footer-tr td {
-    background-color: var(--color-dark-fog);
+    background-color: var(--color-border-light);
 }
 .total-footer {
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
     display: flex;
     .foot-item {
         padding: 41px;
         h2 {
-            color: var(--color-gray);
+            color: var(--color-medium-gray);
             font-size: var(--font-size-16);
             margin-bottom: 10px;
         }
@@ -107,23 +107,23 @@
 }
 
 .journal-voucher {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
 }
 
 .purchase {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 .sales {
-    color: var(--color-success-enable);
+    color: var(--color-green);
 }
 
 /* class name same as what we are getting data */
 
 .journal {
-    color: var(--color-primary-inventory-stock-report-journal);
+    color: var(--color-green);
 }
 .credit {
-    color: var(--color-primary-credit);
+    color: var(--color-blue-primary);
 }
 .debit {
     color: var(--color-orange);
@@ -152,7 +152,7 @@
 }
 .btn-group-voucher-type {
     width: 100%;
-    color: var(--color-nero) !important;
+    //color: var(--color-black) !important;
     white-space: nowrap;
     min-width: 140px;
     max-width: 140px;
@@ -162,7 +162,7 @@
     button {
         text-align: left;
         width: 100%;
-        color: var(--color-nero);
+        //color: var(--color-black);
         margin-right: 0;
         &:focus,
         &:hover {
@@ -180,7 +180,7 @@
     border-radius: 0px;
     padding: 0px;
     input[type="checkbox"]:after {
-        border: 1px solid var(--color-iron);
+        border: 1px solid var(--color-silver);
         width: 15px;
         height: 15px;
         top: 2px;
@@ -194,7 +194,7 @@
         border-right-style: none;
     }
     li {
-        color: var(--color-nero);
+        //color: var(--color-black);
         padding: 3px 7px !important;
         font-size: var(--font-size-12);
     }
@@ -204,7 +204,7 @@
     }
 }
 button[aria-expanded="true"] i {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
 }
 /* voucher type DDL */
 
@@ -212,7 +212,7 @@ button[aria-expanded="true"] i {
     text-transform: capitalize;
 }
 .table-border {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
 }
 .border-none {
     border: none !important;
@@ -227,10 +227,10 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 .icon-pointer .active-text-color {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 .sticky-footer-sale-amount {
     .inner-content-footer {
@@ -246,7 +246,7 @@ button[aria-expanded="true"] i {
         }
         .operators {
             font-size: var(--font-size-32);
-            color: var(--color-gray);
+            color: var(--color-medium-gray);
         }
         h2 {
             font-size: var(--font-size-16);
@@ -266,13 +266,13 @@ button[aria-expanded="true"] i {
     width: 100% !important;
 }
 .text-purple {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 .bg-white {
-    background: var(--color-white);
+    //background: var(--color-white);
 }
 .btn-link-2 {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 .mr-b100 {
     margin-bottom: 100px;
@@ -286,10 +286,10 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: var(--font-size-16);
     margin-left: 10px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
-    color: var(--color-giddh-blue);
-    background: var(--color-white);
+    color: var(--color-blue-primary);
+    //background: var(--color-white);
     .icon-advance-filter {
         padding: 10px;
     }
@@ -302,10 +302,10 @@ button[aria-expanded="true"] i {
     cursor: pointer;
 }
 button.btn.btn-filter {
-    background: var(--color-dark-fog);
-    border: 1px solid var(--color-iron);
+    background: var(--color-border-light);
+    border: 1px solid var(--color-silver);
     font-size: var(--font-size-15);
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -327,12 +327,12 @@ button.btn.btn-filter {
     display: table;
 }
 .icon-btn {
-    border: 1px solid var(--color-common-secondary-border);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
     height: 36px;
     width: 36px;
     margin-top: 0;
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
     .strong {
         font-weight: bold;
     }
@@ -342,7 +342,7 @@ button.btn.btn-filter {
         tr {
             &:last-child {
                 td {
-                    border-bottom: 1px solid var(--color-iron);
+                    border-bottom: 1px solid var(--color-silver);
                 }
             }
         }

@@ -5,17 +5,17 @@
     position: relative;
     z-index: 1;
     cursor: default;
-    border: 1px solid var(--color-common-secondary-border);
+    border: 1px solid var(--color-silver);
     width: 230px;
 }
 
 .date-range-picker:focus {
-    border-color: var(--color-primary-button-border) !important;
+    border-color: var(--color-silver) !important;
 }
 .input-wrapper {
     position: relative;
     display: block;
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
 }
 .input-wrapper:before {
     position: absolute;
@@ -23,7 +23,7 @@
     display: block;
     height: 36px;
     width: 1px;
-    background-color: var(--color-iron);
+    background-color: var(--color-silver);
     left: 37px !important;
     z-index: 2;
     top: 0;
@@ -61,25 +61,25 @@
 .expand-collapse-btn a {
     width: 40px;
     height: 40px;
-    background-color: var(--color-white);
-    border: 1px solid var(--color-common-secondary-border);
+    //background-color: var(--color-white);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: var(--font-size-16);
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     &:hover {
-        background: var(--color-blue);
+        background: var(--color-blue-primary);
         color: var(--color-white);
     }
 }
 
 button.btn.btn-filter {
-    background: var(--color-dark-fog);
-    border: 1px solid var(--color-dark-fog);
+    background: var(--color-border-light);
+    border: 1px solid var(--color-border-light);
     font-size: var(--font-size-15);
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     align-items: center;
 }
 

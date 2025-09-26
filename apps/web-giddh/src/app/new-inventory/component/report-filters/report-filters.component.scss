@@ -1,5 +1,5 @@
 .stock-mat-salect {
-    border: 1px solid var(--color-secondary-input-bar-border);
+    border: 1px solid var(--color-silver);
     border-radius: 5px !important;
     padding: 8px;
     font-size: var(--font-size-15);
@@ -10,15 +10,15 @@
     .transactional-wise-common-btn {
         height: 42px;
         width: 42px;
-        border: 1px solid var(--color-gray);
+        border: 1px solid var(--color-medium-gray);
         border-radius: 20px;
         box-shadow: none;
-        background: var(--color-white);
+        //background: var(--color-white);
     }
 
     .icon-download-circle {
         font-size: 16px;
-        color: var(--color-gray);
+        color: var(--color-medium-gray);
     }
 }
 
@@ -32,9 +32,9 @@
     width: 84%;
 
     .mat-chip.mat-standard-chip {
-        color: var(--color-chips-primary) !important;
-        background-color: var(--color-body-background) !important;
-        border: 1px solid var(--color-primary-login-box-body-text) !important;
+        color: var(--color-dark-black) !important;
+        //background-color: var(--color-white) !important;
+        border: 1px solid var(--color-blue-primary) !important;
         border-radius: 5px !important;
         font-size: var(--font-size-12) !important;
     }
@@ -88,7 +88,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--color-secondary-input-bar-border);
+    border: 1px solid var(--color-silver);
     padding: 5px;
     border-radius: 4px;
     height: 36px;

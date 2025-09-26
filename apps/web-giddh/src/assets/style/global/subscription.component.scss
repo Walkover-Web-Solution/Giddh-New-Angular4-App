@@ -5,18 +5,18 @@
 }
 .main-tabs-content {
     .mat-tab-labels {
-        background-color: var(--color-dark-fog);
+        background-color: var(--color-border-light);
     }
 }
 
 .mat-datepicker-toggle {
-    color: var(--color-nero) !important;
+    //color: var(--color-black) !important;
 }
 .mat-form-field-flex {
     align-items: center !important;
 }
 .mat-calendar-header {
-    background-color: var(--color-primary-header-background) !important;
+    background-color: var(--color-blue-primary) !important;
 }
 .mat-form-field-type-mat-date-range-input {
     .mat-form-field-infix {
@@ -28,6 +28,6 @@
 }
 .main-content-subscription{
     .dropdown-bg {
-        background-color: var(--color-transparent-background) !important;
+        background-color: var(--color-transparent) !important;
     }
 }

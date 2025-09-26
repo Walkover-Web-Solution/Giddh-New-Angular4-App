@@ -2,14 +2,14 @@
     .header {
         display: flex;
         align-items: center;
-        background-color: var(--color-primary-header-background);
-        color: var(--color-popup-list-head-text);
+        background-color: var(--color-blue-primary);
+        color: var(--color-white);
         width: 100%;
         padding-left: 10px;
         height: 50px;
         .attachment-back-button {
             width: 64px;
-            color: var(--color-toast-primary-text) !important;
+            color: var(--color-white) !important;
             i {
                 margin-right: 2px;
             }
@@ -21,9 +21,9 @@
     .section {
         display: flex;
         height: 77vh;
-        background-color: var(--color-popup-background);
+        //background-color: var(--color-white);
         .left-side {
-            border-right: 1px solid var(--color-common-secondary-border);
+            border-right: 1px solid var(--color-silver);
             width: 35%;
             padding: 10px 10px 10px 13px;
             position: relative;
@@ -67,7 +67,7 @@
                             margin-top: 1px;
                             overflow: hidden;
                             text-overflow: ellipsis;
-                            color: var(--color-table-septenary-content);
+                            //color: var(--color-black);
                         }
                         a {
                             color: var(--color-dark-gray) !important;
@@ -93,14 +93,14 @@
             padding: 10px 13px;
             .right-side-buttons {
                 display: flex;
-                background-color: var(--color-white);
-                border: 1px solid var(--color-common-secondary-border);
+                //background-color: var(--color-white);
+                border: 1px solid var(--color-silver);
                 border-radius: 5px;
                 min-width: 67px;
                 float: right;
                 margin-right: 2px;
                 span {
-                    border-left: 1px solid var(--color-common-secondary-border);
+                    border-left: 1px solid var(--color-silver);
                     padding: 5px;
                     display: flex;
                     justify-content: center;
@@ -140,10 +140,10 @@
     }
 }
 .active-file {
-    color: var(--color-blue) !important;
+    color: var(--color-blue-primary) !important;
 }
 .disabled {
-    background-color: var(--color-iron) !important;
+    background-color: var(--color-silver) !important;
     cursor: not-allowed !important;
 }
 ::ng-deep {

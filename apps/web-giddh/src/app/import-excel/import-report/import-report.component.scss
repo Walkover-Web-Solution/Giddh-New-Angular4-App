@@ -4,7 +4,7 @@
     .import-card {
         padding: 15px;
         background-color: var(--color-common-primary-background-for-all-components);
-        box-shadow: 0px 3px 7px var(--color-primary-common-box-shadow);
+        box-shadow: 0px 3px 7px var(--color-shadow-light);
         border-radius: 2px;
         position: relative;
         padding-right: 30px;
@@ -16,7 +16,7 @@
             z-index: 2;
         }
         svg.download-import {
-            fill: var(--color-abbey);
+            fill: var(--color-dark-gray);
         }
     }
     .import-data-row {

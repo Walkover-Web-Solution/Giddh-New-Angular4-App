@@ -1,10 +1,10 @@
 .wrap-transaction-map {
-    border: 1px solid var(--color-common-primary-border);
+    border: 1px solid var(--color-silver);
     border-bottom: none !important;
     .ledger-book {
         box-shadow: none;
         .left-col-new {
-            border-right: 1px solid var(--color-common-primary-border);
+            border-right: 1px solid var(--color-silver);
         }
         .checkbox-span {
             height: 49px;
@@ -29,12 +29,12 @@
 
             &.highlighted-transaction {
                 .mat-grid-tile {
-                    background-color: var(--color-success-enable-bg-light) !important;
+                    background-color: var(--color-success-light) !important;
                 }
             }
             &:not(.highlighted-transaction) {
                 &:hover {
-                    background-color: var(--color-transparent-background);
+                    background-color: var(--color-transparent);
                 }
             }
         }
@@ -75,16 +75,16 @@
 }
 #ledger-transaction-left-list .mat-grid-tile,
 #ledger-transaction-right-list .mat-grid-tile {
-    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
 }
 #ledger-transaction-right-list,
 #ledger-transaction-left-list {
-    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
 }
 
 .form-control,
 input {
-    color: var(--color-nero);
+    //color: var(--color-black);
 }
 .notfound-option {
     display: flex;
@@ -92,8 +92,8 @@ input {
 }
 .ledg-head .mat-grid-list .mat-grid-tile {
     padding: 8px 10px;
-    border-bottom: 1px solid var(--color-ledger-grid-border-color) !important;
-    border-right: 1px solid var(--color-ledger-grid-border-color);
+    border-bottom: 1px solid var(--color-silver) !important;
+    border-right: 1px solid var(--color-silver);
     font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -114,7 +114,7 @@ input {
 }
 .transaction-mapped-table .mat-grid-tile {
     padding: 10px !important;
-    border-bottom: 1px solid var(--color-iron) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
 }
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
@@ -127,8 +127,8 @@ table.ledger-footer-1 td[class*="col-"] {
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid var(--color-iron);
-    border-right: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-silver);
+    border-right: 1px solid var(--color-silver);
     font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -152,7 +152,7 @@ table.ledger-footer-1 td[class*="col-"] {
         .ledger-row.row {
             td,
             th {
-                border-bottom: 1px solid var(--color-iron) !important;
+                border-bottom: 1px solid var(--color-silver) !important;
                 border-top: none !important;
             }
             td[class*="col-"] {
@@ -186,7 +186,7 @@ table.ledger-footer-1 td[class*="col-"] {
     .single-search-box {
         position: relative;
         i {
-            color: var(--color-sidebar-search-bar-text);
+            //color: var(--color-dark-gray);
             left: 12px;
             top: -8px;
             z-index: 1;
@@ -200,7 +200,7 @@ table.ledger-footer-1 td[class*="col-"] {
     }
 }
 .ledger-head-top i.icon-search.position-absolute {
-    background-color: var(--color-blue);
+    background-color: var(--color-blue-primary);
     color: var(--color-white);
     width: 32px;
     height: 36px;
@@ -215,9 +215,9 @@ table.ledger-footer-1 td[class*="col-"] {
 .ledger-stat {
     padding: 10px 15px 0;
     background: var(--color-common-primary-background-for-all-components);
-    color: var(--color-abbey);
+    //color: var(--color-dark-gray);
     font-size: var(--font-size-16);
-    box-shadow: 0px 2px 6px var(--color-primary-ledger-box-shadow);
+    box-shadow: 0px 2px 6px var(--color-shadow-light);
     position: relative;
     z-index: -1;
 }
@@ -245,7 +245,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .ledger-head .mat-grid-list .mat-grid-tile {
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     padding-top: 5px !important;
     padding-bottom: 10px !important;
     border-right: none;
@@ -293,7 +293,7 @@ table.ledger-footer-1 td[class*="col-"] {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
 }
 .upload-div label {
     padding: 6px;
@@ -302,30 +302,30 @@ table.ledger-footer-1 td[class*="col-"] {
     padding-right: 25px !important;
 }
 .thead-background1 th {
-    background: var(--color-white);
-    color: var(--color-nero);
-    border-right: 1px solid var(--color-iron);
+    //background: var(--color-white);
+    //color: var(--color-black);
+    border-right: 1px solid var(--color-silver);
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-silver);
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-15);
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-silver);
 }
 .ledger-main .form-control,
 .ledger-main input {
-    color: var(--color-nero);
+    //color: var(--color-black);
 }
 
 .ledger-book {
-    border: 0px solid var(--color-common-primary-border);
+    border: 0px solid var(--color-silver);
     clear: both;
     position: relative;
     float: left;
     width: 100%;
     margin-bottom: 16px;
     background: var(--color-common-primary-background-for-all-components);
-    box-shadow: 0 0 6px var(--color-primary-ledger-box-shadow);
+    box-shadow: 0 0 6px var(--color-shadow-light);
 }
 .Width600 {
     position: absolute;
@@ -355,7 +355,7 @@ table.ledger-footer-1 td[class*="col-"] {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: var(--color-iron);
+    background-color: var(--color-silver);
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -381,12 +381,12 @@ sh-select:focus {
     outline: 1px var(--color-red) solid;
 }
 .notfound-option.active {
-    background: var(--color-dark-fog) !important;
+    background: var(--color-border-light) !important;
     padding: 2px 5px !important;
 }
 .amount-total {
     font-size: var(--font-size-12);
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
     padding-left: 5px;
 }
 .ledger-book {
@@ -401,28 +401,28 @@ sh-select:focus {
 }
 .left-col-new .mat-grid-list .mat-grid-title:first-child,
 .left-col-new .mat-grid-list .mat-grid-title:first-child {
-    border-left: 1px solid var(--color-iron) !important;
+    border-left: 1px solid var(--color-silver) !important;
 }
 .ledg-head .icomoon-ico {
-    color: var(--color-abbey);
+    //color: var(--color-dark-gray);
     width: 36px;
     min-width: 36px;
     height: 36px;
-    border: 1px solid var(--color-secondary-input-bar-border);
+    border: 1px solid var(--color-silver);
     padding: 3px;
     display: flex;
     justify-content: center;
     border-top-width: 1px;
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
     border-radius: 5px;
 }
 .advance-search-block input {
-    background: var(--color-wild-sand) !important;
+    background: var(--color-light-gray) !important;
     height: 28px;
-    border-color: var(--color-wild-sand) !important;
+    border-color: var(--color-light-gray) !important;
 }
 .advance-search-block input::placeholder {
-    color: var(--color-abbey);
+    //color: var(--color-dark-gray);
 }
 
 .left-col-new,
@@ -441,7 +441,7 @@ sh-select:focus {
     .custom-tabs {
         .nav.nav-tabs {
             position: static !important;
-            background-color: var(--color-body-background) !important;
+            //background-color: var(--color-white) !important;
             padding: 0 5px !important;
         }
     }
@@ -449,7 +449,7 @@ sh-select:focus {
 .advance-search-block .icon-search {
     right: 0;
     top: 0;
-    background-color: var(--color-blue);
+    background-color: var(--color-blue-primary);
     padding: 6px 9px;
     color: var(--color-white);
 }
@@ -458,7 +458,7 @@ sh-select:focus {
 }
 
 .ledger-book .ledger-footer-1 .total-col .border-top {
-    border-top: 1px solid var(--color-table-primary-header-bar-border) !important;
+    border-top: 1px solid var(--color-silver) !important;
 }
 .ledger-book .ledger-footer-1 .total-col .bd-rt {
     border: none;
@@ -475,7 +475,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: var(--color-secondary-input-bar-border);
+    background-color: var(--color-silver);
     left: -32%;
     top: 20px;
 }
@@ -484,7 +484,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: var(--color-secondary-input-bar-border);
+    background-color: var(--color-silver);
     right: -32%;
     top: 20px;
 }
@@ -493,15 +493,15 @@ sh-select:focus {
     margin-top: 25px;
 }
 .ledger-stat h1 {
-    color: var(--color-common-primary-text);
+    //color: var(--color-black);
     font-size: var(--font-size-15);
     margin-bottom: 10px;
 }
 .digit-blue {
-    color: var(--color-common-senary-text);
+    color: var(--color-blue-primary);
 }
 .grey-text-color {
-    color: var(--color-common-secondary-text) !important;
+    color: var(--color-dark-gray) !important;
     font-size: var(--font-size-15);
 }
 
@@ -509,23 +509,23 @@ sh-select:focus {
     font-size: var(--font-size-15);
 }
 .stat-block {
-    border-right: 1px solid var(--color-common-secondary-border);
+    border-right: 1px solid var(--color-silver);
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
 .stat-block:first-child {
-    border-bottom: 8px solid var(--color-common-primary-blue-border);
+    border-bottom: 8px solid var(--color-black);
 }
 .stat-block:nth-child(2) {
-    border-bottom: 8px solid var(--color-giddh-blue);
+    border-bottom: 8px solid var(--color-blue-primary);
 }
 .stat-block:nth-child(3) {
-    border-bottom: 8px solid var(--color-blue);
+    border-bottom: 8px solid var(--color-blue-primary);
 }
 .stat-block:last-child {
     border-right: none;
-    border-bottom: 8px solid var(--color-primary-ledger-stat-block-border);
+    border-bottom: 8px solid var(--color-blue-light);
 }
 .advance-search-filter {
     justify-content: center;
@@ -561,10 +561,10 @@ sh-select:focus {
 }
 .clear-filter-btn {
     border-radius: 5px;
-    border: 1px solid var(--color-primary-button-border);
-    color: var(--color-abbey);
+    border: 1px solid var(--color-silver);
+    //color: var(--color-dark-gray);
     font-size: var(--font-size-15);
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
     width: 36px;
     height: 36px;
     display: flex;
@@ -615,16 +615,16 @@ sh-select:focus {
     min-width: 180px !important;
     border-radius: 30px;
     box-sizing: content-box !important;
-    color: var(--color-primary-head-datepicker-text) !important;
+    //color: var(--color-black) !important;
     text-align: center;
-    border: 1px solid var(--color-secondary-input-bar-border)!important;
+    border: 1px solid var(--color-silver)!important;
     &:focus {
-        border-color: var(--color-blue);
+        border-color: var(--color-blue-primary);
     }
 }
 .ipad-view-datepicker {
     .date-range-picker {
-        border: 1px solid var(--color-iron);
+        border: 1px solid var(--color-silver);
         border-radius: 20px;
         width: 203px !important;
     }
@@ -655,7 +655,7 @@ sh-select:focus {
     table {
         width: 100%;
         tbody {
-            background-color: var(--color-white);
+            //background-color: var(--color-white);
             .transaction-date {
                 font-size: var(--font-size-15);
                 font-weight: var(--font-weight-semibold);
@@ -663,13 +663,13 @@ sh-select:focus {
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
-                border-bottom: 1px solid var(--color-iron);
+                border-bottom: 1px solid var(--color-silver);
                 font-size: var(--font-size-15);
             }
             .second-row {
                 td {
                     &:first-child {
-                        border-right: 1px solid var(--color-iron);
+                        border-right: 1px solid var(--color-silver);
                         width: 60%;
                     }
                     span.account-holder-checkbox {
@@ -691,7 +691,7 @@ sh-select:focus {
         justify-content: center;
     }
     .mat-grid-list {
-        border-top: 1px solid var(--color-iron);
+        border-top: 1px solid var(--color-silver);
     }
 }
 
@@ -720,10 +720,10 @@ sh-select:focus {
             padding-top: 10px;
             &:first-child {
                 padding-right: 15px;
-                border-left: 1px solid var(--color-iron);
+                border-left: 1px solid var(--color-silver);
             }
             &:last-child {
-                border-right: 1px solid var(--color-iron);
+                border-right: 1px solid var(--color-silver);
             }
         }
     }
@@ -750,7 +750,7 @@ sh-select:focus {
         }
     }
     .transaction-table-row table td {
-        border-bottom: 1px solid var(--color-iron);
+        border-bottom: 1px solid var(--color-silver);
     }
     .transaction-table-row table:last-child td {
         border-bottom: none;
@@ -773,7 +773,7 @@ sh-select:focus {
 }
 
 .list-item {
-    border-bottom: 1px solid var(--color-common-secondary-border);
+    border-bottom: 1px solid var(--color-silver);
 }
 
 .ledger-row {
@@ -797,7 +797,7 @@ sh-select:focus {
     padding-top: 14px;
 }
 .account-placeholder-text {
-    color: var(--color-nero) !important;
+    //color: var(--color-black) !important;
 }
 a#reload-bank-transaction i.icon-refresh {
     font-size: var(--font-size-16) !important;
@@ -805,12 +805,12 @@ a#reload-bank-transaction i.icon-refresh {
 input#ledger-search {
     padding-left: 27px !important;
     background-color: transparent !important;
-    border: 1px solid var(--color-secondary-input-bar-border);
+    border: 1px solid var(--color-silver);
     &:focus {
-        border: 1px solid var(--color-secondary-input-bar-border) !important;
+        border: 1px solid var(--color-silver) !important;
     }
     &::placeholder {
-        color: var(--color-sidebar-search-bar-text);
+        //color: var(--color-dark-gray);
     }
 }
 
@@ -824,7 +824,7 @@ input#ledger-search {
     margin-right: 8px;
 }
 .blue-heading {
-    color: var(--color-ledger-heading);
+    color: var(--color-blue-primary);
 }
 
 /*responsive*/
@@ -840,7 +840,7 @@ input#ledger-search {
     top: 0px;
     z-index: 1;
     background-color: var(--color-common-primary-background-for-all-components);
-    border-bottom: 1px solid var(--color-table-primary-header-bar-border);
+    border-bottom: 1px solid var(--color-silver);
 }
 .show-if-ledger-open {
     height: 300px;
@@ -863,10 +863,10 @@ input#ledger-search {
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--color-blue);
+                color: var(--color-blue-primary);
             }
             .icon-favorite-selected {
-                color: var(--color-blue);
+                color: var(--color-blue-primary);
             }
         }
     }
@@ -878,11 +878,11 @@ input#ledger-search {
 
 ::ng-deep {
     .ledg-head .mat-grid-tile-content {
-        color: var(--color-table-primary-content);
+        //color: var(--color-black);
     }
 
     .ledg-head .ledger-row .mat-input-element {
-        color: var(--color-table-primary-content) !important;
+        //color: var(--color-black) !important;
     }
 }
 
@@ -1001,7 +1001,7 @@ input#ledger-search {
         margin-bottom: 0;
     }
     .amount-total {
-        background: var(--color-dark-fog);
+        background: var(--color-border-light);
     }
     .page-count {
         width: 100% !important;
@@ -1038,7 +1038,7 @@ input#ledger-search {
         display: block;
     }
     .right-col-new .ledger-head {
-        background: var(--color-wild-sand);
+        background: var(--color-light-gray);
     }
     .ledger-row td:empty {
         display: none !important;
@@ -1062,7 +1062,7 @@ input#ledger-search {
     }
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child,
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child {
-        border-left: 0px solid var(--color-iron) !important;
+        border-left: 0px solid var(--color-silver) !important;
     }
     .ledg-head.some.transactions-page {
         margin-top: 50px;
@@ -1095,7 +1095,7 @@ input#ledger-search {
                 i {
                     left: -3px;
                     top: 0;
-                    color: var(--color-giddh-blue);
+                    color: var(--color-blue-primary);
                 }
             }
         }
@@ -1108,8 +1108,8 @@ input#ledger-search {
         .ledger-datepicker {
             width: 36px;
             height: 36px;
-            background-color: var(--color-white);
-            border: 1px solid var(--color-iron);
+            //background-color: var(--color-white);
+            border: 1px solid var(--color-silver);
             text-align: center;
             align-items: center;
             justify-content: center;
@@ -1124,7 +1124,7 @@ input#ledger-search {
         right: 0px;
         .btn {
             background-color: transparent;
-            color: var(--color-nero);
+            //color: var(--color-black);
             font-size: var(--font-size-16);
         }
         ul {
@@ -1169,7 +1169,7 @@ input#ledger-search {
         padding: 0;
         i {
             top: 0;
-            color: var(--color-abbey);
+            //color: var(--color-dark-gray);
         }
     }
     .ledger-head .mat-grid-list .mat-grid-tile.active {
@@ -1283,7 +1283,7 @@ input#ledger-search {
 }
 .bank-menu {
     padding: 3px !important;
-    border: 1px solid var(--color-secondary-input-bar-border);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
     width: 36px;
     height: 36px;

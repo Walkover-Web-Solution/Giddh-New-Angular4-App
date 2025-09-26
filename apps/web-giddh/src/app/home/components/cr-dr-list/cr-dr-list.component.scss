@@ -1,16 +1,16 @@
 p.bank-name {
     font-size: var(--font-size-15);
-    color: var(--color-common-senary-text);
+    color: var(--color-blue-primary);
     margin-bottom: 5px;
 }
 p.bank-balance {
-    color: var(--color-abbey);
+    //color: var(--color-dark-gray);
     font-size: var(--font-size-15);
     display: flex;
     justify-content: space-between;
 }
 .single-bank-detail {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-silver);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
@@ -18,15 +18,15 @@ p.bank-balance {
     padding-right: 0;
     padding-left: 0;
     border-top: none;
-    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
     padding-top: 20px;
     padding-bottom: 3px;
     font-size: var(--font-size-15);
-    color: var(--color-table-senary-content);
+    //color: var(--color-black);
 }
 .table thead th {
     vertical-align: bottom;
-    border-bottom: 1px solid var(--color-table-primary-header-bar-border);
+    border-bottom: 1px solid var(--color-silver);
     border-top: none;
     padding-left: 0;
     font-weight: 500;
@@ -36,8 +36,8 @@ p.bank-balance {
 }
 table.basic th {
     font-size: var(--font-size-15);
-    color: var(--color-table-secondary-heading);
-    background-color: var(--color-table-heading-primary-background);
+    color: var(--color-blue-primary);
+    //background-color: var(--color-white);
 }
 .cr-dr-body {
     padding: 15px;
@@ -46,7 +46,7 @@ table.basic th {
     margin-bottom: 50px;
 }
 span.this-week {
-    color: var(--color-abbey);
+    //color: var(--color-dark-gray);
     text-decoration: underline;
     font-size: var(--font-size-15);
 }
@@ -57,21 +57,21 @@ thead th {
     padding-bottom: 5px !important;
 }
 .no-entries {
-    border-top: 1px solid var(--color-iron) !important;
-    border-bottom: 1px solid var(--color-iron) !important;
+    border-top: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
     margin-top: 10px;
     padding: 20px 0 !important;
     text-align: center;
-    color: var(--color-common-primary-text) !important;
+    //color: var(--color-black) !important;
     font-size: var(--font-size-15);
     &:hover {
-        background-color: var(--color-table-row-hover-primary-background);
+        background-color: var(--color-blue-light);
     }
 }
 .dashboard-datepicker {
     min-width: 208px;
     border-radius: 30px;
-    border: 1px solid var(--color-primary-button-border);
+    border: 1px solid var(--color-silver);
 }
 .min-width-130 {
     min-width: 130px !important;

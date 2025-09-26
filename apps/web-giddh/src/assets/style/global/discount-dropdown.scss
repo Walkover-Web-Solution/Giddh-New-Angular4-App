@@ -2,7 +2,7 @@
     width: 254px;
 
     .discount-separator {
-        color: var(--color-tertiary-button-text);
+        //color: var(--color-dark-gray);
     
         .discount-separator-msg {
             z-index: 1;
@@ -14,7 +14,7 @@
     
         .discount-separator-line {  
             height: 1px;
-            background-color: var(--color-common-secondary-border);
+            background-color: var(--color-silver);
             position: absolute;
             top: 50%;
             left: 0;
@@ -27,6 +27,6 @@
         overflow-y: auto;
     }
     .create-new{
-        border-top: 1px solid var(--color-common-secondary-border);
+        border-top: 1px solid var(--color-silver);
     }
 }
