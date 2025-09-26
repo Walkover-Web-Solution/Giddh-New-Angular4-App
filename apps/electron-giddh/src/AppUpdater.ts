@@ -31,10 +31,16 @@ export default class AppUpdaterV1 {
         autoUpdater.logger = this.log;
         autoUpdater.autoDownload = false;
         
-        // Force check interval (optional - for testing)
-        autoUpdater.checkForUpdatesAndNotify();
-        
+        // Setup handlers first, then check for updates
         this.setupUpdateHandlers();
+        
+        // Only check for updates in production environment
+        if (process.env.NODE_ENV === 'production') {
+            this.log.info('Starting initial update check...');
+            autoUpdater.checkForUpdates();
+        } else {
+            this.log.info('Skipping initial update check in development mode');
+        }
         
         // Check for updates every 10 minutes in production (for debugging)
         if (process.env.NODE_ENV === 'production') {
