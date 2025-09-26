@@ -2741,7 +2741,7 @@
                                         <div
                                             *ngIf="
                                                 (customTemplate?.templateType === templateTypeEnum.GstTemplateA &&
-                                                    voucherType === voucherTypeEnum.sales &&
+                                                    (voucherType === voucherTypeEnum.sales || voucherType === voucherTypeEnum.voucher) &&
                                                     customTemplate.sections['table'].data['totalQuantity']) ||
                                                 customTemplate?.templateType === templateTypeEnum.TallyTemplate
                                             "

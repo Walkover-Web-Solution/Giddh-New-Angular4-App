@@ -2457,34 +2457,88 @@ export class GeneralService {
         cleanupCallback: () => void,
         isNavigatingRef: { value: boolean }
     ): void {
+        let pendingNavigationUrl: string = '';
+        
         // Listen for navigation attempts
         router.events.pipe(
             filter(event => event instanceof NavigationStart),
             takeUntil(destroyed$)
         ).subscribe((event: NavigationStart) => {
             // Only intercept if we have unsaved changes and this is a different route
-            if (hasUnsavedChangesCallback() && !isNavigatingRef.value && event.url !== router.url) {
-                // Set flag to prevent multiple dialogs
-                isNavigatingRef.value = true;
+            if (hasUnsavedChangesCallback() && event.url !== router.url) {
+                // Always update the pending navigation URL to the most recent attempt
+                pendingNavigationUrl = event.url;
                 
-                // Cancel the current navigation
-                router.navigateByUrl(router.url, { skipLocationChange: true });
-                
-                // Show confirmation dialog
-                let dialogRef = pageLeaveUtilityService.openDialog();
-                
-                dialogRef.afterClosed().subscribe((action) => {
-                    if (action) {
+                if (!isNavigatingRef.value) {
+                    // Set flag to prevent multiple dialogs
+                    isNavigatingRef.value = true;
+                    
+                    // Cancel the current navigation
+                    router.navigateByUrl(router.url, { skipLocationChange: true });
+                    
+                    // Show confirmation dialog
+                    let dialogRef = pageLeaveUtilityService.openDialogWithoutAutoCleanup();
+                    
+                    dialogRef.afterClosed().subscribe((action) => {
+                        
+                        // Remove body CSS class that was added when dialog opened
+                        document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
+                        
+                        if (action === true) {
                         // User confirmed to leave - clean up and navigate
-                        pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                        cleanupCallback();
-                        isNavigatingRef.value = false;
-                        router.navigateByUrl(event.url);
-                    } else {
-                        // User cancelled - reset navigation flag
-                        isNavigatingRef.value = false;
-                    }
-                });
+                            
+                            // Only do aggressive cleanup when user confirms to leave
+                            setTimeout(() => {
+                                const backdrops = document.querySelectorAll('.cdk-overlay-backdrop, .page-leave-confirmation-modal-backdrop');
+                                backdrops.forEach(backdrop => backdrop.remove());
+                                const modals = document.querySelectorAll('.page-leave-confirmation-modal');
+                                modals.forEach(modal => modal.remove());
+                            }, 100);
+                            
+                            pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                            cleanupCallback();
+                            
+                            // Use setTimeout to ensure navigation happens after all cleanup
+                            setTimeout(() => {
+                                // Reset navigation flag after cleanup but before navigation
+                                isNavigatingRef.value = false;
+                                
+                                // Try Angular navigation first (smooth SPA navigation)
+                                router.navigateByUrl(pendingNavigationUrl, { replaceUrl: false }).then(
+                                    (success) => {
+                                        if (!success) {
+                                            // Try with different navigation options
+                                            return router.navigateByUrl(pendingNavigationUrl, { 
+                                                skipLocationChange: false,
+                                                replaceUrl: false 
+                                            });
+                                        }
+                                        return success;
+                                    }
+                                ).then(
+                                    (success) => {
+                                        if (!success) {
+                                            // Force navigation using window.location (will cause refresh glitch)
+                                            window.location.href = window.location.origin + pendingNavigationUrl;
+                                        }
+                                    }
+                                ).catch(
+                                    (error) => {
+                                        // Fallback to window.location on any error
+                                        window.location.href = window.location.origin + pendingNavigationUrl;
+                                    }
+                                );
+                            }, 200);
+                        } else {
+                            // User cancelled or closed dialog (false, null, undefined) - reset navigation flag and cleanup
+                            pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                            isNavigatingRef.value = false;
+                        }
+                    });
+                } else {
+                    // Dialog is already open, just cancel this navigation attempt
+                    router.navigateByUrl(router.url, { skipLocationChange: true });
+                }
             }
         });
     }
