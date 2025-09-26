@@ -2488,12 +2488,12 @@ export class GeneralService {
                         // User confirmed to leave - clean up and navigate
                             
                             // Only do aggressive cleanup when user confirms to leave
-                            setTimeout(() => {
-                                const backdrops = document.querySelectorAll('.cdk-overlay-backdrop, .page-leave-confirmation-modal-backdrop');
-                                backdrops.forEach(backdrop => backdrop.remove());
-                                const modals = document.querySelectorAll('.page-leave-confirmation-modal');
-                                modals.forEach(modal => modal.remove());
-                            }, 100);
+                            // setTimeout(() => {
+                            //     const backdrops = document.querySelectorAll('.cdk-overlay-backdrop, .page-leave-confirmation-modal-backdrop');
+                            //     backdrops.forEach(backdrop => backdrop.remove());
+                            //     const modals = document.querySelectorAll('.page-leave-confirmation-modal');
+                            //     modals.forEach(modal => modal.remove());
+                            // }, 100);
                             
                             pageLeaveUtilityService.removeBrowserConfirmationDialog();
                             cleanupCallback();
