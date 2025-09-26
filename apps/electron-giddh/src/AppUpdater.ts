@@ -16,7 +16,7 @@ export default class AppUpdaterV1 {
                 dialog.showMessageBox({
                     type: 'info',
                     title: 'Found Updates',
-                    message: 'Found updates, do you want update now testing ?',
+                    message: 'Found updates, do you want update now?',
                     buttons: ['Sure', 'No']
                 }).then((resp) => {
                     if (resp.response === 0) {
@@ -27,10 +27,29 @@ export default class AppUpdaterV1 {
                         updater.enabled = true;
                         updater = null;
                     }
+                }).catch((error) => {
+                    console.error('Dialog error:', error);
+                    // Fallback: automatically download update if dialog fails
+                    autoUpdater.downloadUpdate();
                 });
 
+            } else {
+                // Fallback dialog when updater is null
+                dialog.showMessageBox({
+                    type: 'info',
+                    title: 'Found Updates',
+                    message: 'Found updates, do you want update now?',
+                    buttons: ['Sure', 'No']
+                }).then((resp) => {
+                    if (resp.response === 0) {
+                        autoUpdater.downloadUpdate();
+                    }
+                }).catch((error) => {
+                    console.error('Fallback dialog error:', error);
+                    // If fallback dialog also fails, automatically download
+                    autoUpdater.downloadUpdate();
+                });
             }
-            autoUpdater.downloadUpdate();
         });
         autoUpdater.on('update-not-available', () => {
             if (updater) {
@@ -55,10 +74,23 @@ export default class AppUpdaterV1 {
                 if (returnValue.response === 0) {
                     autoUpdater.quitAndInstall();
                 }
+            }).catch((error) => {
+                console.error('Update downloaded dialog error:', error);
+                // Fallback: show simple confirmation
+                const confirmed = confirm('A new version has been downloaded. Restart now?');
+                if (confirmed) {
+                    autoUpdater.quitAndInstall();
+                }
             });
         });
 
         autoUpdater.checkForUpdatesAndNotify();
+        
+        // Set up interval to check for updates every 5 minutes
+        setInterval(() => {
+            console.log('Checking for updates (5-minute interval)...');
+            autoUpdater.checkForUpdatesAndNotify();
+        }, 5 * 60 * 1000); // 5 minutes in milliseconds
     }
 }
 
