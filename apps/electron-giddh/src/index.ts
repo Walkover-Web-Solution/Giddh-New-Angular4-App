@@ -4,6 +4,7 @@ import { log } from "./util";
 import WindowManager from "./WindowManager";
 import { GoogleLoginElectronConfig } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
+import AppUpdater from "./AppUpdater";
 
 let windowManager: WindowManager = null;
 let STAGING_ENV = false;
@@ -89,4 +90,27 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
                 // use your token.access_token
             });
     }
+});
+// Then at line 16 or in your app.whenReady() section, add:
+app.whenReady().then(() => {
+    // Your existing initialization code...
+    
+    // ADD THIS - Initialize AppUpdater (THIS WAS MISSING!)
+    const appUpdater = new AppUpdater();
+    console.log('🚀 AppUpdater initialized in main process');
+    
+    // Force immediate update check for testing
+    setTimeout(() => {
+        console.log('🔄 Forcing update check after 5 seconds...');
+        const { autoUpdater } = require('electron-updater');
+        autoUpdater.checkForUpdates();
+    }, 5000);
+    
+    // Your other initialization code continues...
+    // Handle update check from renderer
+    ipcMain.handle('check-for-updates', () => {
+        console.log('🔄 Update check requested from renderer process');
+        const { checkForUpdates } = require('./AppUpdater');
+        checkForUpdates(null, null, null);
+    });
 });
