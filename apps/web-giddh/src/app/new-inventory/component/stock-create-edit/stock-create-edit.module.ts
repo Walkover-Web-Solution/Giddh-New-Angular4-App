@@ -28,6 +28,7 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { SortByModule } from "../../../shared/helpers/pipes/sort-by/sort-by.module";
 import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
 
 @NgModule({
     declarations: [
@@ -66,6 +67,9 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     ],
     exports: [
         StockCreateEditComponent
+    ],
+    providers: [
+        PageLeaveConfirmationGuard
     ]
 })
 export class StockCreateEditModule {

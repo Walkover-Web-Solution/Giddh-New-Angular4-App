@@ -2515,19 +2515,7 @@ export class GeneralService {
                                         }
                                         return success;
                                     }
-                                ).then(
-                                    (success) => {
-                                        if (!success) {
-                                            // Force navigation using window.location (will cause refresh glitch)
-                                            window.location.href = window.location.origin + pendingNavigationUrl;
-                                        }
-                                    }
-                                ).catch(
-                                    (error) => {
-                                        // Fallback to window.location on any error
-                                        window.location.href = window.location.origin + pendingNavigationUrl;
-                                    }
-                                );
+                                )
                             }, 200);
                         } else {
                             // User cancelled or closed dialog (false, null, undefined) - reset navigation flag and cleanup
@@ -2558,6 +2546,83 @@ export class GeneralService {
     ): void {
         pageLeaveUtilityService.removeBrowserConfirmationDialog();
         isNavigatingRef.value = false;
+    }
+
+    /**
+     * Global registry for unsaved changes callbacks
+     * Components can register their hasUnsavedChanges callback here
+     */
+    private unsavedChangesCallbacks: (() => boolean)[] = [];
+    private markFormsAsPristineCallbacks: (() => void)[] = [];
+
+    /**
+     * Register a callback to check for unsaved changes
+     *
+     * @param {() => boolean} callback - Function to check for unsaved changes
+     * @returns {() => void} - Unregister function
+     * @memberof GeneralService
+     */
+    public registerUnsavedChangesCallback(callback: () => boolean): () => void {
+        this.unsavedChangesCallbacks.push(callback);
+        
+        // Return unregister function
+        return () => {
+            const index = this.unsavedChangesCallbacks.indexOf(callback);
+            if (index > -1) {
+                this.unsavedChangesCallbacks.splice(index, 1);
+            }
+        };
+    }
+
+    /**
+     * Register a callback to mark forms as pristine
+     *
+     * @param {() => void} callback - Function to mark forms as pristine
+     * @returns {() => void} - Unregister function
+     * @memberof GeneralService
+     */
+    public registerMarkFormsAsPristineCallback(callback: () => void): () => void {
+        this.markFormsAsPristineCallbacks.push(callback);
+        
+        // Return unregister function
+        return () => {
+            const index = this.markFormsAsPristineCallbacks.indexOf(callback);
+            if (index > -1) {
+                this.markFormsAsPristineCallbacks.splice(index, 1);
+            }
+        };
+    }
+
+    /**
+     * Check for unsaved changes globally across all registered components
+     *
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkForUnsavedChanges(): boolean {
+        return this.unsavedChangesCallbacks.some(callback => {
+            try {
+                return callback();
+            } catch (error) {
+                console.warn('Error checking unsaved changes:', error);
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Mark all forms as pristine globally across all registered components
+     *
+     * @memberof GeneralService
+     */
+    public markAllFormsAsPristine(): void {
+        this.markFormsAsPristineCallbacks.forEach(callback => {
+            try {
+                callback();
+            } catch (error) {
+                console.warn('Error marking forms as pristine:', error);
+            }
+        });
     }
 }
 

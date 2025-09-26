@@ -112,24 +112,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private generalService: GeneralService
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.setupNavigationListener();
-    }
-
-    /**
-     * Sets up navigation listener to intercept route changes and show confirmation dialog
-     *
-     * @private
-     * @memberof CreateUpdateGroupComponent
-     */
-    private setupNavigationListener(): void {
-        this.generalService.setupNavigationListener(
-            this.router,
-            this.pageLeaveUtilityService,
-            this.destroyed$,
-            () => this.showPageLeaveConfirmation,
-            () => this.groupForm.markAsPristine(),
-            this.isNavigatingRef
-        );
     }
 
     /**
@@ -395,7 +377,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.groupForm.markAsPristine();
-                    this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_update);
                     if (!this.addGroup) {
                         this.getStockGroups();
@@ -501,7 +482,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.isFormSubmitted = false;
         this.groupForm.reset();
         this.groupForm.markAsPristine();
-        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
         this.groupForm?.patchValue({ showCodeType: "hsn" });
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
@@ -647,7 +627,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.inventoryService.DeleteStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
-                        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
                         this.toaster.showSnackBar("success", this.localeData?.group_delete);
                         if (this.addGroup) {
                             this.closeAsideEvent.emit();

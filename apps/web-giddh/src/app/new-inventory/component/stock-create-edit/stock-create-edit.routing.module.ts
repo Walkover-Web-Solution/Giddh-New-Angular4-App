@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { MainComponent } from "./main.component";
 import { StockCreateEditComponent } from "./stock-create-edit.component";
+import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
 
 const routes: Routes = [
     {
@@ -11,12 +12,14 @@ const routes: Routes = [
             {
                 path: ":type/create",
                 component: StockCreateEditComponent,
-                pathMatch: 'full'
+                pathMatch: 'full',
+                canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
                 path: ":type/edit/:stockUniqueName",
                 component: StockCreateEditComponent,
-                pathMatch: 'full'
+                pathMatch: 'full',
+                canDeactivate: [PageLeaveConfirmationGuard]
             }
         ]
     }

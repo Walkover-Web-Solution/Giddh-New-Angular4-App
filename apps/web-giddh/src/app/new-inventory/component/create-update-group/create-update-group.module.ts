@@ -16,6 +16,7 @@ import { CreateUpdateGroupComponent } from "./create-update-group.component";
 import { GroupCreateEditRoutingModule } from "./create-update-group.routing.module";
 import { MainGroupComponent } from "./main-group.component";
 import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
+import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
 
 @NgModule({
     declarations: [
@@ -42,6 +43,9 @@ import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module"
     ],
     exports: [
         CreateUpdateGroupComponent
+    ],
+    providers: [
+        PageLeaveConfirmationGuard
     ]
 })
 export class GroupCreateEditModule {
