@@ -11,7 +11,7 @@ module.exports = async function (params) {
     // Same appId in electron-builder.
     const appId = 'com.giddh.prod'; // something like 'com.app_name.io'
     const appPath = path.join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
-
+    console.log(appPath);
     if (!fs.existsSync(appPath)) {
         throw new Error(`Cannot find application at: ${appPath}`);
     }

@@ -15,6 +15,7 @@ export default class WindowManager {
     private windows: BrowserWindow[] = [];
 
     constructor() {
+        console.log('data',this.stateManager, this.appUpdater)
         app.on('window-all-closed', () => {
             // restore default set of windows
             this.stateManager.restoreWindows();
