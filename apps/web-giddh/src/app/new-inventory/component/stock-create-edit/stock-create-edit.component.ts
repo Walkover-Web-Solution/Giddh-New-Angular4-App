@@ -281,6 +281,9 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     private isNavigatingRef = { value: false };
     /** Store initial form values to compare for actual changes */
     private initialFormValues: any = null;
+    /** Unregister functions for GeneralService callbacks */
+    private unregisterUnsavedChangesCallback: () => void;
+    private unregisterMarkFormsAsPristineCallback: () => void;
 
     constructor(
         private inventoryService: InventoryService,
@@ -303,7 +306,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         private voucherComponentStore: VoucherComponentStore,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
-        this.setupNavigationListener();
     }
 
     /**
@@ -312,6 +314,21 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public ngOnInit(): void {
+        // Only register with GeneralService if this is a standalone component (not embedded in InventoryMasterComponent)
+        // Check if we're in a routed context vs embedded context
+        if (!this.addStock) {
+            // This is a standalone routed component, register with GeneralService
+            this.unregisterUnsavedChangesCallback = this.generalService.registerUnsavedChangesCallback(() => this.showPageLeaveConfirmation);
+            this.unregisterMarkFormsAsPristineCallback = this.generalService.registerMarkFormsAsPristineCallback(() => {
+                if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
+                    this.stockCreateEditForm.form.markAsPristine();
+                    this.captureInitialFormValues();
+                }
+            });
+        }
+        // If addStock is true, this component is embedded in InventoryMasterComponent
+        // and the parent will handle the page leave confirmation via ViewChild
+        
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         /** added parent class to body after entering new-inventory page */
@@ -424,23 +441,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             }
         }, 1000);
     }
-
-    /**
-     * Sets up navigation listener to intercept route changes and show confirmation dialog
-     *
-     * @private
-     * @memberof StockCreateEditComponent
-     */
-        private setupNavigationListener(): void {
-            this.generalService.setupNavigationListener(
-                this.router,
-                this.pageLeaveUtilityService,
-                this.destroyed$,
-                () => this.showPageLeaveConfirmation,
-                () => this.stockCreateEditForm.form.markAsPristine(),
-                this.isNavigatingRef
-            );
-        }
 
     /**
      * Add option value
@@ -1501,7 +1501,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 if (this.createRecipe && this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
                 }
-                this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
 
                 this.getVariantCustomFields();
                 this.updateCustomFieldObjectInVariant();
@@ -1887,7 +1886,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.processedTaxes = [];
         this.activeTabIndex = 0;
         this.resetTaxes();
-        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
         this.getVariantCustomFields();
         this.updateCustomFieldObjectInVariant();
         setTimeout(() => {
@@ -1930,7 +1928,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.inventoryService.deleteStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
-                        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
                         this.toaster.showSnackBar("success", this.localeData?.stock_delete_succesfully);
                         if (this.addStock) {
                             this.closeAsideEvent.emit();
@@ -1956,7 +1953,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.defaultStockGroupUniqueName = cloneDeep(this.stockGroupUniqueName);
-                this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
                 this.toaster.showSnackBar("success", response?.body);
                 this.changeDetection.detectChanges();
             } else {
@@ -2166,6 +2162,14 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public ngOnDestroy(): void {
+        // Unregister callbacks from GeneralService
+        if (this.unregisterUnsavedChangesCallback) {
+            this.unregisterUnsavedChangesCallback();
+        }
+        if (this.unregisterMarkFormsAsPristineCallback) {
+            this.unregisterMarkFormsAsPristineCallback();
+        }
+        
         this.destroyed$.next(true);
         this.destroyed$.complete();
         /** remove parent class from body after exiting new-inventory page */

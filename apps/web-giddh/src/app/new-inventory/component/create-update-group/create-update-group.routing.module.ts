@@ -12,12 +12,14 @@ const routes: Routes = [
             {
                 path: ":type/create",
                 component: CreateUpdateGroupComponent,
-                pathMatch: 'full'
+                pathMatch: 'full',
+                canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
                 path: ":type/edit/:groupUniqueName",
                 component: CreateUpdateGroupComponent,
-                pathMatch: 'full'
+                pathMatch: 'full',
+                canDeactivate: [PageLeaveConfirmationGuard]
             }
         ]
     }
