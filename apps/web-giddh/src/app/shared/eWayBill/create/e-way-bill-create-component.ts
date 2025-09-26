@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, TemplateRef, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
@@ -11,6 +10,8 @@ import { IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '.
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
 import { EWayBillComponentStore } from '../eWayBill.store';
+import { ASIDE_PANE_CONFIG, IOption, PAGINATION_LIMIT } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -83,7 +84,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.initGenerateEwayBillForm();
         this.initGenerateNewTransporterForm();
         this.transporterFilterRequest.page = 1;
-        this.transporterFilterRequest.count = 10;
+        this.transporterFilterRequest.count = PAGINATION_LIMIT;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
 
         this.componentStore.transporterListDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -221,15 +222,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public openTransporterModel(): void {
-        this.dialog.open(this.accountAsideMenu, {
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '0',
-                top: '0'
-            },
-            height: '100vh',
-            disableClose: true
-        });
+        this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -315,17 +308,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Handles pagination for the transporter list
-     *
-     * @param {*} event The pagination event
-     * @memberof EWayBillCreateComponent
-     */
-    public pageChanged(event: any): void {
-        this.transporterFilterRequest.page = event.page;
-        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        this.detectChanges();
-    }
+
 
     /**
      * Sorts the transporter list based on column and order
@@ -349,6 +332,19 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public updateField(field: string, value: number | string): void {
         this.generateEwayBillform.get(field).patchValue(value);
+    }
+
+
+    /**
+     * This will use for page change
+     *
+     * @param {*} event
+     * @memberof LiabilityDetailedReportComponent
+     */
+    public pageChanged(event: PageEvent): void {
+        this.transporterFilterRequest.page = this.transporterFilterRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.transporterFilterRequest.count = event.pageSize;
+        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
 
 }

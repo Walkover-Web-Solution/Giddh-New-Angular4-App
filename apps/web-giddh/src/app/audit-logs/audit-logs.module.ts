@@ -1,11 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTableModule } from '@angular/material/table';
 import { LaddaModule } from 'angular2-ladda';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { MatButtonModule } from '@angular/material/button';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { AuditLogsComponent } from './audit-logs.component';
 import { AuditLogsRoutingModule } from './audit-logs.routing.module';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
@@ -16,7 +21,6 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
 
 @NgModule({
     declarations: [
-        // Components / Directives/ Pipes
         AuditLogsComponent,
         AuditLogsSidebarComponent,
         AuditLogsGridComponent,
@@ -32,16 +36,21 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        MatMenuModule,
+        MatRadioModule,
+        MatTableModule,
         AuditLogsRoutingModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
-        ShSelectModule,
         AuditLogsServiceModule,
         CurrencyModule,
         SharedModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        GiddhDatepickerModule,
+        MatButtonModule,
+        FormFieldsModule
     ],
 })
 export class AuditLogsModule {

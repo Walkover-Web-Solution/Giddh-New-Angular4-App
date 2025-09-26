@@ -1,115 +1,113 @@
-<ng-container>
-    <form novalidate name="profileForm" [formGroup]="profileForm">
-        <div class="row mr-0 border-bottom">
-            <div class="col-12 col-lg-12 col-xl-9 col-xxl-8 mr-t2 pd-b15">
-                <div class="row pd-b1">
-                    <div class="col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
-                        <div class="form-group mb-0">
-                            <input-field
-                                *ngIf="organizationType === 'COMPANY'"
-                                formControlName="name"
-                                [type]="'text'"
-                                [name]="'companyName'"
-                                [label]="localeData?.company_name"
-                            >
-                            </input-field>
-                            <input-field
-                                *ngIf="organizationType === 'BRANCH'  || isConsolidatedBranch"
-                                [name]="'alias'"
-                                formControlName="alias"
-                                [type]="'text'"
-                                [label]="localeData?.branch_name"
-                            >
-                            </input-field>
-                        </div>
+<form novalidate name="profileForm" [formGroup]="profileForm">
+    <div class="row mr-0 border-bottom">
+        <div class="col-12 col-lg-12 col-xl-9 col-xxl-8 mr-t2 pd-b15">
+            <div class="row pd-b1">
+                <div class="col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
+                    <div class="form-group mb-0">
+                        <input-field
+                            *ngIf="organizationType === 'COMPANY'"
+                            formControlName="name"
+                            [type]="'text'"
+                            [name]="'companyName'"
+                            [label]="localeData?.company_name"
+                        >
+                        </input-field>
+                        <input-field
+                            *ngIf="organizationType === 'BRANCH'  || isConsolidatedBranch"
+                            [name]="'alias'"
+                            formControlName="alias"
+                            [type]="'text'"
+                            [label]="localeData?.branch_name"
+                        >
+                        </input-field>
                     </div>
                 </div>
-                <div class="row pd-b1 mt-3 unique-name">
-                    <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
-                        <label class="font-15">{{ commonLocaleData?.app_unique_name }}:</label>
-                    </div>
-                    <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
-                        <div class="font-15">{{ profileData?.uniqueName }}</div>
-                    </div>
+            </div>
+            <div class="row pd-b1 mt-3 unique-name">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
+                    <label class="font-15">{{ commonLocaleData?.app_unique_name }}:</label>
                 </div>
-                <div *ngIf="(organizationType === 'BRANCH'  || isConsolidatedBranch)" class="row pb-1 mt-3 parent-name">
-                    <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
-                        <label class="font-15">{{ localeData?.parent }}:</label>
-                    </div>
-                    <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
-                        <div *ngIf="profileData?.parent?.name" class="font-15">
-                            {{ profileData?.parent?.name }} ({{ profileData?.parent?.businessType }})
-                        </div>
-                        <div *ngIf="!profileData?.parent?.name" class="font-15">{{ profileData?.companyName }}</div>
-                    </div>
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
+                    <div class="font-15">{{ profileData?.uniqueName }}</div>
                 </div>
-                <div class="row country-name pd-b1 mt-3">
-                    <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
-                        <label class="font-15">{{ localeData?.country_currency }}:</label>
+            </div>
+            <div *ngIf="(organizationType === 'BRANCH'  || isConsolidatedBranch)" class="row pb-1 mt-3 parent-name">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
+                    <label class="font-15">{{ localeData?.parent }}:</label>
+                </div>
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
+                    <div *ngIf="profileData?.parent?.name" class="font-15">
+                        {{ profileData?.parent?.name }} ({{ profileData?.parent?.businessType }})
                     </div>
-                    <div class="country-info col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
-                        <div class="d-flex align-items-center">
-                            <img
-                                class="country-flag"
-                                *ngIf="profileData?.country?.countryCode"
-                                src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
-                                    profileData?.country?.countryCode
-                                }}.svg"
-                                alt="flag img"
-                            />
-                            <div class="font-15">
-                                {{ profileData?.country?.countryName }} - {{ profileData?.country?.currencyCode }}
-                                {{ profileData?.country?.currencyName }}
-                            </div>
+                    <div *ngIf="!profileData?.parent?.name" class="font-15">{{ profileData?.companyName }}</div>
+                </div>
+            </div>
+            <div class="row country-name pd-b1 mt-3">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
+                    <label class="font-15">{{ localeData?.country_currency }}:</label>
+                </div>
+                <div class="country-info col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
+                    <div class="d-flex align-items-center">
+                        <img
+                            class="country-flag"
+                            *ngIf="profileData?.country?.countryCode"
+                            src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
+                                profileData?.country?.countryCode
+                            }}.svg"
+                            alt="flag img"
+                        />
+                        <div class="font-15">
+                            {{ profileData?.country?.countryName }} - {{ profileData?.country?.currencyCode }}
+                            {{ profileData?.country?.currencyName }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="personal-other-details">
-            <div class="row mr-0 mt-3" *ngIf="organizationType === 'COMPANY'">
-                <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-r05">
-                    <div class="form-group">
-                        <input-field
-                            [label]="localeData?.business_type"
-                            [placeholder]="localeData?.business_type_placeholder"
-                            [name]="'businessType'"
-                            formControlName="businessType"
-                            [type]="'text'"
-                            [readonly]="true"
-                            [disabled]="true"
-                            [defaultValue]="profileForm?.get('businessType')?.value"
-                        ></input-field>
-                    </div>
-                </div>
-                <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-l05 pd-r05">
-                    <div class="form-group">
-                        <input-field
-                            [label]="localeData?.company_alias"
-                            [name]="'companyAlias'"
-                            formControlName="nameAlias"
-                            [type]="'text'"
-                        ></input-field>
-                    </div>
-                </div>
-                <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-l05">
-                    <div class="form-group">
-                        <input-field
-                            [label]="localeData?.headquarter_name"
-                            [name]="'headQuarterAlias'"
-                            formControlName="headQuarterAlias"
-                            [type]="'text'"
-                        ></input-field>
-                    </div>
+    </div>
+    <div class="personal-other-details">
+        <div class="row mr-0 mt-3" *ngIf="organizationType === 'COMPANY'">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-r05">
+                <div class="form-group">
+                    <input-field
+                        [label]="localeData?.business_type"
+                        [placeholder]="localeData?.business_type_placeholder"
+                        [name]="'businessType'"
+                        formControlName="businessType"
+                        [type]="'text'"
+                        [readonly]="true"
+                        [disabled]="true"
+                        [defaultValue]="profileForm?.get('businessType')?.value"
+                    ></input-field>
                 </div>
             </div>
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-l05 pd-r05">
+                <div class="form-group">
+                    <input-field
+                        [label]="localeData?.company_alias"
+                        [name]="'companyAlias'"
+                        formControlName="nameAlias"
+                        [type]="'text'"
+                    ></input-field>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-l05">
+                <div class="form-group">
+                    <input-field
+                        [label]="localeData?.headquarter_name"
+                        [name]="'headQuarterAlias'"
+                        formControlName="headQuarterAlias"
+                        [type]="'text'"
+                    ></input-field>
+                </div>
+            </div>
+        </div>
 
-            <other-settings
-                [organizationType]="organizationType"
-                (saveProfile)="updateOtherSettings($event)"
-                [profileData]="profileData"
-                [localeData]="localeData"
-            ></other-settings>
-        </div>
-    </form>
-</ng-container>
+        <other-settings
+            [organizationType]="organizationType"
+            (saveProfile)="updateOtherSettings($event)"
+            [profileData]="profileData"
+            [localeData]="localeData"
+        ></other-settings>
+    </div>
+</form>

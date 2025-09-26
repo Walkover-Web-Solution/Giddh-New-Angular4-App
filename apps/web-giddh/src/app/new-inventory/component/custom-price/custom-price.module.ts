@@ -11,7 +11,7 @@ import { CustomerWiseComponent } from './customer-wise/customer-wise.component';
 import { CustomPriceRoutingModule } from './custom-price.routing.module';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommandKModule } from '../../../theme/command-k/command.k.module';
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
@@ -23,6 +23,7 @@ import { ScrollComponent } from './advance-list-items-popup/virtual-scroll';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     imports: [
@@ -36,7 +37,6 @@ import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module'
         CustomPriceRoutingModule,
         MatListModule,
         MatSlideToggleModule,
-        PaginationModule,
         MatDialogModule,
         CommandKModule,
         GiddhPageLoaderModule,
@@ -46,7 +46,8 @@ import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module'
         DiscountControlModule,
         MatTooltipModule,
         MatRadioModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatPaginatorModule
     ],
     exports: [
         CustomerWiseComponent,

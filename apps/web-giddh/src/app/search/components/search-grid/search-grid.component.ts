@@ -12,6 +12,8 @@ import { GeneralService } from '../../../services/general.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 
 export interface SearchTable {
     name: string;
@@ -100,7 +102,11 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     public isAllChecked: boolean = false;
     /** pagination related  */
     public page: number;
-    public totalPages: number;
+    public countPerPage: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** total result items */
+    public totalItems: number;
     public selectedItems: any[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private checkboxInfo: any = {
@@ -126,7 +132,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(p => this.companyUniqueName = p);
         this.store.pipe(select(p => p.search.searchPaginationInfo), takeUntil(this.destroyed$)).subscribe((info) => {
             this.page = info.page;
-            this.totalPages = info.totalPages;
+            this.totalItems = info.totalItems;
+            this.countPerPage = info.count;
         });
         this.searchResponseFiltered$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             let newArr = response.map(v => ({ ...v, isSelected: false }))
@@ -409,11 +416,30 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.mailSmsDialogRef.close();
     }
 
-    public pageChanged(ev) {
-        this.checkboxInfo.selectedPage = ev.page;
-        this.pageChangeEvent.emit(ev);
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof SearchGridComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        // For search-grid, we're using a special case where pageSize is always 1
+        // because each "page" is a complete set of results
+        const newPage = event.pageIndex + 1;
+        this.checkboxInfo.selectedPage = newPage;
+        
+        // Create an event object compatible with the legacy pageChanged event
+        const legacyEvent = {
+            page: newPage,
+            itemsPerPage: 1,
+            count: this.countPerPage
+        };
+        
+        this.pageChangeEvent.emit(legacyEvent);
         this.isAllChecked = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
     }
+    
+
 
     private createSearchQueryReqObj() {
         return {

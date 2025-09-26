@@ -60,7 +60,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Holds voucher unique name */
     public selectedVoucherUniqueName: string = "";
     /** Voucher has attachments */

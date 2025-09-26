@@ -9,7 +9,7 @@
             <div class="form-group initial-screen position-absolute text-center mb-5">
                 <button
                     aria-label="connect bank"
-                    mat-stroked-button
+                    mat-raised-button
                     class="mr-r2"
                     color="primary"
                     (click)="openInstitutionsDialog()"
@@ -37,7 +37,7 @@
                         <div class="form-group mr-l2">
                             <button
                                 type="button"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="mr-r2"
                                 (click)="openCreateNewAccountModal()"
@@ -68,19 +68,11 @@
                         </div>
                     </div>
                 </ng-container>
-                <!-- This is not using no due to gocardless -->
-                <!-- <ng-container *ngIf="isPlaidSupportedCountry">
-            <div class="form-group">
-                <button aria-label="connect bank" mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
-                    {{ localeData?.payment?.connect_bank }}
-                </button>
-            </div>
-        </ng-container> -->
                 <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope">
                     <div class="form-group">
                         <button
                             aria-label="connect bank"
-                            mat-stroked-button
+                            mat-raised-button
                             class="mr-r2"
                             color="primary"
                             (click)="openInstitutionsDialog()"
@@ -125,10 +117,10 @@
                                         class="width-100 view-only-field inline"
                                         >{{ bankAccount?.account?.name }}</span
                                     >
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         [readonly]="!hasIntegrationScope"
                                         [label]="localeData?.payment?.linked_account"
-                                        [defaultValue]="bankAccount?.account?.name"
+                                        [labelValue]="bankAccount?.account?.name"
                                         *ngIf="!isIciciBankSupportedCountry"
                                         [cssClass]="'input-background'"
                                         [name]="'bankAccountUniqueName'"
@@ -138,7 +130,7 @@
                                             bankAccount?.account.uniqueName = $event.value;
                                             selectBankAccount($event, bankAccount)
                                         "
-                                    ></dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                                 <span class="mr-l1 action-wrapper" *ngIf="!isIciciBankSupportedCountry">
                                     <a
@@ -304,7 +296,7 @@
                                     <button
                                         aria-label="users"
                                         type="button"
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         class="bold font-15 mt-2 mr-l15"
                                         (click)="openCreateNewAccountUserModal(bankAccount)"

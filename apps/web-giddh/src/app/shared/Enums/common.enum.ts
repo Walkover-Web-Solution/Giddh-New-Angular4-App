@@ -5,6 +5,24 @@ export enum FileTypeEnum {
     XLSX = "xlsx"
 }
 
+export enum CopyType {
+    ORIGINAL = "ORIGINAL",
+    CUSTOMER = "CUSTOMER",
+    TRANSPORT = "TRANSPORT"
+}
+
+// Enum representing country names.
+export enum CountryNames {
+    INDIA = "India",
+    UNITED_KINGDOM = "United Kingdom"
+}
+
+export enum AccountArchivedStatusEnum {
+    UNARCHIVED = 'UNARCHIVED',
+    ARCHIVED = 'ARCHIVED',
+    BOTH = 'BOTH'
+}
+
 /** Enum representing standard accounting group unique names used for categorizing accounts. */
 export enum AccountingGroupEnum {
     BankAccounts = 'bankaccounts',
@@ -24,22 +42,4 @@ export enum AccountingGroupEnum {
     RevenueFromOperations = 'revenuefromoperations',
     SundryCreditors = 'sundrycreditors',
     SundryDebtors = 'sundrydebtors'
-}
-
-export enum CopyType {
-    ORIGINAL = "ORIGINAL",
-    CUSTOMER = "CUSTOMER",
-    TRANSPORT = "TRANSPORT"
-}
-
-export enum AccountArchivedStatusEnum {
-    UNARCHIVED = 'UNARCHIVED',
-    ARCHIVED = 'ARCHIVED',
-    BOTH = 'BOTH'
-}
-
-// Enum representing country names.
-export enum CountryNames {
-    INDIA = "India",
-    UNITED_KINGDOM = "United Kingdom"
 }

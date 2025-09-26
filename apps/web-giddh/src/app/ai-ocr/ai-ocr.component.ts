@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil } from "rxjs";
-import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from "../app.constant";
+import { MatMenuTrigger } from "@angular/material/menu";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import * as dayjs from "dayjs";
 import * as duration from "dayjs/plugin/duration";
 import { AiOcrStore } from "./utility/ai-ocr.store";
@@ -8,7 +9,6 @@ import { LedgerComponentStore } from "../ledger/ledger.store";
 import { AiOcrService } from "../services/ai-ocr.service";
 import { GeneralService } from "../services/general.service";
 import { OrganizationType } from "../models/user-login-state";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
 dayjs.extend(duration);
 
@@ -27,8 +27,6 @@ export enum OcrAction {
     providers: [AiOcrStore, LedgerComponentStore],
 })
 export class AiOcrComponent implements OnInit, OnDestroy {
-    /** Directive to get reference of element */
-    @ViewChild("datepickerTemplate") public datepickerTemplate: TemplateRef<any>;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
     /** This will store selected date range to use in api */
@@ -37,10 +35,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /** Universal date observer */
     public universalDate$: Observable<any>;
-    /** This will store modal reference */
-    public modalRef: BsModalRef;
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store universalDate */
     public universalDate: any;
     /** Selected range label */
@@ -53,6 +47,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public isCompany: boolean = true;
     /** Subject to manage the unsubscription logic for observables to prevent memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** Holds local JSON data */
     public localeData: any = {};
     /** Holds common JSON data */
@@ -64,7 +60,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         page: 1,
         totalPages: 0,
         totalItems: 0,
-        count: API_COUNT_LIMIT,
+        count: PAGINATION_LIMIT,
         from: "",
         to: "",
         sort: "",
@@ -138,7 +134,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private aiOcrService: AiOcrService,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
-        private modalService: BsModalService
     ) {
         this.aiOcrService.getOcrData$.next(null);
         this.aiOcrService.ocrList$.next(null);
@@ -172,7 +167,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             }
         });
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
-
 
         this.ocrMainList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (!res) {
@@ -219,7 +213,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.aiOcrStore.getCompletedCount(null);
             }
         }, 5000);
-
 
         this.ocrMainListInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((inProgress: boolean) => {
             this.aiOcrService.ocrList$.next(this.ocrList);
@@ -275,6 +268,9 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             /** Universal date observer */
             this.aiOcrStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((dateObj) => {
                 if (dateObj) {
+                    if (this.countVariable > 0) {
+                        this.initialUpload = false;
+                    }
                     this.universalDate = _.cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi =
@@ -321,7 +317,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
 
         this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.type === OcrAction.Save && response !== null) {
@@ -443,20 +438,11 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     /**
      * This will use for go to branch mode
      *
-     * @memberof ProjectWiseAccountingListComponent
+     * @memberof AiOcrComponent
      */
     public gotToBranchTab(): void {
         this.broadcast = new BroadcastChannel("ai-ocr");
         this.broadcast.postMessage({ success: true });
-    }
-
-    /**
-     * This will hide the datepicker.
-     *
-     * @memberof AiOcrComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef?.hide();
     }
 
     /**
@@ -469,7 +455,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -477,7 +463,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.showClearFilter = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -493,19 +479,17 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To show the datepicker.
+     * This will show the datepicker
      *
-     * @param {*} element
+     * @param {boolean} isOpen
      * @memberof AiOcrComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: "modal-lg giddh-datepicker-modal", backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**

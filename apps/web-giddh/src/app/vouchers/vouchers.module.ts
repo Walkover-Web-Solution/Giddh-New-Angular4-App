@@ -65,7 +65,6 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
-import { ConfirmationModalModule } from "../theme/confirmation-modal/confirmation-modal.module";
 import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-other-tax.module";
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
@@ -76,7 +75,6 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-setting.module";
 import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module";
-import { InvoiceGenerateModule } from "../invoice/generate/invoice-generate.module";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
 import { CancelEInvoiceDialogComponent } from "./cancel-einvoice-dialog/cancel-einvoice-dialog.component";
@@ -171,7 +169,6 @@ import { TemplateEditFilterComponent } from "./template/template-edit-filter/tem
         ReplacePipeModule,
         CurrencyModule,
         NgxMatSelectSearchModule,
-        ConfirmationModalModule,
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,
         NgxMaskModule,
@@ -181,7 +178,6 @@ import { TemplateEditFilterComponent } from "./template/template-edit-filter/tem
         MatNativeDateModule,
         PurchaseSettingModule,
         InvoiceSettingModule,
-        InvoiceGenerateModule,
         CdkScrollModule,
         TrimPipeModule,
         A11yModule,
@@ -190,7 +186,6 @@ import { TemplateEditFilterComponent } from "./template/template-edit-filter/tem
         SubscriptionUpgradeButtonModule,
         SelectTableColumnModule,
         MatButtonToggleModule,
-        MatProgressSpinnerModule,
         TributeMentionModule
     ],
     exports: [

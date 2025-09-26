@@ -107,7 +107,6 @@
                                         class="start-upload-btn mr-l2"
                                         (click)="deleteLogo()"
                                         mat-stroked-button
-                                        color="warn"
                                         [matTooltip]="localeData?.delete_image_from_server"
                                     >
                                         {{ commonLocaleData?.app_delete }}
@@ -118,6 +117,7 @@
                                             <div class="d-flex column-gap1">
                                                 <button
                                                     *ngFor="let size of imageSizes"
+                                                    [disabled]="!customTemplate?.logoUniqueName"
                                                     mat-mini-fab
                                                     [disabled]="!customTemplate?.logoUniqueName"
                                                     [color]="defaultImageSize === size?.label ? 'primary' : ''"
@@ -3498,7 +3498,7 @@
                                             </ng-container>
                                             <div
                                                 *ngIf="
-                                                    customTemplate?.type === 'invoice' &&
+                                                    (customTemplate?.type === 'invoice' || customTemplate?.type === 'voucher') &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
                                                     customTemplate.sections['footer'].data['showNotesAtLastPage']
@@ -3830,8 +3830,8 @@
                                             >
                                                 <mat-radio-group
                                                     [(ngModel)]="selectedSignatureType"
-                                                    name="signatureType"
                                                     (ngModelChange)="onSignatureTypeChange($event)"
+                                                    name="signatureType"
                                                     class="d-flex flex-wrap w-100"
                                                 >
                                                     <div class="d-flex w-100">
@@ -3909,7 +3909,6 @@
                                                                     class="start-upload-btn mr-l2"
                                                                     (click)="removeFile()"
                                                                     mat-stroked-button
-                                                                    color="warn"
                                                                     [matTooltip]="localeData?.delete_image_from_server"
                                                                 >
                                                                     {{ commonLocaleData?.app_delete }}
@@ -3954,22 +3953,19 @@
                                                                                 "
                                                                             >
                                                                         {{ localeData?.slogan_note }}
-                                                                    </textarea
-                                                                            >
-                                                                            <ng-container>
-                                                                                <span class="max-character-label"
-                                                                                    >{{
-                                                                                        localeData?.characters_left
-                                                                                    }}&nbsp;</span
-                                                                                ><span class="max-character-value">{{
-                                                                                    getRemainingCharacters(
-                                                                                        30,
-                                                                                        customTemplate.sections[
-                                                                                            "footer"
-                                                                                        ].data["slogan"].label
-                                                                                    )
-                                                                                }}</span>
-                                                                            </ng-container>
+                                                                    </textarea>
+                                                                            <span class="max-character-label"
+                                                                                >{{
+                                                                                    localeData?.characters_left
+                                                                                }}&nbsp;</span
+                                                                            ><span class="max-character-value">{{
+                                                                                getRemainingCharacters(
+                                                                                    30,
+                                                                                    customTemplate.sections[
+                                                                                        "footer"
+                                                                                    ].data["slogan"].label
+                                                                                )
+                                                                            }}</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>

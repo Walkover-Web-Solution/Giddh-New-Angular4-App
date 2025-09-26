@@ -7,13 +7,14 @@ import { Observable, ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
 import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter' // load on demand
 dayjs.extend(isSameOrAfter) // use plugin
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from '../../../services/general.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { DownloadData, DownloadsRequest } from '../../../models/api-models/downloads';
 import { cloneDeep } from '../../../lodash-optimized';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
 import { download } from '@giddh-workspaces/utils';
 import { exportTypeEnum } from '../../../new-inventory/inventory.enum';
@@ -43,8 +44,6 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public selectedFromDate: Date;
     /** Selected to date */
     public selectedToDate: Date;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
@@ -55,11 +54,9 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store modal reference */
-    public modalRef: BsModalRef;
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** This will store universalDate */
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+/** This will store universalDate */
     public universalDate: any;
     /** To show clear filter */
     public showClearFilter: boolean = false;
@@ -67,6 +64,8 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['requestedDate', 'user', 'services', 'filter', 'download', 'expiry'];
     /** Hold the data of downloads */
     public dataSource = ELEMENT_DATA;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will use for download object */
     public downloadRequest: DownloadsRequest = {
         count: PAGINATION_LIMIT,
@@ -89,7 +88,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
         exportTypeEnum.TransactionWise
     ];
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -167,16 +166,15 @@ export class ExportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This function will change the page of activity logs
-    *
-    * @param {*} event
-    * @memberof ExportsComponent
-    */
-    public pageChanged(event: any): void {
-        if (this.downloadRequest.page !== event.page) {
-            this.downloadRequest.page = event.page;
-            this.getDownloads();
-        }
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof ExportsComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.downloadRequest.page = this.downloadRequest.count !== event.pageSize? 1 : event.pageIndex + 1;
+        this.downloadRequest.count = event.pageSize;
+        this.getDownloads();
     }
 
     /**
@@ -189,7 +187,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -197,7 +195,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.showClearFilter = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -215,9 +213,6 @@ export class ExportsComponent implements OnInit, OnDestroy {
     *
     * @memberof ExportsComponent
     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
 
     /**
      *To show the datepicker
@@ -225,14 +220,12 @@ export class ExportsComponent implements OnInit, OnDestroy {
      * @param {*} element
      * @memberof ExportsComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**

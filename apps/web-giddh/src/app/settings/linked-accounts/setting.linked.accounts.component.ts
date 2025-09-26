@@ -1,11 +1,11 @@
 import { takeUntil } from 'rxjs/operators';
-import { IOption } from './../../theme/ng-select/option.interface';
 import { Store, select } from '@ngrx/store';
 import { Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
 import { SettingsLinkedAccountsService } from '../../services/settings.linked.accounts.service';
 import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-accounts/settings.linked.accounts.action';
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
@@ -17,6 +17,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { Router } from '@angular/router';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'setting-linked-accounts',
@@ -25,8 +26,12 @@ import { Router } from '@angular/router';
 })
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
-    @ViewChild('connectBankModel', { static: true }) public connectBankModel: ModalDirective;
-    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
+    @ViewChild('connectBankTemplate', { static: true }) public connectBankTemplate: TemplateRef<any>;
+    @ViewChild('confirmationTemplate', { static: true }) public confirmationTemplate: TemplateRef<any>;
+    /** Dialog reference for connect bank modal */
+    private connectBankDialogRef: MatDialogRef<any>;
+    /** Dialog reference for confirmation modal */
+    private confirmationDialogRef: MatDialogRef<any>;
     @ViewChild('yodleeFormHTML', { static: true }) public yodleeFormHTML: HTMLFormElement;
     @ViewChild('yodleeIframe', { static: true }) public yodleeIframe: HTMLIFrameElement;
 
@@ -76,7 +81,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private _generalService: GeneralService,
         private searchService: SearchService,
-        private router: Router
+        private router: Router,
+        private dialog: MatDialog
     ) {
         this.companyUniqueName = this._generalService.companyUniqueName;
         this.needReloadingLinkedAccounts$ = this.store.pipe(select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts), takeUntil(this.destroyed$));
@@ -108,8 +114,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.settings.linkedAccounts.iframeSource), takeUntil(this.destroyed$)).subscribe((source) => {
             if (source) {
-                this.connectBankModel?.show();
-                this.connectBankModel.config.ignoreBackdropClick = true;
+                this.connectBankDialogRef = this.dialog.open(this.connectBankTemplate, {
+                    panelClass: 'mat-dialog-md',
+                    disableClose: true
+                });
             }
         });
 
@@ -126,6 +134,13 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
     }
 
+    /**
+     * Opens the connect bank modal dialog
+     *
+     * @param {*} selectedProvider - Selected provider
+     * @param {*} providerAccountId - Provider account ID
+     * @memberof SettingLinkedAccountsComponent
+     */
     public connectBank(selectedProvider?, providerAccountId?) {
         // get token info
         if (selectedProvider) {
@@ -133,8 +148,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             this.isRefreshWithCredentials = false;
             this.providerAccountId = providerAccountId;
         }
-        this.connectBankModel?.show();
-        this.connectBankModel.config.ignoreBackdropClick = true;
+        this.connectBankDialogRef = this.dialog.open(this.connectBankTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     /**
@@ -153,14 +170,22 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         extraParams: ['callback=' + this.config.appUrl + 'app/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
                     });
                     this.yodleeFormHTML?.nativeElement.submit();
-                    this.connectBankModel?.show();
+                    this.connectBankDialogRef = this.dialog.open(this.connectBankTemplate, {
+                        panelClass: 'mat-dialog-md',
+                        disableClose: true
+                    });
                 }
             }
         });
     }
 
+    /**
+     * Closes the connect bank modal dialog
+     *
+     * @memberof SettingLinkedAccountsComponent
+     */
     public closeModal() {
-        this.connectBankModel.hide();
+        this.connectBankDialogRef?.close();
         this.iframeSource = undefined;
         this.selectedProvider = null;
         this.isRefreshWithCredentials = true;
@@ -198,7 +223,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             }
         }
 
-        this.confirmationModal.hide();
+        this.confirmationDialogRef?.close();
         this.selectedAccount = null;
         this.actionToPerform = null;
     }
@@ -219,7 +244,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             message = message?.replace("[BANK]", bankName);
             this.confirmationMessage = message;
             this.actionToPerform = 'DeleteAddedBank';
-            this.confirmationModal?.show();
+            this.confirmationDialogRef = this.dialog.open(this.confirmationTemplate, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
         }
     }
 
@@ -250,7 +278,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             message = message?.replace("[ACCOUNT]", data.value);
             this.confirmationMessage = message;
             this.actionToPerform = 'LinkAccount';
-            this.confirmationModal?.show();
+            this.confirmationDialogRef = this.dialog.open(this.confirmationTemplate, {
+                panelClass: 'mat-dialog-md',
+                disableClose: true
+            });
         }
     }
 
@@ -260,7 +291,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         message = message?.replace("[ACCOUNT]", account.giddhAccount.name);
         this.confirmationMessage = message;
         this.actionToPerform = 'UnlinkAccount';
-        this.confirmationModal?.show();
+        this.confirmationDialogRef = this.dialog.open(this.confirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     public onUpdateDate(date, account) {
@@ -270,7 +304,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         message = message?.replace("[DATE]", this.dateToUpdate);
         this.confirmationMessage = message;
         this.actionToPerform = 'UpdateDate';
-        this.confirmationModal?.show();
+        this.confirmationDialogRef = this.dialog.open(this.confirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     public ngOnDestroy(): void {
