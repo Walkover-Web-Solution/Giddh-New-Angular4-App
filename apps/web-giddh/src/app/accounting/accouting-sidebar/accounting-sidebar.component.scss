@@ -2,7 +2,7 @@
     background: none !important;
     border: 0 !important;
     font-size: var(--font-size-15);
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .sidebar-menu {
@@ -22,7 +22,7 @@
 }
 
 .menu-list li a {
-    //color: var(--color-black);
+    color: var(--color-black);
     padding: 7px 12px;
     display: block;
     font-size: var(--font-size-15);
@@ -33,7 +33,7 @@
 }
 
 .menu-list li a.isHidden {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .active-child {

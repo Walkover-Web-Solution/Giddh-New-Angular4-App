@@ -39,7 +39,7 @@ body.unresponsive {
 }
 
 #box {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     padding: 20px 30px;
     margin: 0 auto;
     width: 360px;
@@ -148,14 +148,14 @@ body.unresponsive {
 }
 
 .btn-login.btn-default {
-    //color: var(--color-black);
-    //background-color: var(--color-white);
+    color: var(--color-black);
+    background-color: var(--color-white);
     border-color: var(--color-silver);
 }
 
 .btn-login.btn-default:hover {
-    //color: var(--color-black) !important;
-    //background-color: var(--color-white);
+    color: var(--color-black) !important;
+    background-color: var(--color-white);
     border-color: var(--color-silver);
     box-shadow: none;
 }
@@ -194,7 +194,7 @@ button.close {
 :host ::ng-deep .form-control {
     height: 41px;
     font-size: var(--font-size-15);
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
 }
 
 :host ::ng-deep .clear {
@@ -246,7 +246,7 @@ h1 {
 }
 
 .login_box h1 {
-    //color: var(--color-black);
+    color: var(--color-black);
     font-weight: 500;
 }
 
@@ -257,7 +257,7 @@ h1 {
 }
 
 small {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .form-wrapper form {
@@ -364,8 +364,8 @@ small {
 }
 
 .slide-content .btn-white:hover {
-    //color: var(--color-black);
-    //background: var(--color-white);
+    color: var(--color-black);
+    background: var(--color-white);
 }
 
 .slide-content > div > img {
@@ -414,8 +414,8 @@ small {
 
 .app-ico ul li a:hover,
 .download-app ul li a:hover {
-    //background: var(--color-white);
-    //color: var(--color-black);
+    background: var(--color-white);
+    color: var(--color-black);
 }
 
 .download-app ul li a:hover i {
@@ -475,7 +475,7 @@ small {
 .accounting-space {
     padding: 30px;
     border-radius: 0;
-    //background-color: var(--color-white) !important;
+    background-color: var(--color-white) !important;
     border: 2px solid var(--color-white);
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
@@ -524,7 +524,7 @@ small {
     width: 100%;
     height: 100%;
     z-index: 9999999;
-    //background: var(--color-white);
+    background: var(--color-white);
     top: var(--top-distance);
     right: 0;
     left: 0;

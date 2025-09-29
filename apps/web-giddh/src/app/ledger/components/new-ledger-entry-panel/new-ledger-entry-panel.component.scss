@@ -1,8 +1,8 @@
 .ledger-panel {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     overflow: visible;
     .more-details {
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
         padding: 0 15px 15px;
         .cheque {
             table {
@@ -10,11 +10,11 @@
                     span:first-child {
                         font-size: 16px;
                         vertical-align: middle;
-                        //color: var(--color-dark-gray);
+                        color: var(--color-dark-gray);
                     }
                     .label {
                         vertical-align: middle;
-                        //color: var(--color-dark-gray);
+                        color: var(--color-dark-gray);
                         font-size: var(--font-size-15);
                     }
                 }
@@ -107,7 +107,7 @@
 }
 
 .ledger-panel table tbody tr td a {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .dropdown-menu-2 {
@@ -168,7 +168,7 @@
 }
 
 .mat-expansion-panel-header.mat-expanded {
-    //background-color: var(--color-white) !important;
+    background-color: var(--color-white) !important;
 }
 
 .icon-box {
@@ -187,7 +187,7 @@
 }
 .delete-attachment {
     a {
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         i {
             font-size: var(--font-size-15);
         }

@@ -30,7 +30,7 @@
 }
 
 .confirmation-box {
-    //background: var(--color-white);
+    background: var(--color-white);
     display: inline-block;
     padding: 20px;
     width: 230px;
@@ -60,7 +60,7 @@
     background: var(--color-border-light) !important;
     border: 0 !important;
     font-size: var(--font-size-15);
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .sidebar-menu {
@@ -85,7 +85,7 @@
 }
 
 .menu-list li a.isHidden {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .sidebar-list {
@@ -101,14 +101,14 @@
 }
 
 .sidebar-list h3 {
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 
 input[name="entryDate"] {
     background: transparent !important;
     border: 0;
     padding: 0 !important;
-    //color: var(--color-black);
+    color: var(--color-black);
     height: auto;
     width: 100px;
     font-size: var(--font-size-15);

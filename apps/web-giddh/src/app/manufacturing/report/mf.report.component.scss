@@ -57,7 +57,7 @@
 .no-btn.clear-filter {
     text-decoration: underline;
     font-weight: var(--font-weight-semibold);
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     padding: 6px 0;
     outline: none !important;
     &:focus {
@@ -74,7 +74,7 @@
     td.raw-material {
         background-color: var(--color-light-gray);
         line-height: 2;
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
     }
     tr {
         &:hover {

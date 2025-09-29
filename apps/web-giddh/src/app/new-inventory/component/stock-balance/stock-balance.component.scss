@@ -63,7 +63,7 @@
                 margin-right: 10px;
                 color: var(--color-blue-primary);
                 border: 1px solid var(--color-blue-primary);
-                //background-color: var(--color-white);
+                background-color: var(--color-white);
                 img {
                     height: 18px;
                     width: auto;
@@ -76,7 +76,7 @@
                 top: 0px;
                 left: 0px;
                 border: 1px solid var(--color-silver);
-                //background-color: var(--color-white);
+                background-color: var(--color-white);
 
                 img {
                     filter: invert(0);
@@ -161,13 +161,13 @@
                                 left: 20px;
                                 position: relative;
                                 top: 3px;
-                                //color: var(--color-black) !important;
+                                color: var(--color-black) !important;
                             }
                         }
                     }
 
                     .proper-spacing-list {
-                        //color: var(--color-dark-gray);
+                        color: var(--color-dark-gray);
                         display: flex;
                         width: 350px;
                         justify-content: center;
@@ -225,7 +225,7 @@
             padding: 7px;
             word-break: break-word;
             white-space: normal;
-            background-color: var(--color-common-primary-background-for-all-components);
+            background-color: var(--color-white);
         }
         .grid-title-left-top {
             padding-top: 0.8% !important;
@@ -237,7 +237,7 @@
             height: 100%;
         }
         .grid-title-list {
-            //color: var(--color-black) !important;
+            color: var(--color-black) !important;
             line-height: 26px;
             min-width: 140px;
             font-weight: 700;
@@ -271,7 +271,7 @@
                 box-shadow: 1px 0px 0px var(--color-shadow-light);
                 overflow: hidden;
                 z-index: 2;
-                //background-color: var(--color-white);
+                background-color: var(--color-white);
                 mat-form-field {
                     top: 11px;
                     input::placeholder {
@@ -307,7 +307,7 @@
                         background-color: var(--color-light-gray);
                     }
                     &:nth-child(even) {
-                        background-color: var(--color-common-primary-background-for-all-components);
+                        background-color: var(--color-white);
                     }
                 }
             }
@@ -319,11 +319,11 @@
                 .grid-title-left {
                     .inner-name {
                         font-size: var(--font-size-15);
-                        //color: var(--color-black);
+                        color: var(--color-black);
                     }
                     .stock-details {
                         font-size: var(--font-size-12);
-                        //color: var(--color-dark-gray);
+                        color: var(--color-dark-gray);
                         .stock-ob {
                             .dot {
                                 position: relative;
@@ -426,7 +426,7 @@
                         .quantity-input {
                             &:focus,
                             &:active {
-                                background-color: var(--color-common-primary-background-for-all-components);
+                                background-color: var(--color-white);
                             }
                         }
 
@@ -494,7 +494,7 @@
     }
 }
 .create-warehouse-btn {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
 }
 .select-all {
     margin: 5px 17px;
@@ -535,7 +535,7 @@
             position: relative;
             padding-right: 7px;
             margin-left: 133px;
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
 
             .sort-img {
                 position: absolute;
@@ -569,7 +569,7 @@
 .stock-list-box {
     .stock-list-unexpanded {
         .stock-list-box-heading {
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
         }
     }
 }
@@ -589,14 +589,14 @@
     .icon-sort-asc {
         line-height: 20px;
         width: 15px;
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         .active-text-color {
             color: var(--color-blue-primary);
         }
     }
 }
 .white-color {
-    background-color: var(--color-common-primary-background-for-all-components) !important;
+    background-color: var(--color-white) !important;
 }
 .gray-color {
     background-color: var(--color-light-gray) !important;

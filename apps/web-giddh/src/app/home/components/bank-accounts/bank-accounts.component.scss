@@ -5,7 +5,7 @@ p.bank-name {
 }
 
 p.bank-balance {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     font-size: var(--font-size-15);
     display: flex;
     justify-content: space-between;
@@ -18,7 +18,7 @@ p.bank-balance {
 }
 
 a.connect-bank {
-    //color: var(--color-black);
+    color: var(--color-black);
     font-size: var(--font-size-15);
     text-decoration: underline;
     padding-top: 5px;
@@ -40,7 +40,7 @@ a.connect-bank {
 }
 
 p {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .banks-scrollbar-wrapper {
@@ -57,7 +57,7 @@ p {
 }
 
 .dashboard-filter {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     .icon-collapse-icon {
         margin-left: 8px;
         font-size: var(--font-size-15);

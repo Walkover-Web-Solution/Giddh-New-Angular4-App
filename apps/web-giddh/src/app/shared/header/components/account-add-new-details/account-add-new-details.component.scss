@@ -27,7 +27,7 @@
 }
 
 .aside-pane-form {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     box-shadow: 0px 3px 6px var(--color-shadow-light);
     padding: 15px 15px;
     overflow: auto;
@@ -38,7 +38,7 @@
 .aside-pane-container {
     padding: 15px;
     font-size: var(--font-size-15);
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .aside-pane-form label {
@@ -125,7 +125,7 @@ form.gstin-form {
 
 .add-address-default h3 {
     font-size: var(--font-size-15);
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .contact-form,
@@ -152,8 +152,8 @@ form.gstin-form {
 
 a.btn-remove {
     padding: 3px 10px;
-    //background-color: var(--color-white);
-    //color: var(--color-black);
+    background-color: var(--color-white);
+    color: var(--color-black);
     border: 1px solid var(--color-silver);
 }
 

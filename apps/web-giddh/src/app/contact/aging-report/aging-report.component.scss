@@ -62,7 +62,7 @@
 }
 
 .search-field input:focus {
-    //background-color: var(--color-white) !important;
+    background-color: var(--color-white) !important;
     border-color: var(--color-black) !important;
 }
 
@@ -79,7 +79,7 @@ span.input-addon {
 
 tr.aging-table-top td {
     padding: 8px 0;
-    background-color: var(--color-common-primary-background-for-all-components) !important;
+    background-color: var(--color-white) !important;
 }
 
 .refresh-btn {
@@ -88,7 +88,7 @@ tr.aging-table-top td {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     border: 1px solid var(--color-silver);
     border-radius: 5px;
     margin-left: 10px !important;
@@ -99,7 +99,7 @@ tr.aging-table-top td {
         justify-content: center;
     }
     .icon-refresh {
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
     }
 }
 
@@ -121,7 +121,7 @@ tr.aging-table-top td {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        //color: var(--color-black);
+        color: var(--color-black);
         border: none;
         background-color: var(--color-light-gray) !important;
         border-radius: 5px;
@@ -256,7 +256,7 @@ tr.mat-header-row {
             }
 
             .customer-name {
-                //color: var(--color-black);
+                color: var(--color-black);
                 white-space: normal;
                 word-break: break-all;
             }
@@ -333,7 +333,7 @@ tr.mat-header-row {
             display: flex;
 
             i {
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
             }
         }
     }
@@ -360,7 +360,7 @@ tr.mat-header-row {
         display: flex !important;
 
         a {
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
         }
 
         .max-width-250 {
@@ -439,7 +439,7 @@ tr.mat-header-row {
     justify-content: center;
     align-items: center;
     height: 36px !important;
-    // border-right: 1px solid var(--color-silver) !important;
+    border-right: 1px solid var(--color-silver) !important;
     cursor: pointer;
 }
 

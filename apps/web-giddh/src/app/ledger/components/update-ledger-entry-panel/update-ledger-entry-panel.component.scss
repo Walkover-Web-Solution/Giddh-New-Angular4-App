@@ -85,7 +85,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     background: transparent;
     border: none !important;
     padding: 5px;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .notfound-option.active {
@@ -116,7 +116,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .ledger-main .form-control {
-    //background: var(--color-white) !important;
+    background: var(--color-white) !important;
     top: 0px !important;
 }
 
@@ -170,7 +170,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .download-invoice-ledger > i {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     padding-left: 5px;
 }
 
@@ -222,19 +222,19 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     }
 }
 .advanced {
-    //background: var(--color-white);
+    background: var(--color-white);
     table.xs-table-block {
         tr {
             td.remove-invoice {
                 span:first-child {
                     font-size: 16px;
                     vertical-align: middle;
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                     padding-right: 8px;
                 }
                 .remove-invoice-label {
                     vertical-align: middle;
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                     font-size: var(--font-size-15);
                 }
             }
@@ -249,17 +249,17 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     font-size: 10px;
 }
 .icon-info {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     cursor: pointer;
     padding: 8px 5px 0;
 }
 .adjusted-info {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     padding: 15px;
     z-index: 1;
     max-width: 360px;
     box-shadow: 0 3px 6px var(--color-shadow-light);
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     .info-text {
         font-family: var(--font-family);
     }
@@ -306,7 +306,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     float: right;
     margin-top: 1px;
     a {
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         font-size: var(--font-size-15);
     }
 }
@@ -316,7 +316,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .no-data-found {
-    //background: var(--color-white);
+    background: var(--color-white);
     text-align: center;
     font-size: var(--font-size-32);
     height: 600px;

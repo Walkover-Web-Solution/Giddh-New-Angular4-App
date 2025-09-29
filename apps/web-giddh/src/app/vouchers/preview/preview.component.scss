@@ -22,9 +22,7 @@
         .single-invoice-detail {
             &:hover,
             &.active {
-                background-color: var(
-                    --color-primary-invoice-preview-details-left-sidebar-list-background-active-hover
-                );
+                background-color: var(--color-light-gray);
             }
         }
     }
@@ -54,7 +52,7 @@
                 user-select: none;
                 max-height: 36px;
                 padding: 5px 10px;
-                //color: var(--color-black);
+                color: var(--color-black);
                 background-color: var(--color-silver);
                 border: 1px solid var(--color-silver);
             }

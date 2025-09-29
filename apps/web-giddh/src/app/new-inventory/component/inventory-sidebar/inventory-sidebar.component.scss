@@ -3,7 +3,7 @@
     top: var(--top-sidebar);
     bottom: 0;
     min-height: 100vh;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     width: 240px;
     left: -240px;
     z-index: 991;
@@ -17,7 +17,7 @@
     }
 
     .aside-pane {
-        //background-color: var(--color-white) !important;
+        background-color: var(--color-white) !important;
         overflow-x: hidden;
         overflow-y: auto;
         z-index: unset;
@@ -67,7 +67,7 @@
                 }
                 mat-tree {
                     width: 240px;
-                    //background-color: var(--color-white);
+                    background-color: var(--color-white);
 
                     mat-tree-node {
                         min-height: 30px;
@@ -92,7 +92,7 @@
                     }
                     .sub-option {
                         cursor: pointer;
-                        //color: var(--color-black);
+                        color: var(--color-black);
                         letter-spacing: 0.14px;
                         height: 27px;
                         align-items: center;
@@ -112,7 +112,7 @@
                             line-height: 15px;
                             &:hover {
                                 color: var(--color-blue-primary);
-                                //background-color: var(--color-white);
+                                background-color: var(--color-white);
                                 .sidebar-menu-icons {
                                     filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
                                 }
@@ -131,7 +131,7 @@
                         height: 27px;
                         font: normal normal 600 var(--font-size-15) / 30px;
                         font-family: var(--font-family);
-                        //color: var(--color-black);
+                        color: var(--color-black);
                         &:last-child {
                             min-height: 37px;
                         }
@@ -176,7 +176,7 @@
                 }
 
                 span {
-                    //color: var(--color-black);
+                    color: var(--color-black);
                     &:first-child {
                         line-height: 1.6;
                         height: 20px;
@@ -202,7 +202,7 @@
 }
 
 .inventory-items ul li:hover a span i {
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
 }
 
 .inventory-sub-bar {
@@ -210,7 +210,7 @@
 
     li {
         a {
-            //color: var(--color-black) !important;
+            color: var(--color-black) !important;
             padding-left: 50px !important;
 
             &:hover {

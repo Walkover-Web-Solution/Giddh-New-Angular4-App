@@ -1,6 +1,6 @@
 .steps-wizard {
     padding: 30px 0;
-    //background: var(--color-white);
+    background: var(--color-white);
     text-align: center;
     display: flex;
     justify-content: space-around;
@@ -19,7 +19,7 @@
             border: 2px solid var(--color-silver);
             border-radius: 100%;
             transition: background-color 1s;
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
             position: relative;
             color: var(--color-medium-gray);
             line-height: 100%;

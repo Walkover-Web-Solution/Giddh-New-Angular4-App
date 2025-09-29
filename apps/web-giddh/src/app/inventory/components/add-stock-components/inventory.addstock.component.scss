@@ -72,7 +72,7 @@ tr.fsstock td {
     padding-bottom: 15px;
 }
 .table-label strong {
-    //color: var(--color-black);
+    color: var(--color-black);
     font-weight: normal !important;
     font-size: var(--font-size-15);
     font-family: var(--font-family);
@@ -94,7 +94,7 @@ tr.fsstock td {
     border: 0;
 }
 .aside-pane-form {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     box-shadow: 0 3px 6px var(--color-shadow-light);
     padding: 15px;
     height: calc(100vh - 90px);

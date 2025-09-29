@@ -59,7 +59,7 @@
 .disabled-list-item {
     padding: 6px;
     height: 100%;
-    //background: var(--color-white);
+    background: var(--color-white);
     font-size: var(--font-size-15);
 }
 
@@ -69,7 +69,7 @@
     top: 0;
 
     .icon-info {
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
     }
 }
 
@@ -85,7 +85,7 @@
     width: calc(100% - 42px);
 }
 .payment-text {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .bank-logo {
@@ -161,7 +161,7 @@
     }
 
     .mat-mdc-table tbody > tr > td:first-child {
-        //color: var(--color-black) !important;
+        color: var(--color-black) !important;
     }
 
     th.mat-header-cell,
@@ -226,7 +226,7 @@
 .plus-cross-btn {
     i {
         padding: 5px 0;
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         font-size: 20px;
     }
 }
@@ -369,7 +369,7 @@
 }
 
 .view-only-field {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     padding: 8px;
     border-radius: 5px;
     color: var(--color-blue-primary);
@@ -379,7 +379,7 @@
     padding: 8px;
     border-radius: 5px;
     word-break: break-word;
-    //color: var(--color-black);
+    color: var(--color-black);
     background-color: var(--color-light-gray);
     border: 1px solid var(--color-light-gray);
 }
@@ -421,7 +421,7 @@
 }
 
 .field-label {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .account-approval-status.approved {

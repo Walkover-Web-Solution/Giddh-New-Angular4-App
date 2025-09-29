@@ -82,7 +82,7 @@
     padding: 3px 7px;
     clear: both;
     font-weight: normal;
-    //color: var(--color-black);
+    color: var(--color-black);
     text-align: inherit;
     white-space: nowrap;
     background: none;
@@ -92,7 +92,7 @@
 
 ::ng-deep .dropdown-item:focus,
 .dropdown-item:hover {
-    //color: var(--color-black);
+    color: var(--color-black);
     text-decoration: none;
     background-color: var(--color-light-gray);
 }
@@ -104,7 +104,7 @@
 
 ::ng-deep .dropdown-item.disabled,
 .dropdown-item:disabled {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     cursor: not-allowed;
     background-color: transparent;
 }

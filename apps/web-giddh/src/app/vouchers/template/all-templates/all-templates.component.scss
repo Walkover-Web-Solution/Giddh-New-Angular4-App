@@ -1,7 +1,7 @@
 * {
     border: 0;
     box-sizing: content-box;
-    //color: var(--color-black);
+    color: var(--color-black);
     font-style: inherit;
     font-weight: inherit;
     list-style: none;
@@ -53,7 +53,7 @@ p {
 #default {
     overflow: auto;
     /* font-size: 93%; */
-    //background: var(--color-white);
+    background: var(--color-white);
     border: 1px solid var(--color-silver);
     padding: 0;
 }
@@ -73,7 +73,7 @@ p {
 
 #default header {
     margin: 0;
-    //background: var(--color-white);
+    background: var(--color-white);
     padding: 10px;
 }
 
@@ -108,7 +108,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .hidden-label {
@@ -274,7 +274,7 @@ header img {
 }
 
 #default table.item td p {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 #default table.balance {
@@ -309,7 +309,7 @@ header img {
     border-top: 1px solid;
     padding: 16px 0px 10px 0;
     margin: 8px 0 0;
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 
 #default aside {
@@ -354,7 +354,7 @@ header img {
     content: attr(title);
     width: auto;
     position: relative;
-    //background: var(--color-white);
+    background: var(--color-white);
     margin: 0 auto;
     padding: 6px 16px;
     right: 0;
@@ -447,7 +447,7 @@ strong {
     padding: 4px;
     height: 15px;
     z-index: 1;
-    //background: var(--color-white);
+    background: var(--color-white);
     width: 20px;
 }
 
@@ -481,7 +481,7 @@ strong {
     padding: 6px 16px;
 }
 .tax-table p {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .tax-table tfoot th {

@@ -47,7 +47,7 @@
         }
         .less-than-text {
             font-size: 32px;
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
             position: absolute;
             top: 80px;
         }
@@ -100,7 +100,7 @@
                                 font-size: var(--font-size-12) !important;
                             }
                             .table-row-delete {
-                                //color: var(--color-dark-gray);
+                                color: var(--color-dark-gray);
                             }
                         }
                     }
@@ -110,7 +110,7 @@
                     border-bottom: 1px solid var(--color-silver);
                     tr {
                         td {
-                            //color: var(--color-black);
+                            color: var(--color-black);
                             font-weight: 100;
                         }
                     }
@@ -134,7 +134,7 @@
             padding: 15px 0;
             &-head {
                 padding: 12px 19px;
-                //background-color: var(--color-dark-gray);
+                background-color: var(--color-dark-gray);
                 color: var(--color-white);
             }
             &-body {
@@ -171,7 +171,7 @@
             }
             .card-head-text {
                 font-size: var(--font-size-12);
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
             }
             .card-text {
                 font-size: var(--font-size-16);
@@ -228,7 +228,7 @@
     height: 35px;
     width: 35px;
     border-radius: 5px;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     border: 1px solid var(--color-silver);
     background-color: var(--color-transparent);
     margin-left: 15px;

@@ -2,13 +2,13 @@
 
 .md-drppicker {
     font-family: var(--font-family);
-    //color: var(--color-black);
+    color: var(--color-black);
     border-radius: 4px;
     width: 278px;
     display: flex;
     margin-top: 0;
     font-size: var(--font-size-15);
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     box-shadow: 0 2px 4px 0 var(--color-shadow-light), 0 2px 8px 0 var(--color-shadow-light);
     &.double {
         width: 100%;
@@ -159,7 +159,7 @@
         border: 1px solid var(--color-white);
         padding: 4px;
         border-radius: 4px;
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
     }
 
     table,
@@ -177,7 +177,7 @@
     .month.drp-animate {
         font-size: var(--font-size-12);
         text-align: left;
-        //color: var(--color-black);
+        color: var(--color-black);
         font-weight: 600;
         .year-name {
             padding-left: 5px;
@@ -312,13 +312,13 @@
     .td-div {
         color: var(--color-blue-primary);
         margin: 0em 0;
-        //background-color: var(--color-white) !important;
+        background-color: var(--color-white) !important;
         &.off {
             &,
             &.in-range,
             &.start-date,
             &.end-date {
-                //background-color: var(--color-white);
+                background-color: var(--color-white);
                 border-color: transparent;
                 color: var(--color-medium-gray);
             }
@@ -338,7 +338,7 @@
             &:hover {
                 span {
                     background-color: var(--color-light-gray) !important;
-                    //color: var(--color-black) !important;
+                    color: var(--color-black) !important;
                     border-color: var(--color-dark-gray);
                 }
             }
@@ -347,7 +347,7 @@
         &.in-range {
             background-color: var(--color-blue-light);
             border-color: transparent;
-            //color: var(--color-black);
+            color: var(--color-black);
             // TODO: Should this be static or should it be parameterized?
             border-radius: 0;
             z-index: 9;
@@ -477,7 +477,7 @@
 
     select {
         display: inline-block;
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
         width: 100%;
         padding: 5px;
         border: 1px solid var(--color-light-gray);
@@ -539,7 +539,7 @@
     .label-input {
         border: 1px solid var(--color-silver);
         border-radius: 4px;
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         height: 30px;
         line-height: 30px;
         display: block;
@@ -586,7 +586,7 @@
         display: flex;
         flex-direction: column;
         border-left: 1px solid var(--color-silver);
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
         height: 490px !important;
         .range-container {
             ul {
@@ -607,8 +607,8 @@
                         text-align: left;
                         cursor: pointer;
                         font-size: var(--font-size-15);
-                        //color: var(--color-black);
-                        //background-color: var(--color-white);
+                        color: var(--color-black);
+                        background-color: var(--color-white);
                         border-left: 3px solid transparent !important;
                         font-family: var(--font-family) !important;
                         transition: all 100ms ease;
@@ -620,7 +620,7 @@
                             position: absolute;
                             z-index: 1017;
                             min-width: 96px;
-                            //background-color: var(--color-white);
+                            background-color: var(--color-white);
                             box-shadow: 0px 2px 8px var(--color-shadow-light);
                             left: 28px;
                             top: -3px;
@@ -750,7 +750,7 @@
     }
     .clear {
         box-shadow: none;
-        //background-color: var(--color-white) !important;
+        background-color: var(--color-white) !important;
         svg {
             color: var(--color-red);
             fill: currentColor;
@@ -768,7 +768,7 @@
 
     ::-webkit-scrollbar-thumb {
         border-radius: 4px;
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
     }
 }
 .md-drppicker td.in-range.in-range-start::before {
@@ -787,7 +787,7 @@
 .md-drppicker td.in-range.in-range-start.in-range-end span {
     background-color: var(--color-blue-light) !important;
     border-radius: 50%;
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
     border-color: var(--color-dark-gray);
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before {
@@ -810,7 +810,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 .md-drppicker .td-div.in-range.in-range-start.in-range-end span {
     background-color: var(--color-blue-light) !important;
     border-radius: 50%;
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
     border-color: var(--color-dark-gray);
 }
 .td-div.in-range.in-range-start.in-range-hovered.in-range-end::before {
@@ -962,7 +962,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 
             .ranges::-webkit-scrollbar-thumb {
                 border-radius: 4px;
-                //background-color: var(--color-white);
+                background-color: var(--color-white);
             }
         }
         &.rtl {
@@ -1037,11 +1037,11 @@ td:hover span {
 
 .md-drppicker td.end-date.active,
 .md-drppicker .td-div.end-date.active {
-    //background-color: var(--color-white) !important;
+    background-color: var(--color-white) !important;
 
     span {
         background-color: var(--color-blue-light) !important;
-        //color: var(--color-black) !important;
+        color: var(--color-black) !important;
     }
 
     .available:hover {
@@ -1167,12 +1167,12 @@ td span {
 }
 
 .activatedDate span {
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
     background-color: transparent !important;
 }
 
 .activatedDate.in-range.in-range-start span {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 .activatedDate:hover {
     span {
@@ -1195,7 +1195,7 @@ td span {
 
 .sub-ranges-cal {
     position: static;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     right: 0;
     top: 0;
     z-index: 9999;
@@ -1248,7 +1248,7 @@ td span {
 
     .date-picker-scroll::-webkit-scrollbar-thumb {
         border-radius: 4px;
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
     }
 }
 
@@ -1300,7 +1300,7 @@ td span {
                 position: sticky;
                 top: 0;
                 z-index: 1;
-                //background-color: var(--color-white);
+                background-color: var(--color-white);
                 .sticky-header {
                     width: calc(100% - 3px) !important;
                     th.days-td {
@@ -1354,8 +1354,8 @@ td span {
                             padding: 0;
                             border: none;
                             border-bottom: none;
-                            //color: var(--color-black);
-                            //background-color: var(--color-white);
+                            color: var(--color-black);
+                            background-color: var(--color-white);
                             &.activeSelectedDate {
                                 border-bottom: none;
                             }
@@ -1368,7 +1368,7 @@ td span {
                             display: flex;
                             align-items: flex-start;
                             align-items: center;
-                            //color: var(--color-dark-gray);
+                            color: var(--color-dark-gray);
                             cursor: pointer;
                         }
                         &.focused-date {
@@ -1446,14 +1446,14 @@ td span {
                 text-align: left;
                 cursor: pointer;
                 font-size: var(--font-size-12);
-                //color: var(--color-black);
+                color: var(--color-black);
                 font-family: var(--font-family);
                 transition: all 100ms ease;
                 .drop-down {
                     position: absolute;
                     z-index: 1017;
                     min-width: 96px;
-                    //background-color: var(--color-white);
+                    background-color: var(--color-white);
                     box-shadow: 0px 2px 8px var(--color-shadow-light);
                     left: 28px;
                     top: -3px;
@@ -1502,7 +1502,7 @@ td span {
                 margin-bottom: 0;
                 border: none;
                 border-bottom: 1px solid var(--color-silver);
-                //color: var(--color-black);
+                color: var(--color-black);
                 background-color: transparent;
                 &:focus {
                     border-bottom-color: var(--color-blue-primary) !important;

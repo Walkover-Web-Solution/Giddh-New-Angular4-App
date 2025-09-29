@@ -101,7 +101,7 @@
 
 .form-control,
 input {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .notfound-option {
@@ -141,7 +141,7 @@ input {
 
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
-    background-color: var(--color-common-primary-background-for-all-components);
+    background-color: var(--color-white);
 }
 
 .ledg-head table td.pd-r25 {
@@ -224,7 +224,7 @@ table.ledger-footer-1 td[class*="col-"] {
         position: relative;
 
         i {
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
             left: 12px;
             top: -8px;
             z-index: 1;
@@ -255,8 +255,8 @@ table.ledger-footer-1 td[class*="col-"] {
 
 .ledger-stat {
     padding: 10px 15px 0;
-    background: var(--color-common-primary-background-for-all-components);
-    //color: var(--color-dark-gray);
+    background: var(--color-white);
+    color: var(--color-dark-gray);
     font-size: var(--font-size-16);
     box-shadow: 0px 2px 6px var(--color-shadow-light);
     position: relative;
@@ -321,7 +321,7 @@ table.ledger-footer-1 td[class*="col-"] {
     left: 5% !important;
     right: 5%;
     bottom: 100px;
-    background: var(--color-common-primary-background-for-all-components);
+    background: var(--color-white);
     padding: 5px;
     font-size: var(--font-size-12);
     z-index: 0;
@@ -358,8 +358,8 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .thead-background1 th {
-    //background: var(--color-white);
-    //color: var(--color-black);
+    background: var(--color-white);
+    color: var(--color-black);
     border-right: 1px solid var(--color-silver);
     padding: 15px 11px !important;
     font-weight: 400;
@@ -371,7 +371,7 @@ table.ledger-footer-1 td[class*="col-"] {
 
 .ledger-main .form-control,
 .ledger-main input {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .ledger-book {
@@ -381,7 +381,7 @@ table.ledger-footer-1 td[class*="col-"] {
     float: left;
     width: 100%;
     margin-bottom: 16px;
-    background: var(--color-common-primary-background-for-all-components);
+    background: var(--color-white);
     box-shadow: 0 0 6px var(--color-shadow-light);
 }
 
@@ -460,7 +460,7 @@ sh-select:focus {
     .left-col-new,
     .right-col-new,
     .statement-view {
-        background: var(--color-common-primary-background-for-all-components);
+        background: var(--color-white);
         padding: 0 0px 350px;
     }
 }
@@ -476,7 +476,7 @@ sh-select:focus {
 }
 
 .ledg-head .icomoon-ico {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     width: 36px;
     min-width: 36px;
     height: 36px;
@@ -485,7 +485,7 @@ sh-select:focus {
     display: flex;
     justify-content: center;
     border-top-width: 1px;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     border-radius: 5px;
 }
 
@@ -496,7 +496,7 @@ sh-select:focus {
 }
 
 .advance-search-block input::placeholder {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .left-col-new,
@@ -517,7 +517,7 @@ sh-select:focus {
     .custom-tabs {
         .nav.nav-tabs {
             position: static !important;
-            //background-color: var(--color-white) !important;
+            background-color: var(--color-white) !important;
             padding: 0 5px !important;
         }
     }
@@ -575,7 +575,7 @@ sh-select:focus {
 }
 
 .ledger-stat h1 {
-    //color: var(--color-black);
+    color: var(--color-black);
     font-size: var(--font-size-15);
     margin-bottom: 10px;
 }
@@ -657,9 +657,9 @@ sh-select:focus {
 .clear-filter-btn {
     border-radius: 5px;
     border: 1px solid var(--color-silver);
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     font-size: var(--font-size-15);
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     width: 36px;
     height: 36px;
     display: flex;
@@ -718,7 +718,7 @@ sh-select:focus {
     min-width: 180px !important;
     border-radius: 30px;
     box-sizing: content-box !important;
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
     text-align: center;
     border: 1px solid var(--color-silver) !important;
 
@@ -763,7 +763,7 @@ sh-select:focus {
         width: 100%;
 
         tbody {
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
 
             .transaction-date {
                 font-size: var(--font-size-15);
@@ -934,7 +934,7 @@ sh-select:focus {
 }
 
 .account-placeholder-text {
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
 }
 
 a#reload-bank-transaction i.icon-refresh {
@@ -951,7 +951,7 @@ input#ledger-search {
     }
 
     &::placeholder {
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
     }
 }
 
@@ -985,7 +985,7 @@ input#ledger-search {
     position: sticky;
     top: 0px;
     z-index: 1;
-    background-color: var(--color-common-primary-background-for-all-components);
+    background-color: var(--color-white);
     border-bottom: 1px solid var(--color-silver);
 }
 
@@ -1033,11 +1033,11 @@ input#ledger-search {
 
 ::ng-deep {
     .ledg-head .mat-grid-tile-content {
-        //color: var(--color-black);
+        color: var(--color-black);
     }
 
     .ledg-head .ledger-row .mat-input-element {
-        //color: var(--color-black) !important;
+        color: var(--color-black) !important;
     }
 }
 
@@ -1308,7 +1308,7 @@ input#ledger-search {
         .ledger-datepicker {
             width: 36px;
             height: 36px;
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
             border: 1px solid var(--color-silver);
             text-align: center;
             align-items: center;
@@ -1326,7 +1326,7 @@ input#ledger-search {
 
         .btn {
             background-color: transparent;
-            //color: var(--color-black);
+            color: var(--color-black);
             font-size: var(--font-size-16);
         }
 
@@ -1379,7 +1379,7 @@ input#ledger-search {
 
         i {
             top: 0;
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
         }
     }
 

@@ -103,7 +103,7 @@
         bottom: 0;
         color: var(--color-blue-primary);
         z-index: 1;
-        //background: var(--color-white) !important;
+        background: var(--color-white) !important;
         min-height: 0 !important;
         padding-top: 10px;
         padding-bottom: 5px;
@@ -188,7 +188,7 @@
     border-bottom: 1px solid var(--color-silver);
 
     .option-label {
-        //color: var(--color-black);
+        color: var(--color-black);
     }
 
     .item-unique {

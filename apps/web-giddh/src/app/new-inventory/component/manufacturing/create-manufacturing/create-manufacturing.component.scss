@@ -14,7 +14,7 @@
         }
         .less-than-text {
             font-size: 32px;
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
             position: absolute;
             top: 120px;
         }
@@ -123,7 +123,7 @@
                     border-top: 1px solid var(--color-silver);
                     tr {
                         td {
-                            //color: var(--color-black);
+                            color: var(--color-black);
                             font-weight: 100;
                             &:nth-child(2) {
                                 text-align: right;
@@ -171,7 +171,7 @@
 
             &-head {
                 padding: 12px 19px;
-                //background-color: var(--color-dark-gray);
+                background-color: var(--color-dark-gray);
                 color: var(--color-white);
             }
 
@@ -214,7 +214,7 @@
             }
             .card-head-text {
                 font-size: var(--font-size-12);
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
             }
             .card-text {
                 font-size: var(--font-size-16);

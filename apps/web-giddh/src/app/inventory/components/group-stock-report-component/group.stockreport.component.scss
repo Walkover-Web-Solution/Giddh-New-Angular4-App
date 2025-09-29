@@ -91,7 +91,7 @@ table {
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    //color: var(--color-black);
+    color: var(--color-black);
     border: none;
     background-color: var(--color-light-gray);
 }
@@ -141,7 +141,7 @@ table {
 }
 
 .total-footer {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     display: flex;
     .foot-item {
         padding: 41px;
@@ -299,7 +299,7 @@ td.border-right-none {
     border: 1px solid var(--color-silver);
     border-radius: 5px;
     color: var(--color-blue-primary);
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 
 .inventory-stock-table {
@@ -330,7 +330,7 @@ button.btn.btn-filter {
 }
 
 .inventory-stock-table input.form-control.stock-input {
-    //color: var(--color-black);
+    color: var(--color-black);
     text-align: left;
 }
 
@@ -351,7 +351,7 @@ button.btn.btn-filter {
     height: 36px;
     width: 36px;
     margin-top: 0;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     .strong {
         font-weight: bold;
     }

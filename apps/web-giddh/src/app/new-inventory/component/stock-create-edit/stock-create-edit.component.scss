@@ -47,7 +47,7 @@
     }
 
     .sales-purchase-details {
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
         padding: 0 15px;
         border-radius: 7px;
 
@@ -161,7 +161,7 @@
     }
 
     .product-option-wrapper {
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
         padding: 20px 15px;
         border-radius: 8px;
 
@@ -175,7 +175,7 @@
             border-color: var(--color-silver);
 
             .chip-close-btn {
-                //color: var(--color-black);
+                color: var(--color-black);
             }
 
             .inventory-category-field-input::placeholder {
@@ -205,7 +205,7 @@
                 height: 32px;
                 width: 40px;
                 border-radius: 5px;
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
                 border: 1px solid var(--color-silver);
                 background-color: var(--color-transparent);
             }
@@ -378,7 +378,7 @@
 
     .button-group {
         .btn-danger {
-            //background-color: var(--color-white) !important;
+            background-color: var(--color-white) !important;
         }
     }
 }
@@ -518,7 +518,7 @@ table.stock-table {
     .remove-attachment {
         width: 25px;
         padding: 2px;
-        //color: var(--color-black);
+        color: var(--color-black);
     }
 }
 
@@ -538,7 +538,7 @@ table.stock-table {
         justify-content: center;
         align-items: center;
         border-radius: 40px;
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         font-size: 17px;
     }
 
@@ -588,12 +588,12 @@ table.stock-table {
                 width: 36px;
                 height: 36px;
                 border-color: var(--color-medium-gray);
-                //background-color: var(--color-white);
+                background-color: var(--color-white);
 
                 i {
                     vertical-align: top;
                     font-size: 20px;
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                 }
             }
         }
@@ -615,7 +615,7 @@ table.stock-table {
                 left: 6px;
                 top: 11px;
                 z-index: 4;
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
             }
 
             input {
@@ -667,7 +667,7 @@ table.stock-table {
 }
 
 .final-product-recipe {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     padding: 15px;
     margin-bottom: 15px;
 
@@ -1087,7 +1087,7 @@ table.stock-table {
     justify-content: center;
     height: 32px;
     border-radius: 5px;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     border: 1px solid var(--color-silver);
     background-color: var(--color-transparent);
     margin-left: 15px;

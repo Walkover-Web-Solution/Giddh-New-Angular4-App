@@ -25,13 +25,13 @@
 }
 
 .bg-wrap {
-    background: var(--color-common-primary-background-for-all-components);
+    background: var(--color-white);
 }
 
 .entry-table thead th {
     font-weight: normal;
     padding: 8px 6px;
-    //color: var(--color-black);
+    color: var(--color-black);
     border-color: var(--color-silver);
 }
 
@@ -52,7 +52,7 @@
     height: 28px;
     line-height: 28px;
     padding: 0 6px !important;
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
     background: transparent !important;
 }
 
@@ -70,7 +70,7 @@
 }
 
 .confirmation-box {
-    //background: var(--color-white);
+    background: var(--color-white);
     display: inline-block;
     padding: 20px;
     width: 230px;
@@ -110,14 +110,14 @@
     background: var(--color-border-light) !important;
     border: 0 !important;
     font-size: var(--font-size-15);
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .account-listbar {
     overflow-y: hidden;
     height: 100vh;
     width: 250px;
-    //background: var(--color-white);
+    background: var(--color-white);
     position: absolute;
     left: -250px;
     z-index: 0;
@@ -147,7 +147,7 @@
 }
 
 .menu-list li a.isHidden {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .sidebar-list {
@@ -164,14 +164,14 @@
 }
 
 .sidebar-list h3 {
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 
 input[name="entryDate"] {
     background: transparent !important;
     border: 0;
     padding: 0 !important;
-    //color: var(--color-black);
+    color: var(--color-black);
     height: auto;
     width: 100px;
     font-size: var(--font-size-15);

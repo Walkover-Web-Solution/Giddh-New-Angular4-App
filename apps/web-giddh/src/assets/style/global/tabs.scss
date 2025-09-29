@@ -4,13 +4,13 @@
 
         .mat-mdc-tab-header {
             padding-left: 15px !important;
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
         }
 
         .mat-mdc-tab {
             .mdc-tab__text-label {
                 font-size: var(--font-size-16);
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
                 // for voucher
                 .voucher-svg {
                     fill: var(--color-dark-gray);

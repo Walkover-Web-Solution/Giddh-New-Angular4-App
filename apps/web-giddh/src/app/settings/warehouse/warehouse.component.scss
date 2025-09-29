@@ -24,7 +24,7 @@
     margin-bottom: 20px;
 }
 .warehouse-card {
-    background-color: var(--color-common-primary-background-for-all-components);
+    background-color: var(--color-white);
     padding: 15px;
     margin-bottom: 15px;
     border: 1px solid var(--color-silver);
@@ -72,7 +72,7 @@
     .btn-group .btn {
         background-color: transparent;
         padding: 0;
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         margin-right: 0;
         font-size: var(--font-size-16);
         position: relative;
@@ -116,7 +116,7 @@ span.set-as-default {
 .warehouse-details label {
     font-weight: var(--font-weight-semibold);
     width: 70px;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     &.cursor-pointer,
     &.pin-label {
         width: auto;
@@ -136,7 +136,7 @@ span.set-as-default {
     }
 }
 .gray-text {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     font-size: var(--font-size-12);
 }
 .set-as-default i.icon-favorite-selected {
@@ -179,9 +179,9 @@ span.set-as-default {
         list-style: none;
         li {
             margin-bottom: 12px;
-            //color: var(--color-black);
+            color: var(--color-black);
             i {
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
             }
         }
     }

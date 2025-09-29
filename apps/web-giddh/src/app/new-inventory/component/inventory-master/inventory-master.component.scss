@@ -2,7 +2,7 @@
     justify-content: space-between;
     padding: 0 0 15px 0;
     flex-wrap: wrap;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     height: calc(100vh - 90px);
     position: relative;
     margin-left: -15px;
@@ -83,7 +83,7 @@
             .breadcrumb {
                 li {
                     a {
-                        //color: var(--color-dark-gray);
+                        color: var(--color-dark-gray);
                     }
 
                     &:last-child {
@@ -116,7 +116,7 @@
                 display: block;
                 height: 28px;
                 line-height: 20px;
-                //color: var(--color-black);
+                color: var(--color-black);
             }
 
             .create-head {
