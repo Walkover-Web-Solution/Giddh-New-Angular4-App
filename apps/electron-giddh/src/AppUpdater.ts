@@ -3,6 +3,7 @@ import { MessageBoxOptions, dialog } from 'electron';
 
 let updater;
 let isManualCheck = false;
+let isCheckingForUpdates = false;
 export default class AppUpdaterV1 {
     public isUpdateDownloaded: boolean = false;
 
@@ -14,41 +15,65 @@ export default class AppUpdaterV1 {
 
         // Handle update available - different behavior for manual vs automatic
         autoUpdater.on('update-available', () => {
+            console.log('Update available detected. isManualCheck:', isManualCheck, 'updater:', !!updater, 'isCheckingForUpdates:', isCheckingForUpdates);
+            
+            // Prevent multiple simultaneous dialogs
+            if (isCheckingForUpdates) {
+                console.log('Already checking for updates, ignoring duplicate event');
+                return;
+            }
+            
+            isCheckingForUpdates = true;
+            
             if (isManualCheck || updater) {
                 // MANUAL UPDATE FLOW - Show dialog and let user choose
+                console.log('Showing manual update dialog');
                 dialog.showMessageBox({
                     type: 'info',
                     title: 'Found Updates',
                     message: 'Found new updates, do you want update now?',
                     buttons: ['Sure', 'No']
                 }).then((resp) => {
+                    console.log('Manual dialog response:', resp.response);
                     if (resp.response === 0) {
+                        // User clicked "Sure"
                         autoUpdater.downloadUpdate();
                         if (updater) {
                             updater.label = 'Downloading updates. . . . .';
                             updater.enabled = false;
                         }
                     } else {
+                        // User clicked "No" or closed dialog (response = 1 or undefined)
+                        console.log('User declined manual update');
                         if (updater) {
                             updater.enabled = true;
                             updater = null;
                         }
                     }
-                    isManualCheck = false; // Reset flag after handling
+                    // Always reset flags after manual check
+                    isManualCheck = false;
+                    isCheckingForUpdates = false;
+                    console.log('Manual check completed, flags reset');
                 }).catch((error) => {
                     console.error('Manual update dialog error:', error);
-                    // Fallback: automatically download update if dialog fails
-                    autoUpdater.downloadUpdate();
-                    isManualCheck = false; // Reset flag after handling
+                    // Reset flags even on error
+                    isManualCheck = false;
+                    isCheckingForUpdates = false;
+                    if (updater) {
+                        updater.enabled = true;
+                        updater = null;
+                    }
                 });
             } else {
                 // AUTOMATIC UPDATE FLOW - Show notification dialog and auto-download
+                console.log('Showing automatic update dialog');
                 dialog.showMessageBox({
                     type: 'info',
                     title: 'Update Available',
                     message: 'A new version is available and will be downloaded automatically.',
                     buttons: ['OK', 'Download Later']
                 }).then((resp) => {
+                    console.log('Automatic dialog response:', resp.response);
                     if (resp.response === 0) {
                         // User clicked OK - download immediately
                         autoUpdater.downloadUpdate();
@@ -56,16 +81,20 @@ export default class AppUpdaterV1 {
                         // User clicked "Download Later" - skip for now
                         console.log('User chose to download update later');
                     }
+                    isCheckingForUpdates = false;
                 }).catch((error) => {
                     console.error('Automatic update dialog error:', error);
                     // Fallback: download silently if dialog fails
                     autoUpdater.downloadUpdate();
+                    isCheckingForUpdates = false;
                 });
             }
         });
 
         // Handle no updates available - only show dialog for manual checks
         autoUpdater.on('update-not-available', () => {
+            console.log('No updates available. isManualCheck:', isManualCheck, 'updater:', !!updater);
+            
             if (isManualCheck || updater) {
                 // MANUAL CHECK - Show "no updates" message
                 dialog.showMessageBox({
@@ -80,7 +109,10 @@ export default class AppUpdaterV1 {
                 // AUTOMATIC CHECK - Silent, no dialog needed
                 console.log('Automatic check: No updates available');
             }
-            isManualCheck = false; // Reset flag after handling
+            // Reset all flags after handling
+            isManualCheck = false;
+            isCheckingForUpdates = false;
+            console.log('No updates check completed, flags reset');
         });
 
         autoUpdater.on('update-downloaded', (event: UpdateDownloadedEvent) => {
