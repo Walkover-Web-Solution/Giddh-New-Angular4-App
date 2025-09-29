@@ -1598,18 +1598,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
-            if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
-                let salesPersonName = "";
-                let salesPersonUniqueName = null;
-
-                if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
-                    const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
-                    if (salesPerson) {
-                        salesPersonName = salesPerson.label
-                        salesPersonUniqueName = salesPerson.value
+            if (!this.isUpdateMode) {
+                if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                    let salesPersonName = "";
+                    let salesPersonUniqueName = null;
+                    if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
+                        const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
+                        if (salesPerson) {
+                            salesPersonName = salesPerson.label
+                            salesPersonUniqueName = salesPerson.value
+                        }
                     }
-                }
-                if (!(this.isUpdateMode && salesPersonUniqueName === null)) {
                     this.invoiceForm.get('salesPersonName').patchValue(salesPersonName);
                     this.invoiceForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
                 }
@@ -3315,7 +3314,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup
             .get("otherTax.amount")
             .patchValue(giddhRoundOff((taxableValue * tax?.taxDetail[0]?.taxValue) / 100, this.highPrecisionRate));
-            
+
         entryFormGroup.get("otherTax.calculationMethod").patchValue(calculationMethod);
         this.calculateReceiptPaymentAmount(entryFormGroup, isUpdate);
         this.changeDetection.detectChanges();
@@ -3774,12 +3773,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.dateChangeType = "entry";
             this.updatedEntryIndex = updatedEntryIndex;
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-               panelClass: "mat-dialog-sm",
+                panelClass: "mat-dialog-sm",
                 data: {
                     configuration: this.generalService.deleteConfiguration(this.localeData?.change_all_entry_dates, this.commonLocaleData),
                 },
             });
-    
+
             dialogRef.afterClosed().subscribe((response) => {
                 this.handleDateChangeConfirmation(response);
             });
@@ -3820,14 +3819,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: "mat-dialog-sm",
-             data: {
-                 configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
-             },
-         });
- 
-         dialogRef.afterClosed().subscribe((response) => {
-             this.handleDateChangeConfirmation(response);
-         });
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+            },
+        });
+
+        dialogRef.afterClosed().subscribe((response) => {
+            this.handleDateChangeConfirmation(response);
+        });
     }
 
     /**
@@ -6196,7 +6195,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             transactionFormGroup.get("stock.stockUnit.code")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
             transactionFormGroup.get("stock.stockUnit.uniqueName")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
-            
+
             let baseRate: number;
             if (response.stock.variant?.unitRates?.length) {
                 baseRate = this.getRateByUnit(transactionFormGroup.get("stock.stockUnit.uniqueName")?.value,response.stock.variant?.unitRates);
@@ -6594,37 +6593,37 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.componentStore.getEstimateProformaDetails({
                 voucherType: this.voucherType,
                 payload: {
-                accountUniqueName: params?.accountUniqueName,
-                estimateNumber: params?.uniqueName,
+                    accountUniqueName: params?.accountUniqueName,
+                    estimateNumber: params?.uniqueName,
+                    voucherType: this.voucherType,
+                },
+            });
+        } else if (this.invoiceType.isProformaInvoice) {
+            this.componentStore.getEstimateProformaDetails({
                 voucherType: this.voucherType,
-            },
-        });
-    } else if (this.invoiceType.isProformaInvoice) {
-        this.componentStore.getEstimateProformaDetails({
-            voucherType: this.voucherType,
-            payload: {
+                payload: {
+                    accountUniqueName: params?.accountUniqueName,
+                    proformaNumber: params?.uniqueName,
+                    voucherType: this.voucherType,
+                },
+            });
+        } else {
+            this.componentStore.getVoucherDetails({
+                isCopyVoucher: false,
                 accountUniqueName: params?.accountUniqueName,
-                proformaNumber: params?.uniqueName,
-                voucherType: this.voucherType,
-            },
-        });
-    } else {
-        this.componentStore.getVoucherDetails({
-            isCopyVoucher: false,
-            accountUniqueName: params?.accountUniqueName,
-            payload: { uniqueName: params?.uniqueName, voucherType: this.voucherType },
-        });
+                payload: { uniqueName: params?.uniqueName, voucherType: this.voucherType },
+            });
+        }
     }
-}
 
-/**
-     * Calculates amount if advance receipt
- *
- * @private
-     * @param {FormGroup} entryFormGroup
-     * @param {boolean} isUpdate
- * @memberof VoucherCreateComponent
- */
+    /**
+         * Calculates amount if advance receipt
+     *
+     * @private
+         * @param {FormGroup} entryFormGroup
+         * @param {boolean} isUpdate
+     * @memberof VoucherCreateComponent
+     */
     private calculateReceiptPaymentAmount(entryFormGroup: FormGroup, isUpdate: boolean = false): void {
         if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             if (
