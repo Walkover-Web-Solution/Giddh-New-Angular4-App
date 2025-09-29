@@ -106,9 +106,8 @@ export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
 
         // Base return URL
         const returnUrl = `ledger/${acc.uniqueName}/${this.from}/${this.to}`;
-        const encodedRedirectUrl = encodeURIComponent(this.currentUrl);
 
-        let url = `${location.origin}${location.pathname}?returnUrl=${returnUrl}&redirectUrl=${encodedRedirectUrl}`;
+        let url = `${location.origin}${location.pathname}?returnUrl=${returnUrl}&redirectUrl=${this.currentUrl}`;
 
         if (isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
