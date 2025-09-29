@@ -11,12 +11,12 @@
     width: 100%;
 }
 .aside-header {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     padding: 20px 10px;
 }
 .aside-pane {
     padding: 0;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
 }
 .aside-title {
     padding-bottom: 0;
@@ -29,14 +29,14 @@
 }
 .creditors-detail > p {
     font-size: var(--font-size-15);
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 .creditors-detail span.red-text {
     color: var(--color-red);
 }
 .contact-details p {
     font-size: var(--font-size-12);
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 .account-details {
     padding: 10px 0;
@@ -65,7 +65,7 @@ form label {
     top: 14px;
 }
 .aside-pane-form {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     box-shadow: 0px 3px 6px var(--color-shadow-light);
     padding: 15px 15px;
     height: calc(100vh - 90px);

@@ -1,5 +1,5 @@
 .mat-mdc-table {
-    //background: var(--color-white) !important;
+    background: var(--color-white) !important;
     &.table-striped {
         .mdc-data-table__content {
             .mat-mdc-row {
@@ -24,7 +24,7 @@
 
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
-            //background-color: var(--color-white) !important;
+            background-color: var(--color-white) !important;
             z-index: 1 !important;
         }
     }
@@ -32,7 +32,7 @@
     .mdc-data-table__content {
         .mat-mdc-row {
             .mat-mdc-cell {
-                //background-color: var(--color-white) !important;
+                background-color: var(--color-white) !important;
             }
         }
     }
@@ -41,19 +41,19 @@
 /*--- menu-button-color ---*/
 .cdk-overlay-container {
     .mat-mdc-menu-panel {
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
     }
 }
 
 /*--- mat-option ---*/
 .mat-mdc-option .mdc-list-item__primary-text {
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
     width: 100%;
 }
 
 /*--- mat-card ---*/
 .mat-mdc-card {
-    //background-color: var(--color-white) !important;
+    background-color: var(--color-white) !important;
 }
 
 /*--- trial-balance-expand ---*/

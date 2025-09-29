@@ -10,7 +10,7 @@
     }
 }
 .mat-mdc-outlined-button {
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
     border-color: var(--color-fields-border) !important;
     &.mat-primary {
         color: var(--color-blue-primary) !important;
@@ -90,7 +90,7 @@ button {
 .mat-icon-button {
     i,
     .mat-icon {
-        //color: var(--color-black);
+        color: var(--color-black);
     }
 }
 

@@ -4,7 +4,7 @@
 }
 .primary-sidebar {
     padding-top: 0 !important;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     .company-branch-block {
         background-color: var(--color-blue-light);
         .branch-connection {
@@ -54,12 +54,12 @@
             .icon-down-new {
                 position: relative;
                 right: 5px;
-                //color: var(--color-black);
+                color: var(--color-black);
             }
             .icon-cross {
                 display: flex;
                 font-size: 12px;
-                //color: var(--color-black);
+                color: var(--color-black);
             }
             .head-nav {
                 background: var(--color-light-gray);
@@ -69,7 +69,7 @@
         }
         h3 {
             font-weight: var(--font-weight-semibold);
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
             .company-alice {
                 width: 30px;
                 height: 30px;
@@ -83,7 +83,7 @@
                 white-space: nowrap;
                 letter-spacing: -2px;
                 font-size: var(--font-size-15) !important;
-                //color: var(--color-black);
+                color: var(--color-black);
             }
             .company-full-name {
                 white-space: normal;
@@ -99,7 +99,7 @@
                     width: 150px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    //color: var(--color-black);
+                    color: var(--color-black);
                 }
                 .branch-ellipsis {
                     white-space: nowrap;
@@ -119,7 +119,7 @@
         .current-branch-name {
             li {
                 a {
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                 }
             }
             .branch-alice {
@@ -137,7 +137,7 @@
         .company-branch-nav {
             height: calc(100vh - 110px);
             box-shadow: none;
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
             border: none;
             margin: 0;
             padding: 0;
@@ -169,7 +169,7 @@
             }
         }
         p {
-            //color: var(--color-black);
+            color: var(--color-black);
             font-weight: var(--font-weight-semibold);
         }
         ul {
@@ -181,7 +181,7 @@
                 white-space: nowrap;
                 position: relative;
                 a {
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                     line-height: 16px;
                     &.show-more {
                         color: var(--color-blue-primary);
@@ -205,7 +205,7 @@
                 display: flex;
                 justify-content: space-between;
                 line-height: 20px;
-                //color: var(--color-black);
+                color: var(--color-black);
                 span {
                     .icon-arrow-down {
                         transform: rotate(0deg);
@@ -228,7 +228,7 @@
         i {
             width: 20px;
             height: 20px;
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
             border-radius: 50%;
             border: 1px solid var(--color-silver);
             transform: rotate(90deg);
@@ -330,7 +330,7 @@
             position: absolute !important;
             left: 60px !important;
             z-index: 9999999 !important;
-            //background-color: var(--color-white) !important;
+            background-color: var(--color-white) !important;
             border: 1px solid var(--color-blue-primary) !important;
             border-radius: 0;
             width: 180px;
@@ -368,7 +368,7 @@
                     &:after {
                         position: absolute;
                         content: "";
-                        //background-color: var(--color-white);
+                        background-color: var(--color-white);
                         width: 100%;
                         height: 100%;
                         left: 40px;
@@ -409,14 +409,14 @@
                         span {
                             i {
                                 font-size: 20px;
-                                //color: var(--color-dark-gray);
+                                color: var(--color-dark-gray);
                                 transform: none;
                             }
                         }
                         i {
                             font-size: var(--font-size-15);
                             display: inline-flex;
-                            //color: var(--color-dark-gray);
+                            color: var(--color-dark-gray);
                             width: 14px;
                             height: 14px;
                             justify-content: center;
@@ -432,7 +432,7 @@
                 &:after {
                     position: absolute;
                     content: "";
-                    //background-color: var(--color-white);
+                    background-color: var(--color-white);
                     width: 100%;
                     height: 100%;
                     left: 40px;
@@ -453,7 +453,7 @@
 
 cdk-tree {
     cdk-tree-node {
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         .main-item-wrapper {
             padding: 0 20px;
             width: 100%;

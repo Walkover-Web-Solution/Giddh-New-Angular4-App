@@ -5,7 +5,7 @@
     width: 100%;
     box-shadow: 0 0 6px var(--color-shadow-light);
     font-family: var(--font-family);
-    background-color: var(--color-common-primary-background-for-all-components);
+    background-color: var(--color-white);
     .modal-header {
         padding: 10px 15px;
         .close {
@@ -17,7 +17,7 @@
 
     p {
         font-size: var(--font-size-15);
-        //color: var(--color-black);
+        color: var(--color-black);
     }
 }
 @media (max-width: 1366px) {

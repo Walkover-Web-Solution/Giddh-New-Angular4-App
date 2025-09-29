@@ -8,7 +8,7 @@
 
 /* Background for the tree. May use for <body> element */
 .jsontree_bg {
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 
 /* Styles for the container of the tree (e.g. fonts, margins etc.) */
@@ -38,7 +38,7 @@
 .jsontree_label {
     font-weight: normal;
     vertical-align: top;
-    //color: var(--color-black);
+    color: var(--color-black);
     position: relative;
     padding: 1px;
     border-radius: 4px;

@@ -45,7 +45,7 @@
                 .stock-list-body {
 
                     .proper-spacing-list {
-                        //color: var(--color-dark-gray);
+                        color: var(--color-dark-gray);
                     }
                 }
             }
@@ -66,7 +66,7 @@
             border-right: 1px solid var(--color-silver);
             word-break: break-word;
             white-space: normal;
-            background-color: var(--color-common-primary-background-for-all-components);
+            background-color: var(--color-white);
         }
     }
     .searching-stocks {
@@ -80,7 +80,7 @@
                 left: 0;
                 z-index: 18;
                 position: sticky;
-                //background: var(--color-white);
+                background: var(--color-white);
             }
             .unique-name-wrapper {
                 min-width: 140px;
@@ -91,7 +91,7 @@
                         background-color: var(--color-light-gray);
                     }
                     &:nth-child(even) {
-                        background-color: var(--color-common-primary-background-for-all-components);
+                        background-color: var(--color-white);
                     }
                 }
             }
@@ -127,7 +127,7 @@
 .stock-list-box {
     .stock-list-unexpanded {
         .stock-list-box-heading {
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
         }
     }
 }

@@ -24,7 +24,7 @@
 
 .btn-lg {
     min-width: 155px;
-    //background: var(--color-white);
+    background: var(--color-white);
     color: var(--color-blue-primary);
     box-shadow: none;
 }
@@ -37,7 +37,7 @@
     border-color: var(--color-blue-primary);
 }
 .aside-pane-form {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     box-shadow: 0 3px 6px var(--color-shadow-light);
     padding: 15px;
     height: calc(100vh - 90px);

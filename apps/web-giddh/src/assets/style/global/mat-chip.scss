@@ -2,12 +2,12 @@ mat-chip-list {
     mat-chip {
         &.mat-mdc-standard-chip {
             &:not(.mdc-evolution-chip--disabled) {
-                //background-color: var(--color-white);
+                background-color: var(--color-white);
                 border: 1px solid;
 
                 .mat-mdc-chip-action-label,
                 .mdc-evolution-chip__icon--trailing {
-                    //color: var(--color-black);
+                    color: var(--color-black);
                 }
             }
         }

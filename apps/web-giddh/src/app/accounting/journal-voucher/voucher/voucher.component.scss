@@ -61,14 +61,14 @@ $text-overflow-ellipsis-width: 255px;
 .current-balance {
     font-size: var(--font-size-15);
     font-style: italic;
-    //color: var(--color-black);
+    color: var(--color-black);
     padding-left: 70px;
 }
 
 .cheque-popup .new-account-form .modal-body {
     .check-clearance-date {
         .form-control[readonly] {
-            //background-color: var(--color-white) !important;
+            background-color: var(--color-white) !important;
         }
     }
 }
@@ -99,7 +99,7 @@ $text-overflow-ellipsis-width: 255px;
             }
 
             input.form-control {
-                //background-color: var(--color-white) !important;
+                background-color: var(--color-white) !important;
                 border: 1px solid var(--color-silver);
                 border-radius: 5px !important;
             }
@@ -117,12 +117,12 @@ $text-overflow-ellipsis-width: 255px;
                 position: absolute;
                 right: 5px;
                 top: 7px;
-                //color: var(--color-black);
+                color: var(--color-black);
             }
         }
 
         .icon-cross {
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
             cursor: pointer;
             padding: 5px;
         }

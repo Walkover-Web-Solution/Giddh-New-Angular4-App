@@ -36,7 +36,7 @@
     height: 36px;
     min-width: 100%;
     padding: 11px;
-    //color: var(--color-black);
+    color: var(--color-black);
     border: none;
     background-color: var(--color-light-gray);
     border-radius: 5px;
@@ -44,7 +44,7 @@
 
 .p-modal-tooltip {
     position: absolute;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     z-index: 1000;
     width: 257px;
     border: 1px solid var(--color-medium-gray);
@@ -75,7 +75,7 @@
 }
 
 .custom-detail h4 {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     margin-top: 7px;
     font-size: var(--font-size-15) !important;
     font-family: var(--font-family) !important;
@@ -87,7 +87,7 @@
 }
 
 ul.list-unstyled li a {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .li-link {
@@ -95,7 +95,7 @@ ul.list-unstyled li a {
 }
 
 .btn-group > a {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .ac-detail,
@@ -224,7 +224,7 @@ table th {
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     font-size: var(--font-size-16);
     color: var(--color-blue-primary);
     border: 1px solid var(--color-silver);
@@ -235,7 +235,7 @@ table th {
         width: 36px;
         height: 36px;
         border: 1px solid var(--color-silver);
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
         border-radius: 5px;
         color: var(--color-blue-primary);
         font-size: 20px;

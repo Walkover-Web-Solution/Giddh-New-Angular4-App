@@ -31,7 +31,7 @@
     top: var(--top-distance);
     bottom: 0;
     min-height: 100vh;
-    //background: var(--color-white);
+    background: var(--color-white);
     width: 240px;
     left: auto;
     right: 0;
@@ -61,12 +61,12 @@
     width: 100%;
 }
 .aside-header {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     padding: 20px 10px;
 }
 .aside-pane {
     padding: 0;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     .aside-help-header {
         display: flex;
         justify-content: space-between;
@@ -82,7 +82,7 @@
     }
 }
 .aside-pane-form {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     box-shadow: 0px 3px 6px var(--color-shadow-light);
     padding: 15px 15px;
     height: calc(100vh - 90px);
@@ -97,7 +97,7 @@
     top: 57px;
     bottom: 0;
     min-height: 100vh;
-    //background: var(--color-white);
+    background: var(--color-white);
     width: 240px;
     left: auto;
     right: 0;
@@ -107,7 +107,7 @@
         display: none;
     }
     .aside-pane {
-        //background: var(--color-white);
+        background: var(--color-white);
         overflow: initial;
         z-index: unset;
         .aside-help-header {

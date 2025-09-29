@@ -44,7 +44,7 @@
 
         h2,
         p {
-            //color: var(--color-black);
+            color: var(--color-black);
             white-space: break-spaces;
         }
 
@@ -134,7 +134,7 @@
             z-index: 9;
             border-bottom: 1px solid var(--color-silver);
             position: sticky;
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
             padding-top: 0px;
             line-height: 3;
             padding: 5px 10px !important;
@@ -246,7 +246,7 @@
 
         .mat-mdc-header-cell {
             border-right: 1px solid var(--color-silver) !important;
-            //background-color: var(--color-white) !important;
+            background-color: var(--color-white) !important;
             z-index: 2 !important;
             padding: 0px !important;
             border-bottom-width: 2px;
@@ -259,7 +259,7 @@
         td {
             &.mat-mdc-cell {
                 border-right: 1px solid var(--color-silver);
-                //background-color: var(--color-white) !important;
+                background-color: var(--color-white) !important;
                 white-space: nowrap !important;
                 min-width: 230px;
 

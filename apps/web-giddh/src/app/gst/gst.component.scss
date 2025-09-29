@@ -62,7 +62,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .text-muted {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .return-content .content-graph {
@@ -159,14 +159,14 @@ svg.icon.icon-xxlg-md {
 }
 
 .btn-default {
-    //color: var(--color-black);
+    color: var(--color-black);
     background-color: var(--color-light-gray);
     border-color: var(--color-silver);
 }
 
 .return-body .notification {
     padding-top: 25px;
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 
 .filing-demo-video {
@@ -252,9 +252,9 @@ hr {
 #c-tab ::ng-deep .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     cursor: default;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     border: 2px solid var(--color-silver);
     border-right: 0 !important;
     border-left: 0 !important;
@@ -418,7 +418,7 @@ hr {
         right: 0;
     }
     .return-content {
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
     }
     .filing-steps .font-large {
         font-size: var(--font-size-15);

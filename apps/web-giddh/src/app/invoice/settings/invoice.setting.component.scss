@@ -19,7 +19,7 @@
 
 .icon-estimate .path1:before {
     content: "\e900";
-    color: var(--color-primary-icon-estimate-path1-before);
+    color: var(--color-red-light);
 }
 
 .general-tab h4,
@@ -108,7 +108,7 @@ input.form-control.send-alert {
         left: 0;
         right: 15px;
         font-size: var(--font-size-12);
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         text-align: left;
     }
     div {
@@ -154,7 +154,7 @@ span.viasocket a {
     position: absolute;
     right: 10px;
     top: 25%;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     font-size: 16px;
 }
 

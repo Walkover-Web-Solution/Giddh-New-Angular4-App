@@ -24,7 +24,7 @@
             height: 100%;
             min-height: inherit;
             table {
-                //background: var(--color-white);
+                background: var(--color-white);
                 thead {
                     th {
                         color: var(--color-blue-primary);
@@ -42,11 +42,11 @@
                 th {
                     padding: 0;
                     min-width: 216px;
-                    //color: var(--color-black);
+                    color: var(--color-black);
                     .border-line {
                         border: 2px solid transparent;
                         &.active {
-                            // border-color: var(--color-blue-primary);
+                            border-color: var(--color-blue-primary);
                         }
                         .custom-padding {
                             padding: 6px 10px;

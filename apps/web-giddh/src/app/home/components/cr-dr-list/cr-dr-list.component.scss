@@ -4,7 +4,7 @@ p.bank-name {
     margin-bottom: 5px;
 }
 p.bank-balance {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     font-size: var(--font-size-15);
     display: flex;
     justify-content: space-between;
@@ -22,7 +22,7 @@ p.bank-balance {
     padding-top: 20px;
     padding-bottom: 3px;
     font-size: var(--font-size-15);
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 .table thead th {
     vertical-align: bottom;
@@ -37,7 +37,7 @@ p.bank-balance {
 table.basic th {
     font-size: var(--font-size-15);
     color: var(--color-blue-primary);
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
 }
 .cr-dr-body {
     padding: 15px;
@@ -46,7 +46,7 @@ table.basic th {
     margin-bottom: 50px;
 }
 span.this-week {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     text-decoration: underline;
     font-size: var(--font-size-15);
 }
@@ -62,7 +62,7 @@ thead th {
     margin-top: 10px;
     padding: 20px 0 !important;
     text-align: center;
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
     font-size: var(--font-size-15);
     &:hover {
         background-color: var(--color-blue-light);

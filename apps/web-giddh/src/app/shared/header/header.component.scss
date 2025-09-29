@@ -246,7 +246,7 @@ ul{
 }
 
 .other a {
-    //color: var(--color-black);
+    color: var(--color-black);
     text-transform: uppercase;
 }
 
@@ -266,7 +266,7 @@ ul.sub-list {
 }
 
 .nav-left-bar .company-name .company-text span {
-    //color: var(--color-black);
+    color: var(--color-black);
     word-break: break-all;
 }
 
@@ -303,7 +303,7 @@ ul.sub-list {
     right: 30px;
     background: none;
     border: 0px;
-    //color: var(--color-black);
+    color: var(--color-black);
     cursor: pointer;
     font-size: 20px;
     z-index: 9999;
@@ -322,7 +322,7 @@ ul.sub-list {
     padding: 10px 15px;
     font-size: var(--font-size-15);
     box-shadow: 1px 1px 3px var(--color-shadow-light);
-    //color: var(--color-black);
+    color: var(--color-black);
 
     p {
         font-weight: var(--font-weight-semibold);
@@ -351,7 +351,7 @@ ul.sub-list {
 }
 
 .setting-sidebar {
-    box-shadow: -2px -2px 15px --color-primary-common-box-shadow;
+    box-shadow: -2px -2px 15px var(--color-shadow-light);
 }
 
 .not-today {
@@ -526,7 +526,7 @@ aside-setting {
 .profile-wrapper{
     padding: 9px 0;
     .profile-picture{
-        //color: var(--color-black);
+        color: var(--color-black);
         width: 40px;
         height: 40px;
         border: 1px solid var(--color-deep-orange);

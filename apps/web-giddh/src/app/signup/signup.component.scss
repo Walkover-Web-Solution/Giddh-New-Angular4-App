@@ -45,7 +45,7 @@ body.unresponsive {
 }
 
 #box {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     padding: 20px 30px;
     margin: 0 auto;
     width: 360px;
@@ -172,14 +172,14 @@ body.unresponsive {
 }
 
 .btn-login.btn-default {
-    //color: var(--color-black);
-    //background-color: var(--color-white);
+    color: var(--color-black);
+    background-color: var(--color-white);
     border-color: var(--color-silver);
 }
 
 .btn-login.btn-default:hover {
-    //color: var(--color-black) !important;
-    //background-color: var(--color-white);
+    color: var(--color-black) !important;
+    background-color: var(--color-white);
     border-color: var(--color-silver);
     box-shadow: none;
 }
@@ -218,7 +218,7 @@ button.close {
 :host ::ng-deep .form-control {
     height: 41px;
     font-size: var(--font-size-15);
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
 }
 
 :host ::ng-deep .clear {
@@ -254,7 +254,7 @@ h1 {
 }
 
 .login-box h1 {
-    //color: var(--color-black);
+    color: var(--color-black);
     font-weight: 500;
 }
 
@@ -265,7 +265,7 @@ h1 {
 }
 
 small {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 /* social-login */
@@ -461,7 +461,7 @@ small {
 .accounting-space {
     padding: 30px;
     border-radius: 0;
-    //background-color: var(--color-white) !important;
+    background-color: var(--color-white) !important;
     border: 2px solid var(--color-white);
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;

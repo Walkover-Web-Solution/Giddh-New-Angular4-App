@@ -7,7 +7,7 @@
 }
 
 .group-open {
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 
 .group-open li {
@@ -51,10 +51,10 @@
 }
 
 stock-list ::ng-deep.in-list a div {
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
 }
 .text-black {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .item-group {
@@ -89,7 +89,7 @@ stock-list ::ng-deep.in-list a div {
             display: flex;
             align-items: center;
             flex: 1;
-            //color: var(--color-black);
+            color: var(--color-black);
             i {
                 margin: 0 15px;
                 font-size: 9px;

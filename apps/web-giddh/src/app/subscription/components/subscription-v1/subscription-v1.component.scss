@@ -1,5 +1,5 @@
 .mat-option {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 .mat-option:hover:not(.mat-option-disabled),
 .mat-option:focus:not(.mat-option-disabled) {
@@ -26,7 +26,7 @@
         height: 30px;
         width: 340px;
         &::placeholder {
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
         }
     }
     .menu-two-list {
@@ -39,7 +39,7 @@
         top: 5px;
         .search-bar {
             font-weight: 500;
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
         }
     }
 }
@@ -72,7 +72,7 @@
         }
         span {
             display: inline-block;
-            //color: var(--color-black);
+            color: var(--color-black);
         }
     }
 }
@@ -97,7 +97,7 @@
     min-width: 100%;
     overflow: auto;
     height: 100%;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     border-left: none;
     border-right: 1px solid var(--color-silver);
     position: relative;
@@ -121,7 +121,7 @@
                 margin: 0px 5px;
             }
             span {
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
             }
         }
         :hover {
@@ -152,10 +152,10 @@
                 .side-bar-list-title {
                     width: 95px;
                     height: inherit;
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                 }
                 .warning {
-                    //color: var(--color-black);
+                    color: var(--color-black);
                     font-weight: 500;
                     font-size: var(--font-size-12);
                 }
@@ -173,7 +173,7 @@
     min-width: 100%;
     overflow: hidden;
     height: 100%;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     border-left: none;
     border-right: 2px solid var(--color-silver);
     position: relative;
@@ -196,7 +196,7 @@
                 margin: 0px 5px;
             }
             span {
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
             }
         }
         .side-bar-items-clone {
@@ -221,7 +221,7 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                 }
             }
             .side-bar-list-clone-2 {
@@ -239,7 +239,7 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                 }
             }
             .side-bar-list-clone-3 {
@@ -257,7 +257,7 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                 }
             }
         }
@@ -266,7 +266,7 @@
 .main-content {
     width: 100%;
     height: inherit;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     .consumed-transaction,
     .consumed-branch,
     .consumed-warehouse,
@@ -319,7 +319,7 @@
             height: 30px !important;
         }
         .mat-header-cell {
-            //color: var(--color-black) !important;
+            color: var(--color-black) !important;
             padding: 4px 10px !important;
             font-size: var(--font-size-15) !important;
             letter-spacing: -0.4px;
@@ -332,7 +332,7 @@
         td.mat-cell:first-of-type {
             width: 49%;
             padding-left: 45px !important;
-            //color: var(--color-black) !important;
+            color: var(--color-black) !important;
         }
         .mat-table tbody tr:hover td {
             background-color: none !important;
@@ -341,7 +341,7 @@
             color: var(--color-red) !important;
         }
         .mat-table tbody > tr > td {
-            //color: var(--color-black) !important;
+            color: var(--color-black) !important;
             background-color: var(--color-medium-gray);
             padding-top: 7px !important;
             padding-bottom: 7px !important;
@@ -352,17 +352,17 @@
         justify-content: space-between;
         align-items: center;
         margin-top: 6px;
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
         .left-side {
             p {
                 font-size: var(--font-size-12);
                 font-weight: 500;
                 line-height: 19px;
-                //color: var(--color-black);
+                color: var(--color-black);
                 span {
                     font-size: var(--font-size-15);
                     font-weight: 500;
-                    //color: var(--color-black);
+                    color: var(--color-black);
                 }
             }
         }
@@ -395,7 +395,7 @@
         mat-grid-tile {
             background-color: var(--color-orange-light);
             .overall-summary-bar-one {
-                //background: var(--color-white);
+                background: var(--color-white);
                 width: 100%;
                 height: inherit;
                 display: flex;
@@ -412,7 +412,7 @@
                     font-weight: bold;
                     p {
                         span {
-                            //color: var(--color-black);
+                            color: var(--color-black);
                             font-size: var(--font-size-15);
                             margin-left: 3px;
                         }
@@ -541,7 +541,7 @@
         justify-content: space-between;
         padding: 0px 1rem;
         .companies-container-items {
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
             width: 20%;
             height: 100%;
             width: 33%;
@@ -550,7 +550,7 @@
             align-items: center;
             p {
                 padding-left: 1rem;
-                //color: var(--color-black);
+                color: var(--color-black);
                 img {
                     height: 1.2rem;
                     padding-right: 8px;
@@ -561,10 +561,10 @@
 }
 ::ng-deep {
     .mat-select-arrow {
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
     }
     .mat-select-placeholder {
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
     }
     .mat-tab-labels {
         background-color: var(--color-border-light);
@@ -572,7 +572,7 @@
             min-width: 110px;
         }
         .mat-tab-label-content {
-            //color: var(--color-dark-gray);
+            color: var(--color-dark-gray);
             font-weight: 500;
         }
     }
@@ -581,7 +581,7 @@
         mat-panel-title {
             font-size: var(--font-size-15);
             padding-left: 15px;
-            //color: var(--color-black) !important;
+            color: var(--color-black) !important;
         }
     }
     .companies .mat-expanded {

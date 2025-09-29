@@ -60,7 +60,7 @@
     height: 30px;
     text-align: center;
     line-height: 30px;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     border-radius: 3px;
     cursor: pointer;
 }
@@ -113,9 +113,9 @@ span {
     visibility: hidden;
 }
 .petty-cash {
-    //background: var(--color-white);
+    background: var(--color-white);
     .bg-color{
-        //background-color: var(--color-white) !important;
+        background-color: var(--color-white) !important;
     }
 }
 

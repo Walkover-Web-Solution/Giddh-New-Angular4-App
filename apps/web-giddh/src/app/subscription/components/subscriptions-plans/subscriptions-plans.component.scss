@@ -6,7 +6,7 @@
 }
 .select-plan-block {
     padding-bottom: 40px;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     border: 1px solid var(--color-silver);
     height: 97%;
 }
@@ -32,7 +32,7 @@
     position: fixed;
     bottom: 30px;
     width: 100%;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     padding: 10px;
 }
 .plan-table-content {
@@ -78,7 +78,7 @@
         z-index: 9;
         border-bottom: 1px solid var(--color-silver);
         position: sticky;
-        //background-color: var(--color-white);
+        background-color: var(--color-white);
         padding-top: 0px;
         line-height: 3;
     }
@@ -150,7 +150,7 @@
     }
     .grid-title-list:nth-child(even) {
         background-color: var(--color-blue-light);
-        //color: var(--color-black) !important;
+        color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
         border-bottom: 1px solid var(--color-silver);
@@ -165,8 +165,8 @@
         border-bottom: 1px solid var(--color-silver);
     }
     .grid-title-list:nth-child(odd) {
-        //background-color: var(--color-white);
-        //color: var(--color-black) !important;
+        background-color: var(--color-white);
+        color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
         border-bottom: 1px solid var(--color-silver);
@@ -189,12 +189,12 @@
 .payment-log-list {
     list-style-type: none;
     font-size: var(--font-size-15);
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 .payment-log-list {
     list-style-type: none;
     font-size: var(--font-size-15);
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 .payment-log-list > li {
     padding: 0px 0 20px 10px;
@@ -248,7 +248,7 @@
     padding: 10px 30px 10px;
     height: 97%;
     justify-content: space-around;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     p.total-price {
         margin: 0 -8px;
     }
@@ -265,7 +265,7 @@
 .inner-your-account {
     position: relative;
     z-index: 2;
-    //background: var(--color-white);
+    background: var(--color-white);
     padding: 30px 15px 15px 30px;
     box-shadow: 0px 3px 6px var(--color-shadow-light);
     border: 1px solid var(--color-silver);
@@ -285,7 +285,7 @@
     height: 100%;
     position: absolute;
     z-index: 1;
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 .your-account:after {
     top: -10px;
@@ -328,7 +328,7 @@
 }
 .transactions-popup {
     width: 360px;
-    //background: var(--color-white);
+    background: var(--color-white);
     box-shadow: 0px 3px 6px var(--color-shadow-light);
     padding: 15px;
     z-index: 9;
@@ -341,7 +341,7 @@
     visibility: hidden;
     transition: 0.5s all ease-in;
     .close {
-        //color: var(--color-black);
+        color: var(--color-black);
         opacity: 1;
         font-size: 16px;
         position: absolute;
@@ -413,7 +413,7 @@
 }
 .btn-group .close {
     font-size: 16px;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     opacity: 1;
 }
 .inner-close {
@@ -421,7 +421,7 @@
     right: 10px;
     top: 10px;
     font-size: var(--font-size-15);
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 .btn-green:focus {
     color: var(--color-white);

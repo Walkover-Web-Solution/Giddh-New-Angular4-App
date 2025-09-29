@@ -34,14 +34,14 @@
 }
 
 #single-role thead th {
-    //color: var(--color-black) !important;
+    color: var(--color-black) !important;
     font-weight: 400;
     text-align: center;
 }
 
 #single-role tbody tr td:first-child,
 #single-role thead th:first-child {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     text-align: left;
     border-right: 1px solid var(--color-silver);
 }
@@ -64,7 +64,7 @@
 }
 
 #single-role tbody tr:first-child {
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 
 #single-role thead th:first-child {
@@ -77,7 +77,7 @@
 }
 
 .role-head {
-    //background: var(--color-white);
+    background: var(--color-white);
     min-height: 170px;
     display: flex;
     flex-direction: column;
@@ -94,7 +94,7 @@
 
 .role ul li {
     width: 25%;
-    //color: var(--color-black);
+    color: var(--color-black);
     padding: 6px;
     font-weight: var(--font-weight-semibold);
     word-break: break-word;

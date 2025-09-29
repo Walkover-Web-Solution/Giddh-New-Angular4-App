@@ -50,7 +50,7 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    //color: var(--color-black);
+    color: var(--color-black);
     border: none;
     background-color: var(--color-light-gray);
 }
@@ -82,7 +82,7 @@
     color: var(--color-blue-primary);
 }
 .Transfer.Note {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 /* voucher type DDL */
@@ -94,7 +94,7 @@
     button {
         text-align: left;
         width: 100%;
-        //color: var(--color-black);
+        color: var(--color-black);
         &:focus,
         &:hover {
             text-decoration: none;
@@ -133,7 +133,7 @@
         border-right-style: none;
     }
     li {
-        //color: var(--color-black);
+        color: var(--color-black);
         padding: 3px 7px !important;
         font-size: var(--font-size-12);
     }
@@ -189,7 +189,7 @@ button[aria-expanded="true"] i {
     border: 1px solid var(--color-blue-primary);
     border-radius: 5px;
     color: var(--color-blue-primary);
-    //background: var(--color-white);
+    background: var(--color-white);
 }
 .table-border .d-flex {
     align-items: center;

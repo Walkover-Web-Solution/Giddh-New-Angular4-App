@@ -82,7 +82,7 @@
     right: auto;
     z-index: 1;
     margin: 0;
-    //background: var(--color-white);
+    background: var(--color-white);
     width: 50%;
     padding: 1px;
     box-shadow: 1px 0 9px var(--color-shadow-light);
@@ -101,14 +101,14 @@
 .account-detail-custom-header {
     border-right: 0;
     padding: 11px 10px 10px 10px;
-    //color: var(--color-black);
+    color: var(--color-black);
     background: var(--color-border-light);
     width: 260px;
     margin-top: -8px;
 }
 
 button.mat-menu-item {
-    //color: var(--color-black);
+    color: var(--color-black);
 }
 
 .account-detail-custom-title {
@@ -128,7 +128,7 @@ button.mat-menu-item {
 }
 
 .custom-detail h4 {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     margin-top: 7px;
     font-size: var(--font-size-15) !important;
     font-family: var(--font-family) !important;
@@ -141,7 +141,7 @@ ul.list-unstyled li a {
 .p-modal-tooltip {
     display: block;
     position: absolute;
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     z-index: 1000;
     width: 257px;
     border: 1px solid var(--color-medium-gray);
@@ -229,7 +229,7 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
         font-size: var(--font-size-15);
         vertical-align: middle;
         display: none;
-        //color: var(--color-dark-gray);
+        color: var(--color-dark-gray);
         position: absolute;
         right: 0;
     }
@@ -304,7 +304,7 @@ tr.aging-table-top td {
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    //color: var(--color-black);
+    color: var(--color-black);
     background-color: var(--color-border-light);
     border-color: var(--color-border-light);
     box-shadow: none !important;
@@ -314,8 +314,8 @@ i.icon-options {
     width: 36px;
     height: 36px;
     border: 1px solid var(--color-silver);
-    //background-color: var(--color-white);
-    color: var(--color-primary-input-bar-text);
+    background-color: var(--color-white);
+    color: var(--color-black);
     font-size: 20px;
     padding: 0;
     display: flex;
@@ -345,7 +345,7 @@ i.icon-options:hover {
 }
 
 .search-field input:focus {
-    //background-color: var(--color-white) !important;
+    background-color: var(--color-white) !important;
     border-color: var(--color-black) !important;
 }
 
@@ -456,7 +456,7 @@ button.btn.btn-filter {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        //color: var(--color-black);
+        color: var(--color-black);
         border: none;
         background-color: var(--color-light-gray) !important;
     }
@@ -975,7 +975,7 @@ button.btn.btn-filter {
 .btn-light:not(:disabled):not(.disabled).active,
 .btn-light:not(:disabled):not(.disabled):active,
 .show > .btn-light.dropdown-toggle {
-    //color: var(--color-black);
+    color: var(--color-black);
     background-color: var(--color-light-gray);
     border: 1px solid var(--color-silver);
 }

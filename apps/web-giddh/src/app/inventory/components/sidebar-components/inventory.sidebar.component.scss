@@ -3,7 +3,7 @@
     display: none;
 }
 .parent-group > ul > li ul li div {
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 .btn-group.show {
     display: inline-block !important;
@@ -12,7 +12,7 @@
     margin-left: 8px;
     margin-top: -3px;
     background: none;
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
     padding: 6px;
     margin-right: 0px !important;
     width: 23px;
@@ -31,7 +31,7 @@ span.caret {
     display: none;
 }
 #inventory-sidebar {
-    //background: var(--color-white);
+    background: var(--color-white);
     width: 260px !important;
     div.clearfix {
         height: 100vh;

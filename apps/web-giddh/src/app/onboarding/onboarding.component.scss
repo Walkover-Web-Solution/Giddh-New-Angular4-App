@@ -9,7 +9,7 @@
 
     .manage-invoice {
         a {
-            background: var(--color-common-primary-background-for-all-components);
+            background: var(--color-white);
             box-shadow: 1px 1px 3px var(--color-shadow-light);
             padding: 9px 15px;
             color: var(--color-blue-primary);
@@ -19,7 +19,7 @@
             i {
                 margin-right: 20px;
                 font-size: 23px;
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
             }
         }
     }

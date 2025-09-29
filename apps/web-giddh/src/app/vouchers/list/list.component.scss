@@ -9,7 +9,7 @@
             border-radius: 5px;
 
             p {
-                //color: var(--color-dark-gray);
+                color: var(--color-dark-gray);
             }
 
             &.opening-box {
@@ -27,7 +27,7 @@
             &.payment-receipt,
             &.closing-box {
                 span {
-                    //color: var(--color-dark-gray);
+                    color: var(--color-dark-gray);
                 }
             }
         }
@@ -128,7 +128,7 @@ table {
     .default-wrap {
         background: var(--color-border-light);
         border-radius: 50px;
-        //color: var(--color-black);
+        color: var(--color-black);
 
         &.active {
             background-color: var(--color-blue-primary) !important;

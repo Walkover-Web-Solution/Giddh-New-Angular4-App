@@ -25,7 +25,7 @@ td {
 }
 
 .stock-group-footer {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     z-index: 3;
     width: calc(100% - 240px);
     padding-right: 15px;
@@ -68,7 +68,7 @@ td {
         border: 1px solid var(--color-medium-gray);
         border-radius: 20px;
         box-shadow: none;
-        //background: var(--color-white);
+        background: var(--color-white);
     }
 
     .icon-download-circle {
@@ -87,7 +87,7 @@ td {
             height: 36px;
             min-width: 100%;
             padding: 11px 40px 11px 11px;
-            //color: var(--color-black);
+            color: var(--color-black);
             border: none;
             background-color: var(--color-light-gray);
             border-radius: 5px;
@@ -122,7 +122,7 @@ td {
 
     .mat-chip.mat-standard-chip {
         color: var(--color-dark-black) !important;
-        //background-color: var(--color-white) !important;
+        background-color: var(--color-white) !important;
         border: 1px solid var(--color-blue-primary) !important;
         font-size: var(--font-size-12) !important;
     }
@@ -137,7 +137,7 @@ td {
     margin-top: 100px;
     padding-bottom: 100px;
     font-size: var(--font-size-32);
-    //color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 
 .filter-dropdown-branch {
