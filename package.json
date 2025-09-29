@@ -1,6 +1,6 @@
 {
     "name": "giddh-workspaces",
-    "version": "8.2.46",
+    "version": "8.2.47",
     "license": "MIT",
     "scripts": {
         "ng": "ng",
