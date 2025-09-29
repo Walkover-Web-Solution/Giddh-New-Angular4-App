@@ -14,7 +14,6 @@ let APP_URL = '';
 let APP_FOLDER = '';
 
 app.on("ready", () => {
-    console.log('windowManager',windowManager)
     ipcMain.on("log.error", (event: any, arg: any) => {
         log(arg);
     });
