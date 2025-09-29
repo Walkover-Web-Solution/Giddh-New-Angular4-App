@@ -43,6 +43,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
 import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
+import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
 
 @Component({
     selector: 'account-add-new-details',
@@ -220,6 +221,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** Holds transfer info if active sales person is transfer */
+    private activeSalePersonIsTransfer: any;
     /** True if sales person is created */
     public salesPersonCreated: boolean = false;
 
@@ -415,7 +418,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
 
-        this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
+        this.addAccountForm.valueChanges.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe((response) => {
             if (this.formValueAssigned && response) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
             }
@@ -501,7 +504,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
             if (!this.isSalesPersonExists(this.addAccountForm.get('salesPersonUniqueName').value, salesPersonList)) {
-                this.addAccountForm.get('salesPersonUniqueName').patchValue(null);
+                let salesPersonName = "";
+                let salesPersonUniqueName = null;
+                if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
+                    const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
+                    if (salesPerson) {
+                        salesPersonName = salesPerson.label
+                        salesPersonUniqueName = salesPerson.value
+                    }
+                }
+                this.addAccountForm.get('salesPersonName').patchValue(salesPersonName);
+                this.addAccountForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
             }
         });
     }
@@ -511,13 +524,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         const interval = setInterval(() => {
             const element = document.getElementById('init-contact-add');
             const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-            
+
             if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-add');
                 clearInterval(interval);
             }
         }, 500); // Reduced interval for faster detection
-        
+
         // Add fallback timeout to prevent infinite loop
         setTimeout(() => {
             clearInterval(interval);
@@ -630,6 +643,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     foreignOpeningBalance: ['']
                 }),
             ]),
+            salesPersonName: [''],
             salesPersonUniqueName: ['']
         });
 
@@ -676,7 +690,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public reInitializeMobileField(fieldId: string): void {
         const element = document.getElementById(fieldId);
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-        
+
         if (element && intlTelInput && !this.intl[fieldId]) {
             this.onlyPhoneNumber(fieldId);
         }
@@ -713,13 +727,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         const interval = setInterval(() => {
             const element = document.getElementById('init-contact-portal_' + lastIndex);
             const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-            
+
             if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
             }
         }, 200); // Faster checking for dynamic elements
-        
+
         // Add fallback timeout
         setTimeout(() => {
             clearInterval(interval);
@@ -1002,6 +1016,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if ((!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) || !(this.activeGroupUniqueName === this.accountingGroupEnum.SundryDebtors || this.isParentSundrydebtors)) {
             delete accountRequest['portalDomain'];
         }
+        delete accountRequest['salesPersonName'];
         this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
@@ -1996,8 +2011,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {this.getSalesPersonList(); this.salesPersonCreated = true})).subscribe();
+        const dialogRef = this.dialog.open(SalesPersonComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: { activeSalePersonUniqueName: this.addAccountForm.get('salesPersonUniqueName').value || "" }
+        });
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.salesPersonCreated = true; this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
     }
 
     /**
