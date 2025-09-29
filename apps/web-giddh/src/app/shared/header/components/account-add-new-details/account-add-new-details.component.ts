@@ -504,16 +504,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
             if (!this.isSalesPersonExists(this.addAccountForm.get('salesPersonUniqueName').value, salesPersonList)) {
-                let salesPersonName = "";
                 let salesPersonUniqueName = null;
                 if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
                     const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
                     if (salesPerson) {
-                        salesPersonName = salesPerson.label
                         salesPersonUniqueName = salesPerson.value
                     }
                 }
-                this.addAccountForm.get('salesPersonName').patchValue(salesPersonName);
                 this.addAccountForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
             }
         });
@@ -643,7 +640,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     foreignOpeningBalance: ['']
                 }),
             ]),
-            salesPersonName: [''],
             salesPersonUniqueName: ['']
         });
 
@@ -1016,7 +1012,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if ((!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) || !(this.activeGroupUniqueName === this.accountingGroupEnum.SundryDebtors || this.isParentSundrydebtors)) {
             delete accountRequest['portalDomain'];
         }
-        delete accountRequest['salesPersonName'];
         this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
