@@ -393,7 +393,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 } else if (currentValue === "") {
                     this.controlLabelValue = "";
                 }
-            } else if (this.value && this.controlLabelValue && this.controlLabelValue?.trim() === "") {
+            } else if (this.value && (!this.controlLabelValue || this.controlLabelValue?.trim() === "")) {
                 this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue) ? this.labelValue : (this.options?.find(option => isEqual(option?.value, this.value))?.label || this.value);
                 this.changeDetection.detectChanges();
             } else if (!this.value) {

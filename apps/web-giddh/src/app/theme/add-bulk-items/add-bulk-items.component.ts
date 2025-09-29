@@ -212,12 +212,11 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     variants: this.stockVariants[index]
                 };
 
-                const stockUnitUniqueName = data.body.stock.variant?.unitRates[0]?.stockUnitUniqueName;
                 let baseRate: number;
-                if (data.body.stock.variant?.unitRates?.length) {
-                    baseRate = this.getRateByUnit(stockUnitUniqueName, data.body.stock.variant?.unitRates);
+                if (data.body.stock?.variant?.unitRates?.length) {
+                    baseRate = this.getRateByUnit(data.body.stock.variant.unitRates[0]?.stockUnitUniqueName, data.body.stock.variant.unitRates) || 0;
                 } else {
-                    baseRate = data.body.stock.rate;
+                    baseRate = data.body.stock?.rate || 0;
                 }
                 const exchangeRateValue = this.inputData.exchangeRate ?? 1;
                 const rate = Number((baseRate / exchangeRateValue).toFixed(this.inputData.highPrecisionRate));
