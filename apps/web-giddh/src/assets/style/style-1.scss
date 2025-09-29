@@ -98,12 +98,18 @@ a {
     padding: 0;
     font-size: 100%;
 }
-a{
-    color: var(--color-blue-primary);
+a {
+    color: var(--color-black);
     &:hover{
-        color: var(--color-blue-primary);
+        color: var(--color-black);
     }
 }
+// a{ // ============== THIS CODE IS TEMPORARY COMMENT =============
+//     color: var(--color-blue-primary);
+//     &:hover{
+//         color: var(--color-blue-primary);
+//     }
+// }
 /*end typo*/
 
 div > input.date-picker {
