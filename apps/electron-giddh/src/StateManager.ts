@@ -67,7 +67,6 @@ export class StateManager {
     private data: Config;
 
     constructor() {
-        console.log('data',this.data)
         if (os.platform() === 'darwin') {
             this.store.path = path.join(os.homedir(), 'Library', 'Preferences', 'org.walkover.giddh' + (isDev() ? '-dev' : '') + '.json');
         }
