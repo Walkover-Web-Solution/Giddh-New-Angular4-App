@@ -289,9 +289,9 @@ export class TemplateFroalaComponent implements OnInit {
                 
                 // Patch existing form instead of recreating it
                 this.emailForm.patchValue({
-                    to: response.to ?? null,
-                    cc: response.cc ?? null,
-                    bcc: response.bcc ?? null,
+                    to: response.to ?? [],
+                    cc: response.cc ?? [],
+                    bcc: response.bcc ?? [],
                     emailSubject: response.emailSubject ?? null,
                     html: response.html ?? null
                 }, { emitEvent: false });
@@ -613,9 +613,9 @@ export class TemplateFroalaComponent implements OnInit {
             }, { emitEvent: false });
         } else {
             this.emailForm = this.formBuilder.group({
-                to: [template?.to ?? null],
-                cc: [template?.cc ?? null],
-                bcc: [template?.bcc ?? null],
+                to: [template?.to ?? []],
+                cc: [template?.cc ?? []],
+                bcc: [template?.bcc ?? []],
                 voucherTypes: [[this.inputData]],
                 emailSubject: [template?.emailSubject ?? null],
                 html: [template?.html ?? null]
@@ -1145,7 +1145,7 @@ export class TemplateFroalaComponent implements OnInit {
             bcc: this.selectedBccEmails,
             cc: this.selectedCcEmails
         };
-
+        
         return isEqual(formRecipients, selectedRecipients);
     }
 }
