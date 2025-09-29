@@ -11,12 +11,31 @@ export default class AppUpdaterV1 {
         log.transports.file.level = 'debug';
         autoUpdater.logger = log;
         autoUpdater.autoDownload = false;
+        
+        // Set S3 update server URL
+        autoUpdater.setFeedURL({
+            provider: 'generic',
+            url: 'https://giddh-app-builds.s3.amazonaws.com/'
+        });
+        
+        console.log('Update server URL:', autoUpdater.getFeedURL());
+        console.log('Current app version:', require('electron').app.getVersion());
+        
+        // Add debug event listeners
+        autoUpdater.on('checking-for-update', () => {
+            console.log('Checking for update...');
+        });
+        
+        autoUpdater.on('error', (err) => {
+            console.error('Update error:', err);
+        });
+        
         autoUpdater.on('update-available', () => {
             if (updater) {
                 dialog.showMessageBox({
                     type: 'info',
                     title: 'Found Updates',
-                    message: 'Found updates, do you want update now?',
+                    message: 'Found new updates, do you want update now?',
                     buttons: ['Sure', 'No']
                 }).then((resp) => {
                     if (resp.response === 0) {
@@ -38,7 +57,7 @@ export default class AppUpdaterV1 {
                 dialog.showMessageBox({
                     type: 'info',
                     title: 'Found Updates',
-                    message: 'Found updates, do you want update now?',
+                    message: 'Found new updates, do you want update now?',
                     buttons: ['Sure', 'No']
                 }).then((resp) => {
                     if (resp.response === 0) {
@@ -76,11 +95,21 @@ export default class AppUpdaterV1 {
                 }
             }).catch((error) => {
                 console.error('Update downloaded dialog error:', error);
-                // Fallback: show simple confirmation
-                const confirmed = confirm('A new version has been downloaded. Restart now?');
-                if (confirmed) {
-                    autoUpdater.quitAndInstall();
-                }
+                // Fallback: use another message box to confirm restart
+                dialog.showMessageBox({
+                    type: 'question',
+                    buttons: ['Restart', 'Later'],
+                    defaultId: 0,
+                    cancelId: 1,
+                    title: 'Application Update',
+                    message: 'A new version has been downloaded. Restart now?'
+                }).then((res) => {
+                    if (res.response === 0) {
+                        autoUpdater.quitAndInstall();
+                    }
+                }).catch((fallbackErr) => {
+                    console.error('Fallback restart dialog error:', fallbackErr);
+                });
             });
         });
 
