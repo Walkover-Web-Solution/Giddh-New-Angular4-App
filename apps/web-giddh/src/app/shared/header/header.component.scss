@@ -3,7 +3,7 @@
 }
 
 .company-button {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
 }
 
 .custom-header {
@@ -17,7 +17,7 @@
     top: var(--top-sidebar);
     bottom: 0;
     min-height: calc(100vh - 60px);
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     width: 60px;
     left: 0;
     z-index: 991;
@@ -165,7 +165,7 @@ ul{
                 a{
                     &:hover {
                         .icon-circle{
-                            //background-color: var(--color-white);
+                            background-color: var(--color-white);
                             i[class^='icon-'],
                             i[class*=' icon-'] {
                               color: var(--color-blue-primary) !important;
@@ -180,7 +180,7 @@ ul{
                 }
                 &:hover{
                     button {
-                        //background-color: var(--color-white) !important;
+                        background-color: var(--color-white) !important;
                         color: var(--color-blue-primary) !important;
                     }
                 }
@@ -318,7 +318,7 @@ ul.sub-list {
 
 /*notification css*/
 .white-row {
-    //background-color: var(--color-white);
+    background-color: var(--color-white);
     padding: 10px 15px;
     font-size: var(--font-size-15);
     box-shadow: 1px 1px 3px var(--color-shadow-light);
@@ -432,7 +432,7 @@ ul.sub-list {
         }
 
         .input-date {
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
             border-radius: 5px !important;
             border: none;
 
@@ -444,7 +444,7 @@ ul.sub-list {
         #add-manage {
             color: var(--color-blue-primary) !important;
             padding: 4.8px 8px;
-            //background-color: var(--color-white);
+            background-color: var(--color-white);
             display: flex;
             justify-content: center;
             align-items: center;
