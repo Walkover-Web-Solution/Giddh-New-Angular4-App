@@ -7,29 +7,10 @@ export default class AppUpdaterV1 {
 
     constructor() {
         const log = require('electron-log');
-        console.log('log',log);
         log.transports.file.level = 'debug';
         autoUpdater.logger = log;
         autoUpdater.autoDownload = false;
-        
-        // Set S3 update server URL
-        autoUpdater.setFeedURL({
-            provider: 'generic',
-            url: 'https://giddh-app-builds.s3.amazonaws.com/'
-        });
-        
-        console.log('Update server URL:', autoUpdater.getFeedURL());
-        console.log('Current app version:', require('electron').app.getVersion());
-        
-        // Add debug event listeners
-        autoUpdater.on('checking-for-update', () => {
-            console.log('Checking for update...');
-        });
-        
-        autoUpdater.on('error', (err) => {
-            console.error('Update error:', err);
-        });
-        
+
         autoUpdater.on('update-available', () => {
             if (updater) {
                 dialog.showMessageBox({
@@ -52,24 +33,9 @@ export default class AppUpdaterV1 {
                     autoUpdater.downloadUpdate();
                 });
 
-            } else {
-                // Fallback dialog when updater is null
-                dialog.showMessageBox({
-                    type: 'info',
-                    title: 'Found Updates',
-                    message: 'Found new updates, do you want update now?',
-                    buttons: ['Sure', 'No']
-                }).then((resp) => {
-                    if (resp.response === 0) {
-                        autoUpdater.downloadUpdate();
-                    }
-                }).catch((error) => {
-                    console.error('Fallback dialog error:', error);
-                    // If fallback dialog also fails, automatically download
-                    autoUpdater.downloadUpdate();
-                });
             }
         });
+
         autoUpdater.on('update-not-available', () => {
             if (updater) {
                 dialog.showMessageBox({
@@ -113,13 +79,9 @@ export default class AppUpdaterV1 {
             });
         });
 
-        autoUpdater.checkForUpdatesAndNotify();
-        
-        // Set up interval to check for updates every 5 minutes
-        setInterval(() => {
-            console.log('Checking for updates (5-minute interval)...');
+        setTimeout(() => {
             autoUpdater.checkForUpdatesAndNotify();
-        }, 5 * 60 * 1000); // 5 minutes in milliseconds
+        }, 3000);
     }
 }
 

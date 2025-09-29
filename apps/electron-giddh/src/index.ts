@@ -4,7 +4,6 @@ import { log } from "./util";
 import WindowManager from "./WindowManager";
 import { GoogleLoginElectronConfig } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
-import AppUpdaterV1 from "./AppUpdater";
 
 let windowManager: WindowManager = null;
 let STAGING_ENV = false;
@@ -23,17 +22,6 @@ app.on("ready", () => {
     setMenu();
     windowManager = new WindowManager();
     windowManager.openWindows();
-
-    // Initialize auto-update checks for Windows packaged builds
-    try {
-        if (process.platform === 'win32' && app.isPackaged) {
-            // AppUpdaterV1 constructor sets up listeners, triggers an immediate check,
-            // and schedules periodic checks every 5 minutes.
-            new AppUpdaterV1();
-        }
-    } catch (err) {
-        log(`Failed to initialize AppUpdaterV1: ${err?.message || err}`);
-    }
 });
 ipcMain.on("open-url", (event, arg) => {
     windowManager.openWindows(arg);
