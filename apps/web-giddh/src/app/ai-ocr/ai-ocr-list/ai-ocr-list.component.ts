@@ -153,7 +153,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentListForm?.controls["status"].valueChanges
             .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((searchedText) => {
-                if (this.isNotNullOrUndefined(searchedText)) {
+                if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                     this.aiOcrService.mainPage$.next(false);
                 }
@@ -166,7 +166,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentListForm?.controls["convertedStatus"].valueChanges
             .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((searchedText) => {
-                if (this.isNotNullOrUndefined(searchedText)) {
+                if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                     this.aiOcrService.mainPage$.next(false);
                 }
@@ -179,7 +179,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentListForm?.controls["uploadedBy"].valueChanges
             .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((searchedText) => {
-                if (this.isNotNullOrUndefined(searchedText)) {
+                if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                     this.aiOcrService.mainPage$.next(false);
                 }
@@ -192,7 +192,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentListForm?.controls["fileName"].valueChanges
             .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((searchedText) => {
-                if (this.isNotNullOrUndefined(searchedText)) {
+                if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                     this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                     this.aiOcrService.mainPage$.next(false);
                 }
