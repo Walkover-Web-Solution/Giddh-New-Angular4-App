@@ -1573,19 +1573,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
-            if (!this.isUpdateMode && !this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
-                let salesPersonName = "";
-                let salesPersonUniqueName = null;
-
-                if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
-                    const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
-                    if (salesPerson) {
-                        salesPersonName = salesPerson.label
-                        salesPersonUniqueName = salesPerson.value
+            if (!this.isUpdateMode) {
+                if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                    let salesPersonName = "";
+                    let salesPersonUniqueName = null;
+                    if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
+                        const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
+                        if (salesPerson) {
+                            salesPersonName = salesPerson.label
+                            salesPersonUniqueName = salesPerson.value
+                        }
                     }
+                    this.invoiceForm.get('salesPersonName').patchValue(salesPersonName);
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
                 }
-                this.invoiceForm.get('salesPersonName').patchValue(salesPersonName);
-                this.invoiceForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
             }
         });
     }
@@ -3739,13 +3740,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (entries?.length > 1) {
             this.dateChangeType = "entry";
             this.updatedEntryIndex = updatedEntryIndex;
-            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(
-                this.localeData,
-                this.commonLocaleData,
-                false
-            );
-            this.dialog.open(this.dateChangeConfirmationModel, {
-                width: "650px",
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: "mat-dialog-sm",
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.change_all_entry_dates, this.commonLocaleData),
+                },
+            });
+
+            dialogRef.afterClosed().subscribe((response) => {
+                this.handleDateChangeConfirmation(response);
             });
         }
     }
@@ -3782,13 +3785,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.dateChangeType = "voucher";
 
-        this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(
-            this.localeData,
-            this.commonLocaleData,
-            true
-        );
-        this.dialog.open(this.dateChangeConfirmationModel, {
-            width: "650px",
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: "mat-dialog-sm",
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+            },
+        });
+
+        dialogRef.afterClosed().subscribe((response) => {
+            this.handleDateChangeConfirmation(response);
         });
     }
 
@@ -6130,12 +6135,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 .get("showCodeType")
                 ?.patchValue(response.stock.hsnNumber || response.hsnNumber ? "hsn" : "sac");
 
-            const rate = Number(
-                (
-                    (response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0) /
-                    (this.invoiceForm.get("exchangeRate")?.value ?? 1)
-                ).toFixed(this.highPrecisionRate)
-            );
+            transactionFormGroup.get("stock.stockUnit.code")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
+            transactionFormGroup.get("stock.stockUnit.uniqueName")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
+
+            let baseRate: number;
+            if (response.stock.variant?.unitRates?.length) {
+                baseRate = this.getRateByUnit(transactionFormGroup.get("stock.stockUnit.uniqueName")?.value,response.stock.variant?.unitRates);
+            } else {
+                baseRate = response.stock.rate;
+            }
+            const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value ?? 1;
+            const rate = Number((baseRate / exchangeRateValue).toFixed(this.highPrecisionRate));
             transactionFormGroup.get("stock.rate.rateForAccount")?.patchValue(rate);
             transactionFormGroup.get("stock.skuCode")?.patchValue(response.stock.skuCode);
             transactionFormGroup.get("stock.skuCodeHeading")?.patchValue(response.stock.skuCodeHeading);
@@ -6265,6 +6275,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.checkIfEntriesHasStock();
     }
 
+     /**
+     * Get rate by unit
+     *
+     * @param {string} stockUnitUniqueName
+     * @param {any[]} unitRates
+     * @returns {number}
+     * @memberof VoucherCreateComponent
+     */
+     private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
+        return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
+    }
+    
     /**
      * Set barcode machine typing to false if user clicked on dropdown
      *
@@ -6543,11 +6565,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Calculates amount if advance receipt
+         * Calculates amount if advance receipt
      *
      * @private
-     * @param {FormGroup} entryFormGroup
-     * @param {boolean} isUpdate
+         * @param {FormGroup} entryFormGroup
+         * @param {boolean} isUpdate
      * @memberof VoucherCreateComponent
      */
     private calculateReceiptPaymentAmount(entryFormGroup: FormGroup, isUpdate: boolean = false): void {
