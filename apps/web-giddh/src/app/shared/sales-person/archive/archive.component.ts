@@ -7,7 +7,7 @@ import { ActionTypeEnum } from '../utility/sales-person.constant';
 import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
 import { SalesPersonComponentStore } from '../utility/sales-person.store';
 import { filter, ReplaySubject, takeUntil } from 'rxjs';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { IOption } from '../../../app.constant';
 
 @Component({
     selector: 'archive',

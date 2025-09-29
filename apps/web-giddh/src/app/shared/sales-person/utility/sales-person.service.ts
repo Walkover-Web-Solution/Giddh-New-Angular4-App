@@ -6,7 +6,7 @@ import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { GiddhErrorHandler } from "../../../services/catchManager/catchmanger";
 import { IServiceConfigArgs, ServiceConfig } from "../../../services/service.config";
 import { GeneralService } from "../../../services/general.service";
-import { HttpMethod, HttpMethodType } from "../../../app.constant";
+import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, HttpMethod, HttpMethodType } from "../../../app.constant";
 import { SALES_PERSON_API, SALES_PERSON_ARCHIVE_API } from "./sales.person.api";
 import { SalesPersonDeleteArchivedModel } from "./sales-person.constant";
 
@@ -34,7 +34,7 @@ export class SalesPersonService {
             url += `/${encodeURIComponent(uniqueName)}`;
         }
         if (httpMethod === HttpMethod.GET) {
-            url += `?page=${params?.page || 1}&count=${params?.count || 200}&archive=${params?.archive ?? false}`; // archive is false by default means only active sales person will be fetched
+            url += `?page=${params?.page || 1}&count=${params?.count || ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT}&archive=${params?.archive ?? false}`; // archive is false by default means only active sales person will be fetched
         }
         return this.http[httpMethod](url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;

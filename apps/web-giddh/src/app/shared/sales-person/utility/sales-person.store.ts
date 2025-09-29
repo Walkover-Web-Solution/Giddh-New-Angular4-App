@@ -5,9 +5,8 @@ import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-model
 import { ToasterService } from "../../../services/toaster.service";
 import { LocaleService } from "../../../services/locale.service";
 import { SalesPersonService } from "./sales-person.service";
-import { HttpMethod } from "../../../app.constant";
+import { HttpMethod, IOption } from "../../../app.constant";
 import { SalesPersonCreateUpdate, SalesPersonDeleteArchivedModel, SalesPersonErrorDetailsEnum } from "./sales-person.constant";
-import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 
 export interface SalesPersonState {
     salesPersonSaveInProgress: boolean;
@@ -167,13 +166,13 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
+                                typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
                                 this.patchState({
                                     deleteSalesPersonSuccess: true
                                 });
                             } else {
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
-
                                     if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                                         this.patchState({
                                             openTransferAndArchiveDialog: true

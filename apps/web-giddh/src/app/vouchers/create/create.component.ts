@@ -83,7 +83,8 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
     ZIP_CODE_SUPPORTED_COUNTRIES,
-    ASIDE_PANE_CONFIG
+    ASIDE_PANE_CONFIG,
+    IOption
 } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
@@ -106,7 +107,6 @@ import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
-import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
 import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
 
 @Component({
@@ -6307,18 +6307,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
      private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
-        return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
-    }
-    
-    /**
-     * Get rate by unit
-     *
-     * @param {string} stockUnitUniqueName
-     * @param {any[]} unitRates
-     * @returns {number}
-     * @memberof VoucherCreateComponent
-     */
-    private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
         return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
     }
 
