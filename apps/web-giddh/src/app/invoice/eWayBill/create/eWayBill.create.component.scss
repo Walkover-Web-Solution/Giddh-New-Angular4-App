@@ -1,18 +1,7 @@
-.right-penal {
+.right-panel {
     border-left: 1px solid var(--color-gray);
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    top: calc(var(--top-distance) + 54px);
     width: 280px;
-    padding: 15px;
-    overflow: auto;
-    .card {
-        width: 100%;
-        margin-bottom: 15px;
-        border-radius: 4px;
-        background-color: var(--color-white);
-        padding: 15px;
+    mat-card {
         h2 {
             font-size: var(--font-size-15);
             color: var(--color-blue);
@@ -30,16 +19,8 @@
     }
 }
 
-.e-way-body {
-    .col-md-3 {
-        display: flex;
-        align-items: center;
-    }
-    .col-md-8 {
-        .input {
-            width: 300px;
-        }
-    }
+.eway-bill-height {
+    min-height: calc(100vh - (var(--header-height) + 20px));
 }
 
 .list-icon-group {

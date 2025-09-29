@@ -61,9 +61,6 @@
                             </div>
                         </div>
                         <div class="col-4 font-12 pd-t15">
-                            <!-- <div class="text-center">
-                                      <div>10,340 Dr.</div>
-                                  </div> -->
                         </div>
                         <div class="col-4 text-right">
                             <div class="font-12 text-color">
@@ -259,10 +256,6 @@
                                                         v-if="legderBalanceData.forwardedBalance.type !== 'CREDIT' || (legderBalanceData.forwardedBalance.amount == 0)">
                                                         <td class="bd-rr" colspan="3">&nbsp;</td>
                                                     </tr>
-                                                    <!-- ng-if="ledger.hasCredit" -->
-                                                    <!-- ng-class="{compound-entry: ledger.isCompoundEntry}"
-                                        ng-click="checkCompEntry(ledger)" -->
-                                                    <!-- uib-tooltip="Total : {{ledger.total.amount}} {{ledger.total.type}}" tooltip-placement="top" -->
                                                     <tr v-for="ledger in ledgerData.ledgersTransactions.creditTransactions"
                                                         v-tooltip="'Total: '+ledger.amount+' '+ledger.type"
                                                         v-on:click="checkCompEntry(ledger)"
@@ -411,7 +404,6 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-3">
-                            <!--<span class="primary-color mr-b1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
                             <h1>Total Transactions
                                 <span class="primary-color">{{ledgerData.ledgersTransactions.totalItems}}</span>
                             </h1>
@@ -459,24 +451,6 @@
             </section>
 
             <section id="web_footer">
-                <!-- <section class="cmnPd80 ylwBg homeBtmhalf">
-          <div class="container">
-            <div class="row text-center">
-              <div class="col-sm-12">
-                <h3 class="arvo">Giddh
-                  <strong>automates the accounting</strong> on behalf of
-                  <span class="companyName">
-                    <strong>{{ledgerData.companyName}}</strong>
-                  </span>.</h3>
-                <h4 class="arvo">We would love to extend our support via
-                  <a href="https://muneem.co" target="_blank" class="green"
-                    style="text-decoration: underline;">Muneem</a>
-                  for any query related to your ledger with
-                  <span class="companyName">{{ledgerData.companyName}}</span>.</h4>
-              </div>
-            </div>
-          </div>
-        </section> -->
 
 
                 <footer class="style-1">
@@ -608,7 +582,7 @@
                                                 </div>
                                             </div>
                                             <button v-on:click="submitForm(cForm, $event)"
-                                                class="btn btn-default btn-lg btn-outline-primary" type="submit">Submit
+                                                mat-raised-button color="primary" type="submit">Submit
                                             </button>
 
                                         </form>
@@ -622,145 +596,6 @@
                 </footer>
 
 
-                <!-- footer start
-        <section id="footer">
-          <section id="contact">
-            <div class="container">
-              <div class="row pr">
-                <div id="footer-mascot" class="visible-md-block visible-lg-block"></div>
-
-                <div class="col-md-5 pull-right col-sm-6 col-xs-12">
-                  <div v-show="!formSubmitted">
-                    <h4 class="header-line mr-b2">Tell us!</h4>
-                    <form novalidate name="contactForm" action="#">
-                      <div class="row">
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input name="contactForm.name" placeholder="Full Name*" v-model="cForm.name" type="text"
-                              required class="form-control">
-                          </div>
-                        </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label for="message">Contact Number *</label>
-                            <input class="form-control" placeholder="Contact Number *" type="text"
-                              decimalDigitsDirective name="contactForm.number" v-model="cForm.number" minlength="7"
-                              maxlength="12" required>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="control-group">
-                        <div class="form-group">
-                          <label for="email">Email Address *</label>
-                          <input name="contactForm.email" placeholder="Email Address *" v-model="cForm.email"
-                            type="email" required class="form-control">
-                        </div>
-                      </div>
-
-                      <div class="control-group">
-                        <div class="form-group">
-                          <label for="message">Message</label>
-                          <textarea name="contactForm.message" placeholder="Message" v-model="cForm.message"
-                            class="form-control"></textarea>
-                        </div>
-                      </div>
-                      <button v-on:click="submitForm(cForm, $event)" class="btn btn-default btn-lg" type="submit">Submit
-                      </button>
-
-                    </form>
-                  </div>
-                  <h4 class="header-line" v-if="formSubmitted">{{responseMsg}}</h4>
-                </div>
-
-                <div class="col-md-5 col-sm-6 col-xs-12">
-
-                </div>
-
-                <div class="col-md-5 col-sm-6 col-xs-12" v-bind:class="{'mr-t4': isSmall}">
-                  <h4 class="header-line">Contact Us</h4>
-
-                  <div class="social">
-                  </div>
-                  <div class="inconsolata">
-                    <p>405-406, Capt. C. S. Naidu Arcade,</p>
-                    <p>Near Greater Kailash Hospital, 10/2 Old Palasia,</p>
-                    <p>Indore, Madhya Pradesh 452018</p>
-                    <p class="mr-t3">Sales :
-                      <a class="white" href="mailto:shubhendra@giddh.com">shubhendra@giddh.com</a>
-                      <br /> Support :
-                      <a class="white" href="mailto:support@giddh.com">support@giddh.com</a>
-                      <br>
-                      <i class="glyphicon glyphicon-phone"></i>
-                      <a class="white" href="tel:07939593939">079 39 59 3939</a>
-                      <i class="glyphicon glyphicon-phone"></i>
-                      <a class="white" href="tel:08033037089">080 33 03 7089</a>
-                    </p>
-                    <ul class="app_download">
-                      <h3>Desktop App</h3>
-                      <li>
-                        <a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.dmg"
-                          title="Mac os" target="_Blank">
-                          <i class="icon-mac"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app+Setup+6.4.0.exe"
-                          target="_Blank" title="Windows">
-                          <i class="icon-windows"></i>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/giddh-app-6.4.0.tar.gz"
-                          target="_Blank" title="Linux">
-                          <i class="fa fa-linux"></i>
-                        </a>
-                      </li>
-                    </ul>
-                    <div id="farzi"></div>
-                  </div>
-                </div>
-
-
-              </div>
-            </div>
-          </section>
-        </section>
-
-
-
-        <footer>
-          <div>
-            <a href="https://giddh.com/about.php" target="_Blank" ng-click="$event.stopPropagation()">About us</a>
-            <span>|</span>
-            <a href="http://blog.giddh.com/" target="_Blank" ng-click="$event.stopPropagation()">Blog</a>
-            <span>|</span>
-            <a href="https://trello.com/b/PArZrnyg/giddh" target="_Blank"
-              ng-click="$event.stopPropagation()">Upcoming</a>
-            <span>|</span>
-            <a href="https://giddh.com/terms.php" target="_Blank" ng-click="$event.stopPropagation()">Terms of use</a>
-            <span>|</span>
-            <a href="https://giddh.com/privacy.php" target="_Blank" ng-click="$event.stopPropagation()">Privacy
-              policy</a>
-            <span>|</span>
-            <a href="https://walkover.workable.com/" target="_Blank" ng-click="$event.stopPropagation()">Work with
-              us!</a>
-            <span>|</span>
-            <a href="http://faq.giddh.com" target="_Blank" ng-click="$event.stopPropagation()">FAQ</a>
-            <span>|</span>
-            <a href="https://giddh.com/affiliate.php" target="_Blank" ng-click="$event.stopPropagation()">Affiliate With
-              Us</a>
-            <span>|</span>
-            <a href="https://changelog.giddh.com" target="_Blank" ng-click="$event.stopPropagation()">Changelog</a>
-          </div>
-
-          <small>All right are reserved © 2020 Walkover
-            <a href="https://giddh.com/" target="_Blank" ng-click="$event.stopPropagation()">Giddh.com</a>
-          </small>
-        </footer>
-      </section>
-       end of footer -->
 
             </section>
     </div>

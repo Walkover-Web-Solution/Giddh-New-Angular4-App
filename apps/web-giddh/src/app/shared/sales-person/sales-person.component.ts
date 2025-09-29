@@ -18,8 +18,8 @@ import { InputFieldComponent } from '../../theme/form-fields/input-field/input-f
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { PAGE_SIZE_OPTIONS } from '../../app.constant';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { MatMenuModule } from '@angular/material/menu';
 import { ArchiveSalesPersonComponent } from './archive/archive.component';
 
@@ -94,13 +94,17 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds advance Filters keys */
     public requestParams: any = {
         page: 1,
-        count: this.pageSizeOptions[0],
+        count: PAGINATION_LIMIT,
         archive: SalesPersonArchiveEnum.BOTH
     };
     /** Transfer and delete dialog reference */
     public transferAndDeleteDialogRef: MatDialogRef<any>;
     /** Transfer and archive dialog reference */
     public transferAndArchiveDialogRef: MatDialogRef<any>;
+    /** Total results */
+    public totalResults: number = 0;
+    /** Voucher API Version */
+    public voucherApiVersion: number;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public salesPersonData: any,
@@ -118,6 +122,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof SalesPersonComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.salesPersonUniqueName = this.salesPersonData?.uniqueName || null;
         this.initForm(this.salesPersonUniqueName ? this.salesPersonData : undefined);
         this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
@@ -346,8 +351,8 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
      * @param {*} event
      * @memberof SalesPersonComponent
      */
-    public handlePageChange(event: any): void {
-        this.requestParams.page = event.pageIndex + 1;
+    public handlePageChange(event: PageEvent): void {
+        this.requestParams.page = this.requestParams.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.requestParams.count = event.pageSize;
         this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
     }

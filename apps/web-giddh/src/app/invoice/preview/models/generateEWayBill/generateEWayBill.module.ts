@@ -2,8 +2,10 @@ import { NgModule } from "@angular/core";
 import { GenerateEWayBillComponent } from "./generateEWayBill.component";
 import { CommonModule } from "@angular/common";
 import { TranslateDirectiveModule } from "apps/web-giddh/src/app/theme/translate/translate.directive.module";
-import { ModalModule } from "ngx-bootstrap/modal";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatBadgeModule } from "@angular/material/badge";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -13,7 +15,9 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         CommonModule,
         MatTooltipModule, 
         TranslateDirectiveModule,
-        ModalModule.forRoot()
+        MatBadgeModule,
+        MatDialogModule,
+        MatButtonModule
     ],
     exports: [
         GenerateEWayBillComponent

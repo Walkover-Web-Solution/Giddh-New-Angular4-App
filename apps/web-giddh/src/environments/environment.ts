@@ -1,4 +1,3 @@
-
 /* tslint:disable */
 
 import { ApplicationRef, NgModuleRef } from '@angular/core';
@@ -8,7 +7,7 @@ import { Environment } from './model';
 Error.stackTraceLimit = Infinity;
 
 export const environment: Environment = {
-    production: true,
+    production: false,
     AppUrl: 'http://localhost:3000/',
     ApiUrl: 'https://apitest.giddh.com/',
     UkApiUrl: 'https://gbapi.giddh.com/',

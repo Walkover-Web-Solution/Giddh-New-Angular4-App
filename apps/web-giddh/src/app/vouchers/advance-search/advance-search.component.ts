@@ -1,14 +1,11 @@
 import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { debounceTime, filter, map, Observable, ReplaySubject, skip, take, takeUntil, tap } from 'rxjs';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { BsModalRef } from 'ngx-bootstrap/modal';
-import { ASIDE_PANE_CONFIG, DATE_REGEX, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { debounceTime, filter, Observable, ReplaySubject, skip, take, takeUntil, tap } from 'rxjs';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../../shared/helpers/defaultDateFormat';
+import { ASIDE_PANE_CONFIG, DATE_REGEX, IOption } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
-import { GeneralService } from '../../services/general.service';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../shared/sales-person/sales-person.component';
 
@@ -49,24 +46,10 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Directive to get reference of element */
     @ViewChild('filterDatepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
-    /* This will store selected date range to use in api */
-    public selectedDateRange: any;
-    /* This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
-    /* This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
-    /* Selected range label */
-    public selectedRangeLabel: any = "";
-    /* Universal date observer */
-    public universalDate$: Observable<any>;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
     /** Holds field label values */
@@ -92,7 +75,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
-        private generalService: GeneralService,
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
         private salesPersonStore: SalesPersonComponentStore
@@ -173,9 +155,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             salesPersonName: [this.advanceFilters?.salesPersonName ?? ''],
             salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? '']
         });
-
-        this.selectedDateRange = { startDate: this.advanceFilters.from, endDate: this.advanceFilters.to };
-        this.selectedDateRangeUi = this.advanceFilters.from + " - " + this.advanceFilters.to;
 
         const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
         if (invoiceDateRange?.length) {

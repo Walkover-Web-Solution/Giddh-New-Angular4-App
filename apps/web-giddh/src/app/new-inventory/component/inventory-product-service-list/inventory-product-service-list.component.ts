@@ -1,5 +1,4 @@
-import { Component, Inject, OnInit, ViewChildren } from "@angular/core";
-import { ShSelectComponent } from "../../../theme/ng-virtual-select/sh-select.component";
+import { Component, Inject, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
@@ -118,12 +117,6 @@ export class ProductServiceListComponent implements OnInit {
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
 
-    // @ViewChild(MatSort) sort: MatSort;
-    //
-    // // tslint:disable-next-line:use-life-cycle-interface
-    // ngAfterViewInit() {
-    //     this.dataSource.sort = this.sort;
-    // }
 
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {

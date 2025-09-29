@@ -14,7 +14,7 @@
                 <!--group-->
                 <div class="pull-right text-right">
                     <button 
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="exportGroupLedger()"
                         aria-label="export" 
@@ -23,7 +23,7 @@
                         {{ commonLocaleData?.app_export }}
                     </button>
                     <button 
-                        mat-stroked-button
+                        mat-raised-button
                         aria-label="share" 
                         class="pull-right" 
                         (click)="openShareGroupDialog()"
@@ -42,7 +42,7 @@
             <!--account-->
             <div class="col-lg-4 pull-right pr-0 pl-0 full-width" *ngIf="showEditAccount$ | async">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     aria-label="share" 
                     class="pull-right"
                     (click)="openShareAccountDialog()"
@@ -153,13 +153,15 @@
 <!--add new buttons-->
 <div class="inline-table new-form ng-scope" *ngIf="showNewForm$ | async">
     <div class="vertical-center groups-buttons">
-        <button aria-label="create group" class="btn isActive mr-b2" (click)="showAddGroupForm()">
+        <button mat-raised-button color="primary" aria-label="create group" class="w125 mr-b2" (click)="showAddGroupForm()">
             {{ commonLocaleData?.app_create_group }}
         </button>
         <span class="clearfix"></span>
         <button
+            mat-raised-button
+            color="primary"
+            class="w125"
             aria-label="create account"
-            class="btn isActive"
             *ngIf="!isRootLevelGroup"
             (click)="showAddAccountForm()"
         >
@@ -226,7 +228,7 @@
         )
     "
 >
-    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">
+    <button mat-raised-button color="primary" (click)="exportMasterDialog()">
         {{ commonLocaleData?.app_export }}
     </button>
 </div>

@@ -46,29 +46,29 @@
                                 </input-field>
                             </div>
                             <div class="col-6 country-space">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'country'"
                                     [autocomplete]="'disabled'"
                                     [label]="commonLocaleData?.app_country + '*'"
                                     [placeholder]="localeData?.enter_country_name"
                                     [options]="countries"
                                     (selectedOption)="selectCountry($event)"
-                                    [defaultValue]="selectedCountry"
+                                    [labelValue]="selectedCountry"
                                     [showError]="isFormSubmitted && !firstStepForm.get('country')?.value"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <div class="col-6 currency-space">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'currency'"
                                     [label]="commonLocaleData?.app_currency + '*'"
                                     [placeholder]="localeData?.enter_currency_name"
                                     [options]="currencies"
                                     [showError]="isFormSubmitted && !firstStepForm.get('currency')?.value"
-                                    [defaultValue]="company.baseCurrency"
+                                    [labelValue]="company.baseCurrency"
                                     (selectedOption)="selectCurrency($event)"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <div class="col-6 mobile-number mobile-number-wrapper" *ngIf="showMobileField">
                                 <input-field
@@ -103,7 +103,8 @@
                                 </button>
 
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
+                                    color="primary"
                                     (click)="sendOtp()"
                                     [disabled]="sendOtpInProgress"
                                     *ngIf="!showOtpField && !isMobileNumberVerified"
@@ -137,7 +138,8 @@
                                 <div class="col-6 mobile-no-action-buttons">
                                     <div class="d-flex align-items-center">
                                         <button
-                                            mat-stroked-button
+                                            mat-raised-button
+                                            color="primary"
                                             (click)="verifyOtp()"
                                             [disabled]="verifyOtpInProgress || resendOtpInProgress"
                                             class="btn-min-width"
@@ -175,7 +177,6 @@
                         <div class="d-flex justify-content-between mr-t15">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 *ngIf="isCreateBySubscription"
                                 (click)="back()"
                                 aria-label="back"
@@ -190,7 +191,7 @@
                             >
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
-                            <button mat-stroked-button color="primary" (click)="nextStepForm()" aria-label="next">
+                            <button mat-raised-button color="primary" (click)="nextStepForm()" aria-label="next">
                                 {{ commonLocaleData?.app_next }}
                             </button>
                         </div>
@@ -212,22 +213,22 @@
                                 </input-field>
                             </div>
                             <div class="col-lg-6 country-space">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [readonly]="true"
                                     [label]="commonLocaleData?.app_country + '*'"
-                                    [defaultValue]="firstStepForm.get('country')?.value?.label"
+                                    [labelValue]="firstStepForm.get('country')?.value?.label"
                                     [ngClass]="{ 'readonly-field': firstStepForm.get('country')?.value?.label }"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <div class="col-lg-6 currency-space">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [readonly]="true"
                                     [label]="commonLocaleData?.app_currency + '*'"
-                                    [defaultValue]="firstStepForm.get('currency')?.value?.value"
+                                    [labelValue]="firstStepForm.get('currency')?.value?.value"
                                     [ngClass]="{ 'readonly-field': firstStepForm.get('currency')?.value?.value }"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <div class="col-lg-12 mobile-number fill-form" *ngIf="showMobileField">
                                 <span class="country-flag">
@@ -252,25 +253,25 @@
                                 </input-field>
                             </div>
                             <div class="col-lg-12">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'businessType'"
                                     [label]="localeData?.business_type"
                                     [placeholder]="localeData?.select_business_type"
                                     [options]="businessTypeList"
                                     (selectedOption)="selectBusinessType($event.value)"
-                                    [defaultValue]="isOtherCountry ? businessTypeList[0].label : ''"
+                                    [labelValue]="isOtherCountry ? businessTypeList[0].label : ''"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <div class="col-lg-12">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'businessNature'"
                                     [label]="localeData?.business_nature"
                                     [placeholder]="localeData?.select_business_nature"
                                     [options]="businessNatureList"
                                     (selectedOption)="selectBusinessNature($event)"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                                 <div
                                     class="mr-t15"
                                     *ngIf="secondStepForm.controls['businessNature']?.value === 'Other'"
@@ -309,7 +310,7 @@
                                 </div>
                             </ng-container>
                             <div class="col-lg-12" *ngIf="!countyList?.length">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'state'"
                                     [label]="
                                         selectedCountryCode === 'EE'
@@ -330,14 +331,14 @@
                                     [options]="states"
                                     [showError]="isFormSubmitted && secondStepForm.get('state')?.invalid"
                                     [readonly]="disabledState"
-                                    [defaultValue]="selectedState"
+                                    [labelValue]="selectedState"
                                     (selectedOption)="selectState($event)"
                                     [ngClass]="{ 'readonly-field': disabledState }"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <div class="col-lg-12" *ngIf="countyList?.length">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'county'"
                                     [label]="
                                         secondStepForm.controls['businessType']?.value === businessTypes.Registered
@@ -347,10 +348,10 @@
                                     [placeholder]="commonLocaleData?.app_select_region"
                                     [options]="countyList"
                                     [showError]="isFormSubmitted && !secondStepForm.get('county')?.value"
-                                    [defaultValue]="secondStepForm.get('county')?.value?.label"
+                                    [labelValue]="secondStepForm.get('county')?.value?.label"
                                     (selectedOption)="secondStepForm.get('county')?.patchValue($event)"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <ng-container
                                 *ngIf="
@@ -427,7 +428,7 @@
                         </div>
                         <ng-container *ngIf="isNewUserLoggedIn">
                             <div class="d-flex column-gap15 mr-t15">
-                                <button mat-stroked-button color="primary" (click)="nextStepForm()">
+                                <button mat-raised-button color="primary" (click)="nextStepForm()">
                                     {{ commonLocaleData?.app_next }}
                                 </button>
                             </div>
@@ -446,7 +447,7 @@
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
                                 </div>
-                                <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                <button mat-raised-button color="primary" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
                             </div>
@@ -537,6 +538,7 @@
                                                         aria-label="delete icon"
                                                         class="btn mr-0"
                                                         (click)="removeUser(i)"
+                                                        mat-stroked-button
                                                     >
                                                         <i class="icon-trash delete"></i>
                                                     </button>
@@ -546,7 +548,7 @@
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-lg-12">
-                                            <a class="mr-0 add-new" href="javascript:void(0);" (click)="handleAddNewUser()"
+                                            <a href="javascript:void(0);" (click)="handleAddNewUser()"
                                                 [class.cursor-disable]="!canAddNewUser()">
                                                 <i class="icon-plus"></i> {{ localeData?.add_user }}
                                             </a>
@@ -558,7 +560,7 @@
                                 <button mat-stroked-button matStepperPrevious>
                                     {{ commonLocaleData?.app_back }}
                                 </button>
-                                <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                <button mat-raised-button color="primary" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
                                 <button

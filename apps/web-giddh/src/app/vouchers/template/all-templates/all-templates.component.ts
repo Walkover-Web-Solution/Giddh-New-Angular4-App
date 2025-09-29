@@ -41,7 +41,7 @@ export class AllTemplatesComponent implements OnInit {
      * @memberof AllTemplatesComponent
      */
     public ngOnInit(): void {
-        this.invoiceUiDataService.customTemplate.pipe(debounceTime(1000), takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+        this.invoiceUiDataService.customTemplate.pipe(debounceTime(1500), takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             if (template?.uniqueName) {
                 this.inputTemplate = cloneDeep(template);
                 this.invoiceTemplatesService.saveTemplateSettings(this.inputTemplate).subscribe((response) => {

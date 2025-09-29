@@ -4,6 +4,8 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
 import { AccountAddNewDetailsModule } from "../header/components/account-add-new-details/account-add-new-details.module";
 import { AccountUpdateNewDetailsModule } from "../header/components/account-update-new-details/account-update-new-details.module";
 import { GenericAsideMenuAccountComponent } from "./generic.aside.menu.account.component";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -13,7 +15,9 @@ import { GenericAsideMenuAccountComponent } from "./generic.aside.menu.account.c
         CommonModule,
         TranslateDirectiveModule,
         AccountAddNewDetailsModule,
-        AccountUpdateNewDetailsModule
+        AccountUpdateNewDetailsModule,
+        MatDialogModule,
+        MatButtonModule
     ],
     exports: [
         GenericAsideMenuAccountComponent

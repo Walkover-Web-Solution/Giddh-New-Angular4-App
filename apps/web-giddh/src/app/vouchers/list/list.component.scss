@@ -24,19 +24,22 @@
                 }
             }
 
-            &.payment-receipt, &.closing-box {
+            &.payment-receipt,
+            &.closing-box {
                 span {
                     color: var(--color-slate);
                 }
             }
         }
     }
+
     table {
         tr {
             td {
                 amount-field {
                     display: inline-block;
                 }
+
                 .action-btn {
                     visibility: hidden;
                 }
@@ -51,10 +54,12 @@
             }
         }
     }
+
     // template field
     .template-design {
         max-width: 258px;
     }
+
     .invoice-video {
         display: none;
     }
@@ -62,11 +67,14 @@
 
 table {
     tr {
-        th, td {
+
+        th,
+        td {
             max-width: 240px;
             word-break: break-all;
         }
     }
+
     .checkbox-show {
         .checkbox-hide {
             display: none;
@@ -152,14 +160,17 @@ table {
             display: block;
         }
     }
+
     .video-link {
         display: none;
     }
 }
 
 @media screen and (max-width: 1024px) {
-    .video-link {
-        display: none;
+    .invoice-list{
+        .video-link {
+            display: none;
+        }
     }
     .new-cr-width {
         width: 190px !important;

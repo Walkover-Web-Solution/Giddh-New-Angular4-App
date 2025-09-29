@@ -312,6 +312,8 @@ export class ExportLedgerRequest {
     public withInvoice?: boolean = false;
     public balanceTypeAsSign?: boolean = false;
     public branchUniqueName?: string = '';
+    public page?: number = 1;
+    public count?: number = PAGINATION_LIMIT;
 }
 
 /**

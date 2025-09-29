@@ -30,9 +30,9 @@
                         </button>
                     </div>
                     <button
-                        *ngIf="!isCompany && !isConsolidatedBranch"
+                        *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                         aria-label="create warehouse"
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         class="btn mr-0"
                         [routerLink]="['/pages/settings/create-warehouse']"
@@ -74,7 +74,7 @@
                                         <span class="icon-dots-three-vertical mr-0 font-14 d-block"></span>
                                     </button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item (click)="editWarehouse(warehouse)">
+                                        <button mat-menu-item (click)="editWarehouse(warehouse)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_edit }}
                                         </button>
                                         <button mat-menu-item (click)="confirmStatusUpdate(warehouse)">
@@ -95,19 +95,37 @@
                                 <div>
                                     <div *ngFor="let address of warehouse?.addresses" class="linked-add">
                                         <ng-container *ngIf="address">
-                                            <label
+                                            <span
                                                 class="cursor-pointer"
-                                                [popover]="popTemplate"
-                                                popoverTitle="{{ address?.name }}"
-                                                placement="right"
-                                                triggers="mouseenter:mouseleave"
-                                                >{{ address?.name }}</label
+                                                cdkOverlayOrigin
+                                                #addressTemplate="cdkOverlayOrigin"
+                                                (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
+                                                (mouseleave)="openAddressInfo(false)"
                                             >
-                                            <ng-template #popTemplate>
-                                                {{ address?.address }} {{ address?.stateCode }}
-                                                <p *ngIf="address?.taxType && address?.taxNumber">
-                                                    {{ address?.taxType }} : {{ address?.taxNumber }}
-                                                </p>
+                                                {{ address?.name }}
+                                            </span>
+
+                                            <ng-template
+                                                cdkConnectedOverlay
+                                                [cdkConnectedOverlayOrigin]="addressTemplate"
+                                                [cdkConnectedOverlayOpen]="isAddressInfoOpen === (address?.uniqueName + warehouse.uniqueName)"
+                                                [cdkConnectedOverlayPositions]="[
+                                                    {
+                                                        originX: 'end',
+                                                        originY: 'center',
+                                                        overlayX: 'start',
+                                                        overlayY: 'center',
+                                                        offsetX: 8
+                                                    }
+                                                ]"
+                                            >
+                                                <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper" (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
+                                                (mouseleave)="openAddressInfo(false)">
+                                                    {{ address?.address }} {{ address?.stateCode }}
+                                                    <p *ngIf="address?.taxType && address?.taxNumber">
+                                                        {{ address?.taxType }} : {{ address?.taxNumber }}
+                                                    </p>
+                                                </div>
                                             </ng-template>
                                         </ng-container>
                                         <!-- static pin code  -->
@@ -128,20 +146,17 @@
             </div>
         </div>
         <div class="warehouse-pagination mt-4">
-            <pagination
-                #warehousePagination
-                *ngIf="warehouses?.length && paginationConfig?.totalItems > paginationLimit"
-                [totalItems]="paginationConfig?.totalItems"
-                [maxSize]="5"
-                [itemsPerPage]="paginationConfig?.count"
-                [boundaryLinks]="true"
-                [rotate]="true"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
+            <mat-paginator
+                *ngIf="warehouses?.length && paginationConfig?.totalItems > pageSizeOptions[0]"
+                [length]="paginationConfig?.totalItems"
+                [pageSize]="paginationConfig?.count"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="currentPage - 1"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+                aria-label="Select page of warehouses"
+            ></mat-paginator>
         </div>
         <br />
         <br />
@@ -151,15 +166,6 @@
             <img src="{{ imgPath2 }}" [alt]="localeData?.branch_image" />
         </div>
     </ng-container>
-
-    <!-- Warehouse on boarding modal (Step 1) -->
-    <ng-template #warehouseOnBoardingModal>
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </ng-template>
 
     <ng-template #asideAccountAsidePane>
         <ng-container
@@ -180,15 +186,6 @@
             >
             </create-address>
         </ng-container>
-    </ng-template>
-    <!-- Welcome component (Step 2) -->
-    <ng-template #welcomeComponent>
-        <welcome-component
-            [itemDetails]="selectedWarehouse"
-            (backButtonClicked)="handleBackButtonClick(false)"
-            (nextButtonClicked)="handleFormSubmit($event)"
-        >
-        </welcome-component>
     </ng-template>
 
     <ng-template #statusModal>

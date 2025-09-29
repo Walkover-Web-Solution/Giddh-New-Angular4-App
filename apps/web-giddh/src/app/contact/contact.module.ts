@@ -2,17 +2,10 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { LaddaModule } from 'angular2-ladda';
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -75,14 +68,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
             style: 'slide-left',
             spinnerSize: 30
         }),
-        ShSelectModule,
-        BsDropdownModule.forRoot(),
-        TooltipModule.forRoot(),
         SharedModule,
-        SelectModule.forRoot(),
-        TabsModule.forRoot(),
-        ModalModule.forRoot(),
-        PaginationModule.forRoot(),
         ClickOutsideModule,
         DigitsOnlyModule,
         ElementViewChildModule,

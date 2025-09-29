@@ -8,7 +8,7 @@ import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
@@ -194,6 +194,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public voucherTypeEnum: any = VoucherTypeEnum;
     /** Holds true when need to refresh page */
     private isRefresh: boolean = null;
+    /** Voucher api version */
+    public voucherApiVersion: number;
 
     constructor(
         private router: Router,
@@ -220,6 +222,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @memberof VouchersPreviewComponent
     */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -799,16 +802,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             model.postRequestObject[this.voucherType === VoucherTypeEnum.generateProforma ? 'proformaNumber' : 'estimateNumber'] = this.selectedInvoice?.voucherNumber;
         }
         this.dialog.open(this.historyAsideDialog, {
-            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData },
-            position: {
-                top: '0',
-                right: '0'
-            },
-            maxWidth: 'var(--aside-pane-width)',
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh',
-            disableClose: true
+            ...ASIDE_PANE_CONFIG,
+            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData }
         });
     }
 

@@ -143,7 +143,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             } else {
                 this.isSuperAdminCompany = false;
             }
-            if (Object.hasOwn(activeCompany?.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany?.moduleRestrictionStatus) {
+            if (activeCompany && Object.hasOwn(activeCompany.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                 const module = activeCompany.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === this.restrictedModules.Users
                 );

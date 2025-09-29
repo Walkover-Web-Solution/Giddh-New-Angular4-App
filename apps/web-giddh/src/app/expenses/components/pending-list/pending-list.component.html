@@ -138,7 +138,7 @@
                 <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_action" class="action-btn">
                     <div class="d-flex column-gap15">
                         <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         (click)="showApproveConfirmPopup(approveConfirm, expenses); $event.stopPropagation()"
                         class="mr-t1"
@@ -147,7 +147,6 @@
                     </button>
                     <button
                         mat-stroked-button
-                        color="warn"
                         (click)="showRejectConfirmPopup(rejectConfirm, expenses); $event.stopPropagation()"
                         class="mr-t1 mr-b1"
                     >
@@ -168,31 +167,25 @@
     </div>
 </div>
 <div
-    *ngIf="pettyCashPendingReportResponse?.totalItems > pettyCashPendingReportResponse?.count"
-    class="pagination-wrapper mt-4"
+    *ngIf="pettyCashPendingReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashPendingReportLoading"
+    class="mt-4"
 >
-    <pagination
-        [totalItems]="pettyCashPendingReportResponse?.totalItems"
-        [maxSize]="5"
-        class="pagination-sm"
-        [boundaryLinks]="true"
-        [itemsPerPage]="20"
-        [rotate]="false"
-        previousText="&#9668;"
-        nextText="&#9658;"
-        (pageChanged)="pageChanged($event)"
-        [firstText]="commonLocaleData?.app_first"
-        [previousText]="commonLocaleData?.app_previous"
-        [nextText]="commonLocaleData?.app_next"
-        [lastText]="commonLocaleData?.app_last"
-    ></pagination>
+    <mat-paginator
+        [length]="pettyCashPendingReportResponse?.totalItems"
+        [pageSize]="pettycashRequest.count"
+        [pageIndex]="pettycashRequest.page - 1"
+        [pageSizeOptions]="pageSizeOptions"
+        [showFirstLastButtons]="true"
+        [hidePageSize]="false"
+        (page)="handlePageEvent($event)"
+    ></mat-paginator>
 </div>
 
 <div *ngIf="isPettyCashPendingReportLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
 
-<div class="no-data" *ngIf="pettyCashPendingReportResponse?.results?.length === 0">
+<div class="no-data" *ngIf="pettyCashPendingReportResponse?.totalItems === 0">
     <no-data></no-data>
 </div>
 

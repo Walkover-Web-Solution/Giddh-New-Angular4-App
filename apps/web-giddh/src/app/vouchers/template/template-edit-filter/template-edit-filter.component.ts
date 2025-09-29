@@ -8,7 +8,7 @@ import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
@@ -24,8 +24,6 @@ import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../mo
 export class TemplateEditFilterComponent implements OnInit {
     /** Ng form instance of content filter component */
     @ViewChild(NgForm) templateForm: NgForm;
-    /** File input element reference for logo upload */
-    @ViewChild('fileInput', { static: true }) logoFile: ElementRef;
     /** Input data passed to the component */
     @Input() public dialogData: any;
     /** Current mode of the component (e.g., 'create', 'edit') */
@@ -105,7 +103,7 @@ export class TemplateEditFilterComponent implements OnInit {
     /** Stores the active company name */
     public activeCompanyName: string;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Holds the value if company is Indian */
     public isIndianCompany: boolean = false;
     /** Hold list of suggestion items for Tribute.js */
@@ -154,11 +152,11 @@ export class TemplateEditFilterComponent implements OnInit {
     /** Selected file for image upload */
     public footerSelectedFile: any;
     /** Holds the file object after selection */
-    public footerFile: any ;
+    public footerFile: any;
     /** Selected file for image upload */
     public mainLogoSelectedFile: any;
     /** Holds the file object after selection */
-    public mainLogoFile: any ;
+    public mainLogoFile: any;
 
 
     constructor(
@@ -358,11 +356,11 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public onValueChange(fieldName: string, value: string) {
-          // Clear existing timer
-          if (this.fieldChangeTimer) {
+        // Clear existing timer
+        if (this.fieldChangeTimer) {
             clearTimeout(this.fieldChangeTimer);
         }
-        
+
         // Set new timer with 500ms delay
         this.fieldChangeTimer = setTimeout(() => {
             const template = cloneDeep(this.customTemplate);
@@ -378,7 +376,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @param {object} validation Validation result with isValid and value
      * @memberof TemplateEditFilterComponent
      */
-    public onPatternValidation(validation: {isValid: boolean, value: string}): void {
+    public onPatternValidation(validation: { isValid: boolean, value: string }): void {
         if (!validation.isValid) {
             this.toasty.showSnackBar("error", `Invalid UPI ID: ${validation.value}`);
         }
@@ -429,6 +427,8 @@ export class TemplateEditFilterComponent implements OnInit {
         if (template?.sections?.['footer']?.data?.['companyName']) {
             template.sections['footer'].data['companyName'].label = this.activeCompanyName;
         }
+       this.deleteLogo();
+       this.removeFile();
         this.templateService.setCustomTemplate(cloneDeep(template));
     }
 
@@ -549,7 +549,6 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public deleteLogo(): void {
-        this.onValueChange('logoUniqueName', null);
         this.templateService.setLogoPath('');
         this.logoAttached = false;
         this.isFileUploaded = false;
@@ -557,7 +556,17 @@ export class TemplateEditFilterComponent implements OnInit {
         this.showDeleteButton = false;
         this.mainLogoFile = null;
         this.mainLogoSelectedFile = null;
-       this.logoFile?.nativeElement && (this.logoFile.nativeElement.value = "");
+
+        // Clear the file input element to allow re-uploading the same file
+        const logoInput = document.getElementById("logo-edit") as HTMLInputElement;
+        if (logoInput) {
+            logoInput.value = "";
+        }
+
+        if (this.customTemplate?.logoUniqueName) {
+            this.customTemplate.logoUniqueName = '';
+        }
+        this.templateService.setCustomTemplate(this.customTemplate);
     }
 
     /**
@@ -657,7 +666,7 @@ export class TemplateEditFilterComponent implements OnInit {
         if (this.fieldChangeTimer) {
             clearTimeout(this.fieldChangeTimer);
         }
-        
+
         // Set new timer with 500ms delay
         this.fieldChangeTimer = setTimeout(() => {
             let template = cloneDeep(this.customTemplate);
@@ -731,8 +740,6 @@ export class TemplateEditFilterComponent implements OnInit {
      */
     public uploadImage(): void {
         this.footerSelectedFile = document.getElementById("signatureImg-edit");
-        this.mainLogoSelectedFile = document.getElementById("mainLogoImg-edit");
-
         if (this.footerSelectedFile?.files?.length) {
             this.footerFile = this.footerSelectedFile?.files[0];
 
@@ -773,13 +780,13 @@ export class TemplateEditFilterComponent implements OnInit {
         this.isSignatureUploadInProgress = false;
         this.footerFile = null;
         this.footerSelectedFile = null;
-        
+
         // Clear the file input element to allow re-uploading the same file
         const signatureInput = document.getElementById("signatureImg-edit") as HTMLInputElement;
         if (signatureInput) {
             signatureInput.value = "";
         }
-        
+
         if (this.customTemplate?.sections?.footer?.data?.imageSignature) {
             this.customTemplate.sections.footer.data.imageSignature.label = '';
         }
@@ -957,7 +964,7 @@ export class TemplateEditFilterComponent implements OnInit {
         const currentCompany = companies?.find(company => company?.uniqueName === companyUniqueName);
         let companyName = '';
         let companyAddress = '';
-        
+
         if (currentCompany) {
             companyName = currentCompany?.name || '';
             companyAddress = currentCompany?.address || '';
@@ -969,9 +976,9 @@ export class TemplateEditFilterComponent implements OnInit {
                 this.templateService.companyPAN.next(currentCompany.panNumber);
             }
         }
-        
+
         this.templateService.setCompanyNameVisibility(true);
-        
+
         if (defaultTemplate) {
             const processedTemplate = cloneDeep(defaultTemplate);
             if (companyName) {
@@ -989,8 +996,8 @@ export class TemplateEditFilterComponent implements OnInit {
      * @param {boolean} event True if the header should be displayed
      * @memberof TemplateEditFilterComponent
      */
-        public changeInvoiceHeader(event: boolean): void {
-            this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
-        }
+    public changeInvoiceHeader(event: boolean): void {
+        this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
+    }
 
 }

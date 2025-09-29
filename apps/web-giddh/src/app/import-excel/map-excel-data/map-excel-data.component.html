@@ -9,13 +9,12 @@
                     </div>
                 </div>
                 <div class="checkbox d-flex mt-1">
-                    <input
-                        type="checkbox"
-                        name="isHeaderProvided"
-                        id="isHeaderProvided"
+                    <mat-checkbox
                         [(ngModel)]="importData.isHeaderProvided"
-                    />
-                    {{ localeData?.header_provided }}
+                        color="primary"
+                    >
+                        {{ localeData?.header_provided }}
+                    </mat-checkbox>
                 </div>
                 <div class="row mt-2 d-flex">
                     <div class="col-12 col-md-4 col-lg-6">
@@ -30,23 +29,22 @@
                         <label>{{ data.field.columnHeader }}</label>
                     </div>
                     <div class="col-12 col-md-5 col-lg-6">
-                        <sh-select
+                        <reactive-dropdown-field
                             [options]="data.options"
                             class="pull-left mr-r1 select-field-width"
                             [placeholder]="commonLocaleData?.app_select_field"
                             [(ngModel)]="data.selected"
-                            (selected)="columnSelected($event, data)"
+                            (selectedOption)="columnSelected($event, data)"
                             (onClear)="clearSelected($event, data)"
-                            (previousChange)="clearSelected($event, data)"
-                            [showClear]="true"
-                            [defaultValue]="data.selected"
-                        ></sh-select>
+                            [labelValue]="data.selected"
+                            [name]="'fieldMapping'"
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
             </div>
             <div class="mt-5">
-                <button class="btn btn-default" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
-                <button class="btn btn-success" (click)="mapExcelData()">{{ commonLocaleData?.app_next }}</button>
+                <button mat-stroked-button (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
+                <button mat-raised-button color="primary" (click)="mapExcelData()">{{ commonLocaleData?.app_next }}</button>
             </div>
         </div>
     </div>

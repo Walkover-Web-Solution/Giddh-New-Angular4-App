@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
-import { PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
@@ -23,7 +23,6 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { transporterModes } from 'apps/web-giddh/src/app/shared/helpers/transporterModes';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -959,7 +958,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 });
                 this.branchTransferCreateEditForm.get('transporterDetails').patchValue({
                     dispatchedDate: response.body?.transporterDetails?.dispatchedDate,
-                    transporterName: this.transporterDropdown.find(res => res.value === response.body?.transporterDetails?.transporterId)?.label,
+                    transporterName: this.transporterDropdown.find(res => res.value === response.body?.transporterDetails?.transporterId)?.label ?? '',
                     transporterId: response.body?.transporterDetails?.transporterId,
                     transportMode: response.body?.transporterDetails?.transportMode,
                     vehicleNumber: response.body?.transporterDetails?.vehicleNumber
@@ -1381,16 +1380,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public onProductNoResultsClicked(idx?: number): void {
         this.innerEntryIndex = idx;
         document.querySelector("body").classList.add("new-branch-transfer-page");
-        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: '760px',
-            height: '100vh !important'
-        });
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
 
-        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+        this.asideMenuStateForProductService.afterClosed().subscribe(response => {
             document.querySelector("body").classList.remove("new-branch-transfer-page");
         });
 
@@ -2252,15 +2244,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public toggleTransporterModel(): void {
-        let dialgRef = this.dialog.open(this.asideManageTransport, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: '760px',
-            height: '100vh !important'
-        });
-        dialgRef.afterClosed().pipe(take(1)).subscribe(response => {
+        let dialgRef = this.dialog.open(this.asideManageTransport, ASIDE_PANE_CONFIG);
+        dialgRef.afterClosed().subscribe(response => {
             this.getTransportersList();
         });
     }

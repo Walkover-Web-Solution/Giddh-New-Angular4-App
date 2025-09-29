@@ -1,18 +1,20 @@
-<div class="modal-header d-flex align-items-center flex-row-reverse">
-    <button aria-hidden="true" class="close" mat-dialog-close>×</button>
-    <h3>{{ localeData?.subscription?.move_company }}</h3>
+<div class="dialog-header">
+    <span>{{ localeData?.subscription?.move_company }}</span>
+    <button mat-icon-button aria-label="close" mat-dialog-close>
+        <i class="icon-cross"></i>
+    </button>
 </div>
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
-<mat-dialog-content class="move-content w-100">
+<mat-dialog-content class="dialog-body">
     <div *ngIf="!isLoading">
         <div id="my-frame" class="modal-body move-company-modal-body clearfix">
             <p class="text-black mb-3" [innerHTML]="getMovePlanText()"></p>
             <div class="row mb-3">
                 <div class="col-md-12 move-wrapper">
                     <div>
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [label]="localeData?.subscription?.select_plan"
                             [placeholder]="localeData?.subscription?.select_plan"
                             [name]="'availablePlans'"
@@ -20,16 +22,15 @@
                             (selectedOption)="selectedPlan = $event.value"
                             [required]="true"
                             (onClear)="onSearchClear()"
-                            [allowValueReset]="true"
                             (dynamicSearchedQuery)="onSearchQueryChange($event)"
                             [enableDynamicSearch]="true"
-                        ></dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
             </div>
             <div class="clearfix">
                 <button
-                    mat-stroked-button
+                    mat-raised-button
                     color="primary"
                     mat-dialog-close
                     (click)="moveCompanyInNewPlan()"

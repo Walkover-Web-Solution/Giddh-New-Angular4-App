@@ -18,14 +18,13 @@ import { select, Store } from '@ngrx/store';
 import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
-import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT, ASIDE_PANE_CONFIG, BootstrapToggleSwitch, BranchHierarchyType, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -178,8 +177,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     };
     /** Available field types list */
     public availableFieldTypes: any = FieldTypes;
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
@@ -189,7 +186,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** True if last duplicate email in portal  users */
     public portalIndex: number;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Hold active index of form group */
     public activeIndex: number = 0;
     /** Holds list of countries which use ZIP Code in address */
@@ -523,16 +520,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
+        // Increase timeout and add more robust checking
         const interval = setInterval(() => {
             const element = document.getElementById('init-contact-add');
             const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-
+            
             if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-add');
                 clearInterval(interval);
             }
         }, 500); // Reduced interval for faster detection
-
+        
         // Add fallback timeout to prevent infinite loop
         setTimeout(() => {
             clearInterval(interval);
@@ -692,7 +690,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public reInitializeMobileField(fieldId: string): void {
         const element = document.getElementById(fieldId);
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-
+        
         if (element && intlTelInput && !this.intl[fieldId]) {
             this.onlyPhoneNumber(fieldId);
         }
@@ -729,13 +727,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         const interval = setInterval(() => {
             const element = document.getElementById('init-contact-portal_' + lastIndex);
             const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-
+            
             if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
             }
         }, 200); // Faster checking for dynamic elements
-
+        
         // Add fallback timeout
         setTimeout(() => {
             clearInterval(interval);
@@ -1015,7 +1013,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete portalDomain.uniqueName;
         });
 
-        if ((!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) || !(this.isParentSundrydebtors || this.activeGroupUniqueName === this.accountingGroupEnum.SundryDebtors)) {
+        if ((!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) || !(this.activeGroupUniqueName === this.accountingGroupEnum.SundryDebtors || this.isParentSundrydebtors)) {
             delete accountRequest['portalDomain'];
         }
         delete accountRequest['salesPersonName'];
@@ -1548,7 +1546,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT,
+                count: DROPDOWN_ITEMS_COUNT_LIMIT,
             }
             if (this.isLedgerModule) {
                 // Remove the top hierarchy of groups
@@ -1869,7 +1867,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
                         }
                     });
-                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    dialogRef.afterClosed().subscribe(response => {
                         if (response) {
                             if (addresses?.get('isDefault')?.value) {
                                 this.addAccountForm.get('name')?.patchValue(result.body?.lgnm);
@@ -1896,18 +1894,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : []
         }
         const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true,
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            maxHeight: '100vh',
+            ...ASIDE_PANE_CONFIG,
             data: data
         });
 
-        bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
+        bulkAddAsideMenuRef.afterClosed().subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;

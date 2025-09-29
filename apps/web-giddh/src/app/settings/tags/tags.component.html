@@ -47,19 +47,23 @@
     <ng-template #confirmationModal>
         <div class="modal-md">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h3>{{ commonLocaleData?.app_confirmation }}</h3>
-                    <button mat-dialog-close class="close" (click)="onUserConfirmation(false)">×</button>
-                </div>
-                <div class="modal-body" [innerHTML]="confirmationMessage"></div>
-                <div class="modal-footer clearfix">
-                    <button mat-stroked-button mat-dialog-close color="primary" (click)="onUserConfirmation(true)">
-                        {{ commonLocaleData?.app_yes }}
-                    </button>
-                    <button mat-stroked-button mat-dialog-close (click)="onUserConfirmation(false)">
-                        {{ commonLocaleData?.app_no }}
+                <div class="dialog-header">
+                    <span>{{ commonLocaleData?.app_confirmation }}</span>
+                    <button mat-icon-button aria-label="close" mat-dialog-close (click)="onUserConfirmation(false)">
+                        <i class="icon-cross"></i>
                     </button>
                 </div>
+                <mat-dialog-content class="dialog-body">
+                    <div [innerHTML]="confirmationMessage"></div>
+                    <div class="d-flex justify-content-end column-gap1 mt-3">
+                        <button mat-raised-button mat-dialog-close color="primary" (click)="onUserConfirmation(true)">
+                            {{ commonLocaleData?.app_yes }}
+                        </button>
+                        <button mat-stroked-button mat-dialog-close (click)="onUserConfirmation(false)">
+                            {{ commonLocaleData?.app_no }}
+                        </button>
+                    </div>
+                </mat-dialog-content>
             </div>
         </div>
     </ng-template>
