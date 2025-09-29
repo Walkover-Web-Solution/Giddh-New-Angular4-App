@@ -3,13 +3,13 @@
         height: 186px;
 
         p {
-            color: var(--color-nero);
+            //color: var(--color-black);
         }
     }
 }
 
 .bank-link-card:hover div {
-    background-color: var(--color-primary-popup-background-hover);
+    background-color: var(--color-light-gray);
 }
 
 .bank-link-card:hover .icon-link {

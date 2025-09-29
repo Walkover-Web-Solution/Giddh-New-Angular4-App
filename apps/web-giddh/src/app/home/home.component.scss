@@ -12,23 +12,23 @@
 
 // new dashboard css
 .white-row {
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
     padding: 9px;
     margin-bottom: 10px;
     font-size: var(--font-size-15);
-    box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
+    box-shadow: 1px 1px 3px var(--color-shadow-light);
 }
 .dashboard-container {
     max-width: 1200px;
     width: 100%;
 }
 span.icon-traingle-info {
-    color: var(--color-primary-header-icon-traingle-info);
+    color: var(--color-red);
     font-size: 15px;
     margin-right: 10px;
 }
 span.icon-info-icon {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
     font-size: var(--font-size-16);
     margin-right: 10px;
 }
@@ -50,7 +50,7 @@ span.icon-info-icon {
     background: transparent;
 }
 .form-control:focus {
-    border-color: var(--color-blue) !important;
+    border-color: var(--color-blue-primary) !important;
 }
 
 .no-data-available {

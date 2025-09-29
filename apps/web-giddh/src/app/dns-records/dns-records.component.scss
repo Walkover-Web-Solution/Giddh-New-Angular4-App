@@ -1,5 +1,5 @@
 .app-container {
-    background: var(--color-white);
+    //background: var(--color-white);
     padding: 16px;
     height: calc(100vh - 0px);
     overflow-y: auto;
@@ -45,13 +45,13 @@
                 }
 
                 .verified {
-                    color: var(--color-success-enable);
-                    background: var(--color-success-enable-bg-light);
+                    color: var(--color-green);
+                    background: var(--color-success-light);
                 }
     
                 .unverified {
-                    color: var(--color-danger);
-                    background: var(--color-danger-bg-light);
+                    color: var(--color-red);
+                    background: var(--color-danger-light);
                 }
             }
         }

@@ -8,7 +8,7 @@
 
 /* Background for the tree. May use for <body> element */
 .jsontree_bg {
-    background: var(--color-white);
+    //background: var(--color-white);
 }
 
 /* Styles for the container of the tree (e.g. fonts, margins etc.) */
@@ -38,14 +38,14 @@
 .jsontree_label {
     font-weight: normal;
     vertical-align: top;
-    color: var(--color-nero);
+    //color: var(--color-black);
     position: relative;
     padding: 1px;
     border-radius: 4px;
     cursor: default;
 }
 .jsontree_node_marked > .jsontree_label-wrapper > .jsontree_label {
-    background: var(--color-chardon);
+    background: var(--color-orange-light);
 }
 
 /* Styles for values */
@@ -61,15 +61,15 @@
     display: inline;
 }
 .jsontree_value_null {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
     font-weight: bold;
 }
 .jsontree_value_string {
-    color: var(--color-success-enable);
+    color: var(--color-green);
     font-weight: bold;
 }
 .jsontree_value_number {
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     font-weight: bold;
 }
 .jsontree_value_boolean {
@@ -85,7 +85,7 @@
     display: block;
     width: 11px;
     height: 11px;
-    filter: var(--color-image-filter);
+    filter: invert(0);
     background-image: url("../images/json-tree-icon.svg");
 }
 .jsontree_node_expanded > .jsontree_label-wrapper > .jsontree_label > .jsontree_expand-button {

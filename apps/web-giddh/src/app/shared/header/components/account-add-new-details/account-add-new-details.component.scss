@@ -1,6 +1,6 @@
 .form-header {
     padding: 20px 15px;
-    background: var(--color-giddh-blue);
+    background: var(--color-blue-primary);
     color: var(--color-white);
 }
 
@@ -27,8 +27,8 @@
 }
 
 .aside-pane-form {
-    background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+    //background-color: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-shadow-light);
     padding: 15px 15px;
     overflow: auto;
     scroll-behavior: smooth;
@@ -38,7 +38,7 @@
 .aside-pane-container {
     padding: 15px;
     font-size: var(--font-size-15);
-    color: var(--color-nero);
+    //color: var(--color-black);
 }
 
 .aside-pane-form label {
@@ -68,7 +68,7 @@ span.dr-label {
 }
 
 .cr-dr-account span.active {
-    background-color: var(--color-blue);
+    background-color: var(--color-blue-primary);
     color: var(--color-white);
 }
 
@@ -86,14 +86,14 @@ span.dr-label {
 
     .input-group {
         .input-group-addon {
-            border-left: 1px solid var(--color-iron) !important;
+            border-left: 1px solid var(--color-silver) !important;
         }
 
         input {
-            border-left: 1px solid var(--color-iron) !important;
+            border-left: 1px solid var(--color-silver) !important;
 
             &:focus {
-                border-left: 1px solid var(--color-blue) !important;
+                border-left: 1px solid var(--color-blue-primary) !important;
             }
         }
     }
@@ -106,7 +106,7 @@ form.gstin-form {
 .add-address-default {
     display: flex;
     justify-content: space-between;
-    background-color: var(--color-right-sidebar-primary-background);
+    background-color: var(--color-silver);
     padding: 6px 10px;
     align-items: center;
     margin: 20px 0;
@@ -125,7 +125,7 @@ form.gstin-form {
 
 .add-address-default h3 {
     font-size: var(--font-size-15);
-    color: var(--color-common-primary-text);
+    //color: var(--color-black);
 }
 
 .contact-form,
@@ -152,9 +152,9 @@ form.gstin-form {
 
 a.btn-remove {
     padding: 3px 10px;
-    background-color: var(--color-white);
-    color: var(--color-nero);
-    border: 1px solid var(--color-iron);
+    //background-color: var(--color-white);
+    //color: var(--color-black);
+    border: 1px solid var(--color-silver);
 }
 
 .name-of-field {

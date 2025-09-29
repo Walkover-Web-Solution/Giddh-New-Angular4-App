@@ -28,7 +28,7 @@
                 }
                 &:hover,
                 &.active {
-                    background-color: var(--color-giddh-blue) !important;
+                    background-color: var(--color-blue-primary) !important;
                     .mdc-list-item__content {
                         a {
                             span,
@@ -51,7 +51,7 @@
                                         input {
                                             height: var(--mat-form-field-height);
                                             &:focus {
-                                                border-color: var(--color-giddh-blue) !important;
+                                                border-color: var(--color-blue-primary) !important;
                                             }
                                         }
                                     }
@@ -63,18 +63,18 @@
             }
             .save-discount-header {
                 span {
-                    color: var(--color-toast-primary-text);
+                    color: var(--color-white);
                 }
                 button {
                     &.mdc-button {
                         .mdc-button__label {
-                            color: var(--color-primary-login-box-header-background) !important;
+                            color: var(--color-blue-primary) !important;
                         }
                         &.mat-mdc-outlined-button {
                             .mdc-button__label {
-                                color: var(--color-tertiary-login-box-body-text) !important;
+                                color: var(--color-white) !important;
                             }
-                            border-color: var(--color-tertiary-login-box-body-text) !important;
+                            border-color: var(--color-white) !important;
                         }
                     }
                 }

@@ -5,7 +5,7 @@
 .square-switch img {
     top: -1px;
     position: relative;
-    filter: var(--color-image-filter);
+    filter: invert(0);
 }
 .division {
     display: flex;
@@ -25,7 +25,7 @@
 }
 .equal-sign {
     font-size: 22px;
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
 }
 .custom-css {
     margin: auto;
@@ -42,7 +42,7 @@
     padding: 0 7px;
 }
 .hr {
-    border-bottom: 2px solid var(--color-iron);
+    border-bottom: 2px solid var(--color-silver);
     margin: 3px 0;
 }
 #close {
@@ -51,15 +51,15 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: var(--color-primary-right-side-popup-header-text);
+    color: var(--color-white);
     font-size: 17px;
     top: 18px;
     margin-right: 0;
     border: 0;
 }
 .aside-pane-form {
-    background-color: var(--color-white);
-    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
+    //background-color: var(--color-white);
+    box-shadow: 0 3px 6px var(--color-shadow-light);
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -70,11 +70,11 @@
         .action {
             .delete-btn {
                 .fa-trash {
-                    color: var(--color-septenary-button-text);
+                    //color: var(--color-black);
                 }
                 &:hover {
                     .fa-trash {
-                        color: var(--color-secondary-button-text);
+                        color: var(--color-white);
                     }
                 }
             }

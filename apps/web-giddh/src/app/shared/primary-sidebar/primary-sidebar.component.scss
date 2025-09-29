@@ -4,9 +4,9 @@
 }
 .primary-sidebar {
     padding-top: 0 !important;
-    background-color: var(--color-sidebar-background);
+    //background-color: var(--color-white);
     .company-branch-block {
-        background-color: var(--color-sidebar-company-background);
+        background-color: var(--color-blue-light);
         .branch-connection {
             padding: 14px 0;
         }
@@ -17,7 +17,7 @@
             span.outer-span {
                 width: 12px;
                 height: calc(100% - 54px);
-                border: 2px solid var(--color-primary-sidebar-branch-connection-outer-span-background);
+                border: 2px solid var(--color-medium-gray);
                 max-height: 100%;
                 min-height: 33px;
                 display: block;
@@ -32,7 +32,7 @@
                     width: 7px;
                     height: 7px;
                     display: block;
-                    background-color: var(--color-primary-sidebar-branch-connection-outer-span-background);
+                    background-color: var(--color-medium-gray);
                     border-radius: 50%;
                     content: "";
                     left: -4px;
@@ -42,7 +42,7 @@
                     width: 7px;
                     height: 7px;
                     display: block;
-                    background-color: var(--color-primary-sidebar-branch-connection-outer-span-background);
+                    background-color: var(--color-medium-gray);
                     border-radius: 50%;
                     content: "";
                     bottom: -4px;
@@ -54,27 +54,27 @@
             .icon-down-new {
                 position: relative;
                 right: 5px;
-                color: var(--color-sidebar-content-text);
+                //color: var(--color-black);
             }
             .icon-cross {
                 display: flex;
                 font-size: 12px;
-                color: var(--color-sidebar-content-text);
+                //color: var(--color-black);
             }
             .head-nav {
-                background: var(--color-wild-sand);
-                border-bottom: 10px solid var(--color-iron);
+                background: var(--color-light-gray);
+                border-bottom: 10px solid var(--color-silver);
                 margin-bottom: 0;
             }
         }
         h3 {
             font-weight: var(--font-weight-semibold);
-            color: var(--color-primary-sidebar-company-branch-block-h3);
+            //color: var(--color-dark-gray);
             .company-alice {
                 width: 30px;
                 height: 30px;
                 min-width: 30px;
-                border: 1px solid var(--color-sidebar-content-text);
+                border: 1px solid var(--color-black);
                 padding: 15px;
                 border-radius: 50px;
                 display: inline-flex;
@@ -83,7 +83,7 @@
                 white-space: nowrap;
                 letter-spacing: -2px;
                 font-size: var(--font-size-15) !important;
-                color: var(--color-sidebar-content-text);
+                //color: var(--color-black);
             }
             .company-full-name {
                 white-space: normal;
@@ -99,7 +99,7 @@
                     width: 150px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    color: var(--color-sidebar-content-text);
+                    //color: var(--color-black);
                 }
                 .branch-ellipsis {
                     white-space: nowrap;
@@ -119,7 +119,7 @@
         .current-branch-name {
             li {
                 a {
-                    color: var(--color-primary-sidebar-current-branch-name-anchor);
+                    //color: var(--color-dark-gray);
                 }
             }
             .branch-alice {
@@ -137,7 +137,7 @@
         .company-branch-nav {
             height: calc(100vh - 110px);
             box-shadow: none;
-            background-color: var(--color-sidebar-background);
+            //background-color: var(--color-white);
             border: none;
             margin: 0;
             padding: 0;
@@ -161,15 +161,15 @@
                 display: block;
                 i {
                     font-size: var(--font-size-16);
-                    color: var(--color-primary-sidebar-account-collapse-i);
+                    color: var(--color-medium-gray);
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color(var(--color-sidebar-background), var(--color-giddh-blue));
+                @include highlight-color(var(--color-white), var(--color-blue-primary));
             }
         }
         p {
-            color: var(--color-sidebar-list-head);
+            //color: var(--color-black);
             font-weight: var(--font-weight-semibold);
         }
         ul {
@@ -181,15 +181,15 @@
                 white-space: nowrap;
                 position: relative;
                 a {
-                    color: var(--color-sidebar-primary-anchor-text);
+                    //color: var(--color-dark-gray);
                     line-height: 16px;
                     &.show-more {
-                        color: var(--color-primary-sidebar-show-more);
+                        color: var(--color-blue-primary);
                         text-decoration: underline;
                         font-size: var(--font-size-12);
                     }
                     &:hover {
-                        color: var(--color-giddh-blue);
+                        color: var(--color-blue-primary);
                     }
                 }
             }
@@ -205,7 +205,7 @@
                 display: flex;
                 justify-content: space-between;
                 line-height: 20px;
-                color: var(--color-sidebar-list-head);
+                //color: var(--color-black);
                 span {
                     .icon-arrow-down {
                         transform: rotate(0deg);
@@ -228,9 +228,9 @@
         i {
             width: 20px;
             height: 20px;
-            background-color: var(--color-white);
+            //background-color: var(--color-white);
             border-radius: 50%;
-            border: 1px solid var(--color-iron);
+            border: 1px solid var(--color-silver);
             transform: rotate(90deg);
             position: absolute;
             top: 70px;
@@ -330,8 +330,8 @@
             position: absolute !important;
             left: 60px !important;
             z-index: 9999999 !important;
-            background-color: var(--color-white) !important;
-            border: 1px solid var(--color-primary-sidebar-account-dropdown-collapse) !important;
+            //background-color: var(--color-white) !important;
+            border: 1px solid var(--color-blue-primary) !important;
             border-radius: 0;
             width: 180px;
             top: 0px !important;
@@ -368,13 +368,13 @@
                     &:after {
                         position: absolute;
                         content: "";
-                        background-color: var(--color-body-background);
+                        //background-color: var(--color-white);
                         width: 100%;
                         height: 100%;
                         left: 40px;
                         z-index: 999;
                         top: 0;
-                        box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
+                        box-shadow: 0 0 6px var(--color-shadow-light);
                         filter: blur(7px);
                     }
                 }
@@ -409,14 +409,14 @@
                         span {
                             i {
                                 font-size: 20px;
-                                color: var(--color-primary-sidebar-account-dropdown-i);
+                                //color: var(--color-dark-gray);
                                 transform: none;
                             }
                         }
                         i {
                             font-size: var(--font-size-15);
                             display: inline-flex;
-                            color: var(--color-primary-sidebar-account-dropdown-i);
+                            //color: var(--color-dark-gray);
                             width: 14px;
                             height: 14px;
                             justify-content: center;
@@ -432,13 +432,13 @@
                 &:after {
                     position: absolute;
                     content: "";
-                    background-color: var(--color-body-background);
+                    //background-color: var(--color-white);
                     width: 100%;
                     height: 100%;
                     left: 40px;
                     z-index: 999;
                     top: 0;
-                    box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
+                    box-shadow: 0 0 6px var(--color-shadow-light);
                     filter: blur(7px);
                 }
             }
@@ -453,7 +453,7 @@
 
 cdk-tree {
     cdk-tree-node {
-        color: var(--color-sidebar-secondary-anchor-text);
+        //color: var(--color-dark-gray);
         .main-item-wrapper {
             padding: 0 20px;
             width: 100%;
@@ -498,7 +498,7 @@ cdk-tree {
                     line-height: 18px;
 
                     &:hover {
-                        @include highlight-color(var(--color-white-tertiary), var(--color-common-primary-text));
+                        @include highlight-color(var(--color-white), var(--color-black));
                     }
                 }
                 .rotate-270 {
@@ -508,7 +508,7 @@ cdk-tree {
         }
         &.has-no-child {
             &:hover {
-                background-color: var(--color-giddh-common-background);
+                background-color: var(--color-blue-primary);
                 color: var(--color-white);
                 .main-item-wrapper {
                     .main-item {
@@ -524,7 +524,7 @@ cdk-tree {
         }
         &.has-no-child {
             &.active {
-                background-color: var(--color-giddh-common-background);
+                background-color: var(--color-blue-primary);
                 color: var(--color-white);
                 .main-item-wrapper {
                     .main-item {

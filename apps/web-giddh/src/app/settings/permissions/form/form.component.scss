@@ -15,12 +15,12 @@
     }
 
     .mat-select-btn {
-        background: var(--color-secondary-input-bar-background) !important;
+        //background: var(--color-white) !important;
         border: 1px solid var(--color-fields-border) !important;
         border-radius: 4px !important;
         padding: 6px !important;
         outline: 0;
-        color: var(--color-nero) !important;
+        //color: var(--color-black) !important;
         box-shadow: none;
         font-size: var(--font-size-15) !important;
         height: 48px;
@@ -59,7 +59,7 @@
     i {
         position: relative;
         right: 2px;
-        color: var(--color-dropdown-list-icon);
+        color: var(--color-dark-black);
     }
 }
 

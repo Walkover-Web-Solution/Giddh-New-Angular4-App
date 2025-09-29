@@ -9,12 +9,12 @@
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid var(--color-primary-button-border);
+                border: 1px solid var(--color-silver);
                 a {
                     width: 34px;
                     font-size: var(--font-size-16);
-                    color: var(--color-octonary-button-text);
-                    border-right: 1px solid var(--color-primary-button-border);
+                    color: var(--color-medium-gray);
+                    border-right: 1px solid var(--color-silver);
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -23,7 +23,7 @@
                     align-items: stretch;
                     height: 34px;
                     align-items: center;
-                    background-color: var(--color-white);
+                    //background-color: var(--color-white);
                 }
                 &:last-child {
                     border-right: none !important;
@@ -55,9 +55,9 @@
         display: flex;
         align-items: center;
         .clear-filter-btn {
-            color: var(--color-giddh-blue);
+            color: var(--color-blue-primary);
             font-size: var(--font-size-15);
-            border: 1px solid var(--color-giddh-blue);
+            border: 1px solid var(--color-blue-primary);
             border-radius: 20px;
             padding: 0 15px;
             height: 40px;
@@ -65,12 +65,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--color-white);
+            //background-color: var(--color-white);
             i {
                 font-size: var(--font-size-12);
                 padding-right: 8px;
                 top: 0;
-                color: var(--color-giddh-blue);
+                color: var(--color-blue-primary);
             }
         }
     }
@@ -83,7 +83,7 @@
         display: flex;
     }
     i {
-        color: var(--color-abbey);
+        //color: var(--color-dark-gray);
     }
     span.entity-alias {
         margin-right: 0;
@@ -99,8 +99,8 @@
 
 /* branch profile */
 .branch-profile-address-content {
-    background-color: var(--color-white);
-    border: 1px solid var(--color-iron);
+    //background-color: var(--color-white);
+    border: 1px solid var(--color-silver);
     padding: 15px;
     margin-bottom: 15px;
     .single-branch-detail {
@@ -109,28 +109,28 @@
             font-size: var(--font-size-15);
             font-weight: var(--font-weight-bold);
             margin-bottom: 10px;
-            color: var(--color-giddh-blue);
+            color: var(--color-blue-primary);
             i {
                 margin-right: 10px;
             }
         }
         label {
-            color: var(--color-abbey);
+            //color: var(--color-dark-gray);
             line-height: 2.3;
         }
         .set-default {
             .selected-defualt {
                 i {
-                    color: var(--color-blue);
+                    color: var(--color-blue-primary);
                 }
             }
             .icon-unlink {
-                color: var(--color-abbey);
+                //color: var(--color-dark-gray);
             }
         }
     }
 }
 
 .default-address {
-    color: var(--color-secondary-success);
+    color: var(--color-green);
 }

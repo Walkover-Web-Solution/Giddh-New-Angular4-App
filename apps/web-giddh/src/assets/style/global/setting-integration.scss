@@ -6,7 +6,7 @@
 }
 
 .input-background {
-    background-color: var(--color-white) !important;
+    //background-color: var(--color-white) !important;
     border-radius: 0.5rem;
 }
 
@@ -19,7 +19,7 @@ select-multiple-fields {
 
 .list-item-underline-hover {
     &:hover {
-        color: var(--color-giddh-blue) !important;
+        color: var(--color-blue-primary) !important;
         text-decoration: underline;
     }
 }

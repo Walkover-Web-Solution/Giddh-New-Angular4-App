@@ -1,14 +1,14 @@
 .vouchers {
-    background-color: var(--color-common-quinary-background-for-all-components);
+    background-color: var(--color-light-gray);
 
     .vouchers-address-form {
 
         input,
         textarea {
-            background: var(--color-transparent-background);
+            background: var(--color-transparent);
 
             &::placeholder {
-                color: var(--color-gray) !important;
+                color: var(--color-medium-gray) !important;
             }
         }
 
@@ -59,14 +59,14 @@
         }
 
         .mat-pseudo-checkbox-checked {
-            background: var(--color-giddh-blue) !important;
+            background: var(--color-blue-primary) !important;
         }
 
         .po-option-value {
             float: left !important;
             width: 100% !important;
             line-height: 1.2 !important;
-            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            color: var(--color-medium-gray);
         }
 
         .mat-option-text {
@@ -83,7 +83,7 @@
 
             &:hover,
             &:focus {
-                border-color: var(--color-common-tertiary-text) !important;
+                border-color: var(--color-dark-gray) !important;
             }
         }
     }
@@ -112,7 +112,7 @@
                         mat-select {
                             &:not(.hsn-sac-code){
                                 border: none !important;
-                                background-color: var(--color-transparent-background) !important;
+                                background-color: var(--color-transparent) !important;
                                 &.form-control {
                                     &:disabled, &:read-only {
                                         cursor: not-allowed;
@@ -156,7 +156,7 @@
     max-height: 50vh;
 
     button {
-        color: var(--color-common-primary-text);
+        //color: var(--color-black);
     }
 }
 
@@ -166,9 +166,9 @@
     .vouchers-add-new {
         position: sticky;
         bottom: 0;
-        color: var(--color-giddh-blue);
+        color: var(--color-blue-primary);
         z-index: 1;
-        background: var(--color-body-background) !important;
+        //background: var(--color-white) !important;
         min-height: 0 !important;
         padding-top: 10px;
         padding-bottom: 5px;
@@ -191,7 +191,7 @@
 }
 
 .text-success {
-    color: var(--color-teal) !important;
+    color: var(--color-green) !important;
 }
 
 // display
@@ -212,22 +212,22 @@
 
 .hsn-code-dropdown {
     position: absolute;
-    background-color: var(--color-white);
-    border: 1px solid var(--color-common-secondary-border);
+    //background-color: var(--color-white);
+    border: 1px solid var(--color-silver);
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
     left: auto;
     top: 47px;
-    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
+    box-shadow: 0 6px 12px var(--color-shadow-light);
     right: 0;
     z-index: 4;
 
     .btn-group {
         .cancel-button {
-            color: var(--color-primary-basic-button-text);
-            background-color: var(--color-white);
-            border: 1px solid var(--color-common-secondary-border);
+            //color: var(--color-dark-gray);
+            //background-color: var(--color-white);
+            border: 1px solid var(--color-silver);
         }
     }
 }

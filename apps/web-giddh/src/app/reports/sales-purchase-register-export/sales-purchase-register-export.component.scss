@@ -9,7 +9,7 @@
 }
 .modal-body {
     p {
-        color: var(--color-sidebar-content-text);
+        //color: var(--color-black);
     }
     form {
         overflow: auto;
@@ -35,7 +35,7 @@
                 position: absolute;
                 width: 1px;
                 height: 55%;
-                background-color: var(--color-gray);
+                background-color: var(--color-medium-gray);
                 top: 46%;
                 right: -20px;
                 transform: translateY(-50%);

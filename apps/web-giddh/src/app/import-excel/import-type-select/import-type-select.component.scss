@@ -12,8 +12,8 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--color-common-secondary-border);
-    background: var(--color-wild-sand);
+    border: 1px solid var(--color-silver);
+    background: var(--color-light-gray);
     cursor: pointer;
     transition: all 0.3s ease;
     color: initial;
@@ -33,12 +33,12 @@
 }
 
 .has-error .form-control {
-    border-color: var(--color-danger) !important;
+    border-color: var(--color-red) !important;
 }
 
 .import-type img {
     max-width: 90px;
-    filter: var(--color-image-filter-secondary);
+    filter: invert(0);
 }
 .import-type > li > a {
     display: block;
@@ -47,9 +47,9 @@
     background-color: var(--color-common-primary-background-for-all-components);
 }
 .text-link-2 {
-    color: var(--color-csv-or-excel-file-card-text) !important;
+    color: var(--color-blue-primary) !important;
     &:hover {
-        color: var(--color-csv-or-excel-file-card-text) !important;
+        color: var(--color-blue-primary) !important;
     }
 }
 @media (max-width: 991px) {
@@ -91,7 +91,7 @@
 
 .import-type {
     .icon-import, .icon-invoice-new {
-        background: var(--color-primary-header-icons);
+        background: var(--color-light-gray);
         width: 90px;
         height: 90px;
         line-height: 90px;

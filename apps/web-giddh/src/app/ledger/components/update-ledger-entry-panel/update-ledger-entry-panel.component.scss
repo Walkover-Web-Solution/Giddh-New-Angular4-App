@@ -85,11 +85,11 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     background: transparent;
     border: none !important;
     padding: 5px;
-    color: var(--color-abbey);
+    //color: var(--color-dark-gray);
 }
 
 .notfound-option.active {
-    background: var(--color-dark-fog) !important;
+    background: var(--color-border-light) !important;
     padding: 2px 5px !important;
 }
 
@@ -99,7 +99,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .amount-total {
     font-size: var(--font-size-12);
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
 }
 
 .other-tax {
@@ -116,7 +116,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .ledger-main .form-control {
-    background: var(--color-white) !important;
+    //background: var(--color-white) !important;
     top: 0px !important;
 }
 
@@ -170,7 +170,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .download-invoice-ledger > i {
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
     padding-left: 5px;
 }
 
@@ -188,7 +188,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .adjust-receipt {
     padding: 10px;
-    border: 1px solid var(--color-common-secondary-border);
+    border: 1px solid var(--color-silver);
     margin-top: 10px;
     position: relative;
 }
@@ -206,7 +206,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .ledger-head th {
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     padding-left: 0;
     padding-bottom: 10px;
 }
@@ -222,19 +222,19 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     }
 }
 .advanced {
-    background: var(--color-dropdown-primary-background);
+    //background: var(--color-white);
     table.xs-table-block {
         tr {
             td.remove-invoice {
                 span:first-child {
                     font-size: 16px;
                     vertical-align: middle;
-                    color: var(--color-abbey);
+                    //color: var(--color-dark-gray);
                     padding-right: 8px;
                 }
                 .remove-invoice-label {
                     vertical-align: middle;
-                    color: var(--color-abbey);
+                    //color: var(--color-dark-gray);
                     font-size: var(--font-size-15);
                 }
             }
@@ -249,17 +249,17 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     font-size: 10px;
 }
 .icon-info {
-    color: var(--color-abbey);
+    //color: var(--color-dark-gray);
     cursor: pointer;
     padding: 8px 5px 0;
 }
 .adjusted-info {
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
     padding: 15px;
     z-index: 1;
     max-width: 360px;
-    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
-    color: var(--color-abbey);
+    box-shadow: 0 3px 6px var(--color-shadow-light);
+    //color: var(--color-dark-gray);
     .info-text {
         font-family: var(--font-family);
     }
@@ -277,7 +277,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     pointer-events: none;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white {
-    background-color: var(--color-dark-fog) !important;
+    background-color: var(--color-border-light) !important;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep input,
 #update-ledger-select-warehouse.disabled-ledger::ng-deep input,
@@ -285,7 +285,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 #update-ledger-invoice-voucher-number.disabled-ledger::ng-deep input,
 #update-ledger-invoice-number.disabled-ledger::ng-deep input,
 #update-ledger-select-variant.disabled-ledger::ng-deep input {
-    background-color: var(--color-dark-fog) !important;
+    background-color: var(--color-border-light) !important;
 }
 .tourist-scheme-wrapper {
     input[type="checkbox"] {
@@ -306,23 +306,23 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     float: right;
     margin-top: 1px;
     a {
-        color: var(--color-dark-gray);
+        //color: var(--color-dark-gray);
         font-size: var(--font-size-15);
     }
 }
 
 .read-only {
-    background-color: var(--color-primary-input-bar-background) !important;
+    background-color: var(--color-light-gray) !important;
 }
 
 .no-data-found {
-    background: var(--color-white);
+    //background: var(--color-white);
     text-align: center;
     font-size: var(--font-size-32);
     height: 600px;
     width: 100%;
     padding: 3rem;
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
 }
 .cross-button {
     font-size: 32px;
@@ -431,7 +431,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     }
     #credit-select input,
     #debit-select input {
-        border: 1px solid var(--color-iron) !important;
+        border: 1px solid var(--color-silver) !important;
         height: 36px;
     }
     .ledger-main .form-control {
@@ -554,6 +554,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 .update-ledger-account {
     .read-only { 
-        background-color: var(--color-transparent-background) !important;
+        background-color: var(--color-transparent) !important;
     }
 }

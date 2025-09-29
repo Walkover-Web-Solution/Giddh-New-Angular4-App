@@ -3,11 +3,11 @@
 }
 
 .company-button {
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
 }
 
 .custom-header {
-    background-color: var(--color-giddh-blue);
+    background-color: var(--color-blue-primary);
     padding: 15px;
     min-height: 60px;
 }
@@ -17,11 +17,11 @@
     top: var(--top-sidebar);
     bottom: 0;
     min-height: calc(100vh - 60px);
-    background-color: var(--color-white);
+    //background-color: var(--color-white);
     width: 60px;
     left: 0;
     z-index: 991;
-    box-shadow: 1px 0px 4px var(--color-sidebar-primary-box-shadow) !important;
+    box-shadow: 1px 0px 4px var(--color-shadow-light) !important;
 }
 
 .nav-tabs {
@@ -88,7 +88,7 @@
     margin-left: 15px;
 
     button {
-        color: var(--color-primary-credit) !important;
+        color: var(--color-blue-primary) !important;
     }
 }
 
@@ -99,7 +99,7 @@
         font-size: var(--font-size-16);
 
         i {
-            color: var(--color-table-secondary-heading);
+            color: var(--color-blue-primary);
             font-size: var(--font-size-16);
         }
     }
@@ -114,7 +114,7 @@
             column-gap: 8px;
 
             a {
-                color: var(--color-table-secondary-heading);
+                color: var(--color-blue-primary);
                 text-decoration: underline;
                 position: relative;
             }
@@ -122,7 +122,7 @@
             .dot {
                 width: 4px;
                 height: 4px;
-                background-color: var(--color-table-secondary-heading);
+                background-color: var(--color-blue-primary);
                 border-radius: 50%;
             }
         }
@@ -134,13 +134,13 @@
 }
 
 .create-txt {
-    border-bottom: 1px solid var(--color-table-primary-content-bar-border);
+    border-bottom: 1px solid var(--color-silver);
     padding: 15px 30px 12px 30px;
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
 
     a {
         font-size: var(--font-size-14) !important;
-        color: var(--color-gray);
+        color: var(--color-medium-gray);
     }
 }
 
@@ -154,7 +154,7 @@ ul{
     &.universal-date{
         li{
             .icon-circle {
-                background-color: var(--color-transparent-background);
+                background-color: var(--color-transparent);
                 width: 35px;
                 height: 35px;
                 align-items: center;
@@ -165,10 +165,10 @@ ul{
                 a{
                     &:hover {
                         .icon-circle{
-                            background-color: var(--color-white-tertiary);
+                            //background-color: var(--color-white);
                             i[class^='icon-'],
                             i[class*=' icon-'] {
-                              color: var(--color-giddh-blue) !important;
+                              color: var(--color-blue-primary) !important;
                             }
                         }
                       }
@@ -176,12 +176,12 @@ ul{
             }
             &.select-today {
                 button {
-                    color: var(--color-primary-header-icons);
+                    color: var(--color-light-gray);
                 }
                 &:hover{
                     button {
-                        background-color: var(--color-white-tertiary) !important;
-                        color: var(--color-giddh-blue) !important;
+                        //background-color: var(--color-white) !important;
+                        color: var(--color-blue-primary) !important;
                     }
                 }
             }
@@ -246,7 +246,7 @@ ul{
 }
 
 .other a {
-    color: var(--color-nero);
+    //color: var(--color-black);
     text-transform: uppercase;
 }
 
@@ -266,7 +266,7 @@ ul.sub-list {
 }
 
 .nav-left-bar .company-name .company-text span {
-    color: var(--color-nero);
+    //color: var(--color-black);
     word-break: break-all;
 }
 
@@ -279,7 +279,7 @@ ul.sub-list {
 
 .nav-left-bar .company-name .branch-unique-name {
     font-size: var(--font-size-12);
-    color: var(--color-blue) !important;
+    color: var(--color-blue-primary) !important;
     padding: 0 0 3px 0;
 }
 
@@ -303,7 +303,7 @@ ul.sub-list {
     right: 30px;
     background: none;
     border: 0px;
-    color: var(--color-nero);
+    //color: var(--color-black);
     cursor: pointer;
     font-size: 20px;
     z-index: 9999;
@@ -318,11 +318,11 @@ ul.sub-list {
 
 /*notification css*/
 .white-row {
-    background-color: var(--color-primary-header-notification-background);
+    //background-color: var(--color-white);
     padding: 10px 15px;
     font-size: var(--font-size-15);
-    box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
-    color: var(--color-primary-header-notification-text);
+    box-shadow: 1px 1px 3px var(--color-shadow-light);
+    //color: var(--color-black);
 
     p {
         font-weight: var(--font-weight-semibold);
@@ -330,19 +330,19 @@ ul.sub-list {
     }
 
     span.icon-traingle-info {
-        color: var(--color-primary-header-icon-traingle-info);
+        color: var(--color-red);
         font-size: var(--font-size-15);
         margin-right: 10px;
     }
 
     span.icon-info-icon {
-        color: var(--color-gray);
+        color: var(--color-medium-gray);
         font-size: var(--font-size-16);
         margin-right: 10px;
     }
 
     i.icon-traingle-info {
-        color: var(--color-primary-header-icon-traingle-info);
+        color: var(--color-red);
     }
 }
 
@@ -378,16 +378,16 @@ ul.sub-list {
 #primary-new-header.primary-main-header {
     padding-left: 15px;
     padding-right: 15px;
-    border-bottom: 1px solid var(--color-primary-header-border-bottom);
+    border-bottom: 1px solid var(--color-white);
     position: fixed;
     width: 100%;
     top: var(--top-distance);
-    background-color: var(--color-primary-header-background);
+    background-color: var(--color-blue-primary);
     z-index: 990 !important;
     height: 60px;
 
     .universal-date {
-        color: var(--color-primary-header-universal-date) !important;
+        color: var(--color-blue-primary) !important;
         display: flex;
         align-items: center;
         column-gap: 20px;
@@ -417,13 +417,13 @@ ul.sub-list {
         .icon-plus,
         i,
         .btn-link {
-            color: var(--color-primary-header-icons);
+            color: var(--color-light-gray);
             position: static !important;
         }
 
         .not-today {
             .calendar-addon {
-                color: var(--color-primary-button-text);
+                color: var(--color-blue-primary);
             }
 
             .input-date {
@@ -432,19 +432,19 @@ ul.sub-list {
         }
 
         .input-date {
-            background-color: var(--color-primary-button-background);
+            //background-color: var(--color-white);
             border-radius: 5px !important;
             border: none;
 
             input {
-                color: var(--color-primary-button-text) !important;
+                color: var(--color-blue-primary) !important;
             }
         }
 
         #add-manage {
-            color: var(--color-primary-button-text) !important;
+            color: var(--color-blue-primary) !important;
             padding: 4.8px 8px;
-            background-color: var(--color-primary-button-background);
+            //background-color: var(--color-white);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -453,7 +453,7 @@ ul.sub-list {
 
             i {
                 padding: 0px 5px 1px 0px!important;
-                color: var(--color-primary-button-text) !important;
+                color: var(--color-blue-primary) !important;
                 font-size: var(--font-size-16);
             }
         }
@@ -465,13 +465,13 @@ ul.sub-list {
                     font-size: 22px;
                 }
                 span {
-                    color: var(--color-tertiary-login-box-body-text);
+                    color: var(--color-white);
                 }
             }
 
             &.disable-icon {
                 i {
-                    color: var(--color-iron) !important;
+                    color: var(--color-silver) !important;
                     cursor: no-drop;
                 }
             }
@@ -518,7 +518,7 @@ aside-setting {
 
 .menu-link {
     a {
-        color: var(--color-table-secondary-heading);
+        color: var(--color-blue-primary);
         text-decoration: underline;
         position: relative;
     }
@@ -526,12 +526,12 @@ aside-setting {
 .profile-wrapper{
     padding: 9px 0;
     .profile-picture{
-        color: var(--color-dropdown-list-secondary);
+        //color: var(--color-black);
         width: 40px;
         height: 40px;
-        border: 1px solid var(--color-deep-saffron);
+        border: 1px solid var(--color-deep-orange);
         border-radius: 50%;
-        background-color: var(--color-deep-saffron);
+        background-color: var(--color-deep-orange);
         span{
             line-height: 38px;
         }

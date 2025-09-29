@@ -9,25 +9,25 @@
             border-radius: 5px;
 
             p {
-                color: var(--color-total-details-heading);
+                //color: var(--color-dark-gray);
             }
 
             &.opening-box {
                 span {
-                    color: var(--color-success-enable);
+                    color: var(--color-green);
                 }
             }
 
             &.due-box {
                 span {
-                    color: var(--color-danger);
+                    color: var(--color-red);
                 }
             }
 
             &.payment-receipt,
             &.closing-box {
                 span {
-                    color: var(--color-slate);
+                    //color: var(--color-dark-gray);
                 }
             }
         }
@@ -101,7 +101,7 @@ table {
     max-width: 250px;
 
     .account-header {
-        background-color: var(--color-dark-fog);
+        background-color: var(--color-border-light);
     }
 }
 
@@ -126,12 +126,12 @@ table {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 
     .default-wrap {
-        background: var(--color-dark-fog);
+        background: var(--color-border-light);
         border-radius: 50px;
-        color: var(--color-nero);
+        //color: var(--color-black);
 
         &.active {
-            background-color: var(--color-quaternary-button-background) !important;
+            background-color: var(--color-blue-primary) !important;
             color: var(--color-white);
         }
     }
@@ -146,7 +146,7 @@ table {
 }
 
 .ontime-delivery {
-    color: var(--color-secondary-success);
+    color: var(--color-green);
 }
 
 :host ::ng-deep select-table-column > button {

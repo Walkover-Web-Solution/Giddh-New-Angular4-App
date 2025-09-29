@@ -1,6 +1,6 @@
 .custom-paginator {
     mat-button-toggle {
-        background-color: var(--color-body-background) !important;
+        //background-color: var(--color-white) !important;
         .mat-button-toggle-label-content {
             line-height: 28px;
         }
@@ -9,7 +9,7 @@
             min-width: 45px;
         }
         &.mat-button-toggle-disabled {
-            color: var(--color-common-primary-disabled) !important;
+            color: var(--color-silver) !important;
         }
     }
 }

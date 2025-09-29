@@ -14,7 +14,7 @@
 
 .input-group-btn {
     font-size: 21px;
-    color: var(--color-rectangular-tab-active-primary-text) !important;
+    color: var(--color-blue-primary) !important;
     cursor: pointer;
     margin-right: 5px;
     padding-top: 5px;
@@ -59,7 +59,7 @@
 .disabled-list-item {
     padding: 6px;
     height: 100%;
-    background: var(--color-white);
+    //background: var(--color-white);
     font-size: var(--font-size-15);
 }
 
@@ -69,7 +69,7 @@
     top: 0;
 
     .icon-info {
-        color: var(--color-abbey);
+        //color: var(--color-dark-gray);
     }
 }
 
@@ -85,7 +85,7 @@
     width: calc(100% - 42px);
 }
 .payment-text {
-    color: var(--color-abbey);
+    //color: var(--color-dark-gray);
 }
 
 .bank-logo {
@@ -161,7 +161,7 @@
     }
 
     .mat-mdc-table tbody > tr > td:first-child {
-        color: var(--color-table-tertiary-content) !important;
+        //color: var(--color-black) !important;
     }
 
     th.mat-header-cell,
@@ -226,7 +226,7 @@
 .plus-cross-btn {
     i {
         padding: 5px 0;
-        color: var(--color-abbey);
+        //color: var(--color-dark-gray);
         font-size: 20px;
     }
 }
@@ -341,17 +341,17 @@
 }
 
 .icici-button {
-    border: 1px solid var(--color-primary-setting-integration-icici-button);
-    color: var(--color-primary-setting-integration-icici-button);
+    border: 1px solid var(--color-orange);
+    color: var(--color-orange);
 }
 
 .button-separator {
-    color: var(--color-iron);
+    color: var(--color-silver);
 }
 
 .account-wrapper {
     width: 65%;
-    border-bottom: 1px solid var(--color-primary-setting-integration-account-wrapper-border);
+    border-bottom: 1px solid var(--color-blue-light);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
@@ -365,23 +365,23 @@
     padding-bottom: 9px;
     margin-top: 3px;
     margin-left: 1px;
-    background-color: var(--color-common-quaternary-background-for-all-components);
+    background-color: var(--color-blue-light);
 }
 
 .view-only-field {
-    background-color: var(--color-input-secondary-background);
+    //background-color: var(--color-white);
     padding: 8px;
     border-radius: 5px;
-    color: var(--color-common-senary-text);
+    color: var(--color-blue-primary);
 }
 
 .disabled-field {
     padding: 8px;
     border-radius: 5px;
     word-break: break-word;
-    color: var(--color-common-septenary-text);
-    background-color: var(--color-input-tertiary-background);
-    border: 1px solid var(--color-primary-input-bar-border);
+    //color: var(--color-black);
+    background-color: var(--color-light-gray);
+    border: 1px solid var(--color-light-gray);
 }
 
 .payment-updates {
@@ -392,7 +392,7 @@
 }
 
 .account-number {
-    color: var(--color-common-senary-text);
+    color: var(--color-blue-primary);
 }
 
 .limit-upto {
@@ -406,13 +406,13 @@
     display: inline-block;
 
     a {
-        color: var(--color-primary-setting-integration-action-anchor);
+        color: var(--color-medium-gray);
     }
 }
 
 .user-action-wrapper {
     a {
-        color: var(--color-primary-setting-integration-action-anchor);
+        color: var(--color-medium-gray);
     }
 }
 
@@ -421,22 +421,22 @@
 }
 
 .field-label {
-    color: var(--color-primary-setting-integration-field-label);
+    //color: var(--color-dark-gray);
 }
 
 .account-approval-status.approved {
-    color: var(--color-primary-setting-integration-account-approval-status-approved);
+    color: var(--color-green);
 
     i::before {
-        color: var(--color-primary-setting-integration-account-approval-status-approved);
+        color: var(--color-green);
     }
 }
 
 .account-approval-status.pending-approval {
-    color: var(--color-primary-setting-integration-account-approval-status-pending-approval);
+    color: var(--color-orange);
 
     i::before {
-        color: var(--color-primary-setting-integration-account-approval-status-pending-approval);
+        color: var(--color-orange);
     }
 }
 
@@ -445,8 +445,8 @@
 }
 
 .btn-light-blue {
-    color: var(--color-common-senary-text);
-    background-color: var(--color-primary-basic-button-opacity);
+    color: var(--color-blue-primary);
+    background-color: var(--color-blue-light);
 }
 
 .modal {
@@ -528,10 +528,10 @@
         justify-content: center;
         align-items: center;
         height: 100%;
-        border: 1px solid var(--color-common-secondary-border);
+        border: 1px solid var(--color-silver);
         border-radius: 5px;
     }
 }
 .link-color {
-    color: var(--color-ledger-heading);
+    color: var(--color-blue-primary);
 }

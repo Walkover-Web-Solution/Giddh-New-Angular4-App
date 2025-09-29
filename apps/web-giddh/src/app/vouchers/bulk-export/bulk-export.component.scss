@@ -17,14 +17,14 @@
 
         @media screen and (min-width: 1280px) {
             &:nth-child(3n + 2) {
-                border-left: 1px solid var(--color-common-primary-border);
-                border-right: 1px solid var(--color-common-primary-border);
+                border-left: 1px solid var(--color-silver);
+                border-right: 1px solid var(--color-silver);
             }
         }
 
         @media screen and (max-width: 1280px) {
             &:nth-child(2n + 2) {
-                border-left: 1px solid var(--color-common-primary-border);
+                border-left: 1px solid var(--color-silver);
             }
         }
     }
