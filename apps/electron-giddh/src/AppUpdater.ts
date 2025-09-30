@@ -115,7 +115,46 @@ export default class AppUpdaterV1 {
             console.log('No updates check completed, flags reset');
         });
 
+        // Handle download progress
+        autoUpdater.on('download-progress', (progressObj) => {
+            console.log(`Download progress: ${Math.round(progressObj.percent)}% - Speed: ${Math.round(progressObj.bytesPerSecond / 1024)} KB/s`);
+            if (updater) {
+                updater.label = `Downloading... ${Math.round(progressObj.percent)}%`;
+            }
+        });
+
+        // Handle download errors
+        autoUpdater.on('error', (error) => {
+            console.error('Update error:', error);
+            if (updater) {
+                updater.label = 'Check For Latest Update';
+                updater.enabled = true;
+                updater = null;
+            }
+            // Reset flags on error
+            isManualCheck = false;
+            isCheckingForUpdates = false;
+            
+            // Show error dialog for manual checks
+            if (isManualCheck || updater) {
+                dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Update Error',
+                    message: 'Failed to check for updates. Please try again later.',
+                    detail: error.message
+                });
+            }
+        });
+
         autoUpdater.on('update-downloaded', (event: UpdateDownloadedEvent) => {
+            console.log('Update downloaded successfully');
+            
+            // Re-enable menu item and reset label
+            if (updater) {
+                updater.label = 'Check For Latest Update';
+                updater.enabled = true;
+            }
+            
             const dialogOpts: MessageBoxOptions = {
                 type: 'info',
                 buttons: ['Restart', 'Later'],
@@ -126,6 +165,11 @@ export default class AppUpdaterV1 {
             dialog.showMessageBox(dialogOpts).then((returnValue) => {
                 if (returnValue.response === 0) {
                     autoUpdater.quitAndInstall();
+                } else {
+                    // User chose "Later" - clean up updater reference
+                    if (updater) {
+                        updater = null;
+                    }
                 }
             }).catch((error) => {
                 console.error('Update downloaded dialog error:', error);
@@ -140,9 +184,18 @@ export default class AppUpdaterV1 {
                 }).then((res) => {
                     if (res.response === 0) {
                         autoUpdater.quitAndInstall();
+                    } else {
+                        // Clean up updater reference
+                        if (updater) {
+                            updater = null;
+                        }
                     }
                 }).catch((fallbackErr) => {
                     console.error('Fallback restart dialog error:', fallbackErr);
+                    // Clean up updater reference even on error
+                    if (updater) {
+                        updater = null;
+                    }
                 });
             });
         });
