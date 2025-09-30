@@ -45,6 +45,7 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
+import { ActionTypeEnum } from '../../../shared/sales-person/utility/sales-person.constant';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -148,6 +149,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** Holds transfer info if active sales person is transfer */
+    private activeSalePersonIsTransfer: any;
 
     public sourceWarehouse: true;
     public companyTaxesList$: Observable<TaxResponse[]>;
@@ -283,8 +286,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public taxDialogRef: MatDialogRef<any>;
     /** Delete attached file dialog ref */
     public deleteAttachedFileDialogRef: MatDialogRef<any>;
-     /** Delete attached file dialog ref */
-     public salesPersonDialogRef: MatDialogRef<any>;
+    /** Delete attached file dialog ref */
+    public salesPersonDialogRef: MatDialogRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
 
@@ -441,6 +444,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.selectedStockVariant = Object.assign({}, currentSelectedVariant ?? res[0]);
                 this.cdRef.detectChanges();
                 this.stockVariantSelected.emit(currentSelectedVariant?.value ?? res[0].value);
+            }
+        });
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe(salesPersonList => {
+            if (!this.isSalesPersonExists(this.blankLedger.salesPersonUniqueName, salesPersonList)) {
+                let salesPersonName = "";
+                let salesPersonUniqueName = null;
+                if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
+                    const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
+                    if (salesPerson) {
+                        salesPersonName = salesPerson.label
+                        salesPersonUniqueName = salesPerson.value
+                    }
+                }
+                this.blankLedger.salesPersonName = salesPersonName;
+                this.blankLedger.salesPersonUniqueName = salesPersonUniqueName;
             }
         });
     }
@@ -1870,7 +1889,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         return item;
                     });
                 });
-            } else if (!this.currentTxn?.duplicateEntry){
+            } else if (!this.currentTxn?.duplicateEntry) {
                 this.currentTxn?.discounts?.map(item => {
                     item.isActive = false;
                     return item;
@@ -2301,9 +2320,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public openSalesPersonDialog(): void {
-        this.salesPersonDialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        this.salesPersonDialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {
-            this.getSalesPersonList(); this.salesPersonDialogRef = undefined;
+        this.salesPersonDialogRef = this.dialog.open(SalesPersonComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: { activeSalePersonUniqueName: this.blankLedger.salesPersonUniqueName || "" }
+        });
+        this.salesPersonDialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => {
+            this.getSalesPersonList(); this.salesPersonDialogRef = undefined; this.activeSalePersonIsTransfer = res.isTransfer
         })).subscribe();
     }
 
@@ -2314,5 +2336,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+    }
+
+    /**
+    * Checks if a sales person exists by unique name
+    *
+    * @private
+    * @param {string} uniqueName - The unique name to search for
+    * @param {any[]} salesPersonList - Array of sales persons to search in
+    * @returns {boolean} True if sales person exists, false otherwise
+    * @memberof NewLedgerEntryPanelComponent
+    */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }
