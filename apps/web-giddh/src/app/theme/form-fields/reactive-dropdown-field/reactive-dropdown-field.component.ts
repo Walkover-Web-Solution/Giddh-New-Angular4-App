@@ -61,9 +61,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Adds red border around field if true */
     @Input() public showError: boolean = false;
     /** Holds label of value */
-    @Input() public labelValue: any = '';
+    @Input() public labelValue: string = '';
     /** Holds label of value to show in the field */
-    public controlLabelValue: any = this.labelValue;
+    public controlLabelValue: string = this.labelValue;
     /** Close autocomplete on focus out if true - Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
     @Input() public closeOnFocusOut: boolean = false;
     /** If we need to clear form control on force clear */
@@ -134,7 +134,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 this.dynamicSearchedQuery.emit(search);
                 if (!search) {
                     this.clearDropdownValue();
-                    this.writeValue("");
+                    this.writeValue("", false);
                 }
             });
         } else {
@@ -145,7 +145,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             ).subscribe((search: string) => {
                 if (!search) {
                     this.clearDropdownValue();
-                    this.writeValue("");
+                    this.writeValue("", false);
                 }
                 this.fieldFilteredOptions$ = this.filterOptions(String(search));
                 this.changeDetection.detectChanges();
@@ -182,7 +182,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
         });
         if (filteredOptions.length === 0) {
-            this.writeValue("");
+            this.writeValue("", false);
         }
         return of(filteredOptions);
     }
@@ -207,7 +207,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
             this.writeValue("");
             this.clearDropdownValue();
-            this.controlLabelValue = "";
         }
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
             this.openDropdownPanel();
@@ -306,13 +305,17 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * Write value to the component (ControlValueAccessor implementation)
      *
      * @param {*} value
+     * @param {boolean} [setLabelValue=true] - Whether to set the label value
      * @memberof ReactiveDropdownFieldComponent
      */
-    public writeValue(value: any): void {
+    public writeValue(value: any, setLabelValue: boolean = true): void {
         if (value !== undefined && value !== null) {
             this.value = value;
         } else {
             this.value = '';
+        }
+        if (setLabelValue) {
+            this.setLabelValue(null);
         }
         this.onChange(value);
     }
@@ -324,7 +327,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public optionSelected(event: any): void {
-        this.writeValue(event?.option?.value?.value);
+        this.writeValue(event?.option?.value?.value, false);
         this.setLabelValue(event?.option?.value);
         this.onTouched();
         this.selectedOption.emit(event?.option?.value);
@@ -388,15 +391,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             if (event) {
                 const currentValue = event?.value;
                 if (currentValue !== null && currentValue !== '') {
-                    this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue) ? this.labelValue : (event?.label || '');
+                    this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue || this.labelValue) ? this.labelValue : (event?.label || '');
                     this.changeDetection.detectChanges();
                 } else if (currentValue === "") {
                     this.controlLabelValue = "";
                 }
-            } else if (this.value && this.controlLabelValue.trim() === "") {
-                this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue) ? this.labelValue : (this.options?.find(option => isEqual(option?.value, this.value))?.label || this.value);
+            } else if (this.value) {
+                this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue || this.labelValue) ? this.labelValue : (this.options?.find(option => isEqual(option?.value, this.value))?.label || this.value);
                 this.changeDetection.detectChanges();
-            } else if (!this.value) {
+            } else {
                 this.controlLabelValue = this.labelValue || "";
             }
         } else {
