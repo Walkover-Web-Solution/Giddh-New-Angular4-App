@@ -152,16 +152,7 @@
                                 <tr>
                                     <td class="font-16 text-gray">{{ localeData?.balance_due }}</td>
                                     <td class="p-0 text-right">
-                                        {{
-                                            responseAccountList.accountSummary.closingBalance?.amount >= 0
-                                                ? (responseAccountList.accountSummary.closingBalance?.type ===
-                                                  transactionType.Credit
-                                                      ? "-"
-                                                      : "") +
-                                                  (responseAccountList.accountAddress.currency?.symbol ?? "") +
-                                                  responseAccountList.accountSummary.closingBalance.amount
-                                                : ""
-                                        }}
+                                        {{ balanceDue }}
                                     </td>
                                 </tr>
                             </tfoot>
@@ -367,16 +358,7 @@
                             <div class="d-flex justify-content-end">
                                 <span class="font-16 fw-900 pd-1">{{ localeData?.balance_due }}</span>
                                 <span class="pd-1">
-                                        {{
-                                            responseAccountList.accountSummary.closingBalance?.amount >= 0
-                                                ? (responseAccountList.accountSummary.closingBalance?.type ===
-                                                  transactionType.Credit
-                                                      ? "-"
-                                                      : "") +
-                                                  (responseAccountList.accountAddress.currency?.symbol ?? "") +
-                                                  responseAccountList.accountSummary.closingBalance.amount
-                                                : ""
-                                        }}
+                                        {{ balanceDue }}
                                     </span>
                             </div>
                         <div
