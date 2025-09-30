@@ -6433,16 +6433,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         const params: any = {
-            barcodeValue: this.barcodeValue
+            barcodeValue: this.barcodeValue,
+            customerUniqueName: this.invoiceForm.controls["account"]?.get("uniqueName")?.value ?? ""
         };
-        
-        if (!this.invoiceType.isCashInvoice) {
-            params.customerUniqueName = this.invoiceForm.controls["account"]?.get("uniqueName")?.value ?? "";
-        }
         
         if (this.invoiceType.isPurchaseOrder) {
             params.invoiceType = VoucherTypeEnum.purchase;
         } else if (this.invoiceType.isCashInvoice) {
+            params.customerUniqueName = "";
             params.invoiceType = VoucherTypeEnum.sales;
         } else {
             params.invoiceType = this.invoiceForm.get("type")?.value || VoucherTypeEnum.sales;
