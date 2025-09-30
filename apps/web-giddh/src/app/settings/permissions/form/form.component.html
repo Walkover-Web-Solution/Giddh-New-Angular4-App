@@ -6,13 +6,14 @@
             <div>
                 <input-field [label]="isLblShow ? localeData?.unique_name_email_label : ''" [type]="'text'"
                     [name]="'emailId'" formControlName="emailId"
+                    [pattern]="giddhEmailRegex"
                     [placeholder]="localeData?.unique_name_email_placeholder" [readonly]="userdata?.uniqueName"
                     [disabled]="isUserRestricted"></input-field>
             </div>
             <div>
                 <reactive-dropdown-field [label]="isUserRestricted ? '' : isLblShow ? localeData?.role_name_label : ''"
                     [name]="'roles'" [placeholder]="localeData?.role_name_placeholder" [options]="allRoles"
-                    formControlName="roleUniqueName" [labelValue]="isUserRestricted  ? '' : userdata?.roleName"
+                    formControlName="roleUniqueName"
                     [required]="true" [readonly]="isUserRestricted"
                     [disabled]="isUserRestricted"></reactive-dropdown-field>
             </div>

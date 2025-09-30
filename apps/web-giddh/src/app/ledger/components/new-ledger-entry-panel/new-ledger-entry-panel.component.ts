@@ -2294,7 +2294,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private setBlankLedgerAmount(): void {
-        if (this.blankLedgerIndex !== undefined) {
+        if (this.blankLedgerIndex !== undefined && this.blankLedger.transactions[this.blankLedgerIndex]) {
             if (this.currentTxn.type === 'DEBIT') {
                 this.blankLedger.transactions[this.blankLedgerIndex].debitAmount = this.currentTxn.amount;
             } else {
