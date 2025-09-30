@@ -9215,7 +9215,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             customerUniqueName: this.invFormData.accountDetails.uniqueName ?? "",
             invoiceType: this.invoiceType,
         }
-        this.commonService.getBarcodeScanData(this.barcodeValue, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.commonService.getBarcodeScanData(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
                 let stockObj = response.body?.stock;
