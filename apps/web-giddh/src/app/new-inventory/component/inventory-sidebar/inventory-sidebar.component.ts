@@ -456,4 +456,3 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
         this.destroyed$.complete();
     }
 }
-
