@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
@@ -277,8 +277,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         const currentValues = this.stockCreateEditForm.form.value;
         return !isEqual(currentValues, this.initialFormValues);
     }
-    /** Flag to track if navigation is in progress to avoid infinite loops */
-    private isNavigatingRef = { value: false };
     /** Store initial form values to compare for actual changes */
     private initialFormValues: any = null;
     /** Unregister functions for GeneralService callbacks */

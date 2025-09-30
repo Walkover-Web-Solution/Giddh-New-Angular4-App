@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { InventoryService } from "../../../services/inventory.service";
-import { debounceTime, distinctUntilChanged, takeUntil, filter } from "rxjs/operators";
-import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
+import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { UntypedFormControl } from "@angular/forms";
 import { cloneDeep } from "../../../lodash-optimized";

@@ -1,8 +1,8 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, Inject, TemplateRef, ViewChild } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil, filter } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Store, select } from '@ngrx/store';
@@ -107,8 +107,6 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
     public isConsolidatedBranch: boolean;
     /** Holds current page url */
     private currentUrl: string = "";
-    /** Flag to track if navigation is in progress */
-    private isNavigating: boolean = false;
 
     constructor(
         private router: Router,
@@ -456,4 +454,3 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
         this.destroyed$.complete();
     }
 }
-
