@@ -147,18 +147,32 @@ export class ActionMenuComponent {
      * @memberof ActionMenuComponent
      */
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string): void {
-        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}` : location.href + `?returnUrl=${part}/${accUniqueName}`;
-        if (additionalParams) {
-            url = `${url}${additionalParams}`;
+        let url: string;
+        
+        if (this.generalService.voucherApiVersion === 2) {
+            // Construct direct page URL
+            url = `/pages/${part}`;
+            if (additionalParams) {
+                url = `${url}${additionalParams}`;
+            }
+            // Add redirectUrl parameter for ledger pages
+            if (part === 'ledger') {
+                const separator = url.includes('?') ? '&' : '?';
+                url = `${url}${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
+            }
+        } else {
+            // Legacy URL construction
+            url = location.href + `?returnUrl=${part}/${accUniqueName}`;
+            if (additionalParams) {
+                url = `${url}${additionalParams}`;
+            }
         }
+        
         if (isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
-            ipcRenderer.send('open-url', url);
+            const electronUrl = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
+            ipcRenderer.send('open-url', electronUrl);
         } else {
-            if (part === 'ledger') {
-                url = url + `?redirectUrl=${this.currentUrl}`;
-            }
             (window as any).open(url);
         }
     }
