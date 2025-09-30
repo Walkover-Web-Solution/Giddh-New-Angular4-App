@@ -8,14 +8,14 @@
                     [name]="'emailId'" formControlName="emailId"
                     [pattern]="giddhEmailRegex"
                     [placeholder]="localeData?.unique_name_email_placeholder" [readonly]="userdata?.uniqueName"
-                    [disabled]="isUserRestricted"></input-field>
+                    [disabled]="isUserRestricted" [required]="true" [showError]="isFormInvalid && permissionForm?.get('emailId').invalid"></input-field>
             </div>
             <div>
                 <reactive-dropdown-field [label]="isUserRestricted ? '' : isLblShow ? localeData?.role_name_label : ''"
                     [name]="'roles'" [placeholder]="localeData?.role_name_placeholder" [options]="allRoles"
                     formControlName="roleUniqueName"
                     [required]="true" [readonly]="isUserRestricted"
-                    [disabled]="isUserRestricted"></reactive-dropdown-field>
+                    [disabled]="isUserRestricted" [showError]="isFormInvalid && permissionForm?.get('roleUniqueName').invalid"></reactive-dropdown-field>
             </div>
             <!-- time span -->
             <div [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true"
@@ -153,7 +153,7 @@
             <div class="action-button text-right text-xl-left" [ngClass]="{ 'text-xl-right': isUpdtCase }">
                 <div class="add-btn">
                     <button mat-raised-button color="primary" [ladda]="createPermissionInProcess$ | async" [disabled]="
-                            permissionForm?.invalid || isUserRestricted
+                        isUserRestricted
                         " class="btn custom-btn">
                         <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
                         <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
