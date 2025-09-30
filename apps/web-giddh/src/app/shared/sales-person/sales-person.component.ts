@@ -78,7 +78,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Sales Person List In Progress */
     public salesPersonListInProgress$: Observable<boolean> = this.componentStore.salesPersonListInProgress$;
     /** Displayed columns for sales person table */
-    public displayedColumns: string[] = ['name', 'email', 'mobileNumber', 'archive', 'action'];
+    public displayedColumns: string[] = ['name', 'email', 'mobileNumber', 'archiveStatus', 'action'];
     /** Active Row Index */
     public activeRowIndex: number = -1;
     /** Sales Person Action Enum */
@@ -169,7 +169,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
             });
             dialogRef.afterClosed().subscribe(response => {
                 if (response === this.commonLocaleData?.app_yes) {
-                    this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_delete, this.localeData?.archive_alternative_message, this.localeData?.transfer_and_archive);
+                    this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_archive, this.localeData?.archive_alternative_message, this.localeData?.transfer_and_archive);
                 } else {
                     this.salesPersonUniqueName = null;
                 }
@@ -262,12 +262,14 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                             this.componentStore.deleteSalesPerson(element?.uniqueName);
                         }
                     });
-                } else {
+                } else {    
                      if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
+                        this.salesPersonUniqueName = element?.uniqueName;
                         this.componentStore.patchState({
                             openTransferAndArchiveDialog: true
                         });
                     } else if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ACCOUNT)) {
+                        this.salesPersonUniqueName = element?.uniqueName;
                         this.componentStore.patchState({
                             openTransferAndDeleteDialog: true
                         });
