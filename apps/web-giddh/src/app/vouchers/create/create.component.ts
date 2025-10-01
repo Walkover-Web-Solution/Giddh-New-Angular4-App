@@ -383,8 +383,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAmountBeforeUpdate: number = 0;
     /** Current page for reference vouchers */
     private referenceVouchersCurrentPage: number = 1;
-    /** Cached voucher account results for pagination */
-    private cachedVoucherAccountResults: OptionInterface[] = [];
     /** Total pages for reference vouchers */
     private referenceVouchersTotalPages: number = 1;
     /** Reference voucher search field */
@@ -804,6 +802,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         /** New account details */
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.componentStore.newAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.createUpdateAccountCallback(response, true);
@@ -2159,12 +2158,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        // Clear cache if this is a new search (page 1) or if search parameters changed
-        if (page === 1) {
-            this.cachedVoucherAccountResults = [];
-            this.voucherAccountResults$ = observableOf(null);
-        }
-
         let accountSearchRequest = this.vouchersUtilityService.getSearchRequestObject(
             this.voucherType,
             query,
@@ -2183,16 +2176,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .subscribe((response) => {
                 if (response?.body?.results?.length) {
                     this.accountSearchRequest.loadMore = true;
+                    let voucherAccountResults = [];
+                    if (page > 1) {
+                        this.voucherAccountResults$.subscribe((res) => (voucherAccountResults = res));
+                    }
                     const newResults = response?.body?.results?.map((res) => {
                         return { label: res.name, value: res.uniqueName, additional: res };
                     });
-
-                    // Use cached results for pagination instead of synchronous subscription
-                    if (page > 1) {
-                        this.cachedVoucherAccountResults = [...this.cachedVoucherAccountResults, ...newResults];
-                    } else {
-                        this.cachedVoucherAccountResults = newResults;
-                    }
 
                     if (selectAccount) {
                         this.invoiceForm.controls["account"]?.get("uniqueName")?.patchValue(query);
@@ -2204,13 +2194,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                         this.openAccountDropdown = false;
                     }
-
-                    // Update Observable with fresh data
-                    this.voucherAccountResults$ = observableOf([...this.cachedVoucherAccountResults]);
+                    this.voucherAccountResults$ = observableOf(voucherAccountResults.concat(...newResults));
                 } else {
                     this.accountSearchRequest.loadMore = false;
                     if (page === 1) {
-                        this.cachedVoucherAccountResults = [];
                         this.voucherAccountResults$ = observableOf(null);
                     }
 
@@ -2438,7 +2425,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const account = entries.at(entryIndex)?.value?.transactions?.[0]?.account;
             // Delete entry if account is not selected
             if (!(account?.uniqueName && account?.name)) {
-                this.deleteLineEntry(entryIndex);
+            this.deleteLineEntry(entryIndex);
             }
             return;
         }
@@ -3314,7 +3301,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup
             .get("otherTax.amount")
             .patchValue(giddhRoundOff((taxableValue * tax?.taxDetail[0]?.taxValue) / 100, this.highPrecisionRate));
-
+            
         entryFormGroup.get("otherTax.calculationMethod").patchValue(calculationMethod);
         this.calculateReceiptPaymentAmount(entryFormGroup, isUpdate);
         this.changeDetection.detectChanges();
@@ -6328,7 +6315,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.checkIfEntriesHasStock();
     }
 
-    /**
+     /**
      * Get rate by unit
      *
      * @param {string} stockUnitUniqueName
@@ -6336,7 +6323,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @returns {number}
      * @memberof VoucherCreateComponent
      */
-    private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
+     private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
         return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
     }
 
@@ -6446,7 +6433,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             params.invoiceType = this.invoiceForm.get("type")?.value || VoucherTypeEnum.sales;
         }
-        
+
         this.commonService
             .getBarcodeScanData(params)
             .pipe(takeUntil(this.destroyed$))

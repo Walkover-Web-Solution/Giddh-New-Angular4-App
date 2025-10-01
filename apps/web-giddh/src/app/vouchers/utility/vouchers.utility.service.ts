@@ -84,7 +84,6 @@ export class VouchersUtilityService {
     public getSearchRequestObject(voucherType: string, query: string, page: number = 1, searchType: string): any {
         let withStocks: boolean;
         let group: string;
-
         if (searchType === SearchType.CUSTOMER) {
             if (![VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.payment].includes(voucherType as VoucherTypeEnum)) {
                 group = 'sundrydebtors';

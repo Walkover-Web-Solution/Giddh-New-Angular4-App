@@ -4,7 +4,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
-import { takeUntil, distinctUntilChanged, filter } from "rxjs/operators";
+import { takeUntil, distinctUntilChanged } from "rxjs/operators";
 import { CompanyActions } from "../../../actions/company.actions";
 import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -90,8 +90,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Discounts list */
     public discountsList: IDiscountList[] = [];
-    /** Flag to track if navigation is in progress to avoid infinite loops */
-    private isNavigatingRef = { value: false };
     /** Store initial form values to compare for actual changes */
     private initialFormValues: any = null;
 
@@ -397,7 +395,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.inventoryService.CreateStockGroup(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
-                    this.isNavigatingRef.value = false;
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_create);
 
                     if (!this.addGroup) {
@@ -492,7 +489,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         }
         this.selectedTaxes = [];
         this.processedTaxes = [];
-        this.showTaxField = true;
         
         // Capture initial form values for comparison after form is fully initialized
         setTimeout(() => {
