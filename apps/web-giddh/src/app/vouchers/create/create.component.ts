@@ -802,6 +802,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         /** New account details */
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.componentStore.newAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.createUpdateAccountCallback(response, true);
@@ -2193,9 +2194,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                         this.openAccountDropdown = false;
                     }
-                    console.log(voucherAccountResults.concat(...newResults));
-                    console.log(voucherAccountResults);
-                    console.log(newResults);
                     this.voucherAccountResults$ = observableOf(voucherAccountResults.concat(...newResults));
                 } else {
                     this.accountSearchRequest.loadMore = false;
