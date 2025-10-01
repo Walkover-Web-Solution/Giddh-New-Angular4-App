@@ -76,39 +76,3 @@ span.icon-rupees {
         }
     }
 }
-@media (max-width: 480px) {
-    .dashboard-filter {
-        display: flex;
-        float: none !important;
-        margin-top: 10px;
-    }
-    .panel-heading {
-        align-items: baseline;
-        flex-direction: column;
-        .dashboard-filter {
-            flex-direction: row-reverse;
-            margin-top: 5px;
-            i {
-                margin-left: 15px;
-            }
-        }
-    }
-}
-@media (max-width: 360px) {
-    .due-amount {
-        font-size: var(--font-size-15);
-        display: block;
-    }
-    .vendor-due-text,
-    .customer-due-text {
-        font-size: var(--font-size-15);
-        float: none !important;
-    }
-    .panel-body small {
-        display: block;
-        float: none !important;
-    }
-    .due {
-        margin-bottom: 10px;
-    }
-}

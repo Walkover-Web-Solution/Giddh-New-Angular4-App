@@ -1,22 +1,22 @@
-.tax-authority-report {
-    .sales-report-table {
-        &.mat-mdc-table {
-            tr {
-                th,
-                td {
-                    border: 1px solid var(--color-silver) !important;
+// .tax-authority-report {
+//     .sales-report-table {
+//         &.mat-mdc-table {
+//             tr {
+//                 th,
+//                 td {
+//                     border: 1px solid var(--color-silver) !important;
 
-                    &:not(:first-child) {
-                        text-align: right;
-                    }
-                }
+//                     &:not(:first-child) {
+//                         text-align: right;
+//                     }
+//                 }
 
-                td {
-                    &.bg-gray {
-                        background-color: var(--color-light-gray) !important;
-                    }
-                }
-            }
-        }
-    }
-}
+//                 td {
+//                     &.bg-gray {
+//                         background-color: var(--color-light-gray) !important;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }

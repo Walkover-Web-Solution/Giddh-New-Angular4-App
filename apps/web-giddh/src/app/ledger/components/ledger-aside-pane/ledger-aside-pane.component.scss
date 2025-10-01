@@ -103,28 +103,3 @@
         max-width: 500px;
     }
 }
-
-@media (max-width: 575px) {
-    :host {
-        max-width: 370px;
-    }
-    :host .aside-pane {
-        max-width: 370px;
-    }
-}
-@media (max-width: 375px) {
-    :host {
-        max-width: 310px;
-    }
-    :host .aside-pane {
-        max-width: 310px;
-    }
-}
-@media (max-width: 320px) {
-    :host {
-        max-width: 280px;
-    }
-    :host .aside-pane {
-        max-width: 280px;
-    }
-}

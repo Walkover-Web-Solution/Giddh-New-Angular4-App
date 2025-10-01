@@ -387,43 +387,6 @@ button.btn.btn-filter {
         padding-left: 0 !important;
     }
 }
-@media (max-width: 767px) {
-    .btn-sky-blue {
-        display: none;
-    }
-    .advance-icon {
-        display: none;
-    }
-    .head-report {
-        font-size: var(--font-size-15);
-    }
-    .btn-link {
-        font-size: var(--font-size-12);
-        margin-right: 0 !important;
-        margin-top: 0 !important;
-    }
-    .inventory-stock-table {
-        table-layout: auto;
-    }
-    .basic > tbody > tr > td,
-    .basic > thead > tr > th {
-        min-width: 100px !important;
-    }
-
-    .download-icon {
-        span {
-            display: none;
-        }
-    }
-    .td-mobile-head {
-        display: block;
-    }
-
-    .table-border {
-        border: 0px solid var(--color-white) !important;
-    }
-}
-
 @media (max-width: 1622px) {
     .table-responsive {
         display: block;

@@ -22,35 +22,3 @@
     top: 50% !important;
     transform: translateY(-50%) !important;
 }
-
-@media (max-width: 767px) {
-    .search-account {
-        float: none !important;
-    }
-    .search-bar .form-control {
-        position: relative;
-        top: 0;
-    }
-    .modal-header {
-        border-radius: 0px;
-    }
-}
-
-@media (max-width: 575px) {
-    .manage-group-acc .col-xs-6 {
-        width: 100%;
-        margin-bottom: 5px;
-    }
-    .manage-group-acc .search-bar-wrapper {
-        float: none !important;
-    }
-    .form-group.search-bar {
-        margin-bottom: 0;
-    }
-    .manage-group-acc .modal-header {
-        padding: 0 15px 10px;
-    }
-    .manage-group-acc .modal-title {
-        font-size: var(--font-size-15) !important;
-    }
-}

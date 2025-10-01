@@ -113,19 +113,6 @@ tr.fsstock td {
     white-space: normal;
     word-break: break-word;
 }
-@media (max-width: 767px) {
-    section.form-body table.no-hover td {
-        width: 100%;
-        display: block;
-        margin-bottom: 0;
-    }
-    tr.no-hover.table-label {
-        display: none;
-    }
-    .input-label-stock {
-        display: block;
-    }
-}
 ::ng-deep {
     .ng-untouched {
         .pull-right {

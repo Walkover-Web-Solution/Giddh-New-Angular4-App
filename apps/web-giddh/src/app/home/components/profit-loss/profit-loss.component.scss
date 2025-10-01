@@ -79,32 +79,3 @@ span.icon-rupees {
         }
     }
 }
-@media (max-width: 767px) {
-    .total-income {
-        margin-bottom: 10px;
-    }
-}
-@media (max-width: 480px) {
-    .dashboard-filter {
-        display: flex;
-        float: none !important;
-        margin-top: 10px;
-    }
-    .panel-heading {
-        align-items: baseline;
-        flex-direction: column;
-        .dashboard-filter {
-            flex-direction: row-reverse;
-            margin-top: 5px;
-            i {
-                margin-left: 15px;
-            }
-        }
-    }
-}
-@media (max-width: 360px) {
-    .due-amount,
-    .total-amount {
-        font-size: var(--font-size-15);
-    }
-}

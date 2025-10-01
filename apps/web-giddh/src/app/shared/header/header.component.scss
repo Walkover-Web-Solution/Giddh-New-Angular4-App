@@ -562,26 +562,6 @@ aside-setting {
     }
 }
 
-@media (max-width: 768px) {
-    span.icon-support.dropdown-toggle {
-        top: 7px;
-    }
-
-    .hamburger-menu {
-        display: flex;
-        align-items: center;
-
-        button {
-            width: 32px;
-            padding: 4px 4px 3px 0;
-
-            i {
-                font-size: 22px !important;
-            }
-        }
-    }
-}
-
 @media (max-width: 840px) {
     ul.sub-list {
         min-height: 30px;

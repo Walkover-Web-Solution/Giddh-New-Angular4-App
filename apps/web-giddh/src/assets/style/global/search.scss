@@ -5,7 +5,7 @@ body {
                 .cdk-overlay-pane {
                     transform: unset !important;
                     .mat-mdc-menu-panel {
-                        max-width: 550px !important;
+                        max-width: 550px !important; // -Need to handle globally 
                     }
                 }
             }

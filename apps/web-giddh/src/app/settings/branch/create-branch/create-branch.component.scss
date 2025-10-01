@@ -118,47 +118,6 @@
         }
     }
 }
-@media (max-width: 767px) {
-    .create-branch-page {
-        .create-branch-under {
-            .branch-under-company {
-                p {
-                    margin-bottom: 10px;
-                }
-                .branch-company-name {
-                    .label-wrapper {
-                        flex-direction: column;
-                        label {
-                            min-width: 100%;
-                        }
-                    }
-                }
-            }
-        }
-        .branch-form {
-            .branch-form-field {
-                flex-direction: column;
-                align-items: flex-start;
-                label {
-                    width: 100%;
-                    margin-bottom: 8px;
-                }
-                .checkbox-label {
-                    display: none;
-                }
-                input,
-                sh-select {
-                    width: 100%;
-                    max-width: 100%;
-                }
-                .sub-location-input {
-                    max-width: 100%;
-                    width: 100%;
-                }
-            }
-        }
-    }
-}
 
 .bg-grey-on-hover {
     &:hover {

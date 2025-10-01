@@ -68,9 +68,9 @@
     .mat-table-sticky {
         top: 60px !important;
     }
-    .common-column-width{
-        min-width: 110px;
-    }
+    // .common-column-width{
+    //     min-width: 110px;
+    // }
 }
 
 ::ng-deep {
@@ -177,42 +177,6 @@
 
 .account-name-column {
     padding-left: 0 !important;
-}
-
-@media (max-width: 767px) {
-    .stock-group-footer {
-        position: static !important;
-
-        .stock-value {
-            padding-right: 0 !important;
-        }
-    }
-}
-
-@media (max-width: 575px) {
-    .stock-group-footer {
-        text-align: left;
-
-        p,
-        label {
-            padding-left: 15px;
-        }
-
-        .pd-l15 {
-            padding-left: 0 !important;
-        }
-
-        .stock-value {
-            justify-content: flex-start !important;
-            text-align: left;
-            padding-left: 0;
-            flex-direction: column;
-
-            .total-stock-value {
-                padding-left: 0;
-            }
-        }
-    }
 }
 @media screen and (max-width: 1200px) {
     .inventory-transaction-list{

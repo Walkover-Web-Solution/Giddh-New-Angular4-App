@@ -242,19 +242,3 @@ button {
         }
     }
 }
-@media (max-width: 767px) {
-    .branch-vector {
-        img {
-            width: 150px;
-        }
-    }
-}
-@media (max-width: 575px) {
-    .warehouse-header {
-        flex-direction: column;
-        .search-warehouse-box {
-            max-width: 100%;
-            margin-bottom: 15px;
-        }
-    }
-}

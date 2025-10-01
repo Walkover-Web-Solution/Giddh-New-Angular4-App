@@ -50,18 +50,3 @@ textarea.receipient-email {
         }
     }
 }
-@media (max-width: 767px) {
-    .descendingRadioBtn {
-        display: block !important;
-        margin-left: 100px !important;
-    }
-    .export-type {
-        flex-direction: column;
-        span {
-            margin-right: 15px !important;
-        }
-    }
-    .show-columnar-button {
-        display: none;
-    }
-}

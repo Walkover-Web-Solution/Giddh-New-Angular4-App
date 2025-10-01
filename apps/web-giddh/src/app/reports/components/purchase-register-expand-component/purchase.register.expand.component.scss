@@ -323,32 +323,3 @@ table th {
 .position-left {
     left: 0;
 }
-
-@media screen and (max-width: 768px) {
-    .giddh-table {
-        tbody {
-            tr {
-                td.voucher-type-td {
-                    width: 100%;
-                }
-            }
-        }
-    }
-}
-@media (max-width: 767px) {
-    .report-breadcrum {
-        position: static !important;
-        padding-left: 15px !important;
-        padding-top: 0 !important;
-        .nav-report {
-            li {
-                font-size: var(--font-size-15);
-            }
-        }
-        .custom-month-select {
-            .btn {
-                font-size: var(--font-size-15);
-            }
-        }
-    }
-}

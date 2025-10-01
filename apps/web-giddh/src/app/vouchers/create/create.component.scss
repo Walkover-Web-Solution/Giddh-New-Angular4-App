@@ -3,11 +3,6 @@
 
     .container-lg {
         max-width: 1540px !important;
-
-        @media screen and (max-width: 768px) {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-        }
     }
 
     .vouchers-title {

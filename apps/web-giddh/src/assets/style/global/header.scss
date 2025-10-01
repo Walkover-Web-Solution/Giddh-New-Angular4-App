@@ -31,27 +31,17 @@
         }
     }
 }
-.mat-mdc-menu-panel {
-    max-width: 450px !important;
-}
-.mat-menu-content:not(:empty) {
-    padding: 0 !important;
-}
+// .mat-mdc-menu-panel {
+//     max-width: 450px !important;
+// }
+// .mat-menu-content:not(:empty) {
+//     padding: 0 !important;
+// }
 
-/*--- billing-detail ---*/
-.back-btnn {
-    .back-button {
-        .mdc-button__label {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    }
-}
 
 // Header Profile Menu options color
-.user-profile-menu{
-    button {
-        color: var(--color-black) !important;
-    }
-}
+// .user-profile-menu{
+//     button {
+//         color: var(--color-black) !important;
+//     }
+// }

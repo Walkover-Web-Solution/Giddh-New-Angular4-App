@@ -9155,12 +9155,6 @@ button.ladda-button .ladda-label {
     margin: 0;
 }
 
-@media (min-width: 564px) {
-    #date-range-picker-parent .daterangepicker {
-        width: 100%;
-    }
-}
-
 .dayBookAdvanceSearch input {
     width: 100%;
 }
@@ -11642,23 +11636,6 @@ body {
     }
 }
 
-@media (min-width: 576px) {
-    .modal-dialog {
-        max-width: 100% !important;
-        margin: 10px auto;
-        padding: 0 10px;
-    }
-
-    #share-modal select {
-        width: auto;
-        max-width: 300px;
-    }
-
-    .d-sm-inline {
-        display: inline-block !important;
-    }
-}
-
 @media (min-width: 768px) {
     .mobile-invoice-date-due-date {
         .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
@@ -11721,80 +11698,6 @@ body {
     }
 }
 
-@media (min-width: 480px) and (max-width: 667px) {
-    .mobile-invoice-date-due-date {
-        .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
-            color: var(--color-black);
-            position: absolute;
-            bottom: 8px !important;
-            right: 10px !important;
-        }
-
-        .mat-form-field-wrapper
-            .mat-form-field-infix
-            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-            position: absolute;
-            padding-top: 11px !important;
-        }
-    }
-
-    .edit-modal {
-        margin: 0 auto;
-        padding-top: 0;
-
-        .edit-date-modal {
-            padding: 0 15px;
-
-            .modal-outside-heading {
-                display: none;
-            }
-
-            .edit-date-container {
-                display: flex;
-                align-items: flex-start;
-
-                .modal-date-range {
-                    flex-direction: column;
-                    justify-content: flex-start;
-                    align-items: flex-start;
-                    border-bottom: none;
-                    padding: 12px 0 0;
-                    margin-bottom: 0;
-                    border-right: 1px solid var(--color-silver);
-                    margin-right: 15px;
-
-                    p {
-                        font-size: var(--font-size-16);
-                        margin-top: 15px;
-                        width: 110px;
-                        margin-bottom: 20px;
-                    }
-
-                    img {
-                        bottom: -40px;
-                        padding-bottom: 10px;
-                    }
-
-                    .modal-inside-heading {
-                        display: block;
-                    }
-                }
-
-                .start-end-date {
-                    padding: 10px 5px 0;
-                }
-
-                .button-wrapper {
-                    position: absolute;
-                    bottom: 2px;
-                    right: 15px;
-                    z-index: 999;
-                }
-            }
-        }
-    }
-}
-
 @media (max-width: 1300px) and (min-width: 1024px) {
     .dashboard-container {
         .card {
@@ -11819,83 +11722,6 @@ body {
                 display: inline-block;
             }
         }
-    }
-}
-
-/*** iPhone and iOS Form Input Zoom Fixes ***/
-/* Fix Input Zoom on devices older than iPhone 5: */
-@media screen and (device-aspect-ratio: 2/3) {
-    select,
-    textarea,
-    input[type="text"],
-    input[type="password"],
-    input[type="datetime"],
-    input[type="datetime-local"],
-    input[type="date"],
-    input[type="month"],
-    input[type="time"],
-    input[type="week"],
-    input[type="number"],
-    input[type="email"],
-    input[type="url"] {
-        font-size: var(--font-size-15);
-    }
-}
-
-/* Fix Input Zoom on iPhone 5, 5C, 5S, iPod Touch 5g */
-@media screen and (device-aspect-ratio: 40/71) {
-    select,
-    textarea,
-    input[type="text"],
-    input[type="password"],
-    input[type="datetime"],
-    input[type="datetime-local"],
-    input[type="date"],
-    input[type="month"],
-    input[type="time"],
-    input[type="week"],
-    input[type="number"],
-    input[type="email"],
-    input[type="url"] {
-        font-size: var(--font-size-15);
-    }
-}
-
-/* Fix Input Zoom on iPhone 6, iPhone 6s, iPhone 7  */
-@media screen and (device-aspect-ratio: 375/667) {
-    select,
-    textarea,
-    input[type="text"],
-    input[type="password"],
-    input[type="datetime"],
-    input[type="datetime-local"],
-    input[type="date"],
-    input[type="month"],
-    input[type="time"],
-    input[type="week"],
-    input[type="number"],
-    input[type="email"],
-    input[type="url"] {
-        font-size: var(--font-size-15);
-    }
-}
-
-/* Fix Input Zoom on iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus, iPhone 8, iPhone X, XS, XS Max  */
-@media screen and (device-aspect-ratio: 9/16) {
-    select,
-    textarea,
-    input[type="text"],
-    input[type="password"],
-    input[type="datetime"],
-    input[type="datetime-local"],
-    input[type="date"],
-    input[type="month"],
-    input[type="time"],
-    input[type="week"],
-    input[type="number"],
-    input[type="email"],
-    input[type="url"] {
-        font-size: var(--font-size-15);
     }
 }
 
@@ -11951,12 +11777,6 @@ body.prevent-body-scroll {
 @media (max-height: 999px) {
     .contact-main {
         min-height: calc(100vh - 420px);
-    }
-}
-
-@media (min-height: 300px) and (max-height: 730px) {
-    .linked-address sh-select-menu .total-padding {
-        height: 257px !important;
     }
 }
 
@@ -12099,22 +11919,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         float: left;
         width: 93%;
         margin-bottom: 12px !important;
-    }
-}
-
-.back-btnn {
-    .btn-default {
-        color: var(--color-black) !important;
-    }
-
-    .btn-default:hover {
-        color: var(--color-black) !important;
-        border-color: var(--color-silver) !important;
-    }
-
-    .btn-default:not(:disabled):not(.disabled):active {
-        color: var(--color-black) !important;
-        border-color: var(--color-silver) !important;
     }
 }
 
@@ -12984,21 +12788,6 @@ body.hide-scroll-body.master-page {
     .readonly-field {
         .mat-mdc-form-field {
             background-color: var(--color-white) !important;
-        }
-    }
-}
-
-@media (max-width: 320px) {
-    .on-mobile-view tbody td {
-        padding: 5px 10px 5px 53% !important;
-    }
-
-    aside-create-unit,
-    aside-create-group {
-        max-width: 280px;
-
-        .aside-pane {
-            max-width: 280px;
         }
     }
 }

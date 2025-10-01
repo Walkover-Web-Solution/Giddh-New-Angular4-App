@@ -236,17 +236,3 @@
         color: var(--color-white) !important;
     }
 }
-
-@media (max-width: 767px) {
-    :host.inventory-sidebar {
-        z-index: 9999;
-        top: var(--top-sidebar);
-    }
-}
-
-@media (max-height: 700px) {
-    .help-aside-body {
-        height: 100%;
-        overflow-y: scroll;
-    }
-}

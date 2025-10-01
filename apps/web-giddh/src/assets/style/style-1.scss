@@ -2322,23 +2322,7 @@ form#groupDetailForm {
         min-width: 195px;
     }
 }
-@media (max-width: 768px) {
-    .mobile-header .upper-layer-header .navbar-nav {
-        float: none;
-    }
-    .desktop-header {
-        display: block;
-    }
-    .mobile-header .btn-xs {
-        padding: 3px 8px !important;
-    }
-    .universal-date {
-        margin-right: 0;
-    }
-    .aside-pane {
-        max-width: 600px;
-    }
-}
+
 @media only screen and (max-width: 1024px) {
     .pd-t1-md {
         padding-top: 10px;
@@ -2383,69 +2367,6 @@ form#groupDetailForm {
                     }
                 }
             }
-        }
-    }
-}
-@media screen and (max-width: 768px) {
-    .contact-body {
-        .all-table {
-            td {
-                &:last-child {
-                    padding: 5px 10px 5px 50% !important;
-                }
-            }
-        }
-        .mat-table {
-            tbody {
-                tr:not(.plan-row-columns) {
-                    &:hover {
-                        td {
-                            background: transparent !important;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    .table-container.trial-balance {
-        .table-responsive {
-            display: table;
-        }
-        section {
-            div {
-                div {
-                    &:first-child {
-                        white-space: normal !important;
-                        word-break: break-word;
-                        width: 20% !important;
-                        max-width: 20% !important;
-                        min-width: 150px;
-                    }
-                    white-space: nowrap !important;
-                    width: 30% !important;
-                    max-width: 30% !important;
-                    min-width: 150px;
-                }
-            }
-        }
-        .table-footer {
-            th {
-                &:first-child {
-                    white-space: normal !important;
-                    word-break: break-word;
-                    width: 20% !important;
-                    max-width: 20% !important;
-                    min-width: 150px;
-                }
-                white-space: nowrap;
-                width: 30% !important;
-                max-width: 30% !important;
-                min-width: 150px;
-                border-right: none !important;
-            }
-        }
-        .row {
-            flex-wrap: nowrap;
         }
     }
 }
@@ -3012,27 +2933,6 @@ td.mat-footer-cell {
     }
 }
 
-@media (max-width: 767px) {
-    .sidebar-overlay {
-        .mat-tab-group {
-            .mat-tab-body-active {
-                z-index: 9999 !important;
-            }
-        }
-    }
-    .petty-cash {
-        .mat-tab-group {
-            .mat-tab-header {
-                position: fixed;
-                width: 100%;
-                z-index: 9;
-            }
-            .mat-tab-body-wrapper {
-                padding-top: 60px;
-            }
-        }
-    }
-}
 @media (max-width: 1075px) {
     .mat-button,
     .mat-raised-button {

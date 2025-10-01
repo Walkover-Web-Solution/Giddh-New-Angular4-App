@@ -595,33 +595,6 @@ ul#dropdown-menu {
         margin-top: 0 !important;
     }
 }
-@media screen and (max-width: 575px) {
-    .gstr-summary-head {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        .wrap-gst-date {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            padding-bottom: 15px;
-            .font-xlarge {
-                font-size: var(--font-size-15);
-            }
-            .dropdown {
-                margin-left: 0;
-            }
-        }
-        .download-authenticate-btn {
-            align-items: flex-start;
-            justify-content: flex-start;
-        }
-        span {
-            margin-bottom: 10px;
-            padding-right: 0;
-        }
-    }
-}
 @media screen and (max-width: 1200px) {
     .list-inline {
         width: 130px;

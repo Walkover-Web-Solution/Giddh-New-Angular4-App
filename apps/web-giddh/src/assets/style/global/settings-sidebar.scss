@@ -93,10 +93,10 @@ body {
             transform: translateX(-240px) !important; // 240px is width of setting sidebar
 
             .mat-mdc-menu-panel {
-                max-width: unset !important;
+                max-width: unset !important; // -Need to handle globally
 
                 .mat-mdc-menu-content {
-                    padding: 0 !important;
+                    padding: 0 !important; // -Need to handle globally
 
                     .tags-menu-contianer {
                         padding: 15px !important;

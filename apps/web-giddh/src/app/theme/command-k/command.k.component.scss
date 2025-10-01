@@ -203,35 +203,3 @@
         }
     }
 }
-
-/*responsive*/
-@media (max-width: 767px) {
-    :host {
-        .search-wrapper {
-            padding: 1rem 2rem 1rem 3.9rem;
-            margin-bottom: 10px;
-            max-width: 100%;
-            .icon-search-icon {
-                left: -3px;
-            }
-        }
-    }
-    .close-navigation {
-        top: 6px;
-        font-size: 17px;
-    }
-    .universal-data-list-wrapper {
-        .universal-list-items {
-            .item {
-                .item-details {
-                    padding-left: 24px;
-                    line-height: 1.4;
-                    font-size: var(--font-size-12);
-                }
-            }
-        }
-    }
-    .item-icon {
-        margin-right: 15px;
-    }
-}

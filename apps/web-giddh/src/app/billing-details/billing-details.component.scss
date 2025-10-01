@@ -384,16 +384,6 @@
     }
 }
 
-@media (max-width: 480px) and (orientation: portrait) {
-    #main {
-        .main-heading-billing {
-            .giddh-heading {
-                width: 100%;
-                margin-top: 22px;
-            }
-        }
-    }
-}
 @media screen and (min-width: 1280px) and (orientation: landscape) {
     .back-btnn {
         float: left;

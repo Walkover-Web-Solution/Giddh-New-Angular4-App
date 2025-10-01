@@ -17,11 +17,6 @@
         .vouchers-content {
             min-height: 80vh;
         }
-
-        @media screen and (max-width: 768px) {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-        }
     }
 
     .row-gap {
@@ -170,16 +165,6 @@
                     pointer-events: none;
                 }
             }
-
-            @media screen and (max-width: 768px) {
-                .row {
-                    .col-6 {
-                        padding-left: 10px !important;
-                        padding-right: 10px !important;
-                    }
-                }
-            }
-
         }
 
         .vouchers-large-container {

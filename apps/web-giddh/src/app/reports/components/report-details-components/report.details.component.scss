@@ -15,26 +15,6 @@
         }
     }
 }
-@media (max-width: 767px) {
-    .report-breadcrum {
-        position: static !important;
-        padding-left: 15px !important;
-        padding-top: 0 !important;
-        .nav-report {
-            li {
-                font-size: var(--font-size-15);
-            }
-        }
-        .custom-month-select {
-            .btn {
-                font-size: var(--font-size-15);
-            }
-        }
-    }
-    .xs-pr-0 {
-        padding-right: 0px !important;
-    }
-}
 
 .duration-dropdown {
     width: 140px !important;

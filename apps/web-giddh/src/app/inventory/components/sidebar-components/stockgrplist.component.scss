@@ -110,11 +110,6 @@ stock-list ::ng-deep.in-list a div {
         }
     }
 }
-@media (max-width: 768px) {
-    .stock-grp-list {
-        max-height: calc(100vh - 245px) !important;
-    }
-}
 .inventory-group-name {
     float: left;
     width: 90%;

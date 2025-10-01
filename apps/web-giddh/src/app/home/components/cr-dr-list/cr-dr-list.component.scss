@@ -76,19 +76,3 @@ thead th {
 .min-width-130 {
     min-width: 130px !important;
 }
-@media (max-width: 768px) {
-    .debtors-table {
-        margin-bottom: 30px;
-    }
-    table.basic td {
-        border-bottom: none !important;
-    }
-    table.on-mobile-view {
-        tbody td:before {
-            left: 10px;
-        }
-        tbody tr {
-            margin: 0 auto 22px;
-        }
-    }
-}

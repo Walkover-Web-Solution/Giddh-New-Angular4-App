@@ -118,15 +118,3 @@
         }
     }
 }
-@media (max-width: 767px) {
-    :host.gst-sidebar {
-        z-index: 9999;
-        top: 0;
-    }
-}
-@media (max-height: 700px) {
-    .help-aside-body {
-        height: 100%;
-        overflow-y: auto;
-    }
-}

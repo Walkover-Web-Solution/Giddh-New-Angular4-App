@@ -11,26 +11,26 @@
             }
         }
 
-        reactive-dropdown-field {
-            .mat-mdc-form-field-infix {
-                padding-bottom: 1px !important;
-                min-height: 1rem !important;
-                padding-top: 0px !important;
-            }
+        // reactive-dropdown-field {
+        //     .mat-mdc-form-field-infix {
+        //         padding-bottom: 1px !important;
+        //         min-height: 1rem !important;
+        //         padding-top: 0px !important;
+        //     }
 
-            .mdc-text-field--no-label {
-                padding: 0 !important;
-            }
-        }
+        //     .mdc-text-field--no-label {
+        //         padding: 0 !important;
+        //     }
+        // }
     }
 
     .po-mat-select {
         padding: 10px 0;
         height: 48px;
 
-        .mat-mdc-select-trigger {
-            padding: 0 10px;
-        }
+        // .mat-mdc-select-trigger {
+        //     padding: 0 10px;
+        // }
     }
 
     input,
@@ -125,9 +125,9 @@
     }
 }
 
-.text-success {
-    color: var(--color-green);
-}
+// .text-success {
+//     color: var(--color-green);
+// }
 
 // template scroll
 .template-scroll {
@@ -209,14 +209,14 @@
 }
 
 // Handle Bootstrap Modal Z-index issue on Mat Tab
-body {
-    &.modal-open {
-        mat-tab-body {
-            &.mat-mdc-tab-body-active {
-                &:has(edit-invoice, app-invoice-setting, app-invoice-generate) {
-                    z-index: unset !important;
-                }
-            }
-        }
-    }
-}
+// body {
+//     &.modal-open {
+//         mat-tab-body {
+//             &.mat-mdc-tab-body-active {
+//                 &:has(edit-invoice, app-invoice-setting, app-invoice-generate) {
+//                     z-index: unset !important;
+//                 }
+//             }
+//         }
+//     }
+// }

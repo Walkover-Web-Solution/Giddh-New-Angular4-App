@@ -122,20 +122,3 @@ button#more-btn-inventory {
         }
     }
 }
-
-@media (max-width: 767px) {
-    #more-btn-inventory {
-        margin-right: 0 !important;
-    }
-}
-
-@media (max-width: 360px) {
-    .advance-search-btn {
-        position: absolute;
-        top: 72px;
-        left: 15px;
-    }
-    button#more-btn-inventory-mobile {
-        margin-left: 45px;
-    }
-}

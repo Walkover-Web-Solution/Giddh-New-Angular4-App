@@ -77,25 +77,6 @@
 .return-sel {
     font-size: var(--font-size-15) !important;
 }
-@media screen and (max-width: 575px) {
-    .btn-wrapper-filling-header {
-        float: none;
-    }
-}
-@media screen and (max-width: 375px) {
-    .btn-wrapper-filling-header {
-        display: flex !important;
-        width: 100% !important;
-        flex-direction: column;
-        .btn-group {
-            display: flex !important;
-        }
-        .btn {
-            margin-right: 0;
-            margin-bottom: 8px;
-        }
-    }
-}
 .filling-header-message {
     font-weight: 400 !important;
 }

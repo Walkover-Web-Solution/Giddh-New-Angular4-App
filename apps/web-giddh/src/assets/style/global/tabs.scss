@@ -1,78 +1,78 @@
-.mat-mdc-tab-group {
-    .mat-mdc-tab-header {
-        border-bottom: 1px solid var(--color-silver);
+// .mat-mdc-tab-group {
+//     .mat-mdc-tab-header {
+//         border-bottom: 1px solid var(--color-silver);
 
-        .mat-mdc-tab-header {
-            padding-left: 15px !important;
-            background-color: var(--color-white);
-        }
+//         .mat-mdc-tab-header {
+//             padding-left: 15px !important;
+//             background-color: var(--color-white);
+//         }
 
-        .mat-mdc-tab {
-            .mdc-tab__text-label {
-                font-size: var(--font-size-16);
-                color: var(--color-dark-gray);
-                // for voucher
-                .voucher-svg {
-                    fill: var(--color-dark-gray);
-                }
-            }
+//         .mat-mdc-tab {
+//             .mdc-tab__text-label {
+//                 font-size: var(--font-size-16);
+//                 color: var(--color-dark-gray);
+//                 // for voucher
+//                 .voucher-svg {
+//                     fill: var(--color-dark-gray);
+//                 }
+//             }
 
-            &.mdc-tab--active {
-                .mdc-tab__text-label {
-                    color: var(--color-blue-primary);
-                    .voucher-svg {
-                        fill: var(--color-blue-primary);
-                    }
-                }
-            }
-        }
-    }
-}
+//             &.mdc-tab--active {
+//                 .mdc-tab__text-label {
+//                     color: var(--color-blue-primary);
+//                     .voucher-svg {
+//                         fill: var(--color-blue-primary);
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
 
-// custom
-.custom-tab {
-    .mat-button-toggle-appearance-standard {
-        &.mat-button-toggle-checked {
-            background-color: var(--color-blue-primary);
-            color: var(--color-white);
-        }
-    }
+// // custom
+// .custom-tab {
+//     .mat-button-toggle-appearance-standard {
+//         &.mat-button-toggle-checked {
+//             background-color: var(--color-blue-primary);
+//             color: var(--color-white);
+//         }
+//     }
 
-    .mat-button-toggle-appearance-standard {
-        .mat-button-toggle-label-content {
-            line-height: 36px;
-        }
-    }
-}
+//     .mat-button-toggle-appearance-standard {
+//         .mat-button-toggle-label-content {
+//             line-height: 36px;
+//         }
+//     }
+// }
 
-// for-box-tabs
-.tabs-box-wrap {
-    &.mat-mdc-tab-group {
-        .mat-mdc-tab-header {
-            border: none;
-        }
-    }
-    .mat-mdc-tab-labels {
-        column-gap: 35px;
-        .mat-mdc-tab {
-            border: 1px solid var(--color-silver);
-            width: 120px;
-            height: 120px!important;
-            border-radius: 4px;
-            .mdc-tab__text-label {
-                flex-direction: column;
-                row-gap: 8px;
-                i {
-                    font-size: 32px;
-                }
-            }
-            .mdc-tab-indicator__content--underline {
-                border: none;
-            }
-            &.mdc-tab-indicator--active {
-                border-color: var(--color-blue-primary);
-                box-shadow: 0 6px 7px var(--color-shadow-light);
-            }
-        }
-    }
-}
+// // for-box-tabs
+// .tabs-box-wrap {
+//     &.mat-mdc-tab-group {
+//         .mat-mdc-tab-header {
+//             border: none;
+//         }
+//     }
+//     .mat-mdc-tab-labels {
+//         column-gap: 35px;
+//         .mat-mdc-tab {
+//             border: 1px solid var(--color-silver);
+//             width: 120px;
+//             height: 120px!important;
+//             border-radius: 4px;
+//             .mdc-tab__text-label {
+//                 flex-direction: column;
+//                 row-gap: 8px;
+//                 i {
+//                     font-size: 32px;
+//                 }
+//             }
+//             .mdc-tab-indicator__content--underline {
+//                 border: none;
+//             }
+//             &.mdc-tab-indicator--active {
+//                 border-color: var(--color-blue-primary);
+//                 box-shadow: 0 6px 7px var(--color-shadow-light);
+//             }
+//         }
+//     }
+// }

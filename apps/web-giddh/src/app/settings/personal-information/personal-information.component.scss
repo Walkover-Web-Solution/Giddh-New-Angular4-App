@@ -73,15 +73,6 @@
     right: 0;
     transform: translateX(90%);
 }
-@media (max-width: 767px) {
-    label {
-        line-height: 2.3;
-    }
-
-    .border-bottom {
-        margin-top: 5px;
-    }
-}
 .view-txt {
     display: flex;
     justify-content: flex-end;

@@ -201,36 +201,3 @@ form label {
         display: block;
     }
 }
-@media (max-width: 767px) {
-    .selected-bank-details .bank-details-wrapper .readonly-bank-details {
-        max-width: 100% !important;
-    }
-
-    .bank-details-wrapper {
-        display: block !important;
-        .readonly-bank-details {
-            max-width: 100%;
-        }
-    }
-    .selected-bank-details {
-        .account-holder-name {
-            p {
-                &:first-child {
-                    max-width: 100%;
-                }
-            }
-        }
-    }
-}
-@media (max-width: 480px) {
-    .payment-top-form .d-flex .form-group,
-    .payment-top-form .d-flex .form-group:last-child {
-        min-width: 100%;
-    }
-    .amount-remark-section .d-flex {
-        display: block;
-        .form-group.pd-r15 {
-            padding-right: 0px;
-        }
-    }
-}

@@ -62,33 +62,6 @@
     }
 }
 
-@media (max-width: 767px) {
-    .import-type {
-        display: block;
-        justify-content: center;
-        text-align: center;
-    }
-    .import-type li {
-        width: 30.33%;
-        margin: 10px;
-        float: left;
-    }
-}
-
-@media (max-width: 575px) {
-    .import-type li {
-        width: 100%;
-        margin: 10px auto;
-        float: none;
-        max-width: 220px;
-        text-align: center;
-        display: block;
-    }
-    .lead {
-        font-size: var(--font-size-24);
-    }
-}
-
 .import-type {
     .icon-import, .icon-invoice-new {
         background: var(--color-light-gray);
