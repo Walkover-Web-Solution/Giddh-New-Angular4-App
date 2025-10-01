@@ -78,6 +78,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public restrictedModules: any = RestrictedModules;
     /** Email id validation regex pattern */
     public giddhEmailRegex = GIDDH_EMAIL_REGEX;
+    /** To check form is invalid */
+    public isFormInvalid: boolean = false;
 
     constructor(
         private _settingsPermissionService: SettingsPermissionService,
@@ -336,6 +338,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public submitPermissionForm() {
+        this.isFormInvalid = this.permissionForm.invalid;
+        if (this.isFormInvalid) {
+            return;
+        }
         let obj: any = {};
         let form: ShareRequestForm = cloneDeep(this.permissionForm?.value);
         let CidrArr = [];
