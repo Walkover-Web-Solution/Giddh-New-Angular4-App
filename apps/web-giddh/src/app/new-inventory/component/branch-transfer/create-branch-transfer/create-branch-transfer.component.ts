@@ -897,6 +897,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dateOfSupply);
         this.assignCurrentCompany();
         this.calculateOverallTotal();
+        this.getBranches();
         this.activeIndx = null
         this.stockUnits[0] = [];
     }
