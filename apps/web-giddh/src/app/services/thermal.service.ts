@@ -157,7 +157,7 @@ export class ThermalService {
                 headerCompanyAddress = '';
             }
         } else {
-            headerCompanyAddress = "";
+            headerCompanyAddress = '';
         }
 
         /**
@@ -268,7 +268,7 @@ export class ThermalService {
         let totalAmountField;
         let totalWords;
         let companyCurrencyCode;
-        if (defaultTemplate?.sections?.footer?.data?.totalDue?.display && defaultTemplate?.sections?.footer?.data?.totalInWords?.display) {
+        if (defaultTemplate?.sections?.footer?.data?.grandTotal?.display && defaultTemplate?.sections?.footer?.data?.totalInWords?.display) {
             totalAmountField = 'Invoice Total';
             totalWords = request.totalAsWords?.amountForAccount;
             subTotal = parseFloat(request?.grandTotal?.amountForAccount).toFixed(2);
@@ -435,10 +435,10 @@ export class ThermalService {
         let totalQty: any = 0;
         for (let entry of request?.entries) {
             let variant = entry?.transactions[0]?.stock?.variant?.name;
-            let productName = entry?.transactions[0]?.stock?.name && variant 
-            ? `${entry?.transactions[0]?.stock?.name} - ${variant}`
-            : entry?.transactions[0]?.stock?.name ? entry?.transactions[0]?.stock?.name : entry?.transactions[0]?.account?.name;
-            
+            let productName = entry?.transactions[0]?.stock?.name && variant
+                ? `${entry?.transactions[0]?.stock?.name} - ${variant}`
+                : entry?.transactions[0]?.stock?.name ? entry?.transactions[0]?.stock?.name : entry?.transactions[0]?.account?.name;
+
             let quantity;
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
                 if (entry?.transactions[0]?.stock?.quantity) {
@@ -572,7 +572,7 @@ export class ThermalService {
                     headerCompanyAddress
                 ) +
                 this.printerFormat.formatCenter(
-                    (companyGstNumberField + " ") + companyGstin
+                    (companyGstNumberField && companyGstin) ? (companyGstNumberField + " ") + companyGstin : ''
                 ) +
                 this.printerFormat.formatCenter(this.blankDash()) +
                 this.printerFormat.formatBold(
@@ -588,7 +588,6 @@ export class ThermalService {
                 ) + this.printerFormat.lineBreak;
 
             const productsFieldShowHide = productsField?.length ? this.justifyText(productsField, itemDetailsField) : this.justifyText(itemDetailsField);
-
             let table =
                 this.blankDash() + this.printerFormat.lineBreak +
                 productsFieldShowHide
@@ -598,7 +597,7 @@ export class ThermalService {
 
                 this.printerFormat.formatCenter(this.blankDash()) +
                 this.justifyText(
-                    (noOfItemsField + " ") + totalQty,
+                    ((noOfItemsField ? noOfItemsField : '') + " ") + (noOfItemsField ? totalQty : ''),
                     (discountAmountField + " ") + discount?.padStart(11)
                 ) +
                 this.justifyText('', (taxAmountField) + '' + taxableAmount?.toFixed(2).padStart(11)) +
@@ -695,6 +694,7 @@ export class ThermalService {
                         .catch(err => console.error(err));
                 };
             });
+
             if (!qz.websocket.isActive()) {
                 qz.websocket
                     .connect()
@@ -814,14 +814,14 @@ export class ThermalService {
      * @returns {*}
      * @memberof ThermalService
      */
-    private wrapStringByLength(productNameWithVariant: string,desiredStringLength: number): any {
+    private wrapStringByLength(productNameWithVariant: string, desiredStringLength: number): any {
         let trimmedStringArray: any = [];
 
         if (productNameWithVariant?.length > desiredStringLength) {
             let remainingString = productNameWithVariant;
 
             while (remainingString?.length !== 0) {
-                
+
                 let cutString = remainingString.substr(0, desiredStringLength);
                 remainingString = remainingString.substr(cutString.length);
 
@@ -831,6 +831,6 @@ export class ThermalService {
 
             return trimmedStringArray;
         }
-            return productNameWithVariant;
+        return productNameWithVariant;
     }
 }
