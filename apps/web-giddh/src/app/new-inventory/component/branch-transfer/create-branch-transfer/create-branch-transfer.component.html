@@ -47,7 +47,7 @@
                 >
                     <!-- Receipt Note Content  Start-->
                     <div *ngIf="branchTransferMode === 'receipt-note'">
-                        <div class="row clearfix primary-form-wrapper row-gap">
+                        <div class="row clearfix primary-form-wrapper row-gap15">
                             <div class="col-lg-8 px-0">
                                 <div class="row">
                                     <div class="col-lg-6 mr-b15">
@@ -80,7 +80,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row row-gap">
+                                <div class="row row-gap15">
                                     <div class="col-lg-6">
                                         <div *ngIf="transferType === 'senders'">
                                             <reactive-dropdown-field
@@ -561,7 +561,7 @@
                     <!-- Receipt Note Content  End-->
                     <!-- Delivery Challan Content  Start-->
                     <div *ngIf="branchTransferMode === 'delivery-challan'">
-                        <div class="row clearfix primary-form-wrapper row-gap">
+                        <div class="row clearfix primary-form-wrapper row-gap15">
                             <div class="col-lg-8 px-0">
                                 <div class="row">
                                     <div class="col-lg-6 mr-b15">
@@ -594,7 +594,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row row-gap">
+                                <div class="row row-gap15">
                                     <div class="col-lg-6">
                                         <div *ngIf="transferType === 'senders'">
                                             <reactive-dropdown-field
@@ -2260,7 +2260,7 @@
                         <div class="col-xl-8 col-lg-10 col-sm-12">
                             <div>
                                 <h3 class="mr-b15">{{ commonLocaleData?.app_transport_details }}</h3>
-                                <div class="row row-gap" formGroupName="transporterDetails">
+                                <div class="row row-gap15" formGroupName="transporterDetails">
                                     <div class="col-sm-6 pl-0">
                                         <div class="direct-mat-datepicker">
                                             <giddh-datepicker

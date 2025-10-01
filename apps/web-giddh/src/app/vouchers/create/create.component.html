@@ -619,7 +619,7 @@
                                 </div>
 
                                 <!-- Row 3 -->
-                                <div class="row row-gap mr-t15 mr-b15"
+                                <div class="row row-gap15 mr-t15 mr-b15"
                                     *ngIf="invoiceType.isPurchaseInvoice && ((vendorPurchaseOrders$ | async)?.length || fieldFilteredOptions?.length)">
                                     <!-- Purchase Order -->
                                     <div class="col-6">
@@ -660,7 +660,7 @@
                                 </div>
 
                                 <!-- Row 4 -->
-                                <div class="row row-gap mr-t15">
+                                <div class="row row-gap15 mr-t15">
 
                                     <!-- Voucher Number -->
                                     <div class="col-6">
@@ -729,7 +729,7 @@
                                 </div>
 
                                 <!-- Row 5 -->
-                                <div class="row row-gap mr-t15">
+                                <div class="row row-gap15 mr-t15">
                                     <!-- Reverse Charge Checkbox -->
                                     <div class="col-12"
                                         *ngIf="showTaxColumn && (invoiceType.isPurchaseInvoice || (currentVoucherFormDetails?.rcmAllowed && (company.countryName === 'India' || company.countryName === 'United Kingdom')))">
@@ -1594,7 +1594,7 @@
                                                                     </mat-panel-title>
                                                                 </mat-expansion-panel-header>
 
-                                                                <div class="row row-gap mx-0 px-2 pb-3"
+                                                                <div class="row row-gap15 mx-0 px-2 pb-3"
                                                                     formGroupName="other">
                                                                     <ng-container
                                                                         *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
