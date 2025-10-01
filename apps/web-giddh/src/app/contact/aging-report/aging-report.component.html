@@ -136,21 +136,7 @@
     </div>
     <div class="contact-main aging-page overflow-visible" *ngIf="!isLoading">
         <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper overflow-visible">
-            <div *ngIf="!isMobileScreen" class="table-responsive overflow-visible">
-                <ng-container *ngTemplateOutlet="mainTable"></ng-container>
-            </div>
-            <div *ngIf="isMobileScreen && (dueAmountReportData$ | async)?.results?.length">
-                <div class="text-center top-aging-table-top pd-1">
-                    <p (click)="openAgingDropDown()">
-                        <strong>{{ localeData?.due_in_last_days }} </strong>
-                    </p>
-                    <aging-dropdown
-                        *ngIf="setDueRangeOpen$ | async"
-                        [options]="agingDropDownoptions"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                    ></aging-dropdown>
-                </div>
+            <div class="table-responsive overflow-visible">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
             <div

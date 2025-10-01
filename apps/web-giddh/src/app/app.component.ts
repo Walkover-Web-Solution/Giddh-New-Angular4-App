@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { Configuration, COUNTRY_REGION_MAP } from "./app.constant";
+import { BREAKPOINT_SCREEN_SIZE, Configuration, COUNTRY_REGION_MAP } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -169,14 +169,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._cdr.detectChanges();
         });
         this.breakpointObserver.observe([
-            '(max-width: 1023px)'
+            BREAKPOINT_SCREEN_SIZE.TAB
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.changeOnMobileView(result.matches);
+                this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB]);
         });
         this.breakpointObserver.observe([
-            '(max-width: 767px)'
+            BREAKPOINT_SCREEN_SIZE.MOBILE
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result.matches) {
+            if (result?.breakpoints[BREAKPOINT_SCREEN_SIZE.MOBILE]) {
                 this.router.navigate(['/mobile-restricted']);
             }
         });

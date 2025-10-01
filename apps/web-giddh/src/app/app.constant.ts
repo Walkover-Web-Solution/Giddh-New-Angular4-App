@@ -629,10 +629,12 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
 export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
 
 /** Break Point Screen Size*/
-export const BREAKPOINT_SCREEN_SIZE = {
-    MEDIUM_DESKTOP_SCREEN_SIZE: '(1536px > width > 1366px)',
-    SMALL_DESKTOP_SCREEN_SIZE: '(1366px > width > 1024px)',
-    TAB_SCREEN_SIZE: '(1024px > width)'
+export enum BREAKPOINT_SCREEN_SIZE {
+    LARGE_DESKTOP = '(1536px > width)',
+    MEDIUM_DESKTOP = '(1536px > width > 1366px)',
+    SMALL_DESKTOP = '(1366px > width > 1024px)',
+    TAB = '(1024px > width > 768px)',
+    MOBILE = '(768px > width)'
 }
 /** HTML tag name  */
 export enum HtmlElementEnum {

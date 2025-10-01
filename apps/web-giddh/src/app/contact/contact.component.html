@@ -6,8 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="relative white-bg">
-        <hamburger-menu *ngIf="activeTab !== 'vendor'" [pageHeading]="getPageHeading()"></hamburger-menu>
-        <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="activeTab === 'vendor'"></hamburger-menu>
+        <hamburger-menu></hamburger-menu>
         
         <mat-tab-group
             #staticTabs
