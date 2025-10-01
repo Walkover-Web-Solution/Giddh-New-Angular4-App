@@ -4038,6 +4038,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private calculateOtherTaxAmount(entry: FormGroup, isActiveEntry: boolean): void {
         let taxableValue = 0;
         if (!entry.get("otherTax").value || !entry.get("transactions").value[0]?.amount?.amountForAccount || isActiveEntry) {
+            return;
+        }
         const amountForAccount = Number(entry.get("transactions").value[0].amount.amountForAccount);
         const totalDiscount = Number(entry.get("totalDiscount").value);
 
