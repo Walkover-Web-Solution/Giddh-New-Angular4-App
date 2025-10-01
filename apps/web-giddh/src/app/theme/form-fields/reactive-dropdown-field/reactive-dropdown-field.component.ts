@@ -205,7 +205,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
         }
         if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
-            this.writeValue("");
+            this.writeValue("", false);
+            this.controlLabelValue = "";
             this.clearDropdownValue();
         }
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
