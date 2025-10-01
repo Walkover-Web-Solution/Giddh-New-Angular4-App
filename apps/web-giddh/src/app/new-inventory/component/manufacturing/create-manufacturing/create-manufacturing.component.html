@@ -110,6 +110,7 @@
                                             (scrollEnd)="stockScrollEnd(manufacturingObject.manufacturingDetails[0])"
                                             (onClear)="resetStocks(manufacturingObject.manufacturingDetails[0])"
                                             [readonly]="isCompany || isConsolidatedBranch"
+                                            [forceClear]="forceClear"
                                         >
                                         </reactive-dropdown-field>
                                     </div>

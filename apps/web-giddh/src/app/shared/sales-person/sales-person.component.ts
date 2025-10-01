@@ -13,7 +13,7 @@ import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.cla
 import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 import { ElementViewChildModule } from '../helpers/directives/elementViewChild/elementViewChild.module';
 import { MatTableModule } from '@angular/material/table';
-import { ActionTypeEnum, SalesPersonActionEnum, SalesPersonArchiveEnum, SalesPersonCreateUpdate } from './utility/sales-person.constant';
+import { ActionTypeEnum, SalesPersonActionEnum, SalesPersonArchiveEnum, SalesPersonCreateUpdate, SalesPersonErrorDetailsEnum } from './utility/sales-person.constant';
 import { InputFieldComponent } from '../../theme/form-fields/input-field/input-field.component';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
@@ -78,7 +78,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Sales Person List In Progress */
     public salesPersonListInProgress$: Observable<boolean> = this.componentStore.salesPersonListInProgress$;
     /** Displayed columns for sales person table */
-    public displayedColumns: string[] = ['name', 'email', 'mobileNumber', 'archive', 'action'];
+    public displayedColumns: string[] = ['name', 'email', 'mobileNumber', 'archiveStatus', 'action'];
     /** Active Row Index */
     public activeRowIndex: number = -1;
     /** Sales Person Action Enum */
@@ -151,7 +151,7 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
 
         // Delete which liked with Account Only 
         this.componentStore.openTransferAndDeleteDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
-            this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_archive, this.localeData?.delete_confirmation_message, this.localeData?.transfer_and_delete);
+            this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_delete, this.localeData?.delete_confirmation_message, this.localeData?.transfer_and_delete);
             this.componentStore.patchState({ openTransferAndDeleteDialog: false });
         })).subscribe();
 
@@ -244,22 +244,37 @@ export class SalesPersonComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.componentStore.createUpdateSalesPerson({ model: salesPersonForm, uniqueName: this.salesPersonUniqueName });
                 break;
             case SalesPersonActionEnum.DELETE:
-                const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-                    panelClass: ['mat-dialog-sm'],
-                    disableClose: true,
-                    data: {
-                        configuration: this.generalService.deleteConfiguration(
-                            this.commonLocaleData?.app_permanently_delete_message,
-                            this.commonLocaleData
-                        )
-                    }
-                });
-                dialogRef.afterClosed().subscribe(response => {
-                    if (response === this.commonLocaleData?.app_yes) {
+                if (!element?.linkedEntities?.length) {
+                    // Show delete confirmation only if sales person is not linked with any account/entry/voucher
+                    const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                        panelClass: ['mat-dialog-sm'],
+                        disableClose: true,
+                        data: {
+                            configuration: this.generalService.deleteConfiguration(
+                                this.commonLocaleData?.app_permanently_delete_message,
+                                this.commonLocaleData
+                            )
+                        }
+                    });
+                    dialogRef.afterClosed().subscribe(response => {
+                        if (response === this.commonLocaleData?.app_yes) {
+                            this.salesPersonUniqueName = element?.uniqueName;
+                            this.componentStore.deleteSalesPerson(element?.uniqueName);
+                        }
+                    });
+                } else {    
+                     if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                         this.salesPersonUniqueName = element?.uniqueName;
-                        this.componentStore.deleteSalesPerson(element?.uniqueName);
+                        this.componentStore.patchState({
+                            openTransferAndArchiveDialog: true
+                        });
+                    } else if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ACCOUNT)) {
+                        this.salesPersonUniqueName = element?.uniqueName;
+                        this.componentStore.patchState({
+                            openTransferAndDeleteDialog: true
+                        });
                     }
-                });
+                }
                 break;
             case SalesPersonActionEnum.EDIT:
                 this.isEditMode = true;

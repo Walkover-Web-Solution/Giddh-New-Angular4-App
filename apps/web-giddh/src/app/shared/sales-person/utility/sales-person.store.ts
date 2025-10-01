@@ -172,8 +172,9 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
                                     if (res.errorDetails?.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
+                                        // Show error message only if linked with entry/voucher
+                                        this.toasterService.showSnackBar('error', res.message); 
                                         this.patchState({
                                             openTransferAndArchiveDialog: true
                                         });
@@ -182,7 +183,6 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                             openTransferAndDeleteDialog: true
                                         });
                                     }
-                                        
                                 }
                                 return this.patchState({
                                     deleteSalesPersonSuccess: false,
