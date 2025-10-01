@@ -4037,9 +4037,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private calculateOtherTaxAmount(entry: FormGroup, isActiveEntry: boolean): void {
         let taxableValue = 0;
-        if (!entry.get("transactions").value[0]?.amount?.amountForAccount || isActiveEntry) {
-            return;
-        }
+        if (!entry.get("otherTax").value || !entry.get("transactions").value[0]?.amount?.amountForAccount || isActiveEntry) {
         const amountForAccount = Number(entry.get("transactions").value[0].amount.amountForAccount);
         const totalDiscount = Number(entry.get("totalDiscount").value);
 
@@ -6892,7 +6890,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
     }
 
     /**
