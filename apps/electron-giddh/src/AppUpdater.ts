@@ -127,6 +127,23 @@ export default class AppUpdaterV1 {
                 downloadSize: info.files?.[0]?.size ? `${Math.round(info.files[0].size / 1024 / 1024)}MB` : 'Unknown'
             });
             
+            // Check if update is already downloaded
+            if (this.isUpdateDownloaded) {
+                console.log('Update already downloaded, showing restart dialog instead');
+                dialog.showMessageBox({
+                    type: 'info',
+                    title: 'Update Ready',
+                    message: `Update v${info.version} is ready to install`,
+                    detail: 'Restart the application to apply the downloaded update.',
+                    buttons: ['Restart Now', 'Later']
+                }).then((result) => {
+                    if (result.response === 0) {
+                        autoUpdater.quitAndInstall();
+                    }
+                });
+                return;
+            }
+            
             // Prevent multiple simultaneous dialogs
             if (isCheckingForUpdates) {
                 console.log('Already checking for updates, ignoring duplicate event');
@@ -149,8 +166,14 @@ export default class AppUpdaterV1 {
                         // User clicked "Sure"
                         console.log('Starting manual download...');
                         
-                        // Show download progress window
-                        createProgressWindow();
+                        // Show simple download notification
+                        dialog.showMessageBox({
+                            type: 'info',
+                            title: 'Downloading Update',
+                            message: 'Update is being downloaded in the background...',
+                            detail: 'You will be notified when the download is complete.',
+                            buttons: ['OK']
+                        });
                         
                         try {
                             autoUpdater.downloadUpdate();
@@ -198,8 +221,14 @@ export default class AppUpdaterV1 {
                         // User clicked OK - download immediately
                         console.log('Starting download...');
                         
-                        // Show download progress window
-                        createProgressWindow();
+                        // Show simple download notification
+                        dialog.showMessageBox({
+                            type: 'info',
+                            title: 'Downloading Update',
+                            message: 'Update is being downloaded in the background...',
+                            detail: 'You will be notified when the download is complete.',
+                            buttons: ['OK']
+                        });
                         
                         try {
                             autoUpdater.downloadUpdate();
@@ -252,13 +281,13 @@ export default class AppUpdaterV1 {
             console.log('Update server URL: S3 bucket giddh-app-builds');
         });
 
-        // Add periodic update checking (every 10 minutes)
+        // Add periodic update checking (every 3 minutes)
         setInterval(() => {
             if (!isCheckingForUpdates && !isManualCheck) {
                 console.log('Periodic update check...');
                 autoUpdater.checkForUpdates();
             }
-        }, 10 * 60 * 1000); // 10 minutes
+        }, 3 * 60 * 1000); // 3 minutes
 
         // Handle download progress
         autoUpdater.on('download-progress', (progressObj) => {
@@ -278,19 +307,14 @@ export default class AppUpdaterV1 {
                 updater.label = `Downloading... ${percent}%`;
             }
             
-            // Update progress window with real-time data
-            updateProgressWindow(percent, transferred, total, speed);
+            // Progress is logged to console for debugging
         });
 
         // Handle download errors
         autoUpdater.on('error', (error) => {
             console.error('Update error:', error);
             
-            // Clean up progress window
-            if (downloadProgressWindow && !downloadProgressWindow.isDestroyed()) {
-                downloadProgressWindow.close();
-            }
-            downloadProgressWindow = null;
+            // Reset download state on error
             
             if (updater) {
                 updater.label = 'Check For Latest Update';
@@ -316,12 +340,11 @@ export default class AppUpdaterV1 {
 
         autoUpdater.on('update-downloaded', (event: UpdateDownloadedEvent) => {
             console.log('Update downloaded successfully');
+            console.log('Downloaded version:', event.version);
+            console.log('Current version:', require('./package.json').version);
             
-            // Clean up progress window
-            if (downloadProgressWindow && !downloadProgressWindow.isDestroyed()) {
-                downloadProgressWindow.close();
-            }
-            downloadProgressWindow = null;
+            // Mark update as downloaded to prevent showing "update available" again
+            this.isUpdateDownloaded = true;
             
             // Re-enable menu item and reset label
             if (updater) {
@@ -329,12 +352,19 @@ export default class AppUpdaterV1 {
                 updater.enabled = true;
             }
             
+            // Reset checking flags
+            isManualCheck = false;
+            isCheckingForUpdates = false;
+            
+            const currentVersion = require('./package.json').version;
+            const newVersion = event.version;
+            
             const dialogOpts: MessageBoxOptions = {
                 type: 'info',
-                buttons: ['Restart', 'Later'],
-                title: 'Application Update',
-                message: process.platform === 'win32' ? (typeof event.releaseNotes === 'object' ? event.releaseNotes.join(",") : event.releaseNotes) : event.releaseName,
-                detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+                buttons: ['Restart Now', 'Later'],
+                title: 'Update Downloaded Successfully',
+                message: `Giddh has been updated from v${currentVersion} to v${newVersion}`,
+                detail: 'The update has been downloaded and is ready to install. Restart the application to apply the updates.'
             }
             dialog.showMessageBox(dialogOpts).then((returnValue) => {
                 if (returnValue.response === 0) {
