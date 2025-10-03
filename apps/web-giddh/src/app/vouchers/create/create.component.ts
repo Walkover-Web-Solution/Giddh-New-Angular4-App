@@ -798,6 +798,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         /** New account details */
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.componentStore.newAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.createUpdateAccountCallback(response, true);
