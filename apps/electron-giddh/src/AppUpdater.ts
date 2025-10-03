@@ -1,9 +1,10 @@
 import { UpdateDownloadedEvent, autoUpdater } from 'electron-updater';
-import { MessageBoxOptions, dialog } from 'electron';
+import { MessageBoxOptions, dialog, BrowserWindow } from 'electron';
 
 let updater;
 let isManualCheck = false;
 let isCheckingForUpdates = false;
+let downloadProgressDialog = null;
 export default class AppUpdaterV1 {
     public isUpdateDownloaded: boolean = false;
 
@@ -12,6 +13,14 @@ export default class AppUpdaterV1 {
         log.transports.file.level = 'debug';
         autoUpdater.logger = log;
         autoUpdater.autoDownload = false;
+        
+        // Configure update server URL
+        autoUpdater.setFeedURL({
+            provider: 's3',
+            bucket: 'giddh-app-builds'
+        });
+        
+        console.log('AppUpdater configured with S3 bucket: giddh-app-builds');
 
         // Handle update available - different behavior for manual vs automatic
         autoUpdater.on('update-available', () => {
@@ -37,7 +46,23 @@ export default class AppUpdaterV1 {
                     console.log('Manual dialog response:', resp.response);
                     if (resp.response === 0) {
                         // User clicked "Sure"
-                        autoUpdater.downloadUpdate();
+                        console.log('Starting manual download...');
+                        
+                        // Show download progress dialog
+                        downloadProgressDialog = dialog.showMessageBox({
+                            type: 'info',
+                            title: 'Downloading Update',
+                            message: 'Downloading update... 0%',
+                            buttons: ['Cancel'],
+                            defaultId: 0
+                        });
+                        
+                        try {
+                            autoUpdater.downloadUpdate();
+                            console.log('Manual download initiated successfully');
+                        } catch (downloadError) {
+                            console.error('Failed to start manual download:', downloadError);
+                        }
                         if (updater) {
                             updater.label = 'Downloading updates. . . . .';
                             updater.enabled = false;
@@ -76,7 +101,23 @@ export default class AppUpdaterV1 {
                     console.log('Automatic dialog response:', resp.response);
                     if (resp.response === 0) {
                         // User clicked OK - download immediately
-                        autoUpdater.downloadUpdate();
+                        console.log('Starting download...');
+                        
+                        // Show download progress dialog
+                        downloadProgressDialog = dialog.showMessageBox({
+                            type: 'info',
+                            title: 'Downloading Update',
+                            message: 'Downloading update... 0%',
+                            buttons: ['Cancel'],
+                            defaultId: 0
+                        });
+                        
+                        try {
+                            autoUpdater.downloadUpdate();
+                            console.log('Automatic download initiated successfully');
+                        } catch (downloadError) {
+                            console.error('Failed to start automatic download:', downloadError);
+                        }
                     } else {
                         // User clicked "Download Later" - skip for now
                         console.log('User chose to download update later');
@@ -115,28 +156,57 @@ export default class AppUpdaterV1 {
             console.log('No updates check completed, flags reset');
         });
 
+        // Handle checking for updates
+        autoUpdater.on('checking-for-update', () => {
+            console.log('Checking for update...');
+        });
+
         // Handle download progress
         autoUpdater.on('download-progress', (progressObj) => {
-            console.log(`Download progress: ${Math.round(progressObj.percent)}% - Speed: ${Math.round(progressObj.bytesPerSecond / 1024)} KB/s`);
+            // Log when download starts (first progress event)
+            if (progressObj.percent === 0) {
+                console.log('Download started successfully');
+            }
+            const percent = Math.round(progressObj.percent);
+            const speed = Math.round(progressObj.bytesPerSecond / 1024);
+            const transferred = Math.round(progressObj.transferred / 1024 / 1024);
+            const total = Math.round(progressObj.total / 1024 / 1024);
+            
+            console.log(`Download progress: ${percent}% - Speed: ${speed} KB/s - ${transferred}MB/${total}MB`);
+            
+            // Update menu item if available
             if (updater) {
-                updater.label = `Downloading... ${Math.round(progressObj.percent)}%`;
+                updater.label = `Downloading... ${percent}%`;
+            }
+            
+            // Update progress dialog if it exists
+            if (downloadProgressDialog) {
+                // Note: Electron's showMessageBox doesn't support dynamic updates
+                // We'll handle this in the download-started event instead
+                console.log(`Progress dialog should show: ${percent}% (${transferred}MB/${total}MB) at ${speed} KB/s`);
             }
         });
 
         // Handle download errors
         autoUpdater.on('error', (error) => {
             console.error('Update error:', error);
+            
+            // Clean up progress dialog
+            downloadProgressDialog = null;
+            
             if (updater) {
                 updater.label = 'Check For Latest Update';
                 updater.enabled = true;
                 updater = null;
             }
+            // Show error dialog for manual checks (check before resetting flags)
+            const wasManualCheck = isManualCheck;
+            
             // Reset flags on error
             isManualCheck = false;
             isCheckingForUpdates = false;
             
-            // Show error dialog for manual checks
-            if (isManualCheck || updater) {
+            if (wasManualCheck || updater) {
                 dialog.showMessageBox({
                     type: 'error',
                     title: 'Update Error',
@@ -148,6 +218,9 @@ export default class AppUpdaterV1 {
 
         autoUpdater.on('update-downloaded', (event: UpdateDownloadedEvent) => {
             console.log('Update downloaded successfully');
+            
+            // Clean up progress dialog
+            downloadProgressDialog = null;
             
             // Re-enable menu item and reset label
             if (updater) {
@@ -203,6 +276,10 @@ export default class AppUpdaterV1 {
         // Check for updates once on initialization (after 3 seconds delay for app to be ready)
         setTimeout(() => {
             console.log('Checking for updates on app initialization...');
+            console.log('AppUpdater configuration:');
+            console.log('- autoDownload:', autoUpdater.autoDownload);
+            console.log('- Feed URL configured for S3 bucket: giddh-app-builds');
+            console.log('- electron-updater version: 6.3.4');
             autoUpdater.checkForUpdates();
         }, 3000);
     }

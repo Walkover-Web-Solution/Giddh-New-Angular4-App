@@ -4,7 +4,7 @@ import { log } from "./util";
 import WindowManager from "./WindowManager";
 import { GoogleLoginElectronConfig } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
-import AppUpdaterV1 from "./AppUpdater";
+import AppUpdaterV1, { checkForUpdates } from "./AppUpdater";
 
 let windowManager: WindowManager = null;
 let STAGING_ENV = false;
@@ -22,6 +22,17 @@ app.on("ready", () => {
     setMenu();
     windowManager = new WindowManager();
     windowManager.openWindows();
+    
+    // Initialize AppUpdater
+    const appUpdater = new AppUpdaterV1();
+    console.log('AppUpdater initialized');
+    
+    // Add IPC handler for manual update checks
+    ipcMain.on('check-for-updates', () => {
+        console.log('Manual update check requested via IPC');
+        // This will trigger the manual update flow
+        checkForUpdates(null, null, null);
+    });
 });
 ipcMain.on("open-url", (event, arg) => {
     windowManager.openWindows(arg);
