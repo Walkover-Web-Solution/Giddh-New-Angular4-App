@@ -7,7 +7,7 @@
     </div>
     <mat-dialog-content class="dialog-body" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
-            <h3 [innerHTML]="confirmationMessage"></h3>
+            <p [innerHTML]="confirmationMessage"></p>
             <div class="text-right mr-t4 clearfix">
                 <button mat-raised-button color="primary" class="mr-r1" (click)="onConfirmation()">
                     {{ commonLocaleData?.app_yes }}

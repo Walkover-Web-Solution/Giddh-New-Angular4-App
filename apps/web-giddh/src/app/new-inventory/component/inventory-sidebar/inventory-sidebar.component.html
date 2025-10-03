@@ -13,7 +13,7 @@
                         <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top">
                     </span>
                 </a>
-                <h1 class="heading">{{ localeData?.sidebar?.inventory }}</h1>
+                <p class="heading">{{ localeData?.sidebar?.inventory }}</p>
             </div>
             <div class="inventory-items">
                 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
@@ -37,7 +37,7 @@
                             (click)="openAsidePaneDialog(node)"
                         >
                             <img src="{{ imgPath }}{{ node.icons }}" [ngClass]="{ 'mt-1': (node.name == localeData?.sidebar?.warehouse_balance)}" class="sidebar-menu-icons" alt="icon" />
-                            <h2>{{ node.name }}</h2>
+                            <p>{{ node.name }}</p>
                         </span>
                     </mat-tree-node>
                     <mat-tree-node
@@ -56,7 +56,7 @@
                             </span>
                         </button>
                         <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="menu icon" />
-                        <h2>{{ node.name }}</h2>
+                        <p>{{ node.name }}</p>
                     </mat-tree-node>
                 </mat-tree>
             </div>

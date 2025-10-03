@@ -121,11 +121,11 @@
                                                     }"
                                                 >
                                                     <div class="plan-content d-flex flex-column h-100">
-                                                        <h2
+                                                        <p
                                                             class="font-20 plan-title d-flex align-items-center justify-content-center"
                                                         >
                                                             {{ plan?.name }}
-                                                        </h2>
+                                                        </p>
                                                         <p *ngIf="plan?.description" class="font-15 feature-txt">
                                                             <span>
                                                                 {{ plan?.description }}
@@ -667,9 +667,9 @@
                         <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.select_billing }}</ng-template>
-                                <h4 class="font-16 strong d-flex align-items-center mb-3 plan-summary-heading">
+                                <p class="font-16 strong d-flex align-items-center mb-3 plan-summary-heading">
                                     {{ localeData?.create_billing }}
-                                </h4>
+                                </p>
                                 <mat-card class="outline-card change-billing-wrap">
                                     <mat-card-content>
                                         <div class="billing-details">
@@ -869,13 +869,13 @@
                         <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.review_pay }}</ng-template>
-                                <h4 class="font-16 mb-3 strong d-flex align-items-center plan-summary-heading">
+                                <p class="font-16 mb-3 strong d-flex align-items-center plan-summary-heading">
                                     {{ localeData?.payment_details }}
-                                </h4>
+                                </p>
                                 <div class="new-plan">
                                     <mat-card class="outline-card">
                                         <mat-card-content>
-                                            <h5 class="font-16 strong mb-3">{{ localeData?.bill_to }}</h5>
+                                            <p class="font-16 strong mb-3">{{ localeData?.bill_to }}</p>
                                             <div class="payment-header pb-3">
                                                 <span class="light-gray font-14 strong d-block">{{
                                                     secondStepForm.get("billingName")?.value
@@ -956,9 +956,9 @@
     <!-- plan-summary -->
     <ng-template #planSummary>
         <div class="summary-wrapper">
-            <h2 class="font-16 mb-3 strong d-flex align-items-center plan-summary-heading">
+            <p class="font-16 mb-3 strong d-flex align-items-center plan-summary-heading">
                 {{ localeData?.plan_summary }}
-            </h2>
+            </p>
             <mat-card class="outline-card">
                 <form
                     name="firstStepForm"

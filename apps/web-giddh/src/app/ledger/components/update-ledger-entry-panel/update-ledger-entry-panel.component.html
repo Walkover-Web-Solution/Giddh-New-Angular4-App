@@ -27,13 +27,13 @@
 
             <!-- Center Section -->
             <div class="col d-flex justify-content-center align-items-center text-center">
-                <h3
+                <p
                     *ngIf="!openDropDown"
                     (dblclick)="!isEinvoiceGenerated ? openHeaderDropDown() : ''"
                     class="d-inline-block text-underline cursor-pointer"
                 >
                     {{ (baseAccount$ | async)?.name }} {{ commonLocaleData?.app_ac }}
-                </h3>
+                </p>
                 <select-field
                     class="w-100"
                     [id]="'update-ledger-select-account'"
@@ -98,7 +98,7 @@
         <mat-dialog-content>
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
-                    <h1>{{ localeData?.no_transaction_found_message }}</h1>
+                    <p>{{ localeData?.no_transaction_found_message }}</p>
                     <img
                         class="mr-t1"
                         height="200"

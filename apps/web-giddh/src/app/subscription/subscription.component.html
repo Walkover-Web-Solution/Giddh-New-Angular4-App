@@ -138,14 +138,14 @@
                                                 <div>
                                                     <div class="long-code-details text-black">
                                                         <figure>
-                                                            <h1 class="section-head">
+                                                            <p class="section-head">
                                                                 {{ localeData?.mobile_number?.accounts }}
-                                                            </h1>
+                                                            </p>
                                                             <ul>
                                                                 <li>
-                                                                    <h2>
+                                                                    <p>
                                                                         {{ localeData?.mobile_number?.accounts_case1 }}:
-                                                                    </h2>
+                                                                    </p>
                                                                     <div class="cases">
                                                                         <p>
                                                                             {{
@@ -168,9 +168,9 @@
                                                                     </div>
                                                                 </li>
                                                                 <li>
-                                                                    <h2>
+                                                                    <p>
                                                                         {{ localeData?.mobile_number?.accounts_case2 }}:
-                                                                    </h2>
+                                                                    </p>
                                                                     <div class="cases">
                                                                         <p>
                                                                             {{
@@ -195,14 +195,14 @@
                                                             </ul>
                                                         </figure>
                                                         <figure>
-                                                            <h1 class="section-head">
+                                                            <p class="section-head">
                                                                 {{ localeData?.mobile_number?.groups }}
-                                                            </h1>
+                                                            </p>
                                                             <ul>
                                                                 <li>
-                                                                    <h2>
+                                                                    <p>
                                                                         {{ localeData?.mobile_number?.groups_case1 }}:
-                                                                    </h2>
+                                                                    </p>
                                                                     <div class="cases">
                                                                         <p>
                                                                             {{
@@ -227,16 +227,16 @@
                                                             </ul>
                                                         </figure>
                                                         <figure>
-                                                            <h1 class="section-head">
+                                                            <p class="section-head">
                                                                 {{ localeData?.mobile_number?.net_worth }}
-                                                            </h1>
+                                                            </p>
                                                             <ul>
                                                                 <li>
-                                                                    <h2>
+                                                                    <p>
                                                                         {{
                                                                             localeData?.mobile_number?.net_worth_case1
                                                                         }}:
-                                                                    </h2>
+                                                                    </p>
                                                                     <div class="cases">
                                                                         <p>
                                                                             {{
@@ -271,7 +271,7 @@
 
                         <div class="mr-t2">
                             <!--two way auth-->
-                            <h1 class="section-head">
+                            <p class="section-head">
                                 <mat-slide-toggle
                                     [(ngModel)]="twoWayAuth"
                                     name="twoWayAuth"
@@ -279,7 +279,7 @@
                                     (change)="changeTwoWayAuth()"
                                     >{{ localeData?.mobile_number?.two_way_auth_label }}
                                 </mat-slide-toggle>
-                            </h1>
+                            </p>
                             <p class="grey" *ngIf="twoWayAuth">{{ localeData?.mobile_number?.two_way_auth_content }}</p>
                         </div>
                     </div>
@@ -289,7 +289,7 @@
                 <div class="wrap-tab-content-pd-15 overflow-visible">
                     <div class="box clearfix mt-1 overflow-visible">
                         <div class="d-flex pd-b1 activity-title">
-                            <h1 class="section-head pt-0">{{ localeData?.session?.section_heading }}</h1>
+                            <p class="section-head pt-0">{{ localeData?.session?.section_heading }}</p>
                             <button mat-stroked-button class="mr-0" (click)="clearAllSession()">
                                 {{ commonLocaleData?.app_delete_all }}
                             </button>

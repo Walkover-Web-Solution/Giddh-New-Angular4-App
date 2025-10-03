@@ -205,8 +205,8 @@
         class="no-data mr-t100 col-12 col-sm-12"
         *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length === 0"
     >
-        <h1>No entries found within given criteria.</h1>
-        <h1>Do search with some other dates</h1>
+        <p>No entries found within given criteria.</p>
+        <p>Do search with some other dates</p>
     </div>
     <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length > 0">
         <div id="mfReportTbl">

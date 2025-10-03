@@ -7,7 +7,7 @@
     <div [formGroup]="downloadForm" *ngIf="!(isVoucherFileDownloading$ | async)">
 
             <ng-container *ngIf="voucherType === 'sales'">
-                <h3 class="font-16 mr-b1">{{ localeData?.invoice_copy }}</h3>
+                <p class="font-16 mr-b1">{{ localeData?.invoice_copy }}</p>
                 <hr />
             </ng-container>
             <div class="mr-t1">

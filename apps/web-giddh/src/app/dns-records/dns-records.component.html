@@ -17,9 +17,9 @@
             </div>
             <mat-card class="mat-card mat-focus-indicator domain-setting-card mt-3 mb-3 mat-elevation-z3"
                 ><div class="d-flex align-items-center justify-content-start mb-2">
-                    <h6 class="domain-text">
+                    <p class="domain-text">
                         {{ commonLocaleData?.domain_verification }}
-                    </h6>
+                    </p>
                 </div>
                 <mat-card-content class="mat-card-content">
                     <div *ngIf="shouldShowLoader">
@@ -94,7 +94,7 @@
                             </table>
                             <section *ngIf="!dataSource?.length && !shouldShowLoader">
                                 <div class="no-data">
-                                    <h1>{{ commonLocaleData?.app_no_records_found }}</h1>
+                                    <p>{{ commonLocaleData?.app_no_records_found }}</p>
                                 </div>
                             </section>
                         </div>

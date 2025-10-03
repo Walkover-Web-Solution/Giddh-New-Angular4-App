@@ -46,9 +46,9 @@
         </div>
         <div class="billing-details">
             <div class="col-md-2 billing-name-content">
-                <h3 class="billing-name" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                <p class="billing-name" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     {{ localeData?.billing_details }}
-                </h3>
+                </p>
             </div>
             <div class="row display-line">
                 <div class="col-md-3 left-side">
@@ -220,7 +220,7 @@
                 <div class="col-md-3 right-side">
                     <div class="whole-renewal">
                         <div class="renewal-heading">
-                            <h3
+                            <p
                                 class="renewal-details"
                                 [ngClass]="{
                                     'skeleton-common-class': showLoader,
@@ -228,7 +228,7 @@
                                 }"
                             >
                                 {{ localeData?.renewal_plan_details }}
-                            </h3>
+                            </p>
                         </div>
                         <div class="renewal-data">
                             <mat-card class="renewal-card">
@@ -281,13 +281,13 @@
                         <section class="renewal-section">
                         </section>
                         <div class="renewal-payable">
-                            <h3
+                            <p
                                 class="new-payable"
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'new-payable-content': showLoader }"
                             >
                                 {{ localeData?.net_payable_amount }}
-                            </h3>
-                            <h2
+                            </p>
+                            <div
                                 class="renewal-amount"
                                 [ngClass]="{
                                     'skeleton-common-class': showLoader,
@@ -314,7 +314,7 @@
                                     [ngClass]="{ 'including-text-content': showLoader }"
                                     >{{ localeData?.including_tax }}</span
                                 >
-                            </h2>
+                            </div>
 
                             <div class="form-group" [ngClass]="{ 'form-group-div': showLoader }">
                                 <div

@@ -3,7 +3,7 @@
 </ng-container>
 <ng-container *ngIf="!isLoading">
     <section class="audit-log" *ngFor="let log of this.auditLogs$ | async; let parentIndex = index">
-        <h1>
+        <p>
             {{ log.operationType }}
             <ng-container *ngIf="log?.details?.voucherType && log?.operationType !== 'EDIT'">
                 <span> -{{ log?.details?.voucherType }}</span></ng-container
@@ -86,7 +86,7 @@
                     - {{ log?.details?.voucherAccount?.name }}({{ log?.details?.voucherAccount?.uniqueName }})</span
                 >
             </ng-template>
-        </h1>
+        </p>
         <div class="audit-log-detail mr-t05 clearfix">
             <label *ngIf="log?.operationType === 'EDIT'">{{ localeData?.updated }}</label>
             <!-- User info block start-->
@@ -872,7 +872,7 @@
     </section>
     <section class="no-logs" *ngIf="(auditLogs$ | async)?.length < 1">
         <div class="no-data">
-            <h1>{{ localeData?.no_results_found }}</h1>
+            <p>{{ localeData?.no_results_found }}</p>
             <p>{{ localeData?.no_results_note }}</p>
         </div>
     </section>

@@ -5,14 +5,14 @@
     (onShortcutPress)="closeDialog()"
 >
     <div class="dialog-header">
-        <h3 class="modal-title">
+        <p class="modal-title">
             {{
                 salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.Client
                     ? commonLocaleData?.app_client
                     : commonLocaleData?.app_invoice
             }}
             details
-        </h3>
+        </p>
         <i (click)="closeDialog()" aria-label="close icon" class="icon-cross cursor-pointer"></i>
     </div>
     <mat-dialog-content class="dialog-content">

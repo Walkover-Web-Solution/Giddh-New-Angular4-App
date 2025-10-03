@@ -187,7 +187,7 @@
         </div>
         <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
             <div class="no-data">
-                <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
+                <p>{{ commonLocaleData?.app_no_record_found }}</p>
             </div>
         </section>
         <div class="mt-4" *ngIf="importRequest?.totalItems > pageSizeOptions[0] && !isLoading">

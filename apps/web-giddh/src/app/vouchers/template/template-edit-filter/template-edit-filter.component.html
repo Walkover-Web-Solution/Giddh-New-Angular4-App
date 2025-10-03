@@ -1018,7 +1018,7 @@
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.TallyTemplate"
                                             class="px-3 mr-t2"
                                         >
-                                            <h4 class="font-16 my-2">{{ localeData?.form }}</h4>
+                                            <p class="font-16 my-2">{{ localeData?.form }}</p>
 
                                             <!-- form name tax invoice -->
                                             <div class="d-flex">
@@ -1113,7 +1113,7 @@
                                             </div>
                                         </div>
                                         <div class="px-3 d-flex flex-column row-gap5 mr-t2">
-                                            <h4 class="font-16 my-2">{{ localeData?.customer_details }}</h4>
+                                            <p class="font-16 my-2">{{ localeData?.customer_details }}</p>
                                             <!-- customer name -->
                                             <div *ngIf="sectionSettings?.header.customerName">
                                                 <mat-checkbox
@@ -1191,7 +1191,7 @@
                                             class="px-3 d-flex flex-column row-gap5 mr-t2"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
-                                            <h4 class="font-16 my-2">{{ localeData?.billing_details }}</h4>
+                                            <p class="font-16 my-2">{{ localeData?.billing_details }}</p>
                                             <!-- billing address -->
                                             <div *ngIf="sectionSettings?.header.billingAddress" class="mr-t2">
                                                 <div class="d-flex">
@@ -1360,7 +1360,7 @@
                                             class="px-3 pb-3 mr-t2 d-flex flex-column row-gap5"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
-                                            <h4 class="font-16 my-2">{{ localeData?.shipping_details }}</h4>
+                                            <p class="font-16 my-2">{{ localeData?.shipping_details }}</p>
                                             <!-- shipping address -->
                                             <div *ngIf="sectionSettings?.header.shippingAddress" class="mr-t2">
                                                 <div class="d-flex">

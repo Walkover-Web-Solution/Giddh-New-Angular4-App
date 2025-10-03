@@ -223,13 +223,13 @@
                         [ngClass]="{ 'footer-plan-loading': showLoader }"
                     >
                         <div class="activation-key mr-b1">
-                            <h2
+                            <p
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-plan': showLoader }"
                                 class="font-24 bold mb-3 redeem-plan"
                             >
                                 {{ localeData?.subscription?.redeem }}
                                 {{ localeData?.subscription?.activation_key }}
-                            </h2>
+                            </p>
                             <p
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-details': showLoader }"
                                 class="font-15"

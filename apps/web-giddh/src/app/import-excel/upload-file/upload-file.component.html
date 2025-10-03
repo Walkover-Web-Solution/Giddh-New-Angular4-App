@@ -1,12 +1,12 @@
 <!-- upload And Map Content start-->
 <div class="upload-and-map-content">
-    <h2 class="text-center">{{ localeData?.import }} 
+    <p class="text-center">{{ localeData?.import }} 
         {{ (entity === voucherType.AccountWise || entity === voucherType.VoucherWise) 
             ? (commonLocaleData?.app_import_type?.voucher + ' - ' + 
                (entity === voucherType.AccountWise 
                   ? commonLocaleData?.app_import_type?.account_wise 
                   : commonLocaleData?.app_import_type?.voucher_wise)) 
-            : (title | titlecase) }}</h2>
+            : (title | titlecase) }}</p>
     <div
         *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
         class="form-group max-width-500 center-block"

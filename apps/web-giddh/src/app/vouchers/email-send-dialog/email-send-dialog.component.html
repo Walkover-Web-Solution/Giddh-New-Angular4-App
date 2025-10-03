@@ -17,7 +17,7 @@
                 <text-field [name]="'email'" [placeholder]="localeData?.enter_email_addresses" [cssClass]="'w-100'" formControlName="to" [type]="'text'"></text-field>
             </div>
             <div class="my-3" *ngIf="invoiceType.isSalesInvoice">
-                <h3 class="mr-b05">{{ localeData?.invoice_copy }}</h3>
+                <p class="mr-b05">{{ localeData?.invoice_copy }}</p>
                 <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Original')"
                     formControlName="copyTypeOriginal">
                     {{ localeData?.original }}

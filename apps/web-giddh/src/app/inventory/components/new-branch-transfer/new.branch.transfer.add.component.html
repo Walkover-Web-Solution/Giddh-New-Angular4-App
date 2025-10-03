@@ -1,7 +1,7 @@
 <section class="receipt-note" autocomplete="off">
     <div class="receipt-note-header d-flex pd-l15 pd-r15">
-        <h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
-        <h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</h3>
+        <p *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</p>
+        <p *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</p>
         <div class="close-receipt pointer" (click)="closeBranchTransferPopup()">
             <span class="icon-cross"></span>
         </div>
@@ -506,7 +506,7 @@
                     <div class="col-lg-6 col-md-4">
                         <div class="right-total-amount">
                             <p>Total Amount</p>
-                            <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
+                            <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</p>
                         </div>
                     </div>
                 </div>
@@ -1121,7 +1121,7 @@
                         </table>
                     </div>
                     <div class="transportation-details mb-2">
-                        <h3 class="mr-b1">Transportation Details</h3>
+                        <p class="mr-b1">Transportation Details</p>
                         <div class="row">
                             <div class="col-sm-6 mr-b2">
                                 <giddh-datepicker
@@ -1169,7 +1169,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <h3 class="mr-b1">Note</h3>
+                                <p class="mr-b1">Note</p>
                                 <textarea
                                     class="form-control"
                                     maxlength="100"
@@ -1219,7 +1219,7 @@
 <ng-template #transporterPopupTemplate>
     <div>
         <div class="form-header">
-            <h3 class="aside-title">Manage Transporter</h3>
+            <p class="aside-title">Manage Transporter</p>
         </div>
         <button mat-stroked-button type="button" class="mr-t05" (click)="openTransporterPopupDialog()">
             <i class="icon-cross"></i>
