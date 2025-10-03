@@ -328,38 +328,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
-                            *ngIf="isTabletScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
-                        >
-                            <div class="custom-datepicker-wrapper">
-                            <div 
-                                class="custom-datepicker" 
-                                [matMenuTriggerFor]="universalDatepicker"
-                                #universalDatepickerTrigger="matMenuTrigger"
-                                role="button"
-                                aria-haspopup="true"
-                                aria-controls="universalDatepicker"
-                            >
-                                <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
-                                <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
-                            </div>
-                        </div>
-                        </div>
                     </div>
                     <div class="contact-main customer-page on-mobile-view overflow-visible">
                         <div class="pd-b2 mr-b1 overflow-visible">
                             <div class="overflow-visible">
-                                <div *ngIf="!isTabletScreen && !isGetAccountsInProcess">
+                                <div *ngIf="!isGetAccountsInProcess">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
 
-                                <giddh-page-loader *ngIf="!isTabletScreen && isGetAccountsInProcess">
+                                <giddh-page-loader *ngIf="isGetAccountsInProcess">
                                 </giddh-page-loader>
-
-                                <div *ngIf="isTabletScreen">
-                                    <ng-container *ngTemplateOutlet="mainTable"></ng-container>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -622,7 +600,6 @@
                                     </div>
                                     <button
                                         mat-menu-item
-                                        *ngIf="!isTabletScreen"
                                         class="menu-table-item"
                                         (click)="performActions(1, account)"
                                         aria-label="ledger"
@@ -1029,7 +1006,6 @@
                                         </div>
                                         <button
                                             mat-menu-item
-                                            *ngIf="!isTabletScreen"
                                             class="menu-table-item"
                                             (click)="performActions(1, account)"
                                             aria-label="ledger"
