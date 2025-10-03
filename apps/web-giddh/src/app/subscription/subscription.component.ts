@@ -8,7 +8,6 @@ import { ToasterService } from '../services/toaster.service';
 import { CompanyResponse } from '../models/api-models/Company';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { ClipboardService } from 'ngx-clipboard';
 import { LoginActions } from '../actions/login.action';
 import { SessionActions } from '../actions/session.action';
@@ -94,7 +93,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private router: Router,
         private sessionAction: SessionActions,
         private route: ActivatedRoute,
-        private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions,
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,

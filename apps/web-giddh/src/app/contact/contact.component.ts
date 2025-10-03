@@ -1,5 +1,4 @@
 import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
-import { BreakpointObserver } from "@angular/cdk/layout";
 import {
     ChangeDetectorRef,
     Component,
@@ -94,7 +93,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public activeAccountDetails: any;
     public allSelectionModel: boolean = false;
     public localStorageKeysForFilters = { customer: "customerFilterStorageV2", vendor: "vendorFilterStorageV2" };
-    public isMobileScreen: boolean = false;
     public isICICIIntegrated: boolean = false;
     public selectedWhileHovering: string;
     public searchLoader$: Observable<boolean>;
@@ -258,7 +256,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private settingsProfileActions: SettingsProfileActions,
+        private settingsProfileActions: SettingsProfileActions,
         private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -296,16 +294,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
-
-        this.breakPointObservar.observe([
-            BREAKPOINT_SCREEN_SIZE.TAB
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB]) {
-                this.isMobileScreen = true;
-            } else {
-                this.isMobileScreen = false;
-            }
-        });
 
         this.bulkEmailSuccess$.pipe(
             takeUntil(this.destroyed$)

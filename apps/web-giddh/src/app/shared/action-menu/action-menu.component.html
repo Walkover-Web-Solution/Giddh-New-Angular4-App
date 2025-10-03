@@ -30,7 +30,7 @@
 
   <button
     mat-menu-item
-    *ngIf="showGotoLedger && !isMobileScreen"
+    *ngIf="showGotoLedger && !isTabletScreen"
     class="menu-table-item"
     (click)="performActions(1, account)"
     aria-label="ledger"
