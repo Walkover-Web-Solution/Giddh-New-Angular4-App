@@ -45,7 +45,7 @@
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="no-data" *ngIf="!warehouses?.length && !showLoader">
-                <h1>{{ localeData?.no_warehouse_found }}</h1>
+                <p>{{ localeData?.no_warehouse_found }}</p>
             </div>
             <div *ngIf="!showLoader" class="row warehouse-box">
                 <div
@@ -54,7 +54,7 @@
                 >
                     <div class="warehouse-card">
                         <div class="d-flex">
-                            <h3>{{ warehouse.name }}</h3>
+                            <p>{{ warehouse.name }}</p>
                             <div class="warehouse-options">
                                 <span
                                     class="warehouse-status font-15"

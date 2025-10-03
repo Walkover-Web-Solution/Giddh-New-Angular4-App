@@ -51,7 +51,7 @@
             (click)="backToHomePage($event)"
             *ngIf="communicationPlatforms?.MSG91?.isConnected"
         >
-            <span class="mat-button-wrapper"
+            <span class="mat-button-wrapper d-flex"
                 ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
             </span>
         </button>
@@ -171,7 +171,7 @@
             </table>
             <section class="no-logs" *ngIf="!activeTriggersDataSource?.length && !isActiveTriggersLoading">
                 <div class="no-data">
-                    <h1>{{ localeData?.communication?.no_triggers_found }}</h1>
+                    <p>{{ localeData?.communication?.no_triggers_found }}</p>
                 </div>
             </section>
         </div>

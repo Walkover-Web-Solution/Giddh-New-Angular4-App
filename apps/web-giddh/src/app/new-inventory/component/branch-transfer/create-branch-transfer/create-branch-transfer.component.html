@@ -7,13 +7,13 @@
     <section id="branch-transfer-create" *ngIf="showContent">
         <hamburger-menu></hamburger-menu>
         <div class="branch-transfer-header">
-            <h2>
+            <p>
                 {{
                     branchTransferMode === "receipt-note"
                         ? commonLocaleData?.app_receipt_note
                         : commonLocaleData?.app_delivery_challan
                 }}
-            </h2>
+            </p>
         </div>
         <div class="branch-transfer-body">
             <div class="branch-transfer-body-radio-btns" *ngIf="!editBranchTransferUniqueName">
@@ -553,7 +553,7 @@
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
                                     <p>{{ commonLocaleData?.app_total_amount }}</p>
-                                    <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
+                                    <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1223,7 +1223,7 @@
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
                                     <p>{{ commonLocaleData?.app_total_amount }}</p>
-                                    <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
+                                    <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</p>
                                 </div>
                             </div>
                         </div>
@@ -2259,7 +2259,7 @@
                     <div class="row">
                         <div class="col-xl-8 col-lg-10 col-sm-12">
                             <div>
-                                <h3 class="mr-b15">{{ commonLocaleData?.app_transport_details }}</h3>
+                                <p class="mr-b15">{{ commonLocaleData?.app_transport_details }}</p>
                                 <div class="row row-gap15" formGroupName="transporterDetails">
                                     <div class="col-sm-6 pl-0">
                                         <div class="direct-mat-datepicker">

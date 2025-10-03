@@ -23,9 +23,9 @@
             &:focus {
                 border-color: var(--color-silver) !important;
             }
-            &::placeholder {
-                color: var(--color-dark-gray) !important;
-            }
+            // &::placeholder {
+            //     color: var(--color-dark-gray) !important;
+            // }
         }
         .input-group-append {
             font-size: var(--font-size-12);

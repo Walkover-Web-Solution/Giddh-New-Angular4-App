@@ -76,7 +76,7 @@
                                     commonLocaleData?.app_this_week
                                 }})
                             </p>
-                            <h3>
+                            <p>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="summaryData.totalCurrent"
@@ -85,7 +85,7 @@
                                     >
                                     </amount-field>
                                 </span>
-                            </h3>
+                            </p>
                         </div>
                         <div class="single-sale-detail">
                             <p>
@@ -93,7 +93,7 @@
                                     commonLocaleData?.app_last_week
                                 }})
                             </p>
-                            <h3>
+                            <p>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="summaryData.totalLast"
@@ -102,11 +102,11 @@
                                     >
                                     </amount-field>
                                 </span>
-                            </h3>
+                            </p>
                         </div>
                         <div class="single-sale-detail">
                             <p>{{ localeData?.highest }} {{ activeGraphType["uniqueName"] }}</p>
-                            <h3>
+                            <p>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="summaryData.highest"
@@ -115,12 +115,12 @@
                                     >
                                     </amount-field>
                                 </span>
-                            </h3>
+                            </p>
                             <span>{{ summaryData.highestLabel }}</span>
                         </div>
                         <div class="single-sale-detail">
                             <p>{{ localeData?.lowest }} {{ activeGraphType["uniqueName"] }}</p>
-                            <h3>
+                            <p>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="summaryData.lowest"
@@ -129,7 +129,7 @@
                                     >
                                     </amount-field>
                                 </span>
-                            </h3>
+                            </p>
                             <span>{{ summaryData.lowestLabel }}</span>
                         </div>
                     </div>
@@ -210,7 +210,7 @@
                         <div class="collapse-close" (click)="showColumnChart()">
                             <span class="icon-collapse-icon" [matTooltip]="commonLocaleData?.app_collapse"></span>
                         </div>
-                        <h1>{{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] | titlecase }}</h1>
+                        <p>{{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] | titlecase }}</p>
                     </div>
                 </div>
             </div>
@@ -261,7 +261,7 @@
                                         getCurrentWeekStartEndDate[1] | date
                                     }})
                                 </p>
-                                <h3>
+                                <p>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="summaryData.totalCurrent"
@@ -270,7 +270,7 @@
                                         >
                                         </amount-field>
                                     </span>
-                                </h3>
+                                </p>
                             </div>
                         </div>
                         <div class="col-sm-3 single-sale-data">
@@ -280,7 +280,7 @@
                                         getPreviousWeekStartEndDate[1] | date
                                     }})
                                 </p>
-                                <h3>
+                                <p>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="summaryData.totalLast"
@@ -289,7 +289,7 @@
                                         >
                                         </amount-field>
                                     </span>
-                                </h3>
+                                </p>
                             </div>
                         </div>
                         <div class="col-sm-3 single-sale-data">
@@ -297,7 +297,7 @@
                                 <p class="small-heading">
                                     {{ localeData?.highest }} {{ activeGraphType["uniqueName"] }}
                                 </p>
-                                <h3>
+                                <p>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="summaryData.highest"
@@ -306,7 +306,7 @@
                                         >
                                         </amount-field>
                                     </span>
-                                </h3>
+                                </p>
                                 <span class="date-wise-sale">{{ summaryData.highestLabel }}</span>
                             </div>
                         </div>
@@ -315,7 +315,7 @@
                                 <p class="small-heading">
                                     {{ localeData?.lowest }} {{ activeGraphType["uniqueName"] }}
                                 </p>
-                                <h3>
+                                <p>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="summaryData.lowest"
@@ -324,7 +324,7 @@
                                         >
                                         </amount-field>
                                     </span>
-                                </h3>
+                                </p>
                                 <span class="date-wise-sale">{{ summaryData.lowestLabel }}</span>
                             </div>
                         </div>

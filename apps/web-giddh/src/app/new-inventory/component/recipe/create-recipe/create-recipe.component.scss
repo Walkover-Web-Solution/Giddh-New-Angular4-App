@@ -182,9 +182,6 @@
             color: var(--color-blue-primary);
             border-bottom: 1px solid var(--color-silver);
             button {
-                .mat-button-wrapper {
-                    display: flex !important;
-                }
                 span {
                     font-size: var(--font-size-24);
                     line-height: 32px;

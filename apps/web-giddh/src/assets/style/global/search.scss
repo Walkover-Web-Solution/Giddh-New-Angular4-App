@@ -15,7 +15,7 @@ body {
         }
         .select-entity-height {
             input {
-                height: var(--mat-form-field-height);
+                height: var(--custom-mat-form-field-height);
                 border-radius: 0.5rem;
             }
         }

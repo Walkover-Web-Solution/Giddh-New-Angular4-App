@@ -365,7 +365,7 @@
                 </button>
             </div>
             <mat-dialog-content class="dialog-body">
-                <h1 class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
+                <p class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</p>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
                     [cssClass]="'form-control mr-b1'"
@@ -375,7 +375,7 @@
                     [placeholder]="localeData?.enter_subject_placeholder"
                 >
                 </text-field>
-                <h1 class="mr-b1 font-15">{{ localeData?.type_message_body }}:</h1>
+                <p class="mr-b1 font-15">{{ localeData?.type_message_body }}:</p>
                 <textarea
                     matInput
                     #messageBox
@@ -420,7 +420,7 @@
             </div>
 
             <mat-dialog-content class="dialog-body">
-                <h1 class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
+                <p class="mr-b1 font-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</p>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
                     [cssClass]="'form-control mr-b1'"
@@ -431,7 +431,7 @@
                 >
                 </text-field>
 
-                <h1 class="mr-b1 font-15">{{ localeData?.type_message_body }}:</h1>
+                <p class="mr-b1 font-15">{{ localeData?.type_message_body }}:</p>
                 <textarea
                     matInput
                     #messageBox
@@ -578,11 +578,11 @@
                                     <div class="account-detail-custom-header">
                                         <div class="d-flex p-0">
                                             <div class="account-detail-padding flex-fill border-right-0">
-                                                <h3 class="account-detail-custom-title word-break">
+                                                <p class="account-detail-custom-title word-break">
                                                     <span (click)="updateCustomerAcc('customer', account)">
                                                         {{ account?.name }}
                                                     </span>
-                                                </h3>
+                                                </p>
                                             </div>
                                             <a
                                                 *ngIf="voucherApiVersion === 2"
@@ -593,9 +593,9 @@
                                             </a>
                                         </div>
                                         <div class="custom-detail">
-                                            <h4>{{ account?.mobileNo }}</h4>
-                                            <h4>{{ account?.email }}</h4>
-                                            <h4>{{ account?.gstIn }}</h4>
+                                            <p>{{ account?.mobileNo }}</p>
+                                            <p>{{ account?.email }}</p>
+                                            <p>{{ account?.gstIn }}</p>
                                         </div>
                                     </div>
                                     <button
@@ -891,7 +891,7 @@
                 </table>
             </ng-container>
 
-            <ng-container *ngIf="activeTab === 'vendor'" class="sticky-table">
+            <ng-container *ngIf="activeTab === 'vendor'">
                 <table
                     *ngIf="searchStr || sundryCreditorsAccounts?.length"
                     mat-table
@@ -984,11 +984,11 @@
                                         <div class="account-detail-custom-header">
                                             <div class="d-flex p-0">
                                                 <div class="account-detail-padding flex-fill border-right-0">
-                                                    <h3 class="account-detail-custom-title word-break">
+                                                    <p class="account-detail-custom-title word-break">
                                                         <span (click)="updateCustomerAcc('vendor', account)">{{
                                                             account?.name
                                                         }}</span>
-                                                    </h3>
+                                                    </p>
                                                 </div>
                                                 <a
                                                     *ngIf="voucherApiVersion === 2"
@@ -999,9 +999,9 @@
                                                 </a>
                                             </div>
                                             <div class="custom-detail">
-                                                <h4>{{ account?.mobileNo }}</h4>
-                                                <h4>{{ account?.email }}</h4>
-                                                <h4>{{ account?.gstIn }}</h4>
+                                                <p>{{ account?.mobileNo }}</p>
+                                                <p>{{ account?.email }}</p>
+                                                <p>{{ account?.gstIn }}</p>
                                             </div>
                                         </div>
                                         <button
@@ -1042,9 +1042,9 @@
                                             </div>
 
                                             <mat-dialog-content class="dialog-body">
-                                                <h1 class="mr-b1 mr-t15" *ngIf="messageBody.type == 'Email'">
+                                                <p class="mr-b1 mr-t15" *ngIf="messageBody.type == 'Email'">
                                                     {{ localeData?.enter_subject }}:
-                                                </h1>
+                                                </p>
                                                 <text-field
                                                     *ngIf="messageBody.type == 'Email'"
                                                     [cssClass]="'form-control mr-b1'"
@@ -1053,7 +1053,7 @@
                                                     type="text"
                                                     [placeholder]="localeData?.enter_subject_placeholder"
                                                 ></text-field>
-                                                <h1 class="mr-b1 mr-t15">{{ localeData?.type_message_body }}:</h1>
+                                                <p class="mr-b1 mr-t15">{{ localeData?.type_message_body }}:</p>
                                                 <textarea
                                                     matInput
                                                     #messageBox
@@ -1525,7 +1525,7 @@
             <div class="align-item-center">
                 <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="data not found" />
             </div>
-            <h2 class="text-gray">{{ commonLocaleData?.app_no_data_found }}</h2>
+            <p class="text-gray">{{ commonLocaleData?.app_no_data_found }}</p>
         </div>
     </ng-template>
 

@@ -8,7 +8,7 @@
 
                     <div class="vouchers-title d-flex align-items-center" [ngClass]="{'pd-b1': ocrDataEnabled}">
                         <div class="d-flex align-items-center">
-                            <h1 [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}"
+                            <p [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}"
                                 (click)="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote ? invoiceForm.get('salesPurchaseAsReceiptPayment')?.patchValue(!invoiceForm.get('salesPurchaseAsReceiptPayment')?.value) : ''">
                                 {{ invoiceType.isCashInvoice && invoiceType.isSalesInvoice ?
                                 localeData?.invoice_types?.cash_invoice : invoiceType.isCashInvoice &&
@@ -16,7 +16,7 @@
                                 invoiceType.isCashInvoice && invoiceType.isDebitNote ?
                                 localeData?.invoice_types?.cash_debit_note : invoiceType.isCashInvoice &&
                                 invoiceType.isCreditNote ? localeData?.invoice_types?.cash_credit_note : (voucherType |
-                                voucherName: localeData | titlecase) }}</h1>
+                                voucherName: localeData | titlecase) }}</p>
                                 
                             <mat-slide-toggle color="primary" class="ml-4"
                                 *ngIf="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote && !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)"
@@ -137,12 +137,12 @@
                                     <div class="balance-due-label">{{ invoiceType.isProformaInvoice ||
                                         invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount :
                                         localeData?.balance_due }}</div>
-                                    <h2 class="d-inline-block">
+                                    <p class="d-inline-block">
                                         <amount-field [amount]="voucherTotals.balanceDue"
                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                         </amount-field>
-                                    </h2>
+                                    </p>
                                 </div>
                                 <div class="col-12">
                                     <span

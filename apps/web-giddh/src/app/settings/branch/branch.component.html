@@ -58,7 +58,7 @@
                         </div>
                         <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mr-t2 loader-main">
                             <div class="no-data">
-                                <h1>{{ localeData?.no_branch_found }}</h1>
+                                <p>{{ localeData?.no_branch_found }}</p>
                             </div>
                         </div>
                         <div *ngIf="showLoader" class="spinner2">
@@ -78,14 +78,14 @@
                                                             [matTooltip]="commonLocaleData?.app_branch"
                                                         ></i>
                                                         <div>
-                                                            <h2>
+                                                            <p>
                                                                 {{ branch.name }}
                                                                 {{
                                                                     branch.consolidatedBranch
                                                                         ? "(" + localeData?.consolidated + ")"
                                                                         : ""
                                                                 }}
-                                                            </h2>
+                                                            </p>
                                                         </div>
                                                     </div>
                                                     <div class="pull-right right-card-section">

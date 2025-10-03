@@ -16,12 +16,12 @@
                 <form class="create-acc-form d-flex flex-column row-gap15" [formGroup]="bulkAddAccountForm">
                     <ng-container formArrayName="customFields">
                         <div class="d-grid column-gap1 pd-b1" [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'">
-                            <h4 class="fw-bold w100">{{ commonLocaleData?.app_branch_name }}</h4>
-                            <h4 class="fw-bold text-left" *ngIf="data?.foreignCurrency">
+                            <p class="fw-bold w100">{{ commonLocaleData?.app_branch_name }}</p>
+                            <p class="fw-bold text-left" *ngIf="data?.foreignCurrency">
                                 {{ localeData?.foreign_opening_balance }}
-                            </h4>
-                            <h4 class="fw-bold text-left">{{ localeData?.opening_balance }}</h4>
-                            <h4 class="fw-bold text-right justify-self-end">{{ localeData?.opening_balance_type }}</h4>
+                            </p>
+                            <p class="fw-bold text-left">{{ localeData?.opening_balance }}</p>
+                            <p class="fw-bold text-right justify-self-end">{{ localeData?.opening_balance_type }}</p>
                         </div>
                         <ng-container
                             *ngFor="let item of bulkAddAccountForm.get('customFields')['controls']; let bulkIndex = index"

@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="box clearfix">
-        <h1 class="section-head pt-0">{{ localeData?.add_bank_account_form_heading }}</h1>
+        <p class="section-head pt-0">{{ localeData?.add_bank_account_form_heading }}</p>
         <div>
             <button mat-raised-button color="primary" (click)="connectBank()">{{ localeData?.connect_bank }}</button>
         </div>
@@ -49,14 +49,14 @@
 
     <div class="box clearfix mr-t2" *ngIf="ebankAccounts && ebankAccounts.length">
         <div >
-            <h1 class="section-head pt-0">{{ localeData?.added_accounts }}</h1>
+            <p class="section-head pt-0">{{ localeData?.added_accounts }}</p>
             <div class="mt-1">
                 <section
                     *ngFor="let acc of ebankAccounts; let accIdx = index"
                     class="clearfix bank-account"
                     [ngClass]="{ 'mr-b4': accIdx != ebankAccounts?.length - 1 }"
                 >
-                    <h3 class="subHead bd-rb">
+                    <p class="subHead bd-rb">
                         {{ acc.siteName }}
                         <button
                             mat-stroked-button class="mr-l1"
@@ -78,7 +78,7 @@
                         >
                             <i class="icon-refresh"></i> {{ commonLocaleData?.app_refresh }}
                         </button>
-                    </h3>
+                    </p>
                     <aside class="body">
                         <aside
                             [attachOutsideOnClick]="true"

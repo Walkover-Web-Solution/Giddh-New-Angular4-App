@@ -12,14 +12,14 @@
                 <div class="fb-1-container">
                     <div class="d-flex job-work-content">
                         <div class="d-flex form-inline">
-                            <h2 class="mr-2 report-info d-inline-block bold text-capitalize font-16">
+                            <p class="mr-2 report-info d-inline-block bold text-capitalize font-16">
                                 <span *ngIf="type === 'stock'" class="report-info">{{ nameStockOrPerson }}</span
                                 >&nbsp;<span *ngIf="type === 'stock'">(Transaction Log)</span>
 
                                 <span *ngIf="type === 'person'" class="report-info"
                                     ><span>{{ nameStockOrPerson }}</span></span
                                 >
-                            </h2>
+                            </p>
                             <div class="form-group margin-datepicker">
                                 <div 
                                     class="custom-datepicker"  
@@ -279,7 +279,7 @@
                             <tr class="mat-row" *ngIf="!inventoryReport || inventoryReport.transactions?.length <= 0">
                                 <td class="mat-cell text-center empty-table" [attr.colspan]="getDisplayedColumns().length">
                                     <img src="assets/images/search-data-not-found.svg" />
-                                    <h1>No Report Found !!</h1>
+                                    <p>No Report Found !!</p>
                                 </td>
                             </tr>
                         </table>
@@ -306,7 +306,7 @@
 <!-- Advance search popup -->
 <ng-template #advanceSearchTemplate>
     <div class="theme-bg clearfix">
-        <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
+        <p class="modal-title bg" id="modal-title">Advance Search</p>
         <button aria-hidden="true" mat-stroked-button class="close" mat-dialog-close (click)="advanceSearchAction('cancel')">
             ×
         </button>

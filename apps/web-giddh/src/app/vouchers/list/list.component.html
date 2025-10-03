@@ -239,7 +239,7 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                                     >
-                                                        <h3>{{ element?.customerName | titlecase }}</h3>
+                                                        <p>{{ element?.customerName | titlecase }}</p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
                                                             <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
                                                         </a>
@@ -689,11 +689,11 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                                     >
-                                                        <h3>
+                                                        <p>
                                                             {{
                                                                 element?.account?.customerName || element?.account?.name
                                                             }}
-                                                        </h3>
+                                                        </p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
                                                             <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
                                                         </a>
@@ -1214,11 +1214,11 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                                     >
-                                                        <h3>
+                                                        <p>
                                                             {{
                                                                 element?.account?.customerName || element?.account?.name
                                                             }}
-                                                        </h3>
+                                                        </p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
                                                             <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
                                                         </a>
@@ -1737,11 +1737,11 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                                     >
-                                                        <h3>
+                                                        <p>
                                                             {{
                                                                 element?.account?.customerName || element?.account?.name
                                                             }}
-                                                        </h3>
+                                                        </p>
                                                         <button
                                                             mat-mini-fab
                                                             color="primary"
@@ -2211,7 +2211,7 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                                     >
-                                                        <h3>{{ element?.customerName | titlecase }}</h3>
+                                                        <p>{{ element?.customerName | titlecase }}</p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
                                                             <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
                                                         </a>
@@ -2598,7 +2598,7 @@
                                             <div
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                             >
-                                                <h3>{{ element?.account?.name }}</h3>
+                                                <p>{{ element?.account?.name }}</p>
                                                 <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
                                                     <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
                                                 </a>
@@ -4479,7 +4479,7 @@
                                             <div
                                                 class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                             >
-                                                <h3>{{ element?.account?.name }}</h3>
+                                                <p>{{ element?.account?.name }}</p>
                                                 <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
                                                     <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
                                                 </a>
@@ -4588,12 +4588,12 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-16 border-bottom pb-2 mb-3">
                                                     {{ localeData?.general }}
                                                     <span class="text-gray font-12">{{
                                                         localeData?.general_settings_applicable
                                                     }}</span>
-                                                </h4>
+                                                </p>
                                                 <div>
                                                     <mat-slide-toggle
                                                         aria-label="enable narration onin voucher"
@@ -4628,12 +4628,12 @@
                                             {{ commonLocaleData?.app_email }}
                                         </ng-template>
                                         <div class="tabs-box-content py-3">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-16 border-bottom pb-2 mb-3">
                                                 {{ localeData?.email_sms }}
                                                 <span class="text-gray font-12">{{
                                                     localeData?.general_settings_applicable
                                                 }}</span>
-                                            </h4>
+                                            </p>
                                             <ng-container formGroupName="invoiceSettings">
                                                 <div class="d-flex column-gap1 align-items-center mb-3">
                                                     <input-field
@@ -4742,9 +4742,9 @@
                                         </ng-template>
                                         <ng-container formGroupName="estimateSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-16 border-bottom pb-2 mb-3">
                                                     {{ localeData?.estimate_quotation }}
-                                                </h4>
+                                                </p>
                                                 <div class="d-flex column-gap1 mb-3">
                                                     <input-field
                                                         [name]="'headerName'"
@@ -4835,9 +4835,9 @@
                                         </ng-template>
                                         <ng-container formGroupName="proformaSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-16 border-bottom pb-2 mb-3">
                                                     {{ localeData?.proforma_invoice }}
-                                                </h4>
+                                                </p>
                                                 <div class="d-flex column-gap1 mb-3">
                                                     <input-field
                                                         [name]="'headerName'"
@@ -4928,9 +4928,9 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-16 border-bottom pb-2 mb-3">
                                                     {{ commonLocaleData?.app_invoice }}
-                                                </h4>
+                                                </p>
                                                 <div class="d-flex column-gap1 mb-3">
                                                     <input-field
                                                         [name]="'duePeriod'"
@@ -5174,9 +5174,9 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-16 border-bottom pb-2 mb-3">
                                                     {{ commonLocaleData?.app_receipt }}
-                                                </h4>
+                                                </p>
                                                 <div class="mb-3 d-flex align-items-center column-gap15">
                                                     <mat-slide-toggle
                                                         name="useCustomReceiptNumber"
@@ -5272,9 +5272,9 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-16 border-bottom pb-2 mb-3">
                                                     {{ commonLocaleData?.app_voucher_types?.debit_note }}
-                                                </h4>
+                                                </p>
                                                 <div class="mb-3 d-flex align-items-center column-gap15">
                                                     <mat-slide-toggle
                                                         aria-label="debit no"
@@ -5379,9 +5379,9 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-16 border-bottom pb-2 mb-3">
                                                     {{ commonLocaleData?.app_voucher_types?.credit_note }}
-                                                </h4>
+                                                </p>
                                                 <div class="mb-3 d-flex align-items-center column-gap15">
                                                     <mat-slide-toggle
                                                         aria-label="custom invoice"
@@ -5473,10 +5473,10 @@
                                     </ng-template>
                                     <ng-container formGroupName="purchaseBillSettings">
                                         <div class="tabs-box-content py-3">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-16 border-bottom pb-2 mb-3">
                                                 {{ localeData?.integration }}
                                                 <span class="text-gray font-12"> {{ localeData?.settings_note }}</span>
-                                            </h4>
+                                            </p>
                                             <div class="d-flex column-gap1 align-items-center mb-3">
                                                 <input-field
                                                     [name]="'email'"
@@ -5582,9 +5582,9 @@
                                     </ng-template>
                                     <ng-container formGroupName="purchaseBillSettings">
                                         <div class="tabs-box-content py-3">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-16 border-bottom pb-2 mb-3">
                                                 {{ localeData?.purchase_order }}
-                                            </h4>
+                                            </p>
                                             <div class="d-flex column-gap1 mb-3">
                                                 <input-field
                                                     [name]="'poDuePeriod'"
@@ -5679,9 +5679,9 @@
                                     </ng-template>
                                     <div class="tabs-box-content py-3">
                                         <ng-container formGroupName="purchaseBillSettings">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-16 border-bottom pb-2 mb-3">
                                                 {{ localeData?.purchase_bill }}
-                                            </h4>
+                                            </p>
                                             <giddh-datepicker
                                                 *ngIf="showPurchaseDate"
                                                 type="text"
@@ -5779,9 +5779,9 @@
                                     </ng-template>
                                     <ng-container formGroupName="invoiceSettings">
                                         <div class="tabs-box-content py-3">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-16 border-bottom pb-2 mb-3">
                                                 {{ commonLocaleData?.app_payment }}
-                                            </h4>
+                                            </p>
                                             <div class="mb-3 d-flex align-items-center column-gap15">
                                                 <mat-slide-toggle
                                                     name="useCustomPaymentNumber"
@@ -5879,7 +5879,7 @@
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">
-                                <h3 class="fonr-16">{{ localeData?.design_template }}</h3>
+                                <p class="fonr-16">{{ localeData?.design_template }}</p>
                                 <p class="my-3">
                                     {{ localeData?.template_gallery_info }}
                                 </p>
@@ -5902,7 +5902,7 @@
                                 "
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                    <h3 class="fonr-16">{{ template.name }}</h3>
+                                    <p class="fonr-16">{{ template.name }}</p>
                                     <span
                                         *ngIf="template.isDefault"
                                         [ngClass]="{ 'active': template.isDefault }"
@@ -5988,7 +5988,7 @@
                                 "
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                    <h3 class="fonr-16">{{ template.name }}</h3>
+                                    <p class="fonr-16">{{ template.name }}</p>
                                     <span
                                         *ngIf="template.isDefaultForVoucher"
                                         [ngClass]="{ 'active': template.isDefaultForVoucher }"

@@ -253,7 +253,7 @@
                 </table>
                 <giddh-page-loader *ngIf="shouldShowLoader"></giddh-page-loader>
                 <div class="no-data" *ngIf="addresses?.length === 0 && !shouldShowLoader">
-                    <h1>{{ localeData?.no_address_found }}</h1>
+                    <p>{{ localeData?.no_address_found }}</p>
                 </div>
             </div>
         </div>
@@ -262,7 +262,7 @@
             <div *ngFor="let address of addresses; index as addressIndex">
                 <div class="branch-profile-address-content col-md-12 mr-b15">
                     <div class="single-branch-detail mr-b15">
-                        <h4><i class="icon-branch-icon mr-r05"></i>{{ address?.name }}</h4>
+                        <p><i class="icon-branch-icon mr-r05"></i>{{ address?.name }}</p>
                         <div class="row">
                             <div class="col-md-4">
                                 <label>{{ commonLocaleData?.app_address }}:</label>
@@ -311,7 +311,7 @@
                 </div>
             </div>
             <div class="no-data" *ngIf="addresses?.length === 0">
-                <h1>{{ localeData?.no_address_found }}</h1>
+                <p>{{ localeData?.no_address_found }}</p>
             </div>
         </div>
         <!-- branch profile element end -->
@@ -385,7 +385,7 @@
                 <mat-dialog-content class="dialog-body">
                     <form name="newRole" novalidate autocomplete="off">
                         <div class="modal-wrap mr-b2">
-                            <h3>{{ localeData?.want_to_continue }}</h3>
+                            <p>{{ localeData?.want_to_continue }}</p>
                         </div>
                         <div class="d-flex justify-content-end column-gap1">
                             <button

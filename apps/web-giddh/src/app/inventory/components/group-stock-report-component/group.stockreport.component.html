@@ -2,9 +2,9 @@
     <div class="fb-1-container mr-b1 mt-3">
         <div class="d-flex justify-content-between w-100">
             <div class="d-flex wrap-head-report">
-                <h2 class="mr-2 head-report" *ngIf="groupStockReport">
+                <p class="mr-2 head-report" *ngIf="groupStockReport">
                     <span>{{ groupStockReport.stockGroupName }}</span> (Group)
-                </h2>
+                </p>
                 <div class="advance-icon cursor-pointer" matTooltip="Advance Search" (click)="onOpenAdvanceSearch()">
                     <i class="icon-advance-filter"></i>
                 </div>
@@ -630,12 +630,12 @@
                     groupNotFoundMessage
                 "
             >
-                <h1 [class.group-not-found]="groupNotFoundMessage">
+                <p [class.group-not-found]="groupNotFoundMessage">
                     {{ groupNotFoundMessage ? groupNotFoundMessage : "No entries found within given criteria." }}
-                </h1>
-                <h1 class="p-0" [class.group-not-found]="groupNotFoundMessage">
+                </p>
+                <p class="p-0" [class.group-not-found]="groupNotFoundMessage">
                     {{ groupNotFoundMessage ? groupNotFoundMessage : "Do search with some other dates" }}
-                </h1>
+                </p>
             </div>
         </div>
 
@@ -711,7 +711,7 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Opening Value</h4>
-                                    <h2>{{ groupStockReport.openingBalance.amount | giddhCurrency }}</h2>
+                                    <p>{{ groupStockReport.openingBalance.amount | giddhCurrency }}</p>
                                     <h4 *ngIf="groupStockReport.openingBalance.quantity">
                                         ({{ groupStockReport.openingBalance.quantity | giddhCurrency }}
                                         {{ groupStockReport.openingBalance.stockUnit }})
@@ -722,7 +722,7 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Inward Value</h4>
-                                    <h2>{{ groupStockReport.inwardBalance.amount | giddhCurrency }}</h2>
+                                    <p>{{ groupStockReport.inwardBalance.amount | giddhCurrency }}</p>
                                     <h4 *ngIf="groupStockReport.inwardBalance.quantity">
                                         ({{ groupStockReport.inwardBalance.quantity | giddhCurrency }}
                                         {{ groupStockReport.inwardBalance.stockUnit }})
@@ -733,7 +733,7 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Outward Value</h4>
-                                    <h2>{{ groupStockReport.outwardBalance.amount | giddhCurrency }}</h2>
+                                    <p>{{ groupStockReport.outwardBalance.amount | giddhCurrency }}</p>
                                     <h4 *ngIf="groupStockReport.outwardBalance.quantity">
                                         ({{ groupStockReport.outwardBalance.quantity | giddhCurrency }}
                                         {{ groupStockReport.outwardBalance.stockUnit }})
@@ -744,9 +744,9 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Closing Value</h4>
-                                    <h2 class="text-purple">
+                                    <p class="text-purple">
                                         {{ groupStockReport.closingBalance.amount | giddhCurrency }}
-                                    </h2>
+                                    </p>
                                     <h4 class="text-purple" *ngIf="groupStockReport.closingBalance.quantity">
                                         ({{ groupStockReport.closingBalance.quantity | giddhCurrency }}
                                         {{ groupStockReport.closingBalance.stockUnit }})

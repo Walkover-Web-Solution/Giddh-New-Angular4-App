@@ -45,7 +45,6 @@
                 class="icon-bar"
                 [matTooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
                 matTooltipPosition="right"
-                matTooltipClass="tooltip-black"
             ></span>
         </div>
     </div>
@@ -66,7 +65,6 @@
                         (click)="backToCompany()"
                         [matTooltip]="activeCompany?.name"
                         [matTooltipPosition]="'below'"
-                        matTooltipClass="tooltip-black"
                     >
                         <i class="icon-left back-left"></i>
                         {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}

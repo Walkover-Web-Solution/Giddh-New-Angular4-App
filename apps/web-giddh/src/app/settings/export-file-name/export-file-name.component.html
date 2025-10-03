@@ -2,7 +2,7 @@
   <div *ngIf="moduleExportSettingArray?.length" class="d-flex flex-row justify-content-between">
     <div class="col-lg-7 col-md-12">
       <div class="pd-t2">
-        <h2>{{ localeData?.export_setting_description }}</h2>
+        <p>{{ localeData?.export_setting_description }}</p>
       </div>
       <div class="settings-profile-tabs pd-t2" [formGroup]="exportModuleSettingForm">
         <ng-container formArrayName="moduleExportSetting">

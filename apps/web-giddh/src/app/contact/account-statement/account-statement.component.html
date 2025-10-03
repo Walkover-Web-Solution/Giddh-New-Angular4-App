@@ -13,7 +13,7 @@
                 <tr>
                     <td width="65%" class="vertical-align-top">
                         <address class="address-block font-18" *ngIf="responseAccountList.accountName">
-                            <h2 class="font-20">{{ responseAccountList.accountName }}</h2>
+                            <p class="font-20">{{ responseAccountList.accountName }}</p>
                             <ng-container *ngIf="responseAccountList.accountAddress">
                                 <p *ngIf="responseAccountList.accountAddress.email">
                                     {{ responseAccountList.accountAddress.email }}
@@ -42,7 +42,7 @@
                     </td>
                     <td width="35%" class="vertical-align-top">
                         <address class="address-block font-18 text-right" *ngIf="responseAccountList.companyName">
-                            <h2 class="font-20">{{ responseAccountList.companyName }}</h2>
+                            <p class="font-20">{{ responseAccountList.companyName }}</p>
                             <ng-container *ngIf="responseAccountList.companyGstAddress">
                                 <p *ngIf="responseAccountList.companyGstAddress.email">
                                     {{ responseAccountList.companyGstAddress.email }}
@@ -79,7 +79,7 @@
                     <td width="35%">
                         <div class="d-flex justify-content-end">
                             <div>
-                                <h2 class="font-30 text-right">{{ localeData?.statement_of_accounts }}</h2>
+                                <p class="font-30 text-right">{{ localeData?.statement_of_accounts }}</p>
                                 <hr class="bordered m-0" />
                                 <p class="text-right text-gray font-18 line-height-22">
                                     {{ responseAccountList.fromDate }} <span> - </span> {{ responseAccountList.toDate }}
@@ -197,8 +197,7 @@
                             mat-stroked-button
                             class="mr-r1"
                             [matTooltip]="commonLocaleData?.app_export"
-                            [matTooltipPosition]="'above'"
-                            matTooltipClass="tooltip-black"
+                            [matTooltipPosition]="'above'"  
                             (click)="exportAccountStatement()"
                         >
                             <i aria-label="export-account"class="icon-export-icon lh-0"></i>
@@ -209,8 +208,7 @@
                             (click)="onOpenAdvanceSearch()"
                             class="d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
                             [matTooltip]="commonLocaleData?.app_advance_search"
-                            [matTooltipPosition]="'above'"
-                            matTooltipClass="tooltip-black"
+                            [matTooltipPosition]="'above'"            
                         >
                             <i class="icon-advance-filter"></i>
                         </button>

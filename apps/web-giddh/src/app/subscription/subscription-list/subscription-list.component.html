@@ -188,8 +188,7 @@
                             *matCellDef="let element"
                             class="position-relative"
                             [matTooltip]="element?.subscriptionId"
-                            [matTooltipPosition]="'above'"
-                            matTooltipClass="tooltip-black"
+                            [matTooltipPosition]="'above'"  
                         >
                             {{ element.plan?.name ? element.plan?.name : "-" }}
                         </td>
@@ -314,7 +313,7 @@
             </form>
         </section>
         <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(subscriptionListInProgress$ | async)">
-            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+            <p>{{ commonLocaleData?.app_no_data_found }}</p>
         </div>
         <div
             *ngIf="

@@ -13,7 +13,7 @@
                 <mat-card-content *ngIf="!(viewSubscriptionDataInProgress$ | async)">
                     <div class="d-flex justify-content-between column-gap1 align-items-center border-bottom pb-2">
                         <div class="d-flex column-gap1">
-                            <h4 class="font-16">{{ commonLocaleData?.app_view }} {{ localeData?.tab_heading }}</h4>
+                            <p class="font-16">{{ commonLocaleData?.app_view }} {{ localeData?.tab_heading }}</p>
                             <span class="badge btn-success cp font-12">{{
                                 viewSubscriptionData?.status | uppercase
                             }}</span>
@@ -118,7 +118,7 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <h4 class="border-bottom pb-3 font-16 mr-t2">{{ commonLocaleData?.app_total }}</h4>
+                        <p class="border-bottom pb-3 font-16 mr-t2">{{ commonLocaleData?.app_total }}</p>
                         <div class="d-flex justify-content-between pt-3">
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ localeData?.subscription_id }}</p>
@@ -194,7 +194,7 @@
                             </div>
                         </div>
                         <!-- usage -->
-                        <h4 class="strong border-bottom pb-3 font-16 mr-t3">{{ localeData?.usage }}</h4>
+                        <p class="strong border-bottom pb-3 font-16 mr-t3">{{ localeData?.usage }}</p>
                         <div class="d-flex justify-content-between pt-3">
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_company }}</p>
@@ -265,7 +265,7 @@
             <div class="billing-account mx-auto">
                 <mat-card class="outline-card">
                     <mat-card-content>
-                        <h4 class="font-16 strong border-bottom pb-2">{{ localeData?.billing_account }}</h4>
+                        <p class="font-16 strong border-bottom pb-2">{{ localeData?.billing_account }}</p>
                         <ng-container *ngIf="viewSubscriptionData?.cashfreeBillingInfo">
                             <p class="strong my-3 light-gray">
                                 {{ commonLocaleData?.app_payment_mode }} :

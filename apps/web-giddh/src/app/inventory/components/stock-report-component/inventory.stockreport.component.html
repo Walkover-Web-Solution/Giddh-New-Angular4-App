@@ -19,9 +19,9 @@
 
         <div class="d-flex w-100 justify-content-between">
             <div class="d-flex wrap-head-report">
-                <h2 class="head-report" *ngIf="stockReport && stockReport.stockUnit">
+                <p class="head-report" *ngIf="stockReport && stockReport.stockUnit">
                     <span> {{ stockReport.stockName }}</span> (Stock)
-                </h2>
+                </p>
 
                 <div class="advance-icon cursor-pointer" (click)="onOpenAdvanceSearch()" matTooltip="Advance Search">
                     <span class="icon-advance-filter"></span>
@@ -524,12 +524,12 @@
                 class="no-data"
                 *ngIf="(stockReport && stockReport.count < 1 && !stockReportInProcess) || stockNotFoundMessage"
             >
-                <h1 [class.stock-not-found]="stockNotFoundMessage">
+                <p [class.stock-not-found]="stockNotFoundMessage">
                     {{ stockNotFoundMessage ? stockNotFoundMessage : "No entries found within given criteria." }}
-                </h1>
-                <h1 class="p-0" [class.stock-not-found]="stockNotFoundMessage">
+                </p>
+                <p class="p-0" [class.stock-not-found]="stockNotFoundMessage">
                     {{ stockNotFoundMessage ? stockNotFoundMessage : "Do search with some other dates" }}
-                </h1>
+                </p>
             </div>
         </div>
     </section>
@@ -542,55 +542,55 @@
                     <div class="col-sm-3 pr-0">
                         <div class="row">
                             <div class="col-6">
-                                <h4 class="text-light text-left">Profit/Loss</h4>
+                                <p class="text-light text-left">Profit/Loss</p>
                             </div>
                             <div class="col-12">
-                                <h4 class="text-purple text-left">
+                                <p class="text-purple text-left">
                                     &nbsp;{{ stockReport.profit | giddhCurrency }} ({{
                                         selectedDateRangeUi | replaceHyphens
                                     }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-2 pr-0">
                         <div class="row">
                             <div class="col-10 p-0">
-                                <h4 class="text-light">Transaction Count</h4>
+                                <p class="text-light">Transaction Count</p>
                             </div>
                             <div class="col-2 p-0">
-                                <h4 class="text-purple text-left">
+                                <p class="text-purple text-left">
                                     {{
                                         stockReport.inwardBalance.transactionCount +
                                             stockReport.outwardBalance.transactionCount | giddhCurrency
                                     }}
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-10 p-0">
-                                <h4>Inward</h4>
+                                <p>Inward</p>
                             </div>
                             <div class="col-2 p-0">
-                                <h4 class="text-left">
+                                <p class="text-left">
                                     &nbsp;<span *ngIf="stockReport.inwardBalance.transactionCount">{{
                                         stockReport.inwardBalance.transactionCount | giddhCurrency
                                     }}</span
                                     ><span *ngIf="!stockReport.inwardBalance.transactionCount">0</span>
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-10 p-0">
-                                <h4>Outward</h4>
+                                <p>Outward</p>
                             </div>
                             <div class="col-2 p-0">
-                                <h4 class="text-left">
+                                <p class="text-left">
                                     &nbsp;<span *ngIf="stockReport.outwardBalance.transactionCount">{{
                                         stockReport.outwardBalance.transactionCount | giddhCurrency
                                     }}</span
                                     ><span *ngIf="!stockReport.outwardBalance.transactionCount">0</span>
-                                </h4>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -598,42 +598,42 @@
                     <div class="col-sm-7">
                         <div class="flex-col">
                             <div class="cont">
-                                <h4 class="text-light">Opening</h4>
-                                <h2>{{ stockReport.openingBalance.amount | giddhCurrency }}</h2>
-                                <h4>
+                                <p class="text-light">Opening</p>
+                                <p>{{ stockReport.openingBalance.amount | giddhCurrency }}</p>
+                                <p>
                                     ({{ stockReport.openingBalance.quantity | giddhCurrency }}
                                     {{ stockReport.openingBalance.stockUnit }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="flex-col">
                             <div class="cont">
-                                <h4 class="text-light">Inward</h4>
-                                <h2>{{ stockReport.inwardBalance.amount | giddhCurrency }}</h2>
-                                <h4>
+                                <p class="text-light">Inward</p>
+                                <p>{{ stockReport.inwardBalance.amount | giddhCurrency }}</p>
+                                <p>
                                     ({{ stockReport.inwardBalance.quantity | giddhCurrency }}
                                     {{ stockReport.inwardBalance.stockUnit }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="flex-col">
                             <div class="cont">
-                                <h4 class="text-light">Outward</h4>
-                                <h2>{{ stockReport.outwardBalance.amount | giddhCurrency }}</h2>
-                                <h4>
+                                <p class="text-light">Outward</p>
+                                <p>{{ stockReport.outwardBalance.amount | giddhCurrency }}</p>
+                                <p>
                                     ({{ stockReport.outwardBalance.quantity | giddhCurrency }}
                                     {{ stockReport.outwardBalance.stockUnit }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="flex-col">
                             <div class="cont">
-                                <h4 class="text-light">Closing Stock</h4>
-                                <h2 class="text-purple">{{ stockReport.closingBalance.amount | giddhCurrency }}</h2>
-                                <h4>
+                                <p class="text-light">Closing Stock</p>
+                                <p class="text-purple">{{ stockReport.closingBalance.amount | giddhCurrency }}</p>
+                                <p>
                                     ({{ stockReport.closingBalance.quantity | giddhCurrency }}
                                     {{ stockReport.closingBalance.stockUnit }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                     </div>

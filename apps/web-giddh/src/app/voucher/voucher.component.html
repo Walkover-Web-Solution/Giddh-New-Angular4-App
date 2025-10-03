@@ -12,7 +12,7 @@
             <mat-card-content class="vouchers-content w-100 h-100">
                 <!-- Voucher Page Heading -->
                 <div class="vouchers-title d-flex align-items-center">
-                    <h1>{{ invoiceTypeLabel }}</h1>
+                    <p>{{ invoiceTypeLabel }}</p>
                     <small class="invoice-type-text" *ngIf="invoiceType === 'estimates'">
                         ({{ commonLocaleData?.app_beta }})
                     </small>
@@ -3776,7 +3776,7 @@
                                                         (invoiceForm?.controls)['message2']?.errors?.maxlength
                                                     "
                                                     (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                                    class="h3"
+                                                    class="p"
                                                 >
                                                     {{ commonLocaleData?.app_create }}
                                                 </button>
