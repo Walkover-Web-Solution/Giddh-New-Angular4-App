@@ -946,7 +946,7 @@ input#ledger-search {
         max-width: 100%;
     }
 }
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
     .linked-entities {
         margin-top: 10px;
         margin-bottom: 0;
@@ -986,7 +986,7 @@ input#ledger-search {
         position: absolute !important;
     }
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1024px) {
     .stat-block {
         padding-left: 20px;
     }
@@ -1186,7 +1186,7 @@ input#ledger-search {
     justify-content: center !important;
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 1024px) {
     .ledger-datepicker {
         img {
             padding-top: 5px;

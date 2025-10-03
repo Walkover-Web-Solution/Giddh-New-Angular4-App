@@ -39,7 +39,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public emailData: string = '';
     public withInvoiceNumber: boolean = false;
     public universalDate$: Observable<any>;
-    public isMobileScreen: boolean = true;
     /** Columnar report in balance type for Credit/Debit as +/- sign */
     public balanceTypeAsSign: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

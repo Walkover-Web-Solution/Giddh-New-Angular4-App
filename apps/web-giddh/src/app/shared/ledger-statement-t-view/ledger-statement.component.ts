@@ -10,7 +10,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-request";
-import { BranchHierarchyType, RESTRICTED_VOUCHERS_FOR_DOWNLOAD } from "../../app.constant";
+import { BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, RESTRICTED_VOUCHERS_FOR_DOWNLOAD } from "../../app.constant";
 import { LedgerVM } from "../../ledger/ledger.vm";
 import { ChangeDetectorRef } from "@angular/core";
 import { GIDDH_DATE_FORMAT } from "../helpers/defaultDateFormat";
@@ -38,8 +38,6 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     public ledgerView: TLedgerView = LedgerViewEnum.TView;
     /** Stores the LedgerViewEnum reference */
     public ledgerViewEnum: typeof LedgerViewEnum = LedgerViewEnum;
-    /** True if the device is a mobile screen */
-    public isMobileScreen: boolean = true;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Stores the static total columns count for the ledger grid */
@@ -196,17 +194,15 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
-        const mediumScreen: string = "(max-width: 1536px)";
-        const smallScreen: string = "(max-width: 1366px)";
-
         this.breakpointObserver.observe([
-            smallScreen, mediumScreen
+            BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP,
+            BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result?.matches) {
-                if (result.breakpoints[smallScreen]) {
+                if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP]) {
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]
-                } else if (result.breakpoints[mediumScreen]) {
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP]) {
                     this.ledgerGridTotalColumns = 8;
                     this.ledgerGridColumnsValue = [2, 3, 3]
                 } else {

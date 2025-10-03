@@ -630,7 +630,7 @@ export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/return
 
 /** Break Point Screen Size*/
 export enum BREAKPOINT_SCREEN_SIZE {
-    LARGE_DESKTOP = '(1536px > width)',
+    LARGE_DESKTOP = '(1536px < width)',
     MEDIUM_DESKTOP = '(1536px > width > 1366px)',
     SMALL_DESKTOP = '(1366px > width > 1024px)',
     TAB = '(1024px > width > 768px)',
