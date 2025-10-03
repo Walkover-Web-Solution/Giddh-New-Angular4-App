@@ -5,6 +5,8 @@ let updater;
 let isManualCheck = false;
 let isCheckingForUpdates = false;
 let downloadProgressWindow = null;
+let userDeclinedUpdate = false;
+let declinedVersion = null;
 
 // Function to create progress window
 function createProgressWindow() {
@@ -127,6 +129,13 @@ export default class AppUpdaterV1 {
                 downloadSize: info.files?.[0]?.size ? `${Math.round(info.files[0].size / 1024 / 1024)}MB` : 'Unknown'
             });
             
+            // Reset declined flags if this is a newer version than what was declined
+            if (userDeclinedUpdate && declinedVersion && info.version !== declinedVersion) {
+                console.log(`New version ${info.version} detected, resetting declined status for old version ${declinedVersion}`);
+                userDeclinedUpdate = false;
+                declinedVersion = null;
+            }
+            
             // Check if update is already downloaded
             if (this.isUpdateDownloaded) {
                 console.log('Update already downloaded, showing restart dialog instead');
@@ -144,6 +153,12 @@ export default class AppUpdaterV1 {
                 return;
             }
             
+            // Check if user already declined this version
+            if (userDeclinedUpdate && declinedVersion === info.version) {
+                console.log(`User already declined update v${info.version}, skipping popup`);
+                return;
+            }
+            
             // Prevent multiple simultaneous dialogs
             if (isCheckingForUpdates) {
                 console.log('Already checking for updates, ignoring duplicate event');
@@ -155,11 +170,13 @@ export default class AppUpdaterV1 {
             if (isManualCheck || updater) {
                 // MANUAL UPDATE FLOW - Show dialog and let user choose
                 console.log('Showing manual update dialog');
+                const currentVersion = require('./package.json').version;
                 dialog.showMessageBox({
                     type: 'info',
-                    title: 'Found Updates',
-                    message: 'Found new updates, do you want update now?',
-                    buttons: ['Sure', 'No']
+                    title: 'Update Available',
+                    message: `New version v${info.version} is available!`,
+                    detail: `Current version: v${currentVersion}\nNew version: v${info.version}\n\nWould you like to download and install the update now?`,
+                    buttons: ['Download Now', 'Later']
                 }).then((resp) => {
                     console.log('Manual dialog response:', resp.response);
                     if (resp.response === 0) {
@@ -237,8 +254,11 @@ export default class AppUpdaterV1 {
                             console.error('Failed to start automatic download:', downloadError);
                         }
                     } else {
-                        // User clicked "Download Later" - skip for now
+                        // User clicked "Download Later" - remember this choice
                         console.log('User chose to download update later');
+                        userDeclinedUpdate = true;
+                        declinedVersion = info.version;
+                        console.log(`Marked version ${info.version} as declined`);
                     }
                     isCheckingForUpdates = false;
                 }).catch((error) => {
@@ -254,11 +274,20 @@ export default class AppUpdaterV1 {
         autoUpdater.on('update-not-available', () => {
             console.log('No updates available. isManualCheck:', isManualCheck, 'updater:', !!updater);
             
+            // Reset all update-related flags when no updates are available
+            // This handles the case where app was updated and restarted
+            this.isUpdateDownloaded = false;
+            userDeclinedUpdate = false;
+            declinedVersion = null;
+            console.log('Reset all update flags - app is up-to-date');
+            
             if (isManualCheck || updater) {
-                // MANUAL CHECK - Show "no updates" message
+                // MANUAL CHECK - Show "no updates" message with version info
+                const currentVersion = require('./package.json').version;
                 dialog.showMessageBox({
-                    title: 'No Updates',
-                    message: 'Current version is up-to-date.'
+                    title: 'No Updates Available',
+                    message: `You are running the latest version!`,
+                    detail: `Current version: v${currentVersion}\n\nYour application is up-to-date.`
                 });
                 if (updater) {
                     updater.enabled = true;
@@ -346,6 +375,10 @@ export default class AppUpdaterV1 {
             // Mark update as downloaded to prevent showing "update available" again
             this.isUpdateDownloaded = true;
             
+            // Reset declined flags since download completed
+            userDeclinedUpdate = false;
+            declinedVersion = null;
+            
             // Re-enable menu item and reset label
             if (updater) {
                 updater.label = 'Check For Latest Update';
@@ -359,48 +392,25 @@ export default class AppUpdaterV1 {
             const currentVersion = require('./package.json').version;
             const newVersion = event.version;
             
-            const dialogOpts: MessageBoxOptions = {
+            // Show notification that app will restart automatically
+            dialog.showMessageBox({
                 type: 'info',
-                buttons: ['Restart Now', 'Later'],
+                buttons: ['OK'],
                 title: 'Update Downloaded Successfully',
                 message: `Giddh has been updated from v${currentVersion} to v${newVersion}`,
-                detail: 'The update has been downloaded and is ready to install. Restart the application to apply the updates.'
-            }
-            dialog.showMessageBox(dialogOpts).then((returnValue) => {
-                if (returnValue.response === 0) {
+                detail: 'The application will restart automatically in 3 seconds to apply the updates.'
+            }).then(() => {
+                // Auto-restart after 3 seconds
+                console.log('Auto-restarting application in 3 seconds...');
+                setTimeout(() => {
+                    console.log('Restarting application with new update...');
                     autoUpdater.quitAndInstall();
-                } else {
-                    // User chose "Later" - clean up updater reference
-                    if (updater) {
-                        updater = null;
-                    }
-                }
+                }, 3000);
             }).catch((error) => {
                 console.error('Update downloaded dialog error:', error);
-                // Fallback: use another message box to confirm restart
-                dialog.showMessageBox({
-                    type: 'question',
-                    buttons: ['Restart', 'Later'],
-                    defaultId: 0,
-                    cancelId: 1,
-                    title: 'Application Update',
-                    message: 'A new version has been downloaded. Restart now?'
-                }).then((res) => {
-                    if (res.response === 0) {
-                        autoUpdater.quitAndInstall();
-                    } else {
-                        // Clean up updater reference
-                        if (updater) {
-                            updater = null;
-                        }
-                    }
-                }).catch((fallbackErr) => {
-                    console.error('Fallback restart dialog error:', fallbackErr);
-                    // Clean up updater reference even on error
-                    if (updater) {
-                        updater = null;
-                    }
-                });
+                // Fallback: restart immediately if dialog fails
+                console.log('Dialog failed, restarting immediately...');
+                autoUpdater.quitAndInstall();
             });
         });
 
