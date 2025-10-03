@@ -1,0 +1,13 @@
+// Examples mixins
+@mixin mat-button-variant($color) {
+    background-color: $color;
+    color: #fff;
+    &:hover {
+        background-color: lighten($color, 10%);
+    }
+}
+@mixin mat-card-header($background-color) {
+    background-color: $background-color;
+    padding: 16px;
+    border-bottom: 1px solid #ddd;
+}
