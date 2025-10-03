@@ -266,9 +266,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
         });
         this.breakPointObservar.observe([
-            BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE,
+            BREAKPOINT_SCREEN_SIZE.TAB
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isTabScreen = result?.matches;
+            this.isTabScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB];
         });
 
         this.componentStore.fileGstr3BSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {

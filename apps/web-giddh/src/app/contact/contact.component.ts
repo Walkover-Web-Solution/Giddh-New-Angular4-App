@@ -26,7 +26,7 @@ import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT } from "../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT, BREAKPOINT_SCREEN_SIZE } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,
@@ -195,8 +195,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
-    /** This will store screen size */
-    public isMobileView: boolean = false;
     /** Stores the searched name value for the Name filter */
     public searchedName: FormControl = new FormControl<string>('');
     /** True, if name search field is to be shown in the filters */
@@ -300,11 +298,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
 
         this.breakPointObservar.observe([
-            "(max-width: 1023px)",
-            "(max-width: 767px)",
+            BREAKPOINT_SCREEN_SIZE.TAB
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result?.breakpoints["(max-width: 1023px)"];
-            this.isMobileView = result?.breakpoints["(max-width: 767px)"];
+            if (result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB]) {
+                this.isMobileScreen = true;
+            } else {
+                this.isMobileScreen = false;
+            }
         });
 
         this.bulkEmailSuccess$.pipe(
@@ -1578,24 +1578,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 width: '980px',
                 panelClass: 'contact-modal'
             });
-        }
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof ContactComponent
-     */
-    public getPageHeading(): string {
-        if (this.isMobileView) {
-            if (this.activeTab === "aging-report") {
-                return this.localeData?.aging_report;
-            } else if (this.activeTab !== "aging-report") {
-                return this.localeData?.customer;
-            }
-        } else {
-            return "";
         }
     }
 
