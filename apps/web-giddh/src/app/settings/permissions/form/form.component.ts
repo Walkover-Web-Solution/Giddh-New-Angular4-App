@@ -1,5 +1,5 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from './../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_EMAIL_REGEX } from './../../../shared/helpers/defaultDateFormat';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -76,6 +76,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** Email id validation regex pattern */
+    public giddhEmailRegex = GIDDH_EMAIL_REGEX;
+    /** To check form is invalid */
+    public isFormInvalid: boolean = false;
 
     constructor(
         private _settingsPermissionService: SettingsPermissionService,
@@ -143,11 +147,14 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             } else {
                 this.isSuperAdminCompany = false;
             }
-            if (activeCompany && Object.hasOwn(activeCompany.subscription?.planDetails?.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
+            if (activeCompany.subscription?.planDetails?.restrictedModules && Object.hasOwn(activeCompany.subscription.planDetails.restrictedModules, this.restrictedModules.Users) && activeCompany.moduleRestrictionStatus) {
                 const module = activeCompany.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === this.restrictedModules.Users
                 );
                 this.isUserRestricted = !module?.remainingUsers;
+                if (this.isUserRestricted) {
+                    this.permissionForm.get('roleUniqueName').patchValue('');
+                }
             }
         });
 
@@ -223,7 +230,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
             this.permissionForm = this._fb.group({
                 uniqueName: [data.uniqueName],
-                emailId: [data.emailId, Validators.compose([Validators.required, Validators.maxLength(150)])],
+                emailId: [data.emailId, Validators.compose([Validators.required, Validators.maxLength(150), Validators.pattern(this.giddhEmailRegex)])],
                 entity: ['company'],
                 roleUniqueName: [data.roleUniqueName, [Validators.required]],
                 periodOptions: this.getPeriodFromData(data),
@@ -256,7 +263,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
         } else {
             this.permissionForm = this._fb.group({
-                emailId: [null, Validators.compose([Validators.required, Validators.maxLength(150)])],
+                emailId: [null, Validators.compose([Validators.required, Validators.maxLength(150), Validators.pattern(this.giddhEmailRegex)])],
                 entity: ['company'],
                 roleUniqueName: ['admin', [Validators.required]],
                 periodOptions: [DATE_RANGE],
@@ -331,6 +338,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public submitPermissionForm() {
+        this.isFormInvalid = this.permissionForm.invalid;
+        if (this.isFormInvalid) {
+            return;
+        }
         let obj: any = {};
         let form: ShareRequestForm = cloneDeep(this.permissionForm?.value);
         let CidrArr = [];

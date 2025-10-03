@@ -62,6 +62,7 @@ import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-
 import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
 import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
+import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
 
 @Component({
     selector: 'account-update-new-details',
@@ -278,6 +279,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public parentGroups: any[] = [];
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** Holds transfer info if active sales person is transfer */
+    private activeSalePersonIsTransfer: any;
     /** True if sales person is created */
     public salesPersonCreated: boolean = false;
     /** Flag to determine if the parent group is "sundrycreditors". */
@@ -481,7 +484,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
 
-        this.addAccountForm.valueChanges.pipe(debounceTime(200),takeUntil(this.destroyed$)).subscribe((response) => {
+        this.addAccountForm.valueChanges.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe((response) => {
             if (this.formValueAssigned && response) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
             }
@@ -523,6 +526,22 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
         this.onViewReady(true);
         this.loadAccountData();
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+            if (!this.isSalesPersonExists(this.addAccountForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                let salesPersonName = "";
+                let salesPersonUniqueName = null;
+                if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
+                    const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
+                    if (salesPerson) {
+                        salesPersonName = salesPerson.label
+                        salesPersonUniqueName = salesPerson.value
+                    }
+                }
+                this.addAccountForm.get('salesPersonName').patchValue(salesPersonName);
+                this.addAccountForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -1173,9 +1192,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
-        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         delete accountRequest['portalDomain'];
         delete accountRequest['mobileCode'];
+        delete accountRequest['salesPersonName'];
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest,
@@ -2641,14 +2661,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
     }
 
-     /**
-     * Open sales person dialog
-     *
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => {this.getSalesPersonList(); this.salesPersonCreated = true})).subscribe();
+    /**
+    * Open sales person dialog
+    *
+    * @memberof AccountUpdateNewDetailsComponent
+    */
+    public openSalesPersonDialog(): void {
+        const dialogRef = this.dialog.open(SalesPersonComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: { activeSalePersonUniqueName: this.addAccountForm.get('salesPersonUniqueName').value || "" }
+        });
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.salesPersonCreated = true; this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
     }
 
     /**
@@ -2658,5 +2681,19 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }

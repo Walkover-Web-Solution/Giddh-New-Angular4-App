@@ -83,7 +83,8 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
     ZIP_CODE_SUPPORTED_COUNTRIES,
-    ASIDE_PANE_CONFIG
+    ASIDE_PANE_CONFIG,
+    IOption
 } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
@@ -106,6 +107,7 @@ import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
+import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
 
 @Component({
     selector: "create",
@@ -469,6 +471,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** Holds transfer info if active sales person is transfer */
+    private activeSalePersonIsTransfer: any;
     /** True if OCR data is enabled for voucher creation. */
     public ocrDataEnabled: boolean = false;
     /** Get ocr voucher details observable */
@@ -1586,6 +1590,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         });
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+            if (!this.isUpdateMode) {
+                if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                    let salesPersonName = "";
+                    let salesPersonUniqueName = null;
+                    if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
+                        const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
+                        if (salesPerson) {
+                            salesPersonName = salesPerson.label
+                            salesPersonUniqueName = salesPerson.value
+                        }
+                    }
+                    this.invoiceForm.get('salesPersonName').patchValue(salesPersonName);
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
+                }
+            }
+        });
     }
 
     /**
@@ -2516,8 +2538,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         let index = 0;
         if (!this.isUpdateMode) { // Take sales person details only if account is new else assign from get voucher response
-            this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
-            this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+            this.salesPersonList$.pipe(take(1)).subscribe(salesPersonList => {
+                if (this.isSalesPersonExists(accountData?.salesPerson?.uniqueName, salesPersonList)) {
+                    this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+                }
+            });
         }
 
         if (this.useDefaultAccountDetails) {
@@ -3720,12 +3746,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.dateChangeType = "entry";
             this.updatedEntryIndex = updatedEntryIndex;
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-               panelClass: "mat-dialog-sm",
+                panelClass: "mat-dialog-sm",
                 data: {
                     configuration: this.generalService.deleteConfiguration(this.localeData?.change_all_entry_dates, this.commonLocaleData),
                 },
             });
-    
             dialogRef.afterClosed().subscribe((response) => {
                 this.handleDateChangeConfirmation(response);
             });
@@ -3766,14 +3791,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: "mat-dialog-sm",
-             data: {
-                 configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
-             },
-         });
- 
-         dialogRef.afterClosed().subscribe((response) => {
-             this.handleDateChangeConfirmation(response);
-         });
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+            },
+        });
+
+        dialogRef.afterClosed().subscribe((response) => {
+            this.handleDateChangeConfirmation(response);
+        });
     }
 
     /**
@@ -3995,7 +4020,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private calculateOtherTaxAmount(entry: FormGroup, isActiveEntry: boolean): void {
         let taxableValue = 0;
-        if (!entry.get("transactions").value[0]?.amount?.amountForAccount || isActiveEntry) {
+        if (!entry.get("otherTax").value || !entry.get("transactions").value[0]?.amount?.amountForAccount || isActiveEntry) {
             return;
         }
         const amountForAccount = Number(entry.get("transactions").value[0].amount.amountForAccount);
@@ -4053,6 +4078,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.calculateTotalTax();
+        this.calculateOtherTaxAmount(entryFormGroup, false);
     }
 
     /**
@@ -6142,7 +6168,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             transactionFormGroup.get("stock.stockUnit.code")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
             transactionFormGroup.get("stock.stockUnit.uniqueName")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
-            
             let baseRate: number;
             if (response.stock.variant?.unitRates?.length) {
                 baseRate = this.getRateByUnit(transactionFormGroup.get("stock.stockUnit.uniqueName")?.value,response.stock.variant?.unitRates);
@@ -6274,7 +6299,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.checkIfEntriesHasStock();
     }
 
-    /**
+     /**
      * Get rate by unit
      *
      * @param {string} stockUnitUniqueName
@@ -6282,7 +6307,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @returns {number}
      * @memberof VoucherCreateComponent
      */
-    private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
+     private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
         return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
     }
 
@@ -6564,11 +6589,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Calculates amount if advance receipt
+         * Calculates amount if advance receipt
      *
      * @private
-     * @param {FormGroup} entryFormGroup
-     * @param {boolean} isUpdate
+         * @param {FormGroup} entryFormGroup
+         * @param {boolean} isUpdate
      * @memberof VoucherCreateComponent
      */
     private calculateReceiptPaymentAmount(entryFormGroup: FormGroup, isUpdate: boolean = false): void {
@@ -6825,8 +6850,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
+        const dialogRef = this.dialog.open(
+            SalesPersonComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: { activeSalePersonUniqueName: this.invoiceForm.get('salesPersonUniqueName').value || "" }
+        }
+        );
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
     }
 
     /**
@@ -6836,5 +6866,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof VoucherCreateComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }
