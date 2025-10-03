@@ -6,9 +6,9 @@
         textarea {
             background: var(--color-transparent);
 
-            &::placeholder {
-                color: var(--color-medium-gray) !important;
-            }
+            // &::placeholder {
+            //     color: var(--color-medium-gray) !important;
+            // }
         }
 
         // reactive-dropdown-field {

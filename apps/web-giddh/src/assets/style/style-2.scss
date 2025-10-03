@@ -4,6 +4,7 @@
 @import "./json-diff.scss";
 @import "./intl.scss";
 @import "./global/utility.scss";
+@import "./old-material-overide.scss";
 @import "./ngx-bs-datepicker.scss";
 @import "./global/add-company.scss";
 @import "./global/aside-modal.scss";
@@ -2785,7 +2786,7 @@ modal-container.modal {
 
     &.custom-new-datepicker {
         input {
-            height: var(--mat-form-field-height);
+            height: var(--custom-mat-form-field-height);
             border-radius: 0.5rem;
         }
 
@@ -3756,17 +3757,6 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-15);
 }
 
-.popover.bottom > .arrow:after {
-    margin-left: 0;
-    border-top-width: 0;
-    top: 1px;
-    border-right: 15px solid transparent;
-    border-bottom: 15px solid var(--color-white);
-    border-left: 15px solid transparent;
-    left: -15px;
-    z-index: 9;
-}
-
 .btn-row {
     margin-top: 14px;
 }
@@ -4094,12 +4084,6 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .bd-rt {
     border-color: var(--color-silver);
-}
-
-.popover.bottom > .arrow {
-    right: 13%;
-    left: auto;
-    border-bottom-color: var(--color-white);
 }
 
 .default-color {
@@ -8430,9 +8414,9 @@ ul.dropdown-menu p.lead.pd {
     height: 36px;
     font-size: var(--font-size-15) !important;
 
-    &::placeholder {
-        color: var(--color-silver);
-    }
+    // &::placeholder {
+    //     color: var(--color-silver);
+    // }
 }
 
 .nav-tabs > li.active > a,
@@ -9136,25 +9120,6 @@ button.ladda-button .ladda-label {
     padding: 0;
 }
 
-.popover.purchase-invoice-rcm,
-.popover.adjustment-popover,
-.update-ledger-rcm,
-.all-modules-popover {
-    .popover-arrow.arrow {
-        display: none;
-    }
-}
-
-.purchase-invoice-rcm {
-    .popover-content {
-        background-color: var(--color-white);
-    }
-}
-
-.popover.adjustment-popover {
-    margin: 0;
-}
-
 .dayBookAdvanceSearch input {
     width: 100%;
 }
@@ -9169,42 +9134,16 @@ button.ladda-button .ladda-label {
     color: var(--color-blue-primary) !important;
 }
 
-button {
-    transition: none !important;
-}
-
-.aside-pane-form label {
-    font-size: var(--font-size-15);
-}
-
 .tax-engine .header-info .dropdown-menu > li > a:hover {
     color: inherit !important;
     background: inherit !important;
 }
-
-.disable-select-group .toggle {
-    display: none;
-}
-
 /* radio & checkbox new CSS start */
-
-input.checkbox-custom[type="checkbox"] {
-    position: absolute;
-    top: 1px;
-    text-align: center;
-    margin: 0 8px 0 0;
-    cursor: pointer;
-    left: 0px;
-    height: 19px;
-}
-
-.checkbox-custom,
 .radio-custom {
     opacity: 0;
     position: absolute;
 }
 
-.checkbox-custom,
 .checkbox-custom-label,
 .radio-custom,
 .radio-custom-label {
@@ -9314,9 +9253,9 @@ input.checkbox-custom[type="checkbox"] {
     padding-left: 3px !important;
     font-size: var(--font-size-15) !important;
 
-    &::placeholder {
-        color: var(--color-dark-gray);
-    }
+    // &::placeholder {
+    //     color: var(--color-dark-gray);
+    // }
 }
 
 .select2-parent.select2-ledger .ledger-account-label input.form-control.focused {
@@ -9773,9 +9712,9 @@ span#HW_badge_cont:nth-child(3) {
                     border: 1px solid var(--color-silver);
                     background-color: var(--color-white);
 
-                    &::placeholder {
-                        color: var(--color-silver);
-                    }
+                    // &::placeholder {
+                    //     color: var(--color-silver);
+                    // }
                 }
             }
         }
@@ -9831,41 +9770,6 @@ span#HW_badge_cont:nth-child(3) {
 
 #rcw-p91-widget-button {
     z-index: 992;
-}
-
-.linked-add {
-    .popover {
-        width: 268px;
-        font-family: inherit;
-        border-radius: 4px;
-        box-shadow: 0 3px 6px var(--color-shadow-light);
-        top: 20% !important;
-
-        .popover-arrow {
-            display: none;
-        }
-
-        .popover-header {
-            padding: 15px 15px 0 15px;
-            margin-bottom: 0;
-            font-size: var(--font-size-15);
-            border-bottom: none;
-            font-weight: var(--font-weight-semibold);
-            background-color: var(--color-white);
-        }
-
-        .popover-body {
-            padding: 0 15px 15px 15px;
-            color: var(--color-black);
-            background-color: var(--color-white);
-        }
-    }
-
-    &.create .popover {
-        .popover-body {
-            padding: 8px 15px;
-        }
-    }
 }
 
 .linked-entities {
@@ -9941,10 +9845,6 @@ span#HW_badge_cont:nth-child(3) {
     .tooltip-inner {
         white-space: nowrap;
     }
-}
-
-.rcm-entry .popover {
-    max-width: 600px;
 }
 
 .update-ledger-overlay .modal-backdrop.show {
@@ -10130,9 +10030,9 @@ giddh-datepicker {
         padding: 9px 6px;
         font-size: var(--font-size-15);
 
-        &::placeholder {
-            color: var(--color-silver) !important;
-        }
+        // &::placeholder {
+        //     color: var(--color-silver) !important;
+        // }
     }
 
     .mat-form-field-wrapper {
@@ -10953,12 +10853,6 @@ body.update-scroll-hidden {
 .stock-group-parent > ul {
     height: calc(100vh - 320px);
     overflow: auto;
-}
-
-.financial-report-account-detail-container {
-    .popover-arrow {
-        display: none;
-    }
 }
 
 .contact-body {
@@ -12159,9 +12053,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
                     padding-left: 28px !important;
                     background-color: var(--color-light-gray) !important;
 
-                    &::placeholder {
-                        color: var(--color-blue-primary) !important;
-                    }
+                    // &::placeholder {
+                    //     color: var(--color-blue-primary) !important;
+                    // }
                 }
             }
         }
@@ -12688,9 +12582,9 @@ hamburger-menu {
                     padding-top: 7px !important;
                     border-radius: 5px;
 
-                    &::placeholder {
-                        color: var(--color-blue-primary) !important;
-                    }
+                    // &::placeholder {
+                    //     color: var(--color-blue-primary) !important;
+                    // }
                 }
             }
         }
@@ -12968,9 +12862,9 @@ voucher-component {
                 border-color: var(--color-black) !important;
             }
 
-            &::placeholder {
-                color: var(--color-medium-gray);
-            }
+            // &::placeholder {
+            //     color: var(--color-medium-gray);
+            // }
         }
     }
 }
@@ -13338,7 +13232,7 @@ aside-menu-product-service {
 // This Class will use globllay for border like mat input field
 .mat-form-field-border {
     &.mat-form-field-height {
-        height: var(--mat-form-field-height) !important;
+        height: var(--custom-mat-form-field-height) !important;
     }
 
     border-radius: 4px !important;
@@ -13451,9 +13345,9 @@ import-wizard {
     height: 38px;
     border-radius: 18px;
 
-    &::placeholder {
-        color: var(--color-black) !important;
-    }
+    // &::placeholder {
+    //     color: var(--color-black) !important;
+    // }
 }
 
 .download-arrow {

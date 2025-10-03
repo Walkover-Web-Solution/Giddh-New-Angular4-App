@@ -23,7 +23,7 @@
     }
     .inline-multiple-input-width {
         width: 530px;
-        min-height: var(--mat-form-field-height);
+        min-height: var(--custom-mat-form-field-height);
         .input-min-width {
             min-width: 50%; 
         }

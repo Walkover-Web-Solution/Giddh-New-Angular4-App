@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'ledger/export-ledger'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    <div id="exportModal" class="disable-ripple">
+    <div id="exportModal">
         <div class="dialog-header">
             <span>{{ localeData?.page_heading }}</span>
             <button mat-icon-button aria-label="close" mat-dialog-close>

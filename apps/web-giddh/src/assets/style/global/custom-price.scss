@@ -49,7 +49,7 @@
                                 .discount-input {
                                     .multi-select {
                                         input {
-                                            height: var(--mat-form-field-height);
+                                            height: var(--custom-mat-form-field-height);
                                             &:focus {
                                                 border-color: var(--color-blue-primary) !important;
                                             }

@@ -55,7 +55,6 @@
                                 [matTooltip]="commonLocaleData?.app_expand_all"
                                 [matTooltipPosition]="'above'"
                                 *ngIf="!isAllExpanded"
-                                matTooltipClass="tooltip-black"
                             >
                                 <span class="icon-expandIcon"></span>
                             </a>
@@ -67,7 +66,6 @@
                                 [matTooltip]="commonLocaleData?.app_collapse_all"
                                 [matTooltipPosition]="'above'"
                                 *ngIf="isAllExpanded"
-                                matTooltipClass="tooltip-black"
                             >
                                 <span class="icon-collapse"></span>
                             </a>
@@ -87,7 +85,6 @@
                                 class="mr-r15"
                                 [matTooltip]="commonLocaleData?.app_advance_search"
                                 [matTooltipPosition]="'above'"
-                                matTooltipClass="tooltip-black"
                                 (click)="onOpenAdvanceSearch()"
                                 mat-raised-button
                                 color="primary"

@@ -468,7 +468,7 @@ sh-select:focus {
     display: inline-flex;
     position: relative;
     min-width: 252px;
-    height: var(--mat-form-field-height);
+    height: var(--custom-mat-form-field-height);
 }
 .advance-search-by-date:before {
     position: absolute;
@@ -557,7 +557,7 @@ sh-select:focus {
 .d-flex.search-ledger-field {
     align-items: center;
     margin-right: 0;
-    min-height: var(--mat-form-field-height);
+    min-height: var(--custom-mat-form-field-height);
 }
 .clear-filter-btn {
     border-radius: 5px;
@@ -809,9 +809,9 @@ input#ledger-search {
     &:focus {
         border: 1px solid var(--color-silver) !important;
     }
-    &::placeholder {
-        color: var(--color-dark-gray);
-    }
+    // &::placeholder {
+    //     color: var(--color-dark-gray);
+    // }
 }
 
 .mat-grid-tile.select2-ledger {

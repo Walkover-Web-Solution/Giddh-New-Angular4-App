@@ -143,8 +143,7 @@
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName
                                 }"
                                 [matTooltip]="txn.description"
-                                [matTooltipPosition]="'above'"
-                                matTooltipClass="tooltip-black"
+                                [matTooltipPosition]="'above'" 
                             >
                                 <mat-grid-tile
                                     [attr.data-title]="commonLocaleData?.app_date"
@@ -193,7 +192,6 @@
                                                     : txn?.voucherNumber || commonLocaleData?.app_not_available
                                             "
                                             [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -346,7 +344,6 @@
                                 }"
                                 [matTooltip]="txn.description"
                                 [matTooltipPosition]="'above'"
-                                matTooltipClass="tooltip-black"
                             >
                                 <mat-grid-tile
                                     colspan="{{ ledgerGridColumnsValue[0] }}"
@@ -393,7 +390,6 @@
                                                     : txn?.voucherNumber || commonLocaleData?.app_not_available
                                             "
                                             [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -453,7 +449,6 @@
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 {{ localeData?.to_balance_cf }}:
                                                 <span class="digit-blue">
@@ -503,7 +498,6 @@
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <!-- By -->
                                                 {{ localeData?.by_balance_cf }}:
@@ -831,8 +825,7 @@
                                                     ledgerTxnBalance?.closingBalance?.type === 'DEBIT'
                                                         ? lc.ledgerUnderStandingObj.balanceText.dr
                                                         : lc.ledgerUnderStandingObj.balanceText.cr
-                                                "
-                                                matTooltipClass="tooltip-black"
+                                                "         
                                             >
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.convertedClosingBalance?.amount"

@@ -101,7 +101,6 @@
                                             (click)="performBulkAction('delete')"
                                             [matTooltip]="commonLocaleData?.app_delete"
                                             [matTooltipPosition]="'above'"
-                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-trash font-15"></i>
                                         </button>
@@ -117,7 +116,7 @@
                                             (click)="performBulkAction('generate')"
                                             [matTooltip]="commonLocaleData?.app_generate_voucher"
                                             [matTooltipPosition]="'above'"
-                                            matTooltipClass="tooltip-black"
+                                            
                                         >
                                             <i class="icon-generate-invoice font-15"></i>
                                         </button>
@@ -134,7 +133,6 @@
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path"></i>
                                     </button>
@@ -168,7 +166,6 @@
                                         (click)="resetAdvanceSearch()"
                                         [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i aria-hidden="true" class="icon-refresh"></i>
                                     </a>
@@ -218,7 +215,6 @@
                                     class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
                                     [matTooltipPosition]="'above'"
-                                    matTooltipClass="tooltip-black"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
                                     <span class="icon-advance-filter"></span>
@@ -232,7 +228,6 @@
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                     [matTooltipPosition]="'above'"
-                                    matTooltipClass="tooltip-black"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
                                 </button>
@@ -252,7 +247,6 @@
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-trash"></i>
                                     </button>
@@ -269,7 +263,6 @@
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-generate-invoice"></i>
                                     </button>
@@ -286,7 +279,6 @@
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path"></i>
                                     </button>
@@ -435,7 +427,6 @@
                                             class="icomoon-ico d-flex align-items-center"
                                             [matTooltip]="commonLocaleData?.app_refresh"
                                             [matTooltipPosition]="'above'"
-                                            matTooltipClass="tooltip-black"
                                             (click)="getBankTransactions()"
                                         >
                                             <i aria-hidden="true" class="icon-refresh lh-0"></i>
@@ -451,7 +442,6 @@
                                             class="icomoon-ico d-flex align-items-center"
                                             [matTooltip]="commonLocaleData?.app_refresh"
                                             [matTooltipPosition]="'above'"
-                                            matTooltipClass="tooltip-black"
                                             (click)="refreshBankTransactions()"
                                             [disabled]="(isBankRefreshing$ | async)"
                                         >
@@ -463,7 +453,6 @@
                                             id="connect-bank"
                                             class="icomoon-ico d-flex align-items-center"
                                             [matTooltip]="localeData?.connect_bank"
-                                            matTooltipClass="tooltip-black"
                                             [matTooltipPosition]="'above'"
                                             (click)="openBankLinkDialog()"
                                         >
@@ -477,7 +466,6 @@
                                         id="upload"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.import_statement"
-                                        matTooltipClass="tooltip-black"
                                         [matTooltipPosition]="'above'"
                                         (click)="showUploadBankStatementModal()"
                                     >
@@ -491,7 +479,6 @@
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.share_ledger"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                         (click)="showShareLedgerModal()"
                                     >
                                         <i class="icon-ledger-path lh-0"></i>
@@ -504,7 +491,6 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="commonLocaleData?.app_export"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                         (click)="showExportLedgerModal()"
                                     >
                                         <i class="icon-ledger-union-5 lh-0"></i>
@@ -517,7 +503,6 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.delete_bank_transactions"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
                                         *ngIf="
                                             entryUniqueNamesForBulkAction?.length > 0 ||
@@ -542,7 +527,6 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="this.localeData?.autopaid_title"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                         (click)="showAutopaidModal()"
                                     >
                                         <img
@@ -1395,7 +1379,6 @@
                                                             (click)="openAttachmentsDialog(attachments, transactions, true)"
                                                             [matTooltip]="transactions.attachedFileName"
                                                             [matTooltipPosition]="'right'"
-                                                            matTooltipClass="tooltip-black"
                                                         >
                                                             <i class="icon-attachment pull-left"></i>
                                                         </span>
@@ -1591,7 +1574,6 @@
                                 }"
                                 [matTooltip]="txn.description"
                                 [matTooltipPosition]="'above'"
-                                matTooltipClass="tooltip-black"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
@@ -1633,7 +1615,6 @@
                                             (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-attachment pull-left"></i>
                                         </span>
@@ -1651,7 +1632,6 @@
                                                 (txn.voucherNumber || commonLocaleData?.app_not_available)
                                             "
                                             [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1661,7 +1641,6 @@
                                             (click)="openAttachmentsDialog(attachments, txn, true)"
                                             [matTooltip]="txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-attachment pull-left"></i>
                                         </span>
@@ -1687,7 +1666,6 @@
                                                         : txn.voucherNumber || commonLocaleData?.app_not_available
                                                 "
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-eye pull-left"></i>
                                             </span>
@@ -1997,7 +1975,6 @@
                                     }"
                                     [matTooltip]="txn.description"
                                     [matTooltipPosition]="'above'"
-                                    matTooltipClass="tooltip-black"
                                     (mouseover)="entryHovered(txn.entryUniqueName)"
                                     (mouseout)="selectedTrxWhileHovering = ''"
                                 >
@@ -2038,7 +2015,6 @@
                                                 (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                                 [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
                                             </span>
@@ -2056,7 +2032,6 @@
                                                     (txn.voucherNumber || commonLocaleData?.app_not_available)
                                                 "
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
@@ -2066,7 +2041,6 @@
                                                 (click)="openAttachmentsDialog(attachments, txn, true)"
                                                 [matTooltip]="txn.attachedFileName"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
                                             </span>
@@ -2092,7 +2066,6 @@
                                                         : txn.voucherNumber || commonLocaleData?.app_not_available
                                                 "
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-eye pull-left"></i>
                                             </span>
@@ -2286,7 +2259,6 @@
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 {{ localeData?.to_balance_cf }}:
                                                 <span class="digit-blue">
@@ -2339,7 +2311,6 @@
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <!-- By -->
                                                 {{ localeData?.by_balance_cf }}:
@@ -3167,7 +3138,6 @@
                         }"
                         [matTooltip]="txn.description"
                         [matTooltipPosition]="'above'"
-                        [matTooltipClass]="tooltip-black"
                         (mouseover)="entryHovered(txn.entryUniqueName)"
                         (mouseout)="selectedTrxWhileHovering = ''"
                     >
@@ -3230,7 +3200,6 @@
                                                 : txn.voucherNumber || commonLocaleData?.app_not_available
                                         "
                                         [matTooltipPosition]="'right'"
-                                        [matTooltipClass]="tooltip-black"
                                     >
                                         <i class="icon-eye"></i>
                                     </span>

@@ -260,7 +260,6 @@
                                                 [matTooltip]="
                                                     localeData?.download_file + ':' + vm.selectedLedger.attachedFileName
                                                 "
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
                                             </span>
@@ -286,7 +285,6 @@
                                                         commonLocaleData?.app_not_available)
                                                 "
                                                 (click)="downloadFiles('VOUCHER', $event)"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
@@ -299,7 +297,6 @@
                                                 (click)="openAttachmentsDialog(attachments, true)"
                                                 [matTooltip]="vm.selectedLedger.attachedFileName"
                                                 [matTooltipPosition]="'above'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment left"></i>
                                             </span>
@@ -332,7 +329,6 @@
                                                                     : vm.selectedLedger.voucherNumber ||
                                                                       commonLocaleData?.app_not_available
                                                             "
-                                                            matTooltipClass="tooltip-black"
                                                         >
                                                             <i class="icon-eye pull-left"></i>
                                                         </span>
@@ -386,7 +382,6 @@
                                                         class="pd-1"
                                                         [matTooltip]="vm.ledgerUnderStandingObj.balanceText.cr"
                                                         [matTooltipPosition]="'above'"
-                                                        matTooltipClass="tooltip-black"
                                                     >
                                                         {{ localeData?.c_f }}: {{ localeData?.cr | uppercase }}
                                                         <span class="d-inline-flex">
@@ -568,7 +563,6 @@
                                                                 ' : ' +
                                                                 vm.selectedLedger.attachedFileName
                                                             "
-                                                            matTooltipClass="tooltip-black"
                                                             (click)="downloadFiles('ATTACHMENT', $event)"
                                                         >
                                                             <i class="icon-attachment pull-left"></i>
@@ -594,7 +588,6 @@
                                                                 (vm.selectedLedger.voucherNumber ||
                                                                     commonLocaleData?.app_not_available)
                                                             "
-                                                            matTooltipClass="tooltip-black"
                                                             (click)="downloadFiles('VOUCHER', $event)"
                                                         >
                                                             <i class="icon-download-circle pull-left"></i>
@@ -609,7 +602,6 @@
                                                             (click)="openAttachmentsDialog(attachments, true)"
                                                             [matTooltip]="vm.selectedLedger.attachedFileName"
                                                             [matTooltipPosition]="'above'"
-                                                            matTooltipClass="tooltip-black"
                                                         >
                                                             <i class="icon-attachment left"></i>
                                                         </span>
@@ -642,7 +634,6 @@
                                                                     : vm.selectedLedger.voucherNumber ||
                                                                       commonLocaleData?.app_not_available
                                                             "
-                                                            matTooltipClass="tooltip-black"
                                                         >
                                                             <i class="icon-eye pull-left"></i>
                                                         </span>
@@ -697,7 +688,6 @@
                                                             class="primary-color pr-1 pl-1 d-inline-flex"
                                                             [matTooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
                                                             [matTooltipPosition]="'above'"
-                                                            matTooltipClass="tooltip-black"
                                                         >
                                                             <amount-field
                                                                 [amount]="vm.compoundTotal"
@@ -876,7 +866,6 @@
                                                 [matTooltip]="
                                                     localeData?.download_file + ':' + vm.selectedLedger.attachedFileName
                                                 "
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
                                             </span>
@@ -902,7 +891,6 @@
                                                         commonLocaleData?.app_not_available)
                                                 "
                                                 (click)="downloadFiles('VOUCHER', $event)"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
@@ -915,7 +903,6 @@
                                                 (click)="openAttachmentsDialog(attachments, true)"
                                                 [matTooltip]="vm.selectedLedger.attachedFileName"
                                                 [matTooltipPosition]="'above'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment left"></i>
                                             </span>
@@ -948,7 +935,6 @@
                                                             : vm.selectedLedger.voucherNumber ||
                                                               commonLocaleData?.app_not_available
                                                     "
-                                                    matTooltipClass="tooltip-black"
                                                 >
                                                     <i class="icon-eye pull-left"></i>
                                                 </span>
@@ -1002,7 +988,6 @@
                                                 class="pd-1"
                                                 [matTooltip]="vm.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'above'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 {{ localeData?.c_f }}: {{ localeData?.cr | uppercase }}
                                                 <span class="d-inline-flex">
@@ -1176,7 +1161,6 @@
                                                     ' : ' +
                                                     vm.selectedLedger.attachedFileName
                                                 "
-                                                matTooltipClass="tooltip-black"
                                                 (click)="downloadFiles('ATTACHMENT', $event)"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
@@ -1202,7 +1186,6 @@
                                                     (vm.selectedLedger.voucherNumber ||
                                                         commonLocaleData?.app_not_available)
                                                 "
-                                                matTooltipClass="tooltip-black"
                                                 (click)="downloadFiles('VOUCHER', $event)"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
@@ -1217,7 +1200,6 @@
                                                 (click)="openAttachmentsDialog(attachments, true)"
                                                 [matTooltip]="vm.selectedLedger.attachedFileName"
                                                 [matTooltipPosition]="'above'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment left"></i>
                                             </span>
@@ -1250,7 +1232,6 @@
                                                             : vm.selectedLedger.voucherNumber ||
                                                               commonLocaleData?.app_not_available
                                                     "
-                                                    matTooltipClass="tooltip-black"
                                                 >
                                                     <i class="icon-eye pull-left"></i>
                                                 </span>
@@ -1305,7 +1286,6 @@
                                                     class="primary-color pr-1 pl-1 d-inline-flex"
                                                     [matTooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
                                                     [matTooltipPosition]="'above'"
-                                                    matTooltipClass="tooltip-black"
                                                 >
                                                     <amount-field
                                                         [amount]="vm.compoundTotal"
