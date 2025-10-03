@@ -4,7 +4,103 @@ import { MessageBoxOptions, dialog, BrowserWindow } from 'electron';
 let updater;
 let isManualCheck = false;
 let isCheckingForUpdates = false;
-let downloadProgressDialog = null;
+let downloadProgressWindow = null;
+
+// Function to create progress window
+function createProgressWindow() {
+    if (downloadProgressWindow) {
+        downloadProgressWindow.close();
+    }
+    
+    downloadProgressWindow = new BrowserWindow({
+        width: 400,
+        height: 200,
+        resizable: false,
+        minimizable: false,
+        maximizable: false,
+        alwaysOnTop: true,
+        center: true,
+        show: false,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true
+        }
+    });
+    
+    // Create HTML content for progress window
+    const progressHTML = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Downloading Update</title>
+            <style>
+                body { 
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    margin: 0; 
+                    padding: 20px; 
+                    background: #f5f5f5;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    height: 160px;
+                }
+                .container { text-align: center; }
+                .title { font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #333; }
+                .progress-bar { 
+                    width: 100%; 
+                    height: 8px; 
+                    background: #e0e0e0; 
+                    border-radius: 4px; 
+                    overflow: hidden;
+                    margin-bottom: 10px;
+                }
+                .progress-fill { 
+                    height: 100%; 
+                    background: #007AFF; 
+                    width: 0%; 
+                    transition: width 0.3s ease;
+                }
+                .progress-text { font-size: 14px; color: #666; margin-bottom: 5px; }
+                .speed-text { font-size: 12px; color: #999; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="title">Downloading Update</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Preparing download...</div>
+                <div class="speed-text" id="speedText"></div>
+            </div>
+        </body>
+        </html>
+    `;
+    
+    downloadProgressWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(progressHTML)}`);
+    
+    downloadProgressWindow.once('ready-to-show', () => {
+        downloadProgressWindow.show();
+    });
+    
+    downloadProgressWindow.on('closed', () => {
+        downloadProgressWindow = null;
+    });
+    
+    return downloadProgressWindow;
+}
+
+// Function to update progress window
+function updateProgressWindow(percent, transferred, total, speed) {
+    if (downloadProgressWindow && !downloadProgressWindow.isDestroyed()) {
+        downloadProgressWindow.webContents.executeJavaScript(`
+            document.getElementById('progressFill').style.width = '${percent}%';
+            document.getElementById('progressText').textContent = '${percent}% (${transferred}MB / ${total}MB)';
+            document.getElementById('speedText').textContent = 'Speed: ${speed} KB/s';
+        `);
+    }
+}
+
 export default class AppUpdaterV1 {
     public isUpdateDownloaded: boolean = false;
 
@@ -23,8 +119,13 @@ export default class AppUpdaterV1 {
         console.log('AppUpdater configured with S3 bucket: giddh-app-builds');
 
         // Handle update available - different behavior for manual vs automatic
-        autoUpdater.on('update-available', () => {
+        autoUpdater.on('update-available', (info) => {
             console.log('Update available detected. isManualCheck:', isManualCheck, 'updater:', !!updater, 'isCheckingForUpdates:', isCheckingForUpdates);
+            console.log('Update info:', {
+                version: info.version,
+                releaseDate: info.releaseDate,
+                downloadSize: info.files?.[0]?.size ? `${Math.round(info.files[0].size / 1024 / 1024)}MB` : 'Unknown'
+            });
             
             // Prevent multiple simultaneous dialogs
             if (isCheckingForUpdates) {
@@ -48,14 +149,8 @@ export default class AppUpdaterV1 {
                         // User clicked "Sure"
                         console.log('Starting manual download...');
                         
-                        // Show download progress dialog
-                        downloadProgressDialog = dialog.showMessageBox({
-                            type: 'info',
-                            title: 'Downloading Update',
-                            message: 'Downloading update... 0%',
-                            buttons: ['Cancel'],
-                            defaultId: 0
-                        });
+                        // Show download progress window
+                        createProgressWindow();
                         
                         try {
                             autoUpdater.downloadUpdate();
@@ -103,14 +198,8 @@ export default class AppUpdaterV1 {
                         // User clicked OK - download immediately
                         console.log('Starting download...');
                         
-                        // Show download progress dialog
-                        downloadProgressDialog = dialog.showMessageBox({
-                            type: 'info',
-                            title: 'Downloading Update',
-                            message: 'Downloading update... 0%',
-                            buttons: ['Cancel'],
-                            defaultId: 0
-                        });
+                        // Show download progress window
+                        createProgressWindow();
                         
                         try {
                             autoUpdater.downloadUpdate();
@@ -159,7 +248,17 @@ export default class AppUpdaterV1 {
         // Handle checking for updates
         autoUpdater.on('checking-for-update', () => {
             console.log('Checking for update...');
+            console.log('Current app version:', require('./package.json').version);
+            console.log('Update server URL: S3 bucket giddh-app-builds');
         });
+
+        // Add periodic update checking (every 10 minutes)
+        setInterval(() => {
+            if (!isCheckingForUpdates && !isManualCheck) {
+                console.log('Periodic update check...');
+                autoUpdater.checkForUpdates();
+            }
+        }, 10 * 60 * 1000); // 10 minutes
 
         // Handle download progress
         autoUpdater.on('download-progress', (progressObj) => {
@@ -179,20 +278,19 @@ export default class AppUpdaterV1 {
                 updater.label = `Downloading... ${percent}%`;
             }
             
-            // Update progress dialog if it exists
-            if (downloadProgressDialog) {
-                // Note: Electron's showMessageBox doesn't support dynamic updates
-                // We'll handle this in the download-started event instead
-                console.log(`Progress dialog should show: ${percent}% (${transferred}MB/${total}MB) at ${speed} KB/s`);
-            }
+            // Update progress window with real-time data
+            updateProgressWindow(percent, transferred, total, speed);
         });
 
         // Handle download errors
         autoUpdater.on('error', (error) => {
             console.error('Update error:', error);
             
-            // Clean up progress dialog
-            downloadProgressDialog = null;
+            // Clean up progress window
+            if (downloadProgressWindow && !downloadProgressWindow.isDestroyed()) {
+                downloadProgressWindow.close();
+            }
+            downloadProgressWindow = null;
             
             if (updater) {
                 updater.label = 'Check For Latest Update';
@@ -219,8 +317,11 @@ export default class AppUpdaterV1 {
         autoUpdater.on('update-downloaded', (event: UpdateDownloadedEvent) => {
             console.log('Update downloaded successfully');
             
-            // Clean up progress dialog
-            downloadProgressDialog = null;
+            // Clean up progress window
+            if (downloadProgressWindow && !downloadProgressWindow.isDestroyed()) {
+                downloadProgressWindow.close();
+            }
+            downloadProgressWindow = null;
             
             // Re-enable menu item and reset label
             if (updater) {
@@ -280,7 +381,18 @@ export default class AppUpdaterV1 {
             console.log('- autoDownload:', autoUpdater.autoDownload);
             console.log('- Feed URL configured for S3 bucket: giddh-app-builds');
             console.log('- electron-updater version: 6.3.4');
-            autoUpdater.checkForUpdates();
+            console.log('- Current app version:', require('./package.json').version);
+            
+            // Test network connectivity before checking updates
+            console.log('Testing network connectivity...');
+            autoUpdater.checkForUpdates().catch((error) => {
+                console.error('Initial update check failed:', error);
+                console.log('Will retry in 5 minutes...');
+                setTimeout(() => {
+                    console.log('Retrying update check...');
+                    autoUpdater.checkForUpdates();
+                }, 5 * 60 * 1000); // 5 minutes
+            });
         }, 3000);
     }
 }
