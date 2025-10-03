@@ -11,7 +11,7 @@
                 class="position-absolute"
                 [pageHeading]="
                     lc?.activeAccount?.name
-                        ? (!isMobileScreen ? localeData?.page_heading : '') +
+                        ? (!isTabletScreen ? localeData?.page_heading : '') +
                           lc?.activeAccount?.name +
                           ' ' +
                           commonLocaleData?.app_ac
@@ -20,7 +20,7 @@
             >
             </hamburger-menu>
             <section class="container-fluid ledger-section pd-t15" [hidden]="isShowLedgerColumnarReportTable">
-                <div class="custom-tabs mt-2 mb-2 position-static" *ngIf="isMobileScreen && ledgerView == ledgerViewEnum.TView">
+                <div class="custom-tabs mt-2 mb-2 position-static" *ngIf="isTabletScreen && ledgerView == ledgerViewEnum.TView">
                     <ul class="nav nav-tabs pt-0">
                         <li [ngClass]="{ 'active': visibleTransactionTypeMobile === 'all' }">
                             <a
@@ -62,7 +62,7 @@
                                 <!-- please remove hidden attribute after functionality works -->
                                 <div
                                     class="select-all-icons"
-                                    *ngIf="checkedTrxWhileHovering?.length > 0 && isMobileScreen"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0 && isTabletScreen"
                                 >
                                     <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering?.length > 0 && (ledgerView == ledgerViewEnum.TView)">
                                         <mat-checkbox
@@ -163,7 +163,7 @@
                                     <a
                                         aria-label="clear"
                                         class="cp mr-l1 clear-filter-btn"
-                                        *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
+                                        *ngIf="(searchText || isAdvanceSearchImplemented) && isTabletScreen && (ledgerView == ledgerViewEnum.StatementView)"
                                         href="javascript:;"
                                         (click)="resetAdvanceSearch()"
                                         [matTooltip]="commonLocaleData?.app_reset_advance_search"
@@ -179,7 +179,7 @@
                                     class="ledger-datepicker"
                                     id="giddh-datepicker-mobile-view mr-r05"
                                     container="body"
-                                    *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
+                                    *ngIf="isTabletScreen && (ledgerView == ledgerViewEnum.StatementView)"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #mobileUniversalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -227,7 +227,7 @@
                                     aria-label="clear"
                                     class="cp clear-filter-btn"
                                     id="clear-filter"
-                                    *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
+                                    *ngIf="isAdvanceSearchImplemented && !isTabletScreen"
                                     href="javascript:;"
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
@@ -238,7 +238,7 @@
                                 </button>
                                 <div
                                     class="d-flex xs-mb-1 column-gap1"
-                                    *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0 && !isTabletScreen"
                                 >
                                     <button
                                         aria-label="delete"
@@ -300,7 +300,7 @@
                                     />
                                 </div>
 
-                                <ng-container *ngIf="isMobileScreen">
+                                <ng-container *ngIf="isTabletScreen">
                                     <button
                                         aria-label="threedots"
                                         mat-stroked-button
@@ -342,7 +342,7 @@
                                     showBranchSwitcher &&
                                     currentCompanyBranches?.length > 2 &&
                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                                    isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)
+                                    isTabletScreen && (ledgerView == ledgerViewEnum.StatementView)
                                 "
                             >
                                 <div class="form-group">
@@ -353,7 +353,7 @@
 
                         <div
                             class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center date-range-options d-flex justify-content-center align-items-center"
-                            *ngIf="!isMobileScreen"
+                            *ngIf="!isTabletScreen"
                         >
                             <div
                                 class="advance-search-by-date date-advance-search ledger-date"
@@ -404,7 +404,7 @@
                         <!-- endregion -->
                         <div
                             class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-right C-flex-end align-items-center search-options"
-                            *ngIf="!isMobileScreen"
+                            *ngIf="!isTabletScreen"
                         >
                             <div class="d-flex xs-width-100 ledger-head-top">
                                 <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advance-search-block">
@@ -593,7 +593,7 @@
                          </div>
                     </div>
                     <div
-                        *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
+                        *ngIf="isLedgerAccountAllowsMultiCurrency && isTabletScreen && (ledgerView == ledgerViewEnum.StatementView)"
                         class="advance-search-block mr-t05"
                     >
                         <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
@@ -611,7 +611,7 @@
 
                     <!-- region bank ledgers-->
                     <div class="clearfix"></div>
-                    <div *ngIf="!isMobileScreen">
+                    <div *ngIf="!isTabletScreen">
                         <h1 class="mr-t2 primary-color" [hidden]="!isBankTransactionLoading">
                             {{ localeData?.loading_transactions }}
                         </h1>
@@ -1268,12 +1268,12 @@
                         cols="2"
                         rowHeight="50px"
                         class="ledger-head"
-                        *ngIf="ledgerView == ledgerViewEnum?.TView && !isMobileScreen || (isMobileScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile !== 'all')"
+                        *ngIf="ledgerView == ledgerViewEnum?.TView && !isTabletScreen || (isTabletScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile !== 'all')"
                     >
                         <mat-grid-tile
                             [ngClass]="
-                                (Shown && !isMobileScreen) ||
-                                (isMobileScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'debit')
+                                (Shown && !isTabletScreen) ||
+                                (isTabletScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'debit')
                                     ? 'active'
                                     : ''
                             "
@@ -1284,8 +1284,8 @@
                         </mat-grid-tile>
                         <mat-grid-tile
                             [ngClass]="
-                                (!Shown && !isMobileScreen) ||
-                                (isMobileScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'credit')
+                                (!Shown && !isTabletScreen) ||
+                                (isTabletScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'credit')
                                     ? 'active'
                                     : ''
                             "
@@ -1296,14 +1296,14 @@
                         </mat-grid-tile>
                     </mat-grid-list>
                     <ng-container *ngIf="ledgerView == ledgerViewEnum?.StatementView">
-                        <div class="ledger-book" *ngIf="isMobileScreen">
+                        <div class="ledger-book" *ngIf="isTabletScreen">
                             <!-- Statement View for Mobile -->
                             <ng-container *ngTemplateOutlet="ledgerStatementView"></ng-container>
                         </div>
                     </ng-container>
 
                     <!-- endregion -->
-                    <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.TView)">
+                    <div class="mobile-ledger-view clearfix" *ngIf="isTabletScreen && (ledgerView == ledgerViewEnum.TView)">
                         <ng-container *ngIf="allTransactionDates && allTransactionDates.length > 0">
                             <ng-container *ngFor="let transactionDate of allTransactionDates">
                                 <div class="border-none pt-0 pb-0 pd-l15 pd-r15">
@@ -1469,7 +1469,7 @@
                     </div>
                     <!-- end mobile view -->
                     <!-- region main transactions-->
-                    <div class="ledger-book" *ngIf="!isMobileScreen">
+                    <div class="ledger-book" *ngIf="!isTabletScreen">
                         <ng-container *ngIf="ledgerView == ledgerViewEnum.TView; else statementView">
                         <!-- region debit transaction-->
                         <div

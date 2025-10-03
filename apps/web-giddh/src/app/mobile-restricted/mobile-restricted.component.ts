@@ -5,6 +5,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
+import { BREAKPOINT_SCREEN_SIZE } from "../app.constant";
 
 @Component({
     selector: 'mobile-restricted',
@@ -24,9 +25,9 @@ export class MobileRestrictedComponent {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-blue-logo.svg';
         this.breakpointObserver.observe([
-            '(min-width: 768px)'
+            BREAKPOINT_SCREEN_SIZE.MOBILE
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result?.matches) {
+            if (!result?.breakpoints[BREAKPOINT_SCREEN_SIZE.MOBILE]) {
                 this.router.navigate(['/home']);
             }
         });

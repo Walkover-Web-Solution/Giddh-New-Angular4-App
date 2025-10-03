@@ -330,7 +330,7 @@
                         </div>
                         <div
                             class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
-                            *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
+                            *ngIf="isTabletScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
                         >
                             <div class="custom-datepicker-wrapper">
                             <div 
@@ -350,14 +350,14 @@
                     <div class="contact-main customer-page on-mobile-view overflow-visible">
                         <div class="pd-b2 mr-b1 overflow-visible">
                             <div class="overflow-visible">
-                                <div *ngIf="!isMobileScreen && !isGetAccountsInProcess">
+                                <div *ngIf="!isTabletScreen && !isGetAccountsInProcess">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
 
-                                <giddh-page-loader *ngIf="!isMobileScreen && isGetAccountsInProcess">
+                                <giddh-page-loader *ngIf="!isTabletScreen && isGetAccountsInProcess">
                                 </giddh-page-loader>
 
-                                <div *ngIf="isMobileScreen">
+                                <div *ngIf="isTabletScreen">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
                             </div>
@@ -622,7 +622,7 @@
                                     </div>
                                     <button
                                         mat-menu-item
-                                        *ngIf="!isMobileScreen"
+                                        *ngIf="!isTabletScreen"
                                         class="menu-table-item"
                                         (click)="performActions(1, account)"
                                         aria-label="ledger"
@@ -1029,7 +1029,7 @@
                                         </div>
                                         <button
                                             mat-menu-item
-                                            *ngIf="!isMobileScreen"
+                                            *ngIf="!isTabletScreen"
                                             class="menu-table-item"
                                             (click)="performActions(1, account)"
                                             aria-label="ledger"

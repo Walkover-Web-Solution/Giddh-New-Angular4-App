@@ -94,7 +94,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public activeAccountDetails: any;
     public allSelectionModel: boolean = false;
     public localStorageKeysForFilters = { customer: "customerFilterStorageV2", vendor: "vendorFilterStorageV2" };
-    public isMobileScreen: boolean = false;
+    /** True if the device is a tablet screen */
+    public isTabletScreen: boolean = false;
     public isICICIIntegrated: boolean = false;
     public selectedWhileHovering: string;
     public searchLoader$: Observable<boolean>;
@@ -301,9 +302,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             BREAKPOINT_SCREEN_SIZE.TAB
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB]) {
-                this.isMobileScreen = true;
+                this.isTabletScreen = true;
             } else {
-                this.isMobileScreen = false;
+                this.isTabletScreen = false;
             }
         });
 

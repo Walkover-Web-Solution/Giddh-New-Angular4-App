@@ -14,21 +14,17 @@
                 </div>
             </div>
             <div class="help-aside-body">
-                <div class="back-to-main-slider" [ngClass]="{ 'setting-close-icon': isMobileScreen }">
+                <div class="back-to-main-slider">
                     <a href="javascript:;" aria-label="back icon">
                         <span
                             class="d-flex align-items-center"
-                            *ngIf="!isMobileScreen && !showSettingHeading"
+                            *ngIf="!showSettingHeading"
                             (click)="goToPreviousPage()"
                             aria-label="back"
                             role="button"
                         >
                             <i class="icon-left font-22"></i>
                             <span>{{ commonLocaleData?.app_back }}</span>
-                        </span>
-                        <span *ngIf="isMobileScreen" (click)="closeAsidePane($event)">
-                            <i class="icon-cross"></i>
-                            {{ localeData?.setting }}
                         </span>
                     </a>
                 </div>

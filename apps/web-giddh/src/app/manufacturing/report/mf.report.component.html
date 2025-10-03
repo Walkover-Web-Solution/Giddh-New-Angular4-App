@@ -1,6 +1,6 @@
 <section id="manufacture" class="clearfix">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
-    <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
+    <div class="clearfix mr-r15 create-btn" *ngIf="isTabletScreen">
         <div class="mr-r15" *ngIf="showClearFilter()">
             <label class="d-none">&nbsp;</label>
             <button mat-stroked-button type="button" (click)="clearFilters()">Clear Filter</button>
@@ -92,7 +92,7 @@
                                 ? 'col-xl-6 col-lg-4'
                                 : 'col-xl-9 col-lg-8'
                         "
-                        *ngIf="!isMobileScreen"
+                        *ngIf="!isTabletScreen"
                     >
                         <div
                             class="d-flex"
