@@ -267,12 +267,12 @@
     height: 97%;
     justify-content: space-around;
     background-color: var(--color-white);
-    p/* UNUSED COMPONENT CLASS: total-price - Auto-commented by script
+    /* p UNUSED COMPONENT CLASS: total-price - Auto-commented by script
 .total-price {
         margin: 0 -8px;
     }
 */
-    .btn-green/* UNUSED COMPONENT CLASS: btn-round - Auto-commented by script
+    /* .btn-green UNUSED COMPONENT CLASS: btn-round - Auto-commented by script
 .btn-round {
         padding: 6px 30px;
         display: block;
@@ -353,7 +353,6 @@
         padding: 6px 60px;
         margin: 10px 0;
     }
-*/
 }
 */
 .transactions-popup {
@@ -870,7 +869,7 @@
     }
 }
 @media screen and (min-width: 768px) and (orientation: portrait) {
-    .plan-td/* UNUSED COMPONENT CLASS: mat-cell - Auto-commented by script
+    .plan-/* td UNUSED COMPONENT CLASS: mat-cell - Auto-commented by script
 .mat-cell:nth-child(even) {
         padding-left: 104px !important;
         padding-right: 106px !important;

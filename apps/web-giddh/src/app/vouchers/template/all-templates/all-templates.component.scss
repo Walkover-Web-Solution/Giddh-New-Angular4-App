@@ -107,7 +107,7 @@ p {
 #default /* UNUSED COMPONENT CLASS: meta - Auto-commented by script
 .meta {
     padding: 0 10px;
-    /* margin-bottom: 10px; */
+  //  margin-bottom: 10px; 
 }
 */
 
@@ -242,7 +242,7 @@ header img {
     border-top: 1px solid var(--color-silver);
 }
 /* UNUSED COMPONENT CLASS: tcs - Auto-commented by script
-/* tcs */
+ // tcs 
 .tcs hr {
     margin-top: 50px;
     width: 100%;
@@ -436,7 +436,6 @@ header img {
     z-index: 0;
 }
 /* UNUSED COMPONENT CLASS: qr-image - Auto-commented by script
-*/
 
 #default header .qr-image img {
     width: 160px;
