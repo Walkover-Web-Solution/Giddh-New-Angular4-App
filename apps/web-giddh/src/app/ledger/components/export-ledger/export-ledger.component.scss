@@ -7,10 +7,12 @@
 .show-columnar-button {
     display: inline-block;
 }
-textarea.receipient-email {
+textarea/* UNUSED COMPONENT CLASS: receipient-email - Auto-commented by script
+.receipient-email {
     width: 98%;
     height: 42px;
 }
+*/
 
 .export-border {
     &::after {

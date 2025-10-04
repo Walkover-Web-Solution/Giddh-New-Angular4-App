@@ -1,7 +1,9 @@
+/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
 .modal-header {
     padding-left: 20px;
     padding-right: 20px;
 }
+*/
 .all-features-list {
     margin-bottom: 30px;
     li {
@@ -21,13 +23,15 @@
             margin-right: 0;
             margin-left: 6px;
         }
-        i.icon-back-arrow {
+        i/* UNUSED COMPONENT CLASS: icon-back-arrow - Auto-commented by script
+.icon-back-arrow {
             transform: rotate(180deg);
             display: none;
             font-size: 12px;
             float: left;
             margin-right: 0;
         }
+*/
     }
 }
 .money-back-guarantee {
@@ -51,9 +55,11 @@
     }
 }
 @media only screen and (max-width: 1360px) and (min-width: 767px) {
-    .inventory-last-box {
+    /* UNUSED COMPONENT CLASS: inventory-last-box - Auto-commented by script
+.inventory-last-box {
         margin-top: 15px;
     }
+*/
     .inventory-last-box > div {
         width: 50%;
         float: left;

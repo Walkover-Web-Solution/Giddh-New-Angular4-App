@@ -50,9 +50,11 @@
                 }
             }
         }
-        .stock-display-wrapper {
+        /* UNUSED COMPONENT CLASS: stock-display-wrapper - Auto-commented by script
+.stock-display-wrapper {
             grid-column: 1/100;
         }
+*/
         .grid-list-div {
             height: 56px;
         }
@@ -134,21 +136,29 @@
 @media (max-width: 1180px) {
     .stock-balance-wrapper {
         .searching-stocks,
-        .stock-balance-top-bar {
+        /* UNUSED COMPONENT CLASS: stock-balance-top-bar - Auto-commented by script
+.stock-balance-top-bar {
             width: 101%;
         }
+*/
         .stock-balance-top-bar {
-            .stock-balance-top-bar-right-side {
+            /* UNUSED COMPONENT CLASS: stock-balance-top-bar-right-side - Auto-commented by script
+.stock-balance-top-bar-right-side {
                 margin-top: 0;
             }
+*/
         }
     }
 }
 
 .input-group {
-    .input-group-addon {
+    /* UNUSED COMPONENT CLASS: input-group - Auto-commented by script
+/* UNUSED COMPONENT CLASS: input-group-addon - Auto-commented by script
+.input-group-addon {
         border-left: 1px solid var(--color-silver) !important;
     }
+*/
+*/
 
     input {
         border-left: 1px solid var(--color-silver) !important;

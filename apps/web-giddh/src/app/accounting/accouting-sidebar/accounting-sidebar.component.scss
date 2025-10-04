@@ -1,17 +1,17 @@
-.appearance-none {
-    background: none !important;
-    border: 0 !important;
-    font-size: var(--font-size-15);
-    color: var(--color-black);
-}
+// .appearance-none {
+//     background: none !important;
+//     border: 0 !important;
+//     font-size: var(--font-size-15);
+//     color: var(--color-black);
+// }
 
-.sidebar-menu {
-    min-height: 100vh;
-    background: var(--color-black);
-    color: var(--color-white);
-    float: right;
-    position: relative;
-}
+// .sidebar-menu {
+//     min-height: 100vh;
+//     background: var(--color-black);
+//     color: var(--color-white);
+//     float: right;
+//     position: relative;
+// }
 
 .menu-list {
     padding: 0;
@@ -32,24 +32,26 @@
     background: var(--color-blue-light);
 }
 
-.menu-list li a.isHidden {
+.menu-list li a/* UNUSED COMPONENT CLASS: isHidden - Auto-commented by script
+.isHidden {
     color: var(--color-dark-gray);
 }
+*/
 
-.active-child {
-    background: var(--color-blue-light);
-    padding-left: 20px;
-}
+// .active-child {
+//     background: var(--color-blue-light);
+//     padding-left: 20px;
+// }
 
 .active-parent {
     background: var(--color-blue-light);
 }
 
-.active-child>span {
-    margin-right: 2px;
-}
+// .active-child>span {
+//     margin-right: 2px;
+// }
 
-.dblUnderlined {
-    border-bottom: 1px double;
-    text-decoration: underline;
-}
+// .dblUnderlined {
+//     border-bottom: 1px double;
+//     text-decoration: underline;
+// }

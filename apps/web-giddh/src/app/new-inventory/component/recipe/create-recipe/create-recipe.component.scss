@@ -7,19 +7,25 @@
             width: 280px;
         }
 
-        .edit-btn {
+        /* UNUSED COMPONENT CLASS: edit-btn - Auto-commented by script
+.edit-btn {
             width: 30px !important;
             height: 30px !important;
             line-height: 0px !important;
             font-size: 20px;
 
-            .icon-add {
+            /* UNUSED COMPONENT CLASS: icon-add - Auto-commented by script
+.icon-add {
                 color: var(--color-blue-primary);
             }
-            .icon-cross {
+*/
+            /* UNUSED COMPONENT CLASS: icon-cross - Auto-commented by script
+.icon-cross {
                 color: var(--color-red);
             }
+*/
         }
+*/
 
         hr {
             margin-left: -15px;
@@ -35,9 +41,11 @@
             margin-left: unset;
             margin-right: unset;
         }
-        .max-width-950 {
+        /* UNUSED COMPONENT CLASS: max-width-950 - Auto-commented by script
+.max-width-950 {
             max-width: 950px;
         }
+*/
         .manufacturing-border {
             border-bottom: 1px solid var(--color-silver);
         }
@@ -52,13 +60,17 @@
             top: 80px;
         }
         .form-fields {
-            .gap-between {
+            /* UNUSED COMPONENT CLASS: gap-between - Auto-commented by script
+.gap-between {
                 gap: 10px;
             }
-            .max-width-230 {
+*/
+            /* UNUSED COMPONENT CLASS: max-width-230 - Auto-commented by script
+.max-width-230 {
                 display: block;
                 width: auto;
             }
+*/
             small {
                 font-size: var(--font-size-12);
             }
@@ -143,9 +155,11 @@
 
                 .col-5 {
                     flex: unset !important;
-                    & ~ .col-5 {
+                    & ~ /* UNUSED COMPONENT CLASS: col-5 - Auto-commented by script
+.col-5 {
                         text-align: right;
                     }
+*/
                 }
             }
         }
@@ -156,28 +170,38 @@
             font-weight: 600;
             font-size: 44px;
         }
-        .custom-card {
+        /* UNUSED COMPONENT CLASS: custom-card - Auto-commented by script
+.custom-card {
             padding: 12px 15px;
             border-radius: 5px;
             min-width: 280px;
 
-            &.bg-green {
+            &/* UNUSED COMPONENT CLASS: bg-green - Auto-commented by script
+.bg-green {
                 background-color: var(--color-green-light);
                 color: var(--color-green);
             }
-            &.bg-vivid-gamboge {
+*/
+            &/* UNUSED COMPONENT CLASS: bg-vivid-gamboge - Auto-commented by script
+.bg-vivid-gamboge {
                 background-color: var(--color-orange-light);
                 color: var(--color-deep-orange);
             }
-            .card-head-text {
+*/
+            /* UNUSED COMPONENT CLASS: card-head-text - Auto-commented by script
+.card-head-text {
                 font-size: var(--font-size-12);
                 color: var(--color-dark-gray);
             }
-            .card-text {
+*/
+            /* UNUSED COMPONENT CLASS: card-text - Auto-commented by script
+.card-text {
                 font-size: var(--font-size-16);
                 font-weight: 500;
             }
+*/
         }
+*/
         .add-recipe {
             color: var(--color-blue-primary);
             border-bottom: 1px solid var(--color-silver);

@@ -5,9 +5,11 @@
     }
 }
 
-.mf-stock-search-request-form .col-xs-1 {
+.mf-stock-search-request-form /* UNUSED COMPONENT CLASS: col-xs-1 - Auto-commented by script
+.col-xs-1 {
     width: 11.33333333%;
 }
+*/
 
 #mfReportTbl .table .table td {
     border: none;
@@ -38,13 +40,17 @@
     }
 }
 
-#mfReportTbl .table td.noBdr {
+#mfReportTbl .table td/* UNUSED COMPONENT CLASS: noBdr - Auto-commented by script
+.noBdr {
     border: none;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: pdBth4 - Auto-commented by script
 .pdBth4 {
     padding: 0 40px;
 }
+*/
 .manufacture-table.giddh-table tbody > tr > td:first-child {
     white-space: nowrap !important;
 }
@@ -54,7 +60,8 @@
         padding: 0 10px;
     }
 }
-.no-btn.clear-filter {
+.no-btn/* UNUSED COMPONENT CLASS: clear-filter - Auto-commented by script
+.clear-filter {
     text-decoration: underline;
     font-weight: var(--font-weight-semibold);
     color: var(--color-dark-gray);
@@ -64,18 +71,25 @@
         outline: none !important;
     }
 }
+*/
 .manufacture-table {
-    .bd-rl {
+    /* UNUSED COMPONENT CLASS: bd-rl - Auto-commented by script
+.bd-rl {
         border-left: 1px solid var(--color-silver) !important;
     }
-    .bd-rr {
+*/
+    /* UNUSED COMPONENT CLASS: bd-rr - Auto-commented by script
+.bd-rr {
         border-right: 1px solid var(--color-silver) !important;
     }
-    td.raw-material {
+*/
+    td/* UNUSED COMPONENT CLASS: raw-material - Auto-commented by script
+.raw-material {
         background-color: var(--color-light-gray);
         line-height: 2;
         color: var(--color-dark-gray);
     }
+*/
     tr {
         &:hover {
             td.raw-material {
@@ -155,10 +169,12 @@
             flex: 0 0 21.666667%;
             max-width: 21.666667%;
         }
-        .col-xl-10 {
+        /* UNUSED COMPONENT CLASS: col-xl-10 - Auto-commented by script
+.col-xl-10 {
             flex: 0 0 78.333333%;
             max-width: 78.333333%;
         }
+*/
     }
     .linked-entities sh-select::ng-deep input {
         padding-right: 6px !important;
@@ -180,14 +196,18 @@
     .manufacturing-form .form-group {
         width: 100%;
     }
-    .d-none-sm {
+    /* UNUSED COMPONENT CLASS: d-none-sm - Auto-commented by script
+.d-none-sm {
         display: none !important;
     }
+*/
     .datepicker-flex,
-    .linked-entities {
+    /* UNUSED COMPONENT CLASS: linked-entities - Auto-commented by script
+.linked-entities {
         flex: 0 0 50%;
         max-width: 50%;
     }
+*/
     .no-branch-head {
         .col-xl-2 {
             flex: 0 0 50%;

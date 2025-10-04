@@ -9,11 +9,13 @@
         margin-top: 50px;
     }
 
-    .stocks-list-head {
+    /* UNUSED COMPONENT CLASS: stocks-list-head - Auto-commented by script
+.stocks-list-head {
         width: 100%;
         overflow: hidden;
         border-bottom: 1px solid var(--color-silver);
     }
+*/
 
     .stock-balance-top-bar {
         display: flex;
@@ -26,7 +28,8 @@
             display: flex;
             align-items: center;
 
-            .new-stock-btn {
+            /* UNUSED COMPONENT CLASS: new-stock-btn - Auto-commented by script
+.new-stock-btn {
                 color: var(--color-white);
                 background: var(--color-blue-primary);
                 padding: 0px 15px 0px 10px;
@@ -35,30 +38,38 @@
                     background-color: var(--color-blue-primary);
                 }
             }
+*/
 
             .search-warehouse-bar {
-                .search-img {
+                /* UNUSED COMPONENT CLASS: search-img - Auto-commented by script
+.search-img {
                     height: 15px;
                     width: auto;
                     position: absolute;
                     filter: invert(0);
                 }
+*/
             }
 
-            .warehouse-select-bar {
+            /* UNUSED COMPONENT CLASS: warehouse-select-bar - Auto-commented by script
+.warehouse-select-bar {
                 position: relative;
                 display: inline-block;
                 margin-left: 10px;
 
-                .search-warehouse-bar {
+                /* UNUSED COMPONENT CLASS: search-warehouse-bar - Auto-commented by script
+.search-warehouse-bar {
                     top: 14px;
                 }
+*/
             }
+*/
         }
 
         .stock-balance-top-bar-right-side {
             margin-top: 5px;
-            .export-btn {
+            /* UNUSED COMPONENT CLASS: export-btn - Auto-commented by script
+.export-btn {
                 padding: 0px 8px;
                 margin-right: 10px;
                 color: var(--color-blue-primary);
@@ -69,7 +80,9 @@
                     width: auto;
                 }
             }
-            .filter-btn {
+*/
+            /* UNUSED COMPONENT CLASS: filter-btn - Auto-commented by script
+.filter-btn {
                 border-radius: 5px;
                 min-width: 40px;
                 padding: 0px 7px;
@@ -82,6 +95,7 @@
                     filter: invert(0);
                 }
             }
+*/
         }
     }
     /**/
@@ -208,9 +222,11 @@
             float: left;
             height: 56px;
         }
-        .top-heading {
+        /* UNUSED COMPONENT CLASS: top-heading - Auto-commented by script
+.top-heading {
             height: 110px !important;
         }
+*/
         .grid-title-left {
             width: 240px;
             min-height: 56px;
@@ -227,15 +243,19 @@
             white-space: normal;
             background-color: var(--color-white);
         }
-        .grid-title-left-top {
+        /* UNUSED COMPONENT CLASS: grid-title-left-top - Auto-commented by script
+.grid-title-left-top {
             padding-top: 0.8% !important;
         }
-        .inner-name.inner-name-bold {
+*/
+        .inner-name/* UNUSED COMPONENT CLASS: inner-name-bold - Auto-commented by script
+.inner-name-bold {
             font-weight: 700;
             width: 100%;
             float: left;
             height: 100%;
         }
+*/
         .grid-title-list {
             color: var(--color-black) !important;
             line-height: 26px;
@@ -493,20 +513,28 @@
         }
     }
 }
+/* UNUSED COMPONENT CLASS: create-warehouse-btn - Auto-commented by script
 .create-warehouse-btn {
     background-color: var(--color-white);
 }
+*/
+/* UNUSED COMPONENT CLASS: select-all - Auto-commented by script
 .select-all {
     margin: 5px 17px;
 }
+*/
+/* UNUSED COMPONENT CLASS: manual-wrapper-content - Auto-commented by script
 .manual-wrapper-content {
     width: 387px;
 }
+*/
+/* UNUSED COMPONENT CLASS: stock-uniq - Auto-commented by script
 .stock-uniq {
     width: 50%;
     float: left;
     padding-left: 52px !important;
 }
+*/
 
 .warehouse-list-head {
     height: 60px;
@@ -537,24 +565,32 @@
             margin-left: 133px;
             color: var(--color-dark-gray);
 
-            .sort-img {
+            /* UNUSED COMPONENT CLASS: sort-img - Auto-commented by script
+.sort-img {
                 position: absolute;
                 height: 12.5px;
                 width: auto;
                 top: 5px;
             }
+*/
 
-            .opening-bal-sort-img {
+            /* UNUSED COMPONENT CLASS: opening-bal-sort-img - Auto-commented by script
+.opening-bal-sort-img {
                 left: 82px;
             }
+*/
 
-            .quantity-sort-img {
+            /* UNUSED COMPONENT CLASS: quantity-sort-img - Auto-commented by script
+.quantity-sort-img {
                 left: 60px;
             }
+*/
 
-            .unit-sort-img {
+            /* UNUSED COMPONENT CLASS: unit-sort-img - Auto-commented by script
+.unit-sort-img {
                 left: 30px;
             }
+*/
         }
         .d-flex {
             .flex-fill {
@@ -581,26 +617,34 @@
     align-items: center;
 }
 
+/* UNUSED COMPONENT CLASS: icon-pointer - Auto-commented by script
 .icon-pointer {
     padding-left: 5px;
     cursor: pointer;
 }
+*/
 .icon-pointer {
-    .icon-sort-asc {
+    /* UNUSED COMPONENT CLASS: icon-sort-asc - Auto-commented by script
+.icon-sort-asc {
         line-height: 20px;
         width: 15px;
         color: var(--color-dark-gray);
-        .active-text-color {
+        /* UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
+.active-text-color {
             color: var(--color-blue-primary);
         }
+*/
     }
+*/
 }
 .white-color {
     background-color: var(--color-white) !important;
 }
+/* UNUSED COMPONENT CLASS: gray-color - Auto-commented by script
 .gray-color {
     background-color: var(--color-light-gray) !important;
 }
+*/
 .expanded-stock-table-with-opacity {
     background-color: var(--color-light-gray);
 }
@@ -623,9 +667,13 @@
 }
 
 .input-group {
-    .input-group-addon {
+    /* UNUSED COMPONENT CLASS: input-group - Auto-commented by script
+/* UNUSED COMPONENT CLASS: input-group-addon - Auto-commented by script
+.input-group-addon {
         border-left: 1px solid var(--color-silver) !important;
     }
+*/
+*/
 
     input {
         border-left: 1px solid var(--color-silver) !important;

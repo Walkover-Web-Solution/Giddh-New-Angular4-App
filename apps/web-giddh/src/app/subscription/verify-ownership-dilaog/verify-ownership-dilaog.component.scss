@@ -6,18 +6,26 @@
         width: 65%;
 
         .view-subscription {
-            .view-right {
+            /* UNUSED COMPONENT CLASS: view-right - Auto-commented by script
+.view-right {
                 width: 150px;
                 flex-direction: column;
             }
+*/
         }
     }
 
-    .billing-account {
+    /* UNUSED COMPONENT CLASS: billing-account - Auto-commented by script
+.billing-account {
         width: 35%;
     }
+/* UNUSED COMPONENT CLASS: mat-mdc-card - Auto-commented by script
+*/
 
-        .mat-mdc-card.outline-card {
+        .mat-mdc-card/* UNUSED COMPONENT CLASS: outline-card - Auto-commented by script
+.outline-card {
             min-height: 215px !important;
         }
+*/
+*/
 }

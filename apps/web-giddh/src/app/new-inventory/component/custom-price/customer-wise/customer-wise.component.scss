@@ -116,9 +116,11 @@
                             color: var(--color-blue-primary) !important;
                         }
                     }
-                    .column-gap42 {
+                    /* UNUSED COMPONENT CLASS: column-gap42 - Auto-commented by script
+.column-gap42 {
                         column-gap: 42px;
                     }
+*/
                     table {
                         &:hover {
                             thead {
@@ -186,12 +188,14 @@
                                             transform: translateY(-50%);
                                         }
                                     }
-                                    &.variant-quantity {
+                                    &/* UNUSED COMPONENT CLASS: variant-quantity - Auto-commented by script
+.variant-quantity {
                                         @include setWidth(100px);
                                         @media (max-width: 1556px) {
                                             @include setWidth(160px);
                                         }
                                     }
+*/
                                     &.variant-delete {
                                         @include setWidth(60px);
                                         .delete-show {

@@ -13,9 +13,11 @@
             i {
                 margin-right: 2px;
             }
-            .mdc-button__label{
+            /* UNUSED COMPONENT CLASS: mdc-button__label - Auto-commented by script
+.mdc-button__label{
                 color: var(--color-white);
             }
+*/
         }
     }
     .section {
@@ -147,9 +149,11 @@
     cursor: not-allowed !important;
 }
 ::ng-deep {
-    .mat-list-item-content {
+    /* UNUSED COMPONENT CLASS: mat-list-item-content - Auto-commented by script
+.mat-list-item-content {
         height: auto !important;
         padding: 0px !important;
         align-items: flex-start !important;
     }
+*/
 }

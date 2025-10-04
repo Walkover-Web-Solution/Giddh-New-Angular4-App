@@ -17,13 +17,15 @@ p.bank-balance {
     margin-bottom: 10px;
 }
 
-a.connect-bank {
+a/* UNUSED COMPONENT CLASS: connect-bank - Auto-commented by script
+.connect-bank {
     color: var(--color-black);
     font-size: var(--font-size-15);
     text-decoration: underline;
     padding-top: 5px;
     display: block;
 }
+*/
 
 .bank-details-block {
     cdk-virtual-scroll-viewport {
@@ -58,8 +60,10 @@ p {
 
 .dashboard-filter {
     color: var(--color-dark-gray);
-    .icon-collapse-icon {
+    /* UNUSED COMPONENT CLASS: icon-collapse-icon - Auto-commented by script
+.icon-collapse-icon {
         margin-left: 8px;
         font-size: var(--font-size-15);
     }
+*/
 }

@@ -1,32 +1,44 @@
+/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
 .container-fluid {
     padding-left: 0;
     padding-right: 0;
 }
+*/
+/* UNUSED COMPONENT CLASS: all-payment-side - Auto-commented by script
 .all-payment-side {
     margin: 0 !important;
     padding: 1rem !important;
 }
-:host .aside-pane {
+*/
+:host /* UNUSED COMPONENT CLASS: aside-pane - Auto-commented by script
+.aside-pane {
     max-width: 760px;
     width: 100%;
 }
+*/
+/* UNUSED COMPONENT CLASS: aside-header - Auto-commented by script
 .aside-header {
     background-color: var(--color-white);
     padding: 20px 10px;
 }
+*/
 .aside-pane {
     padding: 0;
     background-color: var(--color-white);
 }
+/* UNUSED COMPONENT CLASS: aside-title - Auto-commented by script
 .aside-title {
     padding-bottom: 0;
     border-bottom: none;
 }
+*/
+/* UNUSED COMPONENT CLASS: creditors-detail - Auto-commented by script
 .creditors-detail {
     padding: 10px;
     background-color: var(--color-light-gray);
     line-height: 1.6;
 }
+*/
 .creditors-detail > p {
     font-size: var(--font-size-15);
     color: var(--color-black);
@@ -34,36 +46,47 @@
 .creditors-detail span.red-text {
     color: var(--color-red);
 }
+/* UNUSED COMPONENT CLASS: contact-details - Auto-commented by script
 .contact-details p {
     font-size: var(--font-size-12);
     color: var(--color-black);
 }
+*/
+/* UNUSED COMPONENT CLASS: account-details - Auto-commented by script
 .account-details {
     padding: 10px 0;
 }
+*/
 form label {
     font-size: var(--font-size-15);
     margin-bottom: 0;
 }
-.account-details .btn-default {
+.account-details /* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
+.btn-default {
     width: 100%;
     text-align: left;
     background-color: transparent;
     border: 1px solid var(--color-silver);
 }
-.account-details .btn-group {
+*/
+.account-details /* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
+.btn-group {
     width: 230px;
     display: block;
     text-align: left;
 }
+*/
 .account-details {
     padding: 10px;
 }
-.account-details span.caret {
+.account-details span/* UNUSED COMPONENT CLASS: caret - Auto-commented by script
+.caret {
     position: absolute;
     right: 20px;
     top: 14px;
 }
+*/
+/* UNUSED COMPONENT CLASS: aside-pane-form - Auto-commented by script
 .aside-pane-form {
     background-color: var(--color-white);
     box-shadow: 0px 3px 6px var(--color-shadow-light);
@@ -74,19 +97,24 @@ form label {
     position: relative;
     margin-top: 15px;
 }
+*/
 /*new css of new payemtndesign*/
+/* UNUSED COMPONENT CLASS: modal-title - Auto-commented by script
 .modal-title {
     color: var(--color-white);
 }
+*/
 .payment-top-form .d-flex .form-group {
     min-width: 190px;
 }
 .payment-top-form .d-flex .form-group:last-child {
     min-width: 220px;
 }
+/* UNUSED COMPONENT CLASS: pt-25 - Auto-commented by script
 .pt-25 {
     padding-top: 25px;
 }
+*/
 .payment-top-form {
     .form-group {
         margin-bottom: 0;
@@ -178,9 +206,11 @@ form label {
 .align-items-center {
     align-items: center;
 }
+/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
 .modal-header {
     height: 63px !important;
 }
+*/
 .confirm-btn {
     height: auto !important;
     .pay-btn{

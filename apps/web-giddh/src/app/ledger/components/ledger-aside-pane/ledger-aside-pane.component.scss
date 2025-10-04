@@ -1,4 +1,5 @@
-#close.close-btn-absolute {
+#close/* UNUSED COMPONENT CLASS: close-btn-absolute - Auto-commented by script
+.close-btn-absolute {
     position: absolute !important;
     left: auto !important;
     right: 0 !important;
@@ -9,6 +10,7 @@
     top: 9px !important;
     margin-right: 0;
 }
+*/
 :host {
     position: fixed;
     left: auto;
@@ -38,10 +40,12 @@
     display: block;
 }
 
-:host .container-fluid {
+:host /* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
+.container-fluid {
     padding-left: 0;
     padding-right: 0;
 }
+*/
 
 :host {
     .aside-pane {
@@ -51,13 +55,16 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: flexy-child - Auto-commented by script
 .flexy-child {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: vertical-align-middle - Auto-commented by script
 .vertical-align-middle {
     position: absolute;
     top: 50%;
@@ -70,6 +77,7 @@
     text-align: center;
     margin: 0 auto;
 }
+*/
 
 #back {
     display: none;

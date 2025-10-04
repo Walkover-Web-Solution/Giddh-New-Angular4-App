@@ -8,10 +8,14 @@
     max-height: 90vh;
 
     .mdc-list-item {
-        border-left: 3px solid transparent;
-        &.mdc-list-item--with-one-line {
+        /* UNUSED COMPONENT CLASS: mdc-list-item - Auto-commented by script
+border-left: 3px solid transparent;
+        &/* UNUSED COMPONENT CLASS: mdc-list-item--with-one-line - Auto-commented by script
+.mdc-list-item--with-one-line {
             --mdc-list-list-item-one-line-container-height: 42px;
         }
+*/
+*/
         &.active-option {
             border-left-color: 3px solid var(--color-blue-primary);
         }

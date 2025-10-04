@@ -4,7 +4,9 @@
 
 .dialog-content {
     height: calc(100% - 60px) !important;
-    &.mat-mdc-dialog-content{
+    &/* UNUSED COMPONENT CLASS: mat-mdc-dialog-content - Auto-commented by script
+.mat-mdc-dialog-content{
         max-height: unset !important;
     }
+*/
 }

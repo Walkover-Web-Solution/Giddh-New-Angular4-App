@@ -1,6 +1,8 @@
+/* UNUSED COMPONENT CLASS: item-padding - Auto-commented by script
 .item-padding {
     padding: 0 4px;
 }
+*/
 
 .edit-icon-position {
     top: -22px;
@@ -8,9 +10,11 @@
     z-index: 1;
 }
 
+/* UNUSED COMPONENT CLASS: height-30 - Auto-commented by script
 .height-30 {
     height: 30px;
 }
+*/
 
 .ledg-head.entry-popup table td.select2-ledger > sh-select {
     position: initial;
@@ -21,48 +25,64 @@ table.width-100 {
     position: relative;
 }
 
+/* UNUSED COMPONENT CLASS: currency-type - Auto-commented by script
 .currency-type {
     position: absolute;
     top: 50%;
     right: 6px;
     transform: translateY(-50%);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: multi-currency-input - Auto-commented by script
 .multi-currency-input {
     padding-right: 35px !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: model-header - Auto-commented by script
 .model-header {
     padding: 0 15px 0 15px;
 }
+*/
+/* UNUSED COMPONENT CLASS: mr-rl - Auto-commented by script
 .mr-rl {
     margin-left: 0;
     margin-right: 0;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
 .modal-header ng-select {
     width: 339px !important;
 }
+*/
 
 .modal-header ng-select div {
     border: 0;
     background-color: transparent;
 }
 
-.modal-header ng-select div a.ng-star-inserted {
+.modal-header ng-select div a/* UNUSED COMPONENT CLASS: ng-star-inserted - Auto-commented by script
+.ng-star-inserted {
     font-size: var(--font-size-16);
     color: var(--color-white);
 }
+*/
 
-.modal-header ng-select div i.fa.fa-caret-up::before {
+.modal-header ng-select div i.fa/* UNUSED COMPONENT CLASS: fa-caret-up - Auto-commented by script
+.fa-caret-up::before {
     color: var(--color-white);
     font-size: 24px;
 }
+*/
 
-ng-select > div i.fa.fa-caret-down::before {
+ng-select > div i.fa/* UNUSED COMPONENT CLASS: fa-caret-down - Auto-commented by script
+.fa-caret-down::before {
     color: var(--color-white);
     font-size: 20px;
 }
+*/
 
 ng-select > div a.ng-star-inserted {
     color: var(--color-white);
@@ -75,10 +95,12 @@ ng-select > div {
     border: none;
 }
 
+/* UNUSED COMPONENT CLASS: select-drop - Auto-commented by script
 ng-select .select-drop i.fa.fa-caret-up::before {
     color: var(--color-white);
     font-size: 20px;
 }
+*/
 
 .transaction-particular-name {
     width: 100%;
@@ -88,14 +110,18 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     color: var(--color-dark-gray);
 }
 
+/* UNUSED COMPONENT CLASS: notfound-option - Auto-commented by script
 .notfound-option.active {
     background: var(--color-border-light) !important;
     padding: 2px 5px !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: p-0 - Auto-commented by script
 .p-0 {
     padding: 0px !important;
 }
+*/
 
 .amount-total {
     font-size: var(--font-size-12);
@@ -174,16 +200,20 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     padding-left: 5px;
 }
 
+/* UNUSED COMPONENT CLASS: checkbox-custom-label - Auto-commented by script
 .checkbox-custom-label strong {
     display: contents;
 }
+*/
 
 .taxable-amount-section {
     display: inline-block;
     margin-bottom: 12px;
-    .itc-label {
+    /* UNUSED COMPONENT CLASS: itc-label - Auto-commented by script
+.itc-label {
         margin-bottom: 4px;
     }
+*/
 }
 
 .adjust-receipt {
@@ -193,13 +223,17 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     position: relative;
 }
 
+/* UNUSED COMPONENT CLASS: pd-r05 - Auto-commented by script
 .pd-r05 {
     padding-right: 5px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: pd-l05 - Auto-commented by script
 .pd-l05 {
     padding-left: 5px;
 }
+*/
 
 .ledger-bottom {
     display: flex;
@@ -232,11 +266,13 @@ ng-select .select-drop i.fa.fa-caret-up::before {
                     color: var(--color-dark-gray);
                     padding-right: 8px;
                 }
-                .remove-invoice-label {
+                /* UNUSED COMPONENT CLASS: remove-invoice-label - Auto-commented by script
+.remove-invoice-label {
                     vertical-align: middle;
                     color: var(--color-dark-gray);
                     font-size: var(--font-size-15);
                 }
+*/
             }
         }
     }
@@ -253,6 +289,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     cursor: pointer;
     padding: 8px 5px 0;
 }
+/* UNUSED COMPONENT CLASS: adjusted-info - Auto-commented by script
 .adjusted-info {
     background-color: var(--color-white);
     padding: 15px;
@@ -264,21 +301,30 @@ ng-select .select-drop i.fa.fa-caret-up::before {
         font-family: var(--font-family);
     }
 }
+*/
 .left-col-new .row,
 .right-col-new .row,
 .ledger-head .row {
     margin: 0;
 }
+/* UNUSED COMPONENT CLASS: show-if-ledger-open - Auto-commented by script
 .show-if-ledger-open {
     height: 300px;
 }
+*/
 .dropdown-container[disabled],
 .table-amount[disabled] {
     pointer-events: none;
 }
-#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white {
+/* UNUSED COMPONENT CLASS: sh-select-disabled - Auto-commented by script
+/* UNUSED COMPONENT CLASS: disabled-ledger - Auto-commented by script
+#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled /* UNUSED COMPONENT CLASS: bg-white - Auto-commented by script
+.bg-white {
     background-color: var(--color-border-light) !important;
 }
+*/
+*/
+*/
 #update-ledger-assign-tag.disabled-ledger::ng-deep input,
 #update-ledger-select-warehouse.disabled-ledger::ng-deep input,
 #update-ledger-price-input.disabled-ledger,
@@ -297,9 +343,11 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     width: 125px;
 }
 
+/* UNUSED COMPONENT CLASS: tax-width - Auto-commented by script
 .tax-width {
     width: 100px;
 }
+*/
 .delete-attachment {
     margin-right: 14px;
     margin-left: 7px;
@@ -365,9 +413,13 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     .last-table-amount {
         max-width: 100% !important;
     }
-    .ledger-book .h-table tbody .ledger-row td {
+    /* UNUSED COMPONENT CLASS: ledger-row - Auto-commented by script
+/* UNUSED COMPONENT CLASS: h-table - Auto-commented by script
+.ledger-book .h-table tbody .ledger-row td {
         padding-left: 80px !important;
     }
+*/
+*/
     .card-table tbody tr td {
         padding-left: 90px !important;
         margin-right: 10px !important;
@@ -393,9 +445,11 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     .entrypanel:before {
         display: none;
     }
-    .total-amount-ledger {
+    /* UNUSED COMPONENT CLASS: total-amount-ledger - Auto-commented by script
+.total-amount-ledger {
         width: 100%;
     }
+*/
     .xs-table-block {
         width: 100%;
         display: block;
@@ -451,15 +505,19 @@ ng-select .select-drop i.fa.fa-caret-up::before {
         text-align: right;
         margin: 10px 0;
     }
-    .entrypanel .bl-1 {
+    .entrypanel /* UNUSED COMPONENT CLASS: bl-1 - Auto-commented by script
+.bl-1 {
         border-left: 0;
     }
+*/
     .advanced input[type="checkbox"] {
         width: initial !important;
     }
-    .xs-pt-0 {
+    /* UNUSED COMPONENT CLASS: xs-pt-0 - Auto-commented by script
+.xs-pt-0 {
         padding-top: 0px !important;
     }
+*/
     .adjustment-field .pd-r05 {
         padding-right: 15px;
     }
@@ -502,15 +560,19 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 .mat-expansion-panel,
 .total-detail-table {
-    .mat-input-element {
+    /* UNUSED COMPONENT CLASS: mat-input-element - Auto-commented by script
+.mat-input-element {
         box-sizing: border-box !important;
     }
+*/
 }
 
+/* UNUSED COMPONENT CLASS: width-datepicker - Auto-commented by script
 .width-datepicker {
     width: 107px !important;
     margin-top: 7px;
 }
+*/
 
 @media screen and (max-width: 1653px) {
     .width-datepicker {
@@ -530,12 +592,16 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     }
     .ledg-head {
         .custom-tabs {
-            .nav.nav-tabs {
+            /* UNUSED COMPONENT CLASS: nav - Auto-commented by script
+.nav/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
+.nav-tabs {
                 width: 100%;
                 top: 0px !important;
                 padding-top: 0px !important;
                 left: 0px !important;
             }
+*/
+*/
         }
     }
     .ledger-book {

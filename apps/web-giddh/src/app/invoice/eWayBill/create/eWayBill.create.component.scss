@@ -50,21 +50,25 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: list-icon-group - Auto-commented by script
 .list-icon-group label {
     padding: 10px;
     margin-right: 15px;
     border-radius: 3px;
     cursor: pointer;
 }
+*/
 
 .list-icon-group input:checked + label {
     background-color: var(--color-white);
     box-shadow: 2px 2px 5px var(--color-shadow-light);
 }
 
+/* UNUSED COMPONENT CLASS: select-style - Auto-commented by script
 .select-style {
     width: 300px;
 }
+*/
 
 .select-style select {
     padding: 6px !important;
@@ -72,6 +76,7 @@
 }
 
 // modal css start
+/* UNUSED COMPONENT CLASS: aside-pane - Auto-commented by script
 .aside-pane {
     overflow: auto;
     width: 475px;
@@ -80,11 +85,13 @@
     right: 0;
     padding: 0px;
 }
+*/
 
 .aside-pane.aside-right.out button#close {
     right: -60px;
 }
 
+/* UNUSED COMPONENT CLASS: aside-right - Auto-commented by script
 .aside-right {
     font-size: var(--font-size-15);
     background: var(--color-white);
@@ -92,19 +99,26 @@
     transition: 0.5s all ease;
     z-index: 999;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: bg-white - Auto-commented by script
 .bg-white {
     background: var(--color-white) !important;
 }
+*/
 
-.aside-right .control-label {
+.aside-right /* UNUSED COMPONENT CLASS: control-label - Auto-commented by script
+.control-label {
     padding-left: 20px;
     text-align: left;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: bg-gray - Auto-commented by script
 .bg-gray {
     background: var(--color-light-gray);
 }
+*/
 
 .aside-right .list-icon-group label {
     margin: 0px !important;
@@ -134,9 +148,11 @@
     border-right: 1px solid var(--color-silver) !important;
 }
 
+/* UNUSED COMPONENT CLASS: table-modal - Auto-commented by script
 .table-modal {
     border-bottom: 1px solid var(--color-silver) !important;
 }
+*/
 
 .table-modal tbody tr td button {
     background: none;
@@ -152,10 +168,12 @@
     border-bottom: 2px solid var(--color-silver);
 }
 
-.aside-overlay.out {
+.aside-overlay/* UNUSED COMPONENT CLASS: out - Auto-commented by script
+.out {
     visibility: hidden;
     opacity: 0;
 }
+*/
 
 .aside-overlay.in {
     visibility: visible;
@@ -163,12 +181,16 @@
     z-index: 991;
 }
 
+/* UNUSED COMPONENT CLASS: aside-overlay - Auto-commented by script
 .aside-overlay {
     transition: 0.5s all ease;
     z-index: 991;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: date-input-icon - Auto-commented by script
 .date-input-icon {
     top: 9px;
     right: 8px;
 }
+*/

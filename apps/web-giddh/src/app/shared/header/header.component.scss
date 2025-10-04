@@ -1,16 +1,20 @@
+/* UNUSED COMPONENT CLASS: giddh-logo - Auto-commented by script
 .giddh-logo {
     width: 100px;
 }
+*/
 
 .company-button {
     background-color: var(--color-white);
 }
 
+/* UNUSED COMPONENT CLASS: custom-header - Auto-commented by script
 .custom-header {
     background-color: var(--color-blue-primary);
     padding: 15px;
     min-height: 60px;
 }
+*/
 
 .nav-left-bar {
     position: fixed;
@@ -24,17 +28,21 @@
     box-shadow: 1px 0px 4px var(--color-shadow-light) !important;
 }
 
+/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
 .nav-tabs {
     padding-top: 0;
 }
+*/
 
 .nav-left-bar.open {
     left: 0;
     width: 240px;
 
-    &.width-60 {
+    &/* UNUSED COMPONENT CLASS: width-60 - Auto-commented by script
+.width-60 {
         width: 60px;
     }
+*/
 }
 
 .menu-wrapper {
@@ -46,10 +54,12 @@
     overflow: hidden !important;
 }
 
+/* UNUSED COMPONENT CLASS: inner-tooltip - Auto-commented by script
 .inner-tooltip {
     white-space: nowrap !important;
     max-width: none !important;
 }
+*/
 
 .d-inline-block {
     display: inline-block !important;
@@ -82,6 +92,7 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: mega-menu - Auto-commented by script
 .mega-menu {
     display: flex;
     justify-content: space-between;
@@ -91,6 +102,7 @@
         color: var(--color-blue-primary) !important;
     }
 }
+*/
 
 .menu-dropdown-wrapper {
     padding: 0 30px 15px;
@@ -251,37 +263,47 @@ ul{
 }
 
 // top header css
+/* UNUSED COMPONENT CLASS: company-text - Auto-commented by script
 .company-text {
     padding: 6px 8px 6px 0 !important;
     overflow: hidden;
 }
+*/
 
-ul.sub-list {
+ul/* UNUSED COMPONENT CLASS: sub-list - Auto-commented by script
+.sub-list {
     min-height: 50px;
     max-height: 290px;
 }
+*/
 
 .upgrade-plan.list-inline > li {
     padding-left: 0 !important;
 }
 
+/* UNUSED COMPONENT CLASS: company-name - Auto-commented by script
 .nav-left-bar .company-name .company-text span {
     color: var(--color-black);
     word-break: break-all;
 }
+*/
 
-.nav-left-bar .company-name-finance-year {
+.nav-left-bar /* UNUSED COMPONENT CLASS: company-name-finance-year - Auto-commented by script
+.company-name-finance-year {
     display: inline;
     padding-left: 0;
     position: relative;
     top: -3px;
 }
+*/
 
-.nav-left-bar .company-name .branch-unique-name {
+.nav-left-bar .company-name /* UNUSED COMPONENT CLASS: branch-unique-name - Auto-commented by script
+.branch-unique-name {
     font-size: var(--font-size-12);
     color: var(--color-blue-primary) !important;
     padding: 0 0 3px 0;
 }
+*/
 
 .overlay-cal {
     background: rgba(43, 38, 38, 0.6901960784313725);
@@ -335,11 +357,13 @@ ul.sub-list {
         margin-right: 10px;
     }
 
-    span.icon-info-icon {
+    span/* UNUSED COMPONENT CLASS: icon-info-icon - Auto-commented by script
+.icon-info-icon {
         color: var(--color-medium-gray);
         font-size: var(--font-size-16);
         margin-right: 10px;
     }
+*/
 
     i.icon-traingle-info {
         color: var(--color-red);
@@ -366,9 +390,11 @@ ul.sub-list {
     }
 }
 
+/* UNUSED COMPONENT CLASS: branch-icon-tooltip - Auto-commented by script
 .branch-icon-tooltip {
     padding: 0 5px;
 }
+*/
 
 /*new header css starts*/
 .fixed-padding {
@@ -416,10 +442,12 @@ ul.sub-list {
         .icon-calender,
         .icon-plus,
         i,
-        .btn-link {
+        /* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
+.btn-link {
             color: var(--color-light-gray);
             position: static !important;
         }
+*/
 
         .not-today {
             .calendar-addon {
@@ -469,12 +497,14 @@ ul.sub-list {
                 }
             }
 
-            &.disable-icon {
+            &/* UNUSED COMPONENT CLASS: disable-icon - Auto-commented by script
+.disable-icon {
                 i {
                     color: var(--color-silver) !important;
                     cursor: no-drop;
                 }
             }
+*/
         }
     }
     .logo-wrapper {
@@ -510,9 +540,11 @@ aside-setting {
         right: 0;
         // z-index: 9991;
 
-        &.z-index-990 {
+        &/* UNUSED COMPONENT CLASS: z-index-990 - Auto-commented by script
+.z-index-990 {
             z-index: 990 !important;
         }
+*/
     }
 }
 
@@ -553,13 +585,17 @@ aside-setting {
 /* responsive */
 
 @media (max-width: 1023px) {
-    .modal-liq-90 {
+    /* UNUSED COMPONENT CLASS: modal-liq-90 - Auto-commented by script
+.modal-liq-90 {
         width: 100% !important;
     }
+*/
 
-    .logo-hide-ipad {
+    /* UNUSED COMPONENT CLASS: logo-hide-ipad - Auto-commented by script
+.logo-hide-ipad {
         display: none;
     }
+*/
 }
 
 @media (max-width: 840px) {
@@ -568,15 +604,19 @@ aside-setting {
         max-height: 190px;
     }
 
-    .sub-menu-nav {
+    /* UNUSED COMPONENT CLASS: sub-menu-nav - Auto-commented by script
+.sub-menu-nav {
         top: -60px;
     }
+*/
 }
 
 @media (min-width: 992px) {
-    .modal-lg {
+    /* UNUSED COMPONENT CLASS: modal-lg - Auto-commented by script
+.modal-lg {
         max-width: 100% !important;
     }
+*/
 }
 @media screen and (max-width: 1024px) {
     ul{
@@ -589,10 +629,12 @@ aside-setting {
         }
     }
 }
+/* UNUSED COMPONENT CLASS: schedule-now-link - Auto-commented by script
 .schedule-now-link {
     width: 1px;
     height: 1px;
 }
+*/
 .hide-sidebar {
     display: none;
 }

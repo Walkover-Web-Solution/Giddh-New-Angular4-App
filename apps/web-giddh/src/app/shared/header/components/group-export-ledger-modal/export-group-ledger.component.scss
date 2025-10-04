@@ -1,13 +1,18 @@
 .account-dialog {
-    .label-width {
+    /* UNUSED COMPONENT CLASS: label-width - Auto-commented by script
+.label-width {
         min-width: 220px;
     }
+*/
 
-    .toggle-width {
+    /* UNUSED COMPONENT CLASS: toggle-width - Auto-commented by script
+.toggle-width {
         min-width: 65px;
     }
+*/
 
-    .export-border {
+    /* UNUSED COMPONENT CLASS: export-border - Auto-commented by script
+.export-border {
         &::after {
             content: "";
             display: block;
@@ -20,4 +25,5 @@
             transform: translateY(-50%);
         }
     }
+*/
 }

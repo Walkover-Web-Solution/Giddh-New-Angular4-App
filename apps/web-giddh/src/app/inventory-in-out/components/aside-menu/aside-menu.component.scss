@@ -1,3 +1,4 @@
+/* UNUSED COMPONENT CLASS: buttons-container - Auto-commented by script
 .buttons-container {
     display: flex;
     justify-content: center;
@@ -5,6 +6,7 @@
     align-items: center;
     height: 100vh;
 }
+*/
 
 .buttons-container > * {
     margin: 20px;
@@ -35,10 +37,12 @@
     border-radius: 0;
 }
 
-:host .container-fluid {
+:host /* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
+.container-fluid {
     padding-left: 0;
     padding-right: 0;
 }
+*/
 
 :host .aside-pane {
     max-width: 480px;

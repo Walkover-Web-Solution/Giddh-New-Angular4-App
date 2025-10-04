@@ -25,13 +25,15 @@
         color: var(--color-blue-primary);
         cursor: pointer;
     }
-    .btn-success {
+    /* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
+.btn-success {
         background-color: var(--color-green);
         color: var(--color-white);
         &:hover {
             background-color: var(--color-green) !important;
         }
     }
+*/
     .download-button-status {
         min-width: 160px;
         max-width: 160px;
@@ -41,7 +43,8 @@
         width: 160px;
         min-width: 160px;
     }
-    .btn-filter {
+    /* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
+.btn-filter {
         background: var(--color-border-light);
         border: 1px solid var(--color-silver);
         font-size: var(--font-size-15);
@@ -51,4 +54,5 @@
         align-items: center;
         padding: 4px 10px;
     }
+*/
 }

@@ -1,7 +1,9 @@
+/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 @import "../../../assets/style/_mixin.scss";
 .dropdown-menu > li > a {
     padding: 2px 10px;
 }
+*/
 
 .customer-img {
     height: 360px;
@@ -12,13 +14,17 @@
     z-index: 101;
 }
 
+/* UNUSED COMPONENT CLASS: dis - Auto-commented by script
 .dis {
     display: flex;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: pd-1 - Auto-commented by script
 .pd-1 {
     padding: 5px;
 }
+*/
 
 .icon-pointer {
     margin-left: 6px;
@@ -32,19 +38,25 @@
     width: 200px;
 }
 
-.icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
+/* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
+.icon-pointer .d-block.font-xxs.glyphicon/* UNUSED COMPONENT CLASS: glyphicon-triangle-top - Auto-commented by script
+.glyphicon-triangle-top {
     line-height: 0.5;
     height: 8px;
 }
+*/
+*/
 
 .icon-pointer .font-xxs {
     font-size: 16px;
 }
 
+/* UNUSED COMPONENT CLASS: aging-table - Auto-commented by script
 .aging-table {
     width: 100%;
     background: transparent;
 }
+*/
 
 .wrap-searching-aging {
     display: none !important;
@@ -77,11 +89,14 @@ span.input-addon {
     top: 0;
 }
 
+/* UNUSED COMPONENT CLASS: aging-table-top - Auto-commented by script
 tr.aging-table-top td {
     padding: 8px 0;
     background-color: var(--color-white) !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: refresh-btn - Auto-commented by script
 .refresh-btn {
     width: 36px;
     height: 36px;
@@ -98,10 +113,13 @@ tr.aging-table-top td {
         display: flex;
         justify-content: center;
     }
-    .icon-refresh {
+    /* UNUSED COMPONENT CLASS: icon-refresh - Auto-commented by script
+.icon-refresh {
         color: var(--color-dark-gray);
     }
+*/
 }
+*/
 
 .name-width {
     width: 210px;
@@ -111,10 +129,13 @@ tr.aging-table-top td {
     display: none;
 }
 
+/* UNUSED COMPONENT CLASS: word-break - Auto-commented by script
 .word-break {
     word-break: break-word !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: input-container - Auto-commented by script
 .input-container {
     input {
         height: 36px;
@@ -127,14 +148,19 @@ tr.aging-table-top td {
         border-radius: 5px;
     }
 }
+*/
 
+/* UNUSED COMPONENT CLASS: top-aging-table-top - Auto-commented by script
 .top-aging-table-top {
     background: none !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: empty-table - Auto-commented by script
 .empty-table {
     height: 120px;
 }
+*/
 
 tr.mat-header-row {
     height: 51.5px;
@@ -182,15 +208,18 @@ tr.mat-header-row {
             }
         }
     }
-    .mat-flat-button {
+    /* UNUSED COMPONENT CLASS: mat-flat-button - Auto-commented by script
+.mat-flat-button {
         padding: 0px 11px;
     }
+*/
     .search-table {
         margin-left: 7px;
         min-width: 115px;
     }
     .ng-untouched {
-        .pull-right {
+        /* UNUSED COMPONENT CLASS: pull-right - Auto-commented by script
+.pull-right {
             display: flex;
             button {
                 min-width: 50px;
@@ -198,6 +227,7 @@ tr.mat-header-row {
                 padding-left: 10px !important;
             }
         }
+*/
     }
     .mat-customer-name span:nth-child(2) {
         position: relative;
@@ -205,13 +235,16 @@ tr.mat-header-row {
     }
 }
 ::ng-deep {
-    .btn-sky-blue {
+    /* UNUSED COMPONENT CLASS: btn-sky-blue - Auto-commented by script
+.btn-sky-blue {
         color: var(--color-white);
         background-color: var(--color-blue-primary);
         border-color: var(--color-blue-primary);
     }
+*/
 }
 
+/* UNUSED COMPONENT CLASS: btn-filters - Auto-commented by script
 .btn-filters {
     @include common-filters(
         var(--color-blue-primary),
@@ -219,6 +252,7 @@ tr.mat-header-row {
         1px solid var(--color-silver)
     );
 }
+*/
 
 .unpaid-invoice-aside-pane {
     $header-height: 57.8px;
@@ -287,6 +321,7 @@ tr.mat-header-row {
     }
 }
 
+/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -299,6 +334,7 @@ tr.mat-header-row {
     border-right: 1px solid var(--color-silver) !important;
     cursor: pointer;
 }
+*/
 
 .m-0 {
     margin: 0 !important;

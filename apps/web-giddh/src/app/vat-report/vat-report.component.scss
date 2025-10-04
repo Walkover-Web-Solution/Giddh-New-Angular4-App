@@ -1,5 +1,6 @@
 .invoice-control {
-    .nav.nav-tabs {
+    .nav/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
+.nav-tabs {
         margin-bottom: 20px;
         padding: 12px 0px 0 15px !important;
         background-color: var(--color-light-gray);
@@ -7,6 +8,7 @@
         position: relative;
         top: -4px;
     }
+*/
 }
 
 .table-border-bottom {
@@ -36,6 +38,7 @@
     font-family: var(--font-family);
 }
 
+/* UNUSED COMPONENT CLASS: return-sel - Auto-commented by script
 .return-sel {
     background-color: var(--color-light-gray);
     border-radius: 18px;
@@ -44,19 +47,26 @@
     display: inline-block;
     border: 1px solid var(--color-silver);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: datepicker-border - Auto-commented by script
 .datepicker-border {
     border: 1px solid var(--color-silver);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: tax-engine - Auto-commented by script
 .tax-engine {
     background: none;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: export-btn - Auto-commented by script
 .export-btn {
     display: flex;
     justify-content: flex-end;
 }
+*/
 
 .month-picker {
     position: absolute;
@@ -80,9 +90,11 @@
                         color: var(--color-blue-primary) !important;
                     }
 
-                    .btn-link {
+                    /* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
+.btn-link {
                         color: var(--color-blue-primary) !important;
                     }
+*/
                 }
             }
         }
@@ -94,15 +106,20 @@
 }
 
 @media only screen and (max-width: 767px) {
-    .navbar-header.mb-2 {
+    /* UNUSED COMPONENT CLASS: navbar-header - Auto-commented by script
+.navbar-header/* UNUSED COMPONENT CLASS: mb-2 - Auto-commented by script
+.mb-2 {
         margin-top: 60px;
     }
+*/
+*/
 
     .on-mobile-view.table-hide-title tr td {
         padding-left: 15px !important;
     }
 }
 
+/* UNUSED COMPONENT CLASS: daterangePicker - Auto-commented by script
 .daterangePicker {
     position: absolute;
     opacity: 0;
@@ -110,7 +127,10 @@
     top: 0;
     pointer-events: none;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: tax-dropdown - Auto-commented by script
 .tax-dropdown {
     max-width: 30%;
 }
+*/

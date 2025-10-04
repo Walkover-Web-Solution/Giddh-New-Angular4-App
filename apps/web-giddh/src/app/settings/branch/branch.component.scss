@@ -1,10 +1,16 @@
-.form-horizontal .control-label {
+/* UNUSED COMPONENT CLASS: form-horizontal - Auto-commented by script
+.form-horizontal /* UNUSED COMPONENT CLASS: control-label - Auto-commented by script
+.control-label {
     text-align: left;
 }
+*/
+*/
 
+/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu {
     overflow-y: auto;
 }
+*/
 
 .dropdown-menu li {
     font-size: var(--font-size-15);
@@ -26,16 +32,21 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: select-companies - Auto-commented by script
 .select-companies {
     font-size: var(--font-size-15);
     margin-bottom: 5px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: button-yes-cancel - Auto-commented by script
 .button-yes-cancel {
     margin-top: 25px;
     margin-bottom: 20px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -48,17 +59,22 @@
     color: var(--color-medium-gray);
     left: 0;
 }
+*/
 
-.input-group-date-range-picker input.form-control {
+.input-group-date-range-picker input/* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
+.form-control {
     padding-left: 35px !important;
     width: 210px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: content-view - Auto-commented by script
 .content-view {
     display: flex;
     align-items: center;
     font-size: var(--font-size-15);
 }
+*/
 
 .branch-card {
     background-color: var(--color-white);
@@ -82,11 +98,13 @@
     }
 
     .icon-branch-icon,
-    .icon-company-HO {
+    /* UNUSED COMPONENT CLASS: icon-company-HO - Auto-commented by script
+.icon-company-HO {
         padding: 4px 5px 0 0;
         color: var(--color-blue-primary);
         font-size: var(--font-size-12);
     }
+*/
 }
 
 .card-basic-details h2 {
@@ -106,6 +124,7 @@
     border-bottom: 1px solid var(--color-silver);
 }
 
+/* UNUSED COMPONENT CLASS: branch-sales-details - Auto-commented by script
 .branch-sales-details {
     border-top: 1px solid var(--color-silver);
     padding-top: 20px;
@@ -116,15 +135,20 @@
         color: var(--color-black);
     }
 
-    .total-amount {
+    /* UNUSED COMPONENT CLASS: total-amount - Auto-commented by script
+.total-amount {
         width: 70%;
     }
+*/
 }
+/* UNUSED COMPONENT CLASS: unlink - Auto-commented by script
+*/
 
 .unlink a {
     color: var(--color-blue-primary) !important;
     cursor: pointer;
 }
+*/
 
 .card-basic-details ul.dropdown-menu {
     padding-left: 0;
@@ -155,14 +179,18 @@
     right: -15px;
 }
 
+/* UNUSED COMPONENT CLASS: branch-views - Auto-commented by script
 .branch-views {
     cursor: pointer;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
 .btn-link {
     border-width: 0px !important;
     background: var(--color-white) !important;
 }
+*/
 
 .modal-width {
     width: 900px !important;
@@ -188,7 +216,8 @@
     flex-direction: row;
     align-items: center;
 
-    .clear-filter-btn {
+    /* UNUSED COMPONENT CLASS: clear-filter-btn - Auto-commented by script
+.clear-filter-btn {
         color: var(--color-blue-primary);
         font-size: var(--font-size-15);
         border: 1px solid var(--color-blue-primary);
@@ -208,6 +237,7 @@
             color: var(--color-blue-primary);
         }
     }
+*/
 }
 
 .advance-icon {
@@ -229,20 +259,26 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: branch-sales-collapsed - Auto-commented by script
 .branch-sales-collapsed {
     display: none;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: active-status - Auto-commented by script
 .active-status {
     color: var(--color-green);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: status-bullet - Auto-commented by script
 .status-bullet {
     &:before {
         content: " \2022";
         font-size: 34px;
     }
 }
+*/
 
 .parent-branch {
     color: var(--color-dark-gray);
@@ -272,30 +308,38 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: icon-advance-search - Auto-commented by script
 .icon-advance-search {
     font-size: var(--font-size-16);
     color: var(--color-dark-gray);
 }
+*/
 
 .advance-search-list {
     min-width: 123px;
 
-    .search-checkbox {
+    /* UNUSED COMPONENT CLASS: search-checkbox - Auto-commented by script
+.search-checkbox {
         label {
             padding-bottom: 5px;
             padding-left: 5px;
         }
     }
+*/
 }
 
+/* UNUSED COMPONENT CLASS: dropdown-toggle - Auto-commented by script
 .btn-primary.active,
 .btn-primary:active,
-.open>.dropdown-toggle.btn-primary {
+.open>.dropdown-toggle/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
+.btn-primary {
     color: var(--color-black);
     background-color: var(--color-border-light);
     border-color: var(--color-border-light);
     box-shadow: none !important;
 }
+*/
+*/
 
 .linked-add {
     margin-bottom: 5px;
@@ -364,9 +408,11 @@ button {
 
 @media (min-width: 1020px) and (max-width: 1092px) {
     .form-top-fields {
-        .input-addon {
+        /* UNUSED COMPONENT CLASS: input-addon - Auto-commented by script
+.input-addon {
             top: 18px;
         }
+*/
     }
 }
 

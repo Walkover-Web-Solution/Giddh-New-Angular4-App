@@ -2,10 +2,12 @@
     position: relative;
     position: relative;
     width: 45px;
-    .checkbox-custom-label {
+    /* UNUSED COMPONENT CLASS: checkbox-custom-label - Auto-commented by script
+.checkbox-custom-label {
         position: absolute;
         left: 14px;
     }
+*/
 }
 .input-group-addon {
     .checkbox-custom-label {
@@ -15,16 +17,22 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: custom-select - Auto-commented by script
 .custom-select {
     padding: 0 !important;
 }
+*/
 
 .profile-form {
     .form-group {
         .input-group {
-            .input-group-addon {
+            /* UNUSED COMPONENT CLASS: input-group - Auto-commented by script
+/* UNUSED COMPONENT CLASS: input-group-addon - Auto-commented by script
+.input-group-addon {
                 border-left: 1px solid var(--color-silver) !important;
             }
+*/
+*/
             input {
                 border-left: none !important;
                 border-right: none !important;
@@ -40,31 +48,40 @@
 }
 
 @media (min-width: 992px) and (max-width: 1359px) {
-    .profile-form {
+    /* UNUSED COMPONENT CLASS: profile-form - Auto-commented by script
+.profile-form {
         flex: 0 0 100% !important;
         max-width: 100% !important;
     }
-    .decimal-system {
+*/
+    /* UNUSED COMPONENT CLASS: decimal-system - Auto-commented by script
+.decimal-system {
         flex: 0 0 100% !important;
         max-width: 100% !important;
     }
+*/
 }
 
 @media (min-width: 1360px) and (max-width: 1386px) {
-    .number-system {
+    /* UNUSED COMPONENT CLASS: number-system - Auto-commented by script
+.number-system {
         flex-flow: column;
         display: flex;
     }
+*/
 }
 
-::ng-deep .dropdown-divider {
+::ng-deep /* UNUSED COMPONENT CLASS: dropdown-divider - Auto-commented by script
+.dropdown-divider {
     height: 1px;
     margin: 0.5rem 0;
     overflow: hidden;
     background-color: var(--color-border-light);
 }
+*/
 
-::ng-deep .dropdown-item {
+::ng-deep /* UNUSED COMPONENT CLASS: dropdown-item - Auto-commented by script
+.dropdown-item {
     display: block;
     width: 100%;
     padding: 3px 7px;
@@ -77,6 +94,7 @@
     border: 0;
     text-transform: capitalize;
 }
+*/
 
 ::ng-deep .dropdown-item:focus,
 .dropdown-item:hover {
@@ -102,9 +120,11 @@
     background: var(--color-light-gray);
 }
 
+/* UNUSED COMPONENT CLASS: has-error - Auto-commented by script
 .has-error {
     border: 1px solid var(--color-red);
 }
+*/
 
 #createCompForm p {
     font-size: var(--font-size-15);
@@ -114,17 +134,21 @@
     margin-right: -28px;
 }
 
-#createCompForm .text-danger {
+#createCompForm /* UNUSED COMPONENT CLASS: text-danger - Auto-commented by script
+.text-danger {
     display: block;
     /* clear: both; */
     /* float: none; */
 }
+*/
 
+/* UNUSED COMPONENT CLASS: giddh-logo-welcome - Auto-commented by script
 .giddh-logo-welcome img {
     max-width: 140px;
     margin: 50px auto;
     display: block;
 }
+*/
 
 .add-company-detail p {
     max-width: 300px;
@@ -134,19 +158,29 @@
     width: 100%;
 }
 
-#share-modal .btn.btn-sky-blue {
+/* UNUSED COMPONENT CLASS: btn - Auto-commented by script
+#share-modal .btn/* UNUSED COMPONENT CLASS: btn-sky-blue - Auto-commented by script
+.btn-sky-blue {
     width: 100%;
 }
+*/
+*/
+/* UNUSED COMPONENT CLASS: add-company-detail - Auto-commented by script
 .add-company-detail {
     background-color: var(--color-light-gray);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: phone-code-caret - Auto-commented by script
 .phone-code-caret {
     width: 85px;
     margin-right: 28px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: save-export-file-name - Auto-commented by script
 .save-export-file-name {
     top: 5px;
     right: 15px;
 }
+*/

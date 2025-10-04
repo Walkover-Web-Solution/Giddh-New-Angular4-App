@@ -79,26 +79,34 @@ span.icon-collapse-icon:hover {
 
 /* CSS FOR LINE CHART */
 
-p.bankName {
+p/* UNUSED COMPONENT CLASS: bankName - Auto-commented by script
+.bankName {
     font-size: var(--font-size-15);
     color: var(--color-blue-primary);
     margin-bottom: 5px;
 }
+*/
 
-p.bank-balance {
+p/* UNUSED COMPONENT CLASS: bank-balance - Auto-commented by script
+.bank-balance {
     color: var(--color-dark-gray);
     font-size: var(--font-size-15);
     display: flex;
     justify-content: space-between;
 }
+*/
+/* UNUSED COMPONENT CLASS: single-bank-detail - Auto-commented by script
 .single-bank-detail {
     border-bottom: 1px solid var(--color-silver);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
+*/
+/* UNUSED COMPONENT CLASS: dashboard-container - Auto-commented by script
 .dashboard-container {
     padding: 15px;
 }
+*/
 .total-sales-header {
     background-color: var(--color-white);
     border: 1px solid var(--color-silver);
@@ -110,13 +118,16 @@ p.bank-balance {
     color: var(--color-black);
     margin-bottom: 3px;
 }
-.date-range-block .form-control {
+.date-range-block /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
+.form-control {
     border: 1px solid var(--color-blue-primary);
 }
+*/
 .date-range-input {
     position: relative;
 }
-.date-range-input span.icon-calender {
+.date-range-input span/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
+.icon-calender {
     position: absolute;
     width: 32px;
     height: 32px;
@@ -125,6 +136,7 @@ p.bank-balance {
     align-items: center;
     color: var(--color-black);
 }
+*/
 .date-range-input input {
     color: var(--color-black);
 }
@@ -259,23 +271,35 @@ input:read-only:focus {
     flex-direction: row-reverse;
 }
 /*============Mat Range Date Picker Default CSS Overide =====Start===================*/
+/* UNUSED COMPONENT CLASS: mat-datepicker-toggle - Auto-commented by script
 .mat-datepicker-toggle {
     color: var(--color-black) !important;
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-form-field-flex - Auto-commented by script
 .mat-form-field-flex {
     align-items: center !important;
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-calendar-header - Auto-commented by script
 .mat-calendar-header {
     background-color: var(--color-blue-primary) !important;
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-form-field-type-mat-date-range-input - Auto-commented by script
 .mat-form-field-type-mat-date-range-input {
-    .mat-form-field-infix {
+    /* UNUSED COMPONENT CLASS: mat-form-field-infix - Auto-commented by script
+.mat-form-field-infix {
         width: 206px !important;
     }
+*/
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-form-field-wrapper - Auto-commented by script
 .mat-form-field-wrapper {
     padding-bottom: 0 !important;
 }
+*/
 /*============Mat Range Date Picker Default CSS Overide =====End=====================*/
 @media (max-width: 991px) {
     .about-date {

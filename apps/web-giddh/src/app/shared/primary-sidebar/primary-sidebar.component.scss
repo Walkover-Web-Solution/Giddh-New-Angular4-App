@@ -61,11 +61,13 @@
                 font-size: 12px;
                 color: var(--color-black);
             }
-            .head-nav {
+            /* UNUSED COMPONENT CLASS: head-nav - Auto-commented by script
+.head-nav {
                 background: var(--color-light-gray);
                 border-bottom: 10px solid var(--color-silver);
                 margin-bottom: 0;
             }
+*/
         }
         h3 {
             font-weight: var(--font-weight-semibold);
@@ -112,9 +114,11 @@
                     margin-top: 7px;
                 }
             }
-            img.company-icon {
+            img/* UNUSED COMPONENT CLASS: company-icon - Auto-commented by script
+.company-icon {
                 width: 28px;
             }
+*/
         }
         .current-branch-name {
             li {
@@ -122,17 +126,23 @@
                     color: var(--color-dark-gray);
                 }
             }
-            .branch-alice {
+            /* UNUSED COMPONENT CLASS: branch-alice - Auto-commented by script
+.branch-alice {
                 display: none !important;
             }
-            .switch-branch {
+*/
+            /* UNUSED COMPONENT CLASS: switch-branch - Auto-commented by script
+.switch-branch {
                 display: flex !important;
                 justify-content: space-between;
                 align-items: center;
             }
-            .switch-branch-alice {
+*/
+            /* UNUSED COMPONENT CLASS: switch-branch-alice - Auto-commented by script
+.switch-branch-alice {
                 display: none;
             }
+*/
         }
         .company-branch-nav {
             height: calc(100vh - 110px);
@@ -207,24 +217,31 @@
                 line-height: 20px;
                 color: var(--color-black);
                 span {
-                    .icon-arrow-down {
+                    /* UNUSED COMPONENT CLASS: icon-arrow-down - Auto-commented by script
+.icon-arrow-down {
                         transform: rotate(0deg);
                     }
-                    &.rotate-180 {
+*/
+                    &/* UNUSED COMPONENT CLASS: rotate-180 - Auto-commented by script
+.rotate-180 {
                         i.icon-down-new {
                             transform: rotate(180deg);
                         }
                     }
-                    &.rotate-0 {
+*/
+                    &/* UNUSED COMPONENT CLASS: rotate-0 - Auto-commented by script
+.rotate-0 {
                         i.icon-down-new {
                             transform: rotate(0deg);
                         }
                     }
+*/
                 }
             }
         }
     }
-    .toogle-sidebar {
+    /* UNUSED COMPONENT CLASS: toogle-sidebar - Auto-commented by script
+.toogle-sidebar {
         i {
             width: 20px;
             height: 20px;
@@ -241,6 +258,7 @@
             align-items: center;
         }
     }
+*/
     &.sidebar-collapse {
         .company-branch-nav {
             display: none !important;
@@ -289,9 +307,13 @@
                 margin-top: 0;
                 margin-left: 0;
                 .branch-name {
-                    .branch-name-full {
+                    /* UNUSED COMPONENT CLASS: branch-name - Auto-commented by script
+/* UNUSED COMPONENT CLASS: branch-name-full - Auto-commented by script
+.branch-name-full {
                         display: none;
                     }
+*/
+*/
                     .switch-branch-alice {
                         display: flex !important;
                         justify-content: center;
@@ -574,12 +596,16 @@ cdk-tree {
     }
 }
 @media (max-height: 950px) {
-    .sidebar-collapse {
-        .other-sub-menu-item {
+    /* UNUSED COMPONENT CLASS: sidebar-collapse - Auto-commented by script
+.sidebar-collapse {
+        /* UNUSED COMPONENT CLASS: other-sub-menu-item - Auto-commented by script
+.other-sub-menu-item {
             height: 200px;
             overflow-y: auto;
         }
+*/
     }
+*/
     .menu-block {
         padding-bottom: 20px;
     }

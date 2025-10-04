@@ -17,45 +17,59 @@
     .input-group {
         width: 36px;
 
-        &.full-width-input-group {
+        &/* UNUSED COMPONENT CLASS: full-width-input-group - Auto-commented by script
+.full-width-input-group {
             border: none;
             width: 228px;
 
-            .icon-search {
+            /* UNUSED COMPONENT CLASS: icon-search - Auto-commented by script
+.icon-search {
                 border: none;
             }
+*/
 
             .icon-search {
                 border-right: 1px solid var(--color-silver);
             }
         }
+*/
 
-        &.full-width-search-group {
+        &/* UNUSED COMPONENT CLASS: full-width-search-group - Auto-commented by script
+.full-width-search-group {
             width: 228px;
 
-            .icon-search.pos-abs {
+            .icon-search/* UNUSED COMPONENT CLASS: pos-abs - Auto-commented by script
+.pos-abs {
                 z-index: 4;
             }
+*/
         }
+*/
     }
 
     input,
     sh-select {
-        min-width: 228px;
+        /* UNUSED COMPONENT CLASS: search-group - Auto-commented by script
+min-width: 228px;
         text-align: left;
 
         &.search-group,
-        &.giddh-datepicker {
+        &/* UNUSED COMPONENT CLASS: giddh-datepicker - Auto-commented by script
+.giddh-datepicker {
             min-width: 0;
             width: 0 !important;
         }
+*/
+*/
 
         &.search-group.full-width,
-        &.giddh-datepicker.full-width {
+        &.giddh-datepicker/* UNUSED COMPONENT CLASS: full-width - Auto-commented by script
+.full-width {
             min-width: 228px;
             width: 228px !important;
             padding-left: 40px !important;
         }
+*/
     }
 
     .button-group {
@@ -83,18 +97,24 @@ sh-select::ng-deep input {
     border-radius: 50px !important;
 }
 
+/* UNUSED COMPONENT CLASS: new-inventory-page-header - Auto-commented by script
 .new-inventory-page-header {
-    padding: 0 15px 15px;
+    /* UNUSED COMPONENT CLASS: inventory-header - Auto-commented by script
+padding: 0 15px 15px;
     margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid var(--color-medium-gray);
     align-items: center;
 
-    .inventory-header-right {
+    /* UNUSED COMPONENT CLASS: inventory-header-right - Auto-commented by script
+.inventory-header-right {
         display: flex;
     }
+*/
+*/
 }
+*/
 .inventory-card {
     border-radius: 5px;
 }
@@ -111,14 +131,18 @@ button#more-btn-inventory {
         position: relative;
         flex-direction: column;
 
-        .inventory-right-btn {
+        /* UNUSED COMPONENT CLASS: inventory-right-btn - Auto-commented by script
+.inventory-right-btn {
             justify-content: flex-end;
             margin-top: 15px;
         }
+*/
 
-        .advance-search-btn {
+        /* UNUSED COMPONENT CLASS: advance-search-btn - Auto-commented by script
+.advance-search-btn {
             position: absolute;
             top: 70px;
         }
+*/
     }
 }

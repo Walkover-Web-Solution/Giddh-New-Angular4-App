@@ -7,6 +7,7 @@ body.unresponsive {
     background: var(--color-black);
 }
 
+/* UNUSED COMPONENT CLASS: intro - Auto-commented by script
 .intro.login {
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -14,12 +15,15 @@ body.unresponsive {
     width: 100%;
     display: table;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn-lg - Auto-commented by script
 .btn-lg {
     padding: 10px 16px;
     font-size: var(--font-size-15);
     line-height: 1.3333333;
 }
+*/
 
 .btn {
     cursor: pointer;
@@ -29,10 +33,12 @@ body.unresponsive {
     outline: 0;
 }
 
+/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
 .modal-header h3 {
     color: var(--color-white);
     font-size: var(--font-size-16);
 }
+*/
 
 .login {
     padding-top: 0;
@@ -50,9 +56,11 @@ body.unresponsive {
     text-transform: uppercase;
 }
 
+/* UNUSED COMPONENT CLASS: login-btn - Auto-commented by script
 .login-btn {
     position: relative;
 }
+*/
 
 #box img {
     max-height: 30px;
@@ -61,12 +69,14 @@ body.unresponsive {
     top: 4px;
 }
 
-#box .glyphicon {
+#box /* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
+.glyphicon {
     max-height: 30px;
     position: absolute;
     left: 15px;
     top: 13px;
 }
+*/
 
 #box .btn:hover,
 #box .btn:hover {
@@ -77,22 +87,27 @@ body.unresponsive {
     margin-bottom: 10px;
 }
 
+/* UNUSED COMPONENT CLASS: twitter - Auto-commented by script
 .twitter {
     background: var(--color-blue-primary);
 }
+*/
 
 .google {
     background: var(--color-red);
 }
 
+/* UNUSED COMPONENT CLASS: linkedin - Auto-commented by script
 .linkedin {
     background: var(--color-blue-primary);
 }
+*/
 
 .mobile {
     background: var(--color-black);
 }
 
+/* UNUSED COMPONENT CLASS: btn-login - Auto-commented by script
 .btn-login {
     text-transform: uppercase;
     color: var(--color-white);
@@ -111,6 +126,7 @@ body.unresponsive {
     transition-property: transform;
     padding: 10px 16px !important;
 }
+*/
 
 .btn-login:hover,
 .btn-login:focus,
@@ -121,6 +137,7 @@ body.unresponsive {
 
 /*giddh loader*/
 
+/* UNUSED COMPONENT CLASS: giddh-spinner - Auto-commented by script
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
     background: var(--color-black) none repeat scroll 0 0;
@@ -132,6 +149,7 @@ body.unresponsive {
     width: 60px;
     margin: 0 auto 20px;
 }
+*/
 
 @keyframes rotate {
     0% {
@@ -142,16 +160,20 @@ body.unresponsive {
     }
 }
 
-.intro .lead {
+.intro /* UNUSED COMPONENT CLASS: lead - Auto-commented by script
+.lead {
     text-align: center;
     font-size: var(--font-size-16);
 }
+*/
 
-.btn-login.btn-default {
+.btn-login/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
+.btn-default {
     color: var(--color-black);
     background-color: var(--color-white);
     border-color: var(--color-silver);
 }
+*/
 
 .btn-login.btn-default:hover {
     color: var(--color-black) !important;
@@ -160,7 +182,8 @@ body.unresponsive {
     box-shadow: none;
 }
 
-.intro .intro-body {
+.intro /* UNUSED COMPONENT CLASS: intro-body - Auto-commented by script
+.intro-body {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
@@ -171,6 +194,7 @@ body.unresponsive {
     top: 0;
     left: 0;
 }
+*/
 
 button.close {
     float: right;
@@ -197,17 +221,21 @@ button.close {
     color: var(--color-black) !important;
 }
 
-:host ::ng-deep .clear {
+:host ::ng-deep /* UNUSED COMPONENT CLASS: clear - Auto-commented by script
+.clear {
     top: 50% !important;
     font-size: var(--font-size-24) !important;
     right: 6px !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn-blue - Auto-commented by script
 .btn-blue {
     color: var(--color-white) !important;
     border-color: var(--color-blue-primary);
     background: var(--color-blue-primary);
 }
+*/
 
 .btn-blue:hover {
     color: var(--color-white) !important;
@@ -231,6 +259,7 @@ h1 {
     font-size: var(--font-size-24);
 }
 
+/* UNUSED COMPONENT CLASS: slide-content - Auto-commented by script
 .slide-content {
     padding: 80px 100px;
     color: var(--color-white);
@@ -239,22 +268,27 @@ h1 {
     flex-direction: column;
     justify-content: center;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: login_box - Auto-commented by script
 .login_box {
     background: var(--color-light-gray) url("/assets/images/banner-grid-design.png") repeat;
     padding: 20px 70px;
 }
+*/
 
 .login_box h1 {
     color: var(--color-black);
     font-weight: 500;
 }
 
+/* UNUSED COMPONENT CLASS: form-wrapper - Auto-commented by script
 .form-wrapper {
     display: flex;
     margin-bottom: 40px;
     flex-direction: column;
 }
+*/
 
 small {
     color: var(--color-black);
@@ -293,12 +327,14 @@ small {
     padding: 0 15px;
 }
 
+/* UNUSED COMPONENT CLASS: linkedin-ico - Auto-commented by script
 /* social icon */
 
 .linkedin-ico a {
     color: var(--color-blue-primary);
     border-color: var(--color-blue-primary);
 }
+*/
 
 .google-ico a {
     background: var(--color-blue-primary);
@@ -322,11 +358,14 @@ small {
     height: 18px;
 }
 
+/* UNUSED COMPONENT CLASS: ico-apple - Auto-commented by script
 .ico-apple img {
     width: 21px !important;
     height: 21px !important;
     margin-bottom: 3px;
 }
+/* UNUSED COMPONENT CLASS: login-option - Auto-commented by script
+*/
 
 .login-option,
 .login-option a {
@@ -334,6 +373,7 @@ small {
     margin-top: 55px;
     font-weight: 500;
 }
+*/
 
 .login-option a {
     border-bottom: 2px dotted var(--color-blue-primary);
@@ -346,9 +386,11 @@ small {
     line-height: 34px;
 }
 
+/* UNUSED COMPONENT CLASS: hash-tag - Auto-commented by script
 .hash-tag {
     color: var(--color-red);
 }
+*/
 
 .slide-content .btn {
     font-size: var(--font-size-16);
@@ -358,10 +400,12 @@ small {
     padding: 4px 18px;
 }
 
-.slide-content .btn-white {
+.slide-content /* UNUSED COMPONENT CLASS: btn-white - Auto-commented by script
+.btn-white {
     color: var(--color-orange-light);
     border: 1px solid var(--color-white);
 }
+*/
 
 .slide-content .btn-white:hover {
     color: var(--color-black);
@@ -373,12 +417,16 @@ small {
     margin-bottom: 40px;
 }
 
+/* UNUSED COMPONENT CLASS: app-ico - Auto-commented by script
 .app-ico,
+/* UNUSED COMPONENT CLASS: download-app - Auto-commented by script
 .download-app {
     display: flex;
     width: 100%;
     justify-content: space-evenly;
 }
+*/
+*/
 
 .app-ico ul h1 {
     margin-top: 10px;
@@ -422,9 +470,11 @@ small {
     border-color: var(--color-black);
 }
 
+/* UNUSED COMPONENT CLASS: img-hover - Auto-commented by script
 .img-hover:hover img:last-child {
     display: block !important;
 }
+*/
 
 .img-hover:hover img:first-child {
     display: none;
@@ -484,6 +534,7 @@ small {
     color: var(--color-blue-primary);
     font-size: var(--font-size-16);
 }
+/* UNUSED COMPONENT CLASS: btn-outline-primary - Auto-commented by script
 .btn-outline-primary {
     background-color: var(--color-blue-primary);
     border-radius: 3px;
@@ -493,6 +544,7 @@ small {
     margin-bottom: 10px;
     font-size: var(--font-size-15);
 }
+*/
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
     background-color: var(--color-blue-primary);
@@ -507,18 +559,21 @@ small {
     color: var(--color-blue-primary);
     font-size: var(--font-size-15);
 }
+/* UNUSED COMPONENT CLASS: btn-secondary - Auto-commented by script
 .btn-secondary {
     border-radius: 5px;
     color: var(--color-white);
     border: 1px solid var(--color-blue-primary);
     background-color: var(--color-blue-primary);
 }
+*/
 .btn-secondary:hover {
     color: var(--color-white) !important;
     border-color: var(--color-blue-primary);
     background-color: var(--color-blue-primary);
 }
 
+/* UNUSED COMPONENT CLASS: loader-main - Auto-commented by script
 .loader-main {
     position: fixed;
     width: 100%;
@@ -532,6 +587,7 @@ small {
     align-items: center;
     display: flex;
 }
+*/
 .form-inline {
     width: 80px;
 }

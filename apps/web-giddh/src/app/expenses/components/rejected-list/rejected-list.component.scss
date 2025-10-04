@@ -1,6 +1,8 @@
+/* UNUSED COMPONENT CLASS: basic - Auto-commented by script
 .basic > thead > tr > th {
     position: relative;
 }
+*/
 .action-btns {
     display: flex;
     height: 52px;
@@ -26,9 +28,13 @@
 .btn-icon .icon-trash {
     font-size: 20px;
 }
-.icon-pointer .active-text-color {
+.icon-pointer /* UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
+.active-text-color {
     color: var(--color-blue-primary) !important;
 }
+*/
+/* UNUSED COMPONENT CLASS: icon-pointer - Auto-commented by script
 .icon-pointer {
     cursor: pointer;
 }
+*/
