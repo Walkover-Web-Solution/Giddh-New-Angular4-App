@@ -83,7 +83,7 @@
                 tbody {
                     tr {
                         td {
-                            &/* UNUSED COMPONENT CLASS: before-line - Auto-commented by script
+                            /*& UNUSED COMPONENT CLASS: before-line - Auto-commented by script
 .before-line {
                                 &::before {
                                     content: "";
@@ -187,7 +187,7 @@
 
                 .col-5 {
                     flex: unset !important;
-                    & ~ /* UNUSED COMPONENT CLASS: col-5 - Auto-commented by script
+                    /* & ~  UNUSED COMPONENT CLASS: col-5 - Auto-commented by script
 .col-5 {
                         text-align: right;
                     }

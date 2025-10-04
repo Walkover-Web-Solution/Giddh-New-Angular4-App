@@ -24,7 +24,7 @@
         border-bottom-color: var(--color-silver);
         content: "";
     }
-    &/* UNUSED COMPONENT CLASS: openscenter - Auto-commented by script
+    /*& UNUSED COMPONENT CLASS: openscenter - Auto-commented by script
 .openscenter {
         &:before {
             left: 0;
@@ -57,32 +57,32 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        &/* UNUSED COMPONENT CLASS: drops-up-left - Auto-commented by script
+        /*& UNUSED COMPONENT CLASS: drops-up-left - Auto-commented by script
 .drops-up-left {
             transform-origin: 100% 100%;
         }
 */
-        &/* UNUSED COMPONENT CLASS: drops-up-right - Auto-commented by script
+        /*& UNUSED COMPONENT CLASS: drops-up-right - Auto-commented by script
 .drops-up-right {
             transform-origin: 0 100%;
         }
 */
-        &/* UNUSED COMPONENT CLASS: drops-down-left - Auto-commented by script
+        /*& UNUSED COMPONENT CLASS: drops-down-left - Auto-commented by script
 .drops-down-left {
             transform-origin: 100% 0;
         }
 */
-        &/* UNUSED COMPONENT CLASS: drops-down-right - Auto-commented by script
+        /*& UNUSED COMPONENT CLASS: drops-down-right - Auto-commented by script
 .drops-down-right {
             transform-origin: 0 0;
         }
 */
-        &/* UNUSED COMPONENT CLASS: drops-down-center - Auto-commented by script
+        /*& UNUSED COMPONENT CLASS: drops-down-center - Auto-commented by script
 .drops-down-center {
             transform-origin: 50%% 0;
         }
 */
-        &/* UNUSED COMPONENT CLASS: drops-up-center - Auto-commented by script
+        /*& UNUSED COMPONENT CLASS: drops-up-center - Auto-commented by script
 .drops-up-center {
             transform-origin: 50%% 100%;
         }
@@ -896,8 +896,8 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
                     }
                 }
             }
-            .left /* UNUSED COMPONENT CLASS: md-drppicker_input - Auto-commented by script
-.md-drppicker_input {
+            /* UNUSED COMPONENT CLASS: md-drppicker_input - Auto-commented by script
+.left .md-drppicker_input {
                 padding-right: 35px;
             }
 */
@@ -948,18 +948,18 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
         }
     }
     .drp-animate {
-        &/* UNUSED COMPONENT CLASS: drp-picker-site-this - Auto-commented by script
+        /*& UNUSED COMPONENT CLASS: drp-picker-site-this - Auto-commented by script
 .drp-picker-site-this {
             transition-timing-function: linear;
         }
 */
-        &/* UNUSED COMPONENT CLASS: drp-animate-right - Auto-commented by script
+        /*& UNUSED COMPONENT CLASS: drp-animate-right - Auto-commented by script
 .drp-animate-right {
             transform: translateX(10%);
             opacity: 0;
         }
 */
-        &/* UNUSED COMPONENT CLASS: drp-animate-left - Auto-commented by script
+        /*& UNUSED COMPONENT CLASS: drp-animate-left - Auto-commented by script
 .drp-animate-left {
             transform: translateX(-10%);
             opacity: 0;
@@ -1641,7 +1641,6 @@ cdk-virtual-scroll-viewport {
     --mdc-text-button-label-text-color: #000
 }
 */
-*/
 
 .mat-mdc-button/* UNUSED COMPONENT CLASS: mat-primary - Auto-commented by script
 .mat-primary {
@@ -1768,7 +1767,6 @@ cdk-virtual-scroll-viewport {
 .mat-mdc-button.cdk-program-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-button.cdk-keyboard-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button.cdk-program-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button.cdk-keyboard-focused .mat-mdc-button-persistent-ripple::before {
     opacity: .12
 }
-*/
 */
 
 .mat-mdc-button:active .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button:active .mat-mdc-button-persistent-ripple::before {
