@@ -1,6 +1,14 @@
 @charset "utf-8"; 
 @import "./giddh-common.scss";
 
+*,
+*::before,
+*::after {
+   margin: 0;
+   padding: 0;
+   box-sizing: inherit;
+}
+
 *:not([class*="icon-"]), *:not([class*="icon-ledger-"]) {
     font-family: var(--font-family);
 }
@@ -464,6 +472,7 @@ textarea {
 .mr-r15 {
     margin-right: 15px !important;
 }
+
 .column-gap5 {
     column-gap: 5px !important;
 }
@@ -1430,19 +1439,6 @@ table:focus {
 //     }
 // }
 
-.column-gap5 {
-    column-gap: 5px;
-}
-.column-gap1 {
-    column-gap: 10px;
-}
-.column-gap15 {
-    column-gap: 15px;
-}
-.column-gap2 {
-    column-gap: 20px;
-}
-
 // .bulk-entry-list {
 //     .mat-expansion-panel {
 //         .mat-expansion-panel-header {
@@ -2131,7 +2127,7 @@ ul.pills li {
     overflow: auto;
     height: 100vh;
 }
-.modal-liquid.modal-dialog .modal-content .modal-header,
+// .modal-liquid.modal-dialog .modal-content .modal-header,
 .modal-liquid.modal-dialog .modal-content .modal-body {
     background: var(--color-light-gray);
 }
@@ -2255,39 +2251,39 @@ bs-datepicker-container {
     z-index: 9;
 }
 /* added by sarfaraz */
-.d-flex {
-    display: flex !important;
-    display: -ms-flexbox !important;
-    display: -webkit-flex !important;
-}
-.flex-row {
-    flex-direction: row;
-    -ms-flex-direction: row;
-}
-.flex-grow-1 {
-    -ms-flex-positive: 1 !important;
-    flex-grow: 1 !important;
-}
-.align-items-center {
-    align-items: center;
-    -ms-flex-align: center;
-    -webkit-box-align: center;
-}
-.justify-content-center {
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-}
-.justify-content-end {
-    -webkit-box-pack: end;
-    -ms-flex-pack: end;
-    justify-content: flex-end;
-}
-.justify-content-space-between {
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-}
+// .d-flex {
+//     display: flex !important;
+//     display: -ms-flexbox !important;
+//     display: -webkit-flex !important;
+// }
+// .flex-row {
+//     flex-direction: row;
+//     -ms-flex-direction: row;
+// }
+// .flex-grow-1 {
+//     -ms-flex-positive: 1 !important;
+//     flex-grow: 1 !important;
+// }
+// .align-items-center {
+//     align-items: center;
+//     -ms-flex-align: center;
+//     -webkit-box-align: center;
+// }
+// .justify-content-center {
+//     -webkit-box-pack: center;
+//     -ms-flex-pack: center;
+//     justify-content: center;
+// }
+// .justify-content-end {
+//     -webkit-box-pack: end;
+//     -ms-flex-pack: end;
+//     justify-content: flex-end;
+// }
+// .justify-content-space-between {
+//     -webkit-box-pack: justify;
+//     -ms-flex-pack: justify;
+//     justify-content: space-between;
+// }
 
 /* cmdk modal styles */
 .modal-dialog.universal_modal .modal-body {

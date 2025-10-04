@@ -198,7 +198,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
             BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP,
             BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result?.matches) {
+            if (result) {
                 if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP]) {
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]

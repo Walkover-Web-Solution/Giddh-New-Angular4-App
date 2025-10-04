@@ -58,26 +58,23 @@ table.width-100 {
 }
 */
 
-.modal-header ng-select div {
-    border: 0;
-    background-color: transparent;
-}
+// .modal-header ng-select div {
+//     border: 0;
+//     background-color: transparent;
+// }
 
-.modal-header ng-select div a/* UNUSED COMPONENT CLASS: ng-star-inserted - Auto-commented by script
-.ng-star-inserted {
-    font-size: var(--font-size-16);
-    color: var(--color-white);
-}
-*/
+// .modal-header ng-select div a.ng-star-inserted {
+//     font-size: var(--font-size-16);
+//     color: var(--color-white);
+// }
 
-.modal-header ng-select div i.fa/* UNUSED COMPONENT CLASS: fa-caret-up - Auto-commented by script
-.fa-caret-up::before {
-    color: var(--color-white);
-    font-size: 24px;
-}
-*/
+// .modal-header ng-select div i.fa.fa-caret-up::before {
+//     color: var(--color-white);
+//     font-size: 24px;
+// }
 
-ng-select > div i.fa/* UNUSED COMPONENT CLASS: fa-caret-down - Auto-commented by script
+/* UNUSED COMPONENT CLASS: fa-caret-down - Auto-commented by script
+ng-select > div i.fa
 .fa-caret-down::before {
     color: var(--color-white);
     font-size: 20px;

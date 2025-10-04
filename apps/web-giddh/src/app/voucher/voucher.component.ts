@@ -1647,10 +1647,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         });
 
         this.breakpointObserver
-            .observe([BREAKPOINT_SCREEN_SIZE.TAB])
+            .observe([BREAKPOINT_SCREEN_SIZE.TABLET])
             .pipe(takeUntil(this.destroyed$))
             .subscribe((result: BreakpointState) => {
-                this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB];
+                this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
                 if (!this.isTabletScreen && !this.container?.length &&
                     (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName)) {
                     this.buildBulkData(this.invFormData.entries?.length, 0);
@@ -3025,10 +3025,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         }
         if (this.accountAsideMenuState === 'in') {
-            document.querySelector('.invoice-modal-content')?.classList?.add('aside-account-create');
+            // document.querySelector('.invoice-modal-content')?.classList?.add('aside-account-create');
             document.querySelector('body').classList.add('fixed');
         } else {
-            document.querySelector('.invoice-modal-content')?.classList?.remove('aside-account-create');
+            // document.querySelector('.invoice-modal-content')?.classList?.remove('aside-account-create');
             document.querySelector('body').classList.remove('fixed');
         }
     }

@@ -314,7 +314,7 @@ table {
 
 /* UNUSED COMPONENT CLASS: help-text - Auto-commented by script
 .dropdown-menu li .help-text,
-.modal-header .help-text,
+// .modal-header .help-text,
 .text-muted {
     color: var(--color-dark-gray);
     background-color: var(--color-light-gray);
@@ -406,12 +406,12 @@ h6 {
 }
 */
 
-.modal-header {
-    padding: 20px;
-    border-bottom: 1px solid var(--color-silver);
-    min-height: 21.43px;
-    background-color: var(--color-light-gray);
-}
+// .modal-header {
+//     padding: 20px;
+//     border-bottom: 1px solid var(--color-silver);
+//     min-height: 21.43px;
+//     background-color: var(--color-light-gray);
+// }
 
 /* UNUSED COMPONENT CLASS: highlight-info - Auto-commented by script
 .highlight-info {

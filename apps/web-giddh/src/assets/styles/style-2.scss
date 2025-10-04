@@ -1,5 +1,6 @@
 @charset "utf-8";
 @use './themes/_custom-theme.scss';
+@use './main.scss';
 @import "./json-tree.scss";
 @import "./json-diff.scss";
 @import "./intl.scss";
@@ -48,6 +49,56 @@
 @import "./global/override-material-theme-variables";
 @import "./global/tribute-js.scss";
 
+body {
+    font-family: var(--font-family);
+    font-display: block;
+    -webkit-font-smoothing: auto;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden;
+}
+
+body {
+    &.page-leave-confirmation-modal-wrapper {
+        .cdk-overlay-container,
+        .cdk-global-overlay-wrapper {
+            z-index: 99999 !important;
+        }
+    }
+
+    .cdk-overlay-container {
+        .page-leave-confirmation-modal-backdrop {
+            z-index: 99999 !important;
+        }
+    }
+}
+
+
+body {
+    div > a[href*="froala.com/wysiwyg-editor"] {
+        display: none !important;
+    }
+}
+body {
+    &.template-wrapper {
+        .invoice-list {
+            mat-tab-body {
+                &.mat-mdc-tab-body-active {
+                    z-index: unset !important;
+                }
+            }
+        }
+    }
+}
+
+body {
+    &.hide-chat-widget {
+        chat-widget {
+            display: none !important;
+        }
+    }
+}
+
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
 :focus {
@@ -95,17 +146,17 @@ textarea {
     font-size: var(--font-size-15);
 }
 
-.basic {
-    background: var(--color-white);
-}
+// .basic {
+//     background: var(--color-white);
+// }
 
-.table-bordered {
-    border-color: var(--color-silver);
-}
+// .table-bordered {
+//     border-color: var(--color-silver);
+// }
 
-.overflow-x-hidden {
-    overflow-x: hidden;
-}
+// .overflow-x-hidden {
+//     overflow-x: hidden;
+// }
 
 .move-select {
     .menu {
@@ -392,9 +443,9 @@ textarea {
 }
 */
 
-.text-align-center {
-    text-align: center;
-}
+// .text-align-center {
+//     text-align: center;
+// }
 
 /* UNUSED GLOBAL CLASS: text-align-left - Auto-commented by script
 .text-align-left {
@@ -1289,36 +1340,54 @@ textarea {
     -webkit-box-orient: vertical;
 }
 */
-
+/* UNUSED GLOBAL CLASS: mdc-list-item__primary-text - Auto-commented by script
 .institutions-dialog-body {
-    /* UNUSED GLOBAL CLASS: mdc-list-item__primary-text - Auto-commented by script
+    
     .mdc-list-item__primary-text {
         color: var(--color-black) !important;
     }
-    */
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-mdc-tab-body-content - Auto-commented by script
 .setting-branch-body {
-    /* UNUSED GLOBAL CLASS: mat-mdc-tab-body-content - Auto-commented by script
     .mat-mdc-tab-body-content {
         overflow: visible !important;
     }
-    */
 }
+*/
+// .text-limit {
+//     display: -webkit-box;
+//     -webkit-line-clamp: 1;
+//     line-clamp: 1;
+//     -webkit-box-orient: vertical;
+// }
 
+// .institutions-dialog-body {
+//     .mdc-list-item__primary-text {
+//         color: var(--color-black) !important;
+//     }
+// }
+
+// .setting-branch-body {
+//     .mat-mdc-tab-body-content {
+//         overflow: visible !important;
+//     }
+// }
+
+/* UNUSED GLOBAL CLASS: mat-mdc-table - Auto-commented by script
 .pending-table {
-    /* UNUSED GLOBAL CLASS: mat-mdc-table - Auto-commented by script
     .mat-mdc-table {
         .mdc-data-table__row {
             height: 70px !important;
 
-            &:hover {
-                background-color: var(--color-white) !important;
-            }
+            // &:hover {
+            //     background-color: var(--color-white) !important;
+            // }
         }
     }
-    */
 }
+*/
 
 .update-entry-transaction-date {
     giddh-datepicker {
@@ -1336,31 +1405,32 @@ textarea {
         }
         */
 
+        /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
         .readonly-field {
-            /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
             .mat-mdc-form-field {
                 background-color: var(--color-transparent) !important;
             }
-            */
         }
+        */
+        // .mdc-text-field--disabled {
+        //     &.mdc-text-field--filled {
+        //         background-color: var(--color-transparent) !important;
+        //     }
+        // }
+
+        // .readonly-field {
+        //     .mat-mdc-form-field {
+        //         background-color: var(--color-transparent) !important;
+        //     }
+        // }
     }
 }
 
-.border-top {
-    border-top: 1px solid var(--color-silver) !important;
-}
+// .border-top {
+//     border-top: 1px solid var(--color-silver) !important;
+// }
 
-body {
-    &.template-wrapper {
-        .invoice-list {
-            mat-tab-body {
-                &.mat-mdc-tab-body-active {
-                    z-index: unset !important;
-                }
-            }
-        }
-    }
-}
+
 
 /* UNUSED GLOBAL CLASS: custom-giddh-datepicker - Auto-commented by script
 .custom-giddh-datepicker {
@@ -1371,12 +1441,6 @@ body {
     }
 }
 */
-
-body {
-    div > a[href*="froala.com/wysiwyg-editor"] {
-        display: none !important;
-    }
-}
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     /* UNUSED GLOBAL CLASS: subscription-form-select - Auto-commented by script
@@ -1706,18 +1770,10 @@ aside-create-group {
     */
 }
 
-.table-cell {
-    display: table-cell;
-}
+// .table-cell {
+//     display: table-cell;
+// }
 
-body {
-    font-family: var(--font-family);
-    font-display: block;
-    -webkit-font-smoothing: auto;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: hidden;
-}
 
 /* table css need to removed at last (finish)*/
 /* UNUSED GLOBAL CLASS: modal-header - Auto-commented by script
@@ -4637,9 +4693,9 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 */
 
-#share-modal .modal-header {
-    border-bottom: 0;
-}
+// #share-modal .modal-header {
+//     border-bottom: 0;
+// }
 
 /* UNUSED GLOBAL CLASS: modal-header - Auto-commented by script
 .modal-header {
@@ -4933,18 +4989,12 @@ select.form-control {
 .no-result-template {
     position: absolute;
     list-style-type: none;
-    cursor: pointer;
     padding: 5px 10px;
     min-width: 160px;
     font-size: var(--font-size-15);
     text-align: left;
     background-color: var(--color-white);
     background-clip: padding-box;
-    border: 1px solid var(--color-silver);
-    border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px var(--color-shadow-light);
-    box-shadow: 0 6px 12px var(--color-shadow-light);
-    z-index: 1001;
 }
 
 .grp-list {
@@ -7783,7 +7833,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .dropdown-menu li .help-text,
-.tax-engine .modal-header .help-text,
+// .tax-engine .modal-header .help-text,
 .tax-engine .text-muted {
     color: var(--color-dark-gray);
 }
@@ -10128,9 +10178,9 @@ button.ladda-button .ladda-label {
 
 /* UNUSED GLOBAL CLASS: payment-success-modal - Auto-commented by script
 .payment-success-modal {
-    .modal-header {
-        border-radius: 5px 5px 0 0;
-    }
+    // .modal-header {
+    //     border-radius: 5px 5px 0 0;
+    // }
 
     .modal-body {
         text-align: center;
@@ -11567,9 +11617,9 @@ body {
 }
 */
 
-.aside-account-create {
-    z-index: 991 !important;
-}
+// .aside-account-create {
+//     z-index: 991 !important;
+// }
 
 .gst-sidebar-open {
     .nav-left-bar {
@@ -11956,16 +12006,6 @@ inventory-master {
         height: 100% !important;
     }
     */
-}
-
-/* template froala */
-
-body {
-    &.hide-chat-widget {
-        chat-widget {
-            display: none !important;
-        }
-    }
 }
 
 /* responsive  starts here*/

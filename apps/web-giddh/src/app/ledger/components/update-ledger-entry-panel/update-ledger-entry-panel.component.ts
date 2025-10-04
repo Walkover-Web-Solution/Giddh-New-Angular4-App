@@ -370,9 +370,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private salesPersonStore: SalesPersonComponentStore
     ) {
         this.breakPointObservar.observe([
-            BREAKPOINT_SCREEN_SIZE.TAB
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isTabScreen = result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB];
+            this.isTabScreen = result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
         });
         this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
 

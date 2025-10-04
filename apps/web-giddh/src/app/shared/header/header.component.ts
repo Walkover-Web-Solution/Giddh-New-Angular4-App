@@ -30,7 +30,7 @@ import { userLoginStateEnum, OrganizationType } from '../../models/user-login-st
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
+import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -659,17 +659,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
             .observe([
-                BREAKPOINT_SCREEN_SIZE.TAB,
-                BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP
+                ACCOUNTING_BREAKPOINTS.SIDEBAR_COMFORTABLE
             ])
             .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
-                if (state.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB] || state.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP]) {
-                    this.collapseSidebar(true);
-                } else {
+                if (state.breakpoints[ACCOUNTING_BREAKPOINTS.SIDEBAR_COMFORTABLE]) {
                     this.expandSidebar(true);
+                } else {
+                    this.collapseSidebar(true);
                 }
             });
 

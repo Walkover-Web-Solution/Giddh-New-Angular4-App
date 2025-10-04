@@ -628,14 +628,46 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
 /** Gst utility download portal link */
 export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
 
-/** Break Point Screen Size*/
+// /** Break Point Screen Size*/
+// export enum BREAKPOINT_SCREEN_SIZE {
+//     LARGE_DESKTOP = '(1536px < width)',
+//     MEDIUM_DESKTOP = '(1536px > width > 1366px)',
+//     SMALL_DESKTOP = '(1366px > width > 1024px)',
+//     TAB = '(1024px > width > 768px)',
+//     MOBILE = '(768px > width)'
+// }
+/**
+ * Responsive breakpoints for different screen sizes and device types
+ * Used throughout the application for responsive design and layout adjustments
+ */
 export enum BREAKPOINT_SCREEN_SIZE {
-    LARGE_DESKTOP = '(1536px < width)',
-    MEDIUM_DESKTOP = '(1536px > width > 1366px)',
-    SMALL_DESKTOP = '(1366px > width > 1024px)',
-    TAB = '(1024px > width > 768px)',
-    MOBILE = '(768px > width)'
+    /** Mobile devices and small screens - Not optimally supported */
+    UNSUPPORTED = '(max-width: 768px)',
+    /** iPad and tablet users (768px - 1023px) */
+    TABLET = '(min-width: 768px) and (max-width: 1023px)',
+    /** Most common business laptops (1024px - 1279px) */
+    SMALL_DESKTOP = '(min-width: 1024px) and (max-width: 1279px)',
+    /** Modern laptops and smaller monitors (1280px - 1439px) */
+    MEDIUM_DESKTOP = '(min-width: 1280px) and (max-width: 1439px)',
+    /** External monitors and premium laptops (1440px - 1919px) */
+    LARGE_DESKTOP = '(min-width: 1440px) and (max-width: 1919px)',
+    /** High-resolution displays (1920px+) */
+    XL_DESKTOP = '(min-width: 1920px)'
 }
+
+/**
+ * Specialized breakpoints for accounting-specific UI layouts
+ * These breakpoints are optimized for financial data presentation and form layouts
+ */
+export enum ACCOUNTING_BREAKPOINTS {
+    /** Minimum width where sidebar and main content display comfortably together */
+    SIDEBAR_COMFORTABLE = '(min-width: 1200px)',
+    /** Minimum width where forms can be split into multiple columns effectively */
+    MULTI_COLUMN_FORMS = '(min-width: 1100px)',
+    /** Minimum width where all data table columns can be displayed without horizontal scrolling */
+    FULL_DATA_VIEW = '(min-width: 1400px)'
+}
+
 /** HTML tag name  */
 export enum HtmlElementEnum {
     Input = 'INPUT',

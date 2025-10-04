@@ -1,0 +1,39 @@
+@use '../abstracts/mixins' as *;
+
+/* Typography CSS Variables and Utility Classes */
+
+// Font Family Variables and Classes
+:root {
+    --font-family: "Inter";
+}
+
+// Font Weight Variables and Classes
+@include typography-utilities('font-weight', (
+  'regular': 400,
+  'medium': 500,
+  'semibold': 600,
+  'bold': 700
+));
+
+// Font Size Variables and Classes
+@include typography-utilities('font-size', (
+  '9': 9px,
+  '12': 12px,
+  '14': 14px,
+  '15': 15px,
+  '16': 16px,
+  '20': 20px,
+  '24': 24px,
+  '32': 32px,
+  '48': 48px
+));
+
+// Line Height Variables and Classes
+@include typography-utilities('line-height', (
+  '16': 16px,
+  '20': 20px,
+  '22': 22px,
+  '24': 24px,
+  '32': 32px,
+  '36': 36px
+));

@@ -667,14 +667,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP,
             BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP,
-            BREAKPOINT_SCREEN_SIZE.TAB
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result?.matches) {
+            if (result) {
                 // Reset all breakpoint screen size
                 Object.keys(this.breakpointScreenSize).forEach(key => {
                     this.breakpointScreenSize[key] = false;
                 });
-                this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB];
+                this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
                 if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP]) {
                     this.breakpointScreenSize.smallDesktopScreen = true;
                     this.ledgerGridTotalColumns = 3
@@ -685,7 +685,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.ledgerGridTotalColumns = 8;
                     this.ledgerGridColumnsValue = [2, 3, 3]
                     this.getLedgerStatementViewGridColumnsValue();
-                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB]) {
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]) {
                     // this.breakpointScreenSize.tabScreen = true;
                     // this.ledgerGridTotalColumns = 8;
                     // this.ledgerGridColumnsValue = [2, 3, 3];
