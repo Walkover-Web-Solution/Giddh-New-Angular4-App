@@ -160,8 +160,7 @@
                                 [style.padding-left.px]="node.level * 20"
                             >
                                 <div class="main-item-wrapper">
-                                    <a 
-                                        href="javascript:;" 
+                                    <span 
                                         aria-label="menu" 
                                         (click)="toggleNode(node)" 
                                         class="main-item"
@@ -171,7 +170,7 @@
                                             <span class="item-name">{{ node.label }}</span>
                                         </span>
                                         <i class="mr-l1 font-15 icon-right" [ngClass]="{'rotate-270': isExpanded(node)}"></i>
-                                    </a>
+                                    </span>
                                 </div>
                             </cdk-tree-node>
                             
@@ -186,8 +185,7 @@
                             >
                                 <!-- Parent menu without children -->
                                 <div class="main-item-wrapper" *ngIf="node?.link && node?.level === 0">
-                                    <a
-                                        href="javascript:;"
+                                    <span
                                         aria-label="menu"
                                         (click)="toggleNode(node)" 
                                         [routerLink]="[node?.link]"
@@ -198,12 +196,11 @@
                                             <i [ngClass]="node?.icon"></i>
                                             <span class="item-name">{{ node?.label }}</span>
                                         </span>
-                                    </a>
+                                    </span>
                                 </div>
                                 <!-- Child menu without link -->
                                 <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && !node?.link">
-                                    <a
-                                        href="javascript:;"
+                                    <span
                                         class="main-item"
                                         aria-label="menu"
                                         (click)="handleItemClick(node)"
@@ -212,7 +209,7 @@
                                             <i [ngClass]="node?.icon"></i>
                                             {{ node?.label }}
                                         </span>
-                                    </a>
+                                    </span>
                                 </div>
                                 <!-- Child menu with link -->
                                 <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && node?.link">
@@ -222,7 +219,7 @@
                                         [routerLink]="[node?.link]"
                                         [queryParams]="node?.additional?.queryParams"
                                     >
-                                        <span class="item-label">
+                                    <span class="item-label">
                                             <i [ngClass]="node?.icon"></i>
                                             {{ node?.label }}
                                         </span>

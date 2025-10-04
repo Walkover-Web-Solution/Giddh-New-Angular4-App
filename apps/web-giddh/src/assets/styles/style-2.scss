@@ -1,5 +1,6 @@
 @charset "utf-8";
 @use './themes/_custom-theme.scss';
+@use './main.scss';
 @import "./json-tree.scss";
 @import "./json-diff.scss";
 @import "./intl.scss";
@@ -48,6 +49,56 @@
 @import "./global/override-material-theme-variables";
 @import "./global/tribute-js.scss";
 
+body {
+    font-family: var(--font-family);
+    font-display: block;
+    -webkit-font-smoothing: auto;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden;
+}
+
+body {
+    &.page-leave-confirmation-modal-wrapper {
+        .cdk-overlay-container,
+        .cdk-global-overlay-wrapper {
+            z-index: 99999 !important;
+        }
+    }
+
+    .cdk-overlay-container {
+        .page-leave-confirmation-modal-backdrop {
+            z-index: 99999 !important;
+        }
+    }
+}
+
+
+body {
+    div > a[href*="froala.com/wysiwyg-editor"] {
+        display: none !important;
+    }
+}
+body {
+    &.template-wrapper {
+        .invoice-list {
+            mat-tab-body {
+                &.mat-mdc-tab-body-active {
+                    z-index: unset !important;
+                }
+            }
+        }
+    }
+}
+
+body {
+    &.hide-chat-widget {
+        chat-widget {
+            display: none !important;
+        }
+    }
+}
+
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
 :focus {
@@ -95,17 +146,17 @@ textarea {
     font-size: var(--font-size-15);
 }
 
-.basic {
-    background: var(--color-white);
-}
+// .basic {
+//     background: var(--color-white);
+// }
 
-.table-bordered {
-    border-color: var(--color-silver);
-}
+// .table-bordered {
+//     border-color: var(--color-silver);
+// }
 
-.overflow-x-hidden {
-    overflow-x: hidden;
-}
+// .overflow-x-hidden {
+//     overflow-x: hidden;
+// }
 
 .move-select {
     .menu {
@@ -360,17 +411,17 @@ textarea {
     }
 }
 
-.text-align-center {
-    text-align: center;
-}
+// .text-align-center {
+//     text-align: center;
+// }
 
-.text-align-left {
-    text-align: left;
-}
+// .text-align-left {
+//     text-align: left;
+// }
 
-.text-align-right {
-    text-align: right;
-}
+// .text-align-right {
+//     text-align: right;
+// }
 
 .text-primary {
     color: var(--color-blue-primary) !important;
@@ -1137,33 +1188,33 @@ textarea {
     }
 }
 
-.text-limit {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-    -webkit-box-orient: vertical;
-}
+// .text-limit {
+//     display: -webkit-box;
+//     -webkit-line-clamp: 1;
+//     line-clamp: 1;
+//     -webkit-box-orient: vertical;
+// }
 
-.institutions-dialog-body {
-    .mdc-list-item__primary-text {
-        color: var(--color-black) !important;
-    }
-}
+// .institutions-dialog-body {
+//     .mdc-list-item__primary-text {
+//         color: var(--color-black) !important;
+//     }
+// }
 
-.setting-branch-body {
-    .mat-mdc-tab-body-content {
-        overflow: visible !important;
-    }
-}
+// .setting-branch-body {
+//     .mat-mdc-tab-body-content {
+//         overflow: visible !important;
+//     }
+// }
 
 .pending-table {
     .mat-mdc-table {
         .mdc-data-table__row {
             height: 70px !important;
 
-            &:hover {
-                background-color: var(--color-white) !important;
-            }
+            // &:hover {
+            //     background-color: var(--color-white) !important;
+            // }
         }
     }
 }
@@ -1174,47 +1225,31 @@ textarea {
             padding-left: 5px !important;
         }
 
-        .mdc-text-field--disabled {
-            &.mdc-text-field--filled {
-                background-color: var(--color-transparent) !important;
-            }
-        }
+        // .mdc-text-field--disabled {
+        //     &.mdc-text-field--filled {
+        //         background-color: var(--color-transparent) !important;
+        //     }
+        // }
 
-        .readonly-field {
-            .mat-mdc-form-field {
-                background-color: var(--color-transparent) !important;
-            }
-        }
+        // .readonly-field {
+        //     .mat-mdc-form-field {
+        //         background-color: var(--color-transparent) !important;
+        //     }
+        // }
     }
 }
 
-.border-top {
-    border-top: 1px solid var(--color-silver) !important;
-}
+// .border-top {
+//     border-top: 1px solid var(--color-silver) !important;
+// }
 
-body {
-    &.template-wrapper {
-        .invoice-list {
-            mat-tab-body {
-                &.mat-mdc-tab-body-active {
-                    z-index: unset !important;
-                }
-            }
-        }
-    }
-}
+
 
 .custom-giddh-datepicker {
     .mat-datepicker-toggle {
         position: absolute;
         right: -11%;
         top: 0px;
-    }
-}
-
-body {
-    div > a[href*="froala.com/wysiwyg-editor"] {
-        display: none !important;
     }
 }
 
@@ -1512,23 +1547,15 @@ aside-create-group {
     }
 }
 
-.table-cell {
-    display: table-cell;
-}
+// .table-cell {
+//     display: table-cell;
+// }
 
-body {
-    font-family: var(--font-family);
-    font-display: block;
-    -webkit-font-smoothing: auto;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: hidden;
-}
 
 /* table css need to removed at last (finish)*/
-.modal-header .close {
-    cursor: pointer;
-}
+// .modal-header .close {
+//     cursor: pointer;
+// }
 
 [class^="icon-"],
 [class*=" icon-"] {
@@ -3283,9 +3310,9 @@ input[type="checkbox"]:checked:after {
     margin-bottom: 5px;
 }
 
-.border-radius-0 .modal-header > .close {
-    top: 0px;
-}
+// .border-radius-0 .modal-header > .close {
+//     top: 0px;
+// }
 
 .tab-pane input[type="search"]:after {
     font-family: icomoon !important;
@@ -4205,13 +4232,13 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
-#share-modal .modal-header {
-    border-bottom: 0;
-}
+// #share-modal .modal-header {
+//     border-bottom: 0;
+// }
 
-.modal-header {
-    border-radius: 5px 5px 0 0 !important;
-}
+// .modal-header {
+//     border-radius: 5px 5px 0 0 !important;
+// }
 
 #share-modal .btn {
     padding: 7px 16px;
@@ -4273,20 +4300,20 @@ a.btn.btn-xs.btn-link.pull-right {
     width: 25%;
 }
 
-.modal-header {
-    position: relative;
-    background: var(--color-blue-primary) !important;
-    color: var(--color-white);
-    border-color: var(--color-blue-primary);
-    height: 65px;
-    display: flex;
-    align-items: center;
-    border-color: var(--color-blue-primary);
+// .modal-header {
+//     position: relative;
+//     background: var(--color-blue-primary) !important;
+//     color: var(--color-white);
+//     border-color: var(--color-blue-primary);
+//     height: 65px;
+//     display: flex;
+//     align-items: center;
+//     border-color: var(--color-blue-primary);
 
-    .icon-cross {
-        color: var(--color-white);
-    }
-}
+//     .icon-cross {
+//         color: var(--color-white);
+//     }
+// }
 
 .modal-body,
 .modal-footer {
@@ -4459,10 +4486,10 @@ select.form-control {
     transform: rotate(180deg);
 }
 
-.modal-header > h3 {
-    font-size: var(--font-size-16);
-    color: var(--color-white);
-}
+// .modal-header > h3 {
+//     font-size: var(--font-size-16);
+//     color: var(--color-white);
+// }
 
 .no-result-template {
     position: absolute;
@@ -6307,19 +6334,19 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding-right: 24px;
 }
 
-.modal-header > .close {
-    color: var(--color-white) !important;
-    opacity: 1 !important;
-    font-weight: 100;
-    text-shadow: none;
-    font-size: 30px;
-    cursor: pointer;
-    padding: 0 !important;
-    margin: 0 !important;
-    min-width: auto !important;
-    background: transparent !important;
-    height: auto;
-}
+// .modal-header > .close {
+//     color: var(--color-white) !important;
+//     opacity: 1 !important;
+//     font-weight: 100;
+//     text-shadow: none;
+//     font-size: 30px;
+//     cursor: pointer;
+//     padding: 0 !important;
+//     margin: 0 !important;
+//     min-width: auto !important;
+//     background: transparent !important;
+//     height: auto;
+// }
 
 /**new modal design**/
 .welcome-header {
@@ -7123,7 +7150,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .dropdown-menu li .help-text,
-.tax-engine .modal-header .help-text,
+// .tax-engine .modal-header .help-text,
 .tax-engine .text-muted {
     color: var(--color-dark-gray);
 }
@@ -9297,9 +9324,9 @@ button.ladda-button .ladda-label {
 }
 
 .payment-success-modal {
-    .modal-header {
-        border-radius: 5px 5px 0 0;
-    }
+    // .modal-header {
+    //     border-radius: 5px 5px 0 0;
+    // }
 
     .modal-body {
         text-align: center;
@@ -10203,21 +10230,6 @@ giddh-datepicker {
     }
 }
 
-body {
-    &.page-leave-confirmation-modal-wrapper {
-        .cdk-overlay-container,
-        .cdk-global-overlay-wrapper {
-            z-index: 99999 !important;
-        }
-    }
-
-    .cdk-overlay-container {
-        .page-leave-confirmation-modal-backdrop {
-            z-index: 99999 !important;
-        }
-    }
-}
-
 .payment-date {
     giddh-datepicker .mat-form-field-appearance-fill .mat-form-field-flex {
         border: 0px !important;
@@ -10395,11 +10407,11 @@ body {
     padding-left: 15px !important;
 }
 
-.add-manage-group-acc {
-    .modal-header {
-        border-radius: 0 !important;
-    }
-}
+// .add-manage-group-acc {
+//     .modal-header {
+//         border-radius: 0 !important;
+//     }
+// }
 
 .plan-wrapper {
     padding-left: 60px;
@@ -10611,9 +10623,9 @@ body {
     z-index: 99 !important;
 }
 
-.aside-account-create {
-    z-index: 991 !important;
-}
+// .aside-account-create {
+//     z-index: 991 !important;
+// }
 
 .gst-sidebar-open {
     .nav-left-bar {
@@ -10979,16 +10991,6 @@ inventory-master {
 
     .ps-content {
         height: 100% !important;
-    }
-}
-
-/* template froala */
-
-body {
-    &.hide-chat-widget {
-        chat-widget {
-            display: none !important;
-        }
     }
 }
 

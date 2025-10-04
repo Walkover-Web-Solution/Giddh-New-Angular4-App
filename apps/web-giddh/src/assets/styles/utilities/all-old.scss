@@ -1,0 +1,36 @@
+// Border 
+.table-bordered {
+    border-color: var(--color-silver);
+}
+.border-top {
+    border-top: 1px solid var(--color-silver) !important;
+}
+
+// Colors
+.text-primary {
+    color: var(--color-blue-primary) !important;
+}
+
+// Background
+
+// Padding
+
+// Margin
+
+// Overflow
+.overflow-x-hidden {
+    overflow-x: hidden;
+}
+
+// Text
+.text-limit {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+//Table
+.table-cell {
+    display: table-cell;
+}

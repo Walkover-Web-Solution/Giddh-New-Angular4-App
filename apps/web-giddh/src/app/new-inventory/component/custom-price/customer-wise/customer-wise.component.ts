@@ -162,7 +162,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         });
 
         this.breakPointObservar.observe([
-            BREAKPOINT_SCREEN_SIZE.TAB,
+            BREAKPOINT_SCREEN_SIZE.TABLET,
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isTabScreen = result?.matches;
         });

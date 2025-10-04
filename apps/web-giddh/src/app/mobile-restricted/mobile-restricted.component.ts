@@ -25,9 +25,9 @@ export class MobileRestrictedComponent {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-blue-logo.svg';
         this.breakpointObserver.observe([
-            BREAKPOINT_SCREEN_SIZE.MOBILE
+            BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (!result?.breakpoints[BREAKPOINT_SCREEN_SIZE.MOBILE]) {
+            if (!result?.breakpoints[BREAKPOINT_SCREEN_SIZE.UNSUPPORTED]) {
                 this.router.navigate(['/home']);
             }
         });

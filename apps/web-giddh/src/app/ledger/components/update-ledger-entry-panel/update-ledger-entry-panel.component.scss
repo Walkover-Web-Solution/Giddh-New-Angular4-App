@@ -40,24 +40,24 @@ table.width-100 {
     margin-right: 0;
 }
 
-.modal-header ng-select {
-    width: 339px !important;
-}
+// .modal-header ng-select {
+//     width: 339px !important;
+// }
 
-.modal-header ng-select div {
-    border: 0;
-    background-color: transparent;
-}
+// .modal-header ng-select div {
+//     border: 0;
+//     background-color: transparent;
+// }
 
-.modal-header ng-select div a.ng-star-inserted {
-    font-size: var(--font-size-16);
-    color: var(--color-white);
-}
+// .modal-header ng-select div a.ng-star-inserted {
+//     font-size: var(--font-size-16);
+//     color: var(--color-white);
+// }
 
-.modal-header ng-select div i.fa.fa-caret-up::before {
-    color: var(--color-white);
-    font-size: 24px;
-}
+// .modal-header ng-select div i.fa.fa-caret-up::before {
+//     color: var(--color-white);
+//     font-size: 24px;
+// }
 
 ng-select > div i.fa.fa-caret-down::before {
     color: var(--color-white);

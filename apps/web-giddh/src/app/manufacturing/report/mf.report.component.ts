@@ -141,9 +141,9 @@ constructor(
         });
 
         this.breakPointObservar.observe([
-            BREAKPOINT_SCREEN_SIZE.TAB
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB];
+            this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
         });
 
         this.isInventoryPage = this.router.url.includes('/pages/inventory');

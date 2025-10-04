@@ -169,14 +169,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._cdr.detectChanges();
         });
         this.breakpointObserver.observe([
-            BREAKPOINT_SCREEN_SIZE.TAB
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB]);
+                this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]);
         });
         this.breakpointObserver.observe([
-            BREAKPOINT_SCREEN_SIZE.MOBILE
+            BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result?.breakpoints[BREAKPOINT_SCREEN_SIZE.MOBILE]) {
+            if (result?.breakpoints[BREAKPOINT_SCREEN_SIZE.UNSUPPORTED]) {
                 this.router.navigate(['/mobile-restricted']);
             }
         });

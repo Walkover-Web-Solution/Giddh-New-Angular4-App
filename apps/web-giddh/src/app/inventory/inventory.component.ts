@@ -119,9 +119,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private dialog: MatDialog
     ) {
         this.breakPointObservar.observe([
-            BREAKPOINT_SCREEN_SIZE.TAB
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isTabletScreen = result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB];
+            this.isTabletScreen = result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
         });
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
