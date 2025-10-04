@@ -18,5 +18,12 @@
     .action-btn {
         min-width: 125px;
     }
+}
 
+:host ::ng-deep giddh-page-loader {
+    &.unset-loader-margin {
+        .loader-main {
+            margin: 0 !important;
+        }
+    }
 }

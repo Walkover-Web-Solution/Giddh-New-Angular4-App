@@ -120,7 +120,7 @@
                                                                         <span>
                                                                             <button mat-stroked-button
                                                                                 aria-label="delete button"
-                                                                                class="delete-icon"
+                                                                                class="delete-icon w-inherit"
                                                                                 (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)"><i
                                                                                     class="icon-trash"></i>
                                                                             </button>
@@ -180,7 +180,7 @@
                                                                                 <button mat-stroked-button
                                                                                     aria-label="delete button"
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
-                                                                                    class="delete-icon"
+                                                                                    class="delete-icon w-inherit"
                                                                                     (click)="confirmationPopup(variant?.get('variantUniqueName')?.value,  'variant', variant?.get('isTemproraryVariant')?.value, i, j)">
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
@@ -266,7 +266,7 @@
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
                                                                                     aria-label="delete button"
-                                                                                    class="delete-icon"
+                                                                                    class="delete-icon w-inherit"
                                                                                     (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)">
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>

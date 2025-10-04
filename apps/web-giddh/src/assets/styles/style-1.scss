@@ -1641,11 +1641,10 @@ ul.pills li {
     width: 20px;
     height: 20px;
 }
-*/
-// Icomoon Icons
-.icon-dots-three-vertical:before {
-    color: var(--color-black);
-}
+// // Icomoon Icons
+// .icon-dots-three-vertical:before {
+//     color: var(--color-black);
+// }
 /* ledger container */
 .padd15 {
     padding: 15px;
@@ -2472,18 +2471,12 @@ form#groupDetailForm {
 }
 /* UNUSED GLOBAL CLASS: valid-tooltip - Auto-commented by script
 .valid-tooltip,
-.tooltip,
-*/
-/* UNUSED GLOBAL CLASS: tooltip-inner - Auto-commented by script
-.tooltip-inner {
+.tooltip {
     font-size: var(--font-size-12) !important;
 }
-*/
-/* UNUSED GLOBAL CLASS: tooltip-inner - Auto-commented by script
-.tooltip-inner {
-    background: var(--color-dark-gray) !important;
-}
-*/
+// .tooltip-inner {
+//     background: var(--color-dark-gray) !important;
+// }
 /** aside pane styles */
 .aside-pane {
     position: relative;

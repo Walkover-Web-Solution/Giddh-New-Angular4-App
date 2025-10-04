@@ -569,6 +569,223 @@
 }
 
 /**
+ * USER SELECT UTILITIES
+ * =====================
+ * Cross-browser user-select utilities with mixin and utility classes
+ */
+
+/**
+ * User select mixin with cross-browser support
+ * 
+ * @param {String} $value - The user-select value (none, auto, text, contain, all, unset)
+ */
+@mixin user-select($value) {
+    @if $value == unset {
+        // Cross-browser support for unset
+        -webkit-user-select: -webkit-initial !important;
+        -moz-user-select: -moz-initial !important;
+        -ms-user-select: initial !important;
+        user-select: unset !important;
+    } @else {
+        -webkit-user-select: #{$value} !important;
+        -moz-user-select: #{$value} !important;
+        -ms-user-select: #{$value} !important;
+        user-select: #{$value} !important;
+    }
+}
+
+/**
+ * Generate user-select utility classes
+ * Creates classes like .user-select-none, .user-select-auto, etc.
+ */
+@mixin user-select-utilities() {
+    $user-select-values: (
+        'none': none,
+        'auto': auto,
+        'text': text,
+        'contain': contain,
+        'all': all,
+        'unset': unset
+    );
+
+    @each $name, $value in $user-select-values {
+        .user-select-#{$name} {
+            @include user-select($value);
+        }
+    }
+}
+
+/**
+ * POSITION UTILITIES
+ * ==================
+ * Position utilities with mixins and utility classes
+ */
+
+/**
+ * Position mixin with cross-browser support
+ * 
+ * @param {String} $position - The position value (static, relative, absolute, fixed, sticky, unset)
+ */
+@mixin position($position) {
+    @if $position == sticky {
+        // Cross-browser support for sticky positioning
+        position: -webkit-sticky !important;
+        position: sticky !important;
+    } @else if $position == unset {
+        // Cross-browser support for unset
+        position: -webkit-initial !important;
+        position: -moz-initial !important;
+        position: initial !important;
+        position: unset !important;
+    } @else {
+        position: #{$position} !important;
+    }
+}
+
+/**
+ * Generate position utility classes
+ * Creates classes like .position-relative, .position-absolute, etc.
+ */
+@mixin position-utilities() {
+    $position-values: (
+        'static': static,
+        'relative': relative,
+        'absolute': absolute,
+        'fixed': fixed,
+        'sticky': sticky,
+        'unset': unset
+    );
+
+    @each $name, $value in $position-values {
+        .position-#{$name} {
+            @include position($value);
+        }
+    }
+}
+
+/**
+ * Generate position inset utility classes
+ * Creates classes like .top-0, .left-0, .inset-0, etc.
+ */
+@mixin position-inset-utilities() {
+    $inset-values: (
+        '0': 0,
+        'unset': unset
+    );
+
+    @each $name, $value in $inset-values {
+        .top-#{$name} {
+            top: #{$value} !important;
+        }
+        
+        .right-#{$name} {
+            right: #{$value} !important;
+        }
+        
+        .bottom-#{$name} {
+            bottom: #{$value} !important;
+        }
+        
+        .left-#{$name} {
+            left: #{$value} !important;
+        }
+    }
+    
+    // Inset shorthand classes
+    .inset-0 {
+        inset: 0 !important;
+    }
+    
+    .inset-unset {
+        inset: unset !important;
+    }
+}
+
+/**
+ * WIDTH AND HEIGHT UTILITIES
+ * ===========================
+ * Cross-browser width and height utilities with mixins and utility classes
+ */
+
+/**
+ * Width mixin with cross-browser support
+ * 
+ * @param {String|Number} $width - The width value
+ */
+@mixin width($width) {
+    @if $width == unset {
+        // Cross-browser support for unset
+        width: -webkit-initial !important;
+        width: -moz-initial !important;
+        width: initial !important;
+        width: unset !important;
+    } @else {
+        width: #{$width} !important;
+    }
+}
+
+/**
+ * Height mixin with cross-browser support
+ * 
+ * @param {String|Number} $height - The height value
+ */
+@mixin height($height) {
+    @if $height == unset {
+        // Cross-browser support for unset
+        height: -webkit-initial !important;
+        height: -moz-initial !important;
+        height: initial !important;
+        height: unset !important;
+    } @else {
+        height: #{$height} !important;
+    }
+}
+
+/**
+ * Generate width utility classes
+ * Creates classes like .w-25, .w-50, .w-100, etc.
+ */
+@mixin width-utilities() {
+    $width-values: (
+        'auto': auto,
+        'unset': unset,
+        '0': 0,
+        '25': 25%,
+        '50': 50%,
+        '75': 75%,
+        '100': 100%
+    );
+
+    @each $name, $value in $width-values {
+        .w-#{$name} {
+            @include width($value);
+        }
+    }
+}
+
+/**
+ * Generate height utility classes
+ * Creates classes like .h-25, .h-50, .h-100, etc.
+ */
+@mixin height-utilities() {
+    $height-values: (
+        'auto': auto,
+        'unset': unset,
+        '0': 0,
+        '25': 25%,
+        '50': 50%,
+        '75': 75%,
+        '100': 100%
+    );
+
+    @each $name, $value in $height-values {
+        .h-#{$name} {
+            @include height($value);
+        }
+    }
+}
+
+/**
  * Typography variables and utilities mixin
  * Generates CSS custom properties in :root and corresponding utility classes
  * @param {String} $property - The CSS property name (font-weight, font-size, line-height)
