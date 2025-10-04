@@ -26,7 +26,7 @@ export default function setMenu() {
                 role: 'close'
             },
             {
-                label: 'Check For Latest Update',
+                label: 'Check For Update',
                 accelerator: 'CmdOrCtrl+U',
                 click: (item: any, focusedWindow: any, event) => {
                     //
