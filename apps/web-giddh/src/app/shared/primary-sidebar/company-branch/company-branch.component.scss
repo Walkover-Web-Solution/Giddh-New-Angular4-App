@@ -82,16 +82,6 @@
                     }
                 }
             }
-            .btn-sky-blue {
-                padding: 5px 7px;
-                color: var(--color-white);
-                background-color: var(--color-blue-primary);
-                border: 1px solid var(--color-blue-primary);
-            }
-            .btn-sky-blue:hover {
-                background-color: var(--color-blue-primary) !important;
-                border-color: var(--color-blue-primary) !important;
-            }
         }
         .company-list {
             ul {
@@ -346,10 +336,6 @@
                     }
                 }
             }
-            .btn-sky-blue {
-                padding: 0px 10px;
-                height: 30px;
-            }
         }
         .company-list {
             height: calc(100vh - 292px) !important;
@@ -418,11 +404,6 @@
                             }
                             .total-branches {
                                 padding: 10px 20px;
-                                .btn-sky-blue {
-                                    width: 145px;
-                                    padding: 0px 10px;
-                                    height: 30px;
-                                }
                             }
                         }
                     }

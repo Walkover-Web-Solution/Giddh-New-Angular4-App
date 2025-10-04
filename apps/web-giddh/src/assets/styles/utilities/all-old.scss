@@ -6,21 +6,184 @@
     border-top: 1px solid var(--color-silver) !important;
 }
 
+.border-bottom {
+    border-bottom: 1px solid var(--color-silver) !important;
+}
+
+.border-none {
+    border: none !important;
+}
+.bd-rt {
+    border-color: var(--color-silver);
+}
+.dashed {
+    border-style: dashed;
+    border-color: var(--color-silver);
+}
+.only-right-radius {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
+
+
 // Colors
 .text-primary {
     color: var(--color-blue-primary) !important;
 }
+.color-primary {
+    color: var(--color-blue-primary) !important;
+}
+.primary-color {
+    color: var(--dark-blue01) !important;
+}
+
+.primary-color {
+    color: var(--dark-blue01) !important;
+}
+.text-blue {
+    color: var(--color-blue-primary);
+}
+.text-gray {
+    color: var(--color-medium-gray) !important;
+}
+
+.text-purple {
+    color: var(--color-blue-primary);
+}
+.blue {
+    color: var(--color-blue-primary);
+}
+
+.text-light {
+    color: var(--color-medium-gray) !important;
+}
+.text-green {
+    color: var(--color-green);
+}
+
+.text-light {
+    color: var(--color-silver);
+}
+
+.text-light-2 {
+    color: var(--color-medium-gray);
+}
+.add-row {
+    color: var(--color-green);
+}
+
+.delete {
+    color: var(--color-red);
+}
+span.red-text {
+    color: var(--color-red);
+}
+.text-color-white {
+    color: var(--white-color) !important;
+}
+// This color will same in all theme
+.text-static-white {
+    color: var(--color-white) !important;
+}
+
+.text-saffron {
+    color: var(--color-deep-orange) !important;
+}
+.text-black {
+    color: var(--color-black) !important;
+}
+// color link light-dark theme
+.color-link {
+    color: var(--color-blue-primary) !important;
+}
+
+
+
+// Line height
+.lh33 {
+    line-height: 33px;
+}
+
+.lh-0 {
+    line-height: 0 !important;
+}
+
+.lh-1 {
+    line-height: 1 !important;
+}
+
+
+
 
 // Background
+.dot-warning {
+    background: var(--color-deep-orange);
+}
+.dot-primary {
+    background: var(--color-blue-primary);
+}
+
+.dot-success {
+    background: var(--color-green);
+}
+
+.default-color {
+    color: var(--color-black);
+}
+.bg-grey {
+    background-color: var(--color-light-gray) !important;
+}
+.bg-transparent {
+    background: var(--color-transparent) !important;
+    background-color: var(--color-transparent) !important;
+}
+
 
 // Padding
+.pd-t85 {
+    padding-top: 85px !important;
+}
+.pd-t07 {
+    padding-top: 7px;
+}
+.p-0 {
+    padding: 0 !important;
+}
+
+.pl-0 {
+    padding-left: 0 !important;
+}
+
+.pr-0 {
+    padding-right: 0 !important;
+}
+.p-t-5 {
+    padding-right: 5px;
+}
+
+.p-t-10 {
+    padding-left: 10px;
+}
+
+
+
 
 // Margin
+.no-margin {
+    margin: 0 !important;
+}
+
+
 
 // Overflow
 .overflow-x-hidden {
     overflow-x: hidden;
 }
+
+
+
+
+
 
 // Text
 .text-limit {
@@ -29,8 +192,282 @@
     line-clamp: 1;
     -webkit-box-orient: vertical;
 }
+.italic {
+    font-style: italic;
+}
+.normal {
+    font-weight: normal !important;
+}
+
+.unbold {
+    font-weight: normal !important;
+    font-family: var(--font-family) !important;
+}
+.bold {
+    font-weight: var(--font-weight-semibold);
+}
+.fw-bold {
+    font-weight: 600;
+}
+.font-bold {
+    font-weight: var(--font-weight-bold);
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+.word-wrap {
+    word-break: normal;
+    white-space: nowrap;
+}
+
+.text-underline {
+    text-decoration: underline !important;
+
+    &:hover {
+        text-decoration: underline !important;
+    }
+}
+
+
+// Font Size
+.font-9 {
+    font-size: var(--font-size-9);
+}
+
+.icon-font-11 {
+    font-size: 11px !important;
+}
+
+.icon-font-16 {
+    font-size: 16px !important;
+}
+
+.font-12 {
+    font-size: var(--font-size-12) !important;
+}
+
+.font-14 {
+    font-size: var(--font-size-14) !important;
+}
+
+.font-15 {
+    font-size: var(--font-size-15) !important;
+}
+
+.font-16 {
+    font-size: var(--font-size-16) !important;
+}
+
+.icon-font-22 {
+    font-size: 22px !important;
+}
+
+.font-20 {
+    font-size: var(--font-size-20) !important;
+}
+
+.font-24 {
+    font-size: var(--font-size-24) !important;
+}
+
+.icon-font-48 {
+    font-size: var(--font-size-48) !important;
+}
+.size-xs {
+    font-size: var(--font-size-15);
+}
+
+
+
+
+// Text Transform 
+.text-lowercase {
+    text-transform: lowercase !important;
+}
+
+.text-transform-none {
+    text-transform: none !important;
+}
+
+
+
+
 
 //Table
 .table-cell {
     display: table-cell;
+}
+.middle {
+    vertical-align: middle !important;
+}
+.v-align-middle {
+    vertical-align: middle !important;
+}
+
+
+
+
+
+
+// Float
+.clear-both {
+    clear: both;
+}
+
+
+
+
+
+// Position
+.relative {
+    position: relative;
+}
+// Position inset classes
+.top-0 {
+    top: 0;
+}
+.left-0 {
+    left: 0;
+}
+.right-0 {
+    right: 0;
+}
+.bottom-0 {
+    bottom: 0;
+}
+.inset-0 {
+    inset: 0;
+}
+
+
+
+
+// Width Height
+.h-100 {
+    height: 100% !important;
+}
+
+.width-100 {
+    width: 100% !important;
+}
+
+.width-150 {
+    width: 150px;
+    min-width: 150px;
+}
+
+.w-fit-content {
+    width: fit-content !important;
+}
+.max-width-50 {
+    max-width: 50px;
+}
+.width-60 {
+    width: 60px !important;
+}
+.w100 {
+    width: 100px;
+}
+
+.w120 {
+    width: 120px;
+}
+
+.w125 {
+    width: 125px !important;
+}
+.w150 {
+    width: 150px !important;
+}
+.w200 {
+    width: 200px !important;
+}
+
+.w-inherit {
+    width: inherit !important;
+}
+
+
+
+
+// Display
+.justify-content-center {
+    justify-content: center;
+}
+.justify-content-between {
+    justify-content: space-between;
+}
+.align-item-center {
+    display: flex;
+    flex-direction: column;
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+}
+
+.align-items-start {
+    align-items: flex-start !important;
+}
+
+
+// Cursor
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.pointer-event-none {
+    pointer-events: none !important;
+}
+
+.pointer-event-all {
+    pointer-events: all !important;
+}
+
+.cursor-default {
+    cursor: default !important;
+}
+
+.no-select {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.click-disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: var(--color-silver);
+}
+
+
+// Other Global Utilities 
+
+// common-dialog md width
+.mat-dialog-sm {
+    width: 500px;
+}
+
+.mat-dialog-md {
+    width: 760px;
+}
+
+.mat-dialog-lg {
+    width: 1024px;
+    max-width: 80vw;
+}
+
+.z-index-0 {
+    z-index: 0;
 }

@@ -4,7 +4,7 @@
 }
 .primary-sidebar {
     padding-top: 0 !important;
-    background-color: var(--color-white);
+    // background-color: var(--color-white);
     .company-branch-block {
         background-color: var(--color-blue-light);
         .branch-connection {
@@ -54,22 +54,23 @@
             .icon-down-new {
                 position: relative;
                 right: 5px;
-                color: var(--color-black);
+                // color: var(--color-black);
             }
             .icon-cross {
                 display: flex;
                 font-size: 12px;
-                color: var(--color-black);
+                // color: var(--color-black);
             }
             .head-nav {
-                background: var(--color-light-gray);
-                border-bottom: 10px solid var(--color-silver);
+                // background: var(--color-light-gray);
+                // border-bottom: 10px solid var(--color-silver);
+                border-bottom: 10px solid currentColor;
                 margin-bottom: 0;
             }
         }
         h3 {
             font-weight: var(--font-weight-semibold);
-            color: var(--color-dark-gray);
+            // color: var(--color-dark-gray);
             .company-alice {
                 width: 30px;
                 height: 30px;
@@ -83,7 +84,7 @@
                 white-space: nowrap;
                 letter-spacing: -2px;
                 font-size: var(--font-size-15) !important;
-                color: var(--color-black);
+                // color: var(--color-black);
             }
             .company-full-name {
                 white-space: normal;
@@ -99,7 +100,7 @@
                     width: 150px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    color: var(--color-black);
+                    // color: var(--color-black);
                 }
                 .branch-ellipsis {
                     white-space: nowrap;
@@ -117,11 +118,11 @@
             }
         }
         .current-branch-name {
-            li {
-                a {
-                    color: var(--color-dark-gray);
-                }
-            }
+            // li {
+            //     a {
+            //         color: var(--color-dark-gray);
+            //     }
+            // }
             .branch-alice {
                 display: none !important;
             }
@@ -169,7 +170,7 @@
             }
         }
         p {
-            color: var(--color-black);
+            // color: var(--color-black);
             font-weight: var(--font-weight-semibold);
         }
         ul {
@@ -181,7 +182,7 @@
                 white-space: nowrap;
                 position: relative;
                 a {
-                    color: var(--color-dark-gray);
+                    // color: var(--color-dark-gray);
                     line-height: 16px;
                     &.show-more {
                         color: var(--color-blue-primary);
@@ -205,7 +206,7 @@
                 display: flex;
                 justify-content: space-between;
                 line-height: 20px;
-                color: var(--color-black);
+                // color: var(--color-black);
                 span {
                     .icon-arrow-down {
                         transform: rotate(0deg);
@@ -409,14 +410,14 @@
                         span {
                             i {
                                 font-size: 20px;
-                                color: var(--color-dark-gray);
+                                // color: var(--color-dark-gray);
                                 transform: none;
                             }
                         }
                         i {
                             font-size: var(--font-size-15);
                             display: inline-flex;
-                            color: var(--color-dark-gray);
+                            // color: var(--color-dark-gray);
                             width: 14px;
                             height: 14px;
                             justify-content: center;
@@ -453,7 +454,7 @@
 
 cdk-tree {
     cdk-tree-node {
-        color: var(--color-dark-gray);
+        // color: var(--color-dark-gray);
         .main-item-wrapper {
             padding: 0 20px;
             width: 100%;

@@ -204,13 +204,6 @@ tr.mat-header-row {
         right: 3px;
     }
 }
-::ng-deep {
-    .btn-sky-blue {
-        color: var(--color-white);
-        background-color: var(--color-blue-primary);
-        border-color: var(--color-blue-primary);
-    }
-}
 
 .btn-filters {
     @include common-filters(
