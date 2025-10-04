@@ -1,0 +1,181 @@
+/**
+ * Cross-browser text-transform mixin for individual use
+ * Apply text-transform with all vendor prefixes
+ * 
+ * @param {String} $value - The text-transform value (lowercase, uppercase, capitalize, none)
+ */
+@mixin text-transform($value) {
+  -webkit-text-transform: #{$value} !important;
+  -moz-text-transform: #{$value} !important;
+  -ms-text-transform: #{$value} !important;
+  text-transform: #{$value} !important;
+}
+
+/**
+ * Cross-browser text-align mixin for individual use
+ * Apply text-align with all vendor prefixes
+ * 
+ * @param {String} $value - The text-align value (left, right, center, justify)
+ */
+@mixin text-align($value) {
+  -webkit-text-align: #{$value} !important;
+  -moz-text-align: #{$value} !important;
+  -ms-text-align: #{$value} !important;
+  text-align: #{$value} !important;
+}
+
+/**
+ * Cross-browser cursor mixin for individual use
+ * Apply cursor with vendor prefixes for specific cursors
+ * 
+ * @param {String} $value - The cursor value
+ */
+@mixin cursor($value) {
+  @if $value == grab {
+    cursor: grab !important;
+    cursor: -webkit-grab !important;
+    cursor: -moz-grab !important;
+  } @else if $value == grabbing {
+    cursor: grabbing !important;
+    cursor: -webkit-grabbing !important;
+    cursor: -moz-grabbing !important;
+  } @else if $value == zoom-in {
+    cursor: zoom-in !important;
+    cursor: -webkit-zoom-in !important;
+    cursor: -moz-zoom-in !important;
+  } @else if $value == zoom-out {
+    cursor: zoom-out !important;
+    cursor: -webkit-zoom-out !important;
+    cursor: -moz-zoom-out !important;
+  } @else {
+    cursor: #{$value} !important;
+  }
+}
+
+/**
+ * Cross-browser opacity mixin for individual use
+ * Apply opacity with IE8+ support and vendor prefixes
+ * 
+ * @param {Number} $value - The opacity value (0 to 1)
+ */
+@mixin opacity($value) {
+  // IE8+ filter fallback
+  filter: alpha(opacity=#{$value * 100}) !important;
+  // Modern browsers
+  -webkit-opacity: #{$value} !important;
+  -moz-opacity: #{$value} !important;
+  -ms-opacity: #{$value} !important;
+  opacity: #{$value} !important;
+}
+
+/**
+ * Text transformation utility mixin
+ * Generates utility classes for text-transform property with cross-browser support
+ * 
+ * @param {Map} $transforms - Map of class suffixes and their corresponding text-transform values
+ */
+@mixin text-transform-utilities($transforms: (
+  'lowercase': lowercase,
+  'uppercase': uppercase,
+  'capitalize': capitalize,
+  'none': none
+)) {
+  @each $name, $value in $transforms {
+    .text-#{$name} {
+      @include text-transform($value);
+    }
+  }
+}
+
+/**
+ * Text alignment utility mixin
+ * Generates utility classes for text-align property with cross-browser support
+ * 
+ * @param {Map} $alignments - Map of class suffixes and their corresponding text-align values
+ */
+@mixin text-align-utilities($alignments: (
+  'left': left,
+  'right': right,
+  'center': center,
+  'justify': justify
+)) {
+  @each $name, $value in $alignments {
+    .text-#{$name} {
+      @include text-align($value);
+    }
+  }
+}
+
+/**
+ * Cursor utility mixin
+ * Generates utility classes for cursor property with cross-browser support
+ * 
+ * @param {Map} $cursors - Map of class suffixes and their corresponding cursor values
+ */
+@mixin cursor-utilities($cursors: (
+  'auto': auto,
+  'default': default,
+  'none': none,
+  'pointer': pointer,
+  'help': help,
+  'wait': wait,
+  'text': text,
+  'move': move,
+  'not-allowed': not-allowed,
+  'grab': (grab, -webkit-grab, -moz-grab),
+  'grabbing': (grabbing, -webkit-grabbing, -moz-grabbing),
+  'crosshair': crosshair,
+  'copy': copy,
+  'alias': alias,
+  'progress': progress,
+  'cell': cell,
+  'all-scroll': all-scroll,
+  'col-resize': col-resize,
+  'row-resize': row-resize,
+  'n-resize': n-resize,
+  'e-resize': e-resize,
+  's-resize': s-resize,
+  'w-resize': w-resize,
+  'ne-resize': ne-resize,
+  'nw-resize': nw-resize,
+  'se-resize': se-resize,
+  'sw-resize': sw-resize,
+  'ew-resize': ew-resize,
+  'ns-resize': ns-resize,
+  'nesw-resize': nesw-resize,
+  'nwse-resize': nwse-resize,
+  'zoom-in': (zoom-in, -webkit-zoom-in, -moz-zoom-in),
+  'zoom-out': (zoom-out, -webkit-zoom-out, -moz-zoom-out)
+)) {
+  @each $name, $value in $cursors {
+    .cursor-#{$name} {
+      @if type-of($value) == list {
+        @include cursor(nth($value, 1));
+      } @else {
+        @include cursor($value);
+      }
+    }
+  }
+}
+
+/**
+ * Opacity utility mixin
+ * Generates utility classes for opacity property with cross-browser support including IE8+
+ * 
+ * @param {Map} $opacities - Map of class suffixes and their corresponding opacity values
+ */
+@mixin opacity-utilities($opacities: (
+  '0': 0,
+  '10': 0.1,
+  '25': 0.25,
+  '50': 0.5,
+  '75': 0.75,
+  '90': 0.9,
+  '100': 1
+)) {
+  @each $name, $value in $opacities {
+    .opacity-#{$name} {
+      @include opacity($value);
+    }
+  }
+}

@@ -1,0 +1,59 @@
+// ==========================================================================
+// MAIN STYLESHEET
+// ==========================================================================
+// This file imports all other stylesheets in the correct order
+// Following the 7-1 SCSS architecture pattern
+
+// 1. ABSTRACTS
+// --------------------------------------------------------------------------
+// Variables, functions, mixins - no actual CSS output
+@import 'abstracts/variables';
+@import 'abstracts/functions';
+@import 'abstracts/mixins';
+
+// 2. VENDORS
+// --------------------------------------------------------------------------
+// Third-party CSS libraries and frameworks
+@import '~@angular/material/theming';
+
+// 3. BASE
+// --------------------------------------------------------------------------
+// Basic styles, resets, typography
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/global';
+
+// 4. THEMES
+// --------------------------------------------------------------------------
+// Theme-specific styles and configurations
+@import 'themes/custom-theme';
+
+// 5. MATERIAL DESIGN
+// --------------------------------------------------------------------------
+// Angular Material customizations
+@import 'material/material-variables';
+@import 'material/material-overrides';
+
+// 6. LAYOUT
+// --------------------------------------------------------------------------
+// Layout-specific styles (header, sidebar, grid, etc.)
+@import 'layout/header';
+@import 'layout/sidebar';
+@import 'layout/grid';
+
+// 7. COMPONENTS
+// --------------------------------------------------------------------------
+// Component-specific styles
+@import 'components/buttons';
+
+// 8. PAGES
+// --------------------------------------------------------------------------
+// Page-specific styles
+@import 'pages/ledger';
+@import 'pages/vouchers';
+
+// 9. UTILITIES
+// --------------------------------------------------------------------------
+// Utility classes and helper styles (if needed)
+@import 'utilities/spacing';
+@import 'utilities/text';
