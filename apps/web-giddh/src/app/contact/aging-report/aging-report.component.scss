@@ -233,15 +233,6 @@ tr.mat-header-row {
         right: 3px;
     }
 }
-::ng-deep {
-    /* UNUSED COMPONENT CLASS: btn-sky-blue - Auto-commented by script
-.btn-sky-blue {
-        color: var(--color-white);
-        background-color: var(--color-blue-primary);
-        border-color: var(--color-blue-primary);
-    }
-*/
-}
 
 /* UNUSED COMPONENT CLASS: btn-filters - Auto-commented by script
 .btn-filters {
@@ -298,11 +289,11 @@ tr.mat-header-row {
 }
 
 // responsive
-@media (min-width: 769px) {
-    .on-mobile-view > .top-aging-table-top {
-        display: none;
-    }
-}
+// @media (min-width: 769px) {
+//     .on-mobile-view > .top-aging-table-top {
+//         display: none;
+//     }
+// }
 
 @media (max-width: 1024px) {
     .main-table {

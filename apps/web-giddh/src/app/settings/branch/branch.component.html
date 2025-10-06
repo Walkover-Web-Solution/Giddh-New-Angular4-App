@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mr-t2 loader-main">
+                        <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mr-t2">
                             <div class="no-data">
                                 <p>{{ localeData?.no_branch_found }}</p>
                             </div>

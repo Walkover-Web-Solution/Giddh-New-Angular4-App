@@ -1,11 +1,11 @@
-html,
+/* html,
 body {
     height: 100%;
-    /* background-color: var(--color-white); */
+    background-color: var(--color-white);
     color: var(--color-black);
-}
+} */
 
-a.active {
+/* a.active {
     background-color: gray;
 }
 /* UNUSED COMPONENT CLASS: sticky-footer - Auto-commented by script

@@ -4,7 +4,7 @@
 }
 .primary-sidebar {
     padding-top: 0 !important;
-    background-color: var(--color-white);
+    // background-color: var(--color-white);
     .company-branch-block {
         background-color: var(--color-blue-light);
         .branch-connection {
@@ -54,24 +54,23 @@
             .icon-down-new {
                 position: relative;
                 right: 5px;
-                color: var(--color-black);
+                // color: var(--color-black);
             }
             .icon-cross {
                 display: flex;
                 font-size: 12px;
-                color: var(--color-black);
+                // color: var(--color-black);
             }
-            /* UNUSED COMPONENT CLASS: head-nav - Auto-commented by script
-.head-nav {
-                background: var(--color-light-gray);
-                border-bottom: 10px solid var(--color-silver);
+            .head-nav {
+                // background: var(--color-light-gray);
+                // border-bottom: 10px solid var(--color-silver);
+                border-bottom: 10px solid currentColor;
                 margin-bottom: 0;
             }
-*/
         }
         h3 {
             font-weight: var(--font-weight-semibold);
-            color: var(--color-dark-gray);
+            // color: var(--color-dark-gray);
             .company-alice {
                 width: 30px;
                 height: 30px;
@@ -85,7 +84,7 @@
                 white-space: nowrap;
                 letter-spacing: -2px;
                 font-size: var(--font-size-15) !important;
-                color: var(--color-black);
+                // color: var(--color-black);
             }
             .company-full-name {
                 white-space: normal;
@@ -101,7 +100,7 @@
                     width: 150px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    color: var(--color-black);
+                    // color: var(--color-black);
                 }
                 .branch-ellipsis {
                     white-space: nowrap;
@@ -114,23 +113,22 @@
                     margin-top: 7px;
                 }
             }
-            img/* UNUSED COMPONENT CLASS: company-icon - Auto-commented by script
+            /* UNUSED COMPONENT CLASS: company-icon - Auto-commented by script
+            img
 .company-icon {
                 width: 28px;
             }
 */
         }
         .current-branch-name {
-            li {
-                a {
-                    color: var(--color-dark-gray);
-                }
-            }
-            /* UNUSED COMPONENT CLASS: branch-alice - Auto-commented by script
-.branch-alice {
+            // li {
+            //     a {
+            //         color: var(--color-dark-gray);
+            //     }
+            // }
+            .branch-alice {
                 display: none !important;
             }
-*/
             /* UNUSED COMPONENT CLASS: switch-branch - Auto-commented by script
 .switch-branch {
                 display: flex !important;
@@ -179,7 +177,7 @@
             }
         }
         p {
-            color: var(--color-black);
+            // color: var(--color-black);
             font-weight: var(--font-weight-semibold);
         }
         ul {
@@ -191,7 +189,7 @@
                 white-space: nowrap;
                 position: relative;
                 a {
-                    color: var(--color-dark-gray);
+                    // color: var(--color-dark-gray);
                     line-height: 16px;
                     &.show-more {
                         color: var(--color-blue-primary);
@@ -215,7 +213,7 @@
                 display: flex;
                 justify-content: space-between;
                 line-height: 20px;
-                color: var(--color-black);
+                // color: var(--color-black);
                 span {
                     /* UNUSED COMPONENT CLASS: icon-arrow-down - Auto-commented by script
 .icon-arrow-down {
@@ -430,14 +428,14 @@
                         span {
                             i {
                                 font-size: 20px;
-                                color: var(--color-dark-gray);
+                                // color: var(--color-dark-gray);
                                 transform: none;
                             }
                         }
                         i {
                             font-size: var(--font-size-15);
                             display: inline-flex;
-                            color: var(--color-dark-gray);
+                            // color: var(--color-dark-gray);
                             width: 14px;
                             height: 14px;
                             justify-content: center;
@@ -474,7 +472,7 @@
 
 cdk-tree {
     cdk-tree-node {
-        color: var(--color-dark-gray);
+        // color: var(--color-dark-gray);
         .main-item-wrapper {
             padding: 0 20px;
             width: 100%;
@@ -597,12 +595,10 @@ cdk-tree {
 @media (max-height: 950px) {
     /* UNUSED COMPONENT CLASS: sidebar-collapse - Auto-commented by script
 .sidebar-collapse {
-        /* UNUSED COMPONENT CLASS: other-sub-menu-item - Auto-commented by script
 .other-sub-menu-item {
             height: 200px;
             overflow-y: auto;
         }
-*/
     }
 */
     .menu-block {
