@@ -413,7 +413,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case AccountsAction.DELETE_ACCOUNT_RESPONSE:
             let d: BaseResponse<string, any> = action.payload;
             if (d?.status === 'success') {
-                console.log("d", d);
                 return Object.assign({}, state, {
                     activeAccount: null,
                     activeGroup: { uniqueName: d.request?.groupUniqueName },
