@@ -4,9 +4,11 @@
         font-weight: var(--font-weight-semibold);
     }
     .custom-field-list {
-        .table-responsive {
+        /* UNUSED COMPONENT CLASS: table-responsive - Auto-commented by script
+.table-responsive {
             max-height: 555px;
         }
+*/
     }
 }
 .icon-trash,

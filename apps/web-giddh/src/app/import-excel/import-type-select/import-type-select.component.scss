@@ -32,9 +32,12 @@
     margin-bottom: 10px;
 }
 
-.has-error .form-control {
+/* UNUSED COMPONENT CLASS: has-error - Auto-commented by script
+.has-error /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
+.form-control {
     border-color: var(--color-red) !important;
 }
+*/
 
 .import-type img {
     max-width: 90px;
@@ -63,10 +66,13 @@
 }
 
 .import-type {
-    .icon-import, .icon-invoice-new {
+    /* UNUSED COMPONENT CLASS: icon-import - Auto-commented by script
+.icon-import, /* UNUSED COMPONENT CLASS: icon-invoice-new - Auto-commented by script
+.icon-invoice-new {
         background: var(--color-light-gray);
         width: 90px;
         height: 90px;
         line-height: 90px;
     }
+*/
 }

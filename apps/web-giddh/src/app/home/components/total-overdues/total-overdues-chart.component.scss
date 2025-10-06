@@ -9,26 +9,32 @@
 .vendor-due-text {
     color: var(--color-red);
 }
-
-span.month-dropdown {
+/* UNUSED COMPONENT CLASS: month-dropdown - Auto-commented by script
+span
+.month-dropdown {
     font-size: var(--font-size-12);
     color: var(--color-dark-gray);
     vertical-align: top;
 }
+*/
 
-.dashboard-filter .btn-group {
+.dashboard-filter /* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
+.btn-group {
     display: block;
     line-height: 1;
 }
+*/
 
 .dashboard-filter .btn-group span {
     vertical-align: middle;
     color: var(--color-dark-gray);
 }
 
+/* UNUSED COMPONENT CLASS: underline - Auto-commented by script
 .underline {
     text-decoration: underline;
 }
+*/
 
 .dashboard-filter {
     display: inline-flex;
@@ -36,10 +42,12 @@ span.month-dropdown {
     align-items: center;
 }
 
-.dashboard-filter .icon-collapse-icon {
+.dashboard-filter /* UNUSED COMPONENT CLASS: icon-collapse-icon - Auto-commented by script
+.icon-collapse-icon {
     margin-left: 8px;
     font-size: var(--font-size-15);
 }
+*/
 
 .due-amount {
     color: var(--color-black);
@@ -47,14 +55,16 @@ span.month-dropdown {
     margin: 0;
     padding: 0;
 }
-
-span.icon-rupees {
+/* UNUSED COMPONENT CLASS: icon-rupees - Auto-commented by script
+span
+.icon-rupees {
     font-size: 12px;
 }
-
+/* UNUSED COMPONENT CLASS: panel-body - Auto-commented by script
 .panel-body small {
     color: var(--color-dark-gray);
 }
+*/
 .dashboard-datepicker {
     min-width: 218px;
     border-radius: 30px;

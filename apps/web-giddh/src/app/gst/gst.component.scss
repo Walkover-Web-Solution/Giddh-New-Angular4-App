@@ -2,19 +2,28 @@
     padding: 0;
     border-right: 1px solid transparent;
 }
+/* UNUSED COMPONENT CLASS: receipt-wrapper - Auto-commented by script
+/* UNUSED COMPONENT CLASS: dropdown-toggle - Auto-commented by script
+/* UNUSED COMPONENT CLASS: doc-checkbox - Auto-commented by script
+/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
+/* UNUSED COMPONENT CLASS: doc-actions - Auto-commented by script
 .doc-actions {
     border-color: var(--color-blue-primary) !important;
     background: var(--color-blue-primary);
     color: var(--color-white);
 }
+*/
+/* UNUSED COMPONENT CLASS: btn-sm - Auto-commented by script
 
 .btn,
 .btn-sm,
+/* UNUSED COMPONENT CLASS: btn-xs - Auto-commented by script
 .btn-xs {
     border-radius: 3px;
 }
+*/
 
 .btn {
     display: inline-block;
@@ -53,9 +62,11 @@ svg.icon.icon-xxlg-md {
     margin: 22px 0;
 }
 
-.return-content .return-filed {
+.return-content /* UNUSED COMPONENT CLASS: return-filed - Auto-commented by script
+.return-filed {
     background-color: var(--color-green);
 }
+*/
 
 .text-uppercase {
     text-transform: uppercase;
@@ -113,16 +124,20 @@ svg.icon.gstr-icon {
     font-size: var(--font-size-24);
 }
 
+/* UNUSED COMPONENT CLASS: bottom-action - Auto-commented by script
 .bottom-action,
 .tax-engine a,
 .tax-engine a > .dropdown {
     cursor: pointer;
 }
+*/
 
-.return-content .line-gradient {
+.return-content /* UNUSED COMPONENT CLASS: line-gradient - Auto-commented by script
+.line-gradient {
     border-image: linear-gradient(to right, #eee 0, #eee 30%, #fff 60%);
     border-image-slice: 1;
 }
+*/
 
 .return-content .purchase-colm {
     width: 24%;
@@ -158,45 +173,59 @@ svg.icon.icon-xxlg-md {
     margin-bottom: 0;
 }
 
+/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
 .btn-default {
     color: var(--color-black);
     background-color: var(--color-light-gray);
     border-color: var(--color-silver);
 }
+*/
 
-.return-body .notification {
+.return-body /* UNUSED COMPONENT CLASS: notification - Auto-commented by script
+.notification {
     padding-top: 25px;
     background: var(--color-white);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: filing-demo-video - Auto-commented by script
 .filing-demo-video {
     padding: 10px;
     display: block;
     border-radius: 2px;
     margin-bottom: 12px;
 }
+*/
 
-.filing-demo-video .video-thumbnail {
+.filing-demo-video /* UNUSED COMPONENT CLASS: video-thumbnail - Auto-commented by script
+.video-thumbnail {
     display: inline-block;
 }
+*/
 
 .filing-demo-video .video-thumbnail > svg {
     width: 60px;
     height: 40px;
 }
 
-.filing-demo-video .video-desc {
+.filing-demo-video /* UNUSED COMPONENT CLASS: video-desc - Auto-commented by script
+.video-desc {
     display: inline-block;
     padding-left: 10px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: font-medium - Auto-commented by script
 .font-medium {
     font-size: var(--font-size-15);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: label-default - Auto-commented by script
 .label-default {
     background-color: var(--color-medium-gray);
 }
+*/
 
 hr {
     margin-top: 20px;
@@ -204,14 +233,18 @@ hr {
     border-top: 1px solid var(--color-silver);
 }
 
-.return-body .notification .activity-graph {
+.return-body .notification /* UNUSED COMPONENT CLASS: activity-graph - Auto-commented by script
+.activity-graph {
     padding: 20px 0 25px;
 }
+*/
 
-.return-body .notification .activity-graph .notify {
+.return-body .notification .activity-graph /* UNUSED COMPONENT CLASS: notify - Auto-commented by script
+.notify {
     position: relative;
     padding-bottom: 30px;
 }
+*/
 
 .return-body .notification .activity-graph .notify:not(:last-child)::before {
     content: "";
@@ -223,7 +256,8 @@ hr {
     border-left: 1px solid var(--color-border-light);
 }
 
-.return-body .notification .activity-graph .notify-circle {
+.return-body .notification .activity-graph /* UNUSED COMPONENT CLASS: notify-circle - Auto-commented by script
+.notify-circle {
     width: 9px;
     height: 9px;
     border-radius: 50%;
@@ -232,11 +266,14 @@ hr {
     margin-right: 15px;
     margin-top: 4px;
 }
+*/
 
-.return-body .notification .activity-graph .notify-content {
+.return-body .notification .activity-graph /* UNUSED COMPONENT CLASS: notify-content - Auto-commented by script
+.notify-content {
     display: inline-block;
     width: 90%;
 }
+*/
 
 .return-body .notification .activity-graph h4 {
     line-height: 1.5;
@@ -249,6 +286,7 @@ hr {
     color: var(--color-dark-gray) !important;
 }
 
+/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
 #c-tab ::ng-deep .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
@@ -261,29 +299,38 @@ hr {
     border-top: 0 !important;
     border-bottom-color: var(--color-blue-primary);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: my-dropdown-menu - Auto-commented by script
 .my-dropdown-menu {
     top: 8px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: section-disabled - Auto-commented by script
 .section-disabled {
     pointer-events: none;
     opacity: 0.6;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: daterangePicker - Auto-commented by script
 .daterangePicker {
     position: absolute;
     opacity: 0;
     right: -160px;
     top: 0;
-    /* visibility: hidden; */
+    // visibility: hidden;
     pointer-events: none;
 }
+/* UNUSED COMPONENT CLASS: daterangepicker - Auto-commented by script
 
 :host ::ng-deep .daterangepicker.opensright:after,
-:host ::ng-deep .daterangepicker.opensright:before {
+:host ::ng-deep .daterangepicker/* UNUSED COMPONENT CLASS: opensright - Auto-commented by script
+.opensright:before {
     content: none;
 }
+*/
 
 :focus {
     outline: none !important;
@@ -307,24 +354,33 @@ hr {
     }
 }
 
+/* UNUSED COMPONENT CLASS: icon-download - Auto-commented by script
 .icon-download {
     font-weight: 600;
 }
+*/
 
-.header-info .btn-group > .dropdown-menu {
+/* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
+.header-info .btn-group > /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
+.dropdown-menu {
     margin-top: 0;
     z-index: 989;
 }
-::ng-deep #monthPicker button.btn.btn-default.btn-info {
+*/
+::ng-deep #monthPicker button.btn.btn-default/* UNUSED COMPONENT CLASS: btn-info - Auto-commented by script
+.btn-info {
     background: var(--color-blue-primary) !important;
     color: var(--color-white) !important;
     text-decoration: none;
     border-radius: 3px;
 }
+*/
 
-::ng-deep #monthPicker .btn-info > .text-success {
+ /* ::ng-deep #monthPicker .btn-info > UNUSED COMPONENT CLASS: text-success - Auto-commented by script
+.text-success {
     color: var(--color-blue-primary) !important;
 }
+*/
 ::ng-deep #monthPicker .btn-default.btn-info > .text-success {
     color: inherit !important;
 }

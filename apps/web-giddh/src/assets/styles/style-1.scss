@@ -153,53 +153,79 @@ textarea {
 // }
 
 /*header nav links override*/
+/* UNUSED GLOBAL CLASS: navbar-inverse - Auto-commented by script
 .navbar-inverse .navbar-nav > li > a {
     color: var(--color-black);
     line-height: 24px;
 }
+*/
+/* UNUSED GLOBAL CLASS: navbar-inverse - Auto-commented by script
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
     color: var(--color-black) !important;
 }
+*/
+/* UNUSED GLOBAL CLASS: navbar-inverse - Auto-commented by script
 .navbar-inverse .navbar-text {
     color: var(--color-white);
 }
+*/
 /*dashboard panel*/ /* override bootstrap */
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > .active > a,
 .pagination > .active > a:focus,
+*/
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > .active > a:hover,
 .pagination > .active > span,
+*/
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
     z-index: 1 !important;
 }
+*/
 /*Dashboard*/
 #accountList {
     padding-bottom: 70px;
 }
 /*icons style*/ /*48px icons*/
+/* UNUSED GLOBAL CLASS: icon-tb - Auto-commented by script
 .icon-tb {
     background-position: 0 -792px;
 }
+*/
+/* UNUSED GLOBAL CLASS: icon-ew - Auto-commented by script
 .icon-ew {
     background-position: 0 -840px;
 }
+*/
+/* UNUSED GLOBAL CLASS: icon-lw - Auto-commented by script
 .icon-lw {
     background-position: 0 -888px;
 }
+*/
+/* UNUSED GLOBAL CLASS: icon-pnl - Auto-commented by script
 .icon-pnl {
     background-position: 0 -936px;
 }
+*/
+/* UNUSED GLOBAL CLASS: icon-bs - Auto-commented by script
 .icon-bs {
     background-position: 0 -984px;
 }
+*/
 /*24px icons*/
+/* UNUSED GLOBAL CLASS: icon-menu-w - Auto-commented by script
 .icon-menu-w {
     background-position: -24px -216px;
 }
+*/
+/* UNUSED GLOBAL CLASS: icon-building-w - Auto-commented by script
 .icon-building-w {
     background-position: -24px -768px;
 }
+*/
 .icon-user {
     background-position: 0 -360px;
 }
@@ -669,12 +695,16 @@ textarea {
     padding: 10px 0px 0;
 }
 /*modal settings override*/
+/* UNUSED GLOBAL CLASS: border-radius-0 - Auto-commented by script
 .border-radius-0 .modal-content {
     border-radius: 0;
 }
+*/
+/* UNUSED GLOBAL CLASS: modal-liq-90 - Auto-commented by script
 .modal-liq-90 {
     width: 90%;
 }
+*/
 #getGroupModal {
     height: 100%;
     overflow: inherit;
@@ -701,10 +731,12 @@ textarea {
     width: 18px;
 }
 .search-loading .spinner,
+/* UNUSED GLOBAL CLASS: search-warning - Auto-commented by script
 .search-warning .spinner {
     display: inline-block;
     vertical-align: top;
 }
+*/
 .spinner {
     background-size: 30px 30px;
     display: block;
@@ -841,10 +873,12 @@ textarea {
     text-transform: capitalize;
     max-width: 200px;
 }
+/* UNUSED GLOBAL CLASS: ui-select-highlight - Auto-commented by script
 .ui-select-highlight {
     background-color: var(--color-orange);
     display: inline-block;
 }
+*/
 /*breadcrumb style*/
 .breadcrumb > .active > a {
     color: var(--color-dark-gray);
@@ -955,6 +989,7 @@ textarea {
 .btn:focus {
     outline: 1px dotted;
 }
+/* UNUSED GLOBAL CLASS: fadeIn - Auto-commented by script
 .fadeIn {
     -webkit-animation: fadein 0.5s;
     -moz-animation: fadein 0.5s;
@@ -962,6 +997,7 @@ textarea {
     -o-animation: fadein 0.5s;
     animation: fadein 0.5s;
 }
+*/
 @keyframes fadein {
     from {
         opacity: 0;
@@ -1014,11 +1050,14 @@ textarea {
     border-bottom: 1px solid;
     background: var(--color-white);
 }
+/* UNUSED GLOBAL CLASS: pdf-export - Auto-commented by script
 .pdf-export,
 .xls-export {
     position: relative;
     margin-left: 5px;
 }
+*/
+/* UNUSED GLOBAL CLASS: close-icon - Auto-commented by script
 .close-icon {
     position: absolute;
     right: 10px;
@@ -1026,6 +1065,7 @@ textarea {
     z-index: 9;
     cursor: pointer;
 }
+*/
 .table-container .row {
     margin: 0px;
     padding: 0;
@@ -1135,13 +1175,13 @@ textarea {
 // .mr-t100 {
 //     margin-top: 100px;
 // }
-.dropdown-parent .dropdown-menu {
-    max-height: 150px;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    margin: 0;
-    padding: 0;
-}
+// .dropdown-parent .dropdown-menu {
+//     max-height: 150px;
+//     overflow-y: scroll;
+//     -webkit-overflow-scrolling: touch;
+//     margin: 0;
+//     padding: 0;
+// }
 /*tbpl list*/
 .tbpl-list .list-inline {
     line-height: normal;
@@ -1387,15 +1427,21 @@ textarea {
         padding-top: 15px;
         padding-bottom: 15px;
     }
+    /* UNUSED GLOBAL CLASS: navbar-inverse - Auto-commented by script
     .navbar-inverse .navbar-nav > li > a {
         line-height: 24px;
     }
+    */
+    /* UNUSED GLOBAL CLASS: modal-liq-90 - Auto-commented by script
     .modal-liq-90 {
         width: 900px;
     }
+    */
+    /* UNUSED GLOBAL CLASS: manage-account-popup - Auto-commented by script
     .manage-account-popup .modal-liq-90 {
         width: 100%;
     }
+    */
 }
 /*tax table setting*/
 
@@ -1403,24 +1449,32 @@ textarea {
     display: block;
     clear: both;
 }
+/* UNUSED GLOBAL CLASS: tax-table - Auto-commented by script
 .tax-table {
     min-width: 860px;
 }
+*/
 .tax-table.table > tbody > tr > td,
 .tax-table.table > tbody > tr > th {
     vertical-align: middle;
 }
+/* UNUSED GLOBAL CLASS: tax-table - Auto-commented by script
 .tax-table tbody tr td input.form-control {
     border-radius: 0;
 }
+*/
+/* UNUSED GLOBAL CLASS: tax-table - Auto-commented by script
 .tax-table tbody tr td select.form-control {
     border-radius: 0;
 }
+*/
+/* UNUSED GLOBAL CLASS: tax-table - Auto-commented by script
 .tax-table tbody tr td a {
     display: block;
     overflow: hidden;
     margin: 5px;
 }
+*/
 
 table.nopad td,
 table.nopad th {
@@ -1435,32 +1489,46 @@ table.nopad td .form-control,
 table td.nopad {
     padding: 0 !important;
 }
+/* UNUSED GLOBAL CLASS: inner-table - Auto-commented by script
 .inner-table thead tr,
 .inner-table tbody tr {
     border-bottom: 1px solid var(--color-light-gray);
     text-align: center;
 }
+*/
+/* UNUSED GLOBAL CLASS: inner-table - Auto-commented by script
 .inner-table tbody tr:last-child {
     border-bottom: none;
 }
+*/
+/* UNUSED GLOBAL CLASS: inner-table - Auto-commented by script
 .inner-table tbody td,
 .inner-table thead th {
     border-right: 1px solid var(--color-light-gray);
 }
+*/
+/* UNUSED GLOBAL CLASS: inner-table - Auto-commented by script
 .inner-table tbody td:last-child,
 .inner-table thead th:last-child {
     border-right: none;
 }
+*/
+/* UNUSED GLOBAL CLASS: inner-table - Auto-commented by script
 .inner-table td input,
 .inner-table thead th {
     text-align: center;
 }
+*/
+/* UNUSED GLOBAL CLASS: inner-table - Auto-commented by script
 .inner-table td input {
     border-radius: 0;
 }
+*/
+/* UNUSED GLOBAL CLASS: inner-table - Auto-commented by script
 .inner-table td i {
     cursor: pointer;
 }
+*/
 .table-striped .selected-for-inv {
     background-color: var(--color-silver) !important;
 }
@@ -1504,10 +1572,13 @@ ul.pills li {
 .switch.wide100.checked small {
     left: 72px;
 }
+/* UNUSED GLOBAL CLASS: switch - Auto-commented by script
 .switch {
     width: 40px;
     height: 20px;
 }
+*/
+/* UNUSED GLOBAL CLASS: switch - Auto-commented by script
 .switch small {
     width: 20px;
     height: 20px;
@@ -1540,11 +1611,13 @@ ul.pills li {
 .compound-entry td input:hover {
     background: transparent !important;
 }
+/* UNUSED GLOBAL CLASS: add-entry-row - Auto-commented by script
 .add-entry-row .ledger-row td,
 .add-entry-row .ledger-row td input {
     background: var(--color-dark-gray);
     color: var(--color-white);
 }
+*/
 .ledger-panel {
     background: var(--color-light-gray);
     border-radius: 2px;
@@ -1612,6 +1685,7 @@ ul.pills li {
     resize: none;
 }
 /* company list dropdown styles */
+/* UNUSED GLOBAL CLASS: sub-menu-nav - Auto-commented by script
 .sub-menu-nav {
     margin-top: 0px;
     width: 100%;
@@ -1624,23 +1698,32 @@ ul.pills li {
     -webkit-box-shadow: 0 6px 12px var(--color-shadow-light);
     box-shadow: 0 6px 12px var(--color-shadow-light);
 }
+*/
+/* UNUSED GLOBAL CLASS: sub_nav_menu - Auto-commented by script
 .sub_nav_menu li:not(.divider) {
     padding: 5px 10px;
     cursor: pointer;
     position: relative;
 }
+*/
+/* UNUSED GLOBAL CLASS: sub_nav_menu - Auto-commented by script
 .sub_nav_menu li:last-child {
     border: none;
 }
+*/
+/* UNUSED GLOBAL CLASS: sub_nav_menu - Auto-commented by script
 .sub_nav_menu ul li:not(.divider):hover {
     background: var(--color-blue-primary);
 }
+*/
+/* UNUSED GLOBAL CLASS: sub_nav_menu - Auto-commented by script
 .sub_nav_menu li i.glyphicon-trash {
     position: absolute;
     right: 10px;
     top: 8px;
     color: var(--color-white);
 }
+*/
 /* tax section on manage groups and accounts*/
 .download-invoice-ledger > i {
     color: var(--color-dark-gray);
@@ -1667,6 +1750,7 @@ ul.pills li {
 .tbpl-list .list-inline {
     line-height: normal;
 }
+/* UNUSED GLOBAL CLASS: email-type - Auto-commented by script
 .email-type li label input {
     vertical-align: sub;
     margin-right: 5px;
@@ -1683,9 +1767,11 @@ ul.pills li {
 .panel-body .chart-div {
     height: auto;
 }
+/* UNUSED GLOBAL CLASS: modal - Auto-commented by script
 .modal {
     z-index: 992;
 }
+*/
 .dashboard-reconnect-block {
     background: var(--color-silver);
     position: absolute;
@@ -1740,19 +1826,25 @@ ul.pills li {
 .stock-grp-list > li > a {
     color: var(--color-dark-gray);
 }
+/* UNUSED GLOBAL CLASS: sub-grp - Auto-commented by script
 .sub-grp > li > a {
     text-transform: uppercase;
     color: var(--color-dark-gray);
     font-weight: 400;
 }
+*/
+/* UNUSED GLOBAL CLASS: stock-items - Auto-commented by script
 .stock-items > li > a {
     text-transform: capitalize;
     color: var(--color-medium-gray);
 }
+*/
+/* UNUSED GLOBAL CLASS: stock-items - Auto-commented by script
 .stock-items > li > a:hover,
 .sub-grp > li > a:hover {
     color: var(--color-dark-gray);
 }
+*/
 .stock-grp.list {
     height: calc(100% - 200px);
     overflow-y: auto;
@@ -1777,14 +1869,18 @@ ul.pills li {
 .parent-group > .stock-grp-list > li > div {
     text-transform: uppercase;
 }
+/* UNUSED GLOBAL CLASS: stock-items - Auto-commented by script
 .stock-items > li,
 .sub-grp > li {
     padding: 5px 7px;
 }
+*/
+/* UNUSED GLOBAL CLASS: stock-items - Auto-commented by script
 .stock-items > li > i,
 .sub-grp > li > i {
     right: 0;
 }
+*/
 .stock-grp-list > li:last-child {
     border-bottom: 0;
 }
@@ -1797,9 +1893,12 @@ ul.pills li {
     top: 22px;
     color: var(--color-medium-gray);
 }
+/* UNUSED GLOBAL CLASS: tour-backdrop - Auto-commented by script
 .tour-backdrop {
     background-color: var(--color-dark-gray);
 }
+*/
+/* UNUSED GLOBAL CLASS: parent-body - Auto-commented by script
 .parent-body {
     padding-bottom: 52px;
     position: relative;
@@ -1807,11 +1906,14 @@ ul.pills li {
     display: inline-block;
     width: 100%;
 }
+*/
+/* UNUSED GLOBAL CLASS: parent-body - Auto-commented by script
 .parent-body tr {
     width: 100%;
     float: left;
     display: inline-table;
 }
+*/
 .pd-2 {
     padding: 20px;
 }
@@ -2004,10 +2106,12 @@ ul.pills li {
     color: var(--color-black);
     background-color: var(--color-white);
 }
+/* UNUSED GLOBAL CLASS: navbar-inverse - Auto-commented by script
 .navbar-inverse .navbar-nav > .open > a {
     background-color: var(--color-black);
     border-color: transparent;
 }
+*/
 .panel-heading {
     color: var(--color-black) !important;
     text-transform: capitalize;
@@ -2026,10 +2130,12 @@ strong {
     background: transparent !important;
     color: var(--color-white) !important;
 }
+/* UNUSED GLOBAL CLASS: navbar-inverse - Auto-commented by script
 .navbar-inverse .btn-link:focus,
 .navbar-inverse .btn-link:hover {
     color: var(--color-black);
 }
+*/
 
 // b,
 // strong {
@@ -2121,14 +2227,18 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-top
 perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
     opacity: 0;
 }
+/* UNUSED GLOBAL CLASS: sub-menu-nav - Auto-commented by script
 .sub-menu-nav li > a {
     padding: 5px 12px;
     color: var(--color-black);
     display: block;
 }
+*/
+/* UNUSED GLOBAL CLASS: sub-menu-nav - Auto-commented by script
 .sub-menu-nav li > a:hover {
     background: var(--color-blue-primary);
 }
+*/
 .no-dbl-click-select {
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -2214,9 +2324,11 @@ form#groupDetailForm {
     max-width: 660px;
     width: 100%;
 }
+/* UNUSED GLOBAL CLASS: mobile-header - Auto-commented by script
 .mobile-header {
     display: none;
 }
+*/
 #getGroupModal #middleBody {
     height: 100%;
 }
@@ -2239,9 +2351,11 @@ form#groupDetailForm {
 }
 
 @media only screen and (max-width: 1024px) {
+    /* UNUSED GLOBAL CLASS: pd-t1-md - Auto-commented by script
     .pd-t1-md {
         padding-top: 10px;
     }
+    */
 }
 @media (max-width: 1024px) {
     #inventory-sidebar {
@@ -2290,13 +2404,20 @@ form#groupDetailForm {
         left: 100px !important;
     }
 }
+/* UNUSED GLOBAL CLASS: valid-tooltip - Auto-commented by script
 .valid-tooltip,
-.tooltip {
+.tooltip,
+*/
+/* UNUSED GLOBAL CLASS: tooltip-inner - Auto-commented by script
+.tooltip-inner {
     font-size: var(--font-size-12) !important;
 }
-// .tooltip-inner {
-//     background: var(--color-dark-gray) !important;
-// }
+*/
+/* UNUSED GLOBAL CLASS: tooltip-inner - Auto-commented by script
+.tooltip-inner {
+    background: var(--color-dark-gray) !important;
+}
+*/
 /** aside pane styles */
 .aside-pane {
     position: relative;
@@ -2335,9 +2456,11 @@ form#groupDetailForm {
     padding: 0 15px;
 }
 
+/* UNUSED GLOBAL CLASS: delete-custom-field-modal-container - Auto-commented by script
 .delete-custom-field-modal-container {
     z-index: 999999 !important;
 }
+*/
 /* material css for ledger */
 // .mat-dialog-container {
 //     padding: 0px !important;
@@ -2464,11 +2587,13 @@ form#groupDetailForm {
 // }
 
 .ledger-head {
+    /* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
     .mat-grid-tile-content {
         justify-content: space-between !important;
         padding: 0 10px;
         font-weight: 500;
     }
+    */
 }
 // .advance-search-by-date {
 //     .input-wrapper {
@@ -2495,8 +2620,10 @@ form#groupDetailForm {
     padding-left: 2px !important;
 }
 .ledg-head
+    /* UNUSED GLOBAL CLASS: mat-grid-list - Auto-commented by script
     .mat-grid-list
     .mat-grid-tile.new-entry-ledger.select2-parent.select2-ledger
+*/
     .ledger-account-label
     input.form-control.focused {
     padding-left: 1px !important;
@@ -2973,6 +3100,7 @@ form#groupDetailForm {
         }
     }
 }
+/* UNUSED GLOBAL CLASS: cdk-drag-preview - Auto-commented by script
 .cdk-drag-preview {
     background-color: var(--color-white);
     border-radius: 4px;
@@ -3006,6 +3134,7 @@ form#groupDetailForm {
         }
     }
 }
+*/
 
 // add-company {
 //     .fill-form {
@@ -3017,8 +3146,10 @@ form#groupDetailForm {
 //     }
 // }
 
+/* UNUSED GLOBAL CLASS: invoice-date-label - Auto-commented by script
 .invoice-date-label {
     &:focus-visible {
         outline: none;
     }
 }
+*/

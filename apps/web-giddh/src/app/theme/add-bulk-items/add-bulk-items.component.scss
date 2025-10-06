@@ -39,9 +39,11 @@
                 }
 
                 .mat-expansion-panel-header {
-                    &.mat-expanded {
+                    /*& UNUSED COMPONENT CLASS: mat-expanded - Auto-commented by script
+.mat-expanded {
                         height: unset;
                     }
+*/
                 }
             }
         }

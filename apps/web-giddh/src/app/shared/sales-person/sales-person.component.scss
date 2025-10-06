@@ -4,7 +4,8 @@
         .giddh-mobile-wrapper {
             z-index: 5;
             ul {
-                &.iti__country-list {
+                /* UNUSED COMPONENT CLASS: iti__country-list - Auto-commented by script < use in flag dropdown */
+            &.iti__country-list { 
                     position: absolute !important;
                     top: unset !important;
                     left: unset !important;

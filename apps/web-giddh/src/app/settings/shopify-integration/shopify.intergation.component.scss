@@ -1,7 +1,8 @@
 .discount {
     min-height: calc(100vh - 120px);
 
-    .initial-screen {
+    /* UNUSED COMPONENT CLASS: initial-screen - Auto-commented by script
+.initial-screen {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -12,45 +13,64 @@
             font-size: var(--font-size-20);
         }
     }
+*/
 }
+/* UNUSED COMPONENT CLASS: action-btn - Auto-commented by script
 .action-btn{
     min-width: 42px;
 }
+*/
 
 // Communication Page Styling
+/* UNUSED COMPONENT CLASS: msg91-container - Auto-commented by script
 .msg91-container:hover {
     background-color: var(--color-light-gray);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: small-button - Auto-commented by script
 .small-button {
     min-width: 111px;
     margin-right: 29px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: edit-buttons - Auto-commented by script
 .edit-buttons {
     color: var(--color-black) !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: auth-key-input - Auto-commented by script
 .auth-key-input {
     color: var(--color-black) !important;
     background-color: var(--color-white) !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: back-text - Auto-commented by script
 .back-text {
     padding-left: 5px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: verify-form - Auto-commented by script
 .verify-form {
-    .input-field {
+    /* UNUSED COMPONENT CLASS: input-field - Auto-commented by script
+.input-field {
         margin-right: 10px;
         width: 300px;
     }
+*/
 
-    .back-button {
+    /* UNUSED COMPONENT CLASS: back-button - Auto-commented by script
+.back-button {
         width: 64px;
     }
 }
+*/
 
+/* UNUSED COMPONENT CLASS: auth-label - Auto-commented by script
 .auth-label {
     float: left;
     width: 100%;
@@ -59,6 +79,7 @@
     color: var(--color-black);
     font-size: var(--font-size-15) !important;
 }
+*/
 
 .msg91-container {
     position: relative;
@@ -74,30 +95,38 @@
     justify-content: center;
     align-items: center;
 
-    .image {
+    /* UNUSED COMPONENT CLASS: image - Auto-commented by script
+.image {
         position: relative;
 
-        .logo {
+        /* UNUSED COMPONENT CLASS: logo - Auto-commented by script
+.logo {
             width: 86px;
         }
+*/
 
-        .msg {
+        /* UNUSED COMPONENT CLASS: msg - Auto-commented by script
+.msg {
             position: absolute;
             width: 33px;
             right: 17px;
             top: 13.5px;
         }
-    }
+}
+*/
 
-    .integrate {
+    /* UNUSED COMPONENT CLASS: integrate - Auto-commented by script
+.integrate {
         p {
             color: var(--color-black);
             font-size: var(--font-size-12);
             margin-top: 12px;
         }
     }
+*/
 
-    .mini-icons {
+    /* UNUSED COMPONENT CLASS: mini-icons - Auto-commented by script
+.mini-icons {
         width: 100%;
         height: 24%;
         margin-top: 16px;
@@ -108,70 +137,95 @@
             width: 27px;
         }
     }
+*/
 
-    .menu {
+    /* UNUSED COMPONENT CLASS: menu - Auto-commented by script
+.menu {
         position: absolute;
         top: -9px;
         right: 0px;
     }
+*/
 }
 
+/* UNUSED COMPONENT CLASS: new-trigger - Auto-commented by script
 .new-trigger {
     margin: 22px 0px 22px 0px;
 }
+*/
 
 .table-one {
     table {
         margin: 0px 0px;
         box-shadow: none;
 
-        .active-trigger-title-width {
+        /* UNUSED COMPONENT CLASS: active-trigger-title-width - Auto-commented by script
+.active-trigger-title-width {
             width: 4%;
         }
+*/
 
-        .channel-width {
+        /* UNUSED COMPONENT CLASS: channel-width - Auto-commented by script
+.channel-width {
             width: 3%;
         }
+*/
 
-        .args-mapping-width {
+        /* UNUSED COMPONENT CLASS: args-mapping-width - Auto-commented by script
+.args-mapping-width {
             width: 5.5%;
         }
+*/
 
-        .created-at-width {
+        /* UNUSED COMPONENT CLASS: created-at-width - Auto-commented by script
+.created-at-width {
             width: 3%;
         }
+*/
 
-        .icons-left {
+        /* UNUSED COMPONENT CLASS: icons-left - Auto-commented by script
+.icons-left {
             width: 1.5%;
         }
+*/
 
-        .icon-visibility {
+        /* UNUSED COMPONENT CLASS: icon-visibility - Auto-commented by script
+.icon-visibility {
             visibility: hidden;
         }
+*/
 
-        .active-trigger-search {
+        /* UNUSED COMPONENT CLASS: active-trigger-search - Auto-commented by script
+.active-trigger-search {
             position: relative;
             bottom: 2px;
         }
+*/
     }
 }
 
+/* UNUSED COMPONENT CLASS: fields-error - Auto-commented by script
 .fields-error {
     border: 1px solid var(--color-red) !important;
     float: left;
     width: 100%;
     border-radius: 5px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: mandatory-label - Auto-commented by script
 .mandatory-label {
     color: var(--color-red);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: dropdown-heading - Auto-commented by script
 .dropdown-heading {
     font-size: var(--font-size-15) !important;
     font-weight: bold;
     color: var(--color-black) !important;
 }
+*/
 
 .trigger-form {
     display: flex;
@@ -181,26 +235,32 @@
         width: 20%;
         height: 100%;
 
-        .create-trigger-head {
+        /* UNUSED COMPONENT CLASS: create-trigger-head - Auto-commented by script
+.create-trigger-head {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
 
-            .trigger-heading {
+            /* UNUSED COMPONENT CLASS: trigger-heading - Auto-commented by script
+.trigger-heading {
                 margin-left: 10px;
                 display: inline-block;
                 color: var(--color-black) !important;
             }
+*/
 
-            .return {
+            /* UNUSED COMPONENT CLASS: return - Auto-commented by script
+.return {
                 width: 36px;
                 height: auto;
                 cursor: pointer;
             }
-        }
+}
+*/
 
         .trigger-input {
-            .trigger-input-label {
+            /* UNUSED COMPONENT CLASS: trigger-input-label - Auto-commented by script
+.trigger-input-label {
                 font-size: var(--font-size-15);
                 float: left;
                 width: 100%;
@@ -211,6 +271,7 @@
                     color: var(--color-red);
                 }
             }
+*/
         }
 
         button {
@@ -223,40 +284,54 @@
         height: 100%;
         padding-left: 20px;
 
-        .compose {
+        /* UNUSED COMPONENT CLASS: compose - Auto-commented by script
+.compose {
             font-size: var(--font-size-15);
             font-weight: 700;
         }
+*/
 
-        .unit-value {
+        /* UNUSED COMPONENT CLASS: unit-value - Auto-commented by script
+.unit-value {
             font-size: var(--font-size-15);
         }
+*/
 
-        .variables-bottom-border {
+        /* UNUSED COMPONENT CLASS: variables-bottom-border - Auto-commented by script
+.variables-bottom-border {
             margin-bottom: 5px;
             padding-bottom: 5px;
             color: var(--color-black) !important;
             font-weight: none !important;
         }
+*/
 
-        .dropdown-box-1 {
+        /* UNUSED COMPONENT CLASS: dropdown-box-1 - Auto-commented by script
+.dropdown-box-1 {
             margin-top: 53px;
             width: 35%;
 
-            .right-label {
+            /* UNUSED COMPONENT CLASS: right-label - Auto-commented by script
+.right-label {
                 margin-left: 25px;
             }
+*/
 
-            .bottom-label {
+            /* UNUSED COMPONENT CLASS: bottom-label - Auto-commented by script
+.bottom-label {
                 margin-top: 12px;
             }
+*/
 
-            .preview-button {
+            /* UNUSED COMPONENT CLASS: preview-button - Auto-commented by script
+.preview-button {
                 margin-top: 25px;
             }
-        }
+}
+*/
 
-        .dropdown-box-2 {
+        /* UNUSED COMPONENT CLASS: dropdown-box-2 - Auto-commented by script
+.dropdown-box-2 {
             margin-top: 60px;
             width: 35%;
             padding-left: 20px;
@@ -274,37 +349,50 @@
                 margin-top: 25px;
             }
         }
+*/
 
-        .dropdown-box-3 {
+        /* UNUSED COMPONENT CLASS: dropdown-box-3 - Auto-commented by script
+.dropdown-box-3 {
             margin-top: 60px;
             width: 10%;
             padding-left: 20px;
             padding-right: 20px;
         }
+*/
     }
 }
 
+/* UNUSED COMPONENT CLASS: verify-page - Auto-commented by script
 .verify-page {
-    .msg-btn {
+    /* UNUSED COMPONENT CLASS: msg-btn - Auto-commented by script
+.msg-btn {
         border: 0;
         background-color: transparent;
     }
 }
+*/
 
+/* UNUSED COMPONENT CLASS: chip-gap - Auto-commented by script
 .chip-gap {
     display: flex;
     flex-direction: column;
     row-gap: 30px;
 }
+*/
 @media (max-width: 1024px) and (min-width: 768px) {
-    .discount-form-setting-tab label,
+    /* UNUSED COMPONENT CLASS: discount-form-setting-tab - Auto-commented by script
+/* UNUSED COMPONENT CLASS: discount - Auto-commented by script
+.discount-form-setting-tab label,
     .discount-form-setting-tab br {
         display: none !important;
     }
+*/
 }
 
 @media (min-width: 1360px) {
-    .table-bordered {
+    /* UNUSED COMPONENT CLASS: table-bordered - Auto-commented by script
+.table-bordered {
         width: 33.33%;
     }
+*/
 }

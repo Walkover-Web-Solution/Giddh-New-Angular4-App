@@ -4,9 +4,11 @@
     justify-content: center;
     align-items: center;
     height: calc(100vh - 250px);
-    .spinner2 {
+    /* UNUSED COMPONENT CLASS: spinner2 - Auto-commented by script
+.spinner2 {
         text-align: center;
     }
+*/
 }
 .create-warehouse h2 {
     font-size: var(--font-size-16);
@@ -102,7 +104,8 @@
     word-break: break-all;
     color: var(--color-blue-primary);
 }
-span.set-as-default {
+/* span UNUSED COMPONENT CLASS: set-as-default - Auto-commented by script
+.set-as-default {
     background-color: var(--color-silver);
     padding: 5px 10px;
     font-size: var(--font-size-15);
@@ -110,6 +113,7 @@ span.set-as-default {
     margin-right: 10px;
     cursor: pointer;
 }
+*/
 .warehouse-details {
     font-size: var(--font-size-15);
 }
@@ -131,22 +135,28 @@ span.set-as-default {
     margin: 0 0 15px;
     display: flex;
     flex-direction: column;
-    .icon-favorite-selected {
+    /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
+.icon-favorite-selected {
         color: var(--color-blue-primary);
     }
+*/
 }
+/* UNUSED COMPONENT CLASS: gray-text - Auto-commented by script
 .gray-text {
     color: var(--color-dark-gray);
     font-size: var(--font-size-12);
 }
+*/
 .set-as-default i.icon-favorite-selected {
     color: var(--color-blue-primary);
 }
+/* UNUSED COMPONENT CLASS: create-new-warehouse-btn - Auto-commented by script
 .create-new-warehouse-btn {
     justify-content: center;
     align-items: center;
     display: flex;
 }
+*/
 .warehouse-pagination {
     width: 100%;
     text-align: center;
@@ -154,10 +164,12 @@ span.set-as-default {
         cursor: not-allowed;
     }
 }
+/* UNUSED COMPONENT CLASS: dropdown-item - Auto-commented by script
 .dropdown-item.warehouse-options {
     justify-content: flex-start;
     text-align: left;
 }
+*/
 .search-warehouse-box {
     max-width: 200px;
     width: 100%;

@@ -1,5 +1,6 @@
 .adjustment {
-    .breadcrumb-item+.breadcrumb-item {
+    .breadcrumb-item+/* UNUSED COMPONENT CLASS: breadcrumb-item - Auto-commented by script
+.breadcrumb-item {
         &::before {
             content: "\ea01" !important;
             font-family: "icomoon" !important;
@@ -7,6 +8,7 @@
         }
 
     }
+*/
 
     .mat-expansion-panel {
         box-shadow: unset;
@@ -17,10 +19,12 @@
             padding-bottom: 15px !important;
             padding-left: 0 !important;
 
-            &.mat-expanded {
+            /*& UNUSED COMPONENT CLASS: mat-expanded - Auto-commented by script
+.mat-expanded {
                 border-bottom: 1px solid var(--color-silver);
                 border-radius: 5px;
             }
+*/
 
             table {
                 tr {
@@ -48,8 +52,10 @@
 
     }
 
-    .no-data-found {
+    /* UNUSED COMPONENT CLASS: no-data-found - Auto-commented by script
+.no-data-found {
         margin-top: 50px !important;
         margin-bottom: 50px !important;
     }
+*/
 }

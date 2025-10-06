@@ -21,11 +21,13 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
 .stock-grp-list .active a,
 .stock-grp-list .active i,
 .stock-grp-list .active .btn-link i {
     color: var(--color-blue-primary) !important;
 }
+*/
 
 .stock-grp-list .active {
     background-color: var(--color-border-light);
@@ -46,9 +48,11 @@
     padding: 8px 0 8px 35px !important;
 }
 
-.main-group div > stock-list ::ng-deep.in-list {
+.main-group div > stock-list ::ng-dee/* p UNUSED COMPONENT CLASS: in-list - Auto-commented by script
+.in-list {
     padding: 8px 0 8px 15px;
 }
+*/
 
 stock-list ::ng-deep.in-list a div {
     color: var(--color-black) !important;
@@ -63,9 +67,11 @@ stock-list ::ng-deep.in-list a div {
 .no-data-box {
     border-top: 1px solid var(--color-border-light) !important;
 }
-.stock-grp-list li .btn {
+.stock-grp-list li /* UNUSED COMPONENT CLASS: btn - Auto-commented by script
+.btn {
     line-height: 14px;
 }
+*/
 .stock-grp-list {
     li {
         .item-group {

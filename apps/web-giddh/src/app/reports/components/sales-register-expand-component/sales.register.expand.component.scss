@@ -1,13 +1,17 @@
 @import "../../../../assets/styles/_mixin.scss";
+/* UNUSED COMPONENT CLASS: flex-fill - Auto-commented by script
 .flex-fill {
     flex: 1 1 auto;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: basic - Auto-commented by script
 .basic > tbody > tr > td,
 .basic > thead > tr > th,
 .basic > tfoot > tr > th {
     white-space: nowrap !important;
 }
+*/
 .td-search-box {
     padding: 0px !important;
     position: relative;
@@ -42,6 +46,7 @@
     border-radius: 5px;
 }
 
+/* UNUSED COMPONENT CLASS: p-modal-tooltip - Auto-commented by script
 .p-modal-tooltip {
     position: absolute;
     background-color: var(--color-white);
@@ -51,27 +56,36 @@
     border-radius: 4px;
     box-shadow: 0 7px 24px var(--color-shadow-light);
 }
+*/
+/* UNUSED COMPONENT CLASS: account-detail-modal-div - Auto-commented by script
 .account-detail-modal-div {
     height: 100%;
     padding: 0;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: account-detail-custom-header - Auto-commented by script
 .account-detail-custom-header {
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
     background: var(--color-light-gray);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: account-detail-custom-title - Auto-commented by script
 .account-detail-custom-title {
     font-weight: var(--font-weight-semibold) !important;
     font-size: var(--font-size-15) !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: account-detail-padding - Auto-commented by script
 .account-detail-padding {
     padding: 1px;
     text-transform: none !important;
 }
+/* UNUSED COMPONENT CLASS: custom-detail - Auto-commented by script
 
 .custom-detail h4 {
     color: var(--color-dark-gray);
@@ -79,39 +93,53 @@
     font-size: var(--font-size-15) !important;
     font-family: var(--font-family) !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: height-82px - Auto-commented by script
 .height-82px {
     padding: 10px 10px 15px 10px;
     border-top: 1px solid var(--color-silver);
 }
+/* UNUSED COMPONENT CLASS: list-unstyled - Auto-commented by script
 
 ul.list-unstyled li a {
     color: var(--color-black);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: li-link - Auto-commented by script
 .li-link {
     margin-top: 15px !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
 .btn-group > a {
     color: var(--color-black);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: ac-detail - Auto-commented by script
 .ac-detail,
 .ac-detail a {
     display: block;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: sale-register - Auto-commented by script
 .sale-register {
     overflow: hidden;
     display: block;
     display: flex;
     align-items: center;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: text-purple - Auto-commented by script
 .text-purple {
     color: var(--color-blue-primary) !important;
 }
+*/
 
 .responsive {
     padding: 0 15px;
@@ -129,9 +157,12 @@ ul.list-unstyled li a {
     margin-bottom: 0px;
 }
 
-.icon-pointe .glyphicon {
+/* UNUSED COMPONENT CLASS: icon-pointe - Auto-commented by script
+.icon-pointe /* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
+.glyphicon {
     cursor: pointer;
 }
+*/
 
 .middle {
     vertical-align: middle;
@@ -142,35 +173,43 @@ ul.list-unstyled li a {
     width: 51px;
 }
 
+/* UNUSED COMPONENT CLASS: report-dropdown - Auto-commented by script
 .report-dropdown {
     min-width: 210px;
 }
+*/
 
 ul#dropdown-nested {
     min-width: 254px;
     z-index: 9;
 }
 
-ul#dropdown-nested li .caret {
+ul#dropdown-nested li /* UNUSED COMPONENT CLASS: caret - Auto-commented by script
+.caret {
     float: right;
     margin-top: 8px;
 }
+*/
 
 .report-dropdown {
     left: 100% !important;
 }
 
+/* UNUSED COMPONENT CLASS: custom-month-select - Auto-commented by script
 .custom-month-select.show {
     display: inline-block !important;
 }
+*/
 
 .top-bar {
     padding: 15px;
 }
 
-.custom-month-select li:hover a.dropdown-item {
+.custom-month-select li:hover a/* UNUSED COMPONENT CLASS: dropdown-item - Auto-commented by script
+.dropdown-item {
     background-color: var(--color-border-light);
 }
+*/
 
 .custom-month-select button.btn {
     background: transparent !important;
@@ -186,22 +225,29 @@ ul#dropdown-nested li .caret {
     outline: none !important;
 }
 
-.icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
+/* UNUSED COMPONENT CLASS: d-block - Auto-commented by script
+.icon-pointer .d-block.font-xxs.glyphicon/* UNUSED COMPONENT CLASS: glyphicon-triangle-top - Auto-commented by script
+.glyphicon-triangle-top {
     line-height: 0.5;
     height: 8px;
 }
+*/
 
-.icon-pointer .font-xxs {
+/* .icon-pointer  UNUSED COMPONENT CLASS: font-xxs - Auto-commented by script
+.font-xxs {
     font-size: var(--font-size-12);
 }
+*/
 
 table th {
     position: relative;
 }
 
+/* UNUSED COMPONENT CLASS: verticle-align-top - Auto-commented by script
 .verticle-align-top {
     vertical-align: top !important;
 }
+*/
 .icon-pointer {
     cursor: pointer;
     color: var(--color-blue-primary);
@@ -210,9 +256,11 @@ table th {
 .icon-pointer .active-text-color {
     color: var(--color-blue-primary);
 }
+/* UNUSED COMPONENT CLASS: table-middle - Auto-commented by script
 .table-middle th .d-flex {
     align-items: center;
 }
+*/
 .expand-collapse-btn {
     margin-bottom: 0 !important;
 }
@@ -256,7 +304,8 @@ table th {
     }
     .top-bar-content {
         .top-bar-content-right-side {
-            .back-btn {
+            /* UNUSED COMPONENT CLASS: back-btn - Auto-commented by script
+.back-btn {
                 position: relative;
                 top: 1px;
                 right: 10px;
@@ -266,6 +315,7 @@ table th {
                     background-color: var(--color-blue-primary);
                 }
             }
+*/
         }
     }
 }
@@ -278,11 +328,13 @@ table th {
     }
 }
 
+/* UNUSED COMPONENT CLASS: list-inline - Auto-commented by script
 .list-inline > li {
     display: inline-block;
     padding-right: 5px;
     padding-left: 5px;
 }
+*/
 .report-breadcrum {
     position: absolute !important;
     top: 0;
@@ -314,14 +366,17 @@ table th {
 .giddh-table {
     tbody {
         tr {
-            td.voucher-number-td {
+            /* UNUSED COMPONENT CLASS: voucher-number-td - Auto-commented by script
+        td .voucher-number-td {
                 white-space: normal !important;
                 word-break: break-all;
             }
+*/
         }
     }
 }
 
+/* UNUSED COMPONENT CLASS: btn-filters - Auto-commented by script
 .btn-filters {
     @include common-filters(
         var(--color-blue-primary),
@@ -329,6 +384,7 @@ table th {
         1px solid var(--color-silver)
     );
 }
+*/
 
 .position-left {
     left: 0;

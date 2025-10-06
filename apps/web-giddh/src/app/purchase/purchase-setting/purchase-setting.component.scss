@@ -46,13 +46,15 @@
             z-index: 2;
             top: 10px;
         }
-        .unverified-icon {
+        /* UNUSED COMPONENT CLASS: unverified-icon - Auto-commented by script
+.unverified-icon {
             position: absolute;
             color: var(--color-red) !important;
             right: 10px;
             z-index: 2;
             top: 10px;
         }
+*/
     }
     .default-expiry {
         input {
@@ -70,20 +72,24 @@
     .bill-lock-date {
         width: 152px;
         position: relative;
-        .icon-calender {
+        /* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
+.icon-calender {
             position: absolute;
             right: 10px;
             top: 25%;
             color: var(--color-medium-gray);
             font-size: 16px;
         }
+*/
     }
-    .sms-textarea {
+    /* UNUSED COMPONENT CLASS: sms-textarea - Auto-commented by script
+.sms-textarea {
         margin-top: 0;
         margin-bottom: 20px !important;
         margin-left: 10px !important;
         width: 260px;
     }
+*/
 }
 .verified-text {
     color: var(--color-green);
@@ -137,9 +143,11 @@
         .integrated-email {
             margin-left: 30px;
         }
-        .single-tab-block .col-sm-3 {
+        .single-tab-block /* UNUSED COMPONENT CLASS: col-sm-3 - Auto-commented by script
+.col-sm-3 {
             width: 100% !important;
         }
+*/
         .hide-on-mobile {
             display: none;
         }

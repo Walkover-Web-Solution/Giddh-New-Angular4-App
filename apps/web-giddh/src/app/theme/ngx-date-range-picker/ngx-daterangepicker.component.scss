@@ -24,7 +24,8 @@
         border-bottom-color: var(--color-silver);
         content: "";
     }
-    &.openscenter {
+    /*& UNUSED COMPONENT CLASS: openscenter - Auto-commented by script
+.openscenter {
         &:before {
             left: 0;
             right: 0;
@@ -40,6 +41,7 @@
             margin-right: auto;
         }
     }
+*/
     &.single {
         .ranges,
         .calendar {
@@ -55,24 +57,36 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        &.drops-up-left {
+        /*& UNUSED COMPONENT CLASS: drops-up-left - Auto-commented by script
+.drops-up-left {
             transform-origin: 100% 100%;
         }
-        &.drops-up-right {
+*/
+        /*& UNUSED COMPONENT CLASS: drops-up-right - Auto-commented by script
+.drops-up-right {
             transform-origin: 0 100%;
         }
-        &.drops-down-left {
+*/
+        /*& UNUSED COMPONENT CLASS: drops-down-left - Auto-commented by script
+.drops-down-left {
             transform-origin: 100% 0;
         }
-        &.drops-down-right {
+*/
+        /*& UNUSED COMPONENT CLASS: drops-down-right - Auto-commented by script
+.drops-down-right {
             transform-origin: 0 0;
         }
-        &.drops-down-center {
+*/
+        /*& UNUSED COMPONENT CLASS: drops-down-center - Auto-commented by script
+.drops-down-center {
             transform-origin: 50%% 0;
         }
-        &.drops-up-center {
+*/
+        /*& UNUSED COMPONENT CLASS: drops-up-center - Auto-commented by script
+.drops-up-center {
             transform-origin: 50%% 100%;
         }
+*/
         .calendar {
             display: block;
         }
@@ -563,10 +577,12 @@
         }
     }
     &.rtl {
-        .label-input {
+        /* UNUSED COMPONENT CLASS: label-input - Auto-commented by script
+.label-input {
             padding-right: 28px;
             padding-left: 6px;
         }
+*/
         .md-drppicker_input i,
         .md-drppicker_input svg {
             left: auto;
@@ -575,9 +591,11 @@
     }
     /* ranges */
     .show-ranges {
-        .drp-calendar.left {
+        /* UNUSED COMPONENT CLASS: drp-calendar - Auto-commented by script
+.drp-calendar.left {
             border-left: 1px solid var(--color-silver);
         }
+*/
     }
     .ranges {
         float: none;
@@ -616,7 +634,8 @@
                         .available.prev {
                             transform: rotate(180deg);
                         }
-                        .drop-down {
+                        /* UNUSED COMPONENT CLASS: drop-down - Auto-commented by script
+.drop-down {
                             position: absolute;
                             z-index: 1017;
                             min-width: 96px;
@@ -626,7 +645,9 @@
                             top: -3px;
                             border-radius: 2px;
                         }
-                        .mat-select-arrow {
+*/
+                        /* UNUSED COMPONENT CLASS: mat-select-arrow - Auto-commented by script
+.mat-select-arrow {
                             background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABAhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ1dWlkOjY1RTYzOTA2ODZDRjExREJBNkUyRDg4N0NFQUNCNDA3IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkYzRkRFQjcxODUzNTExRTU4RTQwRkQwODFEOUZEMEE3IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkYzRkRFQjcwODUzNTExRTU4RTQwRkQwODFEOUZEMEE3IiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDQyAyMDE1IChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MTk5NzA1OGEtZDI3OC00NDZkLWE4ODgtNGM4MGQ4YWI1NzNmIiBzdFJlZjpkb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6YzRkZmQxMGMtY2NlNS0xMTc4LWE5OGQtY2NkZmM5ODk5YWYwIi8+IDxkYzp0aXRsZT4gPHJkZjpBbHQ+IDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCI+Z2x5cGhpY29uczwvcmRmOmxpPiA8L3JkZjpBbHQ+IDwvZGM6dGl0bGU+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+5iogFwAAAGhJREFUeNpiYGBgKABigf///zOQg0EARH4A4gZyDIIZ8B/JoAJKDIDhB0CcQIkBRBtEyABkgxwoMQCGD6AbRKoBGAYxQgXIBRuZGKgAKPIC3QLxArnRSHZCIjspk52ZKMrOFBUoAAEGAKnq593MQAZtAAAAAElFTkSuQmCC);
                             background-repeat: no-repeat;
                             height: 23px;
@@ -640,6 +661,7 @@
                                 background-color: var(--color-medium-gray);
                             }
                         }
+*/
                         &:hover {
                             background-color: var(--color-blue-primary);
                             color: var(--color-white);
@@ -724,11 +746,13 @@
             }
         }
     }
-    .show-calendar {
+    /* UNUSED COMPONENT CLASS: show-calendar - Auto-commented by script
+.show-calendar {
         .ranges {
             margin-top: 8px;
         }
     }
+*/
     [hidden] {
         display: none;
     }
@@ -743,11 +767,13 @@
             padding: 0 3rem;
         }
     }
-    .mat-button,
+    /* UNUSED COMPONENT CLASS: mat-icon-button - Auto-commented by script
+.mat-button,
     .mat-icon-button,
     .mat-stroked-button {
         background-color: initial;
     }
+*/
     .clear {
         box-shadow: none;
         background-color: var(--color-white) !important;
@@ -825,9 +851,11 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     left: 0;
     color: var(--color-red) !important;
 }
+/* UNUSED COMPONENT CLASS: mb-3 - Auto-commented by script
 .mb-3 {
     margin-bottom: 30px;
 }
+*/
 .relative {
     position: relative;
 }
@@ -868,9 +896,11 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
                     }
                 }
             }
-            .left .md-drppicker_input {
+            /* UNUSED COMPONENT CLASS: md-drppicker_input - Auto-commented by script
+.left .md-drppicker_input {
                 padding-right: 35px;
             }
+*/
             .right .md-drppicker_input {
                 padding-right: 35px;
             }
@@ -918,17 +948,23 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
         }
     }
     .drp-animate {
-        &.drp-picker-site-this {
+        /*& UNUSED COMPONENT CLASS: drp-picker-site-this - Auto-commented by script
+.drp-picker-site-this {
             transition-timing-function: linear;
         }
-        &.drp-animate-right {
+*/
+        /*& UNUSED COMPONENT CLASS: drp-animate-right - Auto-commented by script
+.drp-animate-right {
             transform: translateX(10%);
             opacity: 0;
         }
-        &.drp-animate-left {
+*/
+        /*& UNUSED COMPONENT CLASS: drp-animate-left - Auto-commented by script
+.drp-animate-left {
             transform: translateX(-10%);
             opacity: 0;
         }
+*/
     }
 
     .wrap-selected-date {
@@ -977,9 +1013,11 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 }
 
 @media (min-width: 768px) {
-    .custom-select-btn {
+    /* UNUSED COMPONENT CLASS: custom-select-btn - Auto-commented by script
+.custom-select-btn {
         display: none;
     }
+*/
 }
 
 .in-range.available:hover {
@@ -1099,7 +1137,8 @@ td span {
     flex-wrap: wrap;
     width: 95%;
     padding: 7px;
-    .d-month {
+    /* UNUSED COMPONENT CLASS: d-month - Auto-commented by script
+.d-month {
         width: 20%;
         padding: 6px 4px;
         text-align: center;
@@ -1112,6 +1151,7 @@ td span {
             cursor: pointer;
         }
     }
+*/
 }
 
 .available.prev {
@@ -1261,9 +1301,11 @@ td span {
 }
 
 .yearselect,
+/* UNUSED COMPONENT CLASS: monthselect - Auto-commented by script
 .monthselect {
     display: none !important;
 }
+*/
 
 .md-drppicker .calendar th,
 .md-drppicker .calendar td {
@@ -1281,9 +1323,11 @@ td span {
 .md-drppicker .calendar .td-div.hide-date {
     visibility: hidden;
 }
+/* UNUSED COMPONENT CLASS: close-calender - Auto-commented by script
 .close-calender {
     display: none;
 }
+*/
 
 .calender-container {
     display: flex;
@@ -1563,9 +1607,11 @@ cdk-virtual-scroll-viewport {
         border-radius: 4px;
     }
 }
+/* UNUSED COMPONENT CLASS: calendar-d-flex - Auto-commented by script
 .calendar-d-flex {
     display: flex;
 }
+*/
 .calendar.left .table-condensed,
 .calendar.right .table-condensed {
     min-height: 170px;
@@ -1588,22 +1634,31 @@ cdk-virtual-scroll-viewport {
     display: none !important;
 }
 
+/* UNUSED COMPONENT CLASS: mat-mdc-button - Auto-commented by script
 // Mat Button Indigo Css,  Write manually here because of external css not apply in this component
-.mat-mdc-button.mat-unthemed {
+.mat-mdc-button/* UNUSED COMPONENT CLASS: mat-unthemed - Auto-commented by script
+.mat-unthemed {
     --mdc-text-button-label-text-color: #000
 }
+*/
 
-.mat-mdc-button.mat-primary {
+.mat-mdc-button/* UNUSED COMPONENT CLASS: mat-primary - Auto-commented by script
+.mat-primary {
     --mdc-text-button-label-text-color: #3f51b5
 }
+*/
 
-.mat-mdc-button.mat-accent {
+.mat-mdc-button/* UNUSED COMPONENT CLASS: mat-accent - Auto-commented by script
+.mat-accent {
     --mdc-text-button-label-text-color: #ff4081
 }
+*/
 
-.mat-mdc-button.mat-warn {
+.mat-mdc-button/* UNUSED COMPONENT CLASS: mat-warn - Auto-commented by script
+.mat-warn {
     --mdc-text-button-label-text-color: #f44336
 }
+*/
 
 .mat-mdc-button[disabled][disabled] {
     --mdc-text-button-disabled-label-text-color: rgba(0, 0, 0, 0.38);
@@ -1637,10 +1692,12 @@ cdk-virtual-scroll-viewport {
     --mdc-filled-button-label-text-color: rgba(0, 0, 0, 0.38)
 }
 
+/* UNUSED COMPONENT CLASS: mat-mdc-raised-button - Auto-commented by script
 .mat-mdc-raised-button.mat-unthemed {
     --mdc-protected-button-container-color: #fff;
     --mdc-protected-button-label-text-color: #000
 }
+*/
 
 .mat-mdc-raised-button.mat-primary {
     --mdc-protected-button-container-color: #3f51b5;
@@ -1665,9 +1722,11 @@ cdk-virtual-scroll-viewport {
     --mdc-protected-button-container-elevation: 0
 }
 
+/* UNUSED COMPONENT CLASS: mat-mdc-outlined-button - Auto-commented by script
 .mat-mdc-outlined-button {
     --mdc-outlined-button-outline-color: rgba(0, 0, 0, 0.12)
 }
+*/
 
 .mat-mdc-outlined-button.mat-unthemed {
     --mdc-outlined-button-label-text-color: #000
@@ -1697,13 +1756,18 @@ cdk-virtual-scroll-viewport {
     --mat-mdc-button-ripple-color: rgba(0, 0, 0, 0.1)
 }
 
-.mat-mdc-button:hover .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button:hover .mat-mdc-button-persistent-ripple::before {
+.mat-mdc-button:hover .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button:hover /* UNUSED COMPONENT CLASS: mat-mdc-button-persistent-ripple - Auto-commented by script
+.mat-mdc-button-persistent-ripple::before {
     opacity: .04
 }
+*/
 
+/* UNUSED COMPONENT CLASS: cdk-program-focused - Auto-commented by script
+/* UNUSED COMPONENT CLASS: cdk-keyboard-focused - Auto-commented by script
 .mat-mdc-button.cdk-program-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-button.cdk-keyboard-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button.cdk-program-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button.cdk-keyboard-focused .mat-mdc-button-persistent-ripple::before {
     opacity: .12
 }
+*/
 
 .mat-mdc-button:active .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button:active .mat-mdc-button-persistent-ripple::before {
     opacity: .12
@@ -1724,10 +1788,12 @@ cdk-virtual-scroll-viewport {
     --mat-mdc-button-ripple-color: rgba(244, 67, 54, 0.1)
 }
 
-.mat-mdc-raised-button,.mat-mdc-unelevated-button {
+.mat-mdc-raised-button,/* UNUSED COMPONENT CLASS: mat-mdc-unelevated-button - Auto-commented by script
+.mat-mdc-unelevated-button {
     --mat-mdc-button-persistent-ripple-color: #000;
     --mat-mdc-button-ripple-color: rgba(0, 0, 0, 0.1)
 }
+*/
 
 .mat-mdc-raised-button:hover .mat-mdc-button-persistent-ripple::before,.mat-mdc-unelevated-button:hover .mat-mdc-button-persistent-ripple::before {
     opacity: .04
@@ -1756,10 +1822,13 @@ cdk-virtual-scroll-viewport {
     --mat-mdc-button-ripple-color: rgba(255, 255, 255, 0.1)
 }
 
-.mat-mdc-button.mat-mdc-button-base,.mat-mdc-raised-button.mat-mdc-button-base,.mat-mdc-unelevated-button.mat-mdc-button-base,.mat-mdc-outlined-button.mat-mdc-button-base {
+.mat-mdc-button.mat-mdc-button-base,.mat-mdc-raised-button.mat-mdc-button-base,.mat-mdc-unelevated-button.mat-mdc-button-base,.mat-mdc-outlined-button/* UNUSED COMPONENT CLASS: mat-mdc-button-base - Auto-commented by script
+.mat-mdc-button-base {
     height: 36px
 }
+*/
 
+/* UNUSED COMPONENT CLASS: mdc-button - Auto-commented by script
 .mdc-button {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
@@ -1771,7 +1840,9 @@ cdk-virtual-scroll-viewport {
     text-decoration: var(--mdc-typography-button-text-decoration, none);
     text-transform: var(--mdc-typography-button-text-transform, none)
 }
+*/
 
+/* UNUSED COMPONENT CLASS: mat-mdc-icon-button - Auto-commented by script
 .mat-mdc-icon-button {
     --mat-mdc-button-persistent-ripple-color: #000;
     --mat-mdc-button-ripple-color: rgba(0, 0, 0, 0.1);
@@ -1779,6 +1850,7 @@ cdk-virtual-scroll-viewport {
     --mat-mdc-button-persistent-ripple-color: #000;
     --mat-mdc-button-ripple-color: rgba(0, 0, 0, 0.1)
 }
+*/
 
 .mat-mdc-icon-button:hover .mat-mdc-button-persistent-ripple::before {
     opacity: .04

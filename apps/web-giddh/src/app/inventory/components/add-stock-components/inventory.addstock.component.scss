@@ -9,9 +9,11 @@
     padding: 12px 10px 12px 0 !important;
 }
 
+/* UNUSED COMPONENT CLASS: basic - Auto-commented by script
 .basic > tbody > tr > td {
     padding: 2px 10px 2px 0;
 }
+*/
 
 .table-label {
     border-color: var(--color-silver);
@@ -21,11 +23,13 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu {
     max-height: 168px;
     overflow: auto;
     width: 100%;
 }
+*/
 .sku-row {
     label {
         width: 100%;
@@ -37,9 +41,11 @@
         max-width: 108px;
         border-bottom: 1px solid var(--color-silver);
     }
-    .item-label {
+    /* UNUSED COMPONENT CLASS: item-label - Auto-commented by script
+.item-label {
         display: inline-block;
     }
+*/
     .item-label:first-child {
         max-width: 108px;
     }

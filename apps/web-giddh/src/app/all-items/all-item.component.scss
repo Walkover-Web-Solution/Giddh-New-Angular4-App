@@ -46,11 +46,13 @@
                         i {
                             font-size: 22px;
 
-                            &.unit-mapping-icon {
+                            /* & UNUSED COMPONENT CLASS: unit-mapping-icon - Auto-commented by script
+.unit-mapping-icon {
                                 background-image: url("../../assets/images/unit-mapping.svg");
                                 width: 24px;
                                 height: 24px;
                             }
+*/
                         }
                     }
                     // .mat-mdc-card-content{

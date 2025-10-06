@@ -1,6 +1,8 @@
+/* UNUSED COMPONENT CLASS: font-xlarge - Auto-commented by script
 .font-xlarge {
     font-size: var(--font-size-16);
 }
+*/
 
 a {
     color: var(--color-blue-primary);
@@ -20,24 +22,31 @@ svg.icon.icon-lg {
     vertical-align: middle;
 }
 
+/* UNUSED COMPONENT CLASS: bottom-action - Auto-commented by script
 .tax-engine .bottom-action,
 .tax-engine a,
-.tax-engine a > .dropdown {
+.tax-engine a > /* UNUSED COMPONENT CLASS: dropdown - Auto-commented by script
+.dropdown {
     cursor: pointer;
 }
+*/
 
-.tax-engine .gstr3b-sel {
+.tax-engine /* UNUSED COMPONENT CLASS: gstr3b-sel - Auto-commented by script
+.gstr3b-sel {
     display: inline-block;
     padding: 4px 4px 4px 8px;
     border: 1px solid var(--color-silver);
     border-radius: 2px;
     background: var(--color-white);
 }
+*/
 
-svg.icon.icon-sm {
+svg.icon/* UNUSED COMPONENT CLASS: icon-sm - Auto-commented by script
+.icon-sm {
     height: 14px;
     width: 14px;
 }
+*/
 
 .tax-engine .gstr3b-sel input {
     border: none;
@@ -45,14 +54,17 @@ svg.icon.icon-sm {
     cursor: pointer;
 }
 
+/* UNUSED COMPONENT CLASS: font-large - Auto-commented by script
 .font-large {
     font-size: var(--font-size-16);
 }
+*/
 
 .text-primary {
     color: var(--color-blue-primary);
 }
 
+/* UNUSED COMPONENT CLASS: caret - Auto-commented by script
 .caret {
     display: inline-block;
     width: 0;
@@ -65,7 +77,9 @@ svg.icon.icon-sm {
     border-bottom: 0 dotted;
     content: "";
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn - Auto-commented by script
 .btn {
     display: inline-block;
     padding: 5px 12px;
@@ -79,19 +93,24 @@ svg.icon.icon-sm {
     -ms-user-select: none;
     user-select: none;
 }
+*/
 
 .btn,
+/* UNUSED COMPONENT CLASS: input-group-addon - Auto-commented by script
 .input-group-addon {
     font-weight: 400;
     text-align: center;
 }
+*/
 
 .btn,
-input.gsc-input {
+input/* UNUSED COMPONENT CLASS: gsc-input - Auto-commented by script
+.gsc-input {
     font-size: var(--font-size-15);
     line-height: 1.42857143;
     vertical-align: middle;
 }
+*/
 
 .btn,
 .datepicker table {
@@ -104,15 +123,19 @@ input.gsc-input {
     padding: 0 20px 50px;
 }
 
-.tax-engine .gstr3b-header {
+.tax-engine /* UNUSED COMPONENT CLASS: gstr3b-header - Auto-commented by script
+.gstr3b-header {
     margin: 25px auto;
     position: relative;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: content-disabled - Auto-commented by script
 .content-disabled {
     opacity: 0.5;
     position: relative;
 }
+*/
 
 .tax-engine .gstr3b-header .sel-tab {
     border: 1px solid var(--color-silver);
@@ -122,9 +145,11 @@ input.gsc-input {
     position: static;
     max-width: 835px;
     margin: auto;
-    &.no-border {
+    /* & UNUSED COMPONENT CLASS: no-border - Auto-commented by script
+.no-border {
         border: none !important;
     }
+*/
 }
 
 .content-disabled::after {
@@ -139,9 +164,11 @@ input.gsc-input {
     display: block;
 }
 
+/* UNUSED COMPONENT CLASS: sel-tab - Auto-commented by script
 .tax-engine .gstr3b-header .sel-tab .active {
     background-color: var(--color-blue-primary);
 }
+*/
 
 .tax-engine .gstr3b-header .sel-tab li:before {
     border-left: 23px solid var(--color-silver);
@@ -171,15 +198,19 @@ input.gsc-input {
     left: 100%;
 }
 
-.tax-engine .gstr3b-header .sel-tab .gstr3b-nav {
+.tax-engine .gstr3b-header .sel-tab /* UNUSED COMPONENT CLASS: gstr3b-nav - Auto-commented by script
+.gstr3b-nav {
     padding: 12px 0 12px 18px;
     cursor: pointer;
 }
+*/
 
-svg.icon.icon-xxlg {
+svg.icon/* UNUSED COMPONENT CLASS: icon-xxlg - Auto-commented by script
+.icon-xxlg {
     height: 25px;
     width: 25px;
 }
+*/
 
 .tax-engine .gstr3b-header .sel-tab .active a {
     color: var(--color-white);
@@ -204,16 +235,20 @@ svg.icon.icon-xxlg {
     display: inline-block;
 }
 
-.tax-engine .gstr3b-page-header {
+.tax-engine /* UNUSED COMPONENT CLASS: gstr3b-page-header - Auto-commented by script
+.gstr3b-page-header {
     margin: 0 auto;
     border: none;
     max-width: 903px;
     padding-bottom: 9px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: font-xxxlarge - Auto-commented by script
 .font-xxxlarge {
     font-size: var(--font-size-24);
 }
+*/
 
 .tax-engine .summary-content {
     max-width: 1085px;
@@ -250,11 +285,13 @@ address {
 }
 
 .btn-link:focus,
+/* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
 .btn-link:hover {
     color: var(--color-blue-primary);
     background-color: transparent;
     text-decoration: none;
 }
+*/
 
 table {
     border-collapse: collapse;
@@ -267,25 +304,31 @@ table {
     padding: 6px;
 }
 
+/* UNUSED COMPONENT CLASS: vat-summary - Auto-commented by script
 .gstr3-subheading,
 .vat-summary thead > tr {
     background-color: var(--color-light-gray);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: help-text - Auto-commented by script
 .dropdown-menu li .help-text,
 // .modal-header .help-text,
 .text-muted {
     color: var(--color-dark-gray);
     background-color: var(--color-light-gray);
 }
+*/
 
 .dropdown-menu {
-    .btn-default {
+    /* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
+.btn-default {
         &.disabled {
             cursor: not-allowed;
             opacity: 1 !important;
         }
     }
+*/
 }
 
 *,
@@ -294,10 +337,12 @@ table {
     box-sizing: border-box;
 }
 
+/* UNUSED COMPONENT CLASS: h4 - Auto-commented by script
 .h4,
 h4 {
     font-size: var(--font-size-16);
 }
+*/
 
 h4,
 h5,
@@ -305,6 +350,11 @@ h6 {
     margin-bottom: 10px;
 }
 
+/* UNUSED COMPONENT CLASS: h6 - Auto-commented by script
+/* UNUSED COMPONENT CLASS: h5 - Auto-commented by script
+/* UNUSED COMPONENT CLASS: h3 - Auto-commented by script
+/* UNUSED COMPONENT CLASS: h2 - Auto-commented by script
+/* UNUSED COMPONENT CLASS: h1 - Auto-commented by script
 .h1,
 .h2,
 .h3,
@@ -321,7 +371,9 @@ h6 {
     font-weight: 500;
     line-height: 1.1;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: modal-backdrop - Auto-commented by script
 .modal-backdrop {
     position: fixed;
     top: var(--top-distance);
@@ -329,18 +381,25 @@ h6 {
     background-color: var(--color-white);
     transition: all 0.3s;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: modal-sm - Auto-commented by script
 .modal-sm {
     width: 500px !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: modal-content - Auto-commented by script
 .modal-content {
     box-shadow: 0 5px 15px var(--color-shadow-light);
 }
+*/
 
-// .modal-header {
-//     font-size: var(--font-size-16);
-// }
+/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
+.modal-header {
+    font-size: var(--font-size-16);
+}
+*/
 
 // .modal-header {
 //     padding: 20px;
@@ -349,16 +408,22 @@ h6 {
 //     background-color: var(--color-light-gray);
 // }
 
+/* UNUSED COMPONENT CLASS: highlight-info - Auto-commented by script
 .highlight-info {
     background-color: var(--color-light-gray);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: alert - Auto-commented by script
 .alert {
     padding: 15px;
     margin-bottom: 0px;
     border: 1px solid transparent;
     border-radius: 2px;
 }
+/* UNUSED COMPONENT CLASS: receipt-wrapper - Auto-commented by script
+/* UNUSED COMPONENT CLASS: dropdown-toggle - Auto-commented by script
+/* UNUSED COMPONENT CLASS: doc-checkbox - Auto-commented by script
 
 .btn-primary,
 .btn-primary.disabled,
@@ -383,31 +448,40 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
+/* UNUSED COMPONENT CLASS: doc-actions - Auto-commented by script
 .doc-actions {
     color: var(--color-white);
     background-color: var(--color-red);
     border-color: var(--color-red);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn-sm - Auto-commented by script
 .btn,
 .btn-sm,
+/* UNUSED COMPONENT CLASS: btn-xs - Auto-commented by script
 .btn-xs {
     border-radius: 3px;
 }
+*/
 
 :host ::ng-deep button {
     &.btn-success {
-        .mdc-button__label {
+        /* UNUSED COMPONENT CLASS: mdc-button__label - Auto-commented by script
+.mdc-button__label {
             color: var(--color-white);
         }
+*/
     }
 }
 
+/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
 .btn-primary {
     color: var(--color-white);
     background-color: var(--color-red);
     border-color: var(--color-red);
 }
+*/
 
 .btn {
     display: inline-block;
@@ -423,14 +497,18 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
     user-select: none;
 }
 
+/* UNUSED COMPONENT CLASS: modal-footer - Auto-commented by script
 .modal-footer {
     display: table;
     width: 100%;
 }
+*/
 
-.tax-engine .gstr3-filing-procedure {
+.tax-engine /* UNUSED COMPONENT CLASS: gstr3-filing-procedure - Auto-commented by script
+.gstr3-filing-procedure {
     margin-bottom: 50px;
 }
+*/
 
 .tax-engine .gstr3-points .point {
     background-color: var(--color-blue-primary);
@@ -443,12 +521,14 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
     margin: 0 23px 0 -53px;
 }
 
+/* UNUSED COMPONENT CLASS: caret-right - Auto-commented by script
 .caret-right {
     margin-left: 2px;
     border-left: 4px solid;
     border-bottom: 4px solid transparent;
     border-top: 4px solid transparent;
 }
+*/
 
 tax-engine .caret-right {
     display: inline-block;
@@ -470,10 +550,12 @@ tax-engine .caret-right {
     padding: 20px 50px 10px;
 }
 
-.tax-engine .gstr3-points {
+.tax-engine /* UNUSED COMPONENT CLASS: gstr3-points - Auto-commented by script
+.gstr3-points {
     border-left: 1px dashed var(--color-silver);
     padding-left: 41px;
 }
+*/
 
 dropdown-menu-right {
     right: 0;
@@ -481,13 +563,16 @@ dropdown-menu-right {
     top: 30px !important;
 }
 
+/* UNUSED COMPONENT CLASS: successful-file-detail - Auto-commented by script
 .successful-file-detail h3,
 .gst-return-date h3 {
     color: var(--color-black) !important;
     font-size: var(--font-size-24) !important;
     margin: 20px 0 7px !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn-2 - Auto-commented by script
 .btn-2 {
     background: var(--color-white);
     color: var(--color-blue-primary);
@@ -495,15 +580,18 @@ dropdown-menu-right {
     border-radius: 4px;
     border: 1px solid var(--color-blue-primary);
 }
+*/
 
 .btn-2:hover {
     color: var(--color-white);
     background: var(--color-blue-primary);
 }
 
+/* UNUSED COMPONENT CLASS: file-your-return - Auto-commented by script
 .file-your-return {
     font-size: var(--font-size-16);
 }
+*/
 ul#dropdown-menu {
     top: 30px !important;
 }
@@ -523,26 +611,34 @@ ul#dropdown-menu {
     height: 65px;
 }
 
+/* UNUSED COMPONENT CLASS: dropdown-menu-right - Auto-commented by script
 .dropdown-menu-right {
     min-width: 350px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: pd-r120 - Auto-commented by script
 .pd-r120 {
     padding-right: 120px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: pd-r160 - Auto-commented by script
 .pd-r160 {
     padding-right: 160px;
 }
+*/
 
 .pd-r190 {
     padding-right: 190px;
 }
 
+/* UNUSED COMPONENT CLASS: bg-thead-dark - Auto-commented by script
 .bg-thead-dark {
     background: var(--color-light-gray);
     color: var(--color-black);
 }
+*/
 
 .pointer-none {
     pointer-events: none !important;
@@ -579,17 +675,22 @@ ul#dropdown-menu {
             margin-bottom: 0;
             padding-top: 15px;
             float: none;
-            .list-middle {
-                .dropdown-menu {
+            /* UNUSED COMPONENT CLASS: list-middle - Auto-commented by script
+.list-middle {
+                /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
+.dropdown-menu {
                     left: 0;
                     right: auto;
                 }
             }
+*/
         }
-        .month-picker {
+        /* UNUSED COMPONENT CLASS: month-picker - Auto-commented by script
+.month-picker {
             right: 0 !important;
             left: auto !important;
         }
+*/
     }
     .gstr3b-header {
         margin-top: 0 !important;

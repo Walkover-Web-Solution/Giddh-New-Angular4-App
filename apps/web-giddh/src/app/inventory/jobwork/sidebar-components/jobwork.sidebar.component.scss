@@ -1,10 +1,16 @@
+/* UNUSED COMPONENT CLASS: parent-group - Auto-commented by script
 .parent-group > ul > li ul li div {
     color: var(--color-dark-gray);
 }
+*/
+/* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
 .btn-group.show {
     display: inline-block !important;
 }
-.btn-group > .btn:first-child {
+*/
+/* UNUSED COMPONENT CLASS: btn - Auto-commented by script
+.btn-group > 
+.btn:first-child {
     margin-left: 8px;
     margin-top: -3px;
     background: none;
@@ -12,16 +18,20 @@
     padding: 6px;
     margin-right: 0px !important;
 }
+/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu > li > a:hover {
     background: var(--color-border-light);
     cursor: pointer;
 }
+*/
 .dropdown-menu > li > a {
     color: var(--color-blue-primary);
 }
-span.caret {
+/* span UNUSED COMPONENT CLASS: caret - Auto-commented by script
+.caret {
     display: none;
 }
+*/
 #inventory-sidebar {
     background: var(--color-white);
     min-height: 100vh;
@@ -36,11 +46,13 @@ span.caret {
 .stock-grp-list > li > a:hover {
     color: var(--color-black);
 }
+/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
 :host ::ng-deep .nav-tabs > li {
     width: 50%;
     text-align: center;
     background: var(--color-light-gray);
 }
+*/
 .width-sidebar-form-control {
     width: 205px;
 }
@@ -49,9 +61,11 @@ span.caret {
     width: 205px;
     display: inline-block;
 }
+/* UNUSED COMPONENT CLASS: btn-link-2 - Auto-commented by script
 .btn-link-2 {
     color: var(--color-blue-primary);
 }
+*/
 .no-data-box {
     border-top: 1px solid var(--color-border-light) !important;
 }

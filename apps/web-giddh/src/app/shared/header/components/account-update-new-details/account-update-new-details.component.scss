@@ -1,12 +1,16 @@
+/* UNUSED COMPONENT CLASS: form-header - Auto-commented by script
 .form-header {
     padding: 20px 15px;
     background: var(--color-blue-primary);
     color: var(--color-white);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: portal-height - Auto-commented by script
 .portal-height {
     height: 85px !important;
 }
+*/
 
 .inc-dec {
     position: relative;
@@ -15,7 +19,8 @@
     display: flex;
     align-items: center;
 
-    .plus-minus {
+    /* UNUSED COMPONENT CLASS: plus-minus - Auto-commented by script
+.plus-minus {
         display: flex;
         justify-content: center;
 
@@ -24,8 +29,10 @@
             padding: 0 5px;
         }
     }
+*/
 }
 
+/* UNUSED COMPONENT CLASS: aside-pane-form - Auto-commented by script
 .aside-pane-form {
     background-color: var(--color-white);
     box-shadow: 0px 3px 6px var(--color-shadow-light);
@@ -34,21 +41,26 @@
     scroll-behavior: smooth;
     position: relative;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: aside-pane-container - Auto-commented by script
 .aside-pane-container {
     padding: 15px;
     font-size: var(--font-size-15);
     color: var(--color-black);
 }
+*/
 
 .aside-pane-form label {
     margin-bottom: 5px;
     display: block;
 }
 
+/* UNUSED COMPONENT CLASS: cr-dr-account - Auto-commented by script
 .cr-dr-account {
     position: relative;
 }
+*/
 
 .cr-dr-account span {
     width: 36px;
@@ -63,15 +75,19 @@
     right: 0;
 }
 
-span.dr-label {
+/* span UNUSED COMPONENT CLASS: dr-label - Auto-commented by script
+.dr-label {
     right: 36px !important;
 }
+*/
 
 .cr-dr-account span.active {
     background-color: var(--color-blue-primary);
     color: var(--color-white);
 }
 
+/* UNUSED COMPONENT CLASS: col-sm-2 - Auto-commented by script
+/* UNUSED COMPONENT CLASS: col-sm-10 - Auto-commented by script
 .aside-pane-form .col-sm-4,
 .aside-pane-form .col-sm-8,
 .aside-pane-form .col-sm-10,
@@ -80,6 +96,7 @@ span.dr-label {
 .aside-pane-form .col-sm-12 {
     padding: 0 10px;
 }
+*/
 
 .upper-form {
     margin-bottom: 20px;
@@ -100,9 +117,11 @@ span.dr-label {
     }
 }
 
-form.gstin-form {
+form/* UNUSED COMPONENT CLASS: gstin-form - Auto-commented by script
+.gstin-form {
     padding-top: 15px;
 }
+*/
 
 .add-address-default {
     display: flex;
@@ -113,6 +132,7 @@ form.gstin-form {
     margin: 20px 0;
 }
 
+/* UNUSED COMPONENT CLASS: add-address-btn - Auto-commented by script
 .add-address-btn {
     width: 130px;
     display: flex;
@@ -123,12 +143,15 @@ form.gstin-form {
         margin-right: 10px;
     }
 }
+*/
 
 /*--- custom ---*/
+/* UNUSED COMPONENT CLASS: add-new-btn - Auto-commented by script
 .add-new-btn {
     width: 100%;
     max-width: 185px;
 }
+*/
 
 .add-address-default h3 {
     font-size: var(--font-size-15);
@@ -141,30 +164,22 @@ form.gstin-form {
     padding-top: 15px;
 }
 
-.update-btn-zindex {
-    z-index: 0;
-    color: var(--color-white) !important;
-    border-color: var(--color-blue-primary) !important;
-    background-color: var(--color-blue-primary) !important;
-
-    &:hover {
-        border-color: var(--color-blue-primary) !important;
-        background-color: var(--color-blue-primary) !important;
-    }
-}
-
+/* UNUSED COMPONENT CLASS: wd100 - Auto-commented by script
 .wd100 {
     width: 100% !important;
 }
+*/
 
 .width-select {
     width: calc(100% - 112px);
 }
 
 .move-to-group {
-    .list-item {
+    /* UNUSED COMPONENT CLASS: list-item - Auto-commented by script
+.list-item {
         border-bottom: 1px solid var(--color-silver);
     }
+*/
 }
 
 .name-of-field {
@@ -183,15 +198,19 @@ form.gstin-form {
     }
 }
 
+/* UNUSED COMPONENT CLASS: contact-number-select - Auto-commented by script
 .contact-number-select {
     width: 60px;
     margin-right: 10px;
 }
+/* UNUSED COMPONENT CLASS: merge-btn - Auto-commented by script
 
 .merge-btn,
+/* UNUSED COMPONENT CLASS: save-btn - Auto-commented by script
 .save-btn {
     min-width: 100px;
 }
+*/
 
 .is-default-address {
     margin-top: 5px !important;

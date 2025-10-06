@@ -10,16 +10,21 @@
     .stock-value {
         padding-right: 80px;
 
-        .total-stock-value {
+        /* UNUSED COMPONENT CLASS: total-stock-value - Auto-commented by script
+.total-stock-value {
             padding-left: 30px;
         }
+*/
     }
 }
 
+/* UNUSED COMPONENT CLASS: virtual-group-list - Auto-commented by script
 .virtual-group-list {
     height: 193px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: stock-mat-salect - Auto-commented by script
 .stock-mat-salect {
     border: 1px solid var(--color-silver);
     border-radius: 5px !important;
@@ -27,9 +32,12 @@
     font-size: var(--font-size-15);
     min-width: 250px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: transactional-filter-section - Auto-commented by script
 .transactional-filter-section {
-    .transactional-wise-common-btn {
+    /* UNUSED COMPONENT CLASS: transactional-wise-common-btn - Auto-commented by script
+.transactional-wise-common-btn {
         height: 42px;
         width: 42px;
         border: 1px solid var(--color-medium-gray);
@@ -37,19 +45,23 @@
         box-shadow: none;
         background: var(--color-white);
     }
+*/
 
-    .icon-download-circle {
+    /* UNUSED COMPONENT CLASS: icon-download-circle - Auto-commented by script
+.icon-download-circle {
         font-size: 16px;
         color: var(--color-medium-gray);
     }
 }
+*/
 
 .unit-badge {
     text-transform: lowercase;
 }
 
 .td-search-box {
-    .input-container {
+    /* UNUSED COMPONENT CLASS: input-container - Auto-commented by script
+.input-container {
         input {
             height: 36px;
             min-width: 100%;
@@ -60,14 +72,17 @@
             border-radius: 5px;
         }
     }
+*/
 }
 
 .inventory-report-table {
     overflow-x: visible !important;
 
-    .mat-table-sticky {
+    /* UNUSED COMPONENT CLASS: mat-table-sticky - Auto-commented by script
+.mat-table-sticky {
         top: 60px !important;
     }
+*/
     // .common-column-width{
     //     min-width: 110px;
     // }
@@ -97,19 +112,24 @@
 }
 
 .select-multiple-chiplist-inventory {
-    font-weight: 400 !important;
+    /* UNUSED COMPONENT CLASS: mat-chip - Auto-commented by script
+font-weight: 400 !important;
     font-size: var(--font-size-15) !important;
     width: 84%;
-    .mat-chip.mat-standard-chip {
+    .mat-chi/* p UNUSED COMPONENT CLASS: mat-standard-chip - Auto-commented by script
+.mat-standard-chip {
         color: var(--color-dark-black) !important;
         background-color: var(--color-white) !important;
         border: 1px solid var(--color-blue-primary) !important;
         font-size: var(--font-size-12) !important;
     }
+*/
 }
+/* UNUSED COMPONENT CLASS: searching-bar-chiplist - Auto-commented by script
 .searching-bar-chiplist {
     width: 83% !important;
 }
+*/
 
 .no-data-inventory {
     text-align: center;
@@ -119,23 +139,31 @@
     color: var(--color-dark-gray);
 }
 
+/* UNUSED COMPONENT CLASS: filter-dropdown-branch - Auto-commented by script
 .filter-dropdown-branch {
     max-width: 250px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: filter-dropdown-warehouse - Auto-commented by script
 .filter-dropdown-warehouse {
     max-width: 250px;
     margin-left: 5px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: top-main-bar - Auto-commented by script
 .top-main-bar {
     padding-top: 15px;
 }
+*/
 
 @media (max-width: 1440px) {
-    .select-multiple-chiplist-inventory {
+    /* UNUSED COMPONENT CLASS: select-multiple-chiplist-inventory - Auto-commented by script
+.select-multiple-chiplist-inventory {
         width: 77%;
     }
+*/
 }
 
 @media (max-width: 1024px) {
@@ -160,19 +188,24 @@
         min-width: 199px;
     }
 
-    .stock-group-footer {
+    /* UNUSED COMPONENT CLASS: stock-group-footer - Auto-commented by script
+.stock-group-footer {
         width: 100% !important;
         position: fixed !important;
         margin-top: 15px;
 
-        .stock-value {
+        /* UNUSED COMPONENT CLASS: stock-value - Auto-commented by script
+.stock-value {
             justify-content: space-between !important;
         }
+*/
 
-        .by-date {
+        /* UNUSED COMPONENT CLASS: by-date - Auto-commented by script
+.by-date {
             display: flex;
         }
-    }
+}
+*/
 }
 
 .account-name-column {

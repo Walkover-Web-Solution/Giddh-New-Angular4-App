@@ -26,9 +26,11 @@
         margin-top: 5px;
     }
 
-    .entry-datepicker {
+    /* UNUSED COMPONENT CLASS: entry-datepicker - Auto-commented by script
+.entry-datepicker {
         padding-left: 10px;
     }
+*/
 
     .and-text {
         margin-left: 10px !important;
@@ -66,14 +68,18 @@
         display: flex;
     }
 
-    .clear-filter {
+    /* UNUSED COMPONENT CLASS: clear-filter - Auto-commented by script
+.clear-filter {
         color: var(--color-blue-primary);
         cursor: pointer;
     }
+*/
 
-    .log-clear-button {
+    /* UNUSED COMPONENT CLASS: log-clear-button - Auto-commented by script
+.log-clear-button {
         margin-bottom: 15px;
     }
+*/
 
     .activity-filter-wrap {
         align-items: center;
@@ -89,10 +95,12 @@
         }
     }
 
-    .filter-button {
+    /* UNUSED COMPONENT CLASS: filter-button - Auto-commented by script
+.filter-button {
         float: left;
         width: 15%;
     }
+*/
 
     .activity-table {
         .activity-td {
@@ -105,10 +113,12 @@
             transition: 0ms;
         }
 
-        .mat-column-history {
+        /* UNUSED COMPONENT CLASS: mat-column-history - Auto-commented by script
+.mat-column-history {
             margin: 0 !important;
             padding: 0 !important;
         }
+*/
 
         tr {
             &:hover {
@@ -133,10 +143,12 @@
             min-height: 0;
         }
 
-        .mat-column-operation {
+        /* UNUSED COMPONENT CLASS: mat-column-operation - Auto-commented by script
+.mat-column-operation {
             padding-right: 0;
             margin-right: 0;
         }
+*/
 
         .history-child-row {
             position: relative;

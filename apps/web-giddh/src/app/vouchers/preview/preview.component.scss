@@ -38,13 +38,16 @@
 
                 button {
                     &.mdc-button {
-                        min-width: 36px;
+                        /* UNUSED COMPONENT CLASS: mdc-button - Auto-commented by script
+min-width: 36px;
                         width: 36px;
                         height: 36px;
 
-                        .mdc-button__label {
+                        /* UNUSED COMPONENT CLASS: mdc-button__label - Auto-commented by script
+.mdc-button__label {
                             line-height: 14px;
                         }
+*/
                     }
                 }
             }

@@ -39,9 +39,11 @@
         }
     }
     .branch-form {
-        .mat-mdc-select-multiple {
+        /* UNUSED COMPONENT CLASS: mat-mdc-select-multiple - Auto-commented by script
+.mat-mdc-select-multiple {
             display: none !important;
         }
+*/
 
         .branch-form-field {
             font-size: var(--font-size-15);
@@ -59,16 +61,20 @@
             }
             .address-dropdown {
                 .list-item {
-                    .entity-icon {
+                    /* UNUSED COMPONENT CLASS: entity-icon - Auto-commented by script
+.entity-icon {
                         padding: 4px;
                     }
-                    .entity-details {
+*/
+                    /* UNUSED COMPONENT CLASS: entity-details - Auto-commented by script
+.entity-details {
                         margin-left: 6px;
                         flex: 1;
                         .item {
                             font-weight: var(--font-weight-semibold);
                         }
                     }
+*/
                     .default-entity {
                         align-items: center;
                         display: flex;
@@ -93,9 +99,11 @@
                     i {
                         padding: 5px;
                         cursor: pointer;
-                        &.icon-plus {
+                        /*& UNUSED COMPONENT CLASS: icon-plus - Auto-commented by script
+.icon-plus {
                             color: var(--color-green);
                         }
+*/
                     }
                 }
             }

@@ -181,9 +181,11 @@ textarea {
 }
 
 .all-table {
+    /* UNUSED GLOBAL CLASS: mat-column-contact - Auto-commented by script
     .mat-column-contact {
         text-transform: lowercase;
     }
+    */
 
     .contact-header {
         text-transform: capitalize !important;
@@ -198,11 +200,13 @@ textarea {
     }
 }
 
+/* UNUSED GLOBAL CLASS: billing-details - Auto-commented by script
 .billing-details {
     .mat-form-field-infix {
         border-top: 0 !important;
     }
 }
+*/
 
 .branch-profile-wrapper {
     float: left !important;
@@ -258,45 +262,50 @@ textarea {
         font-size: var(--font-size-15);
     }
 
+    /* UNUSED GLOBAL CLASS: display-mobile - Auto-commented by script
     .display-mobile {
         color: var(--color-medium-gray);
         font-size: var(--font-size-15);
     }
+    */
 
     .mobile-number {
         float: left;
     }
 }
+/* UNUSED GLOBAL CLASS: shipping-date - Auto-commented by script */
+// .mobile-number-portal-wrapper {
+//     input.error {
+//         border: 1px solid var(--color-red);
+//     }
 
-.mobile-number-portal-wrapper {
-    input.error {
-        border: 1px solid var(--color-red);
-    }
+//     @for $index from 0 through 100 {
+//         #init-contact-portal_#{$index}-valid-msg {
+//             color: var(--color-green) !important;
+//             font-size: var(--font-size-15);
+//         }
 
-    @for $index from 0 through 100 {
-        #init-contact-portal_#{$index}-valid-msg {
-            color: var(--color-green) !important;
-            font-size: var(--font-size-15);
-        }
-
-        #init-contact-portal_#{$index}-error-msg {
-            color: var(--color-red);
-            font-size: var(--font-size-15);
-        }
-    }
-}
+//         #init-contact-portal_#{$index}-error-msg {
+//             color: var(--color-red);
+//             font-size: var(--font-size-15);
+//         }
+//     }
+// }
 
 .voucher-preview-edit,
-.update-ledger-entry-panel-popup,
+.updateledger-entry-panel-popup,
 .page-has-tabs,
 .ledger-body {
+    /* UNUSED GLOBAL CLASS: shipping-date - Auto-commented by script
     .shipping-date {
         padding-top: 6px !important;
     }
+    */
 
     .custom-date-entries {
         position: relative;
 
+        /* UNUSED GLOBAL CLASS: edit-icon-custom-entry-date - Auto-commented by script
         .edit-icon-custom-entry-date {
             position: absolute !important;
             right: 44% !important;
@@ -304,9 +313,11 @@ textarea {
             z-index: 0 !important;
             top: 17px;
         }
+        */
 
         giddh-datepicker {
             .mdc-text-field--no-label:not(.mdc-text-field--textarea) {
+                /* UNUSED GLOBAL CLASS: mat-mdc-form-field-input-control - Auto-commented by script
                 .mat-mdc-form-field-input-control {
                     &.mdc-text-field__input,
                     .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
@@ -318,18 +329,22 @@ textarea {
                         padding-left: 0;
                     }
                 }
+                */
             }
 
             .mdc-text-field--filled:not(.mdc-text-field--disabled) {
                 background-color: transparent;
 
+                /* UNUSED GLOBAL CLASS: mdc-line-ripple - Auto-commented by script
                 .mdc-line-ripple {
                     &::before {
                         border: none;
                     }
                 }
+                */
             }
 
+            /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
             .mat-mdc-form-field {
                 &:hover {
                     .mat-mdc-form-field-focus-overlay {
@@ -337,9 +352,12 @@ textarea {
                     }
                 }
             }
+            */
 
+            /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
             .mat-form-field-wrapper
                 .mat-form-field-infix
+*/
                 .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
                 position: absolute;
                 height: 23px !important;
@@ -349,11 +367,14 @@ textarea {
                 padding-left: 0;
             }
 
+            /* UNUSED GLOBAL CLASS: mat-form-field-flex - Auto-commented by script
             .mat-form-field-flex {
                 border: none !important;
                 align-items: inherit !important;
             }
+            */
 
+            /* UNUSED GLOBAL CLASS: mat-datepicker-toggle - Auto-commented by script
             .mat-datepicker-toggle {
                 position: absolute;
                 right: 41%;
@@ -361,6 +382,7 @@ textarea {
                 opacity: 0;
                 z-index: 99;
             }
+            */
         }
     }
 
@@ -373,12 +395,15 @@ textarea {
         padding: 7px !important;
     }
 
+    /* UNUSED GLOBAL CLASS: billing-company - Auto-commented by script
     .billing-company {
         .mat-menu-content {
             max-height: 200px;
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: copy-invoice-menu - Auto-commented by script
     .copy-invoice-menu {
         padding: 5px;
         height: auto;
@@ -392,7 +417,9 @@ textarea {
             }
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: tax-control-menu - Auto-commented by script
     .tax-control-menu {
         button {
             &:focus {
@@ -405,11 +432,14 @@ textarea {
             }
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: multicurrency-grandtotal - Auto-commented by script
     .multicurrency-grandtotal {
         width: 100%;
         float: right;
     }
+    */
 
     .exchange-rate-original {
         display: inline-block;
@@ -419,28 +449,35 @@ textarea {
     }
 }
 
+/* UNUSED GLOBAL CLASS: tax-control-menu - Auto-commented by script
 .tax-control-menu {
     .mat-menu-content:not(:empty) {
         max-height: 200px;
     }
 }
+*/
 
 // .text-align-center {
 //     text-align: center;
 // }
 
-// .text-align-left {
-//     text-align: left;
-// }
+/* UNUSED GLOBAL CLASS: text-align-left - Auto-commented by script
+.text-align-left {
+    text-align: left;
+}
+*/
 
-// .text-align-right {
-//     text-align: right;
-// }
+/* UNUSED GLOBAL CLASS: text-align-right - Auto-commented by script
+.text-align-right {
+    text-align: right;
+}
+*/
 
 .text-primary {
     color: var(--color-blue-primary) !important;
 }
 
+/* UNUSED GLOBAL CLASS: invoice-date-due-date - Auto-commented by script
 .invoice-date-due-date {
     .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
         color: var(--color-black);
@@ -456,29 +493,37 @@ textarea {
         font-size: var(--font-size-12);
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: aside-menu-othertax-open - Auto-commented by script
 .aside-menu-othertax-open {
     .cdk-overlay-container-z-index {
         z-index: 99999 !important;
     }
 }
+*/
 
 .account-aside-menu-state {
+    /* UNUSED GLOBAL CLASS: mat-datepicker-toggle - Auto-commented by script
     .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
         color: var(--color-black);
         position: absolute;
         bottom: 8px !important;
         right: 10px !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
     .mat-form-field-wrapper
         .mat-form-field-infix
+*/
         .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
         position: absolute;
         padding-top: 12px !important;
     }
 }
 
+/* UNUSED GLOBAL CLASS: invoice-due-label - Auto-commented by script
 .invoice-due-label {
     giddh-datepicker .mat-form-field {
         min-width: 120px !important;
@@ -490,7 +535,9 @@ textarea {
         padding-left: 15px;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: invoice-date-label - Auto-commented by script
 .invoice-date-label {
     giddh-datepicker .mat-form-field {
         min-width: 120px !important;
@@ -498,7 +545,9 @@ textarea {
 
     width: 48%;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: billing-shipping-value - Auto-commented by script
 .billing-shipping-value {
     .select-field-input {
         border-bottom: 1px solid var(--color-silver) !important;
@@ -507,24 +556,32 @@ textarea {
         background-color: transparent !important;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: multicurrency-edit - Auto-commented by script
 .multicurrency-edit {
     display: inline-flex !important;
 }
+*/
 
 .hsn-code-dropdown {
+    /* UNUSED GLOBAL CLASS: mat-input-element - Auto-commented by script
     .mat-input-element {
         text-align: left !important;
         padding-left: 5px !important;
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: billing-company-address - Auto-commented by script
 .billing-company-address {
     white-space: break-spaces !important;
     padding-top: 10px !important;
     padding-bottom: 10px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: invoice-date-due-date - Auto-commented by script
 .invoice-date-due-date {
     .date-invoice-parent-form {
         padding-left: 0 !important;
@@ -547,7 +604,9 @@ textarea {
         }
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: purchase-link - Auto-commented by script
 .purchase-link {
     .mat-select-search-no-entries-found {
         padding: 16px !important;
@@ -556,16 +615,20 @@ textarea {
         padding-top: 5px !important;
     }
 }
+*/
 
 .trigger-dropdown {
     font-size: var(--font-size-15);
 }
 
 .compose-trigger-dropdowns {
+    /* UNUSED GLOBAL CLASS: example-chip-list - Auto-commented by script
     .example-chip-list {
         width: 100%;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-legacy - Auto-commented by script
     .mat-form-field-appearance-legacy {
         .mat-form-field-wrapper {
             padding-bottom: 1em !important;
@@ -577,9 +640,11 @@ textarea {
             padding-top: 10px;
         }
     }
+    */
 }
 
 .fields-error {
+    /* UNUSED GLOBAL CLASS: mat-input-element - Auto-commented by script
     .mat-input-element {
         margin-top: 0 !important;
 
@@ -587,6 +652,7 @@ textarea {
             border: 1px solid var(--color-red) !important;
         }
     }
+    */
 }
 
 .campaign-table {
@@ -595,11 +661,13 @@ textarea {
     }
 }
 
+/* UNUSED GLOBAL CLASS: sub-entity-trigger - Auto-commented by script
 .sub-entity-trigger {
     .mat-select-placeholder {
         color: var(--color-silver) !important;
     }
 }
+*/
 
 .trigger-form {
     .form-control {
@@ -617,14 +685,18 @@ textarea {
     }
 
     .mobile-margin {
+        /* UNUSED GLOBAL CLASS: mat-form-field - Auto-commented by script
         .mat-form-field {
             margin-top: 8px !important;
         }
+        */
     }
 
+    /* UNUSED GLOBAL CLASS: mat-form-field - Auto-commented by script
     .mat-form-field {
         width: 100% !important;
     }
+    */
 
     .border-right {
         border-right: 2px solid var(--color-silver) !important;
@@ -645,20 +717,25 @@ textarea {
                 background-color: var(--color-blue-light) !important;
             }
 
+            /* UNUSED GLOBAL CLASS: mat-mdc-chip-remove - Auto-commented by script
             .mat-mdc-chip-remove {
                 font-size: 12px;
                 color: var(--color-dark-black) !important;
             }
+            */
         }
     }
 }
 
 .variables-wrapper {
+    /* UNUSED GLOBAL CLASS: mat-form-field - Auto-commented by script
     .mat-form-field {
         width: 100% !important;
     }
+    */
 
     .campaign-grid-tile {
+        /* UNUSED GLOBAL CLASS: mat-form-field-appearance-legacy - Auto-commented by script
         .mat-form-field-appearance-legacy {
             .mat-form-field-wrapper {
                 padding-bottom: 1em !important;
@@ -671,9 +748,11 @@ textarea {
                 font-weight: normal !important;
             }
         }
+        */
     }
 }
 
+/* UNUSED GLOBAL CLASS: magic-link-container - Auto-commented by script
 .magic-link-container {
     .mat-form-field {
         width: 58% !important;
@@ -687,6 +766,7 @@ textarea {
         padding-top: 0px !important;
     }
 }
+*/
 
 .import-page {
     .linked-entities {
@@ -714,11 +794,14 @@ textarea {
         height: auto !important;
         padding-bottom: 5px !important;
 
+        /* UNUSED GLOBAL CLASS: mat-select-search-input - Auto-commented by script
         .mat-select-search-input {
             padding: 16px 36px 16px 16px !important;
             box-sizing: border-box !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-select-search-inner - Auto-commented by script
         .mat-select-search-inner {
             position: absolute !important;
             top: 0 !important;
@@ -729,10 +812,13 @@ textarea {
             box-shadow: none !important;
             border-radius: 0 !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-select-search-clear - Auto-commented by script
         .mat-select-search-clear {
             margin-right: 0 !important;
         }
+        */
     }
 }
 
@@ -747,6 +833,7 @@ textarea {
 }
 
 .select-multiple-chiplist-inventory {
+    /* UNUSED GLOBAL CLASS: mat-form-field-infix - Auto-commented by script
     .mat-form-field-infix {
         margin-bottom: 7px;
         padding-top: 0;
@@ -756,23 +843,30 @@ textarea {
         margin-left: 7px;
         padding-left: 0 !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-chip-list-wrapper - Auto-commented by script
     .mat-chip-list-wrapper {
         padding: 8px !important;
         padding-left: 0px !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-label-wrapper - Auto-commented by script
     .mat-form-field-label-wrapper {
         margin-top: 1px !important;
     }
+    */
 }
 
 .autopaid {
+    /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
     .mat-dialog-container {
         .modal-body {
             font-size: var(--font-size-15) !important;
         }
     }
+    */
 }
 
 .autopaid-icon {
@@ -780,6 +874,7 @@ textarea {
 }
 
 .select-multiple-chiplist-inventory {
+    /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
     .mat-form-field-wrapper {
         padding-bottom: 0px !important;
 
@@ -791,6 +886,7 @@ textarea {
             margin-top: 7px !important;
         }
     }
+    */
 }
 
 .columns-wrapper {
@@ -798,6 +894,7 @@ textarea {
     .inventory-checkbox {
         width: 100%;
 
+        /* UNUSED GLOBAL CLASS: mat-checkbox-layout - Auto-commented by script
         .mat-checkbox-layout {
             float: left;
             width: 100%;
@@ -808,6 +905,7 @@ textarea {
                 margin-left: 0 !important;
             }
         }
+        */
     }
 
     button.mat-menu-item {
@@ -817,15 +915,19 @@ textarea {
         padding: 0 6px !important;
     }
 
+    /* UNUSED GLOBAL CLASS: mat-menu-content - Auto-commented by script
     .mat-menu-content {
         padding-top: 2px !important;
         padding-bottom: 2px !important;
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: icon-calender - Auto-commented by script
 .icon-calender {
     cursor: pointer;
 }
+*/
 
 .variant-row {
     .form-control {
@@ -847,9 +949,11 @@ textarea {
 .giddh-table {
     thead {
         tr {
+            /* UNUSED GLOBAL CLASS: top-header-columns - Auto-commented by script
             .top-header-columns {
                 border: none !important;
             }
+            */
         }
     }
 
@@ -870,9 +974,11 @@ textarea {
 .create-update-no-data {
     cursor: default !important;
 
+    /* UNUSED GLOBAL CLASS: mat-pseudo-checkbox - Auto-commented by script
     .mat-pseudo-checkbox {
         display: none !important;
     }
+    */
 
     .mat-option-text {
         color: var(--color-black) !important;
@@ -880,6 +986,7 @@ textarea {
 }
 
 /*---- custom -----*/
+/* UNUSED GLOBAL CLASS: inline-adjustment - Auto-commented by script
 .inline-adjustment {
     .adjustments-list {
         height: auto !important;
@@ -890,12 +997,16 @@ textarea {
         min-width: 750px;
     }
 }
+*/
 
 /*--- custom ---*/
+/* UNUSED GLOBAL CLASS: obj-gap - Auto-commented by script
 .obj-gap {
     column-gap: 5px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: select-multiple-icon-options - Auto-commented by script
 .select-multiple-icon-options {
     width: 36px;
     height: 36px;
@@ -919,18 +1030,22 @@ textarea {
         border-color: var(--color-blue-primary);
     }
 }
+*/
 
 .purchase-customise-column-button {
     float: right !important;
 }
 
 .domain-options {
+    /* UNUSED GLOBAL CLASS: mdc-list-item__primary-text - Auto-commented by script
     .mdc-list-item__primary-text {
         width: 100%;
     }
+    */
 }
 
 /*---- custom -----*/
+/* UNUSED GLOBAL CLASS: inline-adjustment - Auto-commented by script
 .inline-adjustment {
     .adjustments-list {
         height: auto !important;
@@ -941,28 +1056,37 @@ textarea {
         min-width: 750px;
     }
 }
+*/
 
 .select-domain {
+    /* UNUSED GLOBAL CLASS: mat-mdc-select - Auto-commented by script
     .mat-mdc-select {
         padding: 0px !important;
     }
+    */
 }
 
 .dropdown-wrapper {
+    /* UNUSED GLOBAL CLASS: mat-mdc-text-field-wrapper - Auto-commented by script
     .mat-mdc-text-field-wrapper {
         border: none !important;
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: gstr-button - Auto-commented by script
 .gstr-button {
     margin-bottom: 0 !important;
     margin-right: 15px !important;
 }
+*/
 
 .collection-integration {
+    /* UNUSED GLOBAL CLASS: mat-mdc-tab-body-wrapper - Auto-commented by script
     .mat-mdc-tab-body-wrapper {
         min-height: 500px;
     }
+    */
 }
 
 .gstin-field {
@@ -975,6 +1099,7 @@ textarea {
 
 .voucher-preview-edit, .giddh-mobile-wrapper {
     .flag-input {
+        /* UNUSED GLOBAL CLASS: mdc-floating-label - Auto-commented by script
         .mdc-floating-label {
             padding-left: 40px !important;
 
@@ -982,6 +1107,7 @@ textarea {
                 padding-left: 0px !important;
             }
         }
+        */
     }
 }
 
@@ -989,6 +1115,7 @@ textarea {
     align-items: baseline;
 }
 
+/* UNUSED GLOBAL CLASS: custom-discount-menu - Auto-commented by script
 .custom-discount-menu {
     min-width: 260px !important;
     max-width: 260px !important;
@@ -1002,7 +1129,9 @@ textarea {
         }
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: plan-table-wrapper - Auto-commented by script
 .plan-table-wrapper {
     .mdc-data-table__row {
         .active-plan-td-bottom {
@@ -1011,6 +1140,7 @@ textarea {
         }
     }
 }
+*/
 
 .journal-voucher {
     .particular-account {
@@ -1025,9 +1155,11 @@ textarea {
         float: right;
         width: 42%;
 
+        /* UNUSED GLOBAL CLASS: mdc-text-field - Auto-commented by script
         .mdc-text-field {
             padding: 0px !important;
         }
+        */
     }
 
     .amount1 {
@@ -1120,11 +1252,13 @@ textarea {
 }
 
 .company-button {
+    /* UNUSED GLOBAL CLASS: mdc-button__label - Auto-commented by script
     .mdc-button__label {
         display: flex;
         align-items: center;
         column-gap: 7px;
     }
+    */
 }
 
 .word-wrap-dots {
@@ -1135,9 +1269,11 @@ textarea {
     display: inline-block;
 }
 
+/* UNUSED GLOBAL CLASS: iti__country-list--dropup - Auto-commented by script
 .iti__country-list--dropup {
     margin-bottom: -200px !important;
 }
+*/
 
 .adjust-inventory-list-page {
     .td-search-box {
@@ -1146,6 +1282,7 @@ textarea {
 }
 
 .adjustment {
+    /* UNUSED GLOBAL CLASS: mat-mdc-checkbox - Auto-commented by script
     .mat-mdc-checkbox {
         &.mat-mdc-checkbox-disabled {
             label {
@@ -1153,13 +1290,17 @@ textarea {
             }
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-expansion-indicator - Auto-commented by script
     .mat-expansion-indicator {
         margin-left: 20px !important;
     }
+    */
 }
 
 .create-branch-page {
+    /* UNUSED GLOBAL CLASS: mat-select-search-branch - Auto-commented by script
     .mat-select-search-branch {
         .mat-select-search-input {
             padding: 0px 30px 0px 17px !important;
@@ -1171,11 +1312,13 @@ textarea {
             top: 0 !important;
         }
     }
+    */
 
     .filter-dropdown-branch {
         max-width: 300px;
     }
 
+    /* UNUSED GLOBAL CLASS: branch-options - Auto-commented by script
     .branch-options {
         height: auto !important;
         padding-bottom: 5px !important;
@@ -1200,8 +1343,33 @@ textarea {
             margin-right: 0 !important;
         }
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: text-limit - Auto-commented by script
+.text-limit {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+*/
+/* UNUSED GLOBAL CLASS: mdc-list-item__primary-text - Auto-commented by script
+.institutions-dialog-body {
+    
+    .mdc-list-item__primary-text {
+        color: var(--color-black) !important;
+    }
+}
+*/
+
+/* UNUSED GLOBAL CLASS: mat-mdc-tab-body-content - Auto-commented by script
+.setting-branch-body {
+    .mat-mdc-tab-body-content {
+        overflow: visible !important;
+    }
+}
+*/
 // .text-limit {
 //     display: -webkit-box;
 //     -webkit-line-clamp: 1;
@@ -1221,6 +1389,7 @@ textarea {
 //     }
 // }
 
+/* UNUSED GLOBAL CLASS: mat-mdc-table - Auto-commented by script
 .pending-table {
     .mat-mdc-table {
         .mdc-data-table__row {
@@ -1232,13 +1401,31 @@ textarea {
         }
     }
 }
+*/
 
 .update-entry-transaction-date {
     giddh-datepicker {
+        /* UNUSED GLOBAL CLASS: mat-mdc-text-field-wrapper - Auto-commented by script
         .mat-mdc-text-field-wrapper {
             padding-left: 5px !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mdc-text-field--disabled - Auto-commented by script
+        .mdc-text-field--disabled {
+            &.mdc-text-field--filled {
+                background-color: var(--color-transparent) !important;
+            }
+        }
+        */
+
+        /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
+        .readonly-field {
+            .mat-mdc-form-field {
+                background-color: var(--color-transparent) !important;
+            }
+        }
+        */
         // .mdc-text-field--disabled {
         //     &.mdc-text-field--filled {
         //         background-color: var(--color-transparent) !important;
@@ -1259,6 +1446,7 @@ textarea {
 
 
 
+/* UNUSED GLOBAL CLASS: custom-giddh-datepicker - Auto-commented by script
 .custom-giddh-datepicker {
     .mat-datepicker-toggle {
         position: absolute;
@@ -1266,8 +1454,10 @@ textarea {
         top: 0px;
     }
 }
+*/
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
+    /* UNUSED GLOBAL CLASS: subscription-form-select - Auto-commented by script
     .subscription-form-select {
         float: left !important;
         width: 100% !important;
@@ -1295,7 +1485,9 @@ textarea {
             z-index: 9991 !important;
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: select-subscription - Auto-commented by script
     .select-subscription {
         float: left;
         width: 100% !important;
@@ -1322,8 +1514,10 @@ textarea {
             z-index: 9991 !important;
         }
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: mat-calendar-body-cell - Auto-commented by script
 .mat-calendar-body-cell {
     &.mat-calendar-body-active {
         .mat-calendar-body-selected {
@@ -1332,13 +1526,17 @@ textarea {
         }
     }
 }
+*/
 
 .product-option {
+    /* UNUSED GLOBAL CLASS: cdk-drop-list - Auto-commented by script
     .cdk-drop-list {
         width: 50%;
     }
+    */
 
     .product-option-wrapper {
+        /* UNUSED GLOBAL CLASS: mat-select - Auto-commented by script
         .mat-select {
             border: 1px solid var(--color-silver);
             border-radius: 5px;
@@ -1348,6 +1546,7 @@ textarea {
             justify-content: center;
             padding: 0px 5px;
         }
+        */
 
         .data-wrap {
             .dot-img {
@@ -1407,30 +1606,36 @@ aside-create-group {
     .mat-list-wrap {
         width: 100%;
 
+        /* UNUSED GLOBAL CLASS: mat-grid-tile - Auto-commented by script
         .mat-grid-tile {
             height: 100%;
             min-height: calc(100vh - 115px);
         }
+        */
 
         .inventory-sub-sideabar {
             .item-list {
                 a {
                     &.group-name {
+                        /* UNUSED GLOBAL CLASS: mdc-list-item__content - Auto-commented by script
                         .mdc-list-item__content {
                             .mdc-list-item__primary-text {
                                 color: var(--color-medium-gray);
                             }
                         }
+                        */
                     }
 
                     &.isActive {
                         background-color: var(--color-blue-primary);
 
+                        /* UNUSED GLOBAL CLASS: mdc-list-item__content - Auto-commented by script
                         .mdc-list-item__content {
                             .mdc-list-item__primary-text {
                                 color: var(--color-white);
                             }
                         }
+                        */
                     }
 
                     mat-list-item {
@@ -1438,6 +1643,7 @@ aside-create-group {
                     }
                 }
 
+                /* UNUSED GLOBAL CLASS: mdc-list-item__content - Auto-commented by script
                 .mdc-list-item__content {
                     padding: 4px 10px;
                     width: 190px;
@@ -1446,6 +1652,7 @@ aside-create-group {
                     text-overflow: ellipsis;
                     white-space: nowrap;
                 }
+                */
             }
         }
 
@@ -1456,27 +1663,33 @@ aside-create-group {
                 height: 100% !important;
 
                 &.form-btn {
+                    /* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
                     .mat-grid-tile-content {
                         overflow-y: auto;
                     }
+                    */
                 }
 
                 // Units are not displaying after creation once the scroll comes on the page
                 &:first-child {
                     mat-list {
+                        /* UNUSED GLOBAL CLASS: cdk-virtual-scroll-viewport - Auto-commented by script
                         .cdk-virtual-scroll-viewport {
                             height: 100% !important;
                             min-height: calc(100vh - 160px);
                         }
+                        */
                     }
                 }
 
                 &:nth-child(2) {
                     mat-list {
+                        /* UNUSED GLOBAL CLASS: cdk-virtual-scroll-viewport - Auto-commented by script
                         .cdk-virtual-scroll-viewport {
                             height: 100% !important;
                             min-height: calc(100vh - 205px);
                         }
+                        */
                     }
                 }
             }
@@ -1492,13 +1705,16 @@ aside-create-group {
 
             a {
                 &.isActive {
+                    /* UNUSED GLOBAL CLASS: mat-list-base - Auto-commented by script
                     .mat-list-base .mat-list-item {
                         color: var(--color-white) !important;
                     }
+                    */
                 }
             }
         }
 
+        /* UNUSED GLOBAL CLASS: mat-list-base - Auto-commented by script
         .mat-list-base {
             .mat-list-item {
                 width: 225px;
@@ -1512,14 +1728,18 @@ aside-create-group {
                 }
             }
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
         .mat-grid-tile-content {
             height: 100%;
             overflow: auto;
             justify-content: flex-start;
         }
+        */
     }
 
+    /* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
     .mat-grid-tile-content {
         align-items: flex-start;
 
@@ -1552,13 +1772,16 @@ aside-create-group {
             }
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: unitgroup-grid-tile - Auto-commented by script
     .unitgroup-grid-tile {
         .mat-grid-tile-content {
             display: block;
             padding: 0 20px;
         }
     }
+    */
 }
 
 // .table-cell {
@@ -1567,11 +1790,11 @@ aside-create-group {
 
 
 /* table css need to removed at last (finish)*/
-// .modal-header .close {
-//     cursor: pointer;
-// }
-
-
+/* UNUSED GLOBAL CLASS: modal-header - Auto-commented by script
+.modal-header .close {
+    cursor: pointer;
+}
+*/
 
 // .middle {
 //     vertical-align: middle !important;
@@ -1659,12 +1882,14 @@ aside-create-group {
 //     border-radius: 30px;
 // }
 
+/* UNUSED GLOBAL CLASS: toggle-inner - Auto-commented by script
 .toggle-inner {
     display: block;
     width: 200%;
     margin-left: -100%;
     transition: margin 0.3s ease-in 0s;
 }
+*/
 
 .toggle-inner:before,
 .toggle-inner:after {
@@ -1691,6 +1916,7 @@ aside-create-group {
     padding-right: 14px;
 }
 
+/* UNUSED GLOBAL CLASS: toggle-switch - Auto-commented by script
 .toggle-switch {
     display: block;
     width: 18px;
@@ -1704,6 +1930,7 @@ aside-create-group {
     background-color: var(--color-blue-primary);
     border-color: var(--color-blue-primary);
 }
+*/
 
 .toggle-checkbox:checked + .toggle-label .toggle-inner {
     margin-left: 0;
@@ -1801,8 +2028,10 @@ aside-create-group {
     }
 }
 
+/* UNUSED GLOBAL CLASS: invoice-preview-page - Auto-commented by script
 .invoice-preview-page,
 .update-ledger-entry-panel-popup,
+*/
 .page-has-tabs,
 .ledger-body {
     .option-value-more {
@@ -1835,6 +2064,7 @@ aside-create-group {
     }
 
     #content-wrapper {
+        /* UNUSED GLOBAL CLASS: invoice-container - Auto-commented by script
         .invoice-container {
             .modal-content {
                 #export-body {
@@ -1846,6 +2076,7 @@ aside-create-group {
                 }
             }
         }
+        */
     }
 }
 
@@ -1873,9 +2104,11 @@ aside-create-group {
     padding: 0rem !important;
 }
 
+/* UNUSED GLOBAL CLASS: invoice-bg - Auto-commented by script
 .invoice-bg {
     padding-top: 15px;
 }
+*/
 
 .invoice-control .nav > li > a {
     padding: 8px 0px !important;
@@ -1931,11 +2164,13 @@ aside-create-group {
     padding: 0 15px;
 }
 
+/* UNUSED GLOBAL CLASS: history-btn - Auto-commented by script
 .history-btn {
     .btn {
         padding: 6px 10px !important;
     }
 }
+*/
 
 .company-list button.btn-link {
     font-size: var(--font-size-15);
@@ -1966,6 +2201,7 @@ ul.sub-list {
     margin-top: 5px;
 }
 
+/* UNUSED GLOBAL CLASS: user-dropdown-header - Auto-commented by script
 .user-dropdown-header > li > a .icon-arrow-down {
     font-size: 9px;
     float: right;
@@ -1979,13 +2215,16 @@ ul.sub-list {
     display: flex;
     color: var(--color-dark-gray);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: sub-list - Auto-commented by script
 .sub-list li a {
     font-size: var(--font-size-15);
     text-overflow: ellipsis;
     display: block;
     padding-right: 40px;
 }
+*/
 
 .company-list .input-group {
     border-bottom: 1px solid var(--color-silver);
@@ -2028,13 +2267,17 @@ ul.sub-list {
 }
 
 /* file upload css start */
+/* UNUSED GLOBAL CLASS: input-upload - Auto-commented by script
 .input-upload .input-group-btn {
     display: inline;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: date-range - Auto-commented by script
 .date-range .date-range-picker {
     max-width: 100%;
 }
+*/
 
 .col-xs-2.date-range {
     width: 220px;
@@ -2057,29 +2300,39 @@ ul.sub-list {
     margin-bottom: 0;
 }
 
+/* UNUSED GLOBAL CLASS: customer-right - Auto-commented by script
 .customer-right {
     background: var(--color-white);
     padding: 0 15px;
     float: right;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: customer-right - Auto-commented by script
 .customer-right table {
     width: 100%;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: customer-right - Auto-commented by script
 .customer-right table tr td {
     padding: 15px;
     color: var(--color-dark-gray);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: customer-right - Auto-commented by script
 .customer-right table tr td h3 {
     font-size: var(--font-size-16);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: customer-right - Auto-commented by script
 .customer-right table tr td p {
     font-size: var(--font-size-15);
     margin-bottom: 7px;
 }
+*/
 
 .custom-tabs .nav.nav-tabs > li {
     padding-right: 35px;
@@ -2136,44 +2389,51 @@ ul.sub-list {
     display: none !important;
 }
 
-.top-aging-table-top {
-    background: var(--color-border-light);
-    position: relative;
-}
-
 // .italic {
 //     font-style: italic;
 // }
 
+/* UNUSED GLOBAL CLASS: aging-table-top - Auto-commented by script
 .aging-table-top td {
     border: 0px solid !important;
     background: var(--color-white) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: aging-table-top - Auto-commented by script
 .aging-table-top .top-aging-table-top {
     background: var(--color-blue-light) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: aging-table-top - Auto-commented by script
 .aging-table-top .top-aging-table-top strong,
 .aging-table-top .top-aging-table-top span .date-range-picker {
     color: var(--color-black);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: aging-table-top - Auto-commented by script
 .aging-table-top .top-aging-table-top span .date-range-picker {
     font-weight: var(--font-weight-semibold);
     text-align: left !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: aging-table - Auto-commented by script
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
     background: var(--color-white) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: aging-table - Auto-commented by script
 .aging-table > tbody > tr:hover td .aging-checkbox {
     opacity: 1;
     visibility: visible;
 }
+*/
 
 .top-aging-table-top1 {
     background: var(--color-white);
@@ -2224,6 +2484,7 @@ ul.sub-list {
 //     font-family: var(--font-family) !important;
 // }
 
+/* UNUSED GLOBAL CLASS: top-aging-table-top - Auto-commented by script
 .top-aging-table-top .date-range-picker {
     display: inline-block;
     width: auto !important;
@@ -2231,6 +2492,7 @@ ul.sub-list {
     text-decoration: underline;
     font-size: var(--font-size-15);
 }
+*/
 
 .basic > thead > tr > th .fa-sort {
     color: var(--color-medium-gray);
@@ -2238,27 +2500,35 @@ ul.sub-list {
     margin-top: 5px;
 }
 
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > li > a {
     background: var(--color-white) !important;
     color: var(--color-black) !important;
     border: 1px solid var(--color-blue-primary) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > li.active > a {
     color: var(--color-white) !important;
     background: var(--color-blue-primary) !important;
     border: 1px solid var(--color-blue-primary) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: table-checkbox - Auto-commented by script
 .table-checkbox {
     position: absolute;
     left: 0;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: aging-table - Auto-commented by script
 .aging-table tr td:first-child,
 .aging-table tr th:first-child {
     padding-left: 28px !important;
 }
+*/
 
 .aging-table.table-aging-report tr td:first-child,
 .aging-table.table-aging-report tr th:first-child {
@@ -2270,10 +2540,12 @@ ul.sub-list {
     white-space: nowrap !important;
 }
 
+/* UNUSED GLOBAL CLASS: aging-table - Auto-commented by script
 .aging-table .table-checkbox {
     position: absolute;
     left: 5px;
 }
+*/
 
 .invoice-btn.show {
     display: inline-block !important;
@@ -2466,6 +2738,7 @@ modal-container.modal.fade.show {
 }
 
 modal-container.modal {
+    /* UNUSED GLOBAL CLASS: warehouse-welcome-modal - Auto-commented by script
     .warehouse-welcome-modal {
         margin: 0;
         width: 100%;
@@ -2478,6 +2751,7 @@ modal-container.modal {
             background-color: var(--color-light-gray);
         }
     }
+    */
 }
 
 .table-modal thead tr th {
@@ -2486,23 +2760,28 @@ modal-container.modal {
     border-right: 1px solid var(--color-silver);
 }
 
+/* UNUSED GLOBAL CLASS: modal-455 - Auto-commented by script
 .modal-455 {
     max-width: 455px;
     transform: translateY(10px) !important;
 }
+*/
 
 .dropdown-left {
     right: 0px !important;
     left: auto !important;
 }
 
+/* UNUSED GLOBAL CLASS: list-icon-group - Auto-commented by script
 .list-icon-group {
     list-style: none;
     padding: 0;
     display: flex;
     margin-left: -10px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: list-icon-group - Auto-commented by script
 .list-icon-group li {
     display: flex;
     align-items: center;
@@ -2510,30 +2789,41 @@ modal-container.modal {
     -moz-transition: 1ms all;
     cursor: pointer;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: list-icon-group - Auto-commented by script
 .list-icon-group input {
     display: none;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: list-icon-group - Auto-commented by script
 .list-icon-group label {
     padding: 10px;
     margin-right: 15px;
     border-radius: 3px;
     cursor: pointer;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: list-icon-group - Auto-commented by script
 .list-icon-group li img {
     margin-right: 7px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: list-icon-group - Auto-commented by script
 .list-icon-group input:checked + label {
     background-color: var(--color-white);
     box-shadow: 2px 2px 5px var(--color-shadow-light);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: modal-consolidated-details - Auto-commented by script
 .modal-consolidated-details {
     width: 75%;
 }
+*/
 
 .dropdown-menu li label {
     padding-left: 10px;
@@ -2562,6 +2852,7 @@ modal-container.modal {
     color: var(--color-white);
 }
 
+/* UNUSED GLOBAL CLASS: table-no-border - Auto-commented by script
 .table-no-border tr th,
 .table-no-border tr td {
     padding: 6px 0 !important;
@@ -2570,10 +2861,13 @@ modal-container.modal {
     font-size: var(--font-size-15);
     color: var(--color-black);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: table-no-border - Auto-commented by script
 .table-no-border tr th {
     color: var(--color-medium-gray);
 }
+*/
 
 .price-input {
     border: 1px solid var(--color-silver) !important;
@@ -2585,6 +2879,7 @@ modal-container.modal {
     min-width: 70px;
 }
 
+/* UNUSED GLOBAL CLASS: input-search - Auto-commented by script
 .input-search .input-group-addon {
     background: var(--color-white);
     border-right: 0px;
@@ -2595,13 +2890,16 @@ modal-container.modal {
     padding-right: 0px;
     border-radius: 2px 0px 0px 2px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: input-search - Auto-commented by script
 .input-search .form-control {
     background: var(--color-white);
     border-radius: 0px 2px 2px 0px !important;
     border-left: 0px;
     border-color: var(--color-silver);
 }
+*/
 
 .btn-filter {
     background: var(--color-white);
@@ -2673,6 +2971,7 @@ modal-container.modal {
 //     color: var(--color-blue-primary);
 // }
 
+/* UNUSED GLOBAL CLASS: all-features-modal - Auto-commented by script
 .all-features-modal {
     margin: 0 auto !important;
     display: flex;
@@ -2689,7 +2988,9 @@ modal-container.modal {
         margin-right: 5px;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: custom-input-search - Auto-commented by script
 .custom-input-search {
     position: relative;
 
@@ -2706,31 +3007,46 @@ modal-container.modal {
         padding-left: 30px !important;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: plan-list - Auto-commented by script
 .plan-list .close:hover,
 .plan-list .close:focus:hover,
+*/
+/* UNUSED GLOBAL CLASS: plan-list - Auto-commented by script
 .plan-list .close:focus:focus,
 .plan-list .close:focus:disabled,
+*/
+/* UNUSED GLOBAL CLASS: plan-list - Auto-commented by script
 .plan-list .close:focus.active,
 .plan-list .close:focus:active,
+*/
 .open > .dropdown-toggle.plan-list .close:focus,
+/* UNUSED GLOBAL CLASS: plan-list - Auto-commented by script
 .plan-list .close:focus:active:focus,
 .plan-list .close:focus:active:hover,
+*/
+/* UNUSED GLOBAL CLASS: plan-list - Auto-commented by script
 .plan-list .close:hover,
 .plan-list .close:focus,
+*/
+/* UNUSED GLOBAL CLASS: plan-list - Auto-commented by script
 .plan-list .close * {
     background: none !important;
     border-color: transparent !important;
     border: 0px !important;
     box-shadow: none !important;
 }
+*/
 
 .custom-datepicker {
     position: relative;
 
+    /* UNUSED GLOBAL CLASS: border-radius-2 - Auto-commented by script
     .border-radius-2 {
         border-radius: 5px;
     }
+    */
 }
 
 .custom-datepicker i {
@@ -2782,23 +3098,31 @@ modal-container.modal {
     width: 14px;
 }
 
+/* UNUSED GLOBAL CLASS: bs-datepicker-body - Auto-commented by script
 .bs-datepicker-body table td.is-highlighted:not(.disabled):not(.selected) span {
     color: var(--color-white);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: payment-success-modal - Auto-commented by script
 .payment-success-modal {
     transform: translate(0, -0%) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: payment-success-modal - Auto-commented by script
 .payment-success-modal {
     .payment-img img {
         width: 80px;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: tooltip-box - Auto-commented by script
 .tooltip-box .tooltip {
     width: 150px;
 }
+*/
 
 /* my css end */
 
@@ -2813,14 +3137,18 @@ modal-container.modal {
     box-shadow: none;
     font-size: var(--font-size-15) !important;
 
+    /* UNUSED GLOBAL CLASS: mat-mdc-select-placeholder - Auto-commented by script
     .mat-mdc-select-placeholder,
     .mat-mdc-select-arrow {
         color: var(--color-black) !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-mdc-select-arrow - Auto-commented by script
     .mat-mdc-select-arrow {
         margin-left: 4px;
     }
+    */
 }
 
 .form-control.mat-mdc-select-disabled {
@@ -2929,6 +3257,7 @@ header .navbar {
 }
 
 /*btn*/
+/* UNUSED GLOBAL CLASS: btn-pink - Auto-commented by script
 .btn-pink {
     background: var(--color-blue-primary);
     border: 1px solid var(--color-blue-primary);
@@ -2938,13 +3267,16 @@ header .navbar {
         color: var(--color-white);
     }
 }
+*/
 
 .dropdown-toggle.btn-pink {
     padding: 6px 16px;
 }
 
+/* UNUSED GLOBAL CLASS: btn-primary - Auto-commented by script
 .btn-primary,
 .btn-primary:focus,
+*/
 .btn-primary:active:focus,
 .btn-primary:not(:disabled):not(.disabled).active,
 .btn-primary:not(:disabled):not(.disabled):active,
@@ -2994,19 +3326,24 @@ fieldset[disabled] .btn-primary:hover {
     }
 }
 
+/* UNUSED GLOBAL CLASS: btn-group-lg - Auto-commented by script
 .btn-group-lg > .btn,
 .btn.btn-lg {
     padding: 10px 16px;
     font-size: var(--font-size-16);
     line-height: 1.3333333;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: btn-default - Auto-commented by script
 .btn-default {
     background: var(--color-white) !important;
     border-color: var(--color-silver) !important;
     color: var(--color-black) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: success-btn - Auto-commented by script
 .success-btn {
     font-size: var(--font-size-15);
     background-color: var(--color-green);
@@ -3017,10 +3354,13 @@ fieldset[disabled] .btn-primary:hover {
         background-color: var(--color-blue-primary);
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: btn-round - Auto-commented by script
 .btn-round {
     border-radius: 90px;
 }
+*/
 
 #actionPane .btn-default {
     background: var(--color-border-light) !important;
@@ -3031,24 +3371,30 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 /*btn end*/
+/* UNUSED GLOBAL CLASS: ledger-header - Auto-commented by script
 .ledger-header thead th {
     background: var(--color-white);
     border-right: 1px solid var(--color-silver);
 }
+*/
 
 .compound-entry td,
 .compound-entry td .form-control {
     border: 0;
 }
 
+/* UNUSED GLOBAL CLASS: ledger-table-body - Auto-commented by script
 .ledger-table-body table tbody.ledger-main tr td {
     padding: 0;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: ledger-container - Auto-commented by script
 .ledger-container table tr.bg3 th {
     border: 1px solid var(--color-silver);
     border-left: 0;
 }
+*/
 
 .tax-list {
     padding: 10px 0;
@@ -3059,12 +3405,14 @@ fieldset[disabled] .btn-primary:hover {
     line-height: normal;
 }
 
+/* UNUSED GLOBAL CLASS: load-more - Auto-commented by script
 .load-more {
     padding: 8px 10px;
     display: block;
     background: var(--color-light-gray);
     margin: 20px 0px;
 }
+*/
 
 #ledger {
     border-top: 1px solid var(--color-silver);
@@ -3086,6 +3434,7 @@ fieldset[disabled] .btn-primary:hover {
     text-align: center;
 }
 
+/* UNUSED GLOBAL CLASS: header-date - Auto-commented by script
 .header-date {
     font-size: var(--font-size-12);
     height: 32px;
@@ -3093,11 +3442,14 @@ fieldset[disabled] .btn-primary:hover {
     padding: 2px 0px;
     border-radius: 2px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: btn-gray - Auto-commented by script
 .btn-gray {
     background: var(--color-dark-gray);
     color: var(--color-white);
 }
+*/
 
 .btn-gray:hover {
     color: var(--color-white);
@@ -3111,6 +3463,7 @@ fieldset[disabled] .btn-primary:hover {
 //     padding-left: 10px;
 // }
 
+/* UNUSED GLOBAL CLASS: danger-btn - Auto-commented by script
 .danger-btn {
     color: var(--color-white);
     text-shadow: none;
@@ -3121,6 +3474,7 @@ fieldset[disabled] .btn-primary:hover {
     box-shadow: none;
     border: 1px solid var(--color-red);
 }
+*/
 
 #companyList {
     background: var(--color-white);
@@ -3136,9 +3490,11 @@ fieldset[disabled] .btn-primary:hover {
     color: var(--dark-blue01) !important;
 }
 
+/* UNUSED GLOBAL CLASS: selected-company - Auto-commented by script
 .selected-company a.text-ellipsis {
     color: var(--color-blue-primary);
 }
+*/
 
 #companyList li.selected-company a:focus {
     background-color: var(--color-blue-primary);
@@ -3261,9 +3617,11 @@ input[type="checkbox"]:checked:after {
     margin-bottom: 5px;
 }
 
-// .border-radius-0 .modal-header > .close {
-//     top: 0px;
-// }
+/* UNUSED GLOBAL CLASS: border-radius-0 - Auto-commented by script
+.border-radius-0 .modal-header > .close {
+    top: 0px;
+}
+*/
 
 .tab-pane input[type="search"]:after {
     font-family: icomoon !important;
@@ -3293,6 +3651,7 @@ input[type="checkbox"]:checked:after {
 //     line-height: 1 !important;
 // }
 
+/* UNUSED GLOBAL CLASS: btn-success-green - Auto-commented by script
 .btn-success-green {
     color: var(--color-white) !important;
     background-color: var(--color-green) !important;
@@ -3303,21 +3662,26 @@ input[type="checkbox"]:checked:after {
         background-color: var(--color-green) !important;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: btn-success-outline - Auto-commented by script
 .btn-success-outline {
     border: 1px solid var(--color-green) !important;
     color: var(--color-green) !important;
 }
+*/
 
 .btn-success-outline:hover {
     color: var(--color-white) !important;
     background: var(--color-green) !important;
 }
 
+/* UNUSED GLOBAL CLASS: btn-danger-outline - Auto-commented by script
 .btn-danger-outline {
     border: 1px solid var(--color-red) !important;
     color: var(--color-red) !important;
 }
+*/
 
 .btn-danger-outline:hover {
     color: var(--color-white) !important;
@@ -3350,11 +3714,13 @@ input[type="checkbox"]:checked:after {
     background: var(--color-green-light) !important;
 }
 
+/* UNUSED GLOBAL CLASS: btn-warning - Auto-commented by script
 .btn-warning {
     color: var(--color-white) !important;
     background-color: var(--color-deep-orange) !important;
     border-color: var(--color-deep-orange) !important;
 }
+*/
 
 .btn-warning:not(:disabled):not(.disabled):active:focus,
 .btn-warning:not(:disabled):not(.disabled).active:focus,
@@ -3394,11 +3760,13 @@ input[type="checkbox"]:checked:after {
     border-color: var(--color-border-light) !important;
 }
 
+/* UNUSED GLOBAL CLASS: btn-cancel - Auto-commented by script
 .btn-cancel {
     background: var(--color-border-light);
     color: var(--color-black);
     border-color: var(--color-border-light);
 }
+*/
 
 .btn-cancel:hover,
 .btn-cancel:active,
@@ -3419,9 +3787,11 @@ input[type="checkbox"]:checked:after {
     opacity: 0.5;
 }
 
+/* UNUSED GLOBAL CLASS: sm-btn - Auto-commented by script
 .sm-btn {
     padding: 6px 11px;
 }
+*/
 
 .unverified,
 .verified {
@@ -3435,6 +3805,7 @@ input[type="checkbox"]:checked:after {
     box-shadow: 0 5px 34px 0 var(--color-shadow-light);
 }
 
+/* UNUSED GLOBAL CLASS: thumbnail - Auto-commented by script
 .thumbnail {
     width: 100%;
     float: left;
@@ -3443,18 +3814,21 @@ input[type="checkbox"]:checked:after {
     background: var(--color-white);
     border-color: var(--color-red-light) !important;
 }
+*/
 
 .thumbnail:hover {
     transition: box-shadow 0.3s ease;
     box-shadow: 0 5px 34px 0 var(--color-shadow-light);
 }
 
+/* UNUSED GLOBAL CLASS: thumbnail - Auto-commented by script
 .thumbnail .caption {
     padding: 20px 7px;
     color: var(--color-black);
     overflow: hidden;
     text-align: center;
 }
+*/
 
 .switch.wide.checked small {
     left: 31px;
@@ -3466,12 +3840,14 @@ input[type="checkbox"]:checked:after {
     height: 34px;
 }
 
+/* UNUSED GLOBAL CLASS: switch - Auto-commented by script
 .switch {
     border: 0;
     border-radius: 48px;
     top: 0;
     background: var(--color-light-gray);
 }
+*/
 
 .switch.checked {
     background: var(--color-green);
@@ -3482,26 +3858,32 @@ input[type="checkbox"]:checked:after {
     left: 20px;
 }
 
+/* UNUSED GLOBAL CLASS: switch - Auto-commented by script
 .switch small {
     top: 2px;
     left: 0px;
 }
+*/
 
 .switch.wide small {
     height: 29px;
     width: 29px;
 }
 
+/* UNUSED GLOBAL CLASS: switch - Auto-commented by script
 .switch .on,
 .switch .off {
     display: none;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: switch_div - Auto-commented by script
 .switch_div {
     max-width: 80px;
     float: left;
     width: 100%;
 }
+*/
 
 .filterForm .form-group {
     float: left;
@@ -3530,9 +3912,11 @@ input[type="checkbox"]:checked:after {
     padding-left: 0;
 }
 
+/* UNUSED GLOBAL CLASS: ui-select-toggle - Auto-commented by script
 .ui-select-toggle {
     padding: 6px 16px !important;
 }
+*/
 
 .tab-pane .list-inline {
     margin-left: 0;
@@ -3629,10 +4013,12 @@ input[type="checkbox"]:checked:after {
 //     align-items: flex-start !important;
 // }
 
+/* UNUSED GLOBAL CLASS: fixed-ng2pdfview - Auto-commented by script
 .fixed-ng2pdfview iframe {
     height: 1530px !important;
     overflow: hidden;
 }
+*/
 
 .preview-1 iframe {
     height: 1234px !important;
@@ -3644,11 +4030,14 @@ input[type="checkbox"]:checked:after {
     color: var(--color-red);
 }
 
+/* UNUSED GLOBAL CLASS: md-btn - Auto-commented by script
 .md-btn {
     padding: 10px 16px;
     border-radius: 3px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: filter-btn - Auto-commented by script
 .filter-btn {
     right: 2em;
     cursor: pointer;
@@ -3656,16 +4045,21 @@ input[type="checkbox"]:checked:after {
     top: 1em;
     bottom: inherit;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: filter-btn - Auto-commented by script
 .filter-btn label {
     position: relative;
     top: -5px;
     right: 4px;
 }
+*/
 
 .checkbox input[type="checkbox"],
+/* UNUSED GLOBAL CLASS: checkbox-inline - Auto-commented by script
 .checkbox-inline input[type="checkbox"],
 .radio input[type="radio"],
+*/
 .radio-inline input[type="radio"] {
     position: relative;
     margin-right: 10px;
@@ -3735,9 +4129,11 @@ input[type="checkbox"]:checked:after {
     font-size: var(--font-size-15);
 }
 
+/* UNUSED GLOBAL CLASS: btn-row - Auto-commented by script
 .btn-row {
     margin-top: 14px;
 }
+*/
 
 a,
 button,
@@ -3751,10 +4147,12 @@ button:focus {
     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
 }
 
+/* UNUSED GLOBAL CLASS: Inpt_dwn - Auto-commented by script
 .Inpt_dwn {
     padding-right: 25px !important;
     text-align: right;
 }
+*/
 
 /*placeholder webkit css*/
 #accountSearch::-webkit-input-placeholder {
@@ -3787,11 +4185,13 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 
+/* UNUSED GLOBAL CLASS: navbar-right - Auto-commented by script
 .navbar-right .dropdown-menu,
 .pull-right > .dropdown-menu {
     top: 54px;
     border-color: var(--color-silver);
 }
+*/
 
 .ledger-main .form-control:focus {
     border: 1px solid var(--color-blue-primary) !important;
@@ -3806,15 +4206,20 @@ input[type="number"]::-webkit-inner-spin-button {
     border-radius: 2px;
 }
 
+/* UNUSED GLOBAL CLASS: dateblock - Auto-commented by script
 .dateblock {
     float: left;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: ledger-header - Auto-commented by script
 .ledger-header thead th:last-child,
 .ledger-container table tr.bg3 th:last-child {
     border-right: 0;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: upload-btn - Auto-commented by script
 .upload-btn {
     background: var(--color-orange-light);
     border: 1px solid var(--color-orange-light);
@@ -3823,6 +4228,7 @@ input[type="number"]::-webkit-inner-spin-button {
     float: right;
     margin-top: 20px;
 }
+*/
 
 .upload-div input[type="file"] {
     display: none;
@@ -3921,9 +4327,11 @@ footer > div > a:last-child {
     background-color: var(--color-border-light) !important;
 }
 
+/* UNUSED GLOBAL CLASS: btn-default-focus - Auto-commented by script
 .btn-default-focus {
     box-shadow: none !important;
 }
+*/
 
 .form-title {
     padding: 12px 20px;
@@ -3999,19 +4407,23 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 @media only screen and (max-width: 1030px) {
+    /* UNUSED GLOBAL CLASS: header-container - Auto-commented by script
     .header-container {
         position: relative;
     }
+    */
 
     body.unresponsive {
         padding-top: 0;
     }
 }
 
+/* UNUSED GLOBAL CLASS: checkbox-inline - Auto-commented by script
 .checkbox-inline input[type="checkbox"],
 .checkbox input[type="checkbox"] {
     left: 0;
 }
+*/
 
 .today.weekend.off.active.end-date.in-range.available {
     background: var(--color-white) !important;
@@ -4041,18 +4453,24 @@ a.btn.btn-xs.btn-link.pull-right {
     width: 25%;
 }
 
+/* UNUSED GLOBAL CLASS: pop-panel - Auto-commented by script
 .pop-panel {
     max-width: 700px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: pop-panel - Auto-commented by script
 .pop-panel .form-control {
     background: var(--color-orange-light);
     border-color: var(--color-silver);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: pop-panel - Auto-commented by script
 .pop-panel label {
     color: var(--color-black);
 }
+*/
 
 .in-words {
     color: var(--color-black);
@@ -4130,13 +4548,17 @@ a.btn.btn-xs.btn-link.pull-right {
     }
 }
 
+/* UNUSED GLOBAL CLASS: item-padding - Auto-commented by script
 .item-padding .multi-select input.form-control {
     padding-right: 24px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: card-invoice-table-wrapper - Auto-commented by script
 .card-invoice-table-wrapper .multi-select input.form-control {
     background-position: 98% !important;
 }
+*/
 
 .multi-select .caret {
     position: absolute;
@@ -4176,20 +4598,24 @@ a.btn.btn-xs.btn-link.pull-right {
     left: initial;
 }
 
+/* UNUSED GLOBAL CLASS: no-btn - Auto-commented by script
 .no-btn {
     box-shadow: none;
     border: 0;
     background: none;
     cursor: pointer;
 }
+*/
 
 // #share-modal .modal-header {
 //     border-bottom: 0;
 // }
 
-// .modal-header {
-//     border-radius: 5px 5px 0 0 !important;
-// }
+/* UNUSED GLOBAL CLASS: modal-header - Auto-commented by script
+.modal-header {
+    border-radius: 5px 5px 0 0 !important;
+}
+*/
 
 #share-modal .btn {
     padding: 7px 16px;
@@ -4247,26 +4673,30 @@ a.btn.btn-xs.btn-link.pull-right {
     width: 25%;
 }
 
-// .modal-header {
-//     position: relative;
-//     background: var(--color-blue-primary) !important;
-//     color: var(--color-white);
-//     border-color: var(--color-blue-primary);
-//     height: 65px;
-//     display: flex;
-//     align-items: center;
-//     border-color: var(--color-blue-primary);
+/* UNUSED GLOBAL CLASS: modal-header - Auto-commented by script
+.modal-header {
+    position: relative;
+    background: var(--color-blue-primary) !important;
+    color: var(--color-white);
+    border-color: var(--color-blue-primary);
+    height: 65px;
+    display: flex;
+    align-items: center;
+    border-color: var(--color-blue-primary);
 
-//     .icon-cross {
-//         color: var(--color-white);
-//     }
-// }
+    .icon-cross {
+        color: var(--color-white);
+    }
+}
+*/
 
 .modal-body,
+/* UNUSED GLOBAL CLASS: modal-footer - Auto-commented by script
 .modal-footer {
     background-color: var(--color-white) !important;
     width: 100%;
 }
+*/
 
 .close-modal {
     position: absolute;
@@ -4296,13 +4726,16 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
 }
 
+/* UNUSED GLOBAL CLASS: select-drop - Auto-commented by script
 .select-drop {
     position: relative;
     top: 0px;
     right: 2px;
     z-index: 9;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: select-drop - Auto-commented by script
 .select-drop i {
     position: absolute;
     right: 4px;
@@ -4312,6 +4745,7 @@ a.btn.btn-xs.btn-link.pull-right {
     transform: translateY(-50%);
     cursor: pointer;
 }
+*/
 
 .ledger-panel {
     .bd-rb {
@@ -4319,6 +4753,7 @@ a.btn.btn-xs.btn-link.pull-right {
     }
 
     .more-details {
+        /* UNUSED GLOBAL CLASS: cheq - Auto-commented by script
         .cheq {
             table {
                 tr {
@@ -4329,20 +4764,27 @@ a.btn.btn-xs.btn-link.pull-right {
                 }
             }
         }
+        */
     }
 }
 
+/* UNUSED GLOBAL CLASS: pop-panel - Auto-commented by script
 .pop-panel .ui-select-toggle {
     min-width: 100px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: no-btn - Auto-commented by script
 .no-btn i {
     top: 3px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: no-btn - Auto-commented by script
 .no-btn .rotate180 {
     top: 0;
 }
+*/
 
 #inventory-sidebar,
 #inventory-sidebar input {
@@ -4358,15 +4800,19 @@ a.btn.btn-xs.btn-link.pull-right {
     padding: 0 15px;
 }
 
+/* UNUSED GLOBAL CLASS: search-input - Auto-commented by script
 .search-input {
     margin-top: 25px;
     position: relative;
     top: 1px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: search-input - Auto-commented by script
 .search-input .bdr.ng-star-inserted {
     border-radius: 3px;
 }
+*/
 
 .form-group.mr-b05,
 .margin-child-label .form-group label {
@@ -4397,6 +4843,7 @@ select.form-control {
     text-transform: capitalize;
 }
 
+/* UNUSED GLOBAL CLASS: list-row - Auto-commented by script
 .list-row span {
     width: 10px;
     height: 2px;
@@ -4406,12 +4853,15 @@ select.form-control {
     top: 50%;
     left: 0;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: list-row - Auto-commented by script
 .list-row p {
     position: relative;
     margin-left: 20px;
     margin-bottom: 0;
 }
+*/
 
 // .no-margin {
 //     margin: 0 !important;
@@ -4429,26 +4879,22 @@ select.form-control {
     transform: rotate(180deg);
 }
 
-// .modal-header > h3 {
-//     font-size: var(--font-size-16);
-//     color: var(--color-white);
-// }
+/* UNUSED GLOBAL CLASS: modal-header - Auto-commented by script
+.modal-header > h3 {
+    font-size: var(--font-size-16);
+    color: var(--color-white);
+}
+*/
 
 .no-result-template {
     position: absolute;
     list-style-type: none;
-    cursor: pointer;
     padding: 5px 10px;
     min-width: 160px;
     font-size: var(--font-size-15);
     text-align: left;
     background-color: var(--color-white);
     background-clip: padding-box;
-    border: 1px solid var(--color-silver);
-    border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px var(--color-shadow-light);
-    box-shadow: 0 6px 12px var(--color-shadow-light);
-    z-index: 1001;
 }
 
 .grp-list {
@@ -4478,6 +4924,7 @@ select.form-control {
 }
 
 .grp-list,
+/* UNUSED GLOBAL CLASS: new-btn-u - Auto-commented by script
 .new-btn-u {
     li {
         list-style: none;
@@ -4494,6 +4941,7 @@ select.form-control {
         }
     }
 }
+*/
 
 .grp-col {
     float: left;
@@ -4561,9 +5009,11 @@ label {
     color: var(--color-dark-gray);
 }
 
+/* UNUSED GLOBAL CLASS: btn-add - Auto-commented by script
 .btn-add {
     display: inline-block !important;
 }
+*/
 
 .btn-add:hover,
 .btn-add:focus {
@@ -4574,17 +5024,23 @@ label {
     border-bottom: 1px solid var(--color-silver);
 }
 
+/* UNUSED GLOBAL CLASS: pop-panel - Auto-commented by script
 .pop-panel .ui-select-toggle {
     min-width: 100px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: no-btn - Auto-commented by script
 .no-btn i {
     top: 3px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: no-btn - Auto-commented by script
 .no-btn .rotate180 {
     top: 0;
 }
+*/
 
 .inline-table {
     display: table;
@@ -4730,9 +5186,11 @@ label {
     color: var(--color-dark-gray);
 }
 
+/* UNUSED GLOBAL CLASS: btn-add - Auto-commented by script
 .btn-add {
     display: inline-block !important;
 }
+*/
 
 .btn-add:hover,
 .btn-add:focus {
@@ -4743,17 +5201,23 @@ label {
     border-bottom: 1px solid var(--color-silver);
 }
 
+/* UNUSED GLOBAL CLASS: pop-panel - Auto-commented by script
 .pop-panel .ui-select-toggle {
     min-width: 100px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: no-btn - Auto-commented by script
 .no-btn i {
     top: 3px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: no-btn - Auto-commented by script
 .no-btn .rotate180 {
     top: 0;
 }
+*/
 
 .form-box {
     overflow-y: auto;
@@ -4774,9 +5238,11 @@ label {
     margin: 0px 0 4px 4px;
 }
 
+/* UNUSED GLOBAL CLASS: share-grp - Auto-commented by script
 .share-grp {
     overflow: hidden;
 }
+*/
 
 .inline-table.new-form {
     width: 100%;
@@ -4857,9 +5323,11 @@ label {
     z-index: 99999 !important;
 }
 
+/* UNUSED GLOBAL CLASS: fa-times - Auto-commented by script
 .fa-times {
     cursor: pointer;
 }
+*/
 
 .new-btn {
     position: absolute;
@@ -4870,9 +5338,11 @@ label {
     z-index: 9;
 }
 
+/* UNUSED GLOBAL CLASS: fix - Auto-commented by script
 .fix ul li:nth-last-child(2) {
     margin-bottom: 30px;
 }
+*/
 
 #getGroupModal .search-bar .reset {
     position: absolute;
@@ -5054,19 +5524,23 @@ label {
     height: auto;
 }
 
+/* UNUSED GLOBAL CLASS: companyGst - Auto-commented by script
 .companyGst .fa-plus {
     top: -12px;
     position: relative;
 }
+*/
 
 .col-wrapper:nth-child(1) .grp-list .master-list a.btn-add {
     display: none !important;
 }
 
+/* UNUSED GLOBAL CLASS: companyGst - Auto-commented by script
 .companyGst .gst {
     padding-bottom: 20px;
     border-bottom: 1px solid var(--color-silver);
 }
+*/
 
 .grey-color {
     color: var(--color-dark-gray);
@@ -5135,23 +5609,29 @@ label {
 .d-grid {
     display: grid !important;
 }
+/* UNUSED GLOBAL CLASS: grid-column-2 - Auto-commented by script
 .grid-column-2 {
     grid-template-columns: repeat(2, 1fr);
 }
+*/
 .grid-column-3 {
     grid-template-columns: repeat(3, 1fr);
 }
+/* UNUSED GLOBAL CLASS: grid-column-4 - Auto-commented by script
 .grid-column-4 {
     grid-template-columns: repeat(4, 1fr);
 }
+*/
 .grid-child-column-full {
     grid-column: 1 / -1;
 }
 
+/* UNUSED GLOBAL CLASS: on-hover - Auto-commented by script
 .on-hover {
     position: relative;
     transition: all 0.3s ease;
 }
+*/
 
 .custom-select {
     height: auto;
@@ -5166,6 +5646,7 @@ label {
         padding-right: 22px !important;
     }
 
+    /* UNUSED GLOBAL CLASS: select-drop - Auto-commented by script
     .select-drop {
         position: absolute;
         bottom: 16px;
@@ -5173,33 +5654,46 @@ label {
         z-index: 9;
         right: 6px;
     }
+    */
 }
 
 #mfReportTbl table > tbody > tr > td > table.table {
     background: transparent;
 }
 
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > li > a,
 .pagination > li > span {
     color: var(--color-black);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > .active > a,
 .pagination > .active > a:focus,
+*/
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > .active > a:hover,
 .pagination > .active > span,
+*/
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
     color: var(--color-white);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > li > a:focus,
 .pagination > li > a:hover,
+*/
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > li > span:focus,
 .pagination > li > span:hover {
     background-color: var(--color-silver) !important;
     border-color: var(--color-silver);
 }
+*/
 
 #manufacture .section-title {
     color: var(--color-dark-gray);
@@ -5208,6 +5702,7 @@ label {
     vertical-align: middle;
 }
 
+/* UNUSED GLOBAL CLASS: select2-container--default - Auto-commented by script
 .select2-container--default .select2-selection--single {
     border-radius: 0px !important;
     padding: 6px !important;
@@ -5216,18 +5711,25 @@ label {
     font-size: var(--font-size-15);
     box-shadow: none;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: select2-container - Auto-commented by script
 .select2-container .select2-selection--single {
     height: 34px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: select2-container--default - Auto-commented by script
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: inherit !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: select2-container--default - Auto-commented by script
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: var(--color-black) !important;
 }
+*/
 
 .select2-results__option[aria-selected] {
     font-size: var(--font-size-15);
@@ -5385,27 +5887,36 @@ label {
             &:hover {
                 background-color: var(--color-border-light) !important;
 
+                /* UNUSED GLOBAL CLASS: mat-checkbox-label - Auto-commented by script
                 .mat-checkbox-label {
                     color: var(--color-blue-primary) !important;
                 }
+                */
             }
 
+            /* UNUSED GLOBAL CLASS: mat-checkbox-label - Auto-commented by script
             .mat-checkbox-label {
                 margin-left: -17px;
             }
+            */
         }
 
+        /* UNUSED GLOBAL CLASS: mat-checkbox-layout - Auto-commented by script
         .mat-checkbox-layout {
             float: left !important;
             width: 100% !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-checkbox-inner-container - Auto-commented by script
         .mat-checkbox-inner-container {
             margin-left: 0 !important;
         }
+        */
     }
 }
 
+/* UNUSED GLOBAL CLASS: update-ledger-tax-dropdown - Auto-commented by script
 .update-ledger-tax-dropdown {
     li {
         float: left;
@@ -5434,6 +5945,7 @@ label {
         }
     }
 }
+*/
 
 .dropdown-container .dropdown-menu li label {
     overflow: hidden;
@@ -5597,13 +6109,16 @@ label {
     display: inline-block;
 }
 
+/* UNUSED GLOBAL CLASS: design-tool - Auto-commented by script
 .design-tool > li {
     float: left;
     width: 100%;
     margin: 10px 0;
     list-style: none;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: design-tool - Auto-commented by script
 .design-tool li > label {
     display: inline-block;
     width: auto !important;
@@ -5611,7 +6126,9 @@ label {
     margin-bottom: 0 !important;
     padding: 0 10px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: design-tool - Auto-commented by script
 .design-tool li [class^="ico-"],
 .design-tool li [class*=" ico-"] {
     width: 50px;
@@ -5621,26 +6138,35 @@ label {
     background-size: 65px;
     filter: invert(0);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: ico-template - Auto-commented by script
 .ico-template {
     background-position: center -6px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: ico-edit - Auto-commented by script
 .ico-edit {
     background-position: center -73px !important;
 }
+*/
 
 .ico-swatch {
     background-position: center -138px !important;
 }
 
+/* UNUSED GLOBAL CLASS: ico-txt - Auto-commented by script
 .ico-txt {
     background-position: center -202px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: ico-print - Auto-commented by script
 .ico-print {
     background-position: center -267px !important;
 }
+*/
 
 .template-view li {
     float: left;
@@ -5674,10 +6200,13 @@ label {
     object-fit: contain;
 }
 
+/* UNUSED GLOBAL CLASS: logo-tool - Auto-commented by script
 .logo-tool ul {
     margin: 5px 0;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: logo-tool - Auto-commented by script
 .logo-tool ul li {
     font-weight: bold;
     list-style: none;
@@ -5690,11 +6219,14 @@ label {
     line-height: 30px;
     color: var(--color-medium-gray);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: logo-tool - Auto-commented by script
 .logo-tool ul li:hover {
     border-color: var(--color-dark-gray);
     color: var(--color-dark-gray);
 }
+*/
 
 .swatch-preview span {
     border-radius: 50%;
@@ -5703,25 +6235,33 @@ label {
     height: 100%;
 }
 
+/* UNUSED GLOBAL CLASS: print-tool - Auto-commented by script
 .print-tool .table > tbody > tr > td {
     padding-top: 0;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: print-tool - Auto-commented by script
 .print-tool .table > tbody > tr > td > input {
     margin: 0 !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: print-tool - Auto-commented by script
 .print-tool a {
     bottom: 10px;
     top: inherit;
     right: -50px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: scroll-auto - Auto-commented by script
 .scroll-auto {
     overflow-y: auto;
     padding-right: 15px;
     max-height: calc(100vh - 245px);
 }
+*/
 
 .scroll-auto::-webkit-scrollbar {
     width: 8px;
@@ -5761,6 +6301,7 @@ fieldset[disabled] .disable-bg {
     background-color: transparent !important;
 }
 
+/* UNUSED GLOBAL CLASS: disable-bg - Auto-commented by script
 .disable-bg {
     border: 0;
     background-color: transparent !important;
@@ -5771,6 +6312,7 @@ fieldset[disabled] .disable-bg {
         }
     }
 }
+*/
 
 input[type="checkbox"][disabled] {
     opacity: 2.2;
@@ -5827,10 +6369,12 @@ input[type="checkbox"][disabled] {
     outline: 0;
 }
 
+/* UNUSED GLOBAL CLASS: align-top - Auto-commented by script
 .align-top > tbody > tr > td,
 .v-align-top {
     vertical-align: top;
 }
+*/
 
 .subHead {
     font-size: var(--font-size-16);
@@ -5940,15 +6484,19 @@ datepicker-inner .well table tbody .btn-default.active {
     border: 0;
 }
 
+/* UNUSED GLOBAL CLASS: btn-xs - Auto-commented by script
 .btn-xs {
     padding: 1px 5px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: calendar-dropdown - Auto-commented by script
 .calendar-dropdown {
     border-color: var(--color-silver);
     margin-top: 1px;
     border-radius: 2px;
 }
+*/
 
 datepicker-inner .well yearpicker table tbody tr td .btn-default,
 datepicker-inner .well monthpicker table tbody tr td .btn-default {
@@ -5969,9 +6517,11 @@ input[type="checkbox"][disabled]:after {
     cursor: not-allowed;
 }
 
+/* UNUSED GLOBAL CLASS: form-bg - Auto-commented by script
 .form-bg {
     background: var(--color-light-gray);
 }
+*/
 
 .toggle-btn i {
     margin-right: 9px;
@@ -5994,11 +6544,13 @@ input[type="checkbox"][disabled]:after {
     text-transform: uppercase;
 }
 
+/* UNUSED GLOBAL CLASS: welcome-header - Auto-commented by script
 .welcome-header h2 {
     font-size: var(--font-size-24);
     font-family: var(--font-family);
     color: var(--color-black);
 }
+*/
 
 .table-container section div:last-child {
     border-right: 0;
@@ -6089,15 +6641,19 @@ input[type="checkbox"][disabled]:after {
     font-size: var(--font-size-15);
 }
 
+/* UNUSED GLOBAL CLASS: phoneNum - Auto-commented by script
 .phoneNum .input-group-addon {
     padding: 0;
     border: 0;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: phoneNum - Auto-commented by script
 .phoneNum .select2-parent .select2-container .select2-selection--single {
     line-height: 21px !important;
     text-align: right;
 }
+*/
 
 #verifyMobile .phoneNum ng-select > div,
 #verifyMobile .phoneNum ng-select > div > div.single,
@@ -6164,9 +6720,11 @@ virtual-scroll {
     background-color: var(--color-white) !important;
 }
 
+/* UNUSED GLOBAL CLASS: mat-select-panel - Auto-commented by script
 .mat-select-panel {
     background-color: var(--color-white);
 }
+*/
 
 virtual-scroll .scrollable-content .item > a {
     color: var(--color-black);
@@ -6193,6 +6751,7 @@ virtual-scroll .scrollable-content .item > a .item-stock {
     text-transform: none !important;
 }
 
+/* UNUSED GLOBAL CLASS: customer-invoice-form - Auto-commented by script
 .customer-invoice-form virtual-scroll .scrollable-content .item > a {
     color: var(--color-black);
     padding: 3px 10px;
@@ -6203,7 +6762,9 @@ virtual-scroll .scrollable-content .item > a .item-stock {
     justify-content: center;
     border-bottom: 0px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: customer-invoice-table - Auto-commented by script
 .customer-invoice-table virtual-scroll .scrollable-content .item > a {
     white-space: initial;
 
@@ -6211,6 +6772,7 @@ virtual-scroll .scrollable-content .item > a .item-stock {
         background-color: var(--color-border-light);
     }
 }
+*/
 
 virtual-scroll .scrollable-content .item.selected > a,
 virtual-scroll .scrollable-content .item.hilighted > a,
@@ -6269,36 +6831,44 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     background-color: var(--color-light-gray);
 }
 
+/* UNUSED GLOBAL CLASS: has-item - Auto-commented by script
 .has-item {
     padding-right: 24px;
 }
+*/
 
-// .modal-header > .close {
-//     color: var(--color-white) !important;
-//     opacity: 1 !important;
-//     font-weight: 100;
-//     text-shadow: none;
-//     font-size: 30px;
-//     cursor: pointer;
-//     padding: 0 !important;
-//     margin: 0 !important;
-//     min-width: auto !important;
-//     background: transparent !important;
-//     height: auto;
-// }
+/* UNUSED GLOBAL CLASS: modal-header - Auto-commented by script
+.modal-header > .close {
+    color: var(--color-white) !important;
+    opacity: 1 !important;
+    font-weight: 100;
+    text-shadow: none;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-width: auto !important;
+    background: transparent !important;
+    height: auto;
+}
+*/
 
 /**new modal design**/
+/* UNUSED GLOBAL CLASS: welcome-header - Auto-commented by script
 .welcome-header {
     background: var(--color-white) url("../images/Welcome.png") no-repeat center center;
     text-align: center;
     position: relative;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: welcome-header - Auto-commented by script
 .welcome-header h1 {
     font-size: var(--font-size-32);
     font-family: var(--font-family);
     color: var(--color-blue-primary);
 }
+*/
 
 .welcome-header:after {
     position: absolute !important;
@@ -6315,24 +6885,31 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     display: none;
 }
 
+/* UNUSED GLOBAL CLASS: p-lr-15 - Auto-commented by script
 .p-lr-15 {
     padding-left: 15px;
     padding-right: 15px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: company-form-body - Auto-commented by script
 .company-form-body {
     max-width: 422px;
     margin: auto;
     width: 100%;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: welcome-header - Auto-commented by script
 .welcome-header h2 {
     font-size: var(--font-size-24);
     font-family: var(--font-family);
     color: var(--color-black);
     position: relative;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: welcome-header - Auto-commented by script
 .welcome-header h2:after {
     position: absolute;
     top: 0;
@@ -6342,6 +6919,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     width: 23px;
     height: 24px;
 }
+*/
 
 /**end new modal design**/
 .col-wrapper .btn-link {
@@ -6354,8 +6932,10 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     color: var(--color-red);
 }
 
+/* UNUSED GLOBAL CLASS: btn-share - Auto-commented by script
 .btn-share,
 .btn-share:hover,
+*/
 .btn-share:focus {
     background: var(--color-blue-primary);
     color: var(--color-white);
@@ -6365,6 +6945,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     width: 100%;
 }
 
+/* UNUSED GLOBAL CLASS: square-switch - Auto-commented by script
 .square-switch {
     width: 100%;
     background: var(--color-white);
@@ -6375,7 +6956,9 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border-radius: 5px !important;
     overflow: hidden;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: square-switch - Auto-commented by script
 .square-switch > label {
     position: relative;
     transition: all 0.3s ease;
@@ -6386,21 +6969,29 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding: 0 7px;
     height: 34px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: square-switch - Auto-commented by script
 .square-switch > label > span {
     height: 34px;
     color: var(--color-black);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: square-switch - Auto-commented by script
 .square-switch input[type="checkbox"]:checked ~ label {
     background: var(--color-green);
     color: var(--color-white);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: square-switch - Auto-commented by script
 .square-switch > input[type="checkbox"] {
     display: none;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: square-switch - Auto-commented by script
 .square-switch input[type="checkbox"] ~ label::after {
     content: " ";
     background: var(--color-silver);
@@ -6412,11 +7003,14 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     transition: all 0.2s ease;
     top: -1px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: square-switch - Auto-commented by script
 .square-switch input[type="checkbox"]:checked ~ label::after {
     right: -1px;
     left: inherit;
 }
+*/
 
 .form-group {
     font-size: var(--font-size-15);
@@ -6432,11 +7026,13 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     margin-bottom: 0 !important;
 }
 
+/* UNUSED GLOBAL CLASS: option-box - Auto-commented by script
 .option-box {
     background: var(--color-border-light);
     border-bottom: 1px solid var(--color-silver);
     margin-bottom: 10px;
 }
+*/
 
 .dashboard-filter input[type="radio"] {
     top: -1px;
@@ -6548,9 +7144,11 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     text-align: center;
 }
 
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination {
     justify-content: center;
 }
+*/
 
 .ledger-panel label {
     font-weight: 400;
@@ -6650,27 +7248,32 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     display: inline-block;
 }
 
+/* UNUSED GLOBAL CLASS: divide-ico - Auto-commented by script
 .divide-ico {
     width: 15px;
     position: absolute;
     top: 55%;
     left: -7px;
 }
+*/
 
 .unit-add {
     position: absolute;
     right: 15px;
 }
 
+/* UNUSED GLOBAL CLASS: sh-form-control - Auto-commented by script
 .sh-form-control .form-control {
     width: 100% !important;
 }
+*/
 
 /* left bar menu */
 .form-body .toggle-btn label {
     color: var(--color-dark-gray);
 }
 
+/* UNUSED GLOBAL CLASS: user-dropdown-header - Auto-commented by script
 .user-dropdown-header {
     width: 270px;
     right: 4px;
@@ -6678,13 +7281,17 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border: 1px solid var(--color-silver);
     left: -15px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: user-dropdown-header - Auto-commented by script
 .user-dropdown-header > li > a {
     font-size: var(--font-size-15);
     padding: 6px 15px !important;
     color: var(--color-black);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: user-circle - Auto-commented by script
 .user-circle {
     background: var(--color-blue-primary);
     border-radius: 100%;
@@ -6699,11 +7306,14 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border: 1px solid var(--dark-blue);
     text-transform: uppercase;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: user-circle - Auto-commented by script
 .user-circle img {
     width: 100%;
     border-radius: 100%;
 }
+*/
 
 .long-code-details figure ul li {
     list-style: none;
@@ -6729,24 +7339,30 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     margin-left: 10px;
 }
 
+/* UNUSED GLOBAL CLASS: user-name-wrap - Auto-commented by script
 .user-name-wrap {
     width: calc(100% - 40px);
     font-size: var(--font-size-15);
     line-height: initial;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: user-name-wrap - Auto-commented by script
 .user-name-wrap small {
     font-size: var(--font-size-12);
     display: block;
 }
+*/
 
 .dropdown-menu {
+    /* UNUSED GLOBAL CLASS: divider - Auto-commented by script
     .divider {
         height: 1px;
         margin: 9px 0;
         overflow: hidden;
         background-color: var(--color-border-light);
     }
+    */
 
     > li {
         > a {
@@ -6785,9 +7401,11 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     width: 100%;
 }
 
+/* UNUSED GLOBAL CLASS: plus-btn - Auto-commented by script
 .plus-btn .btn {
     background: none;
 }
+*/
 
 .header-left .btn {
     vertical-align: bottom;
@@ -6801,24 +7419,30 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     vertical-align: -webkit-baseline-middle;
 }
 
+/* UNUSED GLOBAL CLASS: max900 - Auto-commented by script
 .max900 {
     max-width: 900px;
 }
+*/
 
 .select-option .form-control {
     width: 100% !important;
     border-radius: 3px;
 }
 
+/* UNUSED GLOBAL CLASS: go-btn - Auto-commented by script
 .go-btn {
     margin-top: 27px;
     margin-left: 5px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: overdue-chart - Auto-commented by script
 .overdue-chart,
 .profit-loss-chart {
     margin: 0 auto;
 }
+*/
 
 .dropdown-option li a:hover {
     background: var(--color-light-gray);
@@ -6829,22 +7453,31 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     text-decoration: underline;
 }
 
+/* UNUSED GLOBAL CLASS: tbpl-dropdown - Auto-commented by script
 .tbpl-dropdown {
     margin-top: 12px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: tbpl-dropdown - Auto-commented by script
 .tbpl-dropdown > li {
     border-bottom: 1px solid var(--color-silver);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: tbpl-dropdown - Auto-commented by script
 .tbpl-dropdown > li:last-child {
     border-bottom: 0;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: tbpl-dropdown - Auto-commented by script
 .tbpl-dropdown > li:hover a {
     background: var(--color-light-gray);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: tbpl-dropdown - Auto-commented by script
 .tbpl-dropdown .caret {
     transform: rotate(180deg);
     border-top: 7px dashed var(--color-silver);
@@ -6854,6 +7487,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     right: 5px;
     top: -8px;
 }
+*/
 
 .auto-save {
     float: right;
@@ -6872,9 +7506,11 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     animation: rotate 1.5s infinite linear;
 }
 
+/* UNUSED GLOBAL CLASS: square-switch - Auto-commented by script
 .square-switch img {
     max-width: 16px;
 }
+*/
 
 /* ===============================================================
 GST filing
@@ -7009,14 +7645,18 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .cmp:hover,
+/* UNUSED GLOBAL CLASS: user-dropdown-header - Auto-commented by script
 .user-dropdown-header > li a:hover .user-name-wrap small {
     color: var(--color-dark-gray);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: user-dropdown-header - Auto-commented by script
 .user-dropdown-header > li a:hover {
     color: var(--color-blue-primary);
     background: var(--color-border-light);
 }
+*/
 
 .hamburger-menu button,
 .hamburger-menu button:hover,
@@ -7094,9 +7734,11 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: var(--color-dark-gray);
 }
 
+/* UNUSED GLOBAL CLASS: space - Auto-commented by script
 .space {
     margin-top: 10px;
 }
+*/
 
 .tax-engine .nav > li,
 .tax-engine .nav > li > a {
@@ -7440,17 +8082,21 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .list-header .list-title > a,
+/* UNUSED GLOBAL CLASS: list-notes - Auto-commented by script
 .list-notes,
 .list-primary .name,
+*/
 .over-flow {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
+/* UNUSED GLOBAL CLASS: font-xxlarge - Auto-commented by script
 .font-xxlarge {
     font-size: var(--font-size-24);
 }
+*/
 
 .tax-engine .sub-filter-nav-band ul {
     list-style: none;
@@ -7640,6 +8286,7 @@ app-header {
     position: relative;
 }
 
+/* UNUSED GLOBAL CLASS: navbar-header - Auto-commented by script
 .navbar-header {
     display: flex;
     flex-direction: row;
@@ -7647,15 +8294,18 @@ app-header {
     align-items: center;
     justify-content: space-between;
 }
+*/
 
 .form-inline sh-select .form-control {
     width: 100%;
 }
 
+/* UNUSED GLOBAL CLASS: permission-icon - Auto-commented by script
 .permission-icon {
     position: absolute;
     right: 10px;
 }
+*/
 
 .invalid-inp {
     border: 2px solid var(--color-red);
@@ -7682,9 +8332,11 @@ app-header {
     border: 2px solid var(--color-red) !important;
 }
 
+/* UNUSED GLOBAL CLASS: text-warning - Auto-commented by script
 .text-warning {
     color: var(--color-orange);
 }
+*/
 
 .heightVH-100 {
     height: 100vh;
@@ -7699,9 +8351,11 @@ app-header {
 }
 
 /* my css */
+/* UNUSED GLOBAL CLASS: new-ledger-text-right - Auto-commented by script
 .new-ledger-text-right .input-wrapper .form-control {
     text-align: right !important;
 }
+*/
 
 .box .company-box .inner-company-box ul > li .tooltip {
     word-break: break-all;
@@ -7801,13 +8455,17 @@ app-header {
     padding-bottom: 260px;
 }
 
+/* UNUSED GLOBAL CLASS: selection-none - Auto-commented by script
 .selection-none *::selection {
     background: var(--color-white);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: selection-none-header - Auto-commented by script
 .selection-none-header *::selection {
     background: var(--color-light-gray);
 }
+*/
 
 .word-break {
     word-break: break-all;
@@ -7902,9 +8560,11 @@ footer#footer.absolute-footer {
             .modal-body.clearfix {
                 #authModal {
                     button[type="login"].ladda-button {
+                        /* UNUSED GLOBAL CLASS: ladda-label - Auto-commented by script
                         .ladda-label {
                             color: var(--color-white);
                         }
+                        */
                     }
                 }
             }
@@ -7915,6 +8575,7 @@ footer#footer.absolute-footer {
 .master-page {
     master {
         .grp-list {
+            /* UNUSED GLOBAL CLASS: cdk-virtual-scroll-viewport - Auto-commented by script
             .cdk-virtual-scroll-viewport {
                 .cdk-virtual-scroll-content-wrapper {
                     .sidebarTooltip {
@@ -7924,6 +8585,7 @@ footer#footer.absolute-footer {
                     }
                 }
             }
+            */
         }
     }
 
@@ -7957,13 +8619,17 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     padding-bottom: 0;
 }
 
+/* UNUSED GLOBAL CLASS: border-radius-0 - Auto-commented by script
 .border-radius-0 {
     font-family: var(--font-family);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: border-radius-0 - Auto-commented by script
 .border-radius-0 small.mr-t05.mr-b05.grey {
     white-space: normal;
 }
+*/
 
 div#getGroupModal {
     height: 100vh;
@@ -7985,27 +8651,33 @@ div#getGroupModal {
     border: none;
 }
 
+/* UNUSED GLOBAL CLASS: mailbox - Auto-commented by script
 .mailbox bs-modal-backdrop.modal-backdrop.fade.in.show {
     z-index: 999;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mailbox - Auto-commented by script
 .mailbox .modal-dialog.send-mail-modal {
     width: 100%;
     max-width: 695px;
     margin: 20px auto;
     padding: 0 15px;
 }
+*/
 
 .billing-address.disabled .state-field .form-control {
     background: transparent !important;
 }
 
+/* UNUSED GLOBAL CLASS: animated - Auto-commented by script
 .animated {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
 }
+*/
 
 .account-aside-menu-state .horizontal-form {
     padding-bottom: 110px;
@@ -8025,11 +8697,14 @@ div#getGroupModal {
     }
 }
 
+/* UNUSED GLOBAL CLASS: fadeIn - Auto-commented by script
 .fadeIn {
     -webkit-animation-name: fadeIn;
     animation-name: fadeIn;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: invoice-footer - Auto-commented by script
 .invoice-footer {
     display: flex;
     padding: 20px 15px;
@@ -8042,6 +8717,7 @@ div#getGroupModal {
     z-index: 3;
     box-shadow: 0 0 6px var(--color-shadow-light);
 }
+*/
 
 .menu_open .invoice-footer {
     left: 240px;
@@ -8081,24 +8757,32 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 //     color: var(--dark-blue01);
 // }
 
+/* UNUSED GLOBAL CLASS: customer-right-wrap - Auto-commented by script
 .customer-right-wrap {
     padding-right: 0;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
 .pagination > li > a,
 .pagination > li > span {
     padding: 6px 10px;
     font-size: var(--font-size-12);
     line-height: 1.5;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: welcome-select - Auto-commented by script
 .welcome-select .menu {
     width: 120px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: create-select - Auto-commented by script
 .create-select .menu {
     width: 142px !important;
 }
+*/
 
 .select-caret:after,
 .select-caret .form-control:after {
@@ -8115,9 +8799,11 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     right: 10px;
 }
 
+/* UNUSED GLOBAL CLASS: welcome-header - Auto-commented by script
 .welcome-header hr {
     border-top-color: var(--color-medium-gray);
 }
+*/
 
 .btn-group-voucher-type label {
     padding-bottom: 0 !important;
@@ -8135,9 +8821,11 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
         color: var(--color-silver) !important;
     }
 
+    /* UNUSED GLOBAL CLASS: mdc-list-item__content - Auto-commented by script
     .mdc-list-item__content {
         overflow: unset !important;
     }
+    */
 }
 
 .btn-group.btn-block.invoice-btn .btn-block {
@@ -8166,9 +8854,11 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     width: auto;
 }
 
+/* UNUSED GLOBAL CLASS: welcome-header - Auto-commented by script
 .welcome-header hr {
     border-top-color: var(--color-medium-gray);
 }
+*/
 
 // .no-select {
 //     -moz-user-select: none;
@@ -8177,9 +8867,11 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 //     user-select: none;
 // }
 
+/* UNUSED GLOBAL CLASS: header-tooltip - Auto-commented by script
 .header-tooltip .tooltip-inner {
     word-break: break-word !important;
 }
+*/
 
 // .tooltip-inner {
 //     background-color: var(--color-dark-gray) !important;
@@ -8207,14 +8899,18 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 //     font-size: var(--font-size-15);
 // }
 
+/* UNUSED GLOBAL CLASS: select-customer-name - Auto-commented by script
 .select-customer-name .scrollable-content > .item {
     height: 48px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: add-company-detail - Auto-commented by script
 .add-company-detail .add-mailer form {
     padding-bottom: 60px;
     background-color: var(--color-white);
 }
+*/
 
 // .main-company-name .tooltip-inner {
 //     white-space: normal;
@@ -8327,6 +9023,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     border: 1px solid var(--color-silver);
 }
 
+/* UNUSED GLOBAL CLASS: table-custom-invoice - Auto-commented by script
 .table-custom-invoice {
     ul.dropdown-menu {
         min-width: 160px !important;
@@ -8339,8 +9036,10 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
         }
     }
 }
+*/
 
 .sales-invoice-table {
+    /* UNUSED GLOBAL CLASS: other-details-section - Auto-commented by script
     .other-details-section {
         .other-details-section-list {
             .mat-form-field-wrapper {
@@ -8370,6 +9069,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
             }
         }
     }
+    */
 }
 
 ul.dropdown-menu p.lead.pd {
@@ -8407,17 +9107,21 @@ ul.dropdown-menu p.lead.pd {
     top: 1px;
 }
 
+/* UNUSED GLOBAL CLASS: pagination-sm - Auto-commented by script
 .pagination-sm > li:first-child > a,
 .pagination-sm > li:first-child > span {
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: pagination-sm - Auto-commented by script
 .pagination-sm > li:last-child > a,
 .pagination-sm > li:last-child > span {
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
 }
+*/
 
 #invoice-setting ul.nav.nav-tabs {
     margin-bottom: 15px;
@@ -8453,9 +9157,11 @@ ul.dropdown-menu p.lead.pd {
     color: var(--color-blue-primary);
 }
 
+/* UNUSED GLOBAL CLASS: aging-table - Auto-commented by script
 .aging-table th .table-checkbox {
     top: 16px;
 }
+*/
 
 .btn-lg.btn-primary {
     min-width: 155px;
@@ -8498,10 +9204,12 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 1px solid var(--color-silver) !important;
 }
 
+/* UNUSED GLOBAL CLASS: gstr-tabs-head - Auto-commented by script
 .gstr-tabs-head .nav.nav-tabs {
     position: relative !important;
     padding: 10px 0px 0 15px !important;
 }
+*/
 
 .setting-page .nav > li > a {
     padding: 2px 0px;
@@ -8608,30 +9316,40 @@ button.btn.btn-filter {
     max-width: 100% !important;
 }
 
+/* UNUSED GLOBAL CLASS: translatY8 - Auto-commented by script
 .translatY8 {
     transform: translateY(80px);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: modal-backdrop - Auto-commented by script
 .modal-backdrop + .modal {
     margin-top: 70px;
     z-index: 992;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: invoice-preview-page - Auto-commented by script
 .invoice-preview-page {
     .modal-backdrop + .modal {
         z-index: 992 !important;
     }
 }
+*/
 
 .new-branch-list-page {
+    /* UNUSED GLOBAL CLASS: modal-backdrop - Auto-commented by script
     .modal-backdrop + .modal {
         z-index: 992 !important;
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: modal-backdrop - Auto-commented by script
 .modal-backdrop + .modal.fade .modal-dialog {
     transform: translate(0);
 }
+*/
 
 .dropdown-container .dropdown-menu li label.checkbox.overflow-hidden.custom-item span {
     max-width: calc(100% - 35px);
@@ -8642,10 +9360,12 @@ button.btn.btn-filter {
     color: var(--color-blue-primary) !important;
 }
 
+/* UNUSED GLOBAL CLASS: amount-arrow - Auto-commented by script
 .amount-arrow .icon-sort-asc {
     float: right !important;
     margin-left: 10px !important;
 }
+*/
 
 .td-search-box {
     min-width: 190px !important;
@@ -8675,27 +9395,35 @@ button.btn.btn-filter {
     padding-bottom: 10px !important;
 }
 
+/* UNUSED GLOBAL CLASS: manage-account-popup - Auto-commented by script
 .manage-account-popup .modal-dialog.modal-xl {
     margin: 0 auto;
 }
+*/
 
 // .currencyTooltip .tooltip-inner {
 //     white-space: initial;
 //     word-break: break-all;
 // }
 
+/* UNUSED GLOBAL CLASS: add-manage-group-acc - Auto-commented by script
 .add-manage-group-acc {
     overflow-y: hidden !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: modal-backdrop - Auto-commented by script
 .modal-backdrop {
     z-index: 991;
     opacity: 0.5;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: modal - Auto-commented by script
 .modal {
     z-index: 992;
 }
+*/
 
 .select2-ledger .menu .list-item:hover {
     background: var(--color-blue-light) !important;
@@ -8730,10 +9458,13 @@ button.ladda-button .ladda-label {
     padding-top: 0;
 }
 
+/* UNUSED GLOBAL CLASS: panel - Auto-commented by script
 .panel {
     border-radius: 2px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-chip-list - Auto-commented by script
 .mat-chip-list {
     .mat-chip-list-wrapper {
         .mat-chip.mat-standard-chip {
@@ -8742,6 +9473,7 @@ button.ladda-button .ladda-label {
         }
     }
 }
+*/
 
 .aside-menu-product-service-page {
     app-header {
@@ -8750,22 +9482,28 @@ button.ladda-button .ladda-label {
 }
 
 #top0,
+/* UNUSED GLOBAL CLASS: no-top - Auto-commented by script
 .no-top {
     top: 0 !important;
 }
+*/
 
 #top0 app-aside-menu-other-taxes {
     top: 0 !important;
 }
 
 .on-setting-page {
+    /* UNUSED GLOBAL CLASS: sub-entity-trigger - Auto-commented by script
     .sub-entity-trigger {
         min-width: 100% !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: bottom-select-suggestion - Auto-commented by script
     .bottom-select-suggestion {
         min-width: 127px;
     }
+    */
 }
 
 .voucher-preview-edit,
@@ -8773,20 +9511,24 @@ button.ladda-button .ladda-label {
 .page-has-tabs,
 .ledger-body,
 .on-setting-page {
+    /* UNUSED GLOBAL CLASS: other-taxes-input - Auto-commented by script
     .other-taxes-input {
         border: 1px solid var(--color-silver) !important;
     }
+    */
 
     .options-class-create {
         text-decoration: underline;
     }
 
     .stock-unit {
+        /* UNUSED GLOBAL CLASS: stock1 - Auto-commented by script
         .stock1 {
             float: left;
             width: 100%;
             margin-bottom: 10px;
         }
+        */
     }
 
     .primary-main-header {
@@ -8805,6 +9547,7 @@ button.ladda-button .ladda-label {
         }
     }
 
+    /* UNUSED GLOBAL CLASS: select-customers-name - Auto-commented by script
     .select-customers-name {
         select-field {
             width: 62.7% !important;
@@ -8816,7 +9559,9 @@ button.ladda-button .ladda-label {
             min-width: 62.7% !important;
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: bill-add - Auto-commented by script
     .bill-add {
         text-field {
             input {
@@ -8825,11 +9570,15 @@ button.ladda-button .ladda-label {
             }
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-select-panel - Auto-commented by script
     .mat-select-panel {
         z-index: 9999 !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: custom-class-create - Auto-commented by script
     .custom-class-create {
         width: 100%;
         display: flex;
@@ -8841,6 +9590,7 @@ button.ladda-button .ladda-label {
             text-decoration: underline;
         }
     }
+    */
 
     .option-value-more {
         float: left !important;
@@ -8904,11 +9654,13 @@ button.ladda-button .ladda-label {
         }
     }
 
+    /* UNUSED GLOBAL CLASS: purchase-link - Auto-commented by script
     .purchase-link {
         .mat-select-disabled {
             background-color: var(--color-light-gray) !important;
         }
     }
+    */
 
     .po-mat-select {
         border: 1px solid var(--color-silver);
@@ -8917,20 +9669,25 @@ button.ladda-button .ladda-label {
         font-size: var(--font-size-12);
         height: 48px;
 
+        /* UNUSED GLOBAL CLASS: mat-mdc-select-trigger - Auto-commented by script
         .mat-mdc-select-trigger {
             padding: 0 10px;
         }
+        */
     }
 
     .po-options-line {
         height: auto !important;
         padding-bottom: 5px !important;
 
+        /* UNUSED GLOBAL CLASS: mat-select-search-input - Auto-commented by script
         .mat-select-search-input {
             padding: 16px 36px 16px 16px !important;
             box-sizing: border-box !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-select-search-inner - Auto-commented by script
         .mat-select-search-inner {
             position: absolute !important;
             top: 0 !important;
@@ -8941,14 +9698,19 @@ button.ladda-button .ladda-label {
             box-shadow: none !important;
             border-radius: 0 !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-select-search-clear - Auto-commented by script
         .mat-select-search-clear {
             margin-right: 0 !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-pseudo-checkbox-checked - Auto-commented by script
         .mat-pseudo-checkbox-checked {
             background: var(--color-blue-primary) !important;
         }
+        */
 
         .po-option-value {
             float: left !important;
@@ -8963,16 +9725,20 @@ button.ladda-button .ladda-label {
         }
     }
 
+    /* UNUSED GLOBAL CLASS: purchase-link - Auto-commented by script
     .purchase-link {
         .mat-select-placeholder {
             font-size: var(--font-size-15) !important;
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: common-uniquename - Auto-commented by script
     .common-uniquename {
         color: var(--color-medium-gray) !important;
         font-size: var(--font-size-12);
     }
+    */
 
     .create-new {
         font-size: var(--font-size-15);
@@ -8982,19 +9748,24 @@ button.ladda-button .ladda-label {
         font-size: var(--font-size-15);
     }
 
+    /* UNUSED GLOBAL CLASS: warehouse-wrapper - Auto-commented by script
     .warehouse-wrapper {
         .select-field-input {
             padding-left: 5px;
             font-size: var(--font-size-15);
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: input-bill - Auto-commented by script
     .input-bill {
         border-radius: 0px !important;
         background-color: transparent !important;
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: aside-menu-othertax-open - Auto-commented by script
 .aside-menu-othertax-open {
     .nav-left-bar {
         z-index: 99 !important;
@@ -9010,6 +9781,7 @@ button.ladda-button .ladda-label {
         }
     }
 }
+*/
 
 .aside-panel-ledger {
     display: flex !important;
@@ -9033,31 +9805,45 @@ button.ladda-button .ladda-label {
     background-color: var(--color-blue-primary) !important;
 }
 
+/* UNUSED GLOBAL CLASS: theme-green - Auto-commented by script
 .theme-green .bs-datepicker-head {
     background-color: var(--color-blue-primary);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: theme-green - Auto-commented by script
 .theme-green .bs-datepicker-body table td span.selected,
 .theme-green .bs-datepicker-body table td.selected span,
+*/
+/* UNUSED GLOBAL CLASS: theme-green - Auto-commented by script
 .theme-green .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-green .bs-datepicker-body table td[class*="select-"] span:after {
     background-color: var(--color-blue-primary);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: bs-datepicker-body - Auto-commented by script
 .bs-datepicker-body table.days td.active:not(.select-start):before,
 .bs-datepicker-body table.days td.in-range:not(.select-start):before,
+*/
+/* UNUSED GLOBAL CLASS: bs-datepicker-body - Auto-commented by script
 .bs-datepicker-body table.days span.active:not(.select-start):before,
 .bs-datepicker-body table.days span.in-range:not(.select-start):before {
     background: var(--color-blue-light);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: theme-green - Auto-commented by script
 .theme-green .bs-datepicker-body table td.week span {
     color: var(--color-blue-primary);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mobileNumberWidth - Auto-commented by script
 .mobileNumberWidth .menu {
     min-width: 90px !important;
 }
+*/
 
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
     padding: 0 0px 0 0 !important;
@@ -9069,9 +9855,11 @@ button.ladda-button .ladda-label {
     border-bottom: 1px solid var(--color-silver) !important;
 }
 
+/* UNUSED GLOBAL CLASS: contact-form - Auto-commented by script
 .contact-form .mobileNumberWidth input {
     padding-right: 0 !important;
 }
+*/
 
 .receipt-note-modal {
     width: 100% !important;
@@ -9086,9 +9874,11 @@ button.ladda-button .ladda-label {
     padding: 0;
 }
 
+/* UNUSED GLOBAL CLASS: dayBookAdvanceSearch - Auto-commented by script
 .dayBookAdvanceSearch input {
     width: 100%;
 }
+*/
 
 .create-acc-form li.highlighted.selected,
 .create-acc-form li.highlighted {
@@ -9127,6 +9917,7 @@ button.ladda-button .ladda-label {
     align-items: center;
 }
 
+/* UNUSED GLOBAL CLASS: checkbox-custom - Auto-commented by script
 .checkbox-custom + .checkbox-custom-label:before,
 .radio-custom + .radio-custom-label:before {
     content: "";
@@ -9141,7 +9932,9 @@ button.ladda-button .ladda-label {
     border-radius: 2px;
     text-align: center;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: checkbox-custom - Auto-commented by script
 .checkbox-custom + .checkbox-custom-label:after {
     transform: rotate(-45deg) scale(0, 0);
     content: "";
@@ -9156,6 +9949,7 @@ button.ladda-button .ladda-label {
     border-right-style: none;
     transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
 }
+*/
 
 .checkbox-custom:checked + .checkbox-custom-label:after {
     transform: rotate(-45deg) scale(1, 1);
@@ -9182,9 +9976,11 @@ button.ladda-button .ladda-label {
 }
 
 /* radio & checkbox new CSS end */
+/* UNUSED GLOBAL CLASS: modal-invoice-preview - Auto-commented by script
 .modal-invoice-preview .modal-body {
     padding: 0;
 }
+*/
 
 .select2-parent.select2-ledger .update-ledger-account input {
     padding-left: 4px !important;
@@ -9254,6 +10050,7 @@ button.ladda-button .ladda-label {
     min-height: 361px;
 }
 
+/* UNUSED GLOBAL CLASS: payment-modal - Auto-commented by script
 .payment-modal {
     max-width: 1190px !important;
     width: 100% !important;
@@ -9261,7 +10058,9 @@ button.ladda-button .ladda-label {
     margin-right: auto;
     margin-left: auto;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: payment-success-modal - Auto-commented by script
 .payment-success-modal {
     // .modal-header {
     //     border-radius: 5px 5px 0 0;
@@ -9284,17 +10083,23 @@ button.ladda-button .ladda-label {
         }
     }
 }
+*/
 
 /*datepicker common css*/
+/* UNUSED GLOBAL CLASS: giddh-datepicker-modal - Auto-commented by script
 .giddh-datepicker-modal .modal-content {
     background: none !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: giddh-datepicker-modal - Auto-commented by script
 .giddh-datepicker-modal .modal-body {
     padding: 0 !important;
 }
+*/
 
 
+/* UNUSED GLOBAL CLASS: edit-modal - Auto-commented by script
 .edit-modal {
     max-width: 300px;
     margin: 0 auto;
@@ -9366,6 +10171,7 @@ button.ladda-button .ladda-label {
         }
     }
 }
+*/
 
 /*notofication css*/
 #HW_badge {
@@ -9431,6 +10237,7 @@ ul {
     flex-direction: column;
 }
 
+/* UNUSED GLOBAL CLASS: mobile-home - Auto-commented by script
 .mobile-home {
     background-color: var(--color-border-light);
 
@@ -9444,11 +10251,15 @@ ul {
         background-color: var(--color-border-light);
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: icon-home-icon - Auto-commented by script
 .icon-home-icon {
     color: var(--color-white);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: remove-header-lower-layer - Auto-commented by script
 .remove-header-lower-layer {
     .container-fluid.mr-b1 {
         margin-bottom: 0;
@@ -9467,6 +10278,7 @@ ul {
         padding-top: 50px;
     }
 }
+*/
 
 .mobile-sidebar-open:after {
     position: absolute;
@@ -9487,6 +10299,7 @@ span#HW_badge_cont:nth-child(3) {
     cursor: pointer !important;
 }
 
+/* UNUSED GLOBAL CLASS: debtor-details-form - Auto-commented by script
 .debtor-details-form {
     .form-fields {
         .single-field {
@@ -9502,6 +10315,7 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+*/
 
 .on-setting-page .nav-left-bar.open,
 .on-user-page .nav-left-bar.open on-user-page {
@@ -9569,6 +10383,7 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 /*flex css start*/
+/* UNUSED GLOBAL CLASS: select-border-bottom - Auto-commented by script
 .select-border-bottom {
     .form-control {
         border: none;
@@ -9576,11 +10391,15 @@ span#HW_badge_cont:nth-child(3) {
         width: 100%;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: preview-lightbox-overlay - Auto-commented by script
 .preview-lightbox-overlay {
     z-index: 999 !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: preview-lightbox - Auto-commented by script
 .preview-lightbox {
     img {
         width: 100%;
@@ -9602,20 +10421,27 @@ span#HW_badge_cont:nth-child(3) {
         justify-content: flex-end;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: estimation-date-modal - Auto-commented by script
 .estimation-date-modal {
     z-index: 99999;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: giddh-datepicker-modal - Auto-commented by script
 .giddh-datepicker-modal {
     z-index: 99999;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: purchase-record-confirmation-modal - Auto-commented by script
 .purchase-record-confirmation-modal {
     .modal-content {
         box-shadow: 0 5px 15px var(--color-shadow-light);
     }
 }
+*/
 
 .dropdown-toggle::after {
     display: none;
@@ -9665,6 +10491,7 @@ span#HW_badge_cont:nth-child(3) {
     z-index: 9999 !important;
 }
 
+/* UNUSED GLOBAL CLASS: item-wise-page - Auto-commented by script
 .item-wise-page,
 .variant-wise-page {
     .item-wise-wrapper,
@@ -9693,7 +10520,9 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: new-ledger-text-right - Auto-commented by script
 .new-ledger-text-right ul li {
     ul {
         li {
@@ -9702,6 +10531,7 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+*/
 
 // .total-col bs-tooltip-container.tooltip .tooltip-inner {
 //     min-width: 150px !important;
@@ -9709,6 +10539,7 @@ span#HW_badge_cont:nth-child(3) {
 //     max-width: 150px !important;
 // }
 
+/* UNUSED GLOBAL CLASS: recurring-form - Auto-commented by script
 .recurring-form {
     sh-select,
     input {
@@ -9716,23 +10547,30 @@ span#HW_badge_cont:nth-child(3) {
         max-width: 170px;
     }
 }
+*/
 
 .daterangepicker {
     z-index: 9992 !important;
 }
 
+/* UNUSED GLOBAL CLASS: sub-branch-option - Auto-commented by script
 .sub-branch-option .bs-tooltip-top {
     left: -25px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: switch-branch-wrapper - Auto-commented by script
 .switch-branch-wrapper .branch-icon-tooltip .bs-tooltip-top {
     left: 8px !important;
     right: 8px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: sub-branch-option - Auto-commented by script
 .sub-branch-option .bs-tooltip-top .arrow::before {
     right: -22px;
 }
+*/
 
 #rcw-p91-widget-button {
     z-index: 992;
@@ -9780,15 +10618,18 @@ span#HW_badge_cont:nth-child(3) {
         right: 0px;
     }
 
+    /* UNUSED GLOBAL CLASS: mat-dialog-content - Auto-commented by script
     .mat-dialog-content {
         margin: 0 !important;
         padding: 0 !important;
         max-height: 90%;
         width: 100%;
     }
+    */
 }
 
 .settings-profile-tabs {
+    /* UNUSED GLOBAL CLASS: tab-container - Auto-commented by script
     .tab-container {
         .nav-tabs {
             .nav-item {
@@ -9805,6 +10646,7 @@ span#HW_badge_cont:nth-child(3) {
             }
         }
     }
+    */
 }
 
 // .customer-form-inline {
@@ -9817,6 +10659,7 @@ span#HW_badge_cont:nth-child(3) {
     z-index: 991 !important;
 }
 
+/* UNUSED GLOBAL CLASS: invoice-edit-wrapper - Auto-commented by script
 .invoice-edit-wrapper {
     .hamburger-menu-icon {
         display: none !important;
@@ -9827,6 +10670,7 @@ span#HW_badge_cont:nth-child(3) {
         border-bottom: none !important;
     }
 }
+*/
 
 .table-amount[disabled] {
     input {
@@ -9847,6 +10691,7 @@ span#HW_badge_cont:nth-child(3) {
 
 #update-ledger-voucher-type-default.disabled-ledger,
 #update-ledger-assign-tag.disabled-ledger {
+    /* UNUSED GLOBAL CLASS: sh-select-disabled - Auto-commented by script
     .sh-select-disabled {
         background-color: var(--color-border-light) !important;
 
@@ -9855,8 +10700,10 @@ span#HW_badge_cont:nth-child(3) {
             background-color: var(--color-border-light) !important;
         }
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: branch-ho-tooltip - Auto-commented by script
 .branch-ho-tooltip {
     left: -7px !important;
 
@@ -9865,9 +10712,12 @@ span#HW_badge_cont:nth-child(3) {
         right: 7px !important;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: inventory-footer - Auto-commented by script
 .inventory-footer,
 .create-group-footer,
+*/
 .stock-group-footer {
     left: 61px;
 }
@@ -9890,13 +10740,17 @@ span#HW_badge_cont:nth-child(3) {
     padding: 0 !important;
 }
 
+/* UNUSED GLOBAL CLASS: hide-sub-sidebar - Auto-commented by script
 .hide-sub-sidebar .right-side-content {
     padding-left: 0 !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: hide-sub-sidebar - Auto-commented by script
 .hide-sub-sidebar .sidebar-handle {
     left: 210px !important;
 }
+*/
 
 .sub-detail-sidebar.fixed-sidebar-top {
     top: 70px;
@@ -9915,14 +10769,18 @@ button#more-btn-inventory,
     left: 0 !important;
 }
 
+/* UNUSED GLOBAL CLASS: select-linked-accounts - Auto-commented by script
 .select-linked-accounts sh-select-menu .menu {
     max-height: 250px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: inventory-dashboard - Auto-commented by script
 .inventory-dashboard .box {
     border: 1px solid var(--color-silver);
     border-radius: 2px;
 }
+*/
 
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -9935,37 +10793,50 @@ ul.dropdown-menu.action-dropdown {
 
 ngx-daterangepicker-material,
 giddh-datepicker {
+    /* UNUSED GLOBAL CLASS: recurring-form - Auto-commented by script
     .recurring-form .mat-form-field {
         max-width: 170px;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: collapse-pane - Auto-commented by script
     .collapse-pane .mat-form-field {
         min-width: 100%;
         max-width: 100%;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field - Auto-commented by script
     .mat-form-field {
         min-width: 170px;
         width: 100%;
         display: inline-block;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-suffix - Auto-commented by script
     .mat-form-field-suffix {
         right: 0;
         position: absolute !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
     .mat-form-field-appearance-fill .mat-form-field-flex {
         height: 36px;
         background-color: var(--color-white);
         padding: 0;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
     .mat-form-field-appearance-fill .mat-form-field-underline::before {
         display: none !important;
         opacity: 0 !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
     .mat-form-field-appearance-fill .mat-form-field-infix {
         padding: 0;
         margin: 0;
@@ -9975,12 +10846,15 @@ giddh-datepicker {
             color: var(--color-dark-gray);
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
     .mat-form-field-appearance-fill .mat-form-field-flex {
         padding: 0 !important;
         display: flex !important;
         align-items: center !important;
     }
+    */
 
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
@@ -9990,9 +10864,11 @@ giddh-datepicker {
 
     .mat-form-field-appearance-fill:not(.mat-form-field-disabled).mat-form-field-flex:hover
         ~ .mat-form-field-underline
+        /* UNUSED GLOBAL CLASS: mat-form-field-ripple - Auto-commented by script
         .mat-form-field-ripple {
         opacity: 0 !important;
     }
+    */
 
     input.mat-input-element {
         margin-top: 0;
@@ -10004,17 +10880,23 @@ giddh-datepicker {
         // }
     }
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
     .mat-form-field-wrapper {
         padding-bottom: 0;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-underline - Auto-commented by script
     .mat-form-field-underline {
         display: none !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-calendar-body-selected - Auto-commented by script
     .mat-calendar-body-selected {
         background-color: var(--color-blue-primary);
     }
+    */
 
     .giddh-limit {
         &.single-line-clamp {
@@ -10038,10 +10920,12 @@ giddh-datepicker {
 
 .ledger-body {
     &:not(.page-leave-confirmation-modal-wrapper) {
-        .cdk-overlay-container,
+        // .cdk-overlay-container, <- check this.
+        /* UNUSED GLOBAL CLASS: cdk-global-overlay-wrapper - Auto-commented by script
         .cdk-global-overlay-wrapper {
             z-index: 1000 !important;
         }
+        */
     }
 
     overflow-y: auto !important;
@@ -10131,9 +11015,11 @@ giddh-datepicker {
                 align-items: center;
             }
 
+            /* UNUSED GLOBAL CLASS: mdc-button__label - Auto-commented by script
             .mdc-button__label {
                 color: var(--color-white);
             }
+            */
         }
     }
 
@@ -10172,6 +11058,26 @@ giddh-datepicker {
     }
 }
 
+body {
+    &.page-leave-confirmation-modal-wrapper {
+        //.cdk-overlay-container, <- check this.
+        /* UNUSED GLOBAL CLASS: cdk-global-overlay-wrapper - Auto-commented by script
+        .cdk-global-overlay-wrapper {
+            z-index: 99999 !important;
+        }
+        */
+    }
+
+    .cdk-overlay-container {
+        /* UNUSED GLOBAL CLASS: page-leave-confirmation-modal-backdrop - Auto-commented by script
+        .page-leave-confirmation-modal-backdrop {
+            z-index: 99999 !important;
+        }
+        */
+    }
+}
+
+/* UNUSED GLOBAL CLASS: payment-date - Auto-commented by script
 .payment-date {
     giddh-datepicker .mat-form-field-appearance-fill .mat-form-field-flex {
         border: 0px !important;
@@ -10183,15 +11089,18 @@ giddh-datepicker {
         font-weight: 600;
     }
 }
+*/
 
 .left-col-new,
 .right-col-new,
 .daybook-advance-search,
 .advance-search {
     giddh-datepicker {
+        /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
         .mat-form-field-appearance-fill .mat-form-field-flex {
             border: none !important;
         }
+        */
     }
 }
 
@@ -10213,10 +11122,12 @@ giddh-datepicker {
     }
 }
 
+/* UNUSED GLOBAL CLASS: delete-modal-overlay - Auto-commented by script
 .delete-modal-overlay {
     z-index: 9992;
-    /*for delete custom zIndex modal*/
+
 }
+*/
 
 .custom-tabs.location-data-tabs .nav-tabs {
     background-color: transparent;
@@ -10252,24 +11163,31 @@ giddh-datepicker {
     background-color: transparent;
 }
 
+/* UNUSED GLOBAL CLASS: change-address-dropdown - Auto-commented by script
 .change-address-dropdown a {
     color: var(--color-blue-primary);
     font-size: var(--font-size-12);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: change-address-dropdown - Auto-commented by script
 .change-address-dropdown li {
     border-bottom: 1px solid var(--color-silver);
     padding-bottom: 4px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: change-address-dropdown - Auto-commented by script
 .change-address-dropdown li:last-child {
     border: none;
 }
+*/
 
 .custom-select {
     background-image: none !important;
 }
 
+/* UNUSED GLOBAL CLASS: more-add-button - Auto-commented by script
 .more-add-button {
     .icon-undo {
         border: 1px solid var(--color-blue-primary);
@@ -10282,6 +11200,7 @@ giddh-datepicker {
         color: var(--color-blue-primary);
     }
 }
+*/
 
 .link-entity-dropdown {
     .list-item.d-flex {
@@ -10333,6 +11252,7 @@ giddh-datepicker {
     }
 }
 
+/* UNUSED GLOBAL CLASS: time-selection - Auto-commented by script
 .time-selection,
 .language-selection {
     .menu {
@@ -10344,16 +11264,19 @@ giddh-datepicker {
         }
     }
 }
+*/
 
 #primary-new-header.primary-main-header.open {
     padding-left: 15px !important;
 }
 
-// .add-manage-group-acc {
-//     .modal-header {
-//         border-radius: 0 !important;
-//     }
-// }
+/* UNUSED GLOBAL CLASS: add-manage-group-acc - Auto-commented by script
+.add-manage-group-acc {
+    .modal-header {
+        border-radius: 0 !important;
+    }
+}
+*/
 
 .plan-wrapper {
     padding-left: 60px;
@@ -10398,6 +11321,7 @@ giddh-datepicker {
 }
 
 .share-grp.account-share-modal,
+/* UNUSED GLOBAL CLASS: group-share-modal - Auto-commented by script
 .group-share-modal {
     .add-mailer {
         .input-group {
@@ -10417,6 +11341,7 @@ giddh-datepicker {
         }
     }
 }
+*/
 
 .stock-create-edit {
     #main {
@@ -10425,13 +11350,16 @@ giddh-datepicker {
                 .select-physical-product {
                     .product-detail-content {
                         .account-inventory-other-tab {
+                            /* UNUSED GLOBAL CLASS: mat-tab-labels - Auto-commented by script
                             .mat-tab-labels {
                                 margin-left: 20px;
                             }
+                            */
 
                             .sales-purchase-details {
                                 #purchase-info-check,
                                 #sales-info-check {
+                                    /* UNUSED GLOBAL CLASS: mat-checkbox-label - Auto-commented by script
                                     .mat-checkbox-label {
                                         font: normal normal 600 var(--font-size-15) / 17px;
                                         font-family: var(--font-family);
@@ -10439,6 +11367,7 @@ giddh-datepicker {
                                         position: relative;
                                         bottom: 1px;
                                     }
+                                    */
                                 }
 
                                 .sales-information,
@@ -10489,6 +11418,7 @@ giddh-datepicker {
         }
     }
 
+    /* UNUSED GLOBAL CLASS: cdk-overlay-connected-position-bounding-box - Auto-commented by script
     .cdk-overlay-connected-position-bounding-box {
         .mat-select-panel {
             .mat-option-disabled {
@@ -10502,9 +11432,11 @@ giddh-datepicker {
             }
         }
     }
+    */
 }
 
 .group-create-update {
+    /* UNUSED GLOBAL CLASS: cdk-overlay-connected-position-bounding-box - Auto-commented by script
     .cdk-overlay-connected-position-bounding-box {
         .mat-select-panel {
             .mat-option-disabled {
@@ -10518,9 +11450,11 @@ giddh-datepicker {
             }
         }
     }
+    */
 }
 
 .stock-balance {
+    /* UNUSED GLOBAL CLASS: cdk-overlay-connected-position-bounding-box - Auto-commented by script
     .cdk-overlay-connected-position-bounding-box {
         #mat-menu-panel-0 {
             .mat-menu-content {
@@ -10557,13 +11491,16 @@ giddh-datepicker {
             }
         }
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: invoice-modal-content - Auto-commented by script
 .invoice-modal-content {
     left: 60px !important;
     width: calc(100% - 60px) !important;
     z-index: 99 !important;
 }
+*/
 
 // .aside-account-create {
 //     z-index: 991 !important;
@@ -10628,20 +11565,24 @@ giddh-datepicker {
 
 .unit-mapping-page {
     .grid-box {
+        /* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
         .mat-grid-tile-content {
             justify-content: space-around;
         }
+        */
     }
 
     .unit-mapping-grid-list {
         .grid-box-content {
             .map-unit-value {
+                /* UNUSED GLOBAL CLASS: map-unit-select-field - Auto-commented by script
                 .map-unit-select-field {
                     input {
                         width: 160px;
                         min-width: 160px;
                     }
                 }
+                */
             }
         }
     }
@@ -10749,6 +11690,7 @@ body.update-scroll-hidden {
                 }
             }
 
+            /* UNUSED GLOBAL CLASS: nav-item - Auto-commented by script
             .nav-item {
                 &.icon-company {
                     &.active {
@@ -10780,6 +11722,7 @@ body.update-scroll-hidden {
                     }
                 }
             }
+            */
         }
     }
 }
@@ -10811,14 +11754,17 @@ body.update-scroll-hidden {
 
 .contact-body {
     .contact-modal {
+        /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
         .mat-dialog-container {
             float: left !important;
             width: 100% !important;
             overflow: hidden;
         }
+        */
     }
 
     .cdk-overlay-container {
+        /* UNUSED GLOBAL CLASS: cdk-global-overlay-wrapper - Auto-commented by script
         .cdk-global-overlay-wrapper {
             .mat-dialog-container {
                 .modal-body {
@@ -10879,7 +11825,9 @@ body.update-scroll-hidden {
                 }
             }
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: cdk-overlay-connected-position-bounding-box - Auto-commented by script
         .cdk-overlay-connected-position-bounding-box {
             .mat-menu-panel {
                 .mat-menu-content {
@@ -10890,15 +11838,19 @@ body.update-scroll-hidden {
                 }
             }
         }
+        */
     }
 }
 
 .ledger-attachments-popup {
     .cdk-overlay-container {
+        /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
         .mat-dialog-container {
             background-color: var(--color-white);
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: cdk-overlay-connected-position-bounding-box - Auto-commented by script
         .cdk-overlay-connected-position-bounding-box {
             .mat-menu-panel {
                 .mat-menu-content {
@@ -10909,6 +11861,7 @@ body.update-scroll-hidden {
                 }
             }
         }
+        */
     }
 
     button.mat-menu-item {
@@ -10918,10 +11871,12 @@ body.update-scroll-hidden {
         padding: 0 16px !important;
     }
 
+    /* UNUSED GLOBAL CLASS: mat-menu-content - Auto-commented by script
     .mat-menu-content {
         padding-top: 2px !important;
         padding-bottom: 2px !important;
     }
+    */
 }
 
 /*---- inventory-master ----*/
@@ -10931,16 +11886,20 @@ inventory-master {
         height: 100% !important;
     }
 
+    /* UNUSED GLOBAL CLASS: ps-content - Auto-commented by script
     .ps-content {
         height: 100% !important;
     }
+    */
 }
 
 /* responsive  starts here*/
 @media (max-width: 1440px) {
+    /* UNUSED GLOBAL CLASS: font-xxlarge - Auto-commented by script
     .font-xxlarge {
         font-size: var(--font-size-16);
     }
+    */
 
     .date-column {
         min-width: 100px !important;
@@ -10959,12 +11918,14 @@ inventory-master {
         .unit-mapping-grid-list {
             .grid-box-content {
                 .map-unit-value {
+                    /* UNUSED GLOBAL CLASS: map-unit-select-field - Auto-commented by script
                     .map-unit-select-field {
                         input {
                             width: 130px;
                             min-width: 130px;
                         }
                     }
+                    */
                 }
             }
         }
@@ -10981,9 +11942,11 @@ inventory-master {
 
 @media (max-width: 1366px) {
     /*--- tooltip ----*/
+    /* UNUSED GLOBAL CLASS: mat-tooltip - Auto-commented by script
     .mat-tooltip {
         margin-bottom: 100px !important;
     }
+    */
 }
 
 @media (max-width: 1024px) {
@@ -10992,9 +11955,11 @@ inventory-master {
     }
 
     .search-control {
+        /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
         .mat-form-field-wrapper {
             width: 95%;
         }
+        */
     }
 
     .small-button {
@@ -11049,9 +12014,11 @@ inventory-master {
         display: none !important;
     }
 
+    /* UNUSED GLOBAL CLASS: text-left-sm - Auto-commented by script
     .text-left-sm {
         text-align: left !important;
     }
+    */
 
     .move-select {
         .menu {
@@ -11078,15 +12045,19 @@ inventory-master {
     }
 
     .users-last-list {
+        /* UNUSED GLOBAL CLASS: cdk-virtual-scroll-content-wrapper - Auto-commented by script
         .cdk-virtual-scroll-content-wrapper {
             position: relative;
         }
+        */
     }
 
+    /* UNUSED GLOBAL CLASS: all-features-modal - Auto-commented by script
     .all-features-modal {
         width: 90%;
         margin: 0 auto;
     }
+    */
 
     .auto-save {
         top: 96px;
@@ -11106,23 +12077,28 @@ inventory-master {
         .unit-mapping-grid-list {
             .grid-box-content {
                 .map-unit-value {
+                    /* UNUSED GLOBAL CLASS: map-unit-select-field - Auto-commented by script
                     .map-unit-select-field {
                         input {
                             width: 87px;
                             min-width: 87px;
                         }
                     }
+                    */
                 }
             }
         }
 
+        /* UNUSED GLOBAL CLASS: mat-autocomplete-panel - Auto-commented by script
         .mat-autocomplete-panel {
             min-width: 87px;
         }
+        */
     }
 }
 
 @media (max-width: 1191px) and (min-width: 1024px) {
+    /* UNUSED GLOBAL CLASS: recurring-form-wrapper - Auto-commented by script
     .recurring-form-wrapper {
         .recurring-form {
             sh-select {
@@ -11146,12 +12122,15 @@ inventory-master {
             }
         }
     }
+    */
 }
 
 @media (max-width: 1019px) {
+    /* UNUSED GLOBAL CLASS: hide-sub-sidebar - Auto-commented by script
     .hide-sub-sidebar .sidebar-handle {
         left: 0 !important;
     }
+    */
 }
 
 @media (min-width: 768px) and (max-width: 1019px) {
@@ -11246,12 +12225,15 @@ inventory-master {
         position: relative;
     }
 
+    /* UNUSED GLOBAL CLASS: inventory-footer - Auto-commented by script
     .inventory-footer,
     .create-group-footer,
+*/
     .stock-group-footer {
         left: 0px !important;
     }
 
+    /* UNUSED GLOBAL CLASS: stock-lists - Auto-commented by script
     .stock-lists {
         position: absolute;
         box-shadow: 0 3px 6px var(--color-shadow-light);
@@ -11262,6 +12244,7 @@ inventory-master {
         max-height: 400px;
         overflow-y: auto;
     }
+    */
 
     .stock-grp-list > li {
         display: inline-block;
@@ -11269,6 +12252,7 @@ inventory-master {
         position: relative;
     }
 
+    /* UNUSED GLOBAL CLASS: sub-filter-nav-band - Auto-commented by script
     .sub-filter-nav-band .nav-tabs {
         overflow-x: auto;
         overflow-y: hidden;
@@ -11280,6 +12264,7 @@ inventory-master {
             white-space: normal;
         }
     }
+    */
 
     .tax-engine .nav-band .nav-tabs {
         white-space: nowrap;
@@ -11294,16 +12279,20 @@ inventory-master {
         min-width: 100% !important;
     }
 
+    /* UNUSED GLOBAL CLASS: mat-raised-button - Auto-commented by script
     .mat-raised-button {
         min-width: auto !important;
     }
+    */
 }
 
 @media (max-width: 840px) {
+    /* UNUSED GLOBAL CLASS: card-invoice-table - Auto-commented by script
     .card-invoice-table #tax-control-multi-select.multi-select input.form-control[readonly],
     .card-invoice-table .multi-select input.form-control {
         background-position: 98% !important;
     }
+    */
 
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
@@ -11328,9 +12317,11 @@ inventory-master {
 }
 
 @media only screen and (max-width: 1400px) {
+    /* UNUSED GLOBAL CLASS: font-xxlarge - Auto-commented by script
     .font-xxlarge {
         font-size: var(--font-size-16);
     }
+    */
 }
 
 @media only screen and (min-width: 1280px) {
@@ -11346,9 +12337,11 @@ inventory-master {
 }
 
 @media only screen and (max-width: 1030px) {
+    /* UNUSED GLOBAL CLASS: header-container - Auto-commented by script
     .header-container {
         position: relative;
     }
+    */
 
     body.unresponsive {
         padding-top: 0;
@@ -11365,18 +12358,24 @@ inventory-master {
     }
 
     .voucher-preview-edit {
+        /* UNUSED GLOBAL CLASS: shipping-date - Auto-commented by script
         .shipping-date {
             padding-top: 50px !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: invoice-other-details-row - Auto-commented by script
         .invoice-other-details-row {
             margin-top: 10px;
         }
+        */
     }
 
+    /* UNUSED GLOBAL CLASS: sm-d-block - Auto-commented by script
     .sm-d-block {
         display: block;
     }
+    */
 
     .users-last-list > li:last-child {
         height: inherit !important;
@@ -11386,9 +12385,11 @@ inventory-master {
         text-align: left !important;
     }
 
+    /* UNUSED GLOBAL CLASS: customer-right-wrap - Auto-commented by script
     .customer-right-wrap .text-right.xs-left {
         text-align: right !important;
     }
+    */
 
     .col-wrapper:nth-child(1) .master-list a {
         text-transform: uppercase;
@@ -11424,19 +12425,23 @@ inventory-master {
         opacity: 1;
     }
 
+    /* UNUSED GLOBAL CLASS: manage-account-popup - Auto-commented by script
     .manage-account-popup .modal-content.full-screen-modal {
         box-shadow: none;
         border: none;
     }
+    */
 
     .wrap-account-sidebar,
     .wrap-account-sidebar .grp-wrapper {
         width: 100% !important;
     }
 
+    /* UNUSED GLOBAL CLASS: add-manage-group-acc - Auto-commented by script
     .add-manage-group-acc {
         overflow-y: auto !important;
     }
+    */
 
     .grp-list .master-list a,
     .new-btn-ul .new-btn a {
@@ -11454,27 +12459,34 @@ inventory-master {
     }
 
     /* manage group account*/
+    /* UNUSED GLOBAL CLASS: add-manage-group-acc - Auto-commented by script
     .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-8,
     .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-4 {
         width: 100%;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: add-manage-group-acc - Auto-commented by script
     .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
         margin-top: 5px;
     }
+    */
 
     .HW_frame_cont.HW_visible.HW_bottom {
         max-width: 300px;
     }
 
+    /* UNUSED GLOBAL CLASS: edit-modal - Auto-commented by script
     .edit-modal {
         .modal-content {
             max-width: 300px;
         }
     }
+    */
 }
 
 @media (min-width: 768px) {
+    /* UNUSED GLOBAL CLASS: mobile-invoice-date-due-date - Auto-commented by script
     .mobile-invoice-date-due-date {
         .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
             color: var(--color-black);
@@ -11490,14 +12502,19 @@ inventory-master {
             padding-top: 11px !important;
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: invoice-modal-content - Auto-commented by script
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: shipping-date - Auto-commented by script
     .shipping-date {
         padding-top: 50px !important;
     }
+    */
 
     .top-content {
         .count-box {
@@ -11509,12 +12526,14 @@ inventory-master {
         display: none;
     }
 
+    /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
     .mat-dialog-container {
         .modal-dialog {
             margin: 0px auto;
             padding: 0px;
         }
     }
+    */
 
     .modal-dialog {
         max-width: 650px !important;
@@ -11530,10 +12549,12 @@ inventory-master {
         max-width: 100% !important;
     }
 
+    /* UNUSED GLOBAL CLASS: po-preview-modal - Auto-commented by script
     .po-preview-modal {
         max-width: 100% !important;
         width: 900px !important;
     }
+    */
 }
 
 @media (max-width: 1300px) and (min-width: 1024px) {
@@ -11544,6 +12565,7 @@ inventory-master {
         }
     }
 
+    /* UNUSED GLOBAL CLASS: recurring-form - Auto-commented by script
     .recurring-form {
         sh-select,
         input {
@@ -11551,9 +12573,11 @@ inventory-master {
             max-width: 130px;
         }
     }
+    */
 }
 
 @media (min-width: 769px) and (max-width: 991px) {
+    /* UNUSED GLOBAL CLASS: gstr-tabs-head - Auto-commented by script
     .gstr-tabs-head {
         .nav.nav-tabs {
             li {
@@ -11561,36 +12585,46 @@ inventory-master {
             }
         }
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: giddh-datepicker-modal - Auto-commented by script
 .giddh-datepicker-modal {
     margin: 0 !important;
 }
+*/
 
 body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
 
 @media (max-width: 991px) and (min-width: 768px) {
+    /* UNUSED GLOBAL CLASS: hidden-sm - Auto-commented by script
     .hidden-sm {
         display: none !important;
     }
+    */
 }
 
 @media (max-width: 1199px) and (min-width: 992px) {
+    /* UNUSED GLOBAL CLASS: hidden-md - Auto-commented by script
     .hidden-md {
         display: none !important;
     }
+    */
 
     ngx-daterangepicker-material,
     giddh-datepicker {
+        /* UNUSED GLOBAL CLASS: recurring-form - Auto-commented by script
         .recurring-form {
             .mat-form-field {
                 min-width: 95px !important;
             }
         }
+        */
     }
 
+    /* UNUSED GLOBAL CLASS: invoice-date-label - Auto-commented by script
     .invoice-date-label {
         giddh-datepicker {
             .mat-form-field {
@@ -11598,7 +12632,9 @@ body.prevent-body-scroll {
             }
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: invoice-date-due-date - Auto-commented by script
     .invoice-date-due-date {
         .mat-datepicker-toggle {
             .mat-button-wrapper {
@@ -11609,6 +12645,7 @@ body.prevent-body-scroll {
             }
         }
     }
+    */
 }
 
 /*media query for height resolution*/
@@ -11637,39 +12674,50 @@ body.prevent-body-scroll {
     opacity: 0.5;
 }
 
+/* UNUSED GLOBAL CLASS: sky-blue-bg - Auto-commented by script
 .sky-blue-bg {
     background-color: var(--color-blue-light);
 }
+*/
 
 .btn-success:disabled {
     color: var(--color-dark-gray) !important;
 
+    /* UNUSED GLOBAL CLASS: ladda-label - Auto-commented by script
     .ladda-label {
         color: var(--color-dark-gray) !important;
     }
+    */
 
     &:hover {
         color: var(--color-dark-gray) !important;
 
+        /* UNUSED GLOBAL CLASS: ladda-label - Auto-commented by script
         .ladda-label {
             color: var(--color-dark-gray) !important;
         }
+        */
     }
 }
 
 .custom-btn {
     &:disabled {
+        /* UNUSED GLOBAL CLASS: ladda-label - Auto-commented by script
         .ladda-label {
             color: var(--color-blue-primary) !important;
         }
+        */
     }
 }
 
+/* UNUSED GLOBAL CLASS: giddh-no-permissions - Auto-commented by script
 .giddh-no-permissions {
     display: none !important;
 }
+*/
 
 /** Angular material datepicker **/
+/* UNUSED GLOBAL CLASS: mat-calendar-controls - Auto-commented by script
 .mat-calendar-controls {
     .mdc-button {
         .mdc-button__label {
@@ -11677,53 +12725,72 @@ body.prevent-body-scroll {
         }
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-calendar-header - Auto-commented by script
 .mat-calendar-header {
     padding: 2px 8px 2px 8px !important;
     background-color: var(--color-blue-primary);
     color: var(--color-white);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-calendar-controls - Auto-commented by script
 .mat-calendar-controls {
     margin: 0% calc(33% / 7 - 16px) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-calendar-arrow - Auto-commented by script
 .mat-calendar-arrow {
     border-top-color: var(--color-white) !important;
     fill: var(--color-white);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-datepicker-content - Auto-commented by script
 .mat-datepicker-content .mat-calendar-next-button,
 .mat-datepicker-content .mat-calendar-previous-button {
     color: var(--color-white) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-calendar-content - Auto-commented by script
 .mat-calendar-content {
     padding: 0px 8px 0px 8px !important;
     background-color: var(--color-white);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-calendar-body-label - Auto-commented by script
 .mat-calendar-body-label {
     visibility: hidden !important;
 }
+*/
 
 .mat-calendar-body-label[colspan="7"] {
     display: none !important;
 }
 
+/* UNUSED GLOBAL CLASS: mat-calendar-table-header - Auto-commented by script
 .mat-calendar-table-header th {
     padding: 10px 0 10px 0 !important;
     color: var(--color-black);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-calendar-table-header - Auto-commented by script
 .mat-calendar-table-header th.mat-calendar-table-header-divider {
     padding: 0px !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-datepicker-content - Auto-commented by script
 .mat-datepicker-content .mat-calendar {
     height: 325px !important;
     background-color: var(--color-white);
 }
+*/
 
 mat-year-view table tr td.mat-calendar-body-label {
     display: none !important;
@@ -11741,17 +12808,23 @@ input[type="checkbox"].cdk-visually-hidden::after {
 }
 
 .billing-wrapper {
+    /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
     .mat-form-field-wrapper {
         padding-bottom: 0 !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
     .mat-form-field-appearance-fill .mat-form-field-flex {
         padding: 0 !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
     .mat-form-field-appearance-fill .mat-form-field-infix {
         padding: 0 !important;
     }
+    */
 
     .form-group {
         float: left;
@@ -11760,21 +12833,28 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
+/* UNUSED GLOBAL CLASS: custom-modalbox - Auto-commented by script
 .custom-modalbox {
     height: 635px !important;
     width: 846px;
 }
+*/
 
 .activation-key {
+    /* UNUSED GLOBAL CLASS: mat-input-element - Auto-commented by script
     .mat-input-element {
         border: 1px solid var(--color-silver) !important;
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: susbcription-plan-years - Auto-commented by script
 .susbcription-plan-years {
     text-transform: lowercase;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: all_feature_button - Auto-commented by script
 .all_feature_button {
     background-color: var(--color-blue-primary);
     color: var(--color-white);
@@ -11784,27 +12864,36 @@ input[type="checkbox"].cdk-visually-hidden::after {
     width: 157px;
     font-weight: 700;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: check_all_plan_features - Auto-commented by script
 .check_all_plan_features {
     cursor: pointer;
     text-decoration: underline;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: plan-top-row - Auto-commented by script
 .plan-top-row .plan-td:first-child {
     vertical-align: bottom !important;
 }
+*/
 
 .grid-title-list {
+    /* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
     .mat-grid-tile-content {
         display: block !important;
         justify-content: left;
     }
+    */
 }
 
 .grid-title-left {
+    /* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
     .mat-grid-tile-content {
         justify-content: left;
     }
+    */
 }
 
 /** Skeleton Effects  **/
@@ -11846,20 +12935,27 @@ input[type="checkbox"].cdk-visually-hidden::after {
 }
 
 .custom-mat-tabs {
+    /* UNUSED GLOBAL CLASS: mat-tab-label - Auto-commented by script
     .mat-tab-label {
         padding: 0 20px !important;
         min-width: 100px !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-ink-bar - Auto-commented by script
     .mat-ink-bar {
         height: 3px !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-mdc-tab-header - Auto-commented by script
     .mat-mdc-tab-header {
         display: none;
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: main-content-subscription - Auto-commented by script
 .main-content-subscription {
     .main-tabs-content {
         .mat-tab-label.mat-tab-label-active {
@@ -11894,11 +12990,15 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-expansion-panel - Auto-commented by script
 .mat-expansion-panel {
     background-color: var(--color-light-gray);
 }
+*/
 
+/* UNUSED GLOBAL CLASS: companies - Auto-commented by script
 .companies {
     .mat-expansion-panel-header-title {
         overflow: hidden !important;
@@ -11908,8 +13008,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         display: block !important;
     }
 }
+*/
 
 .stock-balance-wrapper {
+    /* UNUSED GLOBAL CLASS: search-warehouse-bar - Auto-commented by script
     .search-warehouse-bar {
         .mat-form-field-infix {
             height: 58px;
@@ -11928,15 +13030,19 @@ input[type="checkbox"].cdk-visually-hidden::after {
             }
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-outline - Auto-commented by script
     .mat-form-field-appearance-outline {
         .mat-form-field-outline {
             color: var(--color-silver);
         }
     }
+    */
 
     .stock-list-body {
         .stock-list-expanded-content {
+            /* UNUSED GLOBAL CLASS: mat-form-field-infix - Auto-commented by script
             .mat-form-field-infix {
                 border: 1px solid;
                 border-radius: 5px;
@@ -11962,29 +13068,36 @@ input[type="checkbox"].cdk-visually-hidden::after {
                     color: var(--color-medium-gray);
                 }
             }
+            */
         }
     }
 
     .searching-stocks {
         .custom-material-search-bar {
+            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
             .mat-form-field-outline {
                 height: 33px;
                 background-color: var(--color-light-gray);
                 border-radius: 5px;
             }
+            */
         }
 
         .stock-searchbar {
+            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
             .mat-form-field-outline {
                 width: 230px;
                 color: var(--color-light-gray);
             }
+            */
         }
 
         .group-searchbar {
+            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
             .mat-form-field-outline {
                 color: var(--color-light-gray);
             }
+            */
         }
 
         select-field,
@@ -12036,6 +13149,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     height: 100% !important;
     width: 760px !important;
 
+    /* UNUSED GLOBAL CLASS: mat-dialog-content - Auto-commented by script
     .mat-dialog-content {
         margin: 0 !important;
         padding: 0 !important;
@@ -12043,11 +13157,14 @@ input[type="checkbox"].cdk-visually-hidden::after {
         float: left;
         width: 100%;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
     .mat-dialog-container {
         overflow: hidden;
         background-color: var(--color-white);
     }
+    */
 }
 
 .subscription-sidebar {
@@ -12094,6 +13211,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
         height: 100% !important;
         width: 760px !important;
 
+        /* UNUSED GLOBAL CLASS: mat-dialog-content - Auto-commented by script
         .mat-dialog-content {
             margin: 0 !important;
             padding: 0 !important;
@@ -12101,11 +13219,14 @@ input[type="checkbox"].cdk-visually-hidden::after {
             float: left;
             width: 100%;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
         .mat-dialog-container {
             overflow: hidden;
             background-color: var(--color-white);
         }
+        */
     }
 }
 
@@ -12114,6 +13235,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     height: 100% !important;
     width: 760px !important;
 
+    /* UNUSED GLOBAL CLASS: mat-dialog-content - Auto-commented by script
     .mat-dialog-content {
         margin: 0 !important;
         padding: 0 !important;
@@ -12121,18 +13243,24 @@ input[type="checkbox"].cdk-visually-hidden::after {
         float: left;
         width: 100%;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
     .mat-dialog-container {
         overflow: hidden;
     }
+    */
 }
 
 .show-changed {
+    /* UNUSED GLOBAL CLASS: jsondiffpatch-unchanged - Auto-commented by script
     .jsondiffpatch-unchanged {
         display: none;
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: history-sidebar - Auto-commented by script
 .history-sidebar {
     min-height: 100% !important;
     height: 100% !important;
@@ -12150,6 +13278,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
         overflow: hidden;
     }
 }
+*/
 
 hamburger-menu {
     position: relative;
@@ -12157,19 +13286,23 @@ hamburger-menu {
 }
 
 .activity-log-page {
+    /* UNUSED GLOBAL CLASS: mat-raised-button - Auto-commented by script
     .mat-raised-button {
         box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%),
             0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
     }
+    */
 
     .hamburger-menu {
         position: relative;
         z-index: 99999;
     }
 
+    /* UNUSED GLOBAL CLASS: mat-mdc-table - Auto-commented by script
     .mat-mdc-table tbody > tr > td:first-child {
         color: var(--color-black) !important;
     }
+    */
 
     .giddh-table.mat-mdc-table {
         tbody {
@@ -12184,6 +13317,7 @@ hamburger-menu {
                     }
                 }
 
+                /* UNUSED GLOBAL CLASS: mat-column-history - Auto-commented by script
                 .mat-column-history {
                     .history-checkbox {
                         .mat-checkbox-inner-container-no-side-margin {
@@ -12194,6 +13328,7 @@ hamburger-menu {
                         }
                     }
                 }
+                */
             }
         }
     }
@@ -12209,15 +13344,19 @@ hamburger-menu {
 
 //inventory control styling
 .mat-select-search-inventory {
+    /* UNUSED GLOBAL CLASS: mat-select-search-input - Auto-commented by script
     .mat-select-search-input {
         padding: 0px 30px 0px 17px !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-select-search-clear - Auto-commented by script
     .mat-select-search-clear {
         right: 0 !important;
         margin-right: 0 !important;
         top: 0 !important;
     }
+    */
 }
 
 .inventory-filter-bar {
@@ -12248,9 +13387,11 @@ hamburger-menu {
             border: none !important;
         }
 
+        /* UNUSED GLOBAL CLASS: mat-form-field-underline - Auto-commented by script
         .mat-form-field-underline {
             display: none;
         }
+        */
 
         .menu-btn-control {
             border-top-right-radius: 20px;
@@ -12310,6 +13451,7 @@ hamburger-menu {
         }
     }
 
+    /* UNUSED GLOBAL CLASS: round-btn - Auto-commented by script
     .round-btn {
         display: flex;
         justify-content: center;
@@ -12326,11 +13468,14 @@ hamburger-menu {
             color: var(--color-blue-primary) !important;
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: action-button-container - Auto-commented by script
     .action-button-container {
         display: flex;
         flex: 1;
     }
+    */
 
     span.dots-select {
         font-size: var(--font-size-15);
@@ -12354,44 +13499,59 @@ hamburger-menu {
     padding: 0 26px;
 }
 
+/* UNUSED GLOBAL CLASS: menu-selector - Auto-commented by script
 .menu-selector button.mat-focus-indicator.mat-menu-item {
     line-height: 0;
     height: 37px !important;
 }
+*/
 
 .mat-tab-them {
+    /* UNUSED GLOBAL CLASS: mat-ink-bar - Auto-commented by script
     .mat-ink-bar {
         height: 4px !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-ink-bar - Auto-commented by script
     .mat-ink-bar {
         background-color: var(--color-blue-primary) !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-tab-label - Auto-commented by script
     .mat-tab-label {
         min-width: 100px !important;
     }
+    */
 }
 
 .other-group {
     .mat-tab-them {
+        /* UNUSED GLOBAL CLASS: mat-tab-label - Auto-commented by script
         .mat-tab-label {
             min-width: 94px !important;
             padding: 0 20px !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-tab-labels - Auto-commented by script
         .mat-tab-labels {
             margin-left: 0 !important;
         }
+        */
     }
 }
 
+/* UNUSED GLOBAL CLASS: btn-left-right-round - Auto-commented by script
 .btn-left-right-round {
     border-radius: 50px !important;
 }
+*/
 
 //multi chip control style
 
+/* UNUSED GLOBAL CLASS: multi-select-input - Auto-commented by script
 .multi-select-input {
     display: block;
     width: 100%;
@@ -12420,15 +13580,19 @@ hamburger-menu {
         border-radius: 5px !important;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: stock-group-search - Auto-commented by script
 .stock-group-search {
     input {
         padding-left: 30px !important;
         padding-top: 20px !important;
     }
 }
+*/
 
 .stock-balance-wrapper {
+    /* UNUSED GLOBAL CLASS: search-warehouse-bar - Auto-commented by script
     .search-warehouse-bar {
         .mat-form-field-infix {
             height: 60px;
@@ -12449,15 +13613,19 @@ hamburger-menu {
             }
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-outline - Auto-commented by script
     .mat-form-field-appearance-outline {
         .mat-form-field-outline {
             color: var(--color-silver);
         }
     }
+    */
 
     .stock-list-body {
         .stock-list-expanded-content {
+            /* UNUSED GLOBAL CLASS: mat-form-field-infix - Auto-commented by script
             .mat-form-field-infix {
                 border: 1px solid;
                 border-radius: 5px;
@@ -12483,24 +13651,30 @@ hamburger-menu {
                     color: var(--color-medium-gray);
                 }
             }
+            */
         }
     }
 
     .searching-stocks {
         .custom-material-search-bar {
+            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
             .mat-form-field-outline {
                 height: 33px;
                 background-color: var(--color-light-gray);
                 border-radius: 5px;
             }
+            */
         }
 
         .stock-searchbar {
+            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
             .mat-form-field-outline {
                 width: 230px;
                 color: var(--color-light-gray);
             }
+            */
 
+            /* UNUSED GLOBAL CLASS: mat-form-field-infix - Auto-commented by script
             .mat-form-field-infix {
                 width: 112px;
                 height: 34px;
@@ -12508,12 +13682,15 @@ hamburger-menu {
                 padding-top: 22px;
                 font-size: var(--font-size-15);
             }
+            */
         }
 
         .group-searchbar {
+            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
             .mat-form-field-outline {
                 color: var(--color-light-gray);
             }
+            */
         }
 
         select-field {
@@ -12555,6 +13732,7 @@ hamburger-menu {
     }
 }
 
+/* UNUSED GLOBAL CLASS: myPanelClass - Auto-commented by script
 .myPanelClass {
     margin-top: 30px !important;
     margin-left: 16px !important;
@@ -12563,6 +13741,7 @@ hamburger-menu {
         color: var(--color-blue-primary);
     }
 }
+*/
 
 .myPanelClass.position-fix {
     min-width: calc(100% + 15px) !important;
@@ -12574,11 +13753,13 @@ hamburger-menu {
 .select-physical-product {
     .product-option {
         .product-option-wrapper {
+            /* UNUSED GLOBAL CLASS: multi-select-input - Auto-commented by script
             .multi-select-input {
                 input {
                     background: var(--color-white);
                 }
             }
+            */
         }
     }
 }
@@ -12589,9 +13770,11 @@ body.hide-scroll-body.master-page {
 
 .ledger-attachments-popup {
     .cdk-overlay-container {
+        /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
         .mat-dialog-container {
             background-color: var(--color-white);
         }
+        */
     }
 }
 
@@ -12612,11 +13795,13 @@ body.hide-scroll-body.master-page {
 //     background-color: var(--color-light-gray) !important;
 // }
 
+/* UNUSED GLOBAL CLASS: mat-menu-btn - Auto-commented by script
 .mat-menu-btn {
     line-height: 16px !important;
     height: 16px !important;
     padding: 0 0px !important;
 }
+*/
 
 // .mdc-checkbox--disabled {
 //     cursor: not-allowed !important;
@@ -12624,20 +13809,24 @@ body.hide-scroll-body.master-page {
 
 .ledger-main {
     .readonly-field {
+        /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
         .mat-mdc-form-field {
             background-color: var(--color-white) !important;
         }
+        */
     }
 }
 
 .voucher-preview-edit {
     .custom-date-entries {
         giddh-datepicker {
+            /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
             .mat-form-field-appearance-fill {
                 .mat-form-field-flex {
                     border: none !important;
                 }
             }
+            */
         }
     }
 }
@@ -12651,6 +13840,7 @@ body.hide-scroll-body.master-page {
 
 /** =================Branch Transfer Create Component - End Here=====================*/
 /*---- radio-button -----*/
+/* UNUSED GLOBAL CLASS: mat-radio-button - Auto-commented by script
 .mat-radio-button {
     .mat-radio-container {
         width: 15px !important;
@@ -12667,15 +13857,20 @@ body.hide-scroll-body.master-page {
         }
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: required-field-error - Auto-commented by script
 .required-field-error {
     border: 1px solid var(--color-red) !important;
     color: var(--color-red) !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: cdk-drag - Auto-commented by script
 .cdk-drag {
     cursor: grab;
 }
+*/
 
 .dropdown-position {
     transform: unset !important;
@@ -12729,12 +13924,14 @@ body.hide-scroll-body.master-page {
 
 /*--- voucher-datepicker ---*/
 voucher-component {
+    /* UNUSED GLOBAL CLASS: mat-datepicker-input - Auto-commented by script
     .mat-datepicker-input {
         &:disabled {
             background-color: transparent !important;
             cursor: not-allowed;
         }
     }
+    */
 }
 
 /*--- tooltip --*/
@@ -12759,10 +13956,13 @@ voucher-component {
 }
 
 /*--- slide-toggle ---*/
+/* UNUSED GLOBAL CLASS: mat-slide-toggle-persistent-ripple - Auto-commented by script
 .mat-slide-toggle-persistent-ripple {
     opacity: 0 !important;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: customer-invoice-table - Auto-commented by script
 .customer-invoice-table {
     .mat-form-field-wrapper
         .mat-form-field-infix
@@ -12772,15 +13972,20 @@ voucher-component {
         height: 34px !important;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mat-form-field-suffix - Auto-commented by script
 .mat-form-field-suffix {
     margin-left: 3px;
 }
+*/
 
+/* UNUSED GLOBAL CLASS: cdk-virtual-scroll-content-wrapper - Auto-commented by script
 .cdk-virtual-scroll-content-wrapper {
     width: 100%;
     height: auto;
 }
+*/
 
 .icon-font-14 {
     font-size: 14px;
@@ -12815,6 +14020,7 @@ voucher-component {
 
 .ledger-date {
     .input-wrapper {
+        /* UNUSED GLOBAL CLASS: mat-form-field - Auto-commented by script
         .mat-form-field {
             .mat-form-field-wrapper {
                 .mat-form-field-flex {
@@ -12829,12 +14035,15 @@ voucher-component {
                 }
             }
         }
+        */
 
         .mdc-text-field--no-label:not(.mdc-text-field--textarea) {
             .mat-mdc-form-field-input-control.mdc-text-field__input {
+                /* UNUSED GLOBAL CLASS: mat-mdc-text-field-wrapper - Auto-commented by script
                 .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
                     border: 1px solid var(--color-silver) !important;
                 }
+                */
             }
         }
     }
@@ -12868,21 +14077,27 @@ voucher-component {
         display: none !important;
     }
 
+    /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
     .mat-mdc-form-field {
         background-color: var(--color-light-gray) !important;
     }
+    */
 
     .dropdown-bg {
         background-color: var(--color-transparent) !important;
     }
 
+    /* UNUSED GLOBAL CLASS: mdc-text-field__input - Auto-commented by script
     .mdc-text-field__input {
         background-color: var(--color-transparent) !important;
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
     .mat-mdc-form-field input {
         background-color: var(--color-transparent) !important;
     }
+    */
 }
 
 .new-branch-transfer-page {
@@ -12892,6 +14107,7 @@ voucher-component {
 }
 
 /*----- dialog-box ------*/
+/* UNUSED GLOBAL CLASS: mat-mdc-dialog-container - Auto-commented by script
 .mat-mdc-dialog-container {
     .mdc-dialog__title {
         font-size: var(--font-size-16) !important;
@@ -12905,19 +14121,24 @@ voucher-component {
         background-color: var(--color-white) !important;
     }
 }
+*/
 
+/* UNUSED GLOBAL CLASS: mdc-dialog - Auto-commented by script
 .mdc-dialog {
     .mdc-dialog__content {
         padding: 0 !important;
         color: var(--color-black) !important;
     }
 }
+*/
 
 /*--- scroll-bar ---*/
+/* UNUSED GLOBAL CLASS: cdk-virtual-scrollable - Auto-commented by script
 .cdk-virtual-scrollable {
     height: 100%;
     width: 100%;
 }
+*/
 
 activity-compare-json {
     height: 100%;
@@ -12925,12 +14146,14 @@ activity-compare-json {
 }
 
 .activity-log-page {
+    /* UNUSED GLOBAL CLASS: mat-mdc-dialog-container - Auto-commented by script
     .mat-mdc-dialog-container {
         .mdc-dialog__content {
             height: 100%;
             overflow: unset;
         }
     }
+    */
 }
 
 .mat-form-field-invalid .mdc-floating-label {
@@ -12943,14 +14166,18 @@ activity-compare-json {
     border-color: var(--color-red) !important;
 }
 
+/* UNUSED GLOBAL CLASS: mat-mdc-dialog-content - Auto-commented by script
 .mat-mdc-dialog-content {
     max-height: 70vh !important;
 }
+*/
 
 .aside-pane {
+    /* UNUSED GLOBAL CLASS: mat-mdc-dialog-content - Auto-commented by script
     .mat-mdc-dialog-content {
         max-height: 100vh !important;
     }
+    */
 }
 
 .flag-input {
@@ -12960,9 +14187,11 @@ activity-compare-json {
 
 .reject-textarea,
 .billing-wrapper {
+    /* UNUSED GLOBAL CLASS: mdc-text-field - Auto-commented by script
     .mdc-text-field {
         padding: 0;
     }
+    */
 }
 
 .mat-snack-bar-wrapper {
@@ -12971,6 +14200,7 @@ activity-compare-json {
 }
 
 .plan-page {
+    /* UNUSED GLOBAL CLASS: mdc-data-table__row - Auto-commented by script
     .mdc-data-table__row {
         &:last-child {
             & > .mdc-data-table__cell {
@@ -12978,15 +14208,19 @@ activity-compare-json {
             }
         }
     }
+    */
 
+    /* UNUSED GLOBAL CLASS: mat-horizontal-stepper-header-container - Auto-commented by script
     .mat-horizontal-stepper-header-container {
         max-width: 1240px;
         margin: 0 auto;
         width: 100%;
     }
+    */
 }
 
 // Material 16 Table
+/* UNUSED GLOBAL CLASS: mdc-data-table__row - Auto-commented by script
 .mdc-data-table__row {
     &:last-child {
         & > .mdc-data-table__cell {
@@ -12994,12 +14228,15 @@ activity-compare-json {
         }
     }
 }
+*/
 
 .manufacturing-table {
+    /* UNUSED GLOBAL CLASS: mdc-data-table__header-cell - Auto-commented by script
     .mdc-data-table__header-cell {
         word-break: break-word;
         white-space: nowrap;
     }
+    */
 }
 
 .mat-snack-bar-wrapper {
@@ -13007,13 +14244,16 @@ activity-compare-json {
 }
 
 .mat-select-btn {
+    /* UNUSED GLOBAL CLASS: mdc-button__label - Auto-commented by script
     .mdc-button__label {
         width: 100%;
     }
+    */
 }
 
 /*---- aside-button ----*/
 aside-menu-product-service {
+    /* UNUSED GLOBAL CLASS: mat-mdc-outlined-button - Auto-commented by script
     .mat-mdc-outlined-button {
         &.mat-unthemed {
             &#back {
@@ -13021,6 +14261,7 @@ aside-menu-product-service {
             }
         }
     }
+    */
 }
 
 .on-setting-page {
@@ -13035,11 +14276,13 @@ aside-menu-product-service {
     }
 }
 
+/* UNUSED GLOBAL CLASS: dialog-fixed-header - Auto-commented by script
 .dialog-fixed-header {
     position: sticky !important;
     top: 0;
     z-index: 1;
 }
+*/
 
 .custom-tooltip {
     background-color: var(--color-dark-gray) !important;
@@ -13076,6 +14319,7 @@ aside-menu-product-service {
 // }
 
 // material-pagination
+/* UNUSED GLOBAL CLASS: mat-mdc-paginator - Auto-commented by script
 .mat-mdc-paginator {
     .mat-mdc-form-field {
         .mat-mdc-select {
@@ -13083,6 +14327,7 @@ aside-menu-product-service {
         }
     }
 }
+*/
 
 // outline-card
 // .mat-mdc-card {
@@ -13096,12 +14341,14 @@ aside-menu-product-service {
 .invoice-preview-wrapper {
     .mat-grid-wrapper {
         .mat-list-wrap {
+            /* UNUSED GLOBAL CLASS: mat-mdc-list - Auto-commented by script
             .mat-mdc-list {
                 .mat-mdc-list-item {
                     height: auto;
                     min-height: 60px;
                 }
             }
+            */
         }
     }
 }
@@ -13196,6 +14443,7 @@ aside-menu-product-service {
         color: var(--color-black) !important;
     }
 
+    /* UNUSED GLOBAL CLASS: mat-expansion-panel - Auto-commented by script
     .mat-expansion-panel {
         .mat-expansion-panel-header {
             .mat-expansion-panel-header-title {
@@ -13203,25 +14451,30 @@ aside-menu-product-service {
             }
         }
     }
+    */
 }
 
 // hsn description
 .tax-engine {
+    /* UNUSED GLOBAL CLASS: description-overlap - Auto-commented by script
     .description-overlap {
         width: 175px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+    */
 }
 
 // datepicker label
+/* UNUSED GLOBAL CLASS: date-label - Auto-commented by script
 .date-label {
     label {
         position: absolute;
         z-index: -1;
     }
 }
+*/
 
 .opacity-hidden {
     opacity: 0;
@@ -13268,21 +14521,26 @@ import-wizard {
     }
 }
 
+/* UNUSED GLOBAL CLASS: rotate-icon-130deg - Auto-commented by script
 .rotate-icon-130deg {
     .mdc-button__label {
         transform: rotate(130deg);
     }
 }
+*/
 
 // table header search icon
+/* UNUSED GLOBAL CLASS: table-search-icon - Auto-commented by script
 .table-search-icon {
     top: 2px;
     width: 25px !important;
     height: 25px !important;
     padding: 0 !important;
 }
+*/
 
 // Mat Datepicker for Year and Month selection
+/* UNUSED GLOBAL CLASS: month-selection - Auto-commented by script
 .month-selection {
     border-radius: 50px !important;
     background: var(--color-light-gray) !important;
@@ -13293,6 +14551,7 @@ import-wizard {
     //     color: var(--color-black) !important;
     // }
 }
+*/
 
 .download-arrow {
     .icon-download1 {
@@ -13318,11 +14577,13 @@ mat-list {
 
 // Reverse change header text align
 .reverse-table-report {
+    /* UNUSED GLOBAL CLASS: mat-sort-header-container - Auto-commented by script
     .mat-sort-header-container {
         .mat-sort-header-content {
             text-align: left;
         }
     }
+    */
 }
 
 // .z-index-0 {
@@ -13334,22 +14595,28 @@ mat-list {
 }
 
 [mat-sort-header].cdk-program-focused {
+    /* UNUSED GLOBAL CLASS: mat-sort-header-container - Auto-commented by script
     .mat-sort-header-container {
         border-bottom: none !important;
     }
+    */
 }
 
+/* UNUSED GLOBAL CLASS: mdc-text-field--disabled - Auto-commented by script
 .mdc-text-field--disabled {
     .mdc-text-field--filled {
         background-color: var(--color-transparent) !important;
     }
 }
+*/
 
 //Common class to make dialog background transparent add this in panel class
 .dialog-bg-transparent {
+    /* UNUSED GLOBAL CLASS: mat-mdc-dialog-surface - Auto-commented by script
     .mat-mdc-dialog-surface {
         background-color: var(--color-transparent) !important;
     }
+    */
 }
 
 .select-multiple-chiplist {
@@ -13360,19 +14627,24 @@ mat-list {
                     --mdc-chip-elevated-container-color: var(--color-border-light) !important;
                     border: 1px solid var(--color-silver);
 
+                    /* UNUSED GLOBAL CLASS: mdc-evolution-chip__text-label - Auto-commented by script
                     .mdc-evolution-chip__text-label {
                         --mdc-chip-label-text-color: var(--color-black) !important;
                     }
+                    */
 
+                    /* UNUSED GLOBAL CLASS: mdc-evolution-chip__icon--trailing - Auto-commented by script
                     .mdc-evolution-chip__icon--trailing {
                         --mdc-chip-with-trailing-icon-trailing-icon-color: var(--color-black) !important;
                     }
+                    */
                 }
             }
         }
     }
 }
 
+/* UNUSED GLOBAL CLASS: mat-mdc-checkbox - Auto-commented by script
 .mat-mdc-checkbox {
     &.mat-mdc-checkbox-disabled {
         label {
@@ -13380,12 +14652,15 @@ mat-list {
         }
     }
 }
+*/
 
 // For CompareWithDateRangePickerComponent
 .compare-with-menu {
+    /* UNUSED GLOBAL CLASS: mdc-list-item__start - Auto-commented by script
     .mdc-list-item__start {
         margin-right: 0px !important;
     }
+    */
 }
 
 /** Use this class on black color image (icon)
@@ -13395,9 +14670,11 @@ mat-list {
 }
 
 .advance-filter-button {
+    /* UNUSED GLOBAL CLASS: mdc-button__label - Auto-commented by script
     .mdc-button__label {
         color: var(--color-black) !important;
     }
+    */
 }
 
 .bg-white {
@@ -13414,11 +14691,14 @@ mat-list {
         height: auto !important;
         padding-bottom: 5px !important;
 
+        /* UNUSED GLOBAL CLASS: mat-select-search-input - Auto-commented by script
         .mat-select-search-input {
             padding: 16px 36px 16px 16px !important;
             box-sizing: border-box !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-select-search-inner - Auto-commented by script
         .mat-select-search-inner {
             position: absolute !important;
             top: 0 !important;
@@ -13429,16 +14709,20 @@ mat-list {
             box-shadow: none !important;
             border-radius: 0 !important;
         }
+        */
 
+        /* UNUSED GLOBAL CLASS: mat-select-search-clear - Auto-commented by script
         .mat-select-search-clear {
             margin-right: 0 !important;
         }
+        */
     }
 }
 
 /** In mobile number field if multiple flag are visible,
  use this class to fix the issue */
 .show-single-flag {
+    /* UNUSED GLOBAL CLASS: iti--allow-dropdown - Auto-commented by script
     .iti--allow-dropdown {
         &:has(.iti--allow-dropdown) {
             margin-bottom: 0;
@@ -13447,6 +14731,7 @@ mat-list {
             }
         }
     }
+    */
 }
 
 // .only-right-radius {
@@ -13457,23 +14742,29 @@ mat-list {
 .universal-datepicker-menu-panel {
     max-width: 100% !important;
 
+    /* UNUSED GLOBAL CLASS: mat-mdc-menu-content - Auto-commented by script
     .mat-mdc-menu-content {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
     }
+    */
 }
 
 .hide-mat-tab-header {
+    /* UNUSED GLOBAL CLASS: mat-mdc-tab-header - Auto-commented by script
     .mat-mdc-tab-header {
         display: none !important;
     }
+    */
 }
 
 .primary-sidebar {
     .company-branch-nav {
+        /* UNUSED GLOBAL CLASS: mat-mdc-tab-header - Auto-commented by script
         .mat-mdc-tab-header {
             --mdc-secondary-navigation-tab-container-height: 34px !important;
         }
+        */
     }
 }
 
@@ -13519,6 +14810,7 @@ mat-list {
 
 // For giddh-datepicker month year picker placeholder color
 giddh-datepicker {
+    /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
     .mat-mdc-form-field {
         &.month-year-picker {
             .mat-mdc-text-field-wrapper {
@@ -13532,4 +14824,5 @@ giddh-datepicker {
             }
         }
     }
+    */
 }

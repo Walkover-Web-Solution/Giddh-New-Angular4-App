@@ -7,6 +7,7 @@ body.unresponsive {
     background: var(--color-black);
 }
 
+/* UNUSED COMPONENT CLASS: intro - Auto-commented by script
 .intro.login {
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -14,12 +15,15 @@ body.unresponsive {
     width: 100%;
     display: table;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn-lg - Auto-commented by script
 .btn-lg {
     padding: 10px 16px;
     font-size: var(--font-size-15);
     line-height: 1.3333333;
 }
+*/
 
 .btn {
     cursor: pointer;
@@ -29,20 +33,24 @@ body.unresponsive {
     outline: 0;
 }
 
-// .modal-header h3 {
-//     color: var(--color-white);
-//     font-size: var(--font-size-16);
-// }
+/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
+.modal-header h3 {
+    color: var(--color-white);
+    font-size: var(--font-size-16);
+}
+*/
 
 .login {
     padding-top: 0;
 }
 
-.login .brand-heading {
+.login /* UNUSED COMPONENT CLASS: brand-heading - Auto-commented by script
+.brand-heading {
     color: var(--color-white);
     font-size: var(--font-size-32);
     margin-bottom: 80px;
 }
+*/
 
 #box {
     background-color: var(--color-white);
@@ -56,9 +64,11 @@ body.unresponsive {
     text-transform: uppercase;
 }
 
+/* UNUSED COMPONENT CLASS: login-btn - Auto-commented by script
 .login-btn {
     position: relative;
 }
+*/
 
 #box img {
     max-height: 30px;
@@ -67,12 +77,14 @@ body.unresponsive {
     top: 4px;
 }
 
-#box .glyphicon {
+#box /* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
+.glyphicon {
     max-height: 30px;
     position: absolute;
     left: 15px;
     top: 13px;
 }
+*/
 
 #box .btn:hover,
 #box .btn:hover {
@@ -83,22 +95,27 @@ body.unresponsive {
     margin-bottom: 10px;
 }
 
+/* UNUSED COMPONENT CLASS: twitter - Auto-commented by script
 .twitter {
     background: var(--color-blue-primary);
 }
+*/
 
 .google {
     background: var(--color-red);
 }
 
+/* UNUSED COMPONENT CLASS: linkedin - Auto-commented by script
 .linkedin {
     background: var(--color-blue-primary);
 }
+*/
 
 .mobile {
     background: var(--color-black);
 }
 
+/* UNUSED COMPONENT CLASS: btn-login - Auto-commented by script
 .btn-login {
     text-transform: uppercase;
     color: var(--color-white);
@@ -117,6 +134,7 @@ body.unresponsive {
     transition-property: transform;
     padding: 10px 16px !important;
 }
+*/
 
 .btn-login:hover,
 .btn-login:focus,
@@ -124,11 +142,13 @@ body.unresponsive {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
+/* UNUSED COMPONENT CLASS: btn-blue - Auto-commented by script
 .btn-blue {
     color: var(--color-white) !important;
     border-color: var(--color-blue-primary);
     background: var(--color-blue-primary);
 }
+*/
 
 .btn-blue:hover {
     color: var(--color-white) !important;
@@ -137,6 +157,7 @@ body.unresponsive {
 }
 /*giddh loader*/
 
+/* UNUSED COMPONENT CLASS: giddh-spinner - Auto-commented by script
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
     background: var(--color-black) none repeat scroll 0 0;
@@ -148,6 +169,7 @@ body.unresponsive {
     width: 60px;
     margin: 0 auto 20px;
 }
+*/
 
 .form-inline {
     width: 80px;
@@ -166,16 +188,20 @@ body.unresponsive {
     }
 }
 
-.intro .lead {
+.intro /* UNUSED COMPONENT CLASS: lead - Auto-commented by script
+.lead {
     text-align: center;
     font-size: var(--font-size-16);
 }
+*/
 
-.btn-login.btn-default {
+.btn-login/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
+.btn-default {
     color: var(--color-black);
     background-color: var(--color-white);
     border-color: var(--color-silver);
 }
+*/
 
 .btn-login.btn-default:hover {
     color: var(--color-black) !important;
@@ -184,7 +210,8 @@ body.unresponsive {
     box-shadow: none;
 }
 
-.intro .intro-body {
+.intro /* UNUSED COMPONENT CLASS: intro-body - Auto-commented by script
+.intro-body {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
@@ -195,6 +222,7 @@ body.unresponsive {
     top: 0;
     left: 0;
 }
+*/
 
 button.close {
     float: right;
@@ -221,15 +249,19 @@ button.close {
     color: var(--color-black) !important;
 }
 
-:host ::ng-deep .clear {
+:host ::ng-deep /* UNUSED COMPONENT CLASS: clear - Auto-commented by script
+.clear {
     top: 50% !important;
     font-size: var(--font-size-24) !important;
     right: 6px !important;
 }
+*/
 
-:host ::ng-deep .btn-success {
+:host ::ng-deep /* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
+.btn-success {
     color: var(--color-white);
 }
+*/
 
 strong {
     font-weight: var(--font-weight-bold);
@@ -243,6 +275,7 @@ h1 {
     font-size: var(--font-size-24);
 }
 
+/* UNUSED COMPONENT CLASS: slide-content - Auto-commented by script
 .slide-content {
     padding: 0 100px;
     color: var(--color-white);
@@ -252,6 +285,7 @@ h1 {
     flex-direction: column;
     justify-content: space-evenly;
 }
+*/
 
 .login-box h1 {
     color: var(--color-black);
@@ -297,12 +331,13 @@ small {
     padding: 0 15px;
 }
 
-/* social icon */
-
+/* UNUSED COMPONENT CLASS: linkedin-ico - Auto-commented by script
+// social icon
 .linkedin-ico a {
     color: var(--color-blue-primary);
     border-color: var(--color-blue-primary);
 }
+*/
 
 .google-ico a {
     background: var(--color-blue-primary);
@@ -326,12 +361,14 @@ small {
     height: 18px;
 }
 
+/* UNUSED COMPONENT CLASS: login-option - Auto-commented by script
 .login-option,
 .login-option a {
     color: var(--color-blue-primary);
     margin-top: 55px;
     font-weight: 500;
 }
+*/
 
 .login-option a {
     border-bottom: 2px dotted var(--color-blue-primary);
@@ -344,6 +381,7 @@ small {
     line-height: 34px;
 }
 
+/* UNUSED COMPONENT CLASS: feature-list - Auto-commented by script
 .feature-list {
     display: flex;
     flex-direction: column;
@@ -351,6 +389,7 @@ small {
     justify-content: space-evenly;
     align-self: self-start;
 }
+*/
 
 .feature-list li {
     list-style: none;
@@ -359,7 +398,8 @@ small {
     position: relative;
 }
 
-.feature-list li .signup-ico {
+.feature-list li /* UNUSED COMPONENT CLASS: signup-ico - Auto-commented by script
+.signup-ico {
     position: absolute;
     left: 0;
     height: 100%;
@@ -368,12 +408,14 @@ small {
     top: 7px;
     bottom: 0;
 }
+*/
 
 .feature-list li > p {
     font-size: var(--font-size-16);
     text-align: left;
 }
 
+/* UNUSED COMPONENT CLASS: client-testimonial - Auto-commented by script
 .client-testimonial {
     align-self: flex-start;
     position: relative;
@@ -381,6 +423,7 @@ small {
     background: var(--color-blue-light);
     margin: 0 -15px;
 }
+*/
 
 .client-testimonial .content {
     display: flex;
@@ -401,10 +444,13 @@ small {
     font-size: var(--font-size-16);
 }
 
+/* UNUSED COMPONENT CLASS: hash-tag - Auto-commented by script
 .hash-tag {
     color: var(--color-red);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: blockquote-ico - Auto-commented by script
 .blockquote-ico {
     position: absolute;
     left: 15px;
@@ -414,6 +460,7 @@ small {
     top: 30px;
     bottom: 0;
 }
+*/
 
 /* new theme login page css start */
 .login-box {
@@ -470,6 +517,7 @@ small {
     color: var(--color-blue-primary);
     font-size: var(--font-size-16);
 }
+/* UNUSED COMPONENT CLASS: btn-outline-primary - Auto-commented by script
 .btn-outline-primary {
     background-color: var(--color-blue-primary);
     border-radius: 3px;
@@ -479,12 +527,14 @@ small {
     margin-bottom: 10px;
     font-size: var(--font-size-15);
 }
+*/
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
     background-color: var(--color-blue-primary);
     box-shadow: none;
     outline: none;
 }
+/* UNUSED COMPONENT CLASS: login-with - Auto-commented by script
 .login-with {
     color: var(--color-blue-primary);
     font-size: var(--font-size-15);
@@ -494,20 +544,25 @@ small {
         text-decoration: none;
     }
 }
+*/
+/* UNUSED COMPONENT CLASS: btn-secondary - Auto-commented by script
 .btn-secondary {
     border-radius: 5px;
     color: var(--color-white);
     background-color: var(--color-blue-primary);
     border: 1px solid var(--color-blue-primary);
 }
+*/
 .btn-secondary:hover {
     color: var(--color-white) !important;
     background-color: var(--color-blue-primary);
     border-color: var(--color-blue-primary);
 }
+/* UNUSED COMPONENT CLASS: forgotStep - Auto-commented by script
 .forgotStep {
     display: none;
 }
+*/
 .msg91-ico {
     a {
         width: 199px;
@@ -523,9 +578,11 @@ small {
 }
 
 @media only screen and (min-width: 767px) {
-    .hidden-md {
+    /* UNUSED COMPONENT CLASS: hidden-md - Auto-commented by script
+.hidden-md {
         display: none;
     }
+*/
 }
 @media only screen and (max-width: 767px) {
     .giddh-login {

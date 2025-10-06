@@ -185,9 +185,11 @@
                                 text-align: right;
                             }
 
-                            &.total-column {
+                            /*& UNUSED COMPONENT CLASS: total-column - Auto-commented by script
+.total-column {
                                 min-width: 120px;
                             }
+*/
 
                             &.product-column {
                                 @media screen and (max-width: 1280px) {
@@ -343,9 +345,11 @@
             .vouchers-actions {
                 border-top: 1px solid var(--color-silver);
 
-                .vouchers-more-option-btn {
+                /* UNUSED COMPONENT CLASS: vouchers-more-option-btn - Auto-commented by script
+.vouchers-more-option-btn {
                     min-width: unset;
                 }
+*/
             }
         }
     }

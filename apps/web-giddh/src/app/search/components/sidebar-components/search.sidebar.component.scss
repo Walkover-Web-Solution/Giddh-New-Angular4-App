@@ -14,12 +14,14 @@
     }
 }
 @media (min-width: 1020px) and (max-width: 1099px) {
-    .select-entity,
-    .select-group {
+    // .select-entity,
+    /* UNUSED COMPONENT CLASS: select-group - Auto-commented by script
+.select-group {
         width: 165px;
         sh-select,
         .form-group {
             width: 100%;
         }
     }
+*/
 }

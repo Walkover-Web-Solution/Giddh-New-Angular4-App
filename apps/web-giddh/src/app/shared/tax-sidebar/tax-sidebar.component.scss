@@ -12,11 +12,13 @@
         background: var(--color-white);
         overflow: initial;
         z-index: unset;
-        .back-to-main-slider {
+        /* UNUSED COMPONENT CLASS: back-to-main-slider - Auto-commented by script
+.back-to-main-slider {
             display: block;
             padding: 15px 15px 3px;
             margin-bottom: 0;
         }
+*/
         .help-aside-body {
             .gst-menu-items {
                 mat-list {

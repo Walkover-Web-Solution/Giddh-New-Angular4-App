@@ -2,6 +2,7 @@
     min-height: 100%;
 }
 
+/* UNUSED COMPONENT CLASS: nav - Auto-commented by script
 .inventory-control ::ng-deep.nav > li > a {
     padding: 2px 0px !important;
     margin-right: 35px !important;
@@ -13,8 +14,10 @@
     font-size: var(--font-size-16);
     height: 36px;
 }
-
-.inventory-control ::ng-deep.nav.nav-tabs {
+*/
+/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
+.inventory-control ::ng-deep.nav
+.nav-tabs {
     margin-bottom: 0;
     padding: 0 0px 0 15px !important;
     background-color: var(--color-white);
@@ -25,6 +28,7 @@
     padding: 10px 0px 0 15px !important;
     border-bottom: 1px solid var(--color-silver);
 }
+*/
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
     color: var(--color-blue-primary) !important;
@@ -44,10 +48,12 @@
     color: var(--color-blue-primary) !important;
     border-bottom: 4px solid var(--color-blue-primary) !important;
 }
+/* UNUSED COMPONENT CLASS: navbar - Auto-commented by script
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
 }
+*/
 .inventory-control ::ng-deep.nav > li > a:focus,
 .inventory-control ::ng-deep.nav > li > a:hover {
     background-color: unset !important;

@@ -17,12 +17,16 @@
         padding-right: 8px;
     }
 }
-.in-list .btn {
+.in-list /* UNUSED COMPONENT CLASS: btn - Auto-commented by script
+.btn {
     line-height: 14px !important;
 }
-.stock-items .active .btn-link .fa {
+/* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
+.stock-items .active .btn-link /* UNUSED COMPONENT CLASS: fa - Auto-commented by script
+.fa {
     color: var(--color-blue-primary);
 }
+*/
 .stock-items > li .in-list:hover {
     background-color: var(--color-border-light);
 }
