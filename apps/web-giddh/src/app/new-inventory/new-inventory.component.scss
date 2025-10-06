@@ -26,7 +26,6 @@
 .icon-search {
                 border: none;
             }
-*/
 
             .icon-search {
                 border-right: 1px solid var(--color-silver);
@@ -42,13 +41,12 @@
 .pos-abs {
                 z-index: 4;
             }
-*/
-        }
+}
 */
     }
 
-    input,
-    sh-select {
+    // input,
+    // sh-select {
         /* UNUSED COMPONENT CLASS: search-group - Auto-commented by script
 min-width: 228px;
         text-align: left;
@@ -61,15 +59,16 @@ min-width: 228px;
         }
 */
 
-        &.search-group.full-width,
-        &.giddh-datepicker/* UNUSED COMPONENT CLASS: full-width - Auto-commented by script
+        // &.search-group.full-width,
+        // &.giddh-datepicker
+        /* UNUSED COMPONENT CLASS: full-width - Auto-commented by script
 .full-width {
             min-width: 228px;
             width: 228px !important;
             padding-left: 40px !important;
         }
 */
-    }
+    // }
 
     .button-group {
         button {
@@ -110,7 +109,6 @@ padding: 0 15px 15px;
 .inventory-header-right {
         display: flex;
     }
-*/
 }
 */
 .inventory-card {

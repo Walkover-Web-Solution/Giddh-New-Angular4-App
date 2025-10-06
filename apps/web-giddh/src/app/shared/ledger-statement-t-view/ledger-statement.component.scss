@@ -33,9 +33,8 @@
             display: flex;
 
             @for $i from 0 through $columns {
-                /* UNUSED COMPONENT CLASS: top-position-fix- - Auto-commented by script
-.top-position-fix-#{$i}
-*/ {
+                .top-position-fix-#{$i}
+                {
                     top: $i + px !important;
                 }
             }
@@ -70,35 +69,35 @@
 #ledger-transaction-left-list,
 #ledger-transaction-right-list {
     .mat-grid-tile {
-        .d-flex/* UNUSED COMPONENT CLASS: align-item-center - Auto-commented by script
+        /* .d-flex UNUSED COMPONENT CLASS: align-item-center - Auto-commented by script
 .align-item-center {
             align-items: stretch !important;
         }
 */
 
-        input,
-        sh-select,
-        /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
-.form-control {
-            min-height: 49px;
-            height: 49px;
-            border: 0 !important;
-        }
-*/
+//         input,
+//         sh-select,
+//         /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
+// .form-control {
+//             min-height: 49px;
+//             height: 49px;
+//             border: 0 !important;
+//         }
+// */
     }
 
-    .ledger-row {
-        &:first-child {
-            .mat-grid-tile {
-                /* UNUSED COMPONENT CLASS: mat-grid-tile-content - Auto-commented by script
-.mat-grid-tile-content {
-                    left: 20px;
-                    position: relative;
-                }
-*/
-            }
-        }
-    }
+//     .ledger-row {
+//         &:first-child {
+//             .mat-grid-tile {
+//                 /* UNUSED COMPONENT CLASS: mat-grid-tile-content - Auto-commented by script
+// .mat-grid-tile-content {
+//                     left: 20px;
+//                     position: relative;
+//                 }
+// */
+//             }
+//         }
+//     }
 }
 
 #ledger-transaction-left-list .mat-grid-tile,
@@ -161,7 +160,7 @@ table.ledger-footer-1 td[class*="col-"] {
     background-color: var(--color-white);
 }
 
-.ledg-head table td/* UNUSED COMPONENT CLASS: pd-r25 - Auto-commented by script
+ /* .ledg-head table td UNUSED COMPONENT CLASS: pd-r25 - Auto-commented by script
 .pd-r25 {
     padding-right: 25px !important;
 }
@@ -225,7 +224,7 @@ table.ledger-footer-1 td[class*="col-"] {
     }
 
     tr {
-        td/* UNUSED COMPONENT CLASS: upper-td - Auto-commented by script
+        /* td UNUSED COMPONENT CLASS: upper-td - Auto-commented by script
 .upper-td {
             padding: 0 !important;
             border: none !important;
@@ -243,7 +242,6 @@ table.ledger-footer-1 td[class*="col-"] {
     border: 0;
 }
 /* UNUSED COMPONENT CLASS: thead-background1 - Auto-commented by script
-*/
 
 .thead-background1 th {
     border-left: 0;
@@ -505,10 +503,10 @@ sh-select:focus {
 }
 
 .ledger-book {
-
+/* UNUSED COMPONENT CLASS: statement-view - Auto-commented by script
     .left-col-new,
     .right-col-new,
-    /* UNUSED COMPONENT CLASS: statement-view - Auto-commented by script
+    
 .statement-view {
         background: var(--color-white);
         padding: 0 0px 350px;
@@ -578,7 +576,6 @@ sh-select:focus {
             background-color: var(--color-white) !important;
             padding: 0 5px !important;
         }
-*/
     }
 */
 }
@@ -592,7 +589,6 @@ sh-select:focus {
     color: var(--color-white);
 }
 /* UNUSED COMPONENT CLASS: width-100 - Auto-commented by script
-*/
 
 .left-col-new .width-100.h-table#blank-ledger-container /* UNUSED COMPONENT CLASS: no-left-border - Auto-commented by script
 .no-left-border {
@@ -766,7 +762,7 @@ sh-select:focus {
         margin-right: 8px !important;
     }
 */
-*/
+
 }
 
 .transaction-in-short {
@@ -1052,7 +1048,7 @@ sh-select:focus {
 }
 */
 
-a#reload-bank-transaction i/* UNUSED COMPONENT CLASS: icon-refresh - Auto-commented by script
+/* a#reload-bank-transaction i UNUSED COMPONENT CLASS: icon-refresh - Auto-commented by script
 .icon-refresh {
     font-size: var(--font-size-16) !important;
 }
@@ -1151,7 +1147,6 @@ input#ledger-search {
 .icon-favorite-selected {
                 color: var(--color-blue-primary);
             }
-*/
         }
 */
     }
@@ -1166,8 +1161,8 @@ input#ledger-search {
     .ledg-head .mat-grid-tile-content {
         color: var(--color-black);
     }
-
-    .ledg-head .ledger-row /* UNUSED COMPONENT CLASS: mat-input-element - Auto-commented by script
+/* UNUSED COMPONENT CLASS: mat-input-element - Auto-commented by script
+    .ledg-head .ledger-row 
 .mat-input-element {
         color: var(--color-black) !important;
     }
@@ -1526,7 +1521,7 @@ input#ledger-search {
 .mat-form-field {
                     width: 100%;
                 }
-*/
+
             }
 */
         }
@@ -1577,7 +1572,6 @@ input#ledger-search {
 .entry-date {
         margin-left: 8px;
     }
-*/
 }
 */
 

@@ -61,12 +61,6 @@
                 font-size: 12px;
                 // color: var(--color-black);
             }
-            .head-nav {
-                // background: var(--color-light-gray);
-                // border-bottom: 10px solid var(--color-silver);
-                border-bottom: 10px solid currentColor;
-                margin-bottom: 0;
-            }
         }
         h3 {
             font-weight: var(--font-weight-semibold);
@@ -113,8 +107,7 @@
                     margin-top: 7px;
                 }
             }
-            /* UNUSED COMPONENT CLASS: company-icon - Auto-commented by script
-            img
+            /* img UNUSED COMPONENT CLASS: company-icon - Auto-commented by script
 .company-icon {
                 width: 28px;
             }
@@ -126,6 +119,8 @@
             //         color: var(--color-dark-gray);
             //     }
             // }
+            /* UNUSED COMPONENT CLASS: branch-alice - Auto-commented by script
+.branch-alice {
             .branch-alice {
                 display: none !important;
             }
@@ -599,7 +594,7 @@ cdk-tree {
             height: 200px;
             overflow-y: auto;
         }
-    }
+}
 */
     .menu-block {
         padding-bottom: 20px;

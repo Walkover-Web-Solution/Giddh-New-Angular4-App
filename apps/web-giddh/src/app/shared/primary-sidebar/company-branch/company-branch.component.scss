@@ -65,7 +65,7 @@
             display: none;
         }
     }
-    tab/* UNUSED COMPONENT CLASS: icon-branch1 - Auto-commented by script
+    /* tab UNUSED COMPONENT CLASS: icon-branch1 - Auto-commented by script
 .icon-branch1 {
         margin: 0 -20px;
         &::before {
@@ -185,7 +185,7 @@
 .open {
                         background-color: var(--color-blue-light);
                         margin: 0 -20px;
-                        p/* UNUSED COMPONENT CLASS: show-more-branches - Auto-commented by script
+                        /* p UNUSED COMPONENT CLASS: show-more-branches - Auto-commented by script
 .show-more-branches {
                             padding: 6px 15px;
                         }
@@ -268,7 +268,7 @@
                 }
             }
         }
-        &/* UNUSED COMPONENT CLASS: company-branches-list - Auto-commented by script
+        /* & UNUSED COMPONENT CLASS: company-branches-list - Auto-commented by script
 .company-branches-list {
             .branch-alias,
             .branch-company-name {
@@ -337,9 +337,9 @@
             top: 5px;
             left: 100px;
         }
-*/
 }
-*/ .company-branch-opt-2 {
+*/
+.company-branch-opt-2 {
     .wrap-company-refresh {
         padding: 0 20px;
         p {
@@ -444,6 +444,7 @@
         }
     }
 }
+}
 /* UNUSED COMPONENT CLASS: digit-blue - Auto-commented by script
 .digit-blue {
     color: var(--color-blue-primary) !important;
@@ -457,7 +458,7 @@
 .icon-reload {
     color: var(--color-dark-gray);
 }
-.icon-plus,
+// .icon-plus,
 /* UNUSED COMPONENT CLASS: icon-link-arrow - Auto-commented by script
 .icon-link-arrow {
     width: 20px;
