@@ -662,16 +662,17 @@ button.btn.btn-filter {
 .arrow-icon {
     right: 14px;
     top: 20px;
-    width: 30px;
-    height: 30px;
+    width: 30px !important;
+    height: 30px !important;
     border: 2px solid var(--color-silver);
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.arrow-icon:hover {
-    color: var(--color-light-gray);
-    background-color: var(--color-blue-primary);
+
+    &:hover {
+        color: var(--color-light-gray);
+        background-color: var(--color-blue-primary);
+    }
 }
 .select-all-checkbox-wrapper {
     align-items: center;

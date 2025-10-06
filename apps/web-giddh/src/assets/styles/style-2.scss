@@ -1715,82 +1715,82 @@ aside-create-group {
 
 /* switch on off end */
 /* my css start */
-.spinner2 {
-    margin: 100px auto;
-    width: 40px;
-    height: 40px;
-    position: relative;
-}
+// .spinner2 {
+//     margin: 100px auto;
+//     width: 40px;
+//     height: 40px;
+//     position: relative;
+// }
 
-.cube1,
-.cube2 {
-    background-color: var(--color-blue-primary);
-    width: 15px;
-    height: 15px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    -webkit-animation: sk-cubemove 1.8s infinite ease-in-out;
-    animation: sk-cubemove 1.8s infinite ease-in-out;
-}
+// .cube1,
+// .cube2 {
+//     background-color: var(--color-blue-primary);
+//     width: 15px;
+//     height: 15px;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     -webkit-animation: sk-cubemove 1.8s infinite ease-in-out;
+//     animation: sk-cubemove 1.8s infinite ease-in-out;
+// }
 
-.cube2 {
-    -webkit-animation-delay: -0.9s;
-    animation-delay: -0.9s;
-}
+// .cube2 {
+//     -webkit-animation-delay: -0.9s;
+//     animation-delay: -0.9s;
+// }
 
-@-webkit-keyframes sk-cubemove {
-    25% {
-        -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    }
+// @-webkit-keyframes sk-cubemove {
+//     25% {
+//         -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+//     }
 
-    50% {
-        -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    }
+//     50% {
+//         -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+//     }
 
-    75% {
-        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    }
+//     75% {
+//         -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+//     }
 
-    100% {
-        -webkit-transform: rotate(-360deg);
-    }
-}
+//     100% {
+//         -webkit-transform: rotate(-360deg);
+//     }
+// }
 
-@keyframes sk-cubemove {
-    25% {
-        transform: translateX(42px) rotate(-90deg) scale(0.5);
-        -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    }
+// @keyframes sk-cubemove {
+//     25% {
+//         transform: translateX(42px) rotate(-90deg) scale(0.5);
+//         -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+//     }
 
-    50% {
-        transform: translateX(42px) translateY(42px) rotate(-179deg);
-        -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    }
+//     50% {
+//         transform: translateX(42px) translateY(42px) rotate(-179deg);
+//         -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+//     }
 
-    50.1% {
-        transform: translateX(42px) translateY(42px) rotate(-180deg);
-        -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    }
+//     50.1% {
+//         transform: translateX(42px) translateY(42px) rotate(-180deg);
+//         -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+//     }
 
-    75% {
-        transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-        -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    }
+//     75% {
+//         transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+//         -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+//     }
 
-    100% {
-        transform: rotate(-360deg);
-        -webkit-transform: rotate(-360deg);
-    }
-}
-
-.loader-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 125px;
-    margin-bottom: 105px;
-}
+//     100% {
+//         transform: rotate(-360deg);
+//         -webkit-transform: rotate(-360deg);
+//     }
+// }
+// This is move in component css
+// .loader-main {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     margin-top: 125px;
+//     margin-bottom: 105px;
+// }
 
 #content-wrapper {
     .account-wrapper {
