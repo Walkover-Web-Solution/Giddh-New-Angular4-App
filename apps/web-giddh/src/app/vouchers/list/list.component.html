@@ -4689,7 +4689,7 @@
                                                     <button
                                                         mat-stroked-button
                                                         *ngIf="voucherApiVersion === 2"
-                                                        class="mat-icon-md-btn"
+                                                        class="btn-stroked-icon"
                                                         [ngClass]="{
                                                             'opacity-5':
                                                                 !settingForm.get('invoiceSettings.email').value ||
@@ -5531,7 +5531,7 @@
                                                 <button
                                                     mat-stroked-button
                                                     *ngIf="voucherApiVersion === 2"
-                                                    class="mat-icon-md-btn"
+                                                    class="btn-stroked-icon"
                                                     [ngClass]="{
                                                         'opacity-5':
                                                             !settingForm.get('purchaseBillSettings.email').value ||
@@ -5931,7 +5931,7 @@
                                     <div class="d-flex column-gap1 justify-content-center">
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn"
+                                            class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
                                             (click)="previewTemplate(template)"
@@ -5940,7 +5940,7 @@
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn"
+                                            class="btn-stroked-icon"
                                             [matTooltip]="localeData?.edit_template"
                                             matTooltipPosition="above"
                                             (click)="templateAction(template, 'edit')"
@@ -5949,7 +5949,7 @@
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn cursor-pointer"
+                                            class="btn-stroked-icon cursor-pointer"
                                             [disabled]="template.isDefault"
                                             [matTooltip]="localeData?.delete"
                                             matTooltipPosition="above"
@@ -6008,7 +6008,7 @@
                                     <div class="d-flex column-gap1 justify-content-center">
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn"
+                                            class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
                                             (click)="previewTemplate(template)"
@@ -6017,7 +6017,7 @@
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn"
+                                            class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.edit_template }}"
                                             matTooltipPosition="above"
                                             (click)="templateAction(template, 'edit')"
@@ -6027,7 +6027,7 @@
                                         <button
                                             mat-stroked-button
                                             [disabled]="template.isDefaultForVoucher"
-                                            class="mat-icon-md-btn cursor-pointer"
+                                            class="btn-stroked-icon cursor-pointer"
                                             matTooltip="{{ localeData?.delete }}"
                                             *ngIf="voucherApiVersion === 2"
                                             matTooltipPosition="above"

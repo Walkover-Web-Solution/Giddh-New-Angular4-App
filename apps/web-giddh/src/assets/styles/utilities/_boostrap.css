@@ -3,13 +3,13 @@
      -ms-overflow-style: scrollbar;
  }
 
- *,
+ /* *,
  *::before,
  *::after {
     margin: 0;
     padding: 0;
     box-sizing: inherit;
- }
+ } */
 
  .container,
  .container-fluid,

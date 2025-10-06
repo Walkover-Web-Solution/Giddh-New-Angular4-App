@@ -1673,23 +1673,19 @@ aside-create-group {
                 // Units are not displaying after creation once the scroll comes on the page
                 &:first-child {
                     mat-list {
-                        /* UNUSED GLOBAL CLASS: cdk-virtual-scroll-viewport - Auto-commented by script
                         .cdk-virtual-scroll-viewport {
                             height: 100% !important;
                             min-height: calc(100vh - 160px);
                         }
-                        */
                     }
                 }
 
                 &:nth-child(2) {
                     mat-list {
-                        /* UNUSED GLOBAL CLASS: cdk-virtual-scroll-viewport - Auto-commented by script
                         .cdk-virtual-scroll-viewport {
                             height: 100% !important;
                             min-height: calc(100vh - 205px);
                         }
-                        */
                     }
                 }
             }
@@ -2911,9 +2907,9 @@ modal-container.modal {
     border-radius: 2px;
 }
 
-.btn-filter .icon-options {
-    vertical-align: initial;
-}
+// .btn-filter .icon-options {
+//     vertical-align: initial;
+// }
 
 .dot-icon {
     display: inline-block;
@@ -3021,8 +3017,8 @@ modal-container.modal {
 .plan-list .close:focus.active,
 .plan-list .close:focus:active,
 */
-.open > .dropdown-toggle.plan-list .close:focus,
 /* UNUSED GLOBAL CLASS: plan-list - Auto-commented by script
+.open > .dropdown-toggle.plan-list .close:focus,
 .plan-list .close:focus:active:focus,
 .plan-list .close:focus:active:hover,
 */
@@ -4055,8 +4051,8 @@ input[type="checkbox"]:checked:after {
 }
 */
 
+/* UNUSED GLOBAL CLzASS: checkbox-inline - Auto-commented by script
 .checkbox input[type="checkbox"],
-/* UNUSED GLOBAL CLASS: checkbox-inline - Auto-commented by script
 .checkbox-inline input[type="checkbox"],
 .radio input[type="radio"],
 */
@@ -4690,8 +4686,8 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 */
 
-.modal-body,
 /* UNUSED GLOBAL CLASS: modal-footer - Auto-commented by script
+.modal-body,
 .modal-footer {
     background-color: var(--color-white) !important;
     width: 100%;
@@ -4924,7 +4920,6 @@ select.form-control {
 }
 
 .grp-list,
-/* UNUSED GLOBAL CLASS: new-btn-u - Auto-commented by script
 .new-btn-u {
     li {
         list-style: none;
@@ -4941,7 +4936,6 @@ select.form-control {
         }
     }
 }
-*/
 
 .grp-col {
     float: left;
@@ -5395,9 +5389,9 @@ label {
     margin-top: 7px;
 }
 
-.clearfix {
-    clear: both;
-}
+// .clearfix {
+//     clear: both;
+// }
 
 .th-caption {
     display: table-caption;
@@ -5599,16 +5593,16 @@ label {
     background-color: var(--color-light-gray);
 }
 
-.d-inline-block {
-    display: inline-block !important;
-}
-.d-inline-grid {
-    display: inline-grid !important;
-}
+// .d-inline-block {
+//     display: inline-block !important;
+// }
+// .d-inline-grid {
+//     display: inline-grid !important;
+// }
 
-.d-grid {
-    display: grid !important;
-}
+// .d-grid {
+//     display: grid !important;
+// }
 /* UNUSED GLOBAL CLASS: grid-column-2 - Auto-commented by script
 .grid-column-2 {
     grid-template-columns: repeat(2, 1fr);
@@ -5999,9 +5993,9 @@ label {
     left: 0;
 }
 
-.d-block {
-    display: block;
-}
+// .d-block {
+//     display: block;
+// }
 
 .sticky-footer {
     width: 100%;
@@ -7415,9 +7409,9 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     vertical-align: bottom !important;
 }
 
-.icon-options {
-    vertical-align: -webkit-baseline-middle;
-}
+// .icon-options {
+//     vertical-align: -webkit-baseline-middle;
+// }
 
 /* UNUSED GLOBAL CLASS: max900 - Auto-commented by script
 .max900 {
@@ -7636,16 +7630,16 @@ GST filing
     text-align: right;
 }
 
-.menu_open {
-    padding-left: 240px;
-}
+// .menu_open {
+//     padding-left: 240px;
+// }
 
 perfect-scrollbar > .ps > .ps-overlay {
     opacity: 0;
 }
 
-.cmp:hover,
 /* UNUSED GLOBAL CLASS: user-dropdown-header - Auto-commented by script
+.cmp:hover,
 .user-dropdown-header > li a:hover .user-name-wrap small {
     color: var(--color-dark-gray);
 }
@@ -8081,8 +8075,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     max-width: 100%;
 }
 
-.list-header .list-title > a,
 /* UNUSED GLOBAL CLASS: list-notes - Auto-commented by script
+.list-header .list-title > a,
 .list-notes,
 .list-primary .name,
 */
@@ -8575,7 +8569,6 @@ footer#footer.absolute-footer {
 .master-page {
     master {
         .grp-list {
-            /* UNUSED GLOBAL CLASS: cdk-virtual-scroll-viewport - Auto-commented by script
             .cdk-virtual-scroll-viewport {
                 .cdk-virtual-scroll-content-wrapper {
                     .sidebarTooltip {
@@ -8585,7 +8578,6 @@ footer#footer.absolute-footer {
                     }
                 }
             }
-            */
         }
     }
 
@@ -9481,8 +9473,8 @@ button.ladda-button .ladda-label {
     }
 }
 
-#top0,
 /* UNUSED GLOBAL CLASS: no-top - Auto-commented by script
+#top0,
 .no-top {
     top: 0 !important;
 }
@@ -11320,8 +11312,8 @@ body {
     padding-left: 0;
 }
 
-.share-grp.account-share-modal,
 /* UNUSED GLOBAL CLASS: group-share-modal - Auto-commented by script
+.share-grp.account-share-modal,
 .group-share-modal {
     .add-mailer {
         .input-group {
@@ -12045,11 +12037,9 @@ inventory-master {
     }
 
     .users-last-list {
-        /* UNUSED GLOBAL CLASS: cdk-virtual-scroll-content-wrapper - Auto-commented by script
         .cdk-virtual-scroll-content-wrapper {
             position: relative;
         }
-        */
     }
 
     /* UNUSED GLOBAL CLASS: all-features-modal - Auto-commented by script
@@ -12655,20 +12645,20 @@ body.prevent-body-scroll {
     }
 }
 
-*::-webkit-scrollbar {
-    width: 6px;
-    height: 5px;
-}
+// *::-webkit-scrollbar {
+//     width: 6px;
+//     height: 5px;
+// }
 
-*::-webkit-scrollbar-track {
-    background: var(--color-scrollbar-primary-track-background);
-}
+// *::-webkit-scrollbar-track {
+//     background: var(--color-white);
+// }
 
-*::-webkit-scrollbar-thumb {
-    background: var(--color-white);
-    border-radius: 5px;
-    min-height: 60px;
-}
+// *::-webkit-scrollbar-thumb {
+//     // background: var(--fake-color);
+//     border-radius: 5px;
+//     min-height: 60px;
+// }
 
 .opacity-5 {
     opacity: 0.5;
@@ -12948,11 +12938,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
     */
 
-    /* UNUSED GLOBAL CLASS: mat-mdc-tab-header - Auto-commented by script
+    /* NEED TO CORRECT THIS APPROCH */
     .mat-mdc-tab-header {
         display: none;
     }
-    */
 }
 
 /* UNUSED GLOBAL CLASS: main-content-subscription - Auto-commented by script
@@ -13980,12 +13969,10 @@ voucher-component {
 }
 */
 
-/* UNUSED GLOBAL CLASS: cdk-virtual-scroll-content-wrapper - Auto-commented by script
 .cdk-virtual-scroll-content-wrapper {
     width: 100%;
     height: auto;
 }
-*/
 
 .icon-font-14 {
     font-size: 14px;
@@ -14053,24 +14040,24 @@ voucher-component {
     color: var(--color-black);
 }
 
-.dropdown-bg {
-    background-color: var(--color-white);
-    width: 20px;
-    height: 20px;
-    z-index: 8;
-    right: 0;
-    top: 15px;
+// .dropdown-bg {
+//     background-color: var(--color-white);
+//     width: 20px;
+//     height: 20px;
+//     z-index: 8;
+//     right: 0;
+//     top: 15px;
 
-    .arrow-dropdown {
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid var(--color-black) !important;
-        top: 8px;
-        right: 4px;
-    }
-}
+//     .arrow-dropdown {
+//         width: 0;
+//         height: 0;
+//         border-left: 5px solid transparent;
+//         border-right: 5px solid transparent;
+//         border-top: 5px solid var(--color-black) !important;
+//         top: 8px;
+//         right: 4px;
+//     }
+// }
 
 .readonly-field {
     .dropdown-bg {
@@ -14083,9 +14070,9 @@ voucher-component {
     }
     */
 
-    .dropdown-bg {
-        background-color: var(--color-transparent) !important;
-    }
+    // .dropdown-bg {
+    //     background-color: var(--color-transparent) !important;
+    // }
 
     /* UNUSED GLOBAL CLASS: mdc-text-field__input - Auto-commented by script
     .mdc-text-field__input {

@@ -28,7 +28,7 @@
     <div
         (mouseover)="expandSidebar()"
         (mouseout)="collapseSidebar(false, true)"
-        class="nav-left-bar"
+        class="nav-left-bar mat-app-background"
         [ngClass]="{
             'open': isSidebarExpanded,
             'unvisible': companyList?.length === 0 && !isSubscriptionModule,

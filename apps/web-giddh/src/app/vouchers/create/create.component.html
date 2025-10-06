@@ -1923,9 +1923,9 @@
                                         <button mat-raised-button color="primary" *ngIf="invoiceType.isPaymentInvoice"
                                             (click)="generateVoucher()">{{ localeData?.create_payment }}</button>
                                         <button mat-stroked-button [matMenuTriggerFor]="moreOptions"
-                                            class="vouchers-more-option-btn"
+                                            class="min-width-unset"
                                             *ngIf="invoiceType.isSalesInvoice || invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice"><i
-                                                class="caret"></i></button>
+                                                class="caret rotate-180"></i></button>
                                         <mat-menu #moreOptions="matMenu">
                                             <button mat-menu-item (click)="createSendVoucher()">{{
                                                 localeData?.create_send

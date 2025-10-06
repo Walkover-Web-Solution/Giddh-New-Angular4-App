@@ -786,6 +786,95 @@
 }
 
 /**
+ * TRANSFORM UTILITIES
+ * ===================
+ * Cross-browser transform utilities with mixins and utility classes
+ */
+
+/**
+ * Transform mixin with cross-browser support
+ * 
+ * @param {String} $transform - The transform value (rotate, scale, translate, etc.)
+ */
+@mixin transform($transform) {
+    @if $transform == unset {
+        // Cross-browser support for unset
+        -webkit-transform: -webkit-initial !important;
+        -moz-transform: -moz-initial !important;
+        -ms-transform: initial !important;
+        transform: unset !important;
+    } @else {
+        -webkit-transform: #{$transform} !important;
+        -moz-transform: #{$transform} !important;
+        -ms-transform: #{$transform} !important;
+        transform: #{$transform} !important;
+    }
+}
+
+/**
+ * Generate transform rotation utility classes
+ * Creates classes like .rotate-90, .rotate-180, etc.
+ */
+@mixin transform-rotation-utilities() {
+    $rotation-values: (
+        '0': 0deg,
+        '45': 45deg,
+        '90': 90deg,
+        '135': 135deg,
+        '180': 180deg,
+        '225': 225deg,
+        '270': 270deg,
+        '315': 315deg,
+        'unset': unset
+    );
+
+    @each $name, $value in $rotation-values {
+        .rotate-#{$name} {
+            @include transform(rotate(#{$value}));
+        }
+    }
+    
+    // Negative rotations
+    $negative-rotation-values: (
+        '45': -45deg,
+        '90': -90deg,
+        '135': -135deg,
+        '180': -180deg
+    );
+
+    @each $name, $value in $negative-rotation-values {
+        .-rotate-#{$name} {
+            @include transform(rotate(#{$value}));
+        }
+    }
+}
+
+/**
+ * Generate transform scale utility classes
+ * Creates classes like .scale-50, .scale-100, etc.
+ */
+@mixin transform-scale-utilities() {
+    $scale-values: (
+        '0': 0,
+        '25': 0.25,
+        '50': 0.5,
+        '75': 0.75,
+        '100': 1,
+        '110': 1.1,
+        '125': 1.25,
+        '150': 1.5,
+        '200': 2,
+        'unset': unset
+    );
+
+    @each $name, $value in $scale-values {
+        .scale-#{$name} {
+            @include transform(scale(#{$value}));
+        }
+    }
+}
+
+/**
  * Typography variables and utilities mixin
  * Generates CSS custom properties in :root and corresponding utility classes
  * @param {String} $property - The CSS property name (font-weight, font-size, line-height)

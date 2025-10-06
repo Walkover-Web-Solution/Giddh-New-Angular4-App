@@ -31,7 +31,7 @@
                             display: flex;
                             align-items: flex-start;
                             padding: 7px 20px;
-                            margin-bottom: 4px;
+                            // margin-bottom: 4px;
                             span {
                                 i {
                                     color: var(--color-dark-gray);
@@ -41,6 +41,7 @@
                             }
                             &.active {
                                 background-color: var(--color-blue-primary) !important;
+                                min-height: 34px;
                                 span,
                                 span i {
                                     color: var(--color-white) !important;

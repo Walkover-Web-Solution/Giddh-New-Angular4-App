@@ -6,7 +6,7 @@
 *::after {
    margin: 0;
    padding: 0;
-   box-sizing: inherit;
+   box-sizing: border-box;
 }
 
 *:not([class*="icon-"]), *:not([class*="icon-ledger-"]) {
@@ -730,8 +730,8 @@ textarea {
     height: 18px;
     width: 18px;
 }
-.search-loading .spinner,
 /* UNUSED GLOBAL CLASS: search-warning - Auto-commented by script
+.search-loading .spinner,
 .search-warning .spinner {
     display: inline-block;
     vertical-align: top;
@@ -1137,17 +1137,16 @@ textarea {
 .no-data {
     text-align: center;
     margin-top: 150px;
-    font-size: var(--font-size-32);
-    color: var(--color-black);
-
+    
     & > img {
         max-height: 200px;
     }
-
-    p {
-        font-size: var(--font-size-15);
+    h2,h3 {
+        font-size: var(--font-size-32);
+        font-weight: var(--font-weight-regular);
+    }
+    h3 {
         color: var(--color-dark-gray);
-        margin-top: 20px;
     }
 }
 /* reports */

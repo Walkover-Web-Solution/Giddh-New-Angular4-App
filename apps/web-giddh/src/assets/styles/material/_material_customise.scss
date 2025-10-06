@@ -1,0 +1,5 @@
+/** Used to make stroked button which holds only icon */
+.btn-stroked-icon {
+    @extend .min-width-unset;
+    padding-inline: 10px;
+}

@@ -27,11 +27,13 @@ a/* UNUSED COMPONENT CLASS: connect-bank - Auto-commented by script
 }
 */
 
-.bank-details-block {
-    cdk-virtual-scroll-viewport {
-        height: 334px;
-    }
-}
+// .bank-details-block { =====  WRITE THIS CODE INLINE STYLE
+//     cdk-virtual-scroll-viewport {
+//     .virtual-group-list {
+//         height: 334px;
+//     }
+//     }
+// }
 
 .add-bank-details {
     display: flex;

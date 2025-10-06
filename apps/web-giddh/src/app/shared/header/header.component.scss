@@ -61,9 +61,9 @@
 }
 */
 
-.d-inline-block {
-    display: inline-block !important;
-}
+// .d-inline-block {
+//     display: inline-block !important;
+// }
 
 .notification {
     padding: 0 !important;
@@ -77,14 +77,14 @@
 .universal-date {
     li {
         display: inline-block;
-        position: relative;
+        // position: relative;
         border: 1px solid var(--color-white);
         border-radius: 20px;
         i {
             vertical-align: bottom;
             display: inline-block;
-            position: relative;
-            left: 16px;
+            // position: relative;
+            // left: 16px;
             padding: 0 20px;
             color: var(--color-white);
             font-size: 18px;
