@@ -126,6 +126,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public updateAccountIsSuccess$: Observable<boolean> = this.componentStore.updateAccountIsSuccess$;
     /** Observable indicating if an account delete was successful */
     public isDeleteAccSuccess$: Observable<any> = this.componentStore.isDeleteAccSuccess$;
+    /** Observable indicating if an account delete was successful */
+    public lastDeletedAccountUniqueName$: Observable<any> = this.componentStore.lastDeletedAccountUniqueName$;
     /** Observable for the currently active account */
     public activeAccount$: Observable<any> = this.componentStore.activeAccount$;
     /** Observable for the unique name of the currently active group */
@@ -237,7 +239,27 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             this.isMasterOpen = isAddAndManageOpenedFromOutside;
             if (!isAddAndManageOpenedFromOutside) {
                 this.store.dispatch(this.accountsAction.resetActiveAccount());
-                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+                this.lastDeletedAccountUniqueName$?.pipe(take(1)).subscribe(response => {
+                    if (response && this.queryParams.accountUniqueName === response) {
+                        this.isRefreshingAfterDelete = true;
+                        this.contactList = [];
+                        this.advanceFilters.page = 1;
+                        this.advanceFilters.q = '';
+                        this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                        this.router.navigate([], {
+                            relativeTo: this.activatedRoute,
+                            queryParams: { accountUniqueName: this.queryParams.accountUniqueName },
+                            queryParamsHandling: 'merge', // keeps other params
+                            replaceUrl: true // optionally replace history entry
+                        }).then(() => {
+                            setTimeout(() => {
+                                this.isRefreshingAfterDelete = false;
+                            }, 100);
+                        });
+                    } else {
+                        this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+                    }
+                });
             }
         });
 
@@ -323,7 +345,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.isDeleteAccSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && !this.isMasterOpen) {
                 this.isRefreshingAfterDelete = true;
                 this.contactList = [];
                 this.advanceFilters.page = 1;
