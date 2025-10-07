@@ -112,7 +112,7 @@ padding: 0 15px 15px;
 }
 */
 .inventory-card {
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 button#more-btn-inventory {
     min-width: 90px;

@@ -17,7 +17,7 @@
 .export-card {
     padding: 40px 67px;
     margin: 0 15px;
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
     border: 1px solid var(--color-silver);
     background: var(--color-light-gray);
     width: 50%;

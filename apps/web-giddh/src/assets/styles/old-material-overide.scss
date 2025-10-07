@@ -2,17 +2,17 @@
 mat-form-field {
     &.mat-mdc-form-field {
         width: 100%;
-        &:not(.initial-height) {
+        &:not(.initial-height, .mat-mdc-paginator-page-size-select) {
             --mat-form-field-container-height: var(--custom-mat-form-field-height);
             .mdc-text-field--outlined {
                 height: var(--mat-form-field-container-height);
             }
 
-            .mdc-text-field--outlined {
-                .mat-mdc-form-field-infix {
-                    --mat-form-field-container-vertical-padding: 10px;
-                }
+        .mdc-text-field--outlined {
+            .mat-mdc-form-field-infix {
+                --mat-form-field-container-vertical-padding: 10px;
             }
+        }
         }
     }
 }

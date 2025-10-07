@@ -74,7 +74,7 @@ span.icon-collapse-icon {
     cursor: pointer;
 }
 span.icon-collapse-icon:hover {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 
 /* CSS FOR LINE CHART */
@@ -82,7 +82,7 @@ span.icon-collapse-icon:hover {
 /* p UNUSED COMPONENT CLASS: bankName - Auto-commented by script
 .bankName {
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     margin-bottom: 5px;
 }
 */
@@ -110,7 +110,7 @@ span.icon-collapse-icon:hover {
 .total-sales-header {
     background-color: var(--color-white);
     border: 1px solid var(--color-silver);
-    border-radius: 4px;
+    border-radius: var(--mat-border-radius-4);
     padding: 15px 15px 20px;
 }
 .dashboard-container label {
@@ -120,7 +120,7 @@ span.icon-collapse-icon:hover {
 }
 .date-range-block /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
 .form-control {
-    border: 1px solid var(--color-blue-primary);
+    border: 1px solid var(--mat-primary-color);
 }
 */
 .date-range-input {
@@ -142,7 +142,7 @@ span.icon-collapse-icon:hover {
     color: var(--color-black);
 }
 .page-title h1 {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     font-size: var(--font-size-24);
     text-align: center;
     font-weight: 600;
@@ -166,7 +166,7 @@ span.icon-collapse-icon:hover {
     display: inline;
     text-align: right;
     font-size: 24px;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .date-range-input.disabled {
     opacity: 0.5;
@@ -180,7 +180,7 @@ span.icon-collapse-icon:hover {
     font-size: var(--font-size-16);
 }
 .active-date {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -190,11 +190,11 @@ span.icon-collapse-icon:hover {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     margin-right: 5px;
 }
 .in-active-date {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -204,13 +204,13 @@ span.icon-collapse-icon:hover {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     margin-right: 5px;
 }
 
 .panel {
     padding: 15px;
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
     border: 1px solid var(--color-silver);
 
     position: relative;
@@ -224,11 +224,11 @@ span.icon-collapse-icon:hover {
 }
 .single-sale-data h3 {
     font-size: var(--font-size-24);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     margin-top: 6px;
 }
 span.date-wise-sale {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     font-size: var(--font-size-16);
 }
 
@@ -284,7 +284,7 @@ input:read-only:focus {
 */
 /* UNUSED COMPONENT CLASS: mat-calendar-header - Auto-commented by script
 .mat-calendar-header {
-    background-color: var(--color-blue-primary) !important;
+    background-color: var(--mat-primary-color) !important;
 }
 */
 /* UNUSED COMPONENT CLASS: mat-form-field-type-mat-date-range-input - Auto-commented by script

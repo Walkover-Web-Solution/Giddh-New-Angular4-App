@@ -37,7 +37,7 @@
 .delete-icon {
         font-size: var(--font-size-15);
         line-height: 1.5;
-        border-radius: 3px;
+        border-radius: var(--mat-border-radius-4);
         background: var(--color-border-light);
         border: 1px solid var(--color-silver);
         width: 30px;

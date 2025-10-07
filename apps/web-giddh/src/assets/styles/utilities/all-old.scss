@@ -26,7 +26,7 @@
 }
 .bdr {
     border: 1px solid var(--color-silver) !important;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 .border {
     border-color: var(--color-silver) !important;
@@ -75,10 +75,10 @@
 
 // Colors
 .text-primary {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 .color-primary {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 .primary-color {
     color: var(--dark-blue01) !important;
@@ -88,17 +88,17 @@
     color: var(--dark-blue01) !important;
 }
 .text-blue {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .text-gray {
     color: var(--color-medium-gray) !important;
 }
 
 .text-purple {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .blue {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 
 .text-light {
@@ -141,7 +141,7 @@ span.red-text {
 }
 // color link light-dark theme
 .color-link {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 .black-color {
     color: var(--color-black);
@@ -174,7 +174,7 @@ span.red-text {
     background: var(--color-deep-orange);
 }
 .dot-primary {
-    background: var(--color-blue-primary);
+    background: var(--mat-primary-color);
 }
 
 .dot-success {
@@ -195,7 +195,7 @@ span.red-text {
     background: var(--color-white) !important;
 }
 .custom-keyboard-dropdown-list-focus {
-    background-color: var(--color-blue-light);
+    background-color: var(--mat-primary-color-light);
 }
 
 // Padding

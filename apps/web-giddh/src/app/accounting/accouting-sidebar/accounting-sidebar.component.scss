@@ -29,7 +29,7 @@
 }
 
 .menu-list li a:hover {
-    background: var(--color-blue-light);
+    background: var(--mat-primary-color-light);
 }
 
 .menu-list li a/* UNUSED COMPONENT CLASS: isHidden - Auto-commented by script
@@ -39,12 +39,12 @@
 */
 
 // .active-child {
-//     background: var(--color-blue-light);
+//     background: var(--mat-primary-color-light);
 //     padding-left: 20px;
 // }
 
 .active-parent {
-    background: var(--color-blue-light);
+    background: var(--mat-primary-color-light);
 }
 
 // .active-child>span {

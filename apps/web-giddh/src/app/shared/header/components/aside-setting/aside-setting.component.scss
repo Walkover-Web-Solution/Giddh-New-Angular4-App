@@ -49,7 +49,7 @@
     top: var(--top-distance);
     z-index: 5;
     border: 0;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
     cursor: pointer;
 }
 
@@ -134,7 +134,7 @@
                 width: 15px;
             }
             a {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
                 span {
                     display: flex;
                     align-items: center;
@@ -165,7 +165,7 @@
     .back-to-main-slider {
         /* UNUSED COMPONENT CLASS: ng-star-inserted - Auto-commented by script
 .ng-star-inserted {
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
         }
 */
     }

@@ -41,10 +41,12 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
          --mat-dragged-opacity: 0.16;
      
          /* Border radius */
+         /*  THIS CODE IS COMMENT FROM HERE AND MOVE TO @include border-radius-utilities();
          --mat-border-radius-4: 4px;
          --mat-border-radius-8: 8px;
          --mat-border-radius-12: 12px;
          --mat-border-radius-16: 16px;
+         */
     }
 
 

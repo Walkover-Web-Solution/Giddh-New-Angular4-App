@@ -91,15 +91,15 @@
                         left: 220px;
                     }
                     .sub-option {
-                        cursor: pointer;
-                        color: var(--color-black);
-                        letter-spacing: 0.14px;
-                        height: 27px;
-                        align-items: center;
-                        font: normal normal 600 var(--font-size-15) / 30px var(--font-family);
+                        // cursor: pointer;
+                        // color: var(--color-black);
+                        // letter-spacing: 0.14px;
+                        // height: 27px;
+                        // align-items: center;
+                        // font: normal normal 600 var(--font-size-15) / 30px var(--font-family);
                         &:hover {
                             color: var(--color-white);
-                            background-color: var(--color-blue-primary);
+                            background-color: var(--mat-primary-color);
                             .sidebar-menu-icons {
                                 filter: var(--filter-image-color-white);
                             }
@@ -111,16 +111,13 @@
                             width: 100%;
                             line-height: 15px;
                             &:hover {
-                                color: var(--color-blue-primary);
+                                color: var(--mat-primary-color);
                                 background-color: var(--color-white);
                                 .sidebar-menu-icons {
                                     filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
                                 }
                             }
                         }
-                    }
-                    .hide-node {
-                        display: none;
                     }
                     .list {
                         width: 260px;
@@ -136,15 +133,15 @@
                             min-height: 37px;
                         }
                         &:hover {
-                            color: var(--color-blue-primary);
+                            color: var(--mat-primary-color);
                             .sidebar-list-icon {
-                                color: var(--color-blue-primary);
+                                color: var(--mat-primary-color);
                             }
                             .sidebar-menu-icons {
                                 filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
                             }
                             .sidebar-icon {
-                                color: var(--color-blue-primary);
+                                color: var(--mat-primary-color);
                             }
                         }
                     }
@@ -195,7 +192,7 @@
             }
 
             &:hover {
-                background-color: var(--color-blue-light);
+                background-color: var(--mat-primary-color-light);
             }
         }
     }
@@ -215,24 +212,24 @@
 
             &:hover {
                 background-color: var(--color-border-light);
-                color: var(--color-blue-primary) !important;
+                color: var(--mat-primary-color) !important;
             }
 
             &.active {
                 background-color: var(--color-border-light);
-                color: var(--color-blue-primary) !important;
+                color: var(--mat-primary-color) !important;
             }
         }
     }
 }
 .active {
-    background-color: var(--color-blue-primary) !important;
+    background-color: var(--mat-primary-color) !important;
     color: var(--color-white) !important;
     .sidebar-menu-icons {
         filter: var(--filter-image-color-white) !important;
     }
     &:hover {
-        background-color: var(--color-blue-primary) !important;
+        background-color: var(--mat-primary-color) !important;
         color: var(--color-white) !important;
     }
 }

@@ -271,7 +271,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .ledger-head-top i.icon-search.position-absolute {
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     color: var(--color-white);
     width: 32px;
     height: 36px;
@@ -281,7 +281,7 @@ table.ledger-footer-1 td[class*="col-"] {
     justify-content: center;
     align-items: center;
     right: 0 !important;
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
 }
 
 .ledger-stat {
@@ -322,7 +322,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .ledger-head .mat-grid-list .mat-grid-tile {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     padding-top: 5px !important;
     padding-bottom: 10px !important;
     border-right: none;
@@ -538,7 +538,7 @@ sh-select:focus {
     justify-content: center;
     border-top-width: 1px;
     background-color: var(--color-white);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 */
 
@@ -584,7 +584,7 @@ sh-select:focus {
 .icon-search {
     right: 0;
     top: 0;
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     padding: 6px 9px;
     color: var(--color-white);
 }
@@ -644,7 +644,7 @@ sh-select:focus {
 }
 
 .digit-blue {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 
 .grey-text-color {
@@ -668,16 +668,16 @@ sh-select:focus {
 }
 
 .stat-block:nth-child(2) {
-    border-bottom: 8px solid var(--color-blue-primary);
+    border-bottom: 8px solid var(--mat-primary-color);
 }
 
 .stat-block:nth-child(3) {
-    border-bottom: 8px solid var(--color-blue-primary);
+    border-bottom: 8px solid var(--mat-primary-color);
 }
 
 .stat-block:last-child {
     border-right: none;
-    border-bottom: 8px solid var(--color-blue-light);
+    border-bottom: 8px solid var(--mat-primary-color-light);
 }
 
 /* UNUSED COMPONENT CLASS: advance-search-filter - Auto-commented by script
@@ -727,7 +727,7 @@ sh-select:focus {
 
 /* UNUSED COMPONENT CLASS: clear-filter-btn - Auto-commented by script
 .clear-filter-btn {
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     border: 1px solid var(--color-silver);
     color: var(--color-dark-gray);
     font-size: var(--font-size-15);
@@ -803,7 +803,7 @@ sh-select:focus {
     border: 1px solid var(--color-silver) !important;
 
     &:focus {
-        border-color: var(--color-blue-primary);
+        border-color: var(--mat-primary-color);
     }
 }
 
@@ -811,7 +811,7 @@ sh-select:focus {
     /* UNUSED COMPONENT CLASS: date-range-picker - Auto-commented by script
 .date-range-picker {
         border: 1px solid var(--color-silver);
-        border-radius: 20px;
+        border-radius: var(--mat-border-radius-16);
         width: 203px !important;
     }
 */
@@ -1085,7 +1085,7 @@ input#ledger-search {
 */
 
 .blue-heading {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 
 /*responsive*/
@@ -1140,12 +1140,12 @@ input#ledger-search {
             display: flex;
 
             &:hover:after {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
             }
 
             /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
 .icon-favorite-selected {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
             }
         }
 */
@@ -1426,7 +1426,7 @@ input#ledger-search {
 
             input[type="search"] {
                 min-width: 150px;
-                border-radius: 20px !important;
+                border-radius: var(--mat-border-radius-16) !important;
             }
 
             .clear-filter-btn {
@@ -1441,7 +1441,7 @@ input#ledger-search {
                 i {
                     left: -3px;
                     top: 0;
-                    color: var(--color-blue-primary);
+                    color: var(--mat-primary-color);
                 }
             }
         }
@@ -1485,7 +1485,7 @@ input#ledger-search {
             left: auto !important;
             right: 15px !important;
             top: 30px !important;
-            border-radius: 10px;
+            border-radius: var(--mat-border-radius-8);
             border: none;
             padding: 15px 0;
 
@@ -1579,7 +1579,7 @@ input#ledger-search {
 .bank-menu {
     padding: 3px !important;
     border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     width: 36px;
     height: 36px;
 

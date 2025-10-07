@@ -93,7 +93,7 @@
     .vouchers-add-new {
         position: sticky;
         bottom: 0;
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         z-index: 1;
         background: var(--color-white) !important;
         min-height: 0 !important;
@@ -149,7 +149,7 @@
         z-index: 100 !important;
         font-size: inherit !important;
         box-shadow: none !important;
-        border-radius: 0 !important;
+        border-radius: var(--mat-border-radius-0) !important;
     }
 
     .mat-select-search-clear {
@@ -157,7 +157,7 @@
     }
 
     .mat-pseudo-checkbox-checked {
-        background: var(--color-blue-primary) !important;
+        background: var(--mat-primary-color) !important;
     }
 
     .po-option-value {

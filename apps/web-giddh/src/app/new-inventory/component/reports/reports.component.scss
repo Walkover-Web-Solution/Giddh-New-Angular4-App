@@ -60,7 +60,7 @@ td {
 /* UNUSED COMPONENT CLASS: stock-mat-salect - Auto-commented by script
 .stock-mat-salect {
     border: 1px solid var(--color-silver);
-    border-radius: 5px !important;
+    border-radius: var(--mat-border-radius-4) !important;
     padding: 8px;
     font-size: var(--font-size-15);
     min-width: 250px;
@@ -74,7 +74,7 @@ td {
         height: 42px;
         width: 42px;
         border: 1px solid var(--color-medium-gray);
-        border-radius: 20px;
+        border-radius: var(--mat-border-radius-16);
         box-shadow: none;
         background: var(--color-white);
     }
@@ -104,7 +104,7 @@ td {
             color: var(--color-black);
             border: none;
             background-color: var(--color-light-gray);
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
         }
     }
 */
@@ -142,7 +142,7 @@ font-weight: 400 !important;
 .mat-standard-chip {
         color: var(--color-dark-black) !important;
         background-color: var(--color-white) !important;
-        border: 1px solid var(--color-blue-primary) !important;
+        border: 1px solid var(--mat-primary-color) !important;
         font-size: var(--font-size-12) !important;
     }
 */

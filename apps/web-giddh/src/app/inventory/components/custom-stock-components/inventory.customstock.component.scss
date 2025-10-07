@@ -17,11 +17,11 @@
 */
 .select-unit {
     min-width: 185px !important;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 .select-unit-x {
     min-width: 215px !important;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 .unit-add {
     position: absolute;
@@ -29,7 +29,7 @@
 }
 .equal-sign {
     font-size: 22px;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 /* UNUSED COMPONENT CLASS: custom-css - Auto-commented by script
 .custom-css {

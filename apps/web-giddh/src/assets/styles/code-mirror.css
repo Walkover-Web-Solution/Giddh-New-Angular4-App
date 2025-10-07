@@ -333,9 +333,9 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 }
 
 .CodeMirror pre {
-    -moz-border-radius: 0;
-    -webkit-border-radius: 0;
-    border-radius: 0;
+    -moz-border-radius: var(--mat-border-radius-0);
+    -webkit-border-radius: var(--mat-border-radius-0);
+    border-radius: var(--mat-border-radius-0);
     border-width: 0;
     background: 0 0;
     font-family: inherit;

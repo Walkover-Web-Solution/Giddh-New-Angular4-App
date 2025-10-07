@@ -15,7 +15,7 @@
 
 //     .mat-mdc-form-field {
 //         background-color: var(--color-transparent) !important;
-//         border-radius: 4px;
+//         border-radius: var(--mat-border-radius-4);
 
 //         .mat-mdc-text-field-wrapper {
 //             .mat-form-field-underline {
@@ -258,7 +258,7 @@
 //     giddh-datepicker {
 //         .mat-mdc-form-field-flex {
 //             border: 1px solid var(--color-silver) !important;
-//             border-radius: 5px !important;
+//             border-radius: var(--mat-border-radius-4) !important;
 //         }
 
 //         .mdc-text-field__input {
@@ -409,7 +409,7 @@
 // .mat-pseudo-checkbox-checked,
 // .mat-pseudo-checkbox-indeterminate {
 //     &.mat-pseudo-checkbox-full {
-//         background: var(--color-blue-primary) !important;
+//         background: var(--mat-primary-color) !important;
 //     }
 // }
 
@@ -424,7 +424,7 @@
 // .mat-pseudo-checkbox-indeterminate {
 //     &.mat-pseudo-checkbox-minimal {
 //         &::after {
-//             color: var(--color-blue-primary);
+//             color: var(--mat-primary-color);
 //         }
 //     }
 // }
@@ -488,11 +488,11 @@ ngx-mat-select-search {
 
 //         .mdc-radio__native-control:enabled:checked + .mdc-radio__background {
 //             .mdc-radio__outer-circle {
-//                 // border-color: var(--color-blue-primary) !important;
+//                 // border-color: var(--mat-primary-color) !important;
 //             }
 
 //             .mdc-radio__inner-circle {
-//                 background-color: var(--color-blue-primary) !important;
+//                 background-color: var(--mat-primary-color) !important;
 //             }
 //         }
 
@@ -669,7 +669,7 @@ body {
 .create-new-wrapper {
     left: 0;
     bottom: 0px;
-    background-color: var(--color-white);
+    background-color: var(--mat-autocomplete-background-color);
 }
 
 // matIconPrefix input field

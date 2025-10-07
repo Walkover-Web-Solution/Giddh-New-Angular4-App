@@ -3,9 +3,9 @@
 @use "@angular/material" as mat;
 
 @mixin define-theme-colors($primary-palette, $accent-palette, $warn-palette) {
-    --mat-primary-color: #{mat.get-color-from-palette($primary-palette, 900)};
-    --mat-accent-color: #{mat.get-color-from-palette($accent-palette, 900)};
-    --mat-warn-color: #{mat.get-color-from-palette($warn-palette, 900)};
+    --mat-primary-color: #{mat.get-color-from-palette($primary-palette)};
+    --mat-accent-color: #{mat.get-color-from-palette($accent-palette)};
+    --mat-warn-color: #{mat.get-color-from-palette($warn-palette)};
 }
 
 @mixin create-color-utilities() {
@@ -22,25 +22,25 @@
     }
 }
 
-@mixin common-filters($color, $background-color, $border) {
-    font-size: var(--font-size-15);
-    display: inline-flex;
-    justify-content: space-between;
-    -webkit-box-align: center;
-    align-items: center;
-    padding: 7px 10px !important;
-    .icon-cross {
-        margin-right: 5px;
-    }
-    &:focus {
-        box-shadow: none;
-        outline: none;
-    }
-    &:active {
-        box-shadow: none;
-        outline: none;
-    }
-    background-color: $background-color;
-    color: $color;
-    border-color: $border;
-}
+// @mixin common-filters($color, $background-color, $border) {
+//     font-size: var(--font-size-15);
+//     display: inline-flex;
+//     justify-content: space-between;
+//     -webkit-box-align: center;
+//     align-items: center;
+//     padding: 7px 10px !important;
+//     .icon-cross {
+//         margin-right: 5px;
+//     }
+//     &:focus {
+//         box-shadow: none;
+//         outline: none;
+//     }
+//     &:active {
+//         box-shadow: none;
+//         outline: none;
+//     }
+//     background-color: $background-color;
+//     color: $color;
+//     border-color: $border;
+// }

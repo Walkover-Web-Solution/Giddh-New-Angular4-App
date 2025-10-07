@@ -10,8 +10,8 @@
 .receipt-wrapper .doc-checkbox:checked,
 /* UNUSED COMPONENT CLASS: doc-actions - Auto-commented by script
 .doc-actions {
-    border-color: var(--color-blue-primary) !important;
-    background: var(--color-blue-primary);
+    border-color: var(--mat-primary-color) !important;
+    background: var(--mat-primary-color);
     color: var(--color-white);
 }
 */
@@ -21,7 +21,7 @@
 .btn-sm,
 /* UNUSED COMPONENT CLASS: btn-xs - Auto-commented by script
 .btn-xs {
-    border-radius: 3px;
+    border-radius: var(--mat-border-radius-4);
 }
 */
 
@@ -109,7 +109,7 @@ svg.icon.gstr-icon {
     display: block;
     width: 9px;
     height: 9px;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     background-color: var(--color-border-light);
     position: relative;
     top: 5px;
@@ -151,7 +151,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     margin: 20px 0px 0px;
     i {
         padding: 0 4%;
@@ -192,7 +192,7 @@ svg.icon.icon-xxlg-md {
 .filing-demo-video {
     padding: 10px;
     display: block;
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
     margin-bottom: 12px;
 }
 */
@@ -261,7 +261,7 @@ hr {
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     display: inline-block;
     margin-right: 15px;
     margin-top: 4px;
@@ -297,7 +297,7 @@ hr {
     border-right: 0 !important;
     border-left: 0 !important;
     border-top: 0 !important;
-    border-bottom-color: var(--color-blue-primary);
+    border-bottom-color: var(--mat-primary-color);
 }
 */
 
@@ -337,7 +337,7 @@ hr {
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     background: var(--color-border-light);
 }
 
@@ -369,16 +369,16 @@ hr {
 */
 ::ng-deep #monthPicker button.btn.btn-default/* UNUSED COMPONENT CLASS: btn-info - Auto-commented by script
 .btn-info {
-    background: var(--color-blue-primary) !important;
+    background: var(--mat-primary-color) !important;
     color: var(--color-white) !important;
     text-decoration: none;
-    border-radius: 3px;
+    border-radius: var(--mat-border-radius-4);
 }
 */
 
  /* ::ng-deep #monthPicker .btn-info > UNUSED COMPONENT CLASS: text-success - Auto-commented by script
 .text-success {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 */
 ::ng-deep #monthPicker .btn-default.btn-info > .text-success {
@@ -416,7 +416,7 @@ hr {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     animation: loading 2s linear infinite;
 }
 

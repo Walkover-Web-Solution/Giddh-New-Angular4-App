@@ -40,7 +40,7 @@
             align-items: center;
             background-color: var(--color-light-gray);
             border: 1px solid var(--color-silver);
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
             border-left: none;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
@@ -83,7 +83,7 @@
                         line-height: 12.4px;
                         font-weight: 500;
                         padding: 2px 5px;
-                        border-radius: 5px;
+                        border-radius: var(--mat-border-radius-4);
                         color: var(--color-dark-gray);
                         background-color: var(--color-border-light);
                     }
@@ -102,7 +102,7 @@
                             }
                             .branch-count {
                                 width: 50px;
-                                color: var(--color-blue-primary);
+                                color: var(--mat-primary-color);
                                 padding-left: 10px;
                                 white-space: nowrap;
                             }
@@ -140,7 +140,7 @@
                 color: var(--color-dark-gray);
                 &:hover {
                     span {
-                        background-color: var(--color-blue-light);
+                        background-color: var(--mat-primary-color-light);
                     }
                     /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu {
@@ -183,7 +183,7 @@
                     /* UNUSED COMPONENT CLASS: open - Auto-commented by script
 &
 .open {
-                        background-color: var(--color-blue-light);
+                        background-color: var(--mat-primary-color-light);
                         margin: 0 -20px;
                         /* p UNUSED COMPONENT CLASS: show-more-branches - Auto-commented by script
 .show-more-branches {
@@ -221,7 +221,7 @@
                                     color: var(--color-dark-gray) !important;
                                 }
                                 &.head-branch {
-                                    color: var(--color-blue-primary);
+                                    color: var(--mat-primary-color);
                                     .branch-company-name {
                                         max-width: 150px;
                                         text-overflow: ellipsis;
@@ -257,7 +257,7 @@
                         }
                     }
                     p.show-more-branches {
-                        color: var(--color-blue-primary);
+                        color: var(--mat-primary-color);
                         padding: 10px 0;
                         text-decoration: underline;
                     }
@@ -296,7 +296,7 @@
                         word-break: break-all;
                         &.active {
                             color: var(--color-dark-gray) !important;
-                            background-color: var(--color-blue-light) !important;
+                            background-color: var(--mat-primary-color-light) !important;
                         }
                         &:hover {
                             background-color: initial !important;
@@ -313,7 +313,7 @@
                     }
                     &:hover {
                         a {
-                            background-color: var(--color-blue-light) !important;
+                            background-color: var(--mat-primary-color-light) !important;
                         }
                     }
                     .branch-alias,
@@ -351,7 +351,7 @@
                     line-height: 12.4px;
                     font-weight: 700;
                     padding: 2px 5px;
-                    border-radius: 5px;
+                    border-radius: var(--mat-border-radius-4);
                 }
             }
         }
@@ -410,7 +410,7 @@
                                 }
                             }
                             &.active {
-                                background-color: var(--color-blue-light);
+                                background-color: var(--mat-primary-color-light);
                                 position: sticky;
                                 top: 0;
                                 z-index: 991;
@@ -447,7 +447,7 @@
 }
 /* UNUSED COMPONENT CLASS: digit-blue - Auto-commented by script
 .digit-blue {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 */
 /* UNUSED COMPONENT CLASS: digit-orange - Auto-commented by script
@@ -476,7 +476,7 @@
     .custom-tabs {
         .nav-link.active {
             span {
-                color: var(--color-blue-primary) !important;
+                color: var(--mat-primary-color) !important;
             }
         }
     }

@@ -12,7 +12,7 @@
 }
 /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     background: var(--color-border-light);
 }
 */
@@ -23,7 +23,7 @@
 */
 /* UNUSED COMPONENT CLASS: authenticate-btn - Auto-commented by script
 .authenticate-btn {
-    border: 1px solid var(--color-blue-primary);
+    border: 1px solid var(--mat-primary-color);
 }
 */
 
@@ -34,13 +34,13 @@
         display: inline-block;
     }
 }
+/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
 .btn-wrapper-filling-header {
-    /* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
 .btn-primary {
-        border-color: var(--color-blue-primary);
+        border-color: var(--mat-primary-color);
     }
-*/
 }
+*/
 .head-font-weight {
     font-weight: 500 !important;
 }

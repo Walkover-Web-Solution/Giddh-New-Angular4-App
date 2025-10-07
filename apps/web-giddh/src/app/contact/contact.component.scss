@@ -104,7 +104,7 @@
 /* UNUSED COMPONENT CLASS: account-detail-modal-header-div - Auto-commented by script
 .account-detail-modal-header-div {
     padding: 0;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
 }
 */
 
@@ -165,7 +165,7 @@ ul.list-unstyled li a {
     z-index: 1000;
     width: 257px;
     border: 1px solid var(--color-medium-gray);
-    border-radius: 4px;
+    border-radius: var(--mat-border-radius-4);
     box-shadow: 0 7px 24px var(--color-shadow-light);
     top: -2px;
 }
@@ -203,8 +203,8 @@ ul.list-unstyled li a {
     }
 
     a:hover {
-        color: var(--color-blue-primary) !important;
-        background-color: var(--color-blue-light);
+        color: var(--mat-primary-color) !important;
+        background-color: var(--mat-primary-color-light);
     }
 }
 */
@@ -340,7 +340,7 @@ tr.aging-table-top td {
 
 .more-button li:hover {
     background-color: var(--color-border-light);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 
 .btn-primary.active,
@@ -365,16 +365,16 @@ i.icon-options {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     position: absolute;
     right: 3px;
     bottom: 2px;
 }
 
 i.icon-options:hover {
-    background: var(--color-blue-primary);
+    background: var(--mat-primary-color);
     color: var(--color-light-gray);
-    border-color: var(--color-blue-primary);
+    border-color: var(--mat-primary-color);
 }
 
 .search-field {
@@ -397,10 +397,10 @@ span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     color: var(--color-white);
     font-size: var(--font-size-16);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     height: 36px;
     top: 0;
 }
@@ -491,16 +491,16 @@ button.btn.btn-filter {
 }
 */
 
+/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
 .more-button {
-    /* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
 .btn-default {
         border-radius: 50% !important;
         padding: 0px !important;
         width: 28px;
         height: 28px;
     }
-*/
 }
+*/
 
 /* UNUSED COMPONENT CLASS: input-container - Auto-commented by script
 .input-container {
@@ -523,7 +523,7 @@ button.btn.btn-filter {
     letter-spacing: 1px;
 
     strong {
-        color: var(--color-blue-primary) !important;
+        color: var(--mat-primary-color) !important;
         font-size: var(--font-size-15);
     }
 }
@@ -565,13 +565,13 @@ button.btn.btn-filter {
 }
 
 .pending-approval-button {
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     width: 140px;
     height: 37px;
 }
 
 .pending-approval-button:hover {
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
 }
 
 // .all-table {
@@ -607,7 +607,7 @@ button.btn.btn-filter {
 /* UNUSED COMPONENT CLASS: btn-filters - Auto-commented by script
 .btn-filters {
     @include common-filters(
-        var(--color-blue-primary),
+        var(--mat-primary-color),
         var(--color-border-light),
         1px solid var(--color-silver)
     );
@@ -731,7 +731,7 @@ button.btn.btn-filter {
 
     &:hover {
         color: var(--color-light-gray);
-        background-color: var(--color-blue-primary);
+        background-color: var(--mat-primary-color);
     }
 }
 .select-all-checkbox-wrapper {

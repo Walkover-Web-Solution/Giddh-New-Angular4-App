@@ -240,7 +240,7 @@
                                                     )
                                                 "
                                             >
-                                                <strong
+                                                <span
                                                     class="ml-auto create-new"
                                                     *ngIf="node?.additional?.createNew"
                                                     (click)="$event.stopPropagation()"
@@ -250,7 +250,7 @@
                                                     "
                                                 >
                                                     {{ node?.additional?.createNew?.label }}
-                                                </strong>
+                                                </span>
                                             </ng-container>
                                             <ng-container
                                                 *ngIf="
@@ -260,7 +260,7 @@
                                                         ?.addCustomer
                                                 "
                                             >
-                                                <strong
+                                                <span
                                                     class="ml-auto create-new"
                                                     (click)="
                                                         $event.stopPropagation();
@@ -272,7 +272,7 @@
                                                     "
                                                 >
                                                     {{ node?.additional?.createNew?.label }}
-                                                </strong>
+                                                </span>
                                             </ng-container>
                                         </ng-container>
                                     </div>

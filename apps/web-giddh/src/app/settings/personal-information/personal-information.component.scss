@@ -1,7 +1,7 @@
 /* UNUSED COMPONENT CLASS: custom-file - Auto-commented by script
 .custom-file {
     border: 1px dashed var(--color-silver);
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
     background: var(--color-white);
     width: 100px;
     height: 100px;
@@ -78,7 +78,7 @@
 /* UNUSED COMPONENT CLASS: input-group-btn - Auto-commented by script
 .input-group-btn {
     font-size: var(--font-size-24);
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
     cursor: pointer;
 }
 */

@@ -6,7 +6,7 @@
 .vouchers-wrapper {
     .total-wrapper {
         .total-sale {
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
 
             p {
                 color: var(--color-dark-gray);
@@ -133,7 +133,7 @@ table {
         color: var(--color-black);
 
         &.active {
-            background-color: var(--color-blue-primary) !important;
+            background-color: var(--mat-primary-color) !important;
             color: var(--color-white);
         }
     }

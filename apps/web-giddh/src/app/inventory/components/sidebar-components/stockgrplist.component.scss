@@ -1,5 +1,5 @@
 .active {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 
 .stock-grp-list li > i:focus {
@@ -25,7 +25,7 @@
 .stock-grp-list .active a,
 .stock-grp-list .active i,
 .stock-grp-list .active .btn-link i {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 */
 
@@ -77,7 +77,7 @@ stock-list ::ng-deep.in-list a div {
         .item-group {
             &:hover {
                 a {
-                    color: var(--color-blue-primary) !important;
+                    color: var(--mat-primary-color) !important;
                 }
                 background-color: var(--color-border-light);
             }

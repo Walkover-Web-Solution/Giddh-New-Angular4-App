@@ -1,8 +1,8 @@
 body,
 body.default-theme {
-    --color-blue-primary: #1a237e;
+    // --mat-primary-color: #1a237e;  // CURRENTLY TAKE THIS COLOR FORM MAT THEME
+    --mat-primary-color-light: #1a237e26;
     --color-black: #212528;
-    --color-blue-light: #1a237e26;
     --color-danger-light: #e545561a;
     --color-orange-light: #e58a0026;
     --color-red-light: #e5455626;
@@ -51,33 +51,33 @@ body.default-theme {
 
     // Common variable (Mostly Used)
     // --color-common-primary-text: var(--color-black);
-    // --color-common-primary-text-hover: var(--color-blue-primary);
+    // --color-common-primary-text-hover: var(--mat-primary-color);
     // --color-common-secondary-text: var(--color-dark-gray);
     // --color-common-tertiary-text: var(--color-dark-gray);
     // --color-common-quaternary-text: var(--color-black);
     // --color-common-quinary-text: var(--color-black);
-    // --color-common-senary-text: var(--color-blue-primary);
+    // --color-common-senary-text: var(--mat-primary-color);
     // --color-common-septenary-text: var(--color-black);
-    // --color-common-octonary-text: var(--color-blue-primary);
+    // --color-common-octonary-text: var(--mat-primary-color);
     
     // --color-common-primary-background-for-all-components: var(--color-white);
     // --color-common-secondary-background-for-all-components: var(--color-light-gray);
     // --color-common-tertiary-background-for-all-components: var(--color-light-gray);
-    // --color-common-quaternary-background-for-all-components: var(--color-blue-light);
+    // --color-common-quaternary-background-for-all-components: var(--mat-primary-color-light);
     // --color-common-quinary-background-for-all-components: var(--color-light-gray);
     // --color-common-senary-background-for-all-components: var(--color-silver);
     // --color-common-septenary-background-for-all-components: var(--color-light-gray);
 
     // Signup Login Page Color Components
-    // --color-primary-login-page-background: var(--color-blue-primary);
-    // --color-primary-login-box-header-background: var(--color-blue-primary);
+    // --color-primary-login-page-background: var(--mat-primary-color);
+    // --color-primary-login-box-header-background: var(--mat-primary-color);
     // --color-primary-login-box-body-background: var(--color-white);
-    // --color-primary-login-box-body-text: var(--color-blue-primary);
+    // --color-primary-login-box-body-text: var(--mat-primary-color);
     // --color-secondary-login-box-body-text: var(--color-medium-gray);
     // --color-tertiary-login-box-body-text: var(--color-white);
     // --color-primary-google-box-background: var(--color-orange-light);
-    // --color-primary-login-with-google-box-background: var(--color-blue-primary);
-    // --color-primary-login-signup-linkedin-icon: var(--color-blue-primary);
+    // --color-primary-login-with-google-box-background: var(--mat-primary-color);
+    // --color-primary-login-signup-linkedin-icon: var(--mat-primary-color);
     // --color-primary-login-slide-content-btn-white: var(--color-orange-light);
     // --color-primary-signup-ico-google-background: var(--color-orange-light);
     // --color-primary-login-hash-tag: var(--color-red);
@@ -85,9 +85,9 @@ body.default-theme {
     // --color-primary-login-signup-mobile-background: var(--color-black);
     // --color-primary-login-signup-slide-content-background: var(--color-black);
     // --color-primary-login-signup-download-app-ul-li-a-hover: var(--color-black);
-    // --color-primary-login-signup-twitter-background: var(--color-blue-primary);
+    // --color-primary-login-signup-twitter-background: var(--mat-primary-color);
     // --color-primary-login-signup-google-background: var(--color-red);
-    // --color-primary-login-signup-linkedin-background: var(--color-blue-primary);
+    // --color-primary-login-signup-linkedin-background: var(--mat-primary-color);
     // --color-primary-login-signup-login-box-h1: var(--color-black);
     // --color-primary-login-signup-slide-content-btn-white-hover: var(--color-black);
     // --color-primary-login-signup-input-box: var(--color-black);
@@ -95,15 +95,15 @@ body.default-theme {
 
     // Filter Color Variables
     // --color-filter-text-hover: var(--color-light-gray);
-    // --color-filter-background-hover: var(--color-blue-primary);
+    // --color-filter-background-hover: var(--mat-primary-color);
     // --color-primary-filter-background: var(--color-border-light);
 
     // Loader Color Variables
     // --color-loader-primary-load-bar-and-nth-3rd-child-background: var(--color-orange);
 
     // Header Color Variables
-    // --color-primary-icon-support-dropdown-toggle: var(--color-blue-primary);
-    // --color-primary-header-universal-date: var(--color-blue-primary);
+    // --color-primary-icon-support-dropdown-toggle: var(--mat-primary-color);
+    // --color-primary-header-universal-date: var(--mat-primary-color);
     // --color-primary-header-account-search-form-control-focus: var(--color-medium-gray);
     // --color-primary-header-sub-menu-li-a: var(--color-medium-gray);
     // --color-primary-header-icons: var(--color-light-gray);
@@ -116,32 +116,32 @@ body.default-theme {
     // --color-account-card-primary-text: var(--color-black);
     // --color-account-card-background: var(--color-light-gray);
     // --color-account-card-background-hover: var(--color-white);
-    // --color-upgrade-plan-primary: var(--color-blue-primary);
+    // --color-upgrade-plan-primary: var(--mat-primary-color);
     // --color-upgrade-plan-primary-background: var(--color-border-light);
     // --color-upgrade-plan-secondary-background: var(--color-white);
     // --color-upgrade-plan-tertiary-background: var(--color-border-light);
     // --color-upgrade-plan-card-primary-background-hover: var(--color-border-light);
-    // --color-upgrade-plan-card-primary-border-hover: var(--color-blue-primary);
-    // --color-csv-or-excel-file-card-text: var(--color-blue-primary);
+    // --color-upgrade-plan-card-primary-border-hover: var(--mat-primary-color);
+    // --color-csv-or-excel-file-card-text: var(--mat-primary-color);
     // --color-primary-card-text: var(--color-black);
     // --color-primary-card-background: var(--color-white);
     // --color-primary-card-box-shadow: var(--color-shadow-light);
 
     // Button Color Variables
-    // --color-primary-button-text: var(--color-blue-primary);
+    // --color-primary-button-text: var(--mat-primary-color);
     // --color-primary-button-background: var(--color-white);
     // --color-secondary-button-text: var(--color-white);
-    // --color-secondary-button-background: var(--color-blue-primary);
-    // --color-secondary-button-background-hover: var(--color-blue-primary);
+    // --color-secondary-button-background: var(--mat-primary-color);
+    // --color-secondary-button-background-hover: var(--mat-primary-color);
     // --color-tertiary-button-text: var(--color-dark-gray);
     // --color-tertiary-button-background: var(--color-transparent);
     // --color-tertiary-button-background-hover: #1a237e0f;
     // --color-quaternary-button-text: var(--color-white);
-    // --color-quaternary-button-background: var(--color-blue-primary);
-    // --color-quinary-button-background: var(--color-blue-primary);
+    // --color-quaternary-button-background: var(--mat-primary-color);
+    // --color-quinary-button-background: var(--mat-primary-color);
     // --color-senary-button-text: var(--color-white);
-    // --color-senary-button-background: var(--color-blue-primary);
-    // --color-senary-button-background-hover: var(--color-blue-primary);
+    // --color-senary-button-background: var(--mat-primary-color);
+    // --color-senary-button-background-hover: var(--mat-primary-color);
     // --color-septenary-button-text: var(--color-black);
     // --color-octonary-button-text: var(--color-medium-gray);
     // --color-nonary-button-text: var(--color-white);
@@ -149,12 +149,12 @@ body.default-theme {
     // --color-nonary-button-background-hover: var(--color-green);
     // --color-denary-button-text: var(--color-black);
     // --color-denary-button-background: var(--color-light-gray);
-    // --color-primary-basic-button-opacity: var(--color-blue-light);
+    // --color-primary-basic-button-opacity: var(--mat-primary-color-light);
     // --color-primary-filter-button-text: var(--color-dark-gray);
     // --color-primary-basic-button-text: var(--color-dark-gray);
     // --color-primary-cancel-button-background-hover: var(--color-medium-gray);
     // --color-primary-button-border: var(--color-silver);
-    // --color-secondary-button-border: var(--color-blue-primary);
+    // --color-secondary-button-border: var(--mat-primary-color);
     // --color-primary-button-border-hover: var(--color-silver);
     // --color-default-button: var(--color-black);
 
@@ -164,18 +164,18 @@ body.default-theme {
     // --color-dropdown-list-tertiary: var(--color-black);
     // --color-dropdown-list-quaternary: var(--color-dark-black);
     // --color-dropdown-list-quinary: var(--color-black);
-    // --color-dropdown-list-senary: var(--color-blue-primary);
+    // --color-dropdown-list-senary: var(--mat-primary-color);
     // --color-dropdown-list-icon: var(--color-dark-black);
     // --color-dropdown-secondary-list-icon: var(--color-dark-black);
-    // --color-dropdown-list-hover-text: var(--color-blue-primary);
+    // --color-dropdown-list-hover-text: var(--mat-primary-color);
     // --color-dropdown-primary-background: var(--color-white);
     // --color-dropdown-secondary-background: var(--color-border-light);
     // --color-dropdown-terniary-background: var(--color-border-light);
-    // --color-dropdown-list-hover-background: var(--color-blue-light);
+    // --color-dropdown-list-hover-background: var(--mat-primary-color-light);
     // --color-dropdown-secondary-list-hover-background: var(--color-light-gray);
     // --color-dropdown-tertiary-list-hover-background: var(--color-border-light);
     // --color-dropdown-list-box-shadow: var(--color-silver);
-    // --color-dropdown-primary-bar-border: var(--color-blue-primary);
+    // --color-dropdown-primary-bar-border: var(--mat-primary-color);
     // --color-primary-dropdown-placeholder: var(--color-medium-gray);
 
     // Checkbox, Radio Button, Mat-Expansion Panel Down Arrow and Icon Color Variables
@@ -192,14 +192,14 @@ body.default-theme {
     // --color-sidebar-search-bar-text: var(--color-dark-gray);
     // --color-sidebar-primary-search-bar-background: var(--color-light-gray);
     // --color-sidebar-secondary-search-bar-background: var(--color-light-gray);
-    // --color-active-search-bar-border: var(--color-blue-primary);
+    // --color-active-search-bar-border: var(--mat-primary-color);
     // --color-company-profile-input-label: var(--color-black);
     // --color-discount-search-bar-background: var(--color-white);
     // --color-input-primary-background: var(--color-border-light);
     // --color-input-secondary-background: var(--color-white);
     // --color-input-tertiary-background: var(--color-light-gray);
     // --color-search-bar-primary-border: var(--color-silver);
-    // --color-primary-search-bar-placeholder: var(--color-blue-primary);
+    // --color-primary-search-bar-placeholder: var(--mat-primary-color);
     // --color-secondary-search-bar-placeholder: var(--color-medium-gray);
 
     // Input Bar Variables
@@ -211,44 +211,44 @@ body.default-theme {
     // --color-primary-input-bar-background: var(--color-light-gray);
     // --color-secondary-input-bar-background: var(--color-white);
     // --color-tertiary-input-bar-background: var(--color-border-light);
-    // --color-primary-input-bar-background-focus: var(--color-blue-light);
+    // --color-primary-input-bar-background-focus: var(--mat-primary-color-light);
     // --color-secondary-input-bar-button: var(--color-medium-gray);
     // --color-primary-input-placeholder: var(--color-medium-gray);
 
     // Datepicker Color Variables
     // --color-datepicker-title-text: var(--color-black);
     // --color-datepicker-title-background: var(--color-border-light);
-    // --color-datepicker-header: var(--color-blue-primary);
+    // --color-datepicker-header: var(--mat-primary-color);
     // --color-datepicker-month-name: var(--color-black);
-    // --color-datepicker-date: var(--color-blue-primary);
+    // --color-datepicker-date: var(--mat-primary-color);
     // --color-datepicker-secondary-date: var(--color-black);
     // --color-datepicker-ternary-date: var(--color-black);
     // --color-datepicker-quaternary-date: var(--color-white);
     // --color-datepicker-date-icon: var(--color-black);
     // --color-datepicker-rightside-list-text: var(--color-black);
-    // --color-datepicker-rightside-list-primary-text-hover: var(--color-blue-light);
+    // --color-datepicker-rightside-list-primary-text-hover: var(--mat-primary-color-light);
     // --color-datepicker-right-side-list-secondary-text-hover: var(--color-light-gray);
     // --color-datepicker-input-label: var(--color-dark-gray);
-    // --color-primary-datepicker-input-bottom-border: var(--color-blue-primary);
+    // --color-primary-datepicker-input-bottom-border: var(--mat-primary-color);
     // --color-datepicker-unselected-month: var(--color-black);
     // --color-datepicker-background: var(--color-white);
     // --color-main-content-datepicker: var(--color-black);
     // --color-primary-head-datepicker-text: var(--color-black);
     // --color-datepicker-box-shadow: var(--color-shadow-light);
-    // --color-datepicker-selected-date-background: var(--color-blue-light);
-    // --color-datepicker-selected-date-range-background: var(--color-blue-light);
-    // --color-primary-datepicker-in-range-end-date-background: var(--color-blue-light);
-    // --color-primary-datepicker-btn-success-hover-active-focus: var(--color-blue-primary);
-    // --color-datepicker-mat-select-arrow-active: var(--color-blue-primary);
+    // --color-datepicker-selected-date-background: var(--mat-primary-color-light);
+    // --color-datepicker-selected-date-range-background: var(--mat-primary-color-light);
+    // --color-primary-datepicker-in-range-end-date-background: var(--mat-primary-color-light);
+    // --color-primary-datepicker-btn-success-hover-active-focus: var(--mat-primary-color);
+    // --color-datepicker-mat-select-arrow-active: var(--mat-primary-color);
     // --color-primary-datepicker-btn-angle-down: var(--color-silver);
     // --color-primary-datepicker-btn-btn-danger: var(--color-red);
     // --color-primary-datepicker-btn-btn-danger-hover-active-focus: var(--color-red);
     // --color-primary-datepicker-drop-down-box-shadow: var(--color-medium-gray);
-    // --color-primary-datepicker-in-range-background: var(--color-blue-light);
-    // --color-primary-datepicker-activated-date: var(--color-blue-light);
+    // --color-primary-datepicker-in-range-background: var(--mat-primary-color-light);
+    // --color-primary-datepicker-activated-date: var(--mat-primary-color-light);
     // --color-primary-datepicker-md-drppicker-th-div: var(--color-medium-gray);
     // --color-primary-datepicker-unselected-date-hover: var(--color-light-gray);
-    // --color-primary-datepicker-dropdown-color-active: var(--color-blue-primary);
+    // --color-primary-datepicker-dropdown-color-active: var(--mat-primary-color);
     // --color-primary-datepicker-dropdown-input: var(--color-black);
 
     // SH-SELECT Color Variables
@@ -256,11 +256,11 @@ body.default-theme {
 
     // Profit Loss Color Variables
     // --color-primary-profit-loss-total-expenses-text: var(--color-brown-gold);
-    // --color-primary-profit-loss-total-income-text: var(--color-blue-primary);
+    // --color-primary-profit-loss-total-income-text: var(--mat-primary-color);
 
     // Aside Form Color Variables
     // --color-primary-aside-pane-form-box-shadow: var(--color-shadow-light);
-    // --color-primary-aside-pane-back-to-main-slider: var(--color-blue-primary);
+    // --color-primary-aside-pane-back-to-main-slider: var(--mat-primary-color);
     // --color-primary-aside-pane-unactive-background: var(--color-black);
 
     // Aside Setting and Aside Help Support Color Variables
@@ -275,7 +275,7 @@ body.default-theme {
 
     // Subscription Plans Color Variables
     // --color-primary-subscription-plans-top-bar-background: var(--color-border-light);
-    // --color-primary-subscription-plans-selected-background: var(--color-blue-light);
+    // --color-primary-subscription-plans-selected-background: var(--mat-primary-color-light);
     // --color-primary-subscription-active: var(--color-green);
     // --color-primary-subscription-green-red-orange-dot-background: var(--color-green);
     // --color-primary-tab-header-text: var(--color-dark-gray);
@@ -284,11 +284,11 @@ body.default-theme {
     // --color-primary-subscription-dropdown-background: var(--color-silver);
     // --color-secondary-subscription-dropdown-background: var(--color-white);
     // --color-secondary-subscription-dropdown-background-hover: var(--color-border-light);
-    // --color-primary-subscription-left-sidebar-box-background: var(--color-blue-light);
+    // --color-primary-subscription-left-sidebar-box-background: var(--mat-primary-color-light);
     // --color-primary-subscription-left-sidebar-border-right: var(--color-silver);
 
     // Proforma Invoice Color Variables
-    // --color-primary-performa-invoice-a-copy-invoice: var(--color-blue-primary);
+    // --color-primary-performa-invoice-a-copy-invoice: var(--mat-primary-color);
     // --color-primary-performa-invoice-dissabled-background: var(--color-light-gray);
 
     // Invoice Setting Color Variables
@@ -318,10 +318,10 @@ body.default-theme {
     // --color-primary-sidebar-current-branch-name-anchor: var(--color-dark-gray);
     // --color-primary-sidebar-menu-item-wrapper-list-anchor: var(--color-dark-gray);
     // --color-primary-sidebar-account-dropdown-i: var(--color-dark-gray);
-    // --color-primary-sidebar-account-dropdown-collapse: var(--color-blue-primary);
-    // --color-primary-sidebar-menu-item-anchor-active-hover-highlight: var(--color-blue-primary);
-    // --color-primary-sidebar-menu-item-wrapper-sub-menu-border: var(--color-blue-primary);
-    // --color-primary-sidebar-show-more: var(--color-blue-primary);
+    // --color-primary-sidebar-account-dropdown-collapse: var(--mat-primary-color);
+    // --color-primary-sidebar-menu-item-anchor-active-hover-highlight: var(--mat-primary-color);
+    // --color-primary-sidebar-menu-item-wrapper-sub-menu-border: var(--mat-primary-color);
+    // --color-primary-sidebar-show-more: var(--mat-primary-color);
 
     // Import Excel and Wizard Color Variables
     // --color-import-excel-and-wizard-steps-wizard-li-label: var(--color-medium-gray);
@@ -348,7 +348,7 @@ body.default-theme {
     // --color-primary-payment-aside-contact-details: var(--color-black);
 
     // Setting Intergation Color Variables
-    // --color-primary-setting-integration-account-wrapper-border: var(--color-blue-light);
+    // --color-primary-setting-integration-account-wrapper-border: var(--mat-primary-color-light);
     // --color-primary-setting-integration-account-approval-status-approved: var(--color-green);
     // --color-primary-setting-integration-icici-button: var(--color-orange);
     // --color-primary-setting-integration-account-approval-status-pending-approval: var(--color-orange);
@@ -379,11 +379,11 @@ body.default-theme {
     // --color-primary-company-branch-dropdown-total-company-count: var(--color-dark-gray);
     // --color-primary-company-branch-digit-orange: var(--color-orange);
     // --color-primary-company-branch-company-list-btn-group-active-hover: var(--color-orange-light);
-    // --color-primary-company-branch-branch-list-active-hover: var(--color-blue-light);
-    // --color-primary-company-branch-company-list-btn-group-open-background: var(--color-blue-light);
-    // --color-primary-company-branch-company-list-btn-group-open-span-active: var(--color-blue-light);
+    // --color-primary-company-branch-branch-list-active-hover: var(--mat-primary-color-light);
+    // --color-primary-company-branch-company-list-btn-group-open-background: var(--mat-primary-color-light);
+    // --color-primary-company-branch-company-list-btn-group-open-span-active: var(--mat-primary-color-light);
     // --color-primary-company-branch-wrap-company-refresh-small-background: var(--color-border-light);
-    // --color-primary-company-branch-company-list-li-hover-span-background: var(--color-blue-light);
+    // --color-primary-company-branch-company-list-li-hover-span-background: var(--mat-primary-color-light);
     // --color-primary-company-branch-dropdown-menu-anchor-hover: var(--color-dark-gray);
     // --color-primary-company-branch-company-branches-list: var(--color-dark-gray);
     // --color-primary-company-branch-branch-list-anchor: var(--color-dark-gray);
@@ -391,8 +391,8 @@ body.default-theme {
     // --color-primary-company-branch-btn-group-dropdown-toggle-span: var(--color-dark-gray);
     // --color-primary-company-branch-wrap-company-refresh-small: var(--color-dark-gray);
     // --color-primary-company-branch-input-group-append: var(--color-medium-gray);
-    // --color-primary-company-branch-dropdown-menu-head-branch: var(--color-blue-primary);
-    // --color-primary-company-branch-digit-blue: var(--color-blue-primary);
+    // --color-primary-company-branch-dropdown-menu-head-branch: var(--mat-primary-color);
+    // --color-primary-company-branch-digit-blue: var(--mat-primary-color);
 
     // Popup Color Variables
     // --color-popup-list-head-text: var(--color-white);
@@ -400,13 +400,13 @@ body.default-theme {
     // --color-popup-body-text: var(--color-black);
     // --color-popup-list-input-text: var(--color-black);
     // --color-popup-list-input-text-hover: var(--color-white);
-    // --color-popup-list-hover: var(--color-blue-primary);
+    // --color-popup-list-hover: var(--mat-primary-color);
     // --color-popup-background: var(--color-white);
     // --color-popup-secondary-background: var(--color-orange-light);
     // --color-popup-footer-text: var(--color-black);
     // --color-popup-footer-background: var(--color-light-gray);
     // --color-popup-list-all-features-text: var(--color-dark-gray);
-    // --color-primary-popup-list-header-bottom-border: var(--color-blue-primary);
+    // --color-primary-popup-list-header-bottom-border: var(--mat-primary-color);
     // --color-primary-popup-background-hover: var(--color-light-gray);
 
     // Common Chips Variables
@@ -415,25 +415,25 @@ body.default-theme {
     // --color-chips-secondary-background: var(--color-silver);
 
     // Tabs Color Variables
-    // --color-tab-primary-text: var(--color-blue-primary);
+    // --color-tab-primary-text: var(--mat-primary-color);
     // --color-tab-secondary-text: var(--color-black);
     // --color-tab-tertiary-text: var(--color-black);
-    // --color-tab-tertiary-text-hover: var(--color-blue-primary);
-    // --color-tab-primary-selected-tab-bottom-border: var(--color-blue-primary);
+    // --color-tab-tertiary-text-hover: var(--mat-primary-color);
+    // --color-tab-primary-selected-tab-bottom-border: var(--mat-primary-color);
     // --color-tab-primary-background: var(--color-white);
     // --color-tab-secondary-background: var(--color-light-gray);
-    // --color-tab-primary-active: var(--color-blue-primary);
+    // --color-tab-primary-active: var(--mat-primary-color);
     // --color-tab-primary-inactive: var(--color-dark-gray);
     // --color-tab-primary-border-bottom: var(--color-silver);
 
     // Rectangular Tabs Color Variables
-    // --color-rectangular-tab-active-primary-text: var(--color-blue-primary);
-    // --color-rectangular-tab-active-primary-border: var(--color-blue-primary);
+    // --color-rectangular-tab-active-primary-text: var(--mat-primary-color);
+    // --color-rectangular-tab-active-primary-border: var(--mat-primary-color);
     // --color-rectangular-tab-primary-background: var(--color-white);
     // --color-rectangular-tab-inactive-primary-icon: var(--color-black);
     // --color-rectangular-tab-inactive-primary-text: var(--color-black);
     // --color-rectangular-tab-box-shadow: var(--color-silver);
-    // --color-rectangular-tab-inactive-primary-border: var(--color-blue-primary);
+    // --color-rectangular-tab-inactive-primary-border: var(--mat-primary-color);
     // --color-rectangular-tab-inactive-secondary-border: var(--color-silver);
 
     // Invoice Preview Color Variables
@@ -442,26 +442,26 @@ body.default-theme {
 
     // Pagination Color Variables
     // --color-pagination-button: var(--color-black);
-    // --color-pagination-background: var(--color-blue-primary);
-    // --color-pagination-border: var(--color-blue-primary);
+    // --color-pagination-background: var(--mat-primary-color);
+    // --color-pagination-border: var(--mat-primary-color);
     // --color-pagination-active-button: var(--color-white);
     // --color-pagination-button-hover-background: var(--color-silver);
 
     // Header and Footer Color Variables
-    // --color-primary-header-background: var(--color-blue-primary);
+    // --color-primary-header-background: var(--mat-primary-color);
     // --color-primary-header-icon-traingle-info: var(--color-red);
     // --color-primary-footer-background: var(--color-silver);
     // --color-secondary-footer-background: var(--color-border-light);
 
     // Ledger Heading Color Variable
-    // --color-ledger-heading: var(--color-blue-primary);
+    // --color-ledger-heading: var(--mat-primary-color);
     // --color-ledger-grid-border-color: var(--color-silver);
     // --color-primary-ledger-box-shadow: var(--color-shadow-light);
-    // --color-primary-ledger-stat-block-border: var(--color-blue-light);
+    // --color-primary-ledger-stat-block-border: var(--mat-primary-color-light);
 
     // Invoice Preview Details Color Variables
     // --color-invoice-preview-details-default-header: var(--color-red);
-    // --color-invoice-preview-giddh-table-tbody-tr-background-hover: var(--color-blue-light);
+    // --color-invoice-preview-giddh-table-tbody-tr-background-hover: var(--mat-primary-color-light);
     // --color-invoice-preview-giddh-table-border-right: var(--color-silver);
     // --color-invoice-preview-span-close-modal-background: var(--color-silver);
     // --color-invoice-preview-default-footer-border: var(--color-green);
@@ -476,14 +476,14 @@ body.default-theme {
     // --color-primary-contact-p-modal-tooltip-border: var(--color-medium-gray);
 
     // Master Page Color Variables
-    // --color-master-page-input-clear-text: var(--color-blue-primary);
+    // --color-master-page-input-clear-text: var(--mat-primary-color);
     // --color-master-page-input-no-result-text: var(--color-dark-gray);
     // --color-master-page-tab-background: var(--color-light-gray);
     // --color-master-page-primary-tab: var(--color-black);
     // --color-master-page-secondary-tab: var(--color-black);
-    // --color-master-page-primary-text-hover: var(--color-blue-primary);
-    // --color-master-page-text-secondary-hover: var(--color-blue-primary);
-    // --color-master-page-sidebar-active-list: var(--color-blue-primary);
+    // --color-master-page-primary-text-hover: var(--mat-primary-color);
+    // --color-master-page-text-secondary-hover: var(--mat-primary-color);
+    // --color-master-page-sidebar-active-list: var(--mat-primary-color);
     // --color-master-page-input-label: var(--color-black);
     // --color-master-page-left-sidebar-primary-background: var(--color-light-gray);
     // --color-master-page-left-sidebar-secondary-background: var(--color-white);
@@ -499,8 +499,8 @@ body.default-theme {
     // --color-sidebar-secondary-anchor-text: var(--color-dark-gray);
     // --color-sidebar-menu-list-items: var(--color-white);
     // --color-sidebar-list-head: var(--color-black);
-    // --color-sidebar-anchor-text-hover: var(--color-blue-primary);
-    // --color-sidebar-company-background: var(--color-blue-light);
+    // --color-sidebar-anchor-text-hover: var(--mat-primary-color);
+    // --color-sidebar-company-background: var(--mat-primary-color-light);
     // --color-sidebar-secondary-company-background: var(--color-light-gray);
     // --color-sidebar-background: var(--color-white);
     // --color-sidebar-footer-logout-section-background: var(--color-white);
@@ -508,7 +508,7 @@ body.default-theme {
     // --color-sidebar-company-count-background: var(--color-border-light);
     // --color-sidebar-create-company-list-text: var(--color-dark-gray);
     // --color-sidebar-create-company-list-background: var(--color-light-gray);
-    // --color-sidebar-list-background-hover: var(--color-blue-light);
+    // --color-sidebar-list-background-hover: var(--mat-primary-color-light);
     // --color-sidebar-primary-box-shadow: var(--color-shadow-light);
 
     // Giddh Logo Color Variable
@@ -516,7 +516,7 @@ body.default-theme {
 
     // Tax Sidebar Color Variables
     // --color-primary-tax-sidebar-text: var(--color-dark-gray);
-    // --color-primary-tax-sidebar-list-active: var(--color-blue-primary);
+    // --color-primary-tax-sidebar-list-active: var(--mat-primary-color);
     // --color-primary-tax-sidebar-list-hover: var(--color-border-light);
     // --color-primary-tax-sidebar-gst-menu-items-ul: var(--color-dark-gray);
 
@@ -530,8 +530,8 @@ body.default-theme {
     // --color-primary-branch-active-status: var(--color-green);
 
     // All Items Page Color Variables
-    // --color-primary-all-items-page-heading: var(--color-blue-primary);
-    // --color-primary-all-items-page-single-menu-items-hover-active: var(--color-blue-primary);
+    // --color-primary-all-items-page-heading: var(--mat-primary-color);
+    // --color-primary-all-items-page-single-menu-items-hover-active: var(--mat-primary-color);
     // --color-primary-all-items-page-single-menu-items-heading: var(--color-dark-gray);
     // --color-primary-all-items-page-single-menu-items-body: var(--color-medium-gray);
     // --color-primary-all-items-page-wrapper-block-border: var(--color-border-light);
@@ -543,10 +543,10 @@ body.default-theme {
     // GST Color Variables
     // --color-gst-primary-background-color: var(--color-light-gray);
     // --color-gst-primary-doc-actions: var(--color-red);
-    // --color-gst-primary-return-body-notification-faq-list-li-a-hover: var(--color-blue-primary);
+    // --color-gst-primary-return-body-notification-faq-list-li-a-hover: var(--mat-primary-color);
     // --color-gst-primary-return-content-return-filed: var(--color-green);
-    // --color-gst-primary-c-tab-nav-tabs-active-hover-focus-border-bottom: var(--color-blue-primary);
-    // --color-gst-primary-filing-due-date-return-details-table-tbody-tr-td-first-child-before: var(--color-blue-primary);
+    // --color-gst-primary-c-tab-nav-tabs-active-hover-focus-border-bottom: var(--mat-primary-color);
+    // --color-gst-primary-filing-due-date-return-details-table-tbody-tr-td-first-child-before: var(--mat-primary-color);
     // --color-gst-primary-table-text: var(--color-black);
     // --color-gst-primary-table-background: var(--color-light-gray);
     // --color-gst-secondary-table-background: var(--color-white);
@@ -556,11 +556,11 @@ body.default-theme {
     // --color-primary-gstr3-page-main-button: var(--color-white);
 
     // Inventory Stock Report Color Variables
-    // --color-primary-credit: var(--color-blue-primary);
+    // --color-primary-credit: var(--mat-primary-color);
     // --color-primary-inventory-stock-report-journal: var(--color-green);
     // --color-primary-inventory-stock-balance-list-background: var(--color-light-gray);
     // --color-primary-inventory-stock-balance-text: var(--color-dark-gray);
-    // --color-primary-inventory-stock-expanded-list-background: var(--color-blue-light);
+    // --color-primary-inventory-stock-expanded-list-background: var(--mat-primary-color-light);
     // --color-primary-inventory-stock-dropdown-button-background: var(--color-white);
 
     // All Features Color Variables
@@ -583,12 +583,12 @@ body.default-theme {
     // --color-right-sidebar-primary-background: var(--color-silver);
     // --color-primary-right-sidebar-list-text-hover: var(--color-white);
     // --color-right-sidebar-primary-journal-voucher-list: var(--color-black);
-    // --color-right-sidebar-primary-journal-voucher-list-hover: var(--color-blue-light);
+    // --color-right-sidebar-primary-journal-voucher-list-hover: var(--mat-primary-color-light);
     // --color-right-sidebar-primary-journal-voucher-background: var(--color-border-light);
 
     // Table Color Variables
     // --color-table-primary-heading: var(--color-black);
-    // --color-table-secondary-heading: var(--color-blue-primary);
+    // --color-table-secondary-heading: var(--mat-primary-color);
     // --color-table-tertiary-heading: var(--color-black);
     // --color-table-quaternary-heading: var(--color-light-gray);
     // --color-table-primary-content: var(--color-black);
@@ -598,13 +598,13 @@ body.default-theme {
     // --color-table-quinary-content: var(--color-black);
     // --color-table-senary-content: var(--color-black);
     // --color-table-septenary-content: var(--color-black);
-    // --color-table-row-hover-primary-background: var(--color-blue-light);
-    // --color-table-row-hover-secondary-background: var(--color-blue-light);
+    // --color-table-row-hover-primary-background: var(--mat-primary-color-light);
+    // --color-table-row-hover-secondary-background: var(--mat-primary-color-light);
     // --color-table-heading-primary-background: var(--color-white);
     // --color-table-body-primary-background: var(--color-white);
     // --color-table-body-secondary-background: var(--color-light-gray);
     // --color-table-datepicker-content: var(--color-black);
-    // --color-table-datepicker-header-background: var(--color-blue-primary);
+    // --color-table-datepicker-header-background: var(--mat-primary-color);
     // --color-table-datepicker-body-background: var(--color-white);
     // --color-table-input-background: var(--color-white);
     // --color-table-searchbar-background: var(--color-light-gray);
@@ -628,14 +628,14 @@ body.default-theme {
     // --color-total-details-primary-background: var(--color-white);
     // --color-total-details-secondary-content: var(--color-deep-orange);
     // --color-total-details-secondary-background: var(--color-orange-light);
-    // --color-total-details-tertiary-content: var(--color-blue-primary);
+    // --color-total-details-tertiary-content: var(--mat-primary-color);
     // --color-total-details-tertiary-background: var(--color-border-light);
     // --color-total-details-quaternary-background: var(--color-light-gray);
     // --color-total-details-primary-border: var(--color-silver);
 
     // Right Side Popup Color Variables
     // --color-primary-right-side-popup-header-text: var(--color-white);
-    // --color-primary-right-side-popup-header-background: var(--color-blue-primary);
+    // --color-primary-right-side-popup-header-background: var(--mat-primary-color);
     // --color-primary-right-side-popup-body-background: var(--color-light-gray);
     // --color-secondary-right-side-popup-body-background: var(--color-white);
     // --color-right-side-popup-box-shadow: var(--color-silver);
@@ -672,23 +672,23 @@ body.default-theme {
     // --color-common-primary-input-placeholder: var(--color-silver);
     // --color-common-secondary-input-placeholder: var(--color-dark-gray);
     // --color-common-primary-background-color: var(--color-light-gray);
-    // --color-primary-common-with-opacity-list-hover: var(--color-blue-light);
+    // --color-primary-common-with-opacity-list-hover: var(--mat-primary-color-light);
     // --color-primary-common-without-opacity-list-hover : var(--color-light-gray);
     // --color-grey-bootstrap-border: var(--color-border-medium);
-    // --color-link: var(--color-blue-primary);
-    // --color-giddh-common-background: var(--color-blue-primary);
+    // --color-link: var(--mat-primary-color);
+    // --color-giddh-common-background: var(--mat-primary-color);
 
     // Toast Color Variables
     // --color-red-toast: var(--color-red);
     // --color-green-toast: var(--color-green);
     // --color-warning-toast: var(--color-deep-orange);
-    // --color-info-toast: var(--color-blue-primary);
+    // --color-info-toast: var(--mat-primary-color);
     // --color-toast-primary-text: var(--color-white);
-    // --color-primary-toast-cross-background: var(--color-blue-light);
+    // --color-primary-toast-cross-background: var(--mat-primary-color-light);
 
     // Common Leftout Background Color Variables
     // --color-common-primary-blue-border: var(--color-black);
-    // --color-common--primary-light-background: var(--color-blue-light);
+    // --color-common--primary-light-background: var(--mat-primary-color-light);
 
     // Style 1 File Color Variables
     // --color-due-box-background: var(--color-red-light);
@@ -698,9 +698,9 @@ body.default-theme {
     // --color-daybook-nested-table-tbody-tr-border: var(--color-silver);
     // --color-primary-circle-expenses-background: var(--color-red);
     // --color-primary-table-container-cdk-virtual-scroll-viewport-section-expenses-border: var(--color-red);
-    // --color-primary-circle-income-background: var(--color-blue-primary);
-    // --color-primary-table-container-cdk-virtual-scroll-viewport-section-income-border: var(--color-blue-primary);
-    // --color-primary-dot-primary: var(--color-blue-primary);
+    // --color-primary-circle-income-background: var(--mat-primary-color);
+    // --color-primary-table-container-cdk-virtual-scroll-viewport-section-income-border: var(--mat-primary-color);
+    // --color-primary-dot-primary: var(--mat-primary-color);
     // --color-primary-circle-assets-background: var(--color-deep-orange);
     // --color-primary-table-container-div-cdk-virtual-scroll-viewport-section-assets-border: var(--color-deep-orange);
     // --color-primary-circle-liabilities-background: var(--color-green);
@@ -711,7 +711,7 @@ body.default-theme {
     // --color-checkbox-after-border: var(--color-medium-gray);
     // --color-nav-tabs-anchor: var(--color-medium-gray);
     // --color-nav-item-icon-company-icon-branch1-before: var(--color-medium-gray);
-    // --color-checkbox-checked-after-background: var(--color-blue-primary);
+    // --color-checkbox-checked-after-background: var(--mat-primary-color);
     // --color-upload-btn-background: var(--color-orange-light);
     // --color-pop-panel-form-control-background: var(--color-orange-light);
     // --color-ledger-row-td-select2-container-select2-search__field-background: var(--color-orange-light);
@@ -726,7 +726,7 @@ body.default-theme {
     // --color-primary-thumbnail-border: var(--color-red-light);
     // --color-primary-daterangepicker-input-mini-active-border: var(--color-red-light);
     // --color-primary-selection-none-header-selection: var(--color-light-gray);
-    // --color-primary-sky-blue-bg-background: var(--color-blue-light);
+    // --color-primary-sky-blue-bg-background: var(--mat-primary-color-light);
     // --color-primary-square-switch-input-checked-label: var(--color-green);
     // --color-primary-add-company-detail-add-mailer-form-background: var(--color-white);
 
@@ -734,7 +734,7 @@ body.default-theme {
     // --color-primary-virtual-scroll-background: var(--color-white);
 
     // Common Leftout Text Color Variables
-    // --color-common-primary-dark-blue: var(--color-blue-primary);
+    // --color-common-primary-dark-blue: var(--mat-primary-color);
 
     // Common Image Filter Variable
     // --color-image-filter: invert(0);
@@ -746,8 +746,8 @@ body.default-theme {
     
 
     /************************ ADDITIONAL COLOR ALIASES ************************/
-    // --color-blue: var(--color-blue-primary);
-    // --color-giddh-blue: var(--color-blue-primary);
+    // --color-blue: var(--mat-primary-color);
+    // --color-giddh-blue: var(--mat-primary-color);
     // --color-wild-sand: var(--color-light-gray);
     // --color-skeleton-loading-gradient-inner: var(--color-light-gray);
     // --color-white-secondary: var(--color-light-gray);
@@ -764,7 +764,7 @@ body.default-theme {
     // --color-foam: var(--color-green-light);
     // --color-chardon: var(--color-orange-light);
     // --color-red-border: var(--color-red);
-    // --color-solitude-light: var(--color-blue-light);
+    // --color-solitude-light: var(--mat-primary-color-light);
     // --color-tutu: var(--color-red-light);
     // --color-slate: var(--color-dark-gray);
 
@@ -774,6 +774,6 @@ body.default-theme {
    
     // --color-transparent-background: var(--color-transparent);
     // --color-header-icon-background: #11185c;
-    // --color-primary-common : var(--color-blue-primary);
+    // --color-primary-common : var(--mat-primary-color);
     // --color-list: var(--color-white);
 }

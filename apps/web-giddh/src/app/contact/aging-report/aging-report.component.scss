@@ -81,10 +81,10 @@ span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     color: var(--color-white);
     font-size: var(--font-size-16);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     top: 0;
 }
 
@@ -104,7 +104,7 @@ tr.aging-table-top td {
     align-items: center;
     background-color: var(--color-white);
     border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     margin-left: 10px !important;
     button {
         font-size: var(--font-size-16);
@@ -144,7 +144,7 @@ tr.aging-table-top td {
         color: var(--color-black);
         border: none;
         background-color: var(--color-light-gray) !important;
-        border-radius: 5px;
+        border-radius: var(--mat-border-radius-4);
     }
 }
 */
@@ -182,7 +182,7 @@ tr.mat-header-row {
     .mat-customer-name {
         .icon-pointer {
             .font-xxs {
-                color: var(--color-blue-primary) !important;
+                color: var(--mat-primary-color) !important;
             }
         }
     }
@@ -237,7 +237,7 @@ tr.mat-header-row {
 /* UNUSED COMPONENT CLASS: btn-filters - Auto-commented by script
 .btn-filters {
     @include common-filters(
-        var(--color-blue-primary),
+        var(--mat-primary-color),
         var(--color-border-light),
         1px solid var(--color-silver)
     );
@@ -249,14 +249,14 @@ tr.mat-header-row {
     .header {
         height: $header-height;
         padding: 20px 15px;
-        background: var(--color-blue-primary);
+        background: var(--mat-primary-color);
         color: var(--color-white);
 
         button {
             background: var(--color-transparent);
             color: var(--color-white);
             min-width: 0;
-            border-radius: 0;
+            border-radius: var(--mat-border-radius-0);
         }
     }
     .list-wrapper {
@@ -276,7 +276,7 @@ tr.mat-header-row {
                 border-bottom: 1px solid var(--color-silver);
             }
             &:hover {
-                background-color: var(--color-blue-light);
+                background-color: var(--mat-primary-color-light);
             }
 
             .customer-name {

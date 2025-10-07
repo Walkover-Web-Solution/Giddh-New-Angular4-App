@@ -6,7 +6,7 @@
 
 .icon-pointer/* UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
 .active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 */
 .s-no-column-width{ // -Create this for all columns which use in global
@@ -43,7 +43,7 @@
     background: var(--color-border-light);
     border: 1px solid var(--color-silver);
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     display: inline-flex;
     justify-content: space-between;
     -webkit-box-align: center;

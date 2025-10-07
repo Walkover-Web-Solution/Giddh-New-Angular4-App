@@ -19,7 +19,7 @@
             width: 30px;
             height: 30px;
             border: 2px solid var(--color-silver);
-            border-radius: 100%;
+            border-radius: var(--mat-border-radius-circle);
             transition: background-color 1s;
             background-color: var(--color-white);
             position: relative;

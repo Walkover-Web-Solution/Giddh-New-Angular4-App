@@ -2,7 +2,7 @@
     .header {
         display: flex;
         align-items: center;
-        background-color: var(--color-blue-primary);
+        background-color: var(--mat-primary-color);
         color: var(--color-white);
         width: 100%;
         padding-left: 10px;
@@ -97,7 +97,7 @@
                 display: flex;
                 background-color: var(--color-white);
                 border: 1px solid var(--color-silver);
-                border-radius: 5px;
+                border-radius: var(--mat-border-radius-4);
                 min-width: 67px;
                 float: right;
                 margin-right: 2px;
@@ -122,7 +122,7 @@
             .display-area {
                 height: 90%;
                 margin-top: 8px;
-                border-radius: 5px;
+                border-radius: var(--mat-border-radius-4);
                 overflow: hidden;
                 float: left;
                 width: 100%;
@@ -142,7 +142,7 @@
     }
 }
 .active-file {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 .disabled {
     background-color: var(--color-silver) !important;

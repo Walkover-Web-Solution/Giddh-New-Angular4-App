@@ -8,7 +8,7 @@
     padding-top: 10px;
     padding-bottom: 10px;
     align-items: center;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 section.receipt-note {
     background-color: var(--color-white);
@@ -49,7 +49,7 @@ button.btn.btn-filter {
     background: var(--color-border-light);
     border: 1px solid var(--color-border-light);
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     display: -webkit-inline-box;
     display: inline-flex;
     -webkit-box-pack: justify;
@@ -82,14 +82,14 @@ tfoot td .table-sec.form-group {
     right: -60%;
     top: 9px;
     font-size: var(--font-size-12);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     z-index: 9;
 }
 .sender-details,
 .sender-receivers,
 .multiple-receivers {
     font-size: var(--font-size-12);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     margin-top: 7px;
     cursor: pointer;
 }
@@ -127,7 +127,7 @@ tfoot td .table-sec.form-group {
     position: absolute;
     background-color: var(--color-white);
     border: 1px solid var(--color-silver);
-    border-radius: 3px;
+    border-radius: var(--mat-border-radius-4);
     width: 100%;
     max-width: 250px;
     left: auto;
@@ -270,7 +270,7 @@ tfoot td .table-sec.form-group {
     justify-content: center;
     align-items: center;
     font-size: var(--font-size-15);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 #table-receipt {
     width: 100%;
@@ -307,14 +307,14 @@ tfoot td .table-sec.form-group {
     color: var(--color-white);
 }
 .transfer-type-checked:before {
-    border: 1px solid var(--color-blue-primary);
+    border: 1px solid var(--mat-primary-color);
 }
 .transfer-type-checked:after {
     content: " ";
     position: absolute;
     width: 8px;
     height: 8px;
-    background: var(--color-blue-primary);
+    background: var(--mat-primary-color);
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -355,7 +355,7 @@ tfoot td .table-sec.form-group {
 
 .aside-right .list-icon-group input:checked + label {
     border: 1px solid var(--color-orange);
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
 }
 
 .aside-pane.aside-right.in {
@@ -378,7 +378,7 @@ tfoot td .table-sec.form-group {
     z-index: 9991;
 }
 .icon-pointer.active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .close-receipt {
     color: var(--color-dark-gray);

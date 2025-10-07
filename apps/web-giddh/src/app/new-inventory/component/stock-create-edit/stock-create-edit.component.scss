@@ -17,7 +17,7 @@
 /* UNUSED COMPONENT CLASS: page-title-inventory - Auto-commented by script
 .page-title-inventory {
     font-weight: bold;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     font-size: var(--font-size-15);
 }
 */
@@ -32,7 +32,7 @@
         top: 0;
         padding: 10px;
         z-index: 10;
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
     }
 */
 
@@ -58,7 +58,7 @@
     .sales-purchase-details {
         background-color: var(--color-white);
         padding: 0 15px;
-        border-radius: 7px;
+        border-radius: var(--mat-border-radius-8);
 
         .select-puchase-info {
             padding: 6px 0px;
@@ -69,7 +69,7 @@
             position: relative;
 
             .icon-button-add {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
                 position: absolute;
                 left: 18px;
                 top: 35px;
@@ -77,7 +77,7 @@
                 z-index: 1;
                 font-weight: 600;
                 width: auto;
-                border-radius: 5px;
+                border-radius: var(--mat-border-radius-4);
                 height: 21px;
                 display: flex;
                 align-items: center;
@@ -168,7 +168,7 @@
         }
 
         i {
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
         }
     }
 
@@ -180,13 +180,13 @@
     .product-option-wrapper {
         background-color: var(--color-white);
         padding: 20px 15px;
-        border-radius: 8px;
+        border-radius: var(--mat-border-radius-8);
 
         /* UNUSED COMPONENT CLASS: multi-select-input - Auto-commented by script
 .multi-select-input {
             width: 85%;
             margin-right: 10px;
-            border-radius: 2px;
+            border-radius: var(--mat-border-radius-0);
             display: inline-block;
             position: relative;
             bottom: 2px;
@@ -224,7 +224,7 @@
                 justify-content: center;
                 height: 32px;
                 width: 40px;
-                border-radius: 5px;
+                border-radius: var(--mat-border-radius-4);
                 color: var(--color-dark-gray);
                 border: 1px solid var(--color-silver);
                 background-color: var(--color-transparent);
@@ -232,7 +232,7 @@
         }
 
         .another-option-btn {
-            color: var(--color-blue-primary) !important;
+            color: var(--mat-primary-color) !important;
         }
 
         /* UNUSED COMPONENT CLASS: category-label - Auto-commented by script
@@ -368,7 +368,7 @@
     }
 
     .icon-plus {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
     }
 }
 
@@ -421,7 +421,7 @@ table.stock-table {
     margin-left: 2px;
 
     .table-heading-color {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
     }
 
     tr {
@@ -540,12 +540,12 @@ table.stock-table {
     }
 
     .attachment-placeholder {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
     }
 
     input {
         left: 0;
-        border-radius: 5px;
+        border-radius: var(--mat-border-radius-4);
         z-index: 1;
 
         //  This will hide "Default Choose file" button
@@ -651,7 +651,7 @@ table.stock-table {
             width: 200px;
             position: relative;
             border: 1px solid var(--color-silver);
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
 
             .input-addon {
                 position: absolute;
@@ -834,7 +834,7 @@ table.stock-table {
 }
 
 .option-color {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     padding: 0 15px;
 
     .add-option {
@@ -927,7 +927,7 @@ table.stock-table {
 .tab-container-new {
     padding: 15px 0;
     margin-bottom: 15px;
-    border-radius: 7px;
+    border-radius: var(--mat-border-radius-8);
 
     .sales-purchase-width {
         max-width: 900px;
@@ -1010,7 +1010,7 @@ table.stock-table {
     align-items: center;
     justify-content: center;
     height: 32px;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     color: var(--color-dark-gray);
     border: 1px solid var(--color-silver);
     background-color: var(--color-transparent);
@@ -1018,5 +1018,5 @@ table.stock-table {
 }
 
 .add-new-text-container {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }

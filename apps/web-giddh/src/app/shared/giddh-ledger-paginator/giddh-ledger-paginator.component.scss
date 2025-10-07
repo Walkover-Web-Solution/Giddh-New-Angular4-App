@@ -2,13 +2,13 @@
     display: block;
 }
 .custom-paginator {
-    border-color: var(--color-blue-primary);
+    border-color: var(--mat-primary-color);
     mat-button-toggle {
-        border-color: var(--color-blue-primary);
+        border-color: var(--mat-primary-color);
         width: 80px;
         line-height: 28px;
         &.page-count-wrapper {
-            background-color: var(--color-blue-primary) !important;
+            background-color: var(--mat-primary-color) !important;
             color: var(--color-white);
         }
     }

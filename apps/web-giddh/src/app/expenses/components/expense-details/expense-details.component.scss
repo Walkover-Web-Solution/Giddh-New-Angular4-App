@@ -64,7 +64,7 @@
     text-align: center;
     line-height: 30px;
     color: var(--color-dark-gray);
-    border-radius: 3px;
+    border-radius: var(--mat-border-radius-4);
     cursor: pointer;
 }
 */
@@ -87,7 +87,7 @@ span {
         padding: 10px;
         background-color: var(--color-silver);
         border: 1px solid var(--color-silver);
-        border-radius: 5px;
+        border-radius: var(--mat-border-radius-4);
         position: static;
         transform: inherit;
     }
@@ -130,7 +130,7 @@ span {
 */
 .entry-against {
     &.error-box {
-        border-radius: 7px;
+        border-radius: var(--mat-border-radius-8);
     }
 }
 @media only screen and (max-width: 1440px) {

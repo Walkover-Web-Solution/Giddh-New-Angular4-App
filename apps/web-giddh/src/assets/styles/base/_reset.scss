@@ -1,7 +1,17 @@
 a {
-    text-decoration: none;
+    @include text-decoration(none);
+    color: var(--mat-primary-color);
+}
+h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+button,
+input {
+    outline: none !important;
 }
 
 table {
     border-collapse: collapse;
+    width: 100%;
 }

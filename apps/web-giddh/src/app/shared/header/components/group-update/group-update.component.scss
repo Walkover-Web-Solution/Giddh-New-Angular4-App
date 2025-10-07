@@ -41,12 +41,12 @@
 .manage-group-account-form {
     .form-group {
         .ladda-button[type="submit"] {
-            border-color: var(--color-blue-primary) !important;
-            background-color: var(--color-blue-primary) !important;
+            border-color: var(--mat-primary-color) !important;
+            background-color: var(--mat-primary-color) !important;
             color: var(--color-white) !important;
             &:hover {
-                border-color: var(--color-blue-primary) !important;
-                background-color: var(--color-blue-primary) !important;
+                border-color: var(--mat-primary-color) !important;
+                background-color: var(--mat-primary-color) !important;
             }
         }
     }

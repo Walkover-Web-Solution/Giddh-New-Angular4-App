@@ -74,7 +74,7 @@ p {
     padding: 0.1in;
     letter-spacing: 0;
     width: 100%;
-    border-radius: 1px;
+    border-radius: var(--mat-border-radius-0);
 }
 
 /* header */
@@ -257,7 +257,7 @@ header img {
 }
 .tcs table td,
 .tcs table th {
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
     padding: 5px;
     border: 1px solid var(--color-silver);
     vertical-align: top;
@@ -300,7 +300,7 @@ header img {
 */
 
 #default table.item td {
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
     padding: 7px;
     border-top: 1px solid var(--color-silver);
     line-height: 1.2rem;
@@ -428,7 +428,7 @@ header img {
     position: absolute;
     top: 0;
     bottom: 0;
-    background: var(--color-blue-primary);
+    background: var(--mat-primary-color);
     left: 0;
     right: 0;
     width: 100%;

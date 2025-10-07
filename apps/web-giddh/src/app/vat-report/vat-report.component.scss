@@ -41,7 +41,7 @@
 /* UNUSED COMPONENT CLASS: return-sel - Auto-commented by script
 .return-sel {
     background-color: var(--color-light-gray);
-    border-radius: 18px;
+    border-radius: var(--mat-border-radius-16);
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
@@ -87,12 +87,12 @@
             tr {
                 td {
                     a {
-                        color: var(--color-blue-primary) !important;
+                        color: var(--mat-primary-color) !important;
                     }
 
                     /* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
 .btn-link {
-                        color: var(--color-blue-primary) !important;
+                        color: var(--mat-primary-color) !important;
                     }
 */
                 }

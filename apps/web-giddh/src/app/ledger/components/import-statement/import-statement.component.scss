@@ -20,7 +20,7 @@
         padding: 1px 12px !important;
         cursor: pointer;
         width: 120px !important;
-        border-radius: 2px;
+        border-radius: var(--mat-border-radius-0);
         text-align: center;
         background-color: var(--color-light-gray);
         margin-left: -34px;

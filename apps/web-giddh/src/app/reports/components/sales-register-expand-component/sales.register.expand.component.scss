@@ -24,7 +24,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -43,7 +43,7 @@
     color: var(--color-black);
     border: none;
     background-color: var(--color-light-gray);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 
 /* UNUSED COMPONENT CLASS: p-modal-tooltip - Auto-commented by script
@@ -53,7 +53,7 @@
     z-index: 1000;
     width: 257px;
     border: 1px solid var(--color-silver);
-    border-radius: 4px;
+    border-radius: var(--mat-border-radius-4);
     box-shadow: 0 7px 24px var(--color-shadow-light);
 }
 */
@@ -137,7 +137,7 @@ ul.list-unstyled li a {
 
 /* UNUSED COMPONENT CLASS: text-purple - Auto-commented by script
 .text-purple {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 */
 
@@ -250,11 +250,11 @@ table th {
 */
 .icon-pointer {
     cursor: pointer;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     margin-left: 6px;
 }
 .icon-pointer .active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 /* UNUSED COMPONENT CLASS: table-middle - Auto-commented by script
 .table-middle th .d-flex {
@@ -274,11 +274,11 @@ table th {
     align-items: center;
     background-color: var(--color-white);
     font-size: var(--font-size-16);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     &:hover {
-        background: var(--color-blue-primary);
+        background: var(--mat-primary-color);
         color: var(--color-white);
     }
 }
@@ -287,16 +287,16 @@ table th {
         width: 36px;
         height: 36px;
         border: 1px solid var(--color-silver);
-        border-radius: 5px;
+        border-radius: var(--mat-border-radius-4);
         background-color: var(--color-white);
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         font-size: 20px;
         position: relative;
         padding: 7px;
         &:hover {
-            background: var(--color-blue-primary);
+            background: var(--mat-primary-color);
             color: var(--color-white);
-            border-color: var(--color-blue-primary);
+            border-color: var(--mat-primary-color);
         }
     }
     .btn-group.d-flex.open.show {
@@ -309,10 +309,10 @@ table th {
                 position: relative;
                 top: 1px;
                 right: 10px;
-                background-color: var(--color-blue-primary);
+                background-color: var(--mat-primary-color);
                 color: var(--color-white) !important;
                 &:hover {
-                    background-color: var(--color-blue-primary);
+                    background-color: var(--mat-primary-color);
                 }
             }
 */
@@ -321,10 +321,10 @@ table th {
 }
 
 .verticle-align-top a {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 
     &:hover {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
     }
 }
 
@@ -347,13 +347,13 @@ table th {
             font-weight: var(--font-weight-semibold);
             font-size: var(--font-size-16);
             a {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
             }
         }
     }
     .custom-month-select {
         font-weight: var(--font-weight-semibold);
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         .btn {
             font-size: var(--font-size-16);
             padding: 0;
@@ -363,23 +363,23 @@ table th {
         }
     }
 }
+/* UNUSED COMPONENT CLASS: voucher-number-td - Auto-commented by script
 .giddh-table {
     tbody {
         tr {
-            /* UNUSED COMPONENT CLASS: voucher-number-td - Auto-commented by script
         td .voucher-number-td {
                 white-space: normal !important;
                 word-break: break-all;
             }
-*/
         }
     }
 }
+*/
 
 /* UNUSED COMPONENT CLASS: btn-filters - Auto-commented by script
 .btn-filters {
     @include common-filters(
-        var(--color-blue-primary),
+        var(--mat-primary-color),
         var(--color-border-light),
         1px solid var(--color-silver)
     );

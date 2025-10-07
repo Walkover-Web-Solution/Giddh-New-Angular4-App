@@ -1,7 +1,7 @@
 /* UNUSED COMPONENT CLASS: form-header - Auto-commented by script
 .form-header {
     padding: 20px 15px;
-    background: var(--color-blue-primary);
+    background: var(--mat-primary-color);
     color: var(--color-white);
 }
 */
@@ -82,7 +82,7 @@
 */
 
 .cr-dr-account span.active {
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     color: var(--color-white);
 }
 
@@ -108,10 +108,10 @@
 
         input {
             border-left: 1px solid var(--color-silver) !important;
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
 
             &:focus {
-                border-left: 1px solid var(--color-blue-primary) !important;
+                border-left: 1px solid var(--mat-primary-color) !important;
             }
         }
     }

@@ -10,7 +10,7 @@
 
 /* UNUSED COMPONENT CLASS: custom-header - Auto-commented by script
 .custom-header {
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     padding: 15px;
     min-height: 60px;
 }
@@ -79,7 +79,7 @@
         display: inline-block;
         // position: relative;
         border: 1px solid var(--color-white);
-        border-radius: 20px;
+        border-radius: var(--mat-border-radius-16);
         i {
             vertical-align: bottom;
             display: inline-block;
@@ -99,7 +99,7 @@
     margin-left: 15px;
 
     button {
-        color: var(--color-blue-primary) !important;
+        color: var(--mat-primary-color) !important;
     }
 }
 */
@@ -111,7 +111,7 @@
         font-size: var(--font-size-16);
 
         i {
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
             font-size: var(--font-size-16);
         }
     }
@@ -126,15 +126,15 @@
             column-gap: 8px;
 
             a {
-                color: var(--color-blue-primary);
+                // color: var(--mat-primary-color);
                 text-decoration: underline;
-                position: relative;
+                // position: relative;
             }
 
             .dot {
                 width: 4px;
                 height: 4px;
-                background-color: var(--color-blue-primary);
+                background-color: var(--mat-primary-color);
                 border-radius: 50%;
             }
         }
@@ -180,7 +180,7 @@ ul{
                             background-color: var(--color-white);
                             i[class^='icon-'],
                             i[class*=' icon-'] {
-                              color: var(--color-blue-primary) !important;
+                              color: var(--mat-primary-color) !important;
                             }
                         }
                       }
@@ -193,7 +193,7 @@ ul{
                 &:hover{
                     button {
                         background-color: var(--color-white) !important;
-                        color: var(--color-blue-primary) !important;
+                        color: var(--mat-primary-color) !important;
                     }
                 }
             }
@@ -236,7 +236,7 @@ ul{
 
     .input-date {
         border: 1px solid var(--color-white);
-        border-radius: 20px !important;
+        border-radius: var(--mat-border-radius-16) !important;
         height: 34px;
         width: 240px;
 
@@ -300,7 +300,7 @@ ul{
 .nav-left-bar .company-name /* UNUSED COMPONENT CLASS: branch-unique-name - Auto-commented by script
 .branch-unique-name {
     font-size: var(--font-size-12);
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
     padding: 0 0 3px 0;
 }
 */
@@ -408,12 +408,12 @@ ul{
     position: fixed;
     width: 100%;
     top: var(--top-distance);
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     z-index: 990 !important;
     height: 60px;
 
     .universal-date {
-        color: var(--color-blue-primary) !important;
+        color: var(--mat-primary-color) !important;
         display: flex;
         align-items: center;
         column-gap: 20px;
@@ -451,7 +451,7 @@ ul{
 
         .not-today {
             .calendar-addon {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
             }
 
             .input-date {
@@ -461,27 +461,27 @@ ul{
 
         .input-date {
             background-color: var(--color-white);
-            border-radius: 5px !important;
+            border-radius: var(--mat-border-radius-4) !important;
             border: none;
 
             input {
-                color: var(--color-blue-primary) !important;
+                color: var(--mat-primary-color) !important;
             }
         }
 
         #add-manage {
-            color: var(--color-blue-primary) !important;
+            color: var(--mat-primary-color) !important;
             padding: 4.8px 8px;
             background-color: var(--color-white);
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: var(--font-size-15);
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
 
             i {
                 padding: 0px 5px 1px 0px!important;
-                color: var(--color-blue-primary) !important;
+                color: var(--mat-primary-color) !important;
                 font-size: var(--font-size-16);
             }
         }
@@ -550,7 +550,7 @@ aside-setting {
 
 .menu-link {
     a {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         text-decoration: underline;
         position: relative;
     }

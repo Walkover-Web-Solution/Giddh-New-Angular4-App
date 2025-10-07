@@ -45,10 +45,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
             }
             .icon-favorite-selected {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
             }
         }
     }

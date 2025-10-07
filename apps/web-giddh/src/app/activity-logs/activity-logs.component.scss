@@ -19,7 +19,7 @@
 
     .filter-wrapper {
         display: flex;
-        background-color: var(--color-blue-light);
+        background-color: var(--mat-primary-color-light);
         padding-bottom: 4px;
         padding-top: 4px;
         margin-bottom: 0px;
@@ -48,14 +48,14 @@
         border: none;
         height: 44px;
         cursor: pointer;
-        background-color: var(--color-blue-light);
+        background-color: var(--mat-primary-color-light);
         font-size: var(--font-size-24);
         padding-left: 0px !important;
         padding-right: 0px !important;
         min-width: 44px !important;
         color: var(--color-black) !important;
         padding-top: 0 !important;
-        border-radius: 0 !important;
+        border-radius: var(--mat-border-radius-0) !important;
         padding-top: 4px !important;
         margin: auto;
         margin-left: 3px;
@@ -70,7 +70,7 @@
 
     /* UNUSED COMPONENT CLASS: clear-filter - Auto-commented by script
 .clear-filter {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         cursor: pointer;
     }
 */
@@ -163,12 +163,12 @@
         .compare-json {
             text-decoration: underline;
             text-decoration: underline;
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
             z-index: 99;
             padding: 13px 20px;
 
             &:hover {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
             }
         }
 

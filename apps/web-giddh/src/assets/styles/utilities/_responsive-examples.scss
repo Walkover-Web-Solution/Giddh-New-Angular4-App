@@ -195,7 +195,7 @@
       width: 100%;
       padding: 0.75rem;
       border: 1px solid #ddd;
-      border-radius: 4px;
+      border-radius: var(--mat-border-radius-4);
       
       @include media-breakpoint-up('medium-desktop') {
         // Modern laptops and smaller monitors (1280px+)

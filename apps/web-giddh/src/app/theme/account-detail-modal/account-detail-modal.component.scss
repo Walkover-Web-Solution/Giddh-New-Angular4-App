@@ -13,7 +13,7 @@
 
 .account-detail-modal-header-div {
     padding: 0;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
 }
 
 .account-detail-modal-div {
@@ -82,7 +82,7 @@ ul.list-unstyled li a {
 .li-link {
     margin-top: 15px !important;
     a:hover {
-        color: var(--color-blue-primary) !important;
+        color: var(--mat-primary-color) !important;
     }
 }
 /*ul  UNUSED COMPONENT CLASS: pills - Auto-commented by script

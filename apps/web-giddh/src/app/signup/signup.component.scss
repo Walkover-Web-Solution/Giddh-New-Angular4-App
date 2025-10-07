@@ -97,7 +97,7 @@ body.unresponsive {
 
 /* UNUSED COMPONENT CLASS: twitter - Auto-commented by script
 .twitter {
-    background: var(--color-blue-primary);
+    background: var(--mat-primary-color);
 }
 */
 
@@ -107,7 +107,7 @@ body.unresponsive {
 
 /* UNUSED COMPONENT CLASS: linkedin - Auto-commented by script
 .linkedin {
-    background: var(--color-blue-primary);
+    background: var(--mat-primary-color);
 }
 */
 
@@ -145,15 +145,15 @@ body.unresponsive {
 /* UNUSED COMPONENT CLASS: btn-blue - Auto-commented by script
 .btn-blue {
     color: var(--color-white) !important;
-    border-color: var(--color-blue-primary);
-    background: var(--color-blue-primary);
+    border-color: var(--mat-primary-color);
+    background: var(--mat-primary-color);
 }
 */
 
 .btn-blue:hover {
     color: var(--color-white) !important;
-    border-color: var(--color-blue-primary);
-    background: var(--color-blue-primary);
+    border-color: var(--mat-primary-color);
+    background: var(--mat-primary-color);
 }
 /*giddh loader*/
 
@@ -235,7 +235,7 @@ button.close {
 }
 
 .email {
-    background: var(--color-blue-primary);
+    background: var(--mat-primary-color);
 }
 
 /************* end login page *************/
@@ -334,14 +334,14 @@ small {
 /* UNUSED COMPONENT CLASS: linkedin-ico - Auto-commented by script
 // social icon
 .linkedin-ico a {
-    color: var(--color-blue-primary);
-    border-color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
+    border-color: var(--mat-primary-color);
 }
 */
 
 .google-ico a {
-    background: var(--color-blue-primary);
-    border-color: var(--color-blue-primary) !important;
+    background: var(--mat-primary-color);
+    border-color: var(--mat-primary-color) !important;
     color: var(--color-white);
     padding-left: 40px !important;
 }
@@ -364,14 +364,14 @@ small {
 /* UNUSED COMPONENT CLASS: login-option - Auto-commented by script
 .login-option,
 .login-option a {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     margin-top: 55px;
     font-weight: 500;
 }
 */
 
 .login-option a {
-    border-bottom: 2px dotted var(--color-blue-primary);
+    border-bottom: 2px dotted var(--mat-primary-color);
 }
 
 .slide-content h1 {
@@ -420,7 +420,7 @@ small {
     align-self: flex-start;
     position: relative;
     width: 100%;
-    background: var(--color-blue-light);
+    background: var(--mat-primary-color-light);
     margin: 0 -15px;
 }
 */
@@ -467,7 +467,7 @@ small {
     position: relative;
 }
 .login-left {
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     position: absolute;
     left: 0;
     height: 100vh;
@@ -494,11 +494,11 @@ small {
     max-width: 476px;
     width: 90%;
     margin: 0 auto;
-    border-radius: 8px;
+    border-radius: var(--mat-border-radius-8);
     overflow: hidden;
 }
 .logo-login {
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     height: 98px;
     display: flex;
     align-items: center;
@@ -507,22 +507,22 @@ small {
 }
 .accounting-space {
     padding: 30px;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
     background-color: var(--color-white) !important;
     border: 2px solid var(--color-white);
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
 }
 .accounting-space h4 {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     font-size: var(--font-size-16);
 }
 /* UNUSED COMPONENT CLASS: btn-outline-primary - Auto-commented by script
 .btn-outline-primary {
-    background-color: var(--color-blue-primary);
-    border-radius: 3px;
+    background-color: var(--mat-primary-color);
+    border-radius: var(--mat-border-radius-4);
     min-width: 160px;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     color: var(--color-white);
     margin-bottom: 10px;
     font-size: var(--font-size-15);
@@ -530,33 +530,33 @@ small {
 */
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
     box-shadow: none;
     outline: none;
 }
 /* UNUSED COMPONENT CLASS: login-with - Auto-commented by script
 .login-with {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     font-size: var(--font-size-15);
     margin-top: 10px;
     a {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         text-decoration: none;
     }
 }
 */
 /* UNUSED COMPONENT CLASS: btn-secondary - Auto-commented by script
 .btn-secondary {
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     color: var(--color-white);
-    background-color: var(--color-blue-primary);
-    border: 1px solid var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
+    border: 1px solid var(--mat-primary-color);
 }
 */
 .btn-secondary:hover {
     color: var(--color-white) !important;
-    background-color: var(--color-blue-primary);
-    border-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
+    border-color: var(--mat-primary-color);
 }
 /* UNUSED COMPONENT CLASS: forgotStep - Auto-commented by script
 .forgotStep {

@@ -1,6 +1,6 @@
 .stock-mat-salect {
     border: 1px solid var(--color-silver);
-    border-radius: 5px !important;
+    border-radius: var(--mat-border-radius-4) !important;
     padding: 8px;
     font-size: var(--font-size-15);
     min-width: 250px;
@@ -13,7 +13,7 @@
         height: 42px;
         width: 42px;
         border: 1px solid var(--color-medium-gray);
-        border-radius: 20px;
+        border-radius: var(--mat-border-radius-16);
         box-shadow: none;
         background: var(--color-white);
     }
@@ -30,24 +30,23 @@
 }
 
 .select-multiple-chiplist-inventory {
-    font-weight: 400 !important;
+    // font-weight: 400 !important;
     font-size: var(--font-size-15) !important;
-    width: 84%;
 
     /* .mat-chi p UNUSED COMPONENT CLASS: mat-standard-chip - Auto-commented by script
 .mat-standard-chip {
         color: var(--color-dark-black) !important;
         background-color: var(--color-white) !important;
-        border: 1px solid var(--color-blue-primary) !important;
-        border-radius: 5px !important;
+        border: 1px solid var(--mat-primary-color) !important;
+        border-radius: var(--mat-border-radius-4) !important;
         font-size: var(--font-size-12) !important;
     }
 */
 }
 
-.searching-bar-chiplist {
-    width: 98% !important;
-}
+// .searching-bar-chiplist {
+//     width: 98% !important;
+// }
 
 .filter-dropdown-branch {
     max-width: 250px;
@@ -95,7 +94,7 @@
     align-items: center;
     border: 1px solid var(--color-silver);
     padding: 5px;
-    border-radius: 4px;
+    border-radius: var(--mat-border-radius-4);
     height: 36px;
     width: 36px;
 }

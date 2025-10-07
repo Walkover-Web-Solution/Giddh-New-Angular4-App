@@ -51,9 +51,9 @@
     padding: 0 40px;
 }
 */
-.manufacture-table.giddh-table tbody > tr > td:first-child {
-    white-space: nowrap !important;
-}
+// .manufacture-table.giddh-table tbody > tr > td:first-child {
+//     white-space: nowrap !important;
+// }
 .custom-datepicker {
     input {
         text-align: center;
@@ -115,7 +115,7 @@
     th {
         border: none !important;
         padding: 0;
-        color: var(--color-blue-primary) !important;
+        color: var(--mat-primary-color) !important;
         background: none !important;
     }
 }

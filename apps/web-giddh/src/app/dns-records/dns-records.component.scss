@@ -13,7 +13,7 @@
         margin-left: auto;
 
         .domain-setting-card {
-            border-radius: 8px !important;
+            border-radius: var(--mat-border-radius-8) !important;
         }
 
         // .mat-card {
@@ -21,7 +21,7 @@
         //     display: block;
         //     position: relative;
         //     padding: 16px;
-        //     border-radius: 4px;
+        //     border-radius: var(--mat-border-radius-4);
 
         //     .mat-mdc-card-content {
         //         padding: 0px !important;
@@ -40,7 +40,7 @@
                 background: var(--color-transparent-backgrounds);
 
                 .status {
-                    border-radius: 16px;
+                    border-radius: var(--mat-border-radius-16);
                     padding: 6px 12px;
                 }
 

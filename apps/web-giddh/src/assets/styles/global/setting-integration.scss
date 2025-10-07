@@ -19,7 +19,7 @@ select-multiple-fields {
 
 .list-item-underline-hover {
     &:hover {
-        color: var(--color-blue-primary) !important;
+        color: var(--mat-primary-color) !important;
         text-decoration: underline;
     }
 }

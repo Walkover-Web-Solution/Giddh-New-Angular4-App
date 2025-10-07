@@ -25,7 +25,7 @@
             .warehouse-list-wrapper {
                 .warehouse-list {
                     &:nth-child(odd) {
-                        background-color: var(--color-blue-light);
+                        background-color: var(--mat-primary-color-light);
                     }
                 }
             }
@@ -123,7 +123,7 @@
     width: 290px;
 
     .warehouse-list-head-num {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
     }
 }
 .stock-list-box {
@@ -163,7 +163,7 @@
         border-left: 1px solid var(--color-silver) !important;
 
         &:focus {
-            border-left: 1px solid var(--color-blue-primary) !important;
+            border-left: 1px solid var(--mat-primary-color) !important;
         }
     }
 }

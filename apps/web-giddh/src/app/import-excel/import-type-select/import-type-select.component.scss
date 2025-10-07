@@ -17,7 +17,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     color: initial;
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
     justify-content: center;
 }
 
@@ -50,9 +50,9 @@
     background-color: var(--color-white);
 }
 .text-link-2 {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
     &:hover {
-        color: var(--color-blue-primary) !important;
+        color: var(--mat-primary-color) !important;
     }
 }
 @media (max-width: 991px) {

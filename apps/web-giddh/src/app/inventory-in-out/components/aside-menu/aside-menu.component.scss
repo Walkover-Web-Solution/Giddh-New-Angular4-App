@@ -34,7 +34,7 @@
     top: var(--top-distance);
     z-index: 5;
     border: 0;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
 }
 
 :host /* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script

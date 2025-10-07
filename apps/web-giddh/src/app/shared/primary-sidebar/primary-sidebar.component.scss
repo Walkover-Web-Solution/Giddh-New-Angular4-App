@@ -6,7 +6,7 @@
     padding-top: 0 !important;
     // background-color: var(--color-white);
     .company-branch-block {
-        background-color: var(--color-blue-light);
+        background-color: var(--mat-primary-color-light);
         .branch-connection {
             padding: 14px 0;
         }
@@ -168,7 +168,7 @@
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color(var(--color-white), var(--color-blue-primary));
+                @include highlight-color(var(--color-white), var(--mat-primary-color));
             }
         }
         p {
@@ -187,12 +187,12 @@
                     // color: var(--color-dark-gray);
                     line-height: 16px;
                     &.show-more {
-                        color: var(--color-blue-primary);
+                        color: var(--mat-primary-color);
                         text-decoration: underline;
                         font-size: var(--font-size-12);
                     }
                     &:hover {
-                        color: var(--color-blue-primary);
+                        color: var(--mat-primary-color);
                     }
                 }
             }
@@ -345,8 +345,8 @@
             left: 60px !important;
             z-index: 9999999 !important;
             background-color: var(--color-white) !important;
-            border: 1px solid var(--color-blue-primary) !important;
-            border-radius: 0;
+            border: 1px solid var(--mat-primary-color) !important;
+            border-radius: var(--mat-border-radius-0);
             width: 180px;
             top: 0px !important;
             padding-bottom: 0 !important;
@@ -522,7 +522,7 @@ cdk-tree {
         }
         &.has-no-child {
             &:hover {
-                background-color: var(--color-blue-primary);
+                background-color: var(--mat-primary-color);
                 color: var(--color-white);
                 .main-item-wrapper {
                     .main-item {
@@ -538,7 +538,7 @@ cdk-tree {
         }
         &.has-no-child {
             &.active {
-                background-color: var(--color-blue-primary);
+                background-color: var(--mat-primary-color);
                 color: var(--color-white);
                 .main-item-wrapper {
                     .main-item {

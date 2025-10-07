@@ -16,7 +16,7 @@
     label {
         padding: 10px;
         margin-right: 15px;
-        border-radius: 3px;
+        border-radius: var(--mat-border-radius-4);
         cursor: pointer;
 
         input:checked+& {

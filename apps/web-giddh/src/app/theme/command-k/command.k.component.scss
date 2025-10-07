@@ -72,7 +72,7 @@
         z-index: 10;
         box-shadow: 0 2px 3px 0 var(--color-shadow-light);
         border: 1px solid var(--color-silver);
-        border-radius: 2px;
+        border-radius: var(--mat-border-radius-0);
     }
 */
     &:not(.isFlying),
@@ -177,7 +177,7 @@
             }
             // hover effect
             &.selected {
-                background-color: var(--color-blue-primary);
+                background-color: var(--mat-primary-color);
                 .item-details {
                     color: var(--color-white);
                     small {

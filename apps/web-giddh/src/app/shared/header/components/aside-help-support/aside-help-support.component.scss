@@ -37,7 +37,7 @@
     z-index: 5;
     border: 0;
     cursor: pointer;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
 }
 :host /* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
 .container-fluid {
@@ -76,7 +76,7 @@
         h2 {
             font-weight: var(--font-weight-semibold) !important;
             font-size: var(--font-size-16) !important;
-            color: var(--color-blue-primary) !important;
+            color: var(--mat-primary-color) !important;
             line-height: 20px !important;
             &::before{
                 display: none !important;

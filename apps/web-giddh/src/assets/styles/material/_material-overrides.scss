@@ -2,3 +2,37 @@
 .mat-mdc-menu-panel {
     max-width: unset !important;
 }
+
+// Customize Material Radio Button
+.mat-mdc-radio-group {
+    display: flex;
+    column-gap: 15px;
+
+    .mat-mdc-radio-button {
+        .mdc-radio {
+            padding: 0 !important;
+        }
+    }
+}
+
+// Table 
+table tr {
+    &:hover {
+        background-color: inherit !important;
+    }
+}
+
+
+// Material Reset global utility class
+.mat-form-field-no-overlay {
+    .mat-mdc-form-field {
+        .mat-mdc-form-field-focus-overlay {
+            display: none;
+        }
+    }
+}
+.mat-form-field-no-line-ripple {
+    .mdc-line-ripple {
+        display: none;
+    }
+}

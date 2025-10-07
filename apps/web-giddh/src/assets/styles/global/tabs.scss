@@ -9,8 +9,8 @@
 
         .mat-mdc-tab {
             .mdc-tab__text-label {
-                font-size: var(--font-size-16);
-                color: var(--color-dark-gray);
+                // font-size: var(--font-size-16);
+                // color: var(--color-dark-gray);
                 // for voucher
                 .voucher-svg {
                     fill: var(--color-dark-gray);
@@ -19,9 +19,9 @@
 
             &.mdc-tab--active {
                 .mdc-tab__text-label {
-                    color: var(--color-blue-primary);
+                    // color: var(--mat-primary-color);
                     .voucher-svg {
-                        fill: var(--color-blue-primary);
+                        // fill: var(--mat-primary-color);
                     }
                 }
             }
@@ -33,7 +33,7 @@
 // .custom-tab {
 //     .mat-button-toggle-appearance-standard {
 //         &.mat-button-toggle-checked {
-//             background-color: var(--color-blue-primary);
+//             background-color: var(--mat-primary-color);
 //             color: var(--color-white);
 //         }
 //     }
@@ -58,7 +58,7 @@
             border: 1px solid var(--color-silver);
             width: 120px;
             height: 120px!important;
-            border-radius: 4px;
+            border-radius: var(--mat-border-radius-4);
             .mdc-tab__text-label {
                 flex-direction: column;
                 row-gap: 8px;
@@ -70,7 +70,7 @@
                 border: none;
             }
             &.mdc-tab-indicator--active {
-                border-color: var(--color-blue-primary);
+                border-color: var(--mat-primary-color);
                 box-shadow: 0 6px 7px var(--color-shadow-light);
             }
         }

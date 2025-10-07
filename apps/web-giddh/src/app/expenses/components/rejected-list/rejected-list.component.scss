@@ -19,7 +19,7 @@
     margin-right: 0;
     margin: 0 5px;
     border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     height: 34px;
     width: 34px;
     background-color: var(--color-white);
@@ -30,7 +30,7 @@
 }
 /* .icon-pointer  UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
 .active-text-color {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 */
 /* UNUSED COMPONENT CLASS: icon-pointer - Auto-commented by script

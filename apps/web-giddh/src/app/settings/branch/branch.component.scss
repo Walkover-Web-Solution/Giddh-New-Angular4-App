@@ -22,7 +22,7 @@
         margin: 4px;
         padding: 2px 10px;
         font-size: var(--font-size-15);
-        border-radius: 3px;
+        border-radius: var(--mat-border-radius-4);
         cursor: pointer;
 
         a {
@@ -93,14 +93,14 @@
 
 .clearfix {
     .icon-favorite-selected {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
     }
 
     // .icon-branch-icon,
     /* UNUSED COMPONENT CLASS: icon-company-HO - Auto-commented by script
 .icon-company-HO {
         padding: 4px 5px 0 0;
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         font-size: var(--font-size-12);
     }
 */
@@ -108,7 +108,7 @@
 
 .card-basic-details h2 {
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     font-weight: var(--font-weight-bold);
     margin-bottom: 12px;
     white-space: normal;
@@ -142,7 +142,7 @@
 /* UNUSED COMPONENT CLASS: unlink - Auto-commented by script
 
 .unlink a {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
     cursor: pointer;
 }
 */
@@ -215,10 +215,10 @@
 
     /* UNUSED COMPONENT CLASS: clear-filter-btn - Auto-commented by script
 .clear-filter-btn {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         font-size: var(--font-size-15);
-        border: 1px solid var(--color-blue-primary);
-        border-radius: 20px;
+        border: 1px solid var(--mat-primary-color);
+        border-radius: var(--mat-border-radius-16);
         padding: 0 12px;
         width: 150px !important;
         display: flex;
@@ -231,7 +231,7 @@
             font-size: var(--font-size-12);
             padding-right: 8px;
             top: 0;
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
         }
     }
 */
@@ -242,7 +242,7 @@
     justify-content: center;
     align-items: center;
     font-size: var(--font-size-16);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     background: var(--color-white);
     margin-right: 15px;
 
@@ -251,7 +251,7 @@
 
         &:hover {
             background-color: var(--color-border-light);
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
         }
     }
 }
@@ -299,8 +299,8 @@
         &:before {
             content: "\2605";
             position: absolute;
-            border-color: var(--color-blue-primary);
-            color: var(--color-blue-primary);
+            border-color: var(--mat-primary-color);
+            color: var(--mat-primary-color);
         }
     }
 }
@@ -360,7 +360,7 @@
                 width: 8px;
                 height: 8px;
                 float: left;
-                border-radius: 5px;
+                border-radius: var(--mat-border-radius-4);
                 margin-top: 8px;
                 margin-right: 4px;
             }
@@ -374,7 +374,7 @@
                 width: 8px;
                 height: 8px;
                 float: left;
-                border-radius: 5px;
+                border-radius: var(--mat-border-radius-4);
                 margin-top: 8px;
                 margin-right: 4px;
             }
@@ -388,7 +388,7 @@ button {
         height: 30px;
 
         &:hover {
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
         }
     }
 }

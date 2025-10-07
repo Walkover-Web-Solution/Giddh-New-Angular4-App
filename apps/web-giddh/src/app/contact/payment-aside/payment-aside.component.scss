@@ -152,7 +152,7 @@ form label {
     }
     .bank-details-wrapper {
         border: 1px solid var(--color-silver);
-        border-radius: 2px;
+        border-radius: var(--mat-border-radius-0);
         margin-top: 3px;
         display: flex;
         .readonly-bank-details {

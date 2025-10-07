@@ -28,7 +28,7 @@
     content: "";
     width: 26px;
     height: 26px;
-    background-color: var(--color-blue-light);
+    background-color: var(--mat-primary-color-light);
     top: 5px;
     right: -6px;
     border-radius: 50%;
@@ -211,7 +211,7 @@ button.toast-close-button {
 }
 
 .toast-info {
-    background-color: var(--color-blue-primary);
+    background-color: var(--mat-primary-color);
 }
 .toast-info .toast-title {
     color: var(--color-white);

@@ -108,7 +108,7 @@ export class DynamicThemeService {
 
     /**
      * Applies Material Design color variables to document root
-     * Creates --mat-{type}-color, --mat-{type}-color-rgb, and --mat-{type}-contrast-color variables
+     * Creates --mat-{type}-color, --mat-{type}-color-rgb, --mat-{type}-contrast-color, and --mat-{type}-color-light variables
      * 
      * @private
      * @param {string} paletteType - Type of palette ('primary', 'accent', 'warn')
@@ -141,6 +141,7 @@ export class DynamicThemeService {
         root.style.setProperty(`--mat-${paletteType}-color`, hexColor);
         root.style.setProperty(`--mat-${paletteType}-color-rgb`, hexToRgb(hexColor));
         root.style.setProperty(`--mat-${paletteType}-contrast-color`, getContrastColor(hexColor));
+        root.style.setProperty(`--mat-${paletteType}-color-light`, `rgba(${hexToRgb(hexColor)}, 0.15)`);
     }
 
     /**

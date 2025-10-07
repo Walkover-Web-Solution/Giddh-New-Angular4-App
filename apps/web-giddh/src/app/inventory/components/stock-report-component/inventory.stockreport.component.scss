@@ -21,7 +21,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -67,7 +67,7 @@
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     background: var(--color-border-light);
 }
 /* UNUSED COMPONENT CLASS: stock-input - Auto-commented by script
@@ -121,7 +121,7 @@
 }
 
 .purchase {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .sales {
     color: var(--color-green);
@@ -133,14 +133,14 @@
     color: var(--color-green);
 }
 .credit {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .debit {
     color: var(--color-orange);
 }
 /* UNUSED COMPONENT CLASS: modal-content - Auto-commented by script
 .modal-content {
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
     margin-top: 200px;
 }
 */
@@ -154,7 +154,7 @@
 }
 .dropdown-menu.dropdown-menu-download {
     min-width: 110px;
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
 }
 .dropdown-menu-download li {
     cursor: pointer;
@@ -191,7 +191,7 @@
     width: 115%;
     right: -7.5% !important;
     top: 118% !important;
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
     padding: 0px;
     input[type="checkbox"]:after {
         border: 1px solid var(--color-silver);
@@ -247,10 +247,10 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .icon-pointer .active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .sticky-footer-sale-amount {
     .inner-content-footer {
@@ -286,7 +286,7 @@ button[aria-expanded="true"] i {
     width: 100% !important;
 }
 .text-purple {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 /* UNUSED COMPONENT CLASS: bg-white - Auto-commented by script
 .bg-white {
@@ -295,7 +295,7 @@ button[aria-expanded="true"] i {
 */
 /* UNUSED COMPONENT CLASS: btn-link-2 - Auto-commented by script
 .btn-link-2 {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 */
 .mr-b100 {
@@ -311,8 +311,8 @@ button[aria-expanded="true"] i {
     font-size: var(--font-size-16);
     margin-left: 10px;
     border: 1px solid var(--color-silver);
-    border-radius: 5px;
-    color: var(--color-blue-primary);
+    border-radius: var(--mat-border-radius-4);
+    color: var(--mat-primary-color);
     background: var(--color-white);
     .icon-advance-filter {
         padding: 10px;
@@ -330,7 +330,7 @@ button.btn/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
     background: var(--color-border-light);
     border: 1px solid var(--color-silver);
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -354,7 +354,7 @@ button.btn/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
 }
 .icon-btn {
     border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     height: 36px;
     width: 36px;
     margin-top: 0;

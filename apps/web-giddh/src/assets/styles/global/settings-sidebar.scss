@@ -46,7 +46,7 @@
             }
 
             &:hover {
-                background-color: var(--color-blue-primary);
+                background-color: var(--mat-primary-color);
 
                 a {
                     span {
@@ -65,7 +65,7 @@
         }
 
         .active-link {
-            background-color: var(--color-blue-primary);
+            background-color: var(--mat-primary-color);
 
             a {
                 span {

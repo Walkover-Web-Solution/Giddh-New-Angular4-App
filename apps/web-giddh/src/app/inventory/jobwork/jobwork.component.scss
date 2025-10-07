@@ -37,7 +37,7 @@
 }
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -85,7 +85,7 @@
     color: var(--color-green);
 }
 .Outward.Note {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .Transfer.Note {
     color: var(--color-dark-gray);
@@ -122,7 +122,7 @@
     width: 115%;
     right: -7.5% !important;
     top: 118% !important;
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
     padding: 0px;
     input[type="checkbox"]:after {
         border: 1px solid var(--color-silver);
@@ -158,7 +158,7 @@ button[aria-expanded="true"] i {
 
 /* UNUSED COMPONENT CLASS: modal-content - Auto-commented by script
 .modal-content {
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
     margin-top: 200px;
 }
 */
@@ -177,10 +177,10 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 .icon-pointer .active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 
 .dropdown-menu > li > a:hover {
@@ -194,9 +194,9 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: var(--font-size-16);
     margin-left: 10px;
-    border: 1px solid var(--color-blue-primary);
-    border-radius: 5px;
-    color: var(--color-blue-primary);
+    border: 1px solid var(--mat-primary-color);
+    border-radius: var(--mat-border-radius-4);
+    color: var(--mat-primary-color);
     background: var(--color-white);
 }
 .table-border .d-flex {
@@ -211,7 +211,7 @@ button.btn/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
     background: var(--color-border-light);
     border: 1px solid var(--color-silver);
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;

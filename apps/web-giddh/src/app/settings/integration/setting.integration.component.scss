@@ -9,14 +9,11 @@
     }
 */
 }
-#inlnImg img {
-    max-height: 18px;
-}
 
 /* UNUSED COMPONENT CLASS: input-group-btn - Auto-commented by script
 .input-group-btn {
     font-size: 21px;
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
     cursor: pointer;
     margin-right: 5px;
     padding-top: 5px;
@@ -38,22 +35,22 @@
 }
 */
 
-.disabled:after {
-    background: transparent;
-    content: "";
-    display: block;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    clear: both;
-    float: none;
-    overflow: hidden;
-    position: absolute;
-    z-index: 999;
-    cursor: not-allowed;
-}
+// .disabled:after {
+//     background: transparent;
+//     content: "";
+//     display: block;
+//     width: 100%;
+//     height: 100%;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     clear: both;
+//     float: none;
+//     overflow: hidden;
+//     position: absolute;
+//     z-index: 999;
+//     cursor: not-allowed;
+// }
 
 /* .disabled UNUSED COMPONENT CLASS: list-item - Auto-commented by script
 .list-item {
@@ -100,9 +97,9 @@
     width: 100% !important;
 }
 */
-.linked-account {
-    width: calc(100% - 42px);
-}
+// .linked-account {
+//     width: calc(100% - 42px);
+// }
 /* UNUSED COMPONENT CLASS: payment-text - Auto-commented by script
 .payment-text {
     color: var(--color-dark-gray);
@@ -245,7 +242,8 @@
     }
 */
 
-    .mat-mdc-table tbody .mat-mdc-row:hover .mat-mdc-cell /* UNUSED COMPONENT CLASS: visibility - Auto-commented by script
+/* UNUSED COMPONENT CLASS: visibility - Auto-commented by script
+    .mat-mdc-table tbody .mat-mdc-row:hover .mat-mdc-cell 
 .visibility {
         display: block !important;
     }
@@ -283,11 +281,11 @@
 */
 }
 
-@media (max-width: 1440px) {
-    .mat-form-field {
-        width: 78% !important;
-    }
-}
+// @media (max-width: 1440px) {
+//     .mat-form-field {
+//         width: 78% !important;
+//     }
+// }
 
 /* UNUSED COMPONENT CLASS: plus-cross-btn - Auto-commented by script
 .plus-cross-btn {
@@ -379,7 +377,7 @@
 /* UNUSED COMPONENT CLASS: account-wrapper - Auto-commented by script
 .account-wrapper {
     width: 65%;
-    border-bottom: 1px solid var(--color-blue-light);
+    border-bottom: 1px solid var(--mat-primary-color-light);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
@@ -395,7 +393,7 @@
     padding-bottom: 9px;
     margin-top: 3px;
     margin-left: 1px;
-    background-color: var(--color-blue-light);
+    background-color: var(--mat-primary-color-light);
 }
 */
 
@@ -403,15 +401,15 @@
 .view-only-field {
     background-color: var(--color-white);
     padding: 8px;
-    border-radius: 5px;
-    color: var(--color-blue-primary);
+    border-radius: var(--mat-border-radius-4);
+    color: var(--mat-primary-color);
 }
 */
 
 /* UNUSED COMPONENT CLASS: disabled-field - Auto-commented by script
 .disabled-field {
     padding: 8px;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     word-break: break-word;
     color: var(--color-black);
     background-color: var(--color-light-gray);
@@ -430,7 +428,7 @@
 
 /* UNUSED COMPONENT CLASS: account-number - Auto-commented by script
 .account-number {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 */
 
@@ -473,7 +471,8 @@
 }
 */
 
-.account-approval-status/* UNUSED COMPONENT CLASS: approved - Auto-commented by script
+/* UNUSED COMPONENT CLASS: approved - Auto-commented by script
+.account-approval-status
 .approved {
     color: var(--color-green);
 
@@ -483,7 +482,8 @@
 }
 */
 
-.account-approval-status/* UNUSED COMPONENT CLASS: pending-approval - Auto-commented by script
+/* UNUSED COMPONENT CLASS: pending-approval - Auto-commented by script
+.account-approval-status
 .pending-approval {
     color: var(--color-orange);
 
@@ -501,8 +501,8 @@
 
 /* UNUSED COMPONENT CLASS: btn-light-blue - Auto-commented by script
 .btn-light-blue {
-    color: var(--color-blue-primary);
-    background-color: var(--color-blue-light);
+    color: var(--mat-primary-color);
+    background-color: var(--mat-primary-color-light);
 }
 */
 
@@ -544,51 +544,51 @@
     right: -32px;
 }
 */
-@media (max-width: 1600px) and (min-width: 1200px) {
-    .account-wrapper {
-        width: 80% !important;
-    }
-}
+// @media (max-width: 1600px) and (min-width: 1200px) {
+//     .account-wrapper {
+//         width: 80% !important;
+//     }
+// }
 
-@media (max-width: 1199px) {
-    .account-wrapper {
-        width: 100% !important;
-    }
-}
+// @media (max-width: 1199px) {
+//     .account-wrapper {
+//         width: 100% !important;
+//     }
+// }
 
-@media (min-width: 768px) and (orientation: portrait) {
-    .clearfix {
-        .form {
-            .input-field {
-                input {
-                    width: 250px;
-                }
-            }
-        }
+// @media (min-width: 768px) and (orientation: portrait) {
+//     .clearfix {
+//         .form {
+//             .input-field {
+//                 input {
+//                     width: 250px;
+//                 }
+//             }
+//         }
 
-        .table-one {
-            table {
-                /* UNUSED COMPONENT CLASS: activeTriggers-width - Auto-commented by script
-.activeTriggers-width {
-                    width: 0%;
-                }
-*/
+//         .table-one {
+//             table {
+//                 /* UNUSED COMPONENT CLASS: activeTriggers-width - Auto-commented by script
+// .activeTriggers-width {
+//                     width: 0%;
+//                 }
+// */
 
-                /* UNUSED COMPONENT CLASS: type-width - Auto-commented by script
-.type-width {
-                    width: 4%;
-                }
-*/
-            }
-        }
-    }
+//                 /* UNUSED COMPONENT CLASS: type-width - Auto-commented by script
+// .type-width {
+//                     width: 4%;
+//                 }
+// */
+//             }
+//         }
+//     }
 
-    ::ng-deep {
-        table .type-column {
-            width: 14% !important;
-        }
-    }
-}
+    // ::ng-deep {
+    //     table .type-column {
+    //         width: 14% !important;
+    //     }
+    // }
+// }
 
 /* UNUSED COMPONENT CLASS: account-dropdown - Auto-commented by script
 .account-dropdown {
@@ -603,12 +603,12 @@
         align-items: center;
         height: 100%;
         border: 1px solid var(--color-silver);
-        border-radius: 5px;
+        border-radius: var(--mat-border-radius-4);
     }
 }
 */
 /* UNUSED COMPONENT CLASS: link-color - Auto-commented by script
 .link-color {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 */

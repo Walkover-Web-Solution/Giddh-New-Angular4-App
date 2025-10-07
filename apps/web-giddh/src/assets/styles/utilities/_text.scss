@@ -32,3 +32,9 @@
 
 // Transform scale utilities
 @include transform-scale-utilities();
+
+// Generate text-decoration utility classes
+@include text-decoration-utilities();
+
+// Generate border-radius utility classes
+@include border-radius-utilities();

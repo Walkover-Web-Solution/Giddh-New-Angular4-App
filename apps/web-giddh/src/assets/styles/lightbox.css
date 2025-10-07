@@ -29,7 +29,7 @@ html.lb-disable-scrolling {
     height: auto;
     max-width: inherit;
     max-height: none;
-    border-radius: 3px;
+    border-radius: var(--mat-border-radius-4);
 }
 
 .lightbox a img {

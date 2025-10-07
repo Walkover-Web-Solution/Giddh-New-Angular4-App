@@ -9,7 +9,7 @@
     cursor: pointer;
     /* UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
 .active-text-color {
-        color: var(--color-blue-primary) !important;
+        color: var(--mat-primary-color) !important;
     }
 }
 */
@@ -22,14 +22,14 @@
 }
 */
 .icon-sort-asc.active-text-color {
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
 }
 .td-search-box {
     div {
         display: flex;
         i {
             margin-top: 1px;
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
             padding-right: 8px;
             cursor: pointer;
             display: flex;

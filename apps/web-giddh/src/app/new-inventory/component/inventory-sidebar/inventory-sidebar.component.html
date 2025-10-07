@@ -20,11 +20,11 @@
                     <mat-tree-node
                         *matTreeNodeDef="let node"
                         matTreeNodePadding
-                        class="sub-option"
+                        class="sub-option cursor-pointer"
                         [routerLink]="node?.link"
                         routerLinkActive="active"
                         [ngClass]="{
-                            'hide-node': node.onlyBranchMode && (isCompany || isConsolidatedBranch),
+                            'd-none': node.onlyBranchMode && (isCompany || isConsolidatedBranch),
                             'active': !node?.link && node.hiddenLink.includes(currentUrl),
                             'mr-t1': (node.name == localeData?.sidebar?.warehouse_balance)
                         }"

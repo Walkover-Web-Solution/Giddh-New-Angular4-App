@@ -32,17 +32,17 @@
 .btn-lg {
     min-width: 155px;
     background: var(--color-white);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     box-shadow: none;
 }
 */
 
 .btn-lg:hover {
     background: var(--color-border-light);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     box-shadow: 0px 4px 4px -3px var(--color-shadow-light);
-    border-radius: 0px;
-    border-color: var(--color-blue-primary);
+    border-radius: var(--mat-border-radius-0);
+    border-color: var(--mat-primary-color);
 }
 /* UNUSED COMPONENT CLASS: pad-10-5 - Auto-commented by script
 .pad-10-5 {

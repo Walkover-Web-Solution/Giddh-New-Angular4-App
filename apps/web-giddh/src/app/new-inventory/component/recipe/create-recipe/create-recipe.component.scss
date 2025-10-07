@@ -16,7 +16,7 @@
 
             /* UNUSED COMPONENT CLASS: icon-add - Auto-commented by script
 .icon-add {
-                color: var(--color-blue-primary);
+                color: var(--mat-primary-color);
             }
 */
         /* UNUSED COMPONENT CLASS: icon-cross - Auto-commented by script
@@ -50,7 +50,7 @@
         }
         .section-head {
             font-size: var(--font-size-16);
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
         }
         .less-than-text {
             font-size: 32px;
@@ -97,7 +97,7 @@
                     border-bottom: 1px solid var(--color-silver);
                     tr {
                         th {
-                            color: var(--color-blue-primary);
+                            color: var(--mat-primary-color);
                             font-weight: 500;
                         }
                     }
@@ -172,7 +172,7 @@
         /* UNUSED COMPONENT CLASS: custom-card - Auto-commented by script
 .custom-card {
             padding: 12px 15px;
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
             min-width: 280px;
 
             /*& UNUSED COMPONENT CLASS: bg-green - Auto-commented by script
@@ -201,7 +201,7 @@
         }
 */
         .add-recipe {
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
             border-bottom: 1px solid var(--color-silver);
             button {
                 span {
@@ -235,7 +235,7 @@
     }
 }
 .save-recipe {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     background-color: var(--color-light-gray);
     display: inline-block;
     padding: 5px;
@@ -246,7 +246,7 @@
     justify-content: center;
     height: 35px;
     width: 35px;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     color: var(--color-dark-gray);
     border: 1px solid var(--color-silver);
     background-color: var(--color-transparent);

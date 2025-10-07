@@ -31,11 +31,11 @@
             /* UNUSED COMPONENT CLASS: new-stock-btn - Auto-commented by script
 .new-stock-btn {
                 color: var(--color-white);
-                background: var(--color-blue-primary);
+                background: var(--mat-primary-color);
                 padding: 0px 15px 0px 10px;
 
                 &:hover {
-                    background-color: var(--color-blue-primary);
+                    background-color: var(--mat-primary-color);
                 }
             }
 */
@@ -71,8 +71,8 @@
 .export-btn {
                 padding: 0px 8px;
                 margin-right: 10px;
-                color: var(--color-blue-primary);
-                border: 1px solid var(--color-blue-primary);
+                color: var(--mat-primary-color);
+                border: 1px solid var(--mat-primary-color);
                 background-color: var(--color-white);
                 img {
                     height: 18px;
@@ -82,7 +82,7 @@
 */
             /* UNUSED COMPONENT CLASS: filter-btn - Auto-commented by script
 .filter-btn {
-                border-radius: 5px;
+                border-radius: var(--mat-border-radius-4);
                 min-width: 40px;
                 padding: 0px 7px;
                 top: 0px;
@@ -117,7 +117,7 @@
             .warehouse-list-wrapper {
                 .warehouse-list {
                     &:nth-child(odd) {
-                        background-color: var(--color-blue-light);
+                        background-color: var(--mat-primary-color-light);
                     }
                 }
             }
@@ -125,7 +125,7 @@
                 .warehouse-expanded-box-wrapper {
                     .warehouse-expanded-box {
                         &:nth-child(odd) {
-                            background-color: var(--color-blue-light) !important;
+                            background-color: var(--mat-primary-color-light) !important;
                         }
                     }
                 }
@@ -152,7 +152,7 @@
                         .proper-spacing-list {
                             .opening-bal-input {
                                 width: 115px;
-                                border-radius: 5px;
+                                border-radius: var(--mat-border-radius-4);
                                 padding-left: 4px;
                                 height: 34px;
                                 position: relative;
@@ -160,7 +160,7 @@
                             }
                             .quantity-input {
                                 width: 87px;
-                                border-radius: 5px;
+                                border-radius: var(--mat-border-radius-4);
                                 padding-left: 4px;
                                 height: 34px;
                                 position: relative;
@@ -295,7 +295,7 @@
                     top: 11px;
                     input::placeholder {
                         font-size: var(--font-size-15);
-                        color: var(--color-blue-primary);
+                        color: var(--mat-primary-color);
                     }
                 }
             }
@@ -305,9 +305,9 @@
                 align-items: center;
                 justify-content: center;
                 .unique-name {
-                    border-radius: 5px;
+                    border-radius: var(--mat-border-radius-4);
                     padding: 8px 10px;
-                    color: var(--color-blue-primary);
+                    color: var(--mat-primary-color);
                     background-color: var(--color-light-gray) !important;
                 }
             }
@@ -408,20 +408,20 @@
                                 height: 36px;
                                 width: 110px;
                                 padding-left: 5px;
-                                border-radius: 5px;
+                                border-radius: var(--mat-border-radius-4);
                                 right: 12px;
                             }
                             .quantity-value {
                                 height: 36px;
                                 width: 69px;
                                 padding-left: 5.5px;
-                                border-radius: 5px;
+                                border-radius: var(--mat-border-radius-4);
                                 left: 11px;
                             }
                             .unit-value {
                                 height: 36px;
                                 width: 81px;
-                                border-radius: 5px;
+                                border-radius: var(--mat-border-radius-4);
                                 padding-left: 5px;
                                 left: 20px;
                                 font-size: var(--font-size-15);
@@ -452,9 +452,9 @@
                         .opening-bal-input {
                             width: 110px;
                             padding: 0px 5px;
-                            border-radius: 5px;
+                            border-radius: var(--mat-border-radius-4);
                             margin-right: 55px;
-                            background-color: var(--color-blue-light);
+                            background-color: var(--mat-primary-color-light);
                             position: relative;
                             right: 5px;
                             border: 0;
@@ -463,8 +463,8 @@
                             width: 69px;
                             margin-right: 41px;
                             padding: 0px 5px;
-                            border-radius: 5px;
-                            background-color: var(--color-blue-light);
+                            border-radius: var(--mat-border-radius-4);
+                            background-color: var(--mat-primary-color-light);
                             position: relative;
                             right: 4px;
                             border: 0;
@@ -483,7 +483,7 @@
                             height: 100%;
                             width: 392px;
                             &:nth-child(odd) {
-                                background-color: var(--color-blue-light);
+                                background-color: var(--mat-primary-color-light);
                             }
                         }
                         .editable-input {
@@ -545,7 +545,7 @@
     width: 392px;
 
     .warehouse-list-head-num {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         font-weight: 600;
         font-size: var(--font-size-15);
     }
@@ -630,7 +630,7 @@
         color: var(--color-dark-gray);
         /* UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
 .active-text-color {
-            color: var(--color-blue-primary);
+            color: var(--mat-primary-color);
         }
 }
 */
@@ -676,7 +676,7 @@
         border-left: 1px solid var(--color-silver) !important;
 
         &:focus {
-            border-left: 1px solid var(--color-blue-primary) !important;
+            border-left: 1px solid var(--mat-primary-color) !important;
         }
     }
 }

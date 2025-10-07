@@ -44,7 +44,7 @@
                 }
                 .custom-tab {
                     border: 1px solid var(--color-border-medium);
-                    border-radius: 5px;
+                    border-radius: var(--mat-border-radius-4);
                     button {
                         background-color: var(--color-white);
                         flex-grow: 1;
@@ -62,7 +62,8 @@
                         }
 
                         &.active {
-                            background-color: var(--color-blue-primary);
+                            background-color: var(--mat-primary-color);
+                            color: var(--color-white);
                         }
                     }
                 }
@@ -78,7 +79,7 @@
                     justify-content: space-between;
                     align-items: center;
                     h2 {
-                        color: var(--color-blue-primary) !important;
+                        color: var(--mat-primary-color) !important;
                         font-weight: 600;
                     }
                 }
@@ -90,7 +91,7 @@
                     .save-discount-header {
                         top: 0;
                         right: 0;
-                        background-color: var(--color-blue-primary);
+                        background-color: var(--mat-primary-color);
                         color: var(--color-white) !important;
                         width: calc(100vw - #{$header-giddh-logo-width});
                         height: 59px;
@@ -106,14 +107,14 @@
                     background: var(--color-white);
                     border: 1px solid var(--color-border-medium);
                     margin: 6px 0;
-                    border-radius: 4px;
+                    border-radius: var(--mat-border-radius-4);
                     width: max-content;
                     min-width: 100%;
                     .inventory-head {
                         strong {
                             font-size: var(--font-size-16);
                             margin-left: 12px;
-                            color: var(--color-blue-primary) !important;
+                            color: var(--mat-primary-color) !important;
                         }
                     }
                     /* UNUSED COMPONENT CLASS: column-gap42 - Auto-commented by script
@@ -151,7 +152,7 @@
                         thead {
                             tr {
                                 td {
-                                    vertical-align: middle;
+                                    padding: 10px;
                                     &.variant-name {
                                         width: auto;
                                         @media (max-width: 1366px) {
@@ -248,7 +249,7 @@
                     justify-content: center;
                     height: 32px;
                     min-width: 42px;
-                    border-radius: 5px;
+                    border-radius: var(--mat-border-radius-4);
                     color: var(--color-dark-gray) !important;
                     border: 1px solid var(--color-silver);
                     background-color: var(--color-transparent);

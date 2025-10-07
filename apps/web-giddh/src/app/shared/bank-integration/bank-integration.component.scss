@@ -8,14 +8,10 @@
     }
 }
 
-#inlnImg img {
-    max-height: 18px;
-}
-
 /* UNUSED COMPONENT CLASS: input-group-btn - Auto-commented by script
 .input-group-btn {
     font-size: 21px;
-    color: var(--color-blue-primary) !important;
+    color: var(--mat-primary-color) !important;
     cursor: pointer;
     margin-right: 5px;
     padding-top: 5px;
@@ -37,22 +33,22 @@
 }
 */
 
-.disabled:after {
-    background: transparent;
-    content: "";
-    display: block;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    clear: both;
-    float: none;
-    overflow: hidden;
-    position: absolute;
-    z-index: 999;
-    cursor: not-allowed;
-}
+// .disabled:after {
+//     background: transparent;
+//     content: "";
+//     display: block;
+//     width: 100%;
+//     height: 100%;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     clear: both;
+//     float: none;
+//     overflow: hidden;
+//     position: absolute;
+//     z-index: 999;
+//     cursor: not-allowed;
+// }
 
 /* .disabled UNUSED COMPONENT CLASS: list-item - Auto-commented by script
 .list-item {
@@ -60,9 +56,9 @@
 }
 */
 
-.disabled {
-    position: relative;
-}
+// .disabled {
+//     position: relative;
+// }
 
 /* UNUSED COMPONENT CLASS: disabled-list-item - Auto-commented by script
 .disabled-list-item {
@@ -98,9 +94,9 @@
     width: 100% !important;
 }
 */
-.linked-account {
-    width: calc(100% - 42px);
-}
+// .linked-account {
+//     width: calc(100% - 42px);
+// }
 /* UNUSED COMPONENT CLASS: payment-text - Auto-commented by script
 .payment-text {
     color: var(--color-dark-gray);
@@ -366,7 +362,7 @@
 
 .account-wrapper {
     width: 65%;
-    border-bottom: 1px solid var(--color-blue-light);
+    border-bottom: 1px solid var(--mat-primary-color-light);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
@@ -380,19 +376,19 @@
     padding-bottom: 9px;
     margin-top: 3px;
     margin-left: 1px;
-    background-color: var(--color-blue-light);
+    background-color: var(--mat-primary-color-light);
 }
 
 .view-only-field {
     background-color: var(--color-white);
     padding: 8px;
-    border-radius: 5px;
-    color: var(--color-blue-primary);
+    border-radius: var(--mat-border-radius-4);
+    color: var(--mat-primary-color);
 }
 
 .disabled-field {
     padding: 8px;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     word-break: break-word;
     color: var(--color-black);
     background-color: var(--color-light-gray);
@@ -407,7 +403,7 @@
 }
 
 .account-number {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 
 .limit-upto {
@@ -461,8 +457,8 @@
 
 /* UNUSED COMPONENT CLASS: btn-light-blue - Auto-commented by script
 .btn-light-blue {
-    color: var(--color-blue-primary);
-    background-color: var(--color-blue-light);
+    color: var(--mat-primary-color);
+    background-color: var(--mat-primary-color-light);
 }
 */
 
@@ -554,12 +550,12 @@
         align-items: center;
         height: 100%;
         border: 1px solid var(--color-silver);
-        border-radius: 5px;
+        border-radius: var(--mat-border-radius-4);
     }
 }
 */
 /* UNUSED COMPONENT CLASS: link-color - Auto-commented by script
 .link-color {
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
 }
 */

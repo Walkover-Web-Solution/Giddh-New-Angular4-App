@@ -101,7 +101,7 @@
         height: 64px !important;
         .sub-plan-feature {
             text-decoration: underline;
-            color: var(--color-blue-primary) !important;
+            color: var(--mat-primary-color) !important;
         }
     }
     .sub-plan-name {
@@ -159,7 +159,7 @@
         line-height: 4.8 !important;
     }
     .grid-title-list:nth-child(even) {
-        background-color: var(--color-blue-light);
+        background-color: var(--mat-primary-color-light);
         color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
@@ -250,7 +250,7 @@
 }
 */
 .selected {
-    background-color: var(--color-blue-light);
+    background-color: var(--mat-primary-color-light);
 }
 .select-plan-head {
     text-align: center;
@@ -258,7 +258,7 @@
     font-size: var(--font-size-16);
     padding: 20px 15px;
     h2 {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
         font-weight: bold;
     }
 }
@@ -300,7 +300,7 @@
 .inner-your-account:hover,
 .inner-your-account.active {
     background: var(--color-border-light);
-    border-color: var(--color-blue-primary);
+    border-color: var(--mat-primary-color);
 }
 .your-account:after,
 .your-account:before {
@@ -336,7 +336,7 @@
 }
 .inner-your-account > h3 {
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--mat-primary-color);
     font-weight: bold;
     margin-bottom: 5px;
     .plans-head-top {
@@ -453,7 +453,7 @@
 }
 */
 .see-all-features .inner-your-account {
-    border-color: var(--color-blue-primary);
+    border-color: var(--mat-primary-color);
     margin-bottom: 20px;
 }
 /* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
@@ -697,7 +697,7 @@
     float: left;
     width: 24%;
     .extra-addons-value {
-        color: var(--color-blue-primary);
+        color: var(--mat-primary-color);
     }
 }
 /* UNUSED COMPONENT CLASS: plan-table-layout - Auto-commented by script
@@ -712,7 +712,7 @@
 ::ng-deep {
     /* UNUSED COMPONENT CLASS: color-primary - Auto-commented by script
 .color-primary {
-        color: var(--color-blue-primary) !important;
+        color: var(--mat-primary-color) !important;
     }
 */
 }
@@ -827,7 +827,7 @@
     .main-row-plans::-webkit-scrollbar-thumb {
         background-color: var(--color-silver);
         outline: 1px solid var(--color-dark-gray);
-        border-radius: 20px;
+        border-radius: var(--mat-border-radius-16);
     }
     .single-plan-for-company {
         .plans-box {
