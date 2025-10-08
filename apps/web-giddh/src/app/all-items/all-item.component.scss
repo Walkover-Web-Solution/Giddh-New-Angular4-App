@@ -21,7 +21,7 @@
             border-bottom: 1px solid var(--color-border-light);
             margin-bottom: 20px;
             h3 {
-                color: var(--mat-primary-color);
+                color: var(--text-primary-color);
                 font-weight: var(--font-weight-semibold);
                 i {
                     font-size: 22px;
@@ -62,7 +62,7 @@
                     // }
                     &:hover,
                     &.active {
-                        background-color: var(--mat-primary-color) !important;
+                        background-color: var(--bg-primary-color) !important;
                         h4,
                         p {
                             color: var(--color-white);
@@ -121,7 +121,7 @@
 
     &:hover,
     &.active {
-        background-color: var(--mat-primary-color) !important;
+        background-color: var(--bg-primary-color) !important;
 
         h4,
         p {

@@ -1,6 +1,6 @@
 a {
     @include text-decoration(none, false);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }
 h1, h2, h3, h4, h5, h6 {
     font-size: inherit;

@@ -62,7 +62,7 @@
                         }
 
                         &.active {
-                            background-color: var(--mat-primary-color);
+                            background-color: var(--bg-primary-color);
                             color: var(--color-white);
                         }
                     }
@@ -79,7 +79,7 @@
                     justify-content: space-between;
                     align-items: center;
                     h2 {
-                        color: var(--mat-primary-color) !important;
+                        color: var(--text-primary-color) !important;
                         font-weight: 600;
                     }
                 }
@@ -91,7 +91,7 @@
                     .save-discount-header {
                         top: 0;
                         right: 0;
-                        background-color: var(--mat-primary-color);
+                        background-color: var(--bg-primary-color);
                         color: var(--color-white) !important;
                         width: calc(100vw - #{$header-giddh-logo-width});
                         height: 59px;
@@ -114,7 +114,7 @@
                         strong {
                             font-size: var(--font-size-16);
                             margin-left: 12px;
-                            color: var(--mat-primary-color) !important;
+                            color: var(--text-primary-color) !important;
                         }
                     }
                     /* UNUSED COMPONENT CLASS: column-gap-42 - Auto-commented by script

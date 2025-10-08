@@ -70,7 +70,7 @@
 
     /* UNUSED COMPONENT CLASS: clear-filter - Auto-commented by script
 .clear-filter {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
         cursor: pointer;
     }
 */
@@ -88,11 +88,6 @@
         display: flex;
         flex-wrap: wrap;
         padding-left: 9px;
-        .custom-datepicker {
-            input {
-                height: 36px;
-            }
-        }
     }
 
     /* UNUSED COMPONENT CLASS: filter-button - Auto-commented by script
@@ -163,12 +158,12 @@
         .compare-json {
             text-decoration: underline;
             text-decoration: underline;
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
             z-index: 99;
             padding: 13px 20px;
 
             &:hover {
-                color: var(--mat-primary-color);
+                color: var(--text-primary-color);
             }
         }
 

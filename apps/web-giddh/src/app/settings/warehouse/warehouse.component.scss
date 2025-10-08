@@ -20,7 +20,7 @@
     margin-bottom: 10px;
 }
 .create-warehouse p span {
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }
 .create-warehouse img {
     margin-bottom: 20px;
@@ -102,7 +102,7 @@
     float: left;
     width: 66%;
     word-break: break-all;
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }
 /* span UNUSED COMPONENT CLASS: set-as-default - Auto-commented by script
 .set-as-default {
@@ -137,7 +137,7 @@
     flex-direction: column;
     /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
 .icon-favorite-selected {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
     }
 */
 }
@@ -148,7 +148,7 @@
 }
 */
 .set-as-default i.icon-favorite-selected {
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }
 /* UNUSED COMPONENT CLASS: create-new-warehouse-btn - Auto-commented by script
 .create-new-warehouse-btn {
@@ -210,7 +210,7 @@ button {
         line-height: 32px;
         height: 30px;
         &:hover {
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
         }
     }
 }

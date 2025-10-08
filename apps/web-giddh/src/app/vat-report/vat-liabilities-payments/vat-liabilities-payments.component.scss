@@ -8,9 +8,6 @@
     }
     .custom-datepicker {
         input {
-            height: var(--custom-mat-form-field-height);
-            width: 100% !important;
-            min-width: 230px;
             max-width: unset !important;
         }
     }

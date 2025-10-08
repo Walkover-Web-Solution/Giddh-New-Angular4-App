@@ -455,7 +455,7 @@
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
-                        <li class="not-today cursor-pointer" [ngClass]="{ 'if-today': isTodaysDateSelected }">
+                        <li class="not-today cursor-pointer position-relative" [ngClass]="{ 'if-today': isTodaysDateSelected }">
                             <span class="icon-calender-new calendar-addon" (click)="toggleGiddhDatepicker(true)"></span>
                             <div class="input-date" [ngClass]="{ 'today-date pl-2': isTodaysDateSelected }">
                                 <input

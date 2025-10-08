@@ -8,3 +8,64 @@
     //     background-color: var(--color-light-gray) !important;
     // }
 }   
+
+body,
+body {
+    --text-primary-color: var(--mat-primary-color);
+    --bg-primary-color: var(--mat-primary-color);
+    // --forground-color: var(--mat-text-primary-light);
+
+    --border-color: var(--color-border-light);
+
+    --mat-primary-color: #1a237e;  // CURRENTLY TAKE THIS COLOR FORM MAT THEME
+    --mat-text-primary-light: #1a237e26;
+    --color-black: rgba(0, 0, 0, 0.87);
+    --color-danger-light: #e545561a;
+    --color-orange-light: #e58a0026;
+    --color-red-light: #e5455626;
+    --color-green-light: #36b28326;
+    --color-dark-black: #212529;
+    --color-white: #ffffff;
+    --color-light-gray: #f5f5f5;
+    --color-border-medium: #dee2e6;
+    --color-success-light: #e0f3e5;
+    --color-silver: #cbcfd2;
+    --color-medium-gray: #9b9b9e;
+    --color-dark-gray: #505159;
+    --color-border-light: #e7e9eb9a;
+    --color-fields-border: #0000001f;
+    --color-orange: #e58a00;
+    --color-deep-orange: #ff9933;
+    --color-brown-gold: #996515;
+    --color-red: #C51E3A;
+    --color-green: #098757;
+    --color-transparent: transparent;
+
+    // other color pending 
+    --color-apple-search-background: #575150;
+    --color-field-hover: #000000de;
+    --color-border-focus: #3f51b5;
+    --color-mat-option: #0000000a;
+    
+    // Box shadow
+    --color-shadow-light: #00000033;
+    --color-drag-bottom-shadow: #00000024;
+    --color-drag-right-shadow: #0000001f;
+    --mat-menu-box-shadow: 0px 5px 5px -3px var(--color-shadow-light), 0px 8px 10px 1px var(--color-drag-bottom-shadow),
+        0px 3px 14px 2px var(--color-drag-right-shadow);
+
+    // Filter for Image
+    --filter-image-color-white: brightness(0) invert(1);
+    // Use this class on black color image (icon) to  change color in dark theme 
+    --color-image-filter-quaternary: invert(100%) sepia(1%) saturate(2%) hue-rotate(1deg) brightness(33%) contrast(100%);
+
+
+    // Image url 
+    --url-caret-image: url("../../images/caret-light.svg");
+
+    // &.default-theme {
+    // }
+    &.dark-theme { 
+        --text-primary-color: var(--color-white);
+    }
+}

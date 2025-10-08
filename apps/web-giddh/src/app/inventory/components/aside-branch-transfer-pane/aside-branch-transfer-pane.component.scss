@@ -32,14 +32,14 @@
 .btn-lg {
     min-width: 155px;
     background: var(--color-white);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     box-shadow: none;
 }
 */
 
 .btn-lg:hover {
     background: var(--color-border-light);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     box-shadow: 0px 4px 4px -3px var(--color-shadow-light);
     border-radius: var(--mat-border-radius-0);
     border-color: var(--mat-primary-color);

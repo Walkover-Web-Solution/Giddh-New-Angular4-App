@@ -3,17 +3,17 @@
 // .mat-mdc-outlined-button,
 // .mat-raised-button {
 //     &.mat-primary {
-//         color: var(--mat-primary-color) !important;
+//         color: var(--text-primary-color) !important;
 //     }
 //     .mat-button-focus-overlay {
-//         background-color: var(--mat-primary-color) !important;
+//         background-color: var(--bg-primary-color) !important;
 //     }
 // }
 // .mat-mdc-outlined-button {
 //     color: var(--color-black) !important;
-//     border-color: var(--color-fields-border) !important;
+//     border-color: var(--border-color) !important;
 //     &.mat-primary {
-//         color: var(--mat-primary-color) !important;
+//         color: var(--text-primary-color) !important;
 //     }
 //     &.header-btn {
 //         color: var(--color-white) !important;
@@ -30,7 +30,7 @@
 // .mat-fab,
 // .mat-mini-fab,
 // .mat-mdc-outlined-button .mdc-button__label {
-//     border-color: var(--color-fields-border) !important;
+//     border-color: var(--border-color) !important;
 // }
 // /*==========  Material Button Default Font Size End Here ===============*/
 
@@ -41,7 +41,7 @@
 //             &.ladda-button {
 //                 &:not(:disabled) {
 //                     .ladda-label {
-//                         color: var(--mat-primary-color) !important;
+//                         color: var(--text-primary-color) !important;
 //                         display: contents;
 //                         width: auto;
 //                         height: auto;
@@ -51,7 +51,7 @@
 //                     div {
 //                         div {
 //                             div {
-//                                 background: var(--mat-primary-color) !important;
+//                                 background: var(--bg-primary-color) !important;
 //                             }
 //                         }
 //                     }
@@ -67,7 +67,7 @@
 //         &.mat-primary {
 //             &:disabled {
 //                 .ladda-label {
-//                     color: var(--mat-primary-color) !important;
+//                     color: var(--text-primary-color) !important;
 //                 }
 //             }
 //         }

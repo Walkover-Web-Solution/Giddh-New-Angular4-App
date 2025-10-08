@@ -54,16 +54,16 @@
 // ===== COLORS =====
 // Primary colors
 .text-primary {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
 }
 
 // Grayscale colors
 .text-light {
     color: var(--color-medium-gray) !important;
 }
-.text-default {
-    color: var(--color-black) !important;
-}
+// .text-default {
+//     color: var(--color-black) !important;
+// }
 .text-white {
     color: var(--color-white) !important;
 }
@@ -99,7 +99,7 @@
     background: var(--color-deep-orange);
 }
 .dot-primary {
-    background: var(--mat-primary-color);
+    background: var(--bg-primary-color);
 }
 .dot-success {
     background: var(--color-green);
@@ -118,6 +118,9 @@
     background: var(--color-white) !important;
 }
 .custom-keyboard-dropdown-list-focus {
+    background-color: var(--mat-text-primary-light);
+}
+.sky-blue-bg {
     background-color: var(--mat-text-primary-light);
 }
 
@@ -526,9 +529,7 @@
 .w150,
 .width-150 {
     width: 150px !important;
-}
-.width-150 {
-    min-width: 150px;
+    min-width: 150px !important;
 }
 .w200 {
     width: 200px !important;

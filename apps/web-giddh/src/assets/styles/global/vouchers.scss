@@ -91,7 +91,7 @@
     .vouchers-add-new {
         position: sticky;
         bottom: 0;
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
         z-index: 1;
         background: var(--color-white) !important;
         min-height: 0 !important;
@@ -151,7 +151,7 @@
     }
 
     .mat-pseudo-checkbox-checked {
-        background: var(--mat-primary-color) !important;
+        background: var(--bg-primary-color) !important;
     }
 
     .po-option-value {

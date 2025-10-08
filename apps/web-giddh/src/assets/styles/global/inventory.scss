@@ -73,7 +73,7 @@
     // select-field {
     //     input {
     //         padding: 11px 16px !important;
-    //         border: 1px solid var(--color-fields-border) !important;
+    //         border: 1px solid var(--border-color) !important;
     //         border-radius: var(--mat-border-radius-4);
     //         height: auto;
 
@@ -150,7 +150,7 @@
 //     .mat-expansion-panel {
 //         .mat-expansion-panel-header {
 //             .mat-expansion-panel-header-title {
-//                 color: var(--mat-primary-color) !important;
+//                 color: var(--text-primary-color) !important;
 //             }
 //         }
 //     }
@@ -234,7 +234,7 @@ inventory-master {
 .bulk-stock {
     .bulk-stock-hide-show-button {
         padding-left: 28px;
-        border: 1px solid var(--color-fields-border);
+        border: 1px solid var(--border-color);
         display: flex;
         justify-content: center;
         align-items: center;

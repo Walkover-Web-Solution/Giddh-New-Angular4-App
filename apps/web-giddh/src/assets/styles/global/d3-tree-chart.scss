@@ -7,14 +7,14 @@
         border: 1px solid var(--color-medium-gray);
 
         .tree-inner-content {
-            background-color: var(--mat-primary-color);
+            background-color: var(--bg-primary-color);
             height: 10px;
             border-radius: var(--mat-border-radius-0);
         }
 
         .tree-container {
             .tree-name {
-                color: var(--mat-primary-color);
+                color: var(--text-primary-color);
                 font-weight: bold
             }
 

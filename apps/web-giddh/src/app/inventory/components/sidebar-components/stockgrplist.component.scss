@@ -1,5 +1,5 @@
 .active {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
 }
 
 .stock-grp-list li > i:focus {
@@ -25,7 +25,7 @@
 .stock-grp-list .active a,
 .stock-grp-list .active i,
 .stock-grp-list .active .btn-link i {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
 }
 */
 
@@ -57,9 +57,9 @@
 stock-list ::ng-deep.in-list a div {
     color: var(--color-black) !important;
 }
-.text-default {
-    color: var(--color-black);
-}
+// .text-default {
+//     color: var(--color-black);
+// }
 
 .item-group {
     text-transform: unset !important;
@@ -77,7 +77,7 @@ stock-list ::ng-deep.in-list a div {
         .item-group {
             &:hover {
                 a {
-                    color: var(--mat-primary-color) !important;
+                    color: var(--text-primary-color) !important;
                 }
                 background-color: var(--color-border-light);
             }

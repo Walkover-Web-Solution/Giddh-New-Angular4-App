@@ -64,7 +64,7 @@
 //         }
 
 //         .mdc-notched-outline__notch {
-//             // border-color: var(--color-fields-border) !important;
+//             // border-color: var(--border-color) !important;
 //             border-left: none !important;
 //         }
 //     }
@@ -83,7 +83,7 @@
 //     .mdc-text-field--outlined {
 //         &:not(.mdc-text-field--disabled) {
 //             .mdc-notched-outline__leading {
-//                 // border-color: var(--color-fields-border) !important;
+//                 // border-color: var(--border-color) !important;
 //             }
 
 //             &.mdc-text-field--focused {
@@ -121,14 +121,14 @@
 //             }
 
 //             .mdc-notched-outline__notch {
-//                 // border-color: var(--color-fields-border) !important;
+//                 // border-color: var(--border-color) !important;
 //                 border-left: none !important;
 //             }
 //         }
 
 //         .mdc-notched-outline {
 //             .mdc-notched-outline__trailing {
-//                 // border-color: var(--color-fields-border);
+//                 // border-color: var(--border-color);
 //             }
 //         }
 //     }
@@ -179,7 +179,7 @@
 
 //             .mdc-notched-outline {
 //                 .mdc-notched-outline__trailing {
-//                     // border-color: var(--color-fields-border);
+//                     // border-color: var(--border-color);
 //                 }
 //             }
 //         }
@@ -207,7 +207,7 @@
 
 //     .mdc-text-field--disabled {
 //         .mdc-notched-outline__leading {
-//             // border-color: var(--color-fields-border) !important;
+//             // border-color: var(--border-color) !important;
 //         }
 //     }
 
@@ -409,7 +409,7 @@
 // .mat-pseudo-checkbox-checked,
 // .mat-pseudo-checkbox-indeterminate {
 //     &.mat-pseudo-checkbox-full {
-//         background: var(--mat-primary-color) !important;
+//         background: var(--bg-primary-color) !important;
 //     }
 // }
 
@@ -424,7 +424,7 @@
 // .mat-pseudo-checkbox-indeterminate {
 //     &.mat-pseudo-checkbox-minimal {
 //         &::after {
-//             color: var(--mat-primary-color);
+//             color: var(--text-primary-color);
 //         }
 //     }
 // }
@@ -492,7 +492,7 @@ ngx-mat-select-search {
 //             }
 
 //             .mdc-radio__inner-circle {
-//                 background-color: var(--mat-primary-color) !important;
+//                 background-color: var(--bg-primary-color) !important;
 //             }
 //         }
 
@@ -755,7 +755,7 @@ mat-option {
 
 // .mdc-text-field--outlined {
 //     .mdc-notched-outline__leading {
-//         // border-color: var(--color-fields-border) !important;
+//         // border-color: var(--border-color) !important;
 //     }
 
 //     &.mdc-text-field--focused {
@@ -774,13 +774,13 @@ mat-option {
 //     }
 
 //     .mdc-notched-outline__notch {
-//         // border-color: var(--color-fields-border) !important;
+//         // border-color: var(--border-color) !important;
 //         border-left: none !important;
 //     }
 
 //     .mdc-notched-outline {
 //         .mdc-notched-outline__trailing {
-//             // border-color: var(--color-fields-border);
+//             // border-color: var(--border-color);
 //         }
 //     }
 // }

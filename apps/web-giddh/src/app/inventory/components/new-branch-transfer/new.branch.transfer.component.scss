@@ -8,7 +8,7 @@
     padding-top: 10px;
     padding-bottom: 10px;
     align-items: center;
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }
 section.receipt-note {
     background-color: var(--color-white);
@@ -49,7 +49,7 @@ button.btn.btn-filter {
     background: var(--color-border-light);
     border: 1px solid var(--color-border-light);
     font-size: var(--font-size-15);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     display: -webkit-inline-box;
     display: inline-flex;
     -webkit-box-pack: justify;
@@ -82,14 +82,14 @@ tfoot td .table-sec.form-group {
     right: -60%;
     top: 9px;
     font-size: var(--font-size-12);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     z-index: 9;
 }
 .sender-details,
 .sender-receivers,
 .multiple-receivers {
     font-size: var(--font-size-12);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     margin-top: 7px;
     cursor: pointer;
 }
@@ -314,7 +314,7 @@ tfoot td .table-sec.form-group {
     position: absolute;
     width: 8px;
     height: 8px;
-    background: var(--mat-primary-color);
+    background: var(--bg-primary-color);
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -378,7 +378,7 @@ tfoot td .table-sec.form-group {
     z-index: 9991;
 }
 .icon-pointer.active-text-color {
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }
 .close-receipt {
     color: var(--color-dark-gray);

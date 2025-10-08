@@ -211,7 +211,7 @@ button.toast-close-button {
 }
 
 .toast-info {
-    background-color: var(--mat-primary-color);
+    background-color: var(--bg-primary-color);
 }
 .toast-info .toast-title {
     color: var(--color-white);

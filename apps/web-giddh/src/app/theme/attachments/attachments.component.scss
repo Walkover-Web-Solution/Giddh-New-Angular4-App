@@ -2,7 +2,7 @@
     .header {
         display: flex;
         align-items: center;
-        background-color: var(--mat-primary-color);
+        background-color: var(--bg-primary-color);
         color: var(--color-white);
         width: 100%;
         padding-left: 10px;
@@ -142,7 +142,7 @@
     }
 }
 .active-file {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
 }
 .disabled {
     background-color: var(--color-silver) !important;

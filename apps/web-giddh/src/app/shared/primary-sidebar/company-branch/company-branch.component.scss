@@ -102,7 +102,7 @@
                             }
                             .branch-count {
                                 width: 50px;
-                                color: var(--mat-primary-color);
+                                color: var(--text-primary-color);
                                 padding-left: 10px;
                                 white-space: nowrap;
                             }
@@ -221,7 +221,7 @@
                                     color: var(--color-dark-gray) !important;
                                 }
                                 &.head-branch {
-                                    color: var(--mat-primary-color);
+                                    color: var(--text-primary-color);
                                     .branch-company-name {
                                         max-width: 150px;
                                         text-overflow: ellipsis;
@@ -257,7 +257,7 @@
                         }
                     }
                     p.show-more-branches {
-                        color: var(--mat-primary-color);
+                        color: var(--text-primary-color);
                         padding: 10px 0;
                         text-decoration: underline;
                     }
@@ -447,7 +447,7 @@
 }
 /* UNUSED COMPONENT CLASS: digit-text-primary - Auto-commented by script
 .digit-text-primary {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
 }
 */
 /* UNUSED COMPONENT CLASS: digit-orange - Auto-commented by script
@@ -476,7 +476,7 @@
     .custom-tabs {
         .nav-link.active {
             span {
-                color: var(--mat-primary-color) !important;
+                color: var(--text-primary-color) !important;
             }
         }
     }

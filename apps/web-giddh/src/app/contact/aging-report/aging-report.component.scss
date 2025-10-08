@@ -81,7 +81,7 @@ span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: var(--mat-primary-color);
+    background-color: var(--bg-primary-color);
     color: var(--color-white);
     font-size: var(--font-size-16);
     border-radius: var(--mat-border-radius-4);
@@ -182,7 +182,7 @@ tr.mat-header-row {
     .mat-customer-name {
         .icon-pointer {
             .font-xxs {
-                color: var(--mat-primary-color) !important;
+                color: var(--text-primary-color) !important;
             }
         }
     }
@@ -249,7 +249,7 @@ tr.mat-header-row {
     .header {
         height: $header-height;
         padding: 20px 15px;
-        background: var(--mat-primary-color);
+        background: var(--bg-primary-color);
         color: var(--color-white);
 
         button {

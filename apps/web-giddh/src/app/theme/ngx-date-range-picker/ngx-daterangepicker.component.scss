@@ -324,7 +324,7 @@
     }
     td,
     .td-div {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
         margin: 0em 0;
         background-color: var(--color-white) !important;
         &.off {
@@ -344,7 +344,7 @@
         &.in-range-start,
         &.in-range-end {
             span {
-                background-color: var(--mat-primary-color) !important;
+                background-color: var(--bg-primary-color) !important;
                 border-radius: 50%;
                 color: var(--color-white) !important;
                 border-color: var(--mat-primary-color);
@@ -435,7 +435,7 @@
             background: var(--color-silver);
             &,
             &:hover {
-                background-color: var(--mat-primary-color);
+                background-color: var(--bg-primary-color);
                 border-color: transparent;
                 color: var(--color-white);
             }
@@ -663,7 +663,7 @@
                         }
 */
                         &:hover {
-                            background-color: var(--mat-primary-color);
+                            background-color: var(--bg-primary-color);
                             color: var(--color-white);
                             .available {
                                 &.prev {
@@ -673,7 +673,7 @@
                             }
                         }
                         &.active {
-                            background-color: var(--mat-primary-color);
+                            background-color: var(--bg-primary-color);
                             border-left: 3px solid var(--mat-primary-color) !important;
                             font-weight: var(--font-weight-semibold);
                             color: var(--color-white);
@@ -1057,7 +1057,7 @@ td:hover span {
 
 .md-drppicker td.start-date.active {
     span {
-        background-color: var(--mat-primary-color) !important;
+        background-color: var(--bg-primary-color) !important;
         color: var(--color-white) !important;
         border-color: var(--mat-primary-color) !important;
     }
@@ -1066,7 +1066,7 @@ td:hover span {
 /* new calendar */
 .md-drppicker .td-div.start-date.active {
     span {
-        background-color: var(--mat-primary-color) !important;
+        background-color: var(--bg-primary-color) !important;
         color: var(--color-white) !important;
         border-color: var(--mat-primary-color) !important;
     }
@@ -1247,7 +1247,7 @@ td span {
     li {
         &:hover {
             button {
-                background-color: var(--mat-primary-color);
+                background-color: var(--bg-primary-color);
                 color: var(--color-white);
             }
         }
@@ -1419,7 +1419,7 @@ td span {
                             border-bottom-color: var(--mat-primary-color);
                             cursor: pointer;
                             input {
-                                color: var(--mat-primary-color);
+                                color: var(--text-primary-color);
                                 cursor: pointer;
                             }
                         }
@@ -1517,7 +1517,7 @@ td span {
                     }
                 }
                 &:hover {
-                    background-color: var(--mat-primary-color);
+                    background-color: var(--bg-primary-color);
                     color: var(--color-white);
 
                     input {
@@ -1529,7 +1529,7 @@ td span {
                     }
                 }
                 &.active {
-                    background-color: var(--mat-primary-color);
+                    background-color: var(--bg-primary-color);
                     color: var(--color-white);
                     border-left: 3px solid var(--mat-primary-color) !important;
                 }

@@ -31,12 +31,12 @@
 */
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
 }
 .inventory-control ::ng-deep.nav-tabs > ::ng-deep li.active > a,
 .inventory-control .nav-tabs > ::ng-deep li.active > a:focus,
 .inventory-control ::ng-deep.nav-tabs > li.active > a:hover {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
     border-bottom: 4px solid var(--mat-primary-color) !important;
     cursor: pointer !important;
     background-color: unset !important;
@@ -45,7 +45,7 @@
     border-left: transparent !important;
 }
 .inventory-control .nav-tabs > li > a:hover {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
     border-bottom: 4px solid var(--mat-primary-color) !important;
 }
 /* UNUSED COMPONENT CLASS: navbar - Auto-commented by script

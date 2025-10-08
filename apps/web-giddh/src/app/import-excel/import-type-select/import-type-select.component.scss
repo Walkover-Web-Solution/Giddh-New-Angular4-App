@@ -50,9 +50,9 @@
     background-color: var(--color-white);
 }
 .text-link-2 {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
     &:hover {
-        color: var(--mat-primary-color) !important;
+        color: var(--text-primary-color) !important;
     }
 }
 @media (max-width: 991px) {

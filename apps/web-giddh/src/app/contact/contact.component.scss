@@ -204,7 +204,7 @@ ul.list-unstyled li a {
     }
 
     a:hover {
-        color: var(--mat-primary-color) !important;
+        color: var(--text-primary-color) !important;
         background-color: var(--mat-text-primary-light);
     }
 }
@@ -341,7 +341,7 @@ tr.aging-table-top td {
 
 .more-button li:hover {
     background-color: var(--color-border-light);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }
 
 .btn-primary.active,
@@ -373,7 +373,7 @@ i.icon-options {
 }
 
 i.icon-options:hover {
-    background: var(--mat-primary-color);
+    background: var(--bg-primary-color);
     color: var(--color-light-gray);
     border-color: var(--mat-primary-color);
 }
@@ -398,7 +398,7 @@ span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: var(--mat-primary-color);
+    background-color: var(--bg-primary-color);
     color: var(--color-white);
     font-size: var(--font-size-16);
     border-radius: var(--mat-border-radius-4);
@@ -524,7 +524,7 @@ button.btn.btn-filter {
     letter-spacing: 1px;
 
     strong {
-        color: var(--mat-primary-color) !important;
+        color: var(--text-primary-color) !important;
         font-size: var(--font-size-15);
     }
 }
@@ -554,10 +554,6 @@ button.btn.btn-filter {
     margin-bottom: 4px;
 }
 
-.custom-datepicker input {
-    height: 36px;
-}
-
 .customer-form-inline {
     align-items: center;
     width: 100.25%;
@@ -566,13 +562,13 @@ button.btn.btn-filter {
 }
 
 .pending-approval-button {
-    background-color: var(--mat-primary-color);
+    background-color: var(--bg-primary-color);
     width: 140px;
     height: 37px;
 }
 
 .pending-approval-button:hover {
-    background-color: var(--mat-primary-color);
+    background-color: var(--bg-primary-color);
 }
 
 // .all-table {
@@ -728,7 +724,7 @@ button.btn.btn-filter {
 
     &:hover {
         color: var(--color-light-gray);
-        background-color: var(--mat-primary-color);
+        background-color: var(--bg-primary-color);
     }
 }
 .select-all-checkbox-wrapper {

@@ -88,7 +88,7 @@
 
                     &:last-child {
                         a {
-                            color: var(--mat-primary-color);
+                            color: var(--text-primary-color);
                         }
                     }
 
@@ -120,7 +120,7 @@
             }
 
             .create-head {
-                color: var(--mat-primary-color);
+                color: var(--text-primary-color);
                 font-size: var(--font-size-15);
                 background-color: var(--color-light-gray);
                 width: 100%;

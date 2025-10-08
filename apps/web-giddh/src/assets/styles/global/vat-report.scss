@@ -68,12 +68,12 @@
 
 .white-box {
     .table-heading {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
         font-size: var(--font-size-16);
     }
 
     .inner-table-heading {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
     }
 
     table {
@@ -81,7 +81,7 @@
             tr {
                 td {
                     .btn-link {
-                        color: var(--mat-primary-color) !important;
+                        color: var(--text-primary-color) !important;
                     }
                 }
             }

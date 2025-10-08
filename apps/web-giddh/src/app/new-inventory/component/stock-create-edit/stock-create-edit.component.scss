@@ -17,7 +17,7 @@
 /* UNUSED COMPONENT CLASS: page-title-inventory - Auto-commented by script
 .page-title-inventory {
     font-weight: bold;
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     font-size: var(--font-size-15);
 }
 */
@@ -32,7 +32,7 @@
         top: 0;
         padding: 10px;
         z-index: 10;
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
     }
 */
 
@@ -69,7 +69,7 @@
             position: relative;
 
             .icon-button-add {
-                color: var(--mat-primary-color);
+                color: var(--text-primary-color);
                 position: absolute;
                 left: 18px;
                 top: 35px;
@@ -168,7 +168,7 @@
         }
 
         i {
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
         }
     }
 
@@ -232,7 +232,7 @@
         }
 
         .another-option-btn {
-            color: var(--mat-primary-color) !important;
+            color: var(--text-primary-color) !important;
         }
 
         /* UNUSED COMPONENT CLASS: category-label - Auto-commented by script
@@ -368,7 +368,7 @@
     }
 
     .icon-plus {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
     }
 }
 
@@ -421,7 +421,7 @@ table.stock-table {
     margin-left: 2px;
 
     .table-heading-color {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
     }
 
     tr {
@@ -540,7 +540,7 @@ table.stock-table {
     }
 
     .attachment-placeholder {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
     }
 
     input {
@@ -834,7 +834,7 @@ table.stock-table {
 }
 
 .option-color {
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     padding: 0 15px;
 
     .add-option {
@@ -1018,5 +1018,5 @@ table.stock-table {
 }
 
 .add-new-text-container {
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }

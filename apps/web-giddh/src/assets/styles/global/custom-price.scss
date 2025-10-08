@@ -28,7 +28,7 @@
                 }
                 &:hover,
                 &.active {
-                    background-color: var(--mat-primary-color) !important;
+                    background-color: var(--bg-primary-color) !important;
                     .mdc-list-item__content {
                         a {
                             span,
@@ -68,7 +68,7 @@
                 // button {
                 //     &.mdc-button {
                 //         .mdc-button__label {
-                //             color: var(--mat-primary-color) !important;
+                //             color: var(--text-primary-color) !important;
                 //         }
                 //         &.mat-mdc-outlined-button {
                 //             .mdc-button__label {

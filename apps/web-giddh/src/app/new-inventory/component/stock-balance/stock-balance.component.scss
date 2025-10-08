@@ -31,11 +31,11 @@
             /* UNUSED COMPONENT CLASS: new-stock-btn - Auto-commented by script
 .new-stock-btn {
                 color: var(--color-white);
-                background: var(--mat-primary-color);
+                background: var(--bg-primary-color);
                 padding: 0px 15px 0px 10px;
 
                 &:hover {
-                    background-color: var(--mat-primary-color);
+                    background-color: var(--bg-primary-color);
                 }
             }
 */
@@ -71,7 +71,7 @@
 .export-btn {
                 padding: 0px 8px;
                 margin-right: 10px;
-                color: var(--mat-primary-color);
+                color: var(--text-primary-color);
                 border: 1px solid var(--mat-primary-color);
                 background-color: var(--color-white);
                 img {
@@ -295,7 +295,7 @@
                     top: 11px;
                     input::placeholder {
                         font-size: var(--font-size-15);
-                        color: var(--mat-primary-color);
+                        color: var(--text-primary-color);
                     }
                 }
             }
@@ -307,7 +307,7 @@
                 .unique-name {
                     border-radius: var(--mat-border-radius-4);
                     padding: 8px 10px;
-                    color: var(--mat-primary-color);
+                    color: var(--text-primary-color);
                     background-color: var(--color-light-gray) !important;
                 }
             }
@@ -545,7 +545,7 @@
     width: 392px;
 
     .warehouse-list-head-num {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
         font-weight: 600;
         font-size: var(--font-size-15);
     }
@@ -630,7 +630,7 @@
         color: var(--color-dark-gray);
         /* UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
 .active-text-color {
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
         }
 }
 */

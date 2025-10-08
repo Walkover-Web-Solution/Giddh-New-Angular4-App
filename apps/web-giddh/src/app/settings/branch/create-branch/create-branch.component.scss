@@ -79,10 +79,10 @@
                         align-items: center;
                         display: flex;
                         &:hover:after {
-                            color: var(--mat-primary-color);
+                            color: var(--text-primary-color);
                         }
                         .icon-favorite-selected {
-                            color: var(--mat-primary-color);
+                            color: var(--text-primary-color);
                         }
                     }
                 }

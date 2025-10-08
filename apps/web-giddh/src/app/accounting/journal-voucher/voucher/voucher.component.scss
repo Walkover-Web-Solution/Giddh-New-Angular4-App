@@ -24,18 +24,18 @@
 }
 
 .hilighted {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
     background-color: var(--color-border-light) !important;
 }
 
 .account-list:hover {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
     background-color: var(--color-border-light) !important;
 }
 
 .hilighted {
     &>a {
-        color: var(--mat-primary-color) !important;
+        color: var(--text-primary-color) !important;
     }
 }
 

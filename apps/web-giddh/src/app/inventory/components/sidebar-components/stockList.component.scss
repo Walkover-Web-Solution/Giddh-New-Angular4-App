@@ -2,7 +2,7 @@
     background-color: var(--color-border-light);
 }
 .stock-items .active a .span {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
 }
 .span {
     color: var(--color-black);
@@ -24,12 +24,12 @@
 /* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
 .stock-items .active .btn-link /* UNUSED COMPONENT CLASS: fa - Auto-commented by script
 .fa {
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }
 */
 .stock-items > li .in-list:hover {
     background-color: var(--color-border-light);
 }
 .stock-items > li .in-list:hover a > span {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
 }

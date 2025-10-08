@@ -93,14 +93,14 @@
 
 .clearfix {
     .icon-favorite-selected {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
     }
 
     // .icon-branch-icon,
     /* UNUSED COMPONENT CLASS: icon-company-HO - Auto-commented by script
 .icon-company-HO {
         padding: 4px 5px 0 0;
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
         font-size: var(--font-size-12);
     }
 */
@@ -108,7 +108,7 @@
 
 .card-basic-details h2 {
     font-size: var(--font-size-15);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     font-weight: var(--font-weight-bold);
     margin-bottom: 12px;
     white-space: normal;
@@ -142,7 +142,7 @@
 /* UNUSED COMPONENT CLASS: unlink - Auto-commented by script
 
 .unlink a {
-    color: var(--mat-primary-color) !important;
+    color: var(--text-primary-color) !important;
     cursor: pointer;
 }
 */
@@ -215,7 +215,7 @@
 
     /* UNUSED COMPONENT CLASS: clear-filter-btn - Auto-commented by script
 .clear-filter-btn {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
         font-size: var(--font-size-15);
         border: 1px solid var(--mat-primary-color);
         border-radius: var(--mat-border-radius-16);
@@ -231,7 +231,7 @@
             font-size: var(--font-size-12);
             padding-right: 8px;
             top: 0;
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
         }
     }
 */
@@ -251,7 +251,7 @@
 
         &:hover {
             background-color: var(--color-border-light);
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
         }
     }
 }
@@ -300,7 +300,7 @@
             content: "\2605";
             position: absolute;
             border-color: var(--mat-primary-color);
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
         }
     }
 }
@@ -388,7 +388,7 @@ button {
         height: 30px;
 
         &:hover {
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
         }
     }
 }

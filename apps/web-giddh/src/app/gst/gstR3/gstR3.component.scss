@@ -5,7 +5,7 @@
 */
 
 a {
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     text-decoration: none;
 }
 
@@ -61,7 +61,7 @@ svg.icon/* UNUSED COMPONENT CLASS: icon-sm - Auto-commented by script
 */
 
 .text-primary {
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
 }
 
 /* UNUSED COMPONENT CLASS: caret - Auto-commented by script
@@ -166,7 +166,7 @@ input/* UNUSED COMPONENT CLASS: gsc-input - Auto-commented by script
 
 /* UNUSED COMPONENT CLASS: sel-tab - Auto-commented by script
 .tax-engine .gstr3b-header .sel-tab .active {
-    background-color: var(--mat-primary-color);
+    background-color: var(--bg-primary-color);
 }
 */
 
@@ -290,7 +290,7 @@ address {
 .btn-link:focus,
 /* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
 .btn-link:hover {
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     background-color: transparent;
     text-decoration: none;
 }
@@ -514,7 +514,7 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 */
 
 .tax-engine .gstr3-points .point {
-    background-color: var(--mat-primary-color);
+    background-color: var(--bg-primary-color);
     color: var(--color-white);
     width: 22px;
     height: 22px;
@@ -578,7 +578,7 @@ dropdown-menu-right {
 /* UNUSED COMPONENT CLASS: btn-2 - Auto-commented by script
 .btn-2 {
     background: var(--color-white);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     border: 0px;
     border-radius: var(--mat-border-radius-4);
     border: 1px solid var(--mat-primary-color);
@@ -587,7 +587,7 @@ dropdown-menu-right {
 
 .btn-2:hover {
     color: var(--color-white);
-    background: var(--mat-primary-color);
+    background: var(--bg-primary-color);
 }
 
 /* UNUSED COMPONENT CLASS: file-your-return - Auto-commented by script

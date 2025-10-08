@@ -101,7 +101,7 @@
         height: 64px !important;
         .sub-plan-feature {
             text-decoration: underline;
-            color: var(--mat-primary-color) !important;
+            color: var(--text-primary-color) !important;
         }
     }
     .sub-plan-name {
@@ -258,7 +258,7 @@
     font-size: var(--font-size-16);
     padding: 20px 15px;
     h2 {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
         font-weight: bold;
     }
 }
@@ -336,7 +336,7 @@
 }
 .inner-your-account > h3 {
     font-size: var(--font-size-15);
-    color: var(--mat-primary-color);
+    color: var(--text-primary-color);
     font-weight: bold;
     margin-bottom: 5px;
     .plans-head-top {
@@ -697,7 +697,7 @@
     float: left;
     width: 24%;
     .extra-addons-value {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
     }
 }
 /* UNUSED COMPONENT CLASS: plan-table-layout - Auto-commented by script
@@ -712,7 +712,7 @@
 ::ng-deep {
     /* UNUSED COMPONENT CLASS: text-primary - Auto-commented by script
 .text-primary {
-        color: var(--mat-primary-color) !important;
+        color: var(--text-primary-color) !important;
     }
 */
 }

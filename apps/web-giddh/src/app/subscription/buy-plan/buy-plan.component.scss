@@ -82,7 +82,7 @@
 
                 h2,
                 p {
-                    color: var(--mat-primary-color);
+                    color: var(--text-primary-color);
                 }
             }
         }
@@ -165,7 +165,7 @@
     }
 
     .selected-plan {
-        background-color: var(--mat-primary-color);
+        background-color: var(--bg-primary-color);
 
         span {
             color: var(--color-white);

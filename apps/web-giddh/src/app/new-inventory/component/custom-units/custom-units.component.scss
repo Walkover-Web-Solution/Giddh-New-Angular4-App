@@ -11,7 +11,7 @@
                 margin-left: 0 !important;
             }
             strong {
-                color: var(--mat-primary-color);
+                color: var(--text-primary-color);
                 font-size: var(--font-size-15);
                 display: inline-block;
                 &.list-font {
@@ -28,7 +28,7 @@
                     }
                 }
                 &.selected-unit-group {
-                    background-color: var(--mat-primary-color);
+                    background-color: var(--bg-primary-color);
                     a {
                         color: var(--color-white);
                     }
@@ -41,7 +41,7 @@
                 column-gap: 10px;
 
                 &.selected-unit {
-                    background-color: var(--mat-primary-color);
+                    background-color: var(--bg-primary-color);
                     mat-list-item {
                         a {
                             color: var(--color-white);

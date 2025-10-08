@@ -44,11 +44,11 @@
 }
 .all-feature-modal {
     p {
-        color: var(--mat-primary-color);
+        color: var(--text-primary-color);
         margin-bottom: 10px;
         i {
             font-size: 21px;
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
         }
     }
     [class*="col-"] {

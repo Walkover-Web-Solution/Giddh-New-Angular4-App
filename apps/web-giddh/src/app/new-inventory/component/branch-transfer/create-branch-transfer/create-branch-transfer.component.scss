@@ -8,7 +8,7 @@
         font-size: var(--font-size-16);
 
         h2 {
-            color: var(--mat-primary-color);
+            color: var(--text-primary-color);
             font-weight: 600;
         }
     }
@@ -40,7 +40,7 @@
                 width: 100%;
 
                 th{
-                    color: var(--mat-primary-color) !important;
+                    color: var(--text-primary-color) !important;
                 }
                 th,
                 td {
