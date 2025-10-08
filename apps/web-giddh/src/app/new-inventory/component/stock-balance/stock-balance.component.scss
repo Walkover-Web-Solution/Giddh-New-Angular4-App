@@ -25,7 +25,9 @@
         .stock-balance-top-bar-left-side {
             display: flex;
             align-items: center;
-
+            .stock-btn-height {
+                height: 40px;
+            }
             .new-stock-btn {
                 color: var(--color-white);
                 background: var(--color-blue-primary);
