@@ -144,7 +144,7 @@ export class ContactService {
 
     /**
      * Refresh go-cardless bank transactions
-     * 
+     *
      * . @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
      * @memberof ContactService
      */
@@ -235,7 +235,7 @@ export class ContactService {
      * @memberof ContactService
      */
     public exportAccountStatement(requestObj: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.generalService.replaceUrlPlaceholders(ACCOUNT_STATEMENT_API.EXPORT_ACCOUNT_STATEMENT, requestObj)).pipe(
+        return this.http.post(this.generalService.replaceUrlPlaceholders(ACCOUNT_STATEMENT_API.EXPORT_ACCOUNT_STATEMENT, requestObj.queryParam), requestObj.payload).pipe(
             map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';
