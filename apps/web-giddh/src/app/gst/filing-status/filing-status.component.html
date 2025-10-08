@@ -68,19 +68,17 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
-                    <div class="d-flex justify-content-end" *ngIf="pagination.totalItems > pageSizeOptions[0] && !isLoading">
-                        <mat-paginator
-                            class="mt-3"
-                            [showFirstLastButtons]="true"
-                            [pageSizeOptions]="pageSizeOptions"
-                            [pageIndex]="pageIndex"
-                            (page)="pageChanged($event)"
-                            [length]="pagination.totalItems"
-                            [pageSize]="pagination.count"
-                            [showFirstLastButtons]="true"
-                            [hidePageSize]="false"
-                        ></mat-paginator>
-                    </div>
+                    <mat-paginator
+                        *ngIf="pagination.totalItems > pageSizeOptions[0] && !isLoading"
+                        [showFirstLastButtons]="true"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [pageIndex]="pageIndex"
+                        (page)="pageChanged($event)"
+                        [length]="pagination.totalItems"
+                        [pageSize]="pagination.count"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                    ></mat-paginator>
                 </ng-container>
                 <ng-container *ngIf="!dataSource.length && !isLoading">
                     <div class="no-data mb-5">

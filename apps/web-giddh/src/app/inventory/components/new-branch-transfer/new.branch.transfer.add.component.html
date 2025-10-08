@@ -1378,17 +1378,16 @@
                 </tr>
             </table>
         </div>
-        <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
-            <mat-paginator
-                [length]="transporterListDetails.totalPages"
-                [pageSize]="transporterFilterRequest.count"
-                [pageIndex]="transporterFilterRequest.page - 1"
-                [pageSizeOptions]="pageSizeOptions"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)"
-            ></mat-paginator>
-        </div>
+        <mat-paginator
+            *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]"
+            [length]="transporterListDetails.totalPages"
+            [pageSize]="transporterFilterRequest.count"
+            [pageIndex]="transporterFilterRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
     </div>
 </ng-template>
 <ng-template #asideMenuProductService>

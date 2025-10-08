@@ -511,7 +511,6 @@
 
         <mat-paginator
             *ngIf="ewaybillLists?.totalItems > pageSizeOptions[0] && !(isGetAllEwaybillRequestInProcess$ | async)"
-            class="mt-3"
             (page)="handlePageChange($event)"
             [length]="ewaybillLists?.totalItems"
             [pageSize]="EwayBillfilterRequest.count"

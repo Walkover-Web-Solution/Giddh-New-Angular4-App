@@ -429,16 +429,15 @@
                 </div>
             </section>
         </div>
-        <div *ngIf="activityObj?.totalItems > pageSizeOptions[0] && !isLoading">
-            <mat-paginator
-                [length]="activityObj?.totalItems"
-                [pageSize]="activityObj.count"
-                [pageIndex]="activityObj.page - 1"
-                [pageSizeOptions]="pageSizeOptions"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)">
-            </mat-paginator>
-        </div>
+        <mat-paginator
+            *ngIf="activityObj?.totalItems > pageSizeOptions[0] && !isLoading"
+            [length]="activityObj?.totalItems"
+            [pageSize]="activityObj.count"
+            [pageIndex]="activityObj.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)">
+        </mat-paginator>
     </div>
 </ng-container>

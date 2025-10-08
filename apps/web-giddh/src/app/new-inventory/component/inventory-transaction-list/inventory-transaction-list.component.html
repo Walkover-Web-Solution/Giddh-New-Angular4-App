@@ -565,22 +565,20 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
-                    <div class="mt-4">
-                        <mat-paginator
-                            *ngIf="
-                                stockReportRequest?.totalItems > pageSizeOptions[0] &&
-                                !isLoading &&
-                                displayedColumns?.length
-                            "
-                            [length]="stockReportRequest?.totalItems"
-                            [pageSize]="stockReportRequest?.count"
-                            [pageIndex]="stockReportRequest.page - 1"
-                            [pageSizeOptions]="pageSizeOptions"
-                            [showFirstLastButtons]="true"
-                            [hidePageSize]="false"
-                            (page)="handlePageEvent($event)"
-                        ></mat-paginator>
-                    </div>
+                    <mat-paginator
+                        *ngIf="
+                            stockReportRequest?.totalItems > pageSizeOptions[0] &&
+                            !isLoading &&
+                            displayedColumns?.length
+                        "
+                        [length]="stockReportRequest?.totalItems"
+                        [pageSize]="stockReportRequest?.count"
+                        [pageIndex]="stockReportRequest.page - 1"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                        (page)="handlePageEvent($event)"
+                    ></mat-paginator>
                 </div>
             </div>
         </div>

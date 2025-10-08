@@ -528,22 +528,16 @@
     <div *ngIf="getAgingReportRequestInProcess$ | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
-
-    <div
-        *ngIf="(dueAmountReportData$ | async)?.totalItems > pageSizeOptions[0]"
-        class="mt-4"
-        [hidden]="getAgingReportRequestInProcess$ | async"
-    >
-        <mat-paginator
-            [length]="(dueAmountReportData$ | async)?.totalItems"
-            [pageSize]="dueAmountReportRequest.count"
-            [pageSizeOptions]="pageSizeOptions"
-            [pageIndex]="dueAmountReportRequest.page - 1"
-            [showFirstLastButtons]="true"
-            (page)="handlePageEvent($event)"
-            aria-label="Select page of aging report results">
-        </mat-paginator>
-    </div>
+    <mat-paginator
+        *ngIf="(dueAmountReportData$ | async)?.totalItems > pageSizeOptions[0] && !(getAgingReportRequestInProcess$ | async)"
+        [length]="(dueAmountReportData$ | async)?.totalItems"
+        [pageSize]="dueAmountReportRequest.count"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="dueAmountReportRequest.page - 1"
+        [showFirstLastButtons]="true"
+        (page)="handlePageEvent($event)"
+        aria-label="Select page of aging report results">
+    </mat-paginator>
 </ng-template>
 <ng-template
     #searchTemplate

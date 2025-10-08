@@ -1476,45 +1476,43 @@
             </ng-container>
         </div>
 
-        <div class="mt-4">
-            <ng-container
-                *ngIf="
-                    activeTab === 'customer' &&
-                    sundryDebtorsAccountsBackup.results &&
-                    sundryDebtorsAccountsBackup.results.length &&
-                    totalCustomers > pageSizeOptions[0]
-                "
-            >
-                <mat-paginator
-                    [length]="sundryDebtorsAccountsBackup.totalItems"
-                    [pageSize]="advanceFilters.count"
-                    [pageIndex]="advanceFilters.page - 1"
-                    [pageSizeOptions]="pageSizeOptions"
-                    [showFirstLastButtons]="true"
-                    [hidePageSize]="false"
-                    (page)="handlePageEvent($event);">
-                </mat-paginator>
-            </ng-container>
+        <ng-container
+            *ngIf="
+                activeTab === 'customer' &&
+                sundryDebtorsAccountsBackup.results &&
+                sundryDebtorsAccountsBackup.results.length &&
+                totalCustomers > pageSizeOptions[0]
+            "
+        >
+            <mat-paginator
+                [length]="sundryDebtorsAccountsBackup.totalItems"
+                [pageSize]="advanceFilters.count"
+                [pageIndex]="advanceFilters.page - 1"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event);">
+            </mat-paginator>
+        </ng-container>
 
-            <ng-container
-                *ngIf="
-                    activeTab === 'vendor' &&
-                    sundryCreditorsAccountsBackup.results &&
-                    sundryCreditorsAccountsBackup.results.length &&
-                    totalVendors > pageSizeOptions[0]
-                "
-            >
-                <mat-paginator
-                    [length]="sundryCreditorsAccountsBackup.totalItems"
-                    [pageSize]="advanceFilters.count"
-                    [pageIndex]="advanceFilters.page - 1"
-                    [pageSizeOptions]="pageSizeOptions"
-                    [showFirstLastButtons]="true"
-                    [hidePageSize]="false"
-                    (page)="handlePageEvent($event)">
-                </mat-paginator>
-            </ng-container>
-        </div>
+        <ng-container
+            *ngIf="
+                activeTab === 'vendor' &&
+                sundryCreditorsAccountsBackup.results &&
+                sundryCreditorsAccountsBackup.results.length &&
+                totalVendors > pageSizeOptions[0]
+            "
+        >
+            <mat-paginator
+                [length]="sundryCreditorsAccountsBackup.totalItems"
+                [pageSize]="advanceFilters.count"
+                [pageIndex]="advanceFilters.page - 1"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)">
+            </mat-paginator>
+        </ng-container>
         <div
             class="no-data"
             *ngIf="

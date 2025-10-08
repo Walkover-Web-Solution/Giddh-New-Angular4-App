@@ -658,22 +658,16 @@
                     </table>
                 </div>
 
-                <!-- pagination -->
-                <div
-                    class="mt-2"
+                <mat-paginator
                     *ngIf="daybookData?.totalItems > pageSizeOptions[0]"
-                >
-                    <mat-paginator
-                        [length]="daybookData?.totalItems"
-                        [pageSize]="daybookData?.count"
-                        [pageSizeOptions]="pageSizeOptions"
-                        [pageIndex]="daybookData?.page - 1"
-                        (page)="handlePageEvent($event)"
-                        [hidePageSize]="false"
-                        [showFirstLastButtons]="true">
-                    </mat-paginator>
-                </div>
-                <!-- pagination -->
+                    [length]="daybookData?.totalItems"
+                    [pageSize]="daybookData?.count"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [pageIndex]="daybookData?.page - 1"
+                    (page)="handlePageEvent($event)"
+                    [hidePageSize]="false"
+                    [showFirstLastButtons]="true">
+                </mat-paginator>
             </div>
             <div class="no-data" *ngIf="!daybookData?.entries?.length">
                 <no-data></no-data>

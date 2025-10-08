@@ -115,7 +115,6 @@
                         *ngIf="(triggerList$ | async)?.totalItems > pageSizeOptions[0]"
                     >
                         <mat-paginator
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="(triggerList$ | async)?.totalItems"
                             [pageSize]="triggerListRequest.count"

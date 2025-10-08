@@ -94,7 +94,7 @@
                     </div>
                 </section>
             </div>
-            <div class="mt-3" *ngIf="vatReportTransactions.totalPages > 1">
+            <div *ngIf="vatReportTransactions.totalPages > 1">
                 <mat-paginator
                     (page)="pageChanged($event)"
                     [length]="vatReportTransactions?.totalPages"

@@ -187,23 +187,20 @@
                 </button>
             </div>
         </div>
-        <div
+        <mat-paginator
             *ngIf="
                 ocrDocumentsRequestParams.totalItems > pageSizeOptions[0] && showData && !(ocrListInProgress$ | async)
             "
+            (page)="handlePageChange($event)"
+            [length]="ocrDocumentsRequestParams.totalItems"
+            [pageSize]="ocrDocumentsRequestParams.count"
+            [showFirstLastButtons]="true"
+            [pageSizeOptions]="pageSizeOptions"
+            [hidePageSize]="false"
+            [pageIndex]="pageIndex"
+            class="mt-15"
         >
-            <mat-paginator
-                (page)="handlePageChange($event)"
-                [length]="ocrDocumentsRequestParams.totalItems"
-                [pageSize]="ocrDocumentsRequestParams.count"
-                [showFirstLastButtons]="true"
-                [pageSizeOptions]="pageSizeOptions"
-                [hidePageSize]="false"
-                [pageIndex]="pageIndex"
-                class="mt-15"
-            >
-            </mat-paginator>
-        </div>
+        </mat-paginator>
     </div>
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">

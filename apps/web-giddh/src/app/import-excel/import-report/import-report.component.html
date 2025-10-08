@@ -75,19 +75,16 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-4">
-                <ng-container *ngIf="importStatusResponse?.totalItems > pageSizeOptions[0]">
-                    <mat-paginator
-                        [length]="importStatusResponse?.totalItems"
-                        [pageSize]="importPaginatedRequest.count || importStatusResponse?.count"
-                        [pageIndex]="importPaginatedRequest.page - 1"
-                        [pageSizeOptions]="pageSizeOptions"
-                        [showFirstLastButtons]="true"
-                        [hidePageSize]="false"
-                        (page)="handlePageEvent($event)">
-                    </mat-paginator>
-                </ng-container>
-            </div>
+            <mat-paginator
+                *ngIf="importStatusResponse?.totalItems > pageSizeOptions[0]"
+                [length]="importStatusResponse?.totalItems"
+                [pageSize]="importPaginatedRequest.count || importStatusResponse?.count"
+                [pageIndex]="importPaginatedRequest.page - 1"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)">
+            </mat-paginator>
             <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>
     </div>

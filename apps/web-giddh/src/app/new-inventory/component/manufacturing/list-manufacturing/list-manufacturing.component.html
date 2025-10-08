@@ -188,7 +188,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </section>
-        <div class="mt-4" *ngIf="(totalItems > pageSizeOptions[0]) && !isReportLoading">
+        <div *ngIf="(totalItems > pageSizeOptions[0]) && !isReportLoading">
             <mat-paginator
                 [length]="totalItems"
                 [pageSize]="manufacturingSearchRequest.count"

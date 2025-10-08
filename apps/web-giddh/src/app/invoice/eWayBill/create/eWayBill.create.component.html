@@ -404,16 +404,15 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
         </div>
-        <div class="mt-1 mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
-            <mat-paginator
-                [length]="transporterListDetails.totalItems"
-                [pageSize]="transporterFilterRequest.count"
-                [pageIndex]="transporterFilterRequest.page - 1"
-                [pageSizeOptions]="pageSizeOptions"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)">
-            </mat-paginator>
-        </div>
+        <mat-paginator
+            *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]"
+            [length]="transporterListDetails.totalItems"
+            [pageSize]="transporterFilterRequest.count"
+            [pageIndex]="transporterFilterRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)">
+        </mat-paginator>
     </mat-dialog-content>
 </ng-template>

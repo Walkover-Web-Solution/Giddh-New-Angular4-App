@@ -334,7 +334,7 @@
                 </tr>
             </table>
         </div>
-        <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
+        <div class="mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
             <mat-paginator
                 [length]="transporterListDetails.totalItems"
                 [pageIndex]="transporterFilterRequest.page - 1"

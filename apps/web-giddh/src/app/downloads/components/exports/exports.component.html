@@ -118,17 +118,16 @@
         <p>{{ commonLocaleData?.app_no_record_found }}</p>
     </div>
 </section>
-<div class="mt-4" *ngIf="downloadRequest?.totalItems > pageSizeOptions[0] && !isLoading">
-    <mat-paginator
-        [length]="downloadRequest?.totalItems"
-        [pageSize]="downloadRequest.count"
-        [pageIndex]="downloadRequest.page - 1"
-        [pageSizeOptions]="pageSizeOptions"
-        [showFirstLastButtons]="true"
-        [hidePageSize]="false"
-        (page)="handlePageEvent($event)">
-    </mat-paginator>
-</div>
+<mat-paginator
+    *ngIf="downloadRequest?.totalItems > pageSizeOptions[0] && !isLoading"
+    [length]="downloadRequest?.totalItems"
+    [pageSize]="downloadRequest.count"
+    [pageIndex]="downloadRequest.page - 1"
+    [pageSizeOptions]="pageSizeOptions"
+    [showFirstLastButtons]="true"
+    [hidePageSize]="false"
+    (page)="handlePageEvent($event)">
+</mat-paginator>
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
     <ng-template matMenuContent>
         <app-datepicker-wrapper

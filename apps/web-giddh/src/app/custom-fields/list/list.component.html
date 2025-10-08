@@ -88,23 +88,19 @@
                     <no-data [secondaryMessage]="' '"></no-data>
                 </div>
             </div>
-            <div class="mt-5">
-                <ng-container
-                    *ngIf="
-                        customFieldsList?.results?.length && customFieldsList?.totalItems > pageSizeOptions[0]
-                    "
-                >
-                    <mat-paginator
-                        [length]="customFieldsList?.totalItems"
-                        [pageSize]="customFieldsRequest.count"
-                        [pageIndex]="customFieldsRequest.page - 1"
-                        [pageSizeOptions]="pageSizeOptions"
-                        [showFirstLastButtons]="true"
-                        [hidePageSize]="false"
-                        (page)="handlePageEvent($event)">
-                    </mat-paginator>
-                </ng-container>
-            </div>
+          
+            <mat-paginator
+                *ngIf="
+                    customFieldsList?.results?.length && customFieldsList?.totalItems > pageSizeOptions[0]
+                "
+                [length]="customFieldsList?.totalItems"
+                [pageSize]="customFieldsRequest.count"
+                [pageIndex]="customFieldsRequest.page - 1"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)">
+            </mat-paginator>
         </div>
     </div>
 </ng-container>

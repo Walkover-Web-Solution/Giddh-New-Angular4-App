@@ -155,20 +155,16 @@
     </div>
 </div>
 
-<div
+<mat-paginator
     *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashRejectedReportLoading"
-    class="mt-4"
->
-    <mat-paginator
-        [length]="pettyCashRejectedReportResponse?.totalItems"
-        [pageSize]="pettycashRequest.count"
-        [pageIndex]="pettycashRequest.page - 1"
-        [pageSizeOptions]="pageSizeOptions"
-        [showFirstLastButtons]="true"
-        [hidePageSize]="false"
-        (page)="handlePageEvent($event)"
-    ></mat-paginator>
-</div>
+    [length]="pettyCashRejectedReportResponse?.totalItems"
+    [pageSize]="pettycashRequest.count"
+    [pageIndex]="pettycashRequest.page - 1"
+    [pageSizeOptions]="pageSizeOptions"
+    [showFirstLastButtons]="true"
+    [hidePageSize]="false"
+    (page)="handlePageEvent($event)"
+></mat-paginator>
 
 <div *ngIf="isPettyCashRejectedReportLoading">
     <giddh-page-loader></giddh-page-loader>

@@ -112,19 +112,17 @@
         [commonLocaleData]="commonLocaleData"
     >
     </columnar-report-table-component>
-    <div class="mt-2">
-        <ng-container *ngIf="columnarReportResponse?.totalItems > pageSizeOptions[0]">
-            <mat-paginator
-                [length]="columnarReportResponse.totalItems"
-                [pageSize]="getColumnarRequestModel.count"
-                [pageIndex]="getColumnarRequestModel.page - 1"
-                [pageSizeOptions]="pageSizeOptions"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)">
-            </mat-paginator>
-        </ng-container>
-    </div>
+    <ng-container *ngIf="columnarReportResponse?.totalItems > pageSizeOptions[0]">
+        <mat-paginator
+            [length]="columnarReportResponse.totalItems"
+            [pageSize]="getColumnarRequestModel.count"
+            [pageIndex]="getColumnarRequestModel.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)">
+        </mat-paginator>
+    </ng-container>
     <div *ngIf="isLoading && isShowColumnarReport">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>

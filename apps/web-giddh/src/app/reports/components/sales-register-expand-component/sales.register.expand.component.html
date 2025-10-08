@@ -568,7 +568,7 @@
             </div>
 
         </div>
-        <div class="text-center position-sticky position-left" *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > pageSizeOptions[0]">
+        <div class="position-sticky position-left" *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > pageSizeOptions[0]">
             <mat-paginator
                 (page)="handlePageChange($event)"
                 [length]="(salesRegisteDetailedResponse$ | async)?.totalItems"
