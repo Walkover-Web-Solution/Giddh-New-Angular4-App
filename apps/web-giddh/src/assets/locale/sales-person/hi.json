@@ -1,0 +1,9 @@
+{
+    "archive_confirmation_message": "क्या आप वाकई सेल्स पर्सन को आर्काइव करना चाहते हैं?",
+    "unarchive_confirmation_message": "क्या आप वाकई विक्रय व्यक्ति को अनआर्काइव करना चाहते हैं?",
+    "transfer_and_archive": "ट्रांसफर और आर्काइव",
+    "delete_confirmation_message": "क्या आप सेल्स पर्सन को डिलीट करना चाहते हैं?",
+    "transfer_and_delete": "ट्रांसफर और डिलीट",
+    "delete_with_voucher_message": "आप यह कार्य नहीं कर सकते क्योंकि सेल्स पर्सन वाउचर/एंट्री में मौजूद है। <strong>डिलीट करने के बजाय क्या आप इसे आर्काइव करना चाहते हैं?</strong>",
+    "archive_alternative_message": "क्या आप सेल्स पर्सन को आर्काइव करना चाहते हैं?"
+}

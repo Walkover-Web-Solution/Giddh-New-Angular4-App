@@ -11,7 +11,7 @@ import { GeneralService } from "../../services/general.service";
 import { ToasterService } from "../../services/toaster.service";
 import { AppState } from "../../store";
 import { saveAs } from 'file-saver';
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { LedgerService } from "../../services/ledger.service";
 import { ConfirmModalComponent } from "../new-confirm-modal/confirm-modal.component";
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";
@@ -35,8 +35,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     @Input() public isPettyCash: boolean = false;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
-    /** Instance of close modal icon */
-    @ViewChild('close', { static: true }) public closeModal: ElementRef;
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /** Subject to release subscriptions */
@@ -61,8 +59,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public isLoading: boolean = true;
     /** Holds images folder path */
     public imgPath: string = "";
-    /** True if needs to refresh entry */
-    public refreshAfterClose: boolean = false;
     /** True if is company */
     public isCompany: boolean = false;
     /** True if consolidated branch */
@@ -80,7 +76,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private ledgerService: LedgerService,
         private invoiceAction: InvoiceActions,
-        private invoiceBulkUpdateService: InvoiceBulkUpdateService
+        private invoiceBulkUpdateService: InvoiceBulkUpdateService,
+        private dialogRef: MatDialogRef<AttachmentsComponent>
     ) {
 
     }
@@ -180,7 +177,11 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 if (response.body?.data) {
                     let objectURL = this.generalService.base64ToBlob(response.body?.data, 'application/pdf', 512);
                     this.voucherPdf = { name: this.selectedItem?.voucherNumber, uniqueName: this.selectedItem?.voucherUniqueName, type: "pdf", src: objectURL, originalSrc: objectURL, encodedData: response.body?.data, isChecked: false, originalFileExtension: "pdf" };
-                    this.showVoucherPreview();
+                    if (!this.selectedItem?.isAttachment || !this.attachments?.length) {
+                        this.showVoucherPreview();
+                    } else {
+                        this.showFilePreview(this.attachments[0]);
+                    }
                 } else {
                     this.showFilePreview(this.attachments[0]);
                 }
@@ -262,6 +263,15 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Closes attachment dialog
+     *
+     * @memberof AttachmentsComponent
+     */
+    public closeAttachmentDialog(): void {
+        this.dialogRef?.close(true);
+    }
+
+    /**
      * Files bulk download
      *
      * @memberof AttachmentsComponent
@@ -316,13 +326,12 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.ledgerService.removeAttachment(this.attachments[index]?.uniqueName).subscribe((response) => {
                     if (response?.status === 'success') {
                         let updatedAttachments = this.attachments?.filter(attachment => attachment?.uniqueName !== this.attachments[index]?.uniqueName);
                         this.attachments = updatedAttachments;
-                        this.refreshAfterClose = true;
 
                         if (this.fileInputElement && this.fileInputElement.nativeElement) {
                             this.fileInputElement.nativeElement.value = '';
@@ -362,7 +371,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 let bulkDeleteModel = {
                     voucherUniqueNames: [this.selectedItem?.voucherUniqueName],
@@ -374,14 +383,10 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                         if (response.status === "success") {
                             this.toaster.showSnackBar("success", response.body);
                             this.voucherPdf = null;
-                            this.refreshAfterClose = true;
-
                             this.changeDetectionRef.detectChanges();
                             this.previewFileAfterDelete();
+                            this.closeAttachmentDialog();
 
-                            if (autoDeleteEntries) {
-                                this.closeModal?.nativeElement?.click();
-                            }
                         } else {
                             this.toaster.showSnackBar("error", response.message);
                         }
@@ -492,7 +497,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             if (this.attachments?.length > 0) {
                 this.showFilePreview(this.attachments[0]);
             } else {
-                this.closeModal?.nativeElement?.click();
+                this.closeAttachmentDialog();
             }
         }
     }

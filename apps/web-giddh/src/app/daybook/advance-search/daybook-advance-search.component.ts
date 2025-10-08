@@ -1,26 +1,28 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { debounceTime, filter, take, takeUntil } from 'rxjs/operators';
+import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from '../../services/general.service';
 import { SearchService } from '../../services/search.service';
 import { InventoryService } from '../../services/inventory.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { SettingsTagService } from '../../services/settings.tag.service';
+import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
 
 @Component({
     selector: 'daybook-advance-search-model',
     templateUrl: './daybook-advance-search.component.html',
-    styleUrls: ['./daybook-advance-search.component.scss']
+    styleUrls: ['./daybook-advance-search.component.scss'],
+    providers: [SalesPersonComponentStore]
 
 })
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
@@ -35,8 +37,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /** Search filter data */
     @Input() public searchFilterData: any;
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
-    @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent, static: true }) public dateRangePickerDir: DaterangePickerComponent;
-    public advanceSearchObject: DayBookRequestModel = null;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+public advanceSearchObject: DayBookRequestModel = null;
     public advanceSearchForm: UntypedFormGroup;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
@@ -49,20 +52,14 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     private toDate: string = '';
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
@@ -106,15 +103,22 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public isExpanded: boolean = false;
     /** List of tags */
     public tags$: Observable<IOption[]>;
+    /** Sales Person List */
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** This will use for instance of sales person Dropdown */
+    public salesPersonDropdown: FormControl = new FormControl();
+    /** Filtered Sales Person List */
+    public filteredSalesPersonList: IOption[] = [];
 
     constructor(
         private inventoryService: InventoryService,
         private store: Store<AppState>,
         private fb: UntypedFormBuilder,
         private generalService: GeneralService,
-        private modalService: BsModalService,
         private searchService: SearchService,
-        private settingsTagService: SettingsTagService
+        private settingsTagService: SettingsTagService,
+        private salesPersonStore: SalesPersonComponentStore,
+        private changeDetectionRef: ChangeDetectorRef
     ) {
 
     }
@@ -123,6 +127,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.setVoucherTypes();
         this.loadDefaultAccountsSuggestions();
         this.loadDefaultStocksSuggestions();
+        this.getSalesPersonList();
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
@@ -146,6 +151,33 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
             { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' }
         ]);
+
+        this.salesPersonList$.pipe(filter(Boolean), take(1)).subscribe(res => {
+            this.filteredSalesPersonList = res as IOption[];
+        });
+
+        this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
+            takeUntil(this.destroyed$)).subscribe((search: string) => {
+                if (!search) {
+                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                        this.filteredSalesPersonList = res as IOption[];
+                    });
+                } else {
+                    this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                        this.filteredSalesPersonList = res?.filter((salesPerson: IOption) => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
+                    });
+                }
+                this.changeDetectionRef.detectChanges();
+            });
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200, archive: '' } });
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -174,18 +206,25 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 
                 if (dataToSend?.vouchers) {
                     this.advanceSearchForm.get('vouchers')?.patchValue(dataToSend?.vouchers);
+                    this.advanceSearchForm.get('defaultVouchersLabel')?.patchValue(dataToSend?.defaultVouchersLabel);
                 }
 
                 if (dataToSend?.particulars) {
                     this.advanceSearchForm.get('particulars')?.patchValue(dataToSend?.particulars);
+                    this.advanceSearchForm.get('defaultParticularsLabel')?.patchValue(dataToSend?.defaultParticularsLabel);
                 }
 
                 if (dataToSend?.inventory) {
                     this.advanceSearchForm.get('inventory')?.patchValue(dataToSend?.inventory);
                 }
 
+                if (dataToSend?.inventory?.defaultInventoriesLabel) {
+                    this.advanceSearchForm.get('inventory.defaultInventoriesLabel')?.patchValue(dataToSend?.inventory.defaultInventoriesLabel);
+                }
+
                 if (dataToSend?.tags) {
                     this.advanceSearchForm.get('tags')?.patchValue(dataToSend?.tags);
+                    this.advanceSearchForm.get('defaultTagsLabel')?.patchValue(dataToSend?.defaultTagsLabel);
                 }
             }, 500);
         }
@@ -225,9 +264,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.closeModelEvent.emit({
             cancle: true
         });
-        if (this.modalRef) {
-            this.hideGiddhDatepicker();
-        }
     }
 
     /**
@@ -467,11 +503,15 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             chequeNumber: ['', Validators.required],
             dateOnCheque: ['', Validators.required],
             tags: [[]],
+            defaultTagsLabel: [[]],
             particulars: [[]],
+            defaultParticularsLabel: [[]],
             vouchers: [[]],
+            defaultVouchersLabel: [[]],
             inventory: this.fb.group({
                 includeInventory: true,
                 inventories: [[]],
+                defaultInventoriesLabel: [[]],
                 quantity: null,
                 inventoryQuantity: null,
                 inventoryValue: null,
@@ -485,6 +525,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 itemValueEqualTo: true,
                 itemValueGreaterThan: false
             }),
+            includeSalesPersons: [true],
+            salesPersonUniqueNames: [[]],
         });
 
         if (this.searchFilterData) {
@@ -504,23 +546,18 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * @param {*} element
      * @memberof DaybookAdvanceSearchModelComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
     /**
-     * This will hide the datepicker
+     * Toggles the universal datepicker menu
      *
+     * @param {boolean} isOpen
      * @memberof DaybookAdvanceSearchModelComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
     }
 
     /**
@@ -531,14 +568,14 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -620,7 +657,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             const requestObject = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: DROPDOWN_ITEMS_COUNT_LIMIT
             }
             this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {

@@ -15,16 +15,15 @@ import { select, Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
 import { FormControl, Validators } from "@angular/forms";
 import { ToasterService } from "../../services/toaster.service";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { InvoiceService } from "../../services/invoice.service";
+import { InvoiceTemplatesService } from "../../services/invoice.templates.service";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
-import { trigger, state, style, transition, animate } from "@angular/animations";
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
@@ -40,6 +39,10 @@ import { RestrictedModules } from '../../app.constant';
 import { SettingsIntegrationActions } from "../../actions/settings/settings.integration.action";
 import { CommonActions } from "../../actions/common.actions";
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { MatMenuTrigger } from "@angular/material/menu";
+import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
+import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../services/invoice.ui.data.service';
+import { TemplateModeEnum } from "../../models/api-models/Sales";
 
 export interface VoucherBalances {
     grandTotal: Number;
@@ -59,19 +62,7 @@ interface IReportFilterTableColumn {
     selector: "list",
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
-    providers: [VoucherComponentStore],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    providers: [VoucherComponentStore]
 })
 export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold all voucher list data source for table */
@@ -103,10 +94,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
     /** Holds E-way bill dailog template reference */
     @ViewChild('ewayBill', { static: true }) public ewayBill: TemplateRef<any>;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Holds send email dailog template reference send email */
     @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
+    /** Instance of universal datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+
     /** Holds show Customer Search input visibility status */
     public showCustomerSearch: boolean = false;
     /** Holds show Invoice No Search input visibility status */
@@ -131,18 +123,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public urlVoucherType: string = '';
     /** Hold day js reference */
     public dayjs: any = dayjs;
-    /** Hold Bootstrap Modal Reference */
-    public modalRef: BsModalRef;
     /** Holds selected date range */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Last vouchers get in progress Observable */
@@ -194,7 +182,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** True, if user has enable GST E-invoice */
     public isEInvoiceEnabled: boolean = null;
-    /** Holds page Size Options for pagination */
+    /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Results Count */
     public totalResults: number = 0;
@@ -327,17 +315,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Stores the form fields of onboard form API, required for GST validation in E-Invoice */
     public formFields: any[] = [];
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Form Group for setting form */
     public settingForm: FormGroup;
     /** Hold setting api response */
     public settingResponse: any;
     /** Hold request object for setting form to save */
     public formToSave: any;
-    /** Hold route params */
-    public isRouteApplied: boolean = false;
     /** Holds true if update setting mode */
     public isSettingUpdateMode: boolean = false;
+    /** Hold route params */
+    public isRouteApplied: boolean = false;
     /** Hold current url */
     private currentUrl: string = "";
     /** Enum for estimate table columns */
@@ -358,6 +346,22 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public paymentTableColumnsEnum: typeof PaymentTableColumnsEnum = PaymentTableColumnsEnum;
     /** True if columns loading */
     public isColumnsLoading: boolean = true;
+    /** List of all templates fetched from the service */
+    public templatesList: any[] = [];
+    /** List of all created templates for a given type */
+    public createdTemplatesList: any[] = [];
+    /** True if datepicker menu is open */
+    public isDatepickerMenuOpen: boolean = false;
+    /** List of all created templates for a given type */
+    public purchaseTemplatesList: any[] = [];
+    /** Selected template */
+    public selectedTemplate: any;
+    /** True if columns loading */
+    public showContent: boolean = true;
+    /** Show invoice lock date */
+    public showInvoiceDate: boolean = true;
+    /** Show purchase lock date */
+    public showPurchaseDate: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -369,10 +373,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private vouchersUtilityService: VouchersUtilityService,
-        private modalService: BsModalService,
         private toasterService: ToasterService,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
+        private invoiceTemplatesService: InvoiceTemplatesService,
+        private invoiceUiDataService: InvoiceUiDataService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceActions: InvoiceActions,
         private salesAction: SalesActions,
@@ -406,7 +411,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
 
-            
+
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
@@ -475,12 +480,37 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
+                this.showContent = false;
+                setTimeout(() => {
+                    this.showContent = true;
+                }, 50);
                 this.isColumnsLoading = true;
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
+                const templateType =
+                    this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
+                        : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
 
+                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                    this.fetchTemplates(VoucherTypeEnum.purchase_bill);
+                    this.fetchAllCreatedTemplates(VoucherTypeEnum.purchase_bill);
+                } else {
+                    this.fetchTemplates(templateType);
+                    this.fetchAllCreatedTemplates(templateType);
+                }
+                setTimeout(() => {
+                    if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                        this.purchaseTemplatesList = [
+                            { label: this.commonLocaleData?.app_purchase_bill, value: this.voucherTypeEnum.purchase_bill },
+                            { label: this.commonLocaleData?.app_voucher_types?.purchase_order, value: this.voucherTypeEnum.purchase_order }
+                        ]; 
+                        this.selectedTemplate = this.purchaseTemplatesList[0];
+                    }  else {
+                        this.selectedTemplate = null;
+                    }
+                }, 100);
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                     this.setModuleType();
                 }
@@ -568,7 +598,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-
         /** Universal date */
         this.componentStore.universalDate$.pipe(filter(Boolean), skip(1), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -633,7 +662,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     if (this.activeModule === 'list') {
                         this.generalService.updateActivatedRouteQueryParams({ from: this.advanceFilters.from, to: this.advanceFilters.to });
                     }
-                    this.advanceFilters.to = this.queryParams.to;
+                    this.advanceFilters.page = this.queryParams.page;
                 }
                 this.getVouchers(true);
                 this.getVoucherBalances();
@@ -677,7 +706,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.dialog.closeAll();
-                this.toasterService.showSnackBar("success", (this.voucherType === 'estimates' || this.voucherType === 'proformas') ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
+                this.toasterService.showSnackBar("success", (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -858,15 +887,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (res) {
                 this.toasterService.showSnackBar('success', this.localeData?.gmail_account_added);
                 this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-                if (this.urlVoucherType === 'invoice') {
+                if (this.urlVoucherType === VoucherTypeEnum.invoice) {
                     this.router.navigateByUrl('/pages/invoice/preview/settings/email');
                 }
             }
         });
-
         const broadcast = new BroadcastChannel("settings");
         broadcast.onmessage = (event) => {
             if (event?.data?.form !== undefined && event?.data?.form !== null) {
+                this.isSettingUpdateMode = false;
                 let formValues = event?.data?.form;
                 this.settingForm.patchValue({
                     purchaseBillSettings: formValues.purchaseBillSettings || {},
@@ -995,7 +1024,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.dataSource.push(item);
             });
-
             // When user search in table header then after api call focus on respective search field
             if (this.activeSearchField) {
                 setTimeout(() => {
@@ -1035,7 +1063,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getSelectedTabIndex(): void {
-
         if (!this.isCompany && !this.isConsolidatedBranch) {
             if (this.activeTabGroup === 0) {
                 if (this.voucherType === 'estimates' && this.activeModule === 'list') {
@@ -1046,21 +1073,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 2;
                 } else if (this.voucherType === 'sales' && this.activeModule === 'pending') {
                     this.selectedTabIndex = 3;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'settings') {
+                } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'settings') {
                     this.selectedTabIndex = 4;
-                } else if (this.voucherType === 'sales' && this.activeModule === 'templates') {
+                } else if (this.voucherType === VoucherTypeEnum.sales && this.activeModule === 'templates') {
                     this.selectedTabIndex = 5;
                 }
             } else if (this.activeTabGroup === 1) {
-                if (this.voucherType === 'debit note' && this.activeModule === 'list') {
+                if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'list') {
                     this.selectedTabIndex = 0;
-                } else if (this.voucherType === 'credit note' && this.activeModule === 'list') {
+                } else if (this.voucherType === VoucherTypeEnum.creditNote && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'pending') {
+                } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'pending') {
                     this.selectedTabIndex = 2;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'settings') {
+                } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'settings') {
                     this.selectedTabIndex = 3;
-                } else if (this.voucherType === 'debit note' && this.activeModule === 'templates') {
+                } else if (this.voucherType === VoucherTypeEnum.debitNote && this.activeModule === 'templates') {
                     this.selectedTabIndex = 4;
                 }
             } else if (this.activeTabGroup === 2) {
@@ -1070,6 +1097,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 1;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
                     this.selectedTabIndex = 2;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 3;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === 'receipt' && this.activeModule === 'list') {
@@ -1116,6 +1145,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.selectedTabIndex = 0;
                 } else if (this.voucherType === 'purchase' && this.activeModule === 'list') {
                     this.selectedTabIndex = 1;
+                } else if (this.voucherType === 'purchase' && this.activeModule === 'templates') {
+                    this.selectedTabIndex = 2;
                 }
             } else if (this.activeTabGroup === 3) {
                 if (this.voucherType === this.voucherTypeEnum.receipt && this.activeModule === 'list') {
@@ -1195,6 +1226,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 2) {
                     voucherType = "purchase";
                     activeModule = "settings";
+                } else if (selectedTabIndex === 3) {
+                    voucherType = "purchase";
+                    activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1258,6 +1292,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else if (selectedTabIndex === 1) {
                     voucherType = "purchase";
                     activeModule = "list";
+                } else if (selectedTabIndex === 2) {
+                    voucherType = "purchase";
+                    activeModule = "templates";
                 }
             } else if (this.activeTabGroup === 3) {
                 if (selectedTabIndex === 0) {
@@ -1277,7 +1314,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         }
-
         if (this.queryParams.page) {
             this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule], {
                 queryParams: {
@@ -1382,8 +1418,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.ledgerSearchRequest.count = event.pageSize;
             this.getLedgersOfInvoice();
         } else {
+            this.advanceFilters.page = this.advanceFilters.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.advanceFilters.count = event.pageSize;
-            this.advanceFilters.page = event.pageIndex + 1;
             this.getVouchers(false);
         }
     }
@@ -1452,7 +1488,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-
     /**
      * Generate E-Invoice API Call
      *
@@ -1467,37 +1502,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      *
      * @param {*} days
      * @returns {string}
-     * @memberof InvoicePreviewComponent
+     * @memberof VoucherListComponent
      */
     public getOverdueDaysText(days: any): string {
         let overdueDays = this.localeData?.overdue_days;
         overdueDays = overdueDays?.replace("[DAYS]", days);
         return overdueDays;
-    }
-
-    /**
-    * To show the datepicker
-    *
-    * @param {*} element
-    * @memberof VoucherListComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof VoucherListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -1508,7 +1518,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -1516,7 +1526,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.customDateSelected = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -1596,7 +1606,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             disableClose: true
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response) {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
@@ -1646,7 +1656,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         } else {
             dataToSend['voucherUniqueNames'] = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
         }
-
 
         let dialogRef = this.dialog.open(BulkUpdateComponent, {
             panelClass: ['mat-dialog-md'],
@@ -1715,6 +1724,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
+                this.advanceFilters.page = this.generalService.adjustPageIndex(this.dataSource?.length, this.advanceFilters.page, this.advanceFilters.count, voucher?.uniqueName ? 1 : this.selectedVouchers?.length);
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.componentStore.deleteVoucher({
                         accountUniqueName: voucher?.account?.uniqueName, model: {
@@ -1750,28 +1760,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Open template dialog
-     *
-     * @memberof VoucherListComponent
-     */
-    public templateDialog(): void {
-        this.dialog.open(TemplatePreviewDialogComponent, {
-            width: '980px'
-        });
-    }
-
-    /**
-     * Open template edit dialog
-     *
-     * @memberof VoucherListComponent
-     */
-    public templateEdit(): void {
-        this.dialog.open(TemplateEditDialogComponent, {
-            width: '100%',
-            height: '100vh'
-        });
-    }
 
     /**
      * Toggle between table header title and search input field
@@ -2045,7 +2033,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response === this.commonLocaleData?.app_yes) {
+            if (response === this.commonLocaleData?.app_yes) {
                 this.actionVoucher(voucher, 'cancel');
             }
         });
@@ -2059,7 +2047,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public actionVoucher(voucher: any, action: string): void {
-        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType }});
+        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType } });
     }
 
     /**
@@ -2148,7 +2136,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     * To get all advance adjusted data
     *
     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
-    * @memberof InvoicePreviewComponent
+    * @memberof VoucherListComponent
     */
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
         this.closeAdvanceReceiptDialog();
@@ -2261,13 +2249,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.voucherDetails = voucher;
         this.accountParentGroup = this.getParentGroupForAccountCreate(this.voucherType);
 
-        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true
-        });
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -2432,12 +2414,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public copyVoucher(voucher: any): void {
+        const queryParams = {
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
+            page: this.advanceFilters.page,
+            count: this.advanceFilters.count ?? PAGINATION_LIMIT
+        }
+
+        const searchString = this.advanceFilters.q ?? this.advanceFilters.proformaNumber ?? this.advanceFilters.estimateNumber ?? this.advanceFilters.purchaseOrderNumber;
+        if (searchString?.length) {
+            queryParams['search'] = searchString;
+        }
+
         if (this.voucherType === VoucherTypeEnum.generateEstimate) {
-            this.router.navigate([`/pages/vouchers/estimates/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+            this.router.navigate([`/pages/vouchers/estimates/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`], { queryParams: queryParams });
         } else if (this.voucherType === VoucherTypeEnum.generateProforma) {
-            this.router.navigate([`/pages/vouchers/proformas/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`]);
+            this.router.navigate([`/pages/vouchers/proformas/${voucher?.account?.uniqueName}/${voucher?.voucherNumber}/copy`], { queryParams: queryParams });
         } else {
-            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`]);
+            this.router.navigate([`/pages/vouchers/${this.urlVoucherType}/${voucher?.account?.uniqueName ?? voucher?.vendor?.uniqueName}/${voucher?.uniqueName}/copy`], { queryParams: queryParams });
         }
     }
 
@@ -2569,6 +2563,22 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private clearDateFilters(): void {
         this.universalDate = [];
         this.isUniversalDateApplicable = false;
+    }
+
+    /**
+     * This will be check account of same accouunt on selected pending vouchers
+     *
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
+    public isSameAccount(): boolean {
+        if (!this.selectedPendingVouchers?.length) {
+            return false;
+        }
+        const firstAccountUniqueName = this.selectedPendingVouchers[0]?.account?.uniqueName;
+        return this.selectedPendingVouchers.every(voucher =>
+            voucher?.account?.uniqueName === firstAccountUniqueName
+        );
     }
 
     /**
@@ -2751,7 +2761,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.verifyPurchaseEmail({ getRequestObject: getRequestObject, postRequestObject: postRequestObject });
     }
 
-
     /**
      * Open custom email dialog
      *
@@ -2761,13 +2770,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
             data: voucherType,
-            width: 'var(--aside-pane-width)',
-            height: '70vh',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
+            ...ASIDE_PANE_CONFIG
         });
     }
 
@@ -2869,7 +2872,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public deleteEmail(emailId: string) {
         if (!emailId) {
             return false;
-        } 
+        }
 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-sm'],
@@ -2878,7 +2881,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
                 if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                     this.updateSettingsEmail(null);
@@ -3131,6 +3134,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('invoiceSettings.purchaseRoundOff').patchValue(false);
                         }
 
+                        const lockDateValue = this.settingForm.get('purchaseBillSettings.lockDate').value;
+                        if (lockDateValue === null || lockDateValue === '') {
+                            this.showPurchaseDate = false;
+                            setTimeout(() => {
+                               this.showPurchaseDate = true;
+                            }, 0);
+                        }
+
                         if (!this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').value) {
                             this.settingForm.get('invoiceSettings.generateAutoPurchaseNumber').patchValue(false);
                         }
@@ -3142,6 +3153,15 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
                         );
 
+
+                        const invoiceLockDateValue = this.settingForm.get('invoiceSettings.lockDate').value;
+                        if (invoiceLockDateValue === null || invoiceLockDateValue === '') {
+                            this.showInvoiceDate = false;
+                            setTimeout(() => {
+                               this.showInvoiceDate = true;
+                            }, 0);
+                        }
+
                         if (setting.companyEmailSettings) {
                             this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(
                                 cloneDeep(setting.companyEmailSettings.sendThroughGmail)
@@ -3150,6 +3170,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('companyEmailSettings.sendThroughGmail')?.setValue(false);
                         }
                     }
+
                     if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                         this.applyRoundOff = setting.invoiceSettings.salesRoundOff;
                     } else if (this.voucherType === VoucherTypeEnum.purchase) {
@@ -3170,12 +3191,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-   /**
-     * Submits the form
-     *
-     * @return {*}  {void}
-     * @memberof VoucherListComponent
-     */
+    /**
+      * Submits the form
+      *
+      * @return {*}  {void}
+      * @memberof VoucherListComponent
+      */
     public onSubmit(): void {
         this.isSettingUpdateMode = true;
         if (this.settingForm.get('invoiceSettings.autoPaid').value) {
@@ -3258,20 +3279,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 .filter(item => item?.checked)
                 .map(item => item.value);
             if (!this.displayedColumns.includes('index')) {
-                this.displayedColumns.unshift('index'); 
+                this.displayedColumns.unshift('index');
             }
             if (!this.displayedColumns.includes('more_options') && ![VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                 this.displayedColumns.push('more_options');
             } else if ([VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType) && this.displayedColumns.includes('more_options')) {
-                this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');  
+                this.displayedColumns = this.displayedColumns.filter(column => column !== 'more_options');
             }
             this.setEInvoiceColumns();
             this.getVouchers(false);
             this.getVoucherBalances();
         });
-       setTimeout(() => {
+        setTimeout(() => {
             this.isColumnsLoading = false;
-       }, 400);
+        }, 400);
     }
 
     /**
@@ -3281,7 +3302,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private setModuleType(): void {
-        switch(this.voucherType) {
+        switch (this.voucherType) {
             case VoucherTypeEnum.sales:
                 this.moduleType = VoucherReportFilterModuleEnum.Sales;
                 break;
@@ -3316,6 +3337,155 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Fetches all user templates.
+     * Calls InvoiceTemplatesService.getTemplates() and updates the templatesList.
+     * Handles errors and shows a toaster message if needed.
+     */
+    public fetchTemplates(templateType?: string): void {
+        this.invoiceTemplatesService.getTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.status === 'success') {
+                this.templatesList = res.body || [];
+            } else {
+                this.templatesList = [];
+            }
+        });
+    }
+
+    /**
+     * Fetches all created templates of a given type.
+     * Calls InvoiceTemplatesService.getAllCreatedTemplates(templateType) and updates the createdTemplatesList.
+     * @param templateType The type of template to fetch
+     */
+    public fetchAllCreatedTemplates(templateType: string): void {
+        this.createdTemplatesList = [];
+        this.invoiceTemplatesService.getAllCreatedTemplates(templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.status === 'success') {
+                this.createdTemplatesList = res?.body || [];
+            } else {
+                this.createdTemplatesList = [];
+            }
+        });
+    }
+
+    /**
+     * Sets a template as default.
+     * Calls InvoiceTemplatesService.setTemplateAsDefault and shows feedback.
+     * @param templateUniqueName The unique name of the template
+     * @param templateType The type of template
+     */
+    public setTemplateAsDefault(templateUniqueName: string, templateType: string): void {
+        this.invoiceTemplatesService.setTemplateAsDefault(templateUniqueName, templateType).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.status === 'success') {
+                this.toasterService.showSnackBar('success', this.localeData?.template_set_as_default_successfully);
+                // Update the UI immediately
+                this.createdTemplatesList.forEach(template => {
+                    if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
+                        template.isDefaultForVoucher = (template.uniqueName === templateUniqueName);
+                    } else {
+                        template.isDefault = (template.uniqueName === templateUniqueName);
+                    }
+                });
+            } else {
+                this.toasterService.showSnackBar('error', res?.message);
+            }
+        });
+    }
+
+    /**
+     * Deletes a template by its unique name.
+     * Calls InvoiceTemplatesService.deleteTemplate and updates the list.
+     * @param templateUniqueName The unique name of the template to delete
+     * @param templateType The type of template (optional, for refresh)
+     */
+    public deleteTemplate(template: any, templateType?: string): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.are_you_sure_you_want_to_delete.replace('${template.name}', template.name),
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message
+            },
+            panelClass: ['mat-dialog-sm'],
+            role: 'alertdialog',
+            ariaLabel: 'Confirm Dialog'
+        });
+
+        dialogRef.afterClosed().subscribe(response => {
+            if (response) {
+                this.invoiceTemplatesService.deleteTemplate(template.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    if (res?.status === 'success') {
+                        this.toasterService.showSnackBar('success', this.localeData?.template_deleted_successfully);
+                        this.fetchAllCreatedTemplates(templateType);
+                        this.fetchTemplates(templateType);
+                    } else {
+                        this.toasterService.showSnackBar('error', res?.message);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Open template dialog
+     *
+     * @param {*} template
+     * @memberof VoucherListComponent
+     */
+    public previewTemplate(template: any): void {
+        const reqObj = {
+            ...template,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
+        this.dialog.open(TemplatePreviewDialogComponent, {
+           panelClass: ['mat-dialog-lg'],
+            height: '90vh',
+            maxHeight: '90vh',
+            data: reqObj
+        });
+    }
+
+    /**
+     * Open template edit dialog
+     *
+     * @param {*} template
+     * @param {string} type
+     * @memberof VoucherListComponent
+     */
+    public templateAction(template: any, type: string): void {
+        const templateType =
+            this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
+                : this.voucherType === VoucherTypeEnum.purchaseOrder ? VoucherTypeEnum.purchase_order : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase_bill : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
+        const voucherType = this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher : VoucherTypeEnum.sales;
+        const templatesType = this.urlVoucherType === VoucherTypeEnum.purchase ? this.selectedTemplate?.value : templateType;
+        const dataToSend = {
+            templateList: this.templatesList,
+            voucherType: voucherType,
+            templateType: templatesType,
+            createTemplateList: this.createdTemplatesList,
+            updateTemplate: type === TemplateModeEnum.Edit ? template : null,
+            mode: type === TemplateModeEnum.Edit ? TemplateModeEnum.Update : TemplateModeEnum.Create,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
+        const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
+            width: '100%',
+            height: '95vh',
+            maxHeight: '95vh',
+            maxWidth: '90vw',
+            data: dataToSend,
+            disableClose: true
+        });
+
+        dialogRef.afterClosed().subscribe(response => {
+            if (response) {
+                this.fetchAllCreatedTemplates(templatesType);
+            }
+        });
+    }
+
+    /**
      * This will use for show hide e-invoice status column
      *
      * @private
@@ -3332,5 +3502,31 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.displayedColumns.splice(this.displayedColumns.length - 1, 0, "e_invoice_status");
             }
         }
+    }
+
+    /**
+    * This will show the datepicker
+    *
+    * @param {boolean} isOpen
+    * @memberof VoucherListComponent
+    */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
+    }
+
+    /**
+     * This will use for select template
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    public templateSelect(template: any): void {
+        this.selectedTemplate = template;
+        this.fetchAllCreatedTemplates(template.value);
+        this.fetchTemplates(template.value);
     }
 }

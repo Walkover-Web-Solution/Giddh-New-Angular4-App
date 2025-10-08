@@ -7,101 +7,97 @@
     <section>
         <section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
             <!-- header -->
-            <ng-container>
-                <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
-            </ng-container>
+            <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
             <!-- end header -->
 
             <ng-container *ngIf="searchedItems && searchedItems.length > 0">
                 <div #mainEle tabindex="0" class="universal-list-items">
                     <ng-container *ngIf="isOpen">
-                        <ng-container>
-                            <mat-list role="list">
-                                <commandk-virtual-scroll
-                                    [items]="searchedItems"
-                                    [childHeight]="ItemHeight"
-                                    (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
-                                    [style.max-height.px]="
-                                        searchedItems?.length !== 0
-                                            ? ItemHeight *
-                                              (searchedItems && searchedItems.length < visibleItems
-                                                  ? searchedItems.length
-                                                  : visibleItems)
-                                            : ItemHeight
-                                    "
-                                    (scroll)="onScroll($event)"
-                                    class="scroll-height"
+                        <mat-list role="list">
+                            <commandk-virtual-scroll
+                                [items]="searchedItems"
+                                [childHeight]="ItemHeight"
+                                (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
+                                [style.max-height.px]="
+                                    searchedItems?.length !== 0
+                                        ? ItemHeight *
+                                            (searchedItems && searchedItems.length < visibleItems
+                                                ? searchedItems.length
+                                                : visibleItems)
+                                        : ItemHeight
+                                "
+                                (scroll)="onScroll($event)"
+                                class="scroll-height"
+                            >
+                                <mat-list-item
+                                    role="listitem"
+                                    class="item"
+                                    *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn"
+                                    (mouseover)="highlightItem(i)"
+                                    (mouseout)="unhighlightItem()"                     
+                                    (click)="itemSelected(r,$event)"                     
+                                    [ngClass]="{ 'selected': r.loop === highlightedItem, 'active': r.isSelected }"
                                 >
-                                    <mat-list-item
-                                        role="listitem"
-                                        class="item"
-                                        *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn"
-                                        (mouseover)="highlightItem(i)"
-                                        (mouseout)="unhighlightItem()"                     
-                                        (click)="itemSelected(r,$event)"                     
-                                        [ngClass]="{ 'selected': r.loop === highlightedItem, 'active': r.isSelected }"
-                                    >
-                                        <a [attr.href]="r.type === 'MENU' || r.type === 'ACCOUNT' ? r.route : null" class="d-flex flex-row align-items-center">
-                                            <div class="item-icon">
-                                                <ng-container [ngSwitch]="r.type">
-                                                    <ng-container *ngSwitchCase="'MENU'">
-                                                        <span class="icon-bar" id="icon-bar"></span>
-                                                    </ng-container>
-                                                    <ng-container *ngSwitchCase="'GROUP'">
-                                                        <span class="icon-group-folder" id="icon-group-folder"></span>
-                                                    </ng-container>
-                                                    <ng-container *ngSwitchDefault>
-                                                        <span class="icon-account" id="icon-account"></span>
-                                                    </ng-container>
+                                    <a [attr.href]="r.type === 'MENU' || r.type === 'ACCOUNT' ? r.route : null" class="d-flex flex-row align-items-center">
+                                        <div class="item-icon">
+                                            <ng-container [ngSwitch]="r.type">
+                                                <ng-container *ngSwitchCase="'MENU'">
+                                                    <span class="icon-bar" id="icon-bar"></span>
                                                 </ng-container>
-                                            </div>
-                                            <div class="item-details flex-grow-1">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="width-65">
-                                                        <p
-                                                            id="{{
-                                                                r.type?.toLowerCase() +
-                                                                    '-' +
-                                                                    (r.type === 'MENU'
-                                                                        ? getPageUniqueName(r.route)
-                                                                        : r?.uniqueName)
-                                                            }}"
-                                                        >
-                                                            {{ r.name }}
+                                                <ng-container *ngSwitchCase="'GROUP'">
+                                                    <span class="icon-group-folder" id="icon-group-folder"></span>
+                                                </ng-container>
+                                                <ng-container *ngSwitchDefault>
+                                                    <span class="icon-account" id="icon-account"></span>
+                                                </ng-container>
+                                            </ng-container>
+                                        </div>
+                                        <div class="item-details flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="width-65">
+                                                    <p
+                                                        id="{{
+                                                            r.type?.toLowerCase() +
+                                                                '-' +
+                                                                (r.type === 'MENU'
+                                                                    ? getPageUniqueName(r.route)
+                                                                    : r?.uniqueName)
+                                                        }}"
+                                                    >
+                                                        {{ r.name }}
+                                                    </p>
+                                                    <ng-container [ngSwitch]="r.type">
+                                                        <ng-container *ngSwitchCase="'MENU'">
+                                                            <small>{{ localeData?.menu }}</small>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="r?.parentGroups">
+                                                        <p class="small-para-details">
+                                                            <small>
+                                                                <span
+                                                                    *ngFor="
+                                                                        let item of r?.parentGroups;
+                                                                        let idx = index
+                                                                    "
+                                                                >
+                                                                    <ng-container *ngIf="idx > 0">
+                                                                        <span>&nbsp;❯&nbsp;</span>
+                                                                    </ng-container>
+                                                                    {{ item.name }}
+                                                                </span>
+                                                            </small>
                                                         </p>
-                                                        <ng-container [ngSwitch]="r.type">
-                                                            <ng-container *ngSwitchCase="'MENU'">
-                                                                <small>{{ localeData?.menu }}</small>
-                                                            </ng-container>
-                                                        </ng-container>
-                                                        <ng-container *ngIf="r?.parentGroups">
-                                                            <p class="small-para-details">
-                                                                <small>
-                                                                    <span
-                                                                        *ngFor="
-                                                                            let item of r?.parentGroups;
-                                                                            let idx = index
-                                                                        "
-                                                                    >
-                                                                        <ng-container *ngIf="idx > 0">
-                                                                            <span>&nbsp;❯&nbsp;</span>
-                                                                        </ng-container>
-                                                                        {{ item.name }}
-                                                                    </span>
-                                                                </small>
-                                                            </p>
-                                                        </ng-container>
-                                                    </div>
-                                                    <ng-container *ngIf="r.type === 'ACCOUNT'">
-                                                        <span class="command-hover-text">{{ r?.uniqueName }}</span>
                                                     </ng-container>
                                                 </div>
+                                                <ng-container *ngIf="r.type === 'ACCOUNT'">
+                                                    <span class="command-hover-text">{{ r?.uniqueName }}</span>
+                                                </ng-container>
                                             </div>
-                                        </a>
-                                    </mat-list-item>
-                                </commandk-virtual-scroll>
-                            </mat-list>
-                        </ng-container>
+                                        </div>
+                                    </a>
+                                </mat-list-item>
+                            </commandk-virtual-scroll>
+                        </mat-list>
                         <!-- end -->
                     </ng-container>
                 </div>
@@ -116,7 +112,7 @@
                                 <ng-container *ngIf="showChannelCreateBtn">
                                     <div class="d-flex column-gap15 justify-content-center">
                                         <button
-                                            mat-stroked-button
+                                            mat-raised-button
                                             mat-dialog-close
                                             color="primary"
                                             (click)="triggerAddManage('group')"
@@ -125,7 +121,7 @@
                                         </button>
                                         <button
                                             mat-dialog-close
-                                            mat-stroked-button
+                                            mat-raised-button
                                             color="primary"
                                             (click)="triggerAddManage('account')"
                                         >
@@ -150,9 +146,7 @@
                     <div class="vR">
                         <div class="vN">
                             <div class="vT">{{ item.name }}</div>
-                            <ng-container>
-                                <span>&nbsp;❯&nbsp;</span>
-                            </ng-container>
+                            <span>&nbsp;❯&nbsp;</span>
                         </div>
                     </div>
                 </span>

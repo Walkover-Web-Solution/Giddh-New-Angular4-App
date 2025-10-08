@@ -4,8 +4,9 @@ import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
-import { AppState } from "../../../store";
-import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
+import { AppState } from '../../../store';
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { cloneDeep } from "../../../lodash-optimized";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -29,6 +30,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     @ViewChild('warehouseInput2', { static: false }) warehouseInput2: ElementRef;
     /** Open Account Selection Dropdown instance */
     @ViewChild('warehouseDropdown', { static: false }) public warehouseDropdown: SelectFieldComponent;
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Image path variable */
     public imgPath: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -82,7 +87,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
 
     constructor(
 
@@ -207,12 +212,19 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    * @param {*} event
    * @memberof StockBalanceComponent
    */
-    public pageChanged(event: any): void {
-        if (this.GroupStockReportRequest.page !== event.page) {
-            this.GroupStockReportRequest.page = event.page;
-            this.getStocks();
-        }
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof StockBalanceComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.GroupStockReportRequest.page = this.GroupStockReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.GroupStockReportRequest.count = event.pageSize;
+        this.getStocks();
     }
+
+
 
     /**
     * Get stock details

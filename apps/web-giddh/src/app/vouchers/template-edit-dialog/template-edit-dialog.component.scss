@@ -1,5 +1,13 @@
-.create-discount-aside {
-    background-color: var(--color-common-quinary-background-for-all-components);
+.create-template-aside {
+    .sticky-header {
+        z-index: 10;
+        box-shadow: 0 2px 4px var(--color-drag-shadow);
+    }
+
+    .scrollable-content {
+        flex: 1;
+        height: calc(100vh - 80px);
+    }
 
     .template-left-side {
         width: 40%;

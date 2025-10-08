@@ -6,15 +6,13 @@
 >
     <div class="wrapper">
         <div class="header">
-            <button
+            <button mat-stroked-button
                 aria-hidden="true"
                 class="cursor-pointer font-15 d-flex p-0 attachment-back-button"
                 [attr.aria-label]="commonLocaleData?.app_back"
-                #close
                 disableRipple
                 type="button"
-                mat-button
-                [mat-dialog-close]="refreshAfterClose"
+                (click)="closeAttachmentDialog()"
             >
                 <i class="icon-left"></i> {{ commonLocaleData?.app_back }}
             </button>
@@ -114,7 +112,7 @@
                             [matTooltip]="commonLocaleData?.app_download"
                             [matTooltipPosition]="'above'"
                             aria-label="icon file"
-                            ><i class="icon-file"></i
+                            ><i class="icon-download-circle"></i
                         ></a>
                     </span>
                     <span>

@@ -43,14 +43,55 @@ const mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
 
 // PHP script to prepend to index.html
 const phpScript = `<?php
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
-    $host = $_SERVER['HTTP_HOST'];
-    $requestUri = $_SERVER['REQUEST_URI'];
-    $fullUrl = $protocol . "://" . $host . $requestUri;
-    $parsedUrl = parse_url($fullUrl);
-    $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+    $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    if ($requestUri === '/instance-metadata') {
+        header('Content-Type: application/json');
+        $cacheFile = __DIR__ . '/instance-metadata.json';
+        $instanceInfo = null;
+        if (file_exists($cacheFile)) {
+            $instanceInfo = file_get_contents($cacheFile);
+        }
+        if ($instanceInfo === null) {
+            $token = @file_get_contents(
+                "http://169.254.169.254/latest/api/token",
+                false,
+                stream_context_create([
+                    'http' => [
+                        'method' => 'PUT',
+                        'header' => "X-aws-ec2-metadata-token-ttl-seconds: 21600"
+                    ]
+                ])
+            );
 
-    // setting fetched baseUrl in Origin Header
+            if ($token !== false) {
+                $ctx = stream_context_create([
+                    'http' => [
+                        'method' => 'GET',
+                        'header' => "X-aws-ec2-metadata-token: $token"
+                    ]
+                ]);
+                $instanceInfo = @file_get_contents(
+                    "http://169.254.169.254/latest/dynamic/instance-identity/document",
+                    false,
+                    $ctx
+                );
+                if ($instanceInfo) {
+                    file_put_contents($cacheFile, $instanceInfo);
+                }
+            }
+        }
+        http_response_code(200);
+        echo $instanceInfo;
+        exit;
+    }
+
+    $protocol   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+    $host       = $_SERVER['HTTP_HOST'];
+    $requestUri = $_SERVER['REQUEST_URI'];
+    $fullUrl    = $protocol . "://" . $host . $requestUri;
+    $parsedUrl  = parse_url($fullUrl);
+    $baseUrl    = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+
     $headers = [
         "Origin: $baseUrl"
     ];

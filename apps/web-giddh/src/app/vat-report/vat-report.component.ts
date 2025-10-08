@@ -32,8 +32,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** Hold uae main table displayed columns */
     public displayedColumns: string[] = ['number', 'name', 'aed_amt', 'vat_amt', 'adjustment'];
     /** Hold uae bottom table displayed columns */
@@ -100,7 +100,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState = false;
     }
 
     /**
@@ -182,8 +182,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
         this.vatService.downloadVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === "success") {
-                let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                return saveAs(blob, `VatReport${this.isKenyaCompany ? '.csv' : '.xlsx'}`);
+                let blob = this.generalService.base64ToBlob(res.body.data, 'application/xls', 512);
+                return saveAs(blob, res.body.name);
             } else {
                 this.toasty.clearAllToaster();
                 this.toasty.showSnackBar('error', res?.message);

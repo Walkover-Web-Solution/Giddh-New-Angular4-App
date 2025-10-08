@@ -9,7 +9,7 @@
         <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
             <div class="aside-help-header relative" *ngIf="showSettingHeading">
                 <h4 class="font-15">{{ localeData?.page_heading }}</h4>
-                <div hidden id="close" class="cursor-pointer" (click)="closeAsidePane($event)">
+                <div hidden class="cursor-pointer" (click)="closeAsidePane($event)">
                     <i class="icon-cross"></i>
                 </div>
             </div>
@@ -42,25 +42,27 @@
                                     iciciAllowedCompanies?.includes(selectedCompany?.uniqueName)
                                 "
                             >
-                                <ng-container *ngIf="tab?.link !== '/pages/settings/tag'; else tagsListItem">
-                                    <mat-list-item
-                                        role="listitem"
-                                        [ngClass]="{
-                                            'active-link':
-                                                (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) &&
-                                                !isTagMenuOpened
-                                        }"
-                                    >
-                                        <a
-                                            href="javascript:;"
-                                            aria-label="icon"
-                                            class="d-block clearfix"
-                                            [routerLink]="tab?.link"
+                                <ng-container *ngIf="(tab?.link === '/pages/vouchers/preview/sales/settings' && !isCompany && !isConsolidatedBranch) || tab?.link !== '/pages/vouchers/preview/sales/settings'">
+                                    <ng-container *ngIf="tab?.link !== '/pages/settings/tag'; else tagsListItem">
+                                        <mat-list-item
+                                            role="listitem"
+                                            [ngClass]="{
+                                                'active-link':
+                                                    (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) &&
+                                                    !isTagMenuOpened
+                                            }"
                                         >
-                                            <span [innerHTML]="tab?.icon"></span>
-                                            <span>{{ tab?.label }}</span>
-                                        </a>
-                                    </mat-list-item>
+                                            <a
+                                                href="javascript:;"
+                                                aria-label="icon"
+                                                class="d-block clearfix"
+                                                [routerLink]="tab?.link"
+                                            >
+                                                <span [innerHTML]="tab?.icon"></span>
+                                                <span>{{ tab?.label }}</span>
+                                            </a>
+                                        </mat-list-item>
+                                    </ng-container>
                                 </ng-container>
                             </ng-container>
                             <ng-template #tagsListItem>

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
-import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
+import { EMAIL_VALIDATION_REGEX, IOption } from '../../app.constant';
 import { saveAs } from 'file-saver';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
@@ -12,7 +12,6 @@ import { cloneDeep } from '../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { CopyType, FileTypeEnum } from '../../shared/Enums/common.enum';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { VouchersUtilityService } from '../utility/vouchers.utility.service';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -148,9 +147,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                     const mimeType = this.exportForm.get('exportType').value === ExportTypeEnum.csv
                         ? 'text/csv'
                         : 'application/vnd.ms-excel';
-                    const blob = this.generalService.base64ToBlob(response, mimeType, 512);
-                    const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.inputData?.voucherType, this.inputData?.allVouchersSelected, this.inputData?.localeData)}.${this.exportForm.get('exportType').value === FileTypeEnum.CSV ? FileTypeEnum.CSV : FileTypeEnum.XLSX}`;
-                    saveAs(blob, fileName);
+                    const blob = this.generalService.base64ToBlob(response.data, mimeType, 512);
+                    saveAs(blob, response.name);
                 }
                 this.dialogRef?.close(true);
             }

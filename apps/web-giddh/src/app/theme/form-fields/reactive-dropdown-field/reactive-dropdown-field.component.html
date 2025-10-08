@@ -1,4 +1,4 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <ng-container *ngIf="showLabel">
         <div [ngClass]="{ 'readonly-field': readonly || disabled, 'dropdown-without-label': !showMatLabel}">
             <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }" (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()">
@@ -7,6 +7,7 @@
                     [readonly]="readonly" [disabled]="disabled" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
                     [required]="required" [attr.aria-expanded]="readonly ? false : true"
                     (input)="searchFormControl.next($event.target.value)"
+                    (blur)="onBlur()"
                     #trigger="matAutocompleteTrigger"
                     #selectField matAutocompletePosition="auto" (focusout)="
                         closeOnFocusOut &&
@@ -14,14 +15,14 @@
                         $event?.relatedTarget?.nodeName !== 'A'
                             ? trigger.closePanel()
                             : null
-                    " [value]="labelValue" />
+                    " [value]="controlLabelValue ?? ''" />
                 <mat-autocomplete (opened)="panelOpened()" (optionSelected)="optionSelected($event)" optionsScroll class="py-0"
                     [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
                     [displayWith]="displayLabel" #auto="matAutocomplete">
                     <span class="position-relative">
                         <ng-container *ngFor="let option of fieldFilteredOptions$ | async">
                             <mat-option [value]="option"
-                                [matTooltip]="option?.label" matTooltipPosition="right" (click)="$event.stopPropagation()">
+                                [matTooltip]="option?.label" matTooltipPosition="right" (click)="$event.stopPropagation()" [disabled]="option?.additional?.disabled">
                                 <ng-template [ngTemplateOutletContext]="{ option: option }"
                                     [ngTemplateOutlet]="optionTemplate"></ng-template>
                                 <ng-container *ngIf="!optionTemplate">
@@ -31,9 +32,9 @@
                             <mat-divider *ngIf="showOptionDivider"></mat-divider>
                         </ng-container>
                         <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
-                            {{ commonLocaleData?.app_no_result_found }}
+                            {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
                         </mat-option>
-                        <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()"
+                        <a href="javascript:;" *ngIf="showCreateNew && createNewText" (click)="createNewRecord()"
                             class="position-sticky create-new-wrapper d-flex justify-content-between px-3 py-2">
                             <div class="item create-new">{{ createNewText }}</div>
                             <div class="item create-new-command" *ngIf="showKeyboardCommand">
@@ -71,11 +72,11 @@
                 $event?.relatedTarget?.nodeName !== 'A'
                     ? trigger.closePanel()
                     : null
-            " [value]="labelValue" />
+            " [value]="controlLabelValue ?? ''" />
         <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll
             [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
             [displayWith]="displayLabel" #auto="matAutocomplete">
-            <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()"
+            <a href="javascript:;" *ngIf="showCreateNew && createNewText" (click)="createNewRecord()"
                 class="d-flex justify-content-between px-3 py-2">
                 <div class="item create-new">{{ createNewText }}</div>
                 <div class="item create-new-command" *ngIf="showKeyboardCommand">
@@ -87,7 +88,7 @@
                 {{option?.label}}
             </mat-option>
             <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
-                {{ commonLocaleData?.app_no_result_found }}
+                {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
             </mat-option>
         </mat-autocomplete>
     </ng-container>

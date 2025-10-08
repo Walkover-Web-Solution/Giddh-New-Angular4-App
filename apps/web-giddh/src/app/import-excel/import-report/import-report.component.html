@@ -8,7 +8,7 @@
     <div class="padd15">
         <div class="d-flex flex-column">
             <div class="text-right">
-                <button class="btn btn-sky-blue mr-0" (click)="importFiles()">{{ localeData?.import_files }}</button>
+                <button mat-raised-button color="primary" (click)="importFiles()">{{ localeData?.import_files }}</button>
             </div>
             <div class="mr-t15 import-data-table" *ngIf="!isLoading">
                 <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">
@@ -75,25 +75,18 @@
                     </div>
                 </div>
             </div>
-            <div
-                class="pagination-wrap mb-5"
-                [hidden]="isLoading"
-                *ngIf="importStatusResponse?.totalItems > importStatusResponse?.count"
-            >
-                <pagination
-                    [totalItems]="importStatusResponse?.totalItems"
-                    [(ngModel)]="importPaginatedRequest.page"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="importStatusResponse?.count"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
+            <div class="mt-4">
+                <ng-container *ngIf="importStatusResponse?.totalItems > pageSizeOptions[0]">
+                    <mat-paginator
+                        [length]="importStatusResponse?.totalItems"
+                        [pageSize]="importPaginatedRequest.count || importStatusResponse?.count"
+                        [pageIndex]="importPaginatedRequest.page - 1"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                        (page)="handlePageEvent($event)">
+                    </mat-paginator>
+                </ng-container>
             </div>
             <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>

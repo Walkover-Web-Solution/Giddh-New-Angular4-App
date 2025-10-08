@@ -65,7 +65,6 @@ import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-mod
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
 import { AddAccountRequest, UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
-import { animate, state, style, transition, trigger } from "@angular/animations";
 import { CreateDiscountComponent } from "../../theme/create-discount/create-discount.component";
 import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/confirmation-modal.interface";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
@@ -75,7 +74,6 @@ import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus"
 import { cloneDeep, isEqual, uniqBy } from "../../lodash-optimized";
 import {
     AdjustedVoucherType,
-    ASIDE_PANE_CONFIG,
     BranchHierarchyType,
     ENTRY_DESCRIPTION_LENGTH,
     FILE_ATTACHMENT_TYPE,
@@ -85,6 +83,8 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
     ZIP_CODE_SUPPORTED_COUNTRIES,
+    ASIDE_PANE_CONFIG,
+    IOption
 } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
@@ -107,30 +107,13 @@ import { OcrAction } from "../../ai-ocr/ai-ocr.component";
 import { AiOcrStore } from "../../ai-ocr/utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
+import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
 
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
-    providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore],
-    animations: [
-        trigger("slideInOut", [
-            state(
-                "in",
-                style({
-                    transform: "translate3d(0, 0, 0)",
-                })
-            ),
-            state(
-                "out",
-                style({
-                    transform: "translate3d(100%, 0, 0)",
-                })
-            ),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
+    providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore]
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Instance of RCM checkbox */
@@ -145,8 +128,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("sendEmailModal", { static: true }) public sendEmailModal: any;
     /* Selector for print modal */
     @ViewChild("printVoucherModal", { static: true }) public printVoucherModal: any;
-    /** Date change confirmation modal */
-    @ViewChild("dateChangeConfirmationModel", { static: true }) public dateChangeConfirmationModel: any;
     /* Selector for adjustment modal */
     @ViewChild("adjustmentModal", { static: true }) public adjustmentModal: any;
     /**  This will use for dayjs */
@@ -182,7 +163,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Stock search request */
     public stockSearchRequest: any;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Invoice Settings */
     public invoiceSettings: any;
     /** True if round off will be applicable */
@@ -490,6 +471,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public otherTaxTypeEnum: typeof OtherTaxTypeEnum = OtherTaxTypeEnum;
     /** Sales Person List */
     public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** Holds transfer info if active sales person is transfer */
+    private activeSalePersonIsTransfer: any;
     /** True if OCR data is enabled for voucher creation. */
     public ocrDataEnabled: boolean = false;
     /** Get ocr voucher details observable */
@@ -631,8 +614,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private settingsProfileActions: SettingsProfileActions,
         private titleCasePipe: TitleCasePipe,
         private changeDetection: ChangeDetectorRef,
-        private salesPersonStore: SalesPersonComponentStore,
-        private aiOcrService: AiOcrService
+        private aiOcrService: AiOcrService,
+        private salesPersonStore: SalesPersonComponentStore
     ) {
         this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
@@ -815,6 +798,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         /** New account details */
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.componentStore.newAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.createUpdateAccountCallback(response, true);
@@ -1132,6 +1116,46 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.invoiceForm.controls["warehouse"]
                                 ?.get("uniqueName")
                                 .patchValue(voucherDetails.warehouse?.uniqueName);
+                        }
+
+                        this.invoiceForm
+                            .get("templateDetails.other.customField1")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField1);
+                        this.invoiceForm
+                            .get("templateDetails.other.customField2")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField2);
+                        this.invoiceForm
+                            .get("templateDetails.other.customField3")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.customField3);
+                        this.invoiceForm
+                            .get("templateDetails.other.message2")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.message2);
+                        this.invoiceForm
+                            .get("templateDetails.other.shippedVia")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.shippedVia);
+                        this.invoiceForm
+                            .get("templateDetails.other.shippingDate")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.shippingDate);
+                        this.invoiceForm
+                            .get("templateDetails.other.trackingNumber")
+                            ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
+
+                        if (voucherDetails.attachedFiles) {
+                            this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
+                            this.selectedFileName = voucherDetails.attachedFileName;
+                        }
+
+                        this.invoiceForm
+                            .get("isRcmEntry")
+                            .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
+
+                        if (voucherDetails.adjustments?.length && !this.isCopyMode) {
+                            voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
+                                adjustment.adjustmentAmount = adjustment.amount;
+                                return adjustment;
+                            });
+                            this.advanceReceiptAdjustmentData = { adjustments: voucherDetails.adjustments };
+                            this.calculateAdjustedVoucherTotal(voucherDetails.adjustments);
                         }
 
                         this.invoiceForm
@@ -1565,6 +1589,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                     this.checkIfEntriesHasStock();
                 });
+            }
+        });
+
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+            if (!this.isUpdateMode) {
+                if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
+                    let salesPersonName = "";
+                    let salesPersonUniqueName = null;
+                    if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
+                        const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
+                        if (salesPerson) {
+                            salesPersonName = salesPerson.label
+                            salesPersonUniqueName = salesPerson.value
+                        }
+                    }
+                    this.invoiceForm.get('salesPersonName').patchValue(salesPersonName);
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
+                }
             }
         });
     }
@@ -2493,13 +2535,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
         this.account.excludeTax = !this.showTaxColumn;
-
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
         let index = 0;
         if (!this.isUpdateMode) { // Take sales person details only if account is new else assign from get voucher response
-            this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
-            this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+            this.salesPersonList$.pipe(take(1)).subscribe(salesPersonList => {
+                if (this.isSalesPersonExists(accountData?.salesPerson?.uniqueName, salesPersonList)) {
+                    this.invoiceForm.get('salesPersonName').patchValue(accountData?.salesPerson?.name || '');
+                    this.invoiceForm.get('salesPersonUniqueName').patchValue(accountData?.salesPerson?.uniqueName || null);
+                }
+            });
         }
 
         if (this.useDefaultAccountDetails) {
@@ -2949,6 +2994,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             data: {
                 voucherType: this.voucherType,
                 exchangeRate: this.invoiceForm.get("exchangeRate")?.value ?? 1,
+                highPrecisionRate: this.highPrecisionRate,
                 customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
             },
         });
@@ -3143,13 +3189,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.otherTaxAsideMenuRef = this.dialog.open(OtherTaxComponent, {
+            ...ASIDE_PANE_CONFIG,
             data: {
                 entryIndex: entryIndex,
                 appliedOtherTax: entry.get("otherTax")?.value,
-            },
-            position: {
-                top: "0",
-                right: "0",
             },
         });
 
@@ -3245,7 +3288,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup
             .get("otherTax.amount")
             .patchValue(giddhRoundOff((taxableValue * tax?.taxDetail[0]?.taxValue) / 100, this.highPrecisionRate));
-
+            
         entryFormGroup.get("otherTax.calculationMethod").patchValue(calculationMethod);
         this.calculateReceiptPaymentAmount(entryFormGroup, isUpdate);
         this.changeDetection.detectChanges();
@@ -3276,13 +3319,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.accountParentGroup = "bankaccounts";
         }
 
-        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            disableClose: true,
-        });
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
 
         this.accountAsideMenuRef
             .afterClosed()
@@ -3406,12 +3443,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateDiscountDialog(): void {
-        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, {
-            position: {
-                right: "0",
-                top: "0",
-            },
-        });
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
         this.discountDialogRef
             .afterClosed()
@@ -3714,13 +3746,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (entries?.length > 1) {
             this.dateChangeType = "entry";
             this.updatedEntryIndex = updatedEntryIndex;
-            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(
-                this.localeData,
-                this.commonLocaleData,
-                false
-            );
-            this.dialog.open(this.dateChangeConfirmationModel, {
-                width: "650px",
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: "mat-dialog-sm",
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.change_all_entry_dates, this.commonLocaleData),
+                },
+            });
+            dialogRef.afterClosed().subscribe((response) => {
+                this.handleDateChangeConfirmation(response);
             });
         }
     }
@@ -3757,13 +3790,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.dateChangeType = "voucher";
 
-        this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(
-            this.localeData,
-            this.commonLocaleData,
-            true
-        );
-        this.dialog.open(this.dateChangeConfirmationModel, {
-            width: "650px",
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: "mat-dialog-sm",
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+            },
+        });
+
+        dialogRef.afterClosed().subscribe((response) => {
+            this.handleDateChangeConfirmation(response);
         });
     }
 
@@ -3971,8 +4006,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {FormGroup} entry
      * @memberof VoucherCreateComponent
      */
-    public updateTotalDiscount(totalDiscount: any, entry: FormGroup): void {
+    public updateTotalDiscount(totalDiscount: any, entry: FormGroup, isActiveEntry: boolean): void {
         entry.get("totalDiscount").patchValue(totalDiscount);
+        this.calculateOtherTaxAmount(entry, isActiveEntry);
+    }
+
+    /**
+     * Calculate other tax amount based on taxable value
+     *
+     * @private
+     * @param {FormGroup} entry
+     * @param {boolean} isActiveEntry
+     * @memberof VoucherCreateComponent
+     */
+    private calculateOtherTaxAmount(entry: FormGroup, isActiveEntry: boolean): void {
+        let taxableValue = 0;
+        if (!entry.get("otherTax").value || !entry.get("transactions").value[0]?.amount?.amountForAccount || isActiveEntry) {
+            return;
+        }
+        const amountForAccount = Number(entry.get("transactions").value[0].amount.amountForAccount);
+        const totalDiscount = Number(entry.get("totalDiscount").value);
+
+        if (entry.get("otherTax").value?.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+            taxableValue = amountForAccount - totalDiscount;
+        } else {
+            taxableValue = amountForAccount - totalDiscount + entry.get("totalTaxWithoutCess").value + entry.get("totalCess").value;
+        }
+        const amount = giddhRoundOff(((taxableValue * entry.get("otherTax").value?.taxValue) / 100), HIGH_RATE_FIELD_PRECISION);
+        entry.get("otherTax.amount").patchValue(amount);
     }
 
     /**
@@ -4018,6 +4079,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.calculateTotalTax();
+        this.calculateOtherTaxAmount(entryFormGroup, false);
     }
 
     /**
@@ -4356,7 +4418,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * Open E-Way Bill dialog for creating or editing an E-Way Bill.
      * @param {any} event using for pinCode and gstNumber
      * @returns {void}
-     * 
+     *
      * @memberof VoucherCreateComponent
      */
     public openEwayBillDialog(): void {
@@ -4369,7 +4431,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             this.eWayBillResponse = response;
             this.saveVoucher();
         });
@@ -4625,7 +4687,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
         if (invoiceForm.account.mobileNumber != this.account.mobileNumber) {
-            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, '') : '';
+            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber
+                ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, "")
+                : "";
         }
 
         if (!this.currentVoucherFormDetails?.depositAllowed) {
@@ -4953,7 +5017,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
             const deposits = this.invoiceForm.get("deposits") as FormArray;
             let accountUniqueName = this.invoiceType.isCashInvoice
-                ? deposits.at(0).get("accountUniqueName")?.value ?? invoiceForm.account?.uniqueName ?? "cash"
+                ? deposits.at(0).get("accountUniqueName")?.value || invoiceForm.account?.uniqueName || "cash"
                 : invoiceForm.account?.uniqueName;
             if (invoiceForm?.account?.uniqueName) {
                 invoiceForm.account.uniqueName = accountUniqueName;
@@ -5181,7 +5245,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             roundOff: 0,
             tcsTotal: 0,
             tdsTotal: 0,
-            balanceDue: 0
+            balanceDue: 0,
         };
         this.hasStock = false;
 
@@ -5197,7 +5261,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             subTotal: 0,
             totalTaxableValue: 0,
             totalAdjustedAmount: 0,
-            convertedTotalAdjustedAmount: 0
+            convertedTotalAdjustedAmount: 0,
         };
 
         this.invoiceForm.get("type").patchValue(this.voucherType);
@@ -6101,25 +6165,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             entryFormGroup.get("hsnNumber")?.patchValue(response.stock.hsnNumber || response.hsnNumber);
             entryFormGroup.get("sacNumber")?.patchValue(response.stock.sacNumber || response.sacNumber);
-            entryFormGroup
-                .get("showCodeType")
-                ?.patchValue(response.stock.hsnNumber || response.hsnNumber ? "hsn" : "sac");
+            entryFormGroup.get("showCodeType")?.patchValue(response.stock.hsnNumber || response.hsnNumber ? "hsn" : "sac");
 
-            const rate = Number(
-                (
-                    (response.stock.rate ?? response.stock.variant?.unitRates[0].rate ?? 0) /
-                    (this.invoiceForm.get("exchangeRate")?.value ?? 1)
-                ).toFixed(this.highPrecisionRate)
-            );
+            transactionFormGroup.get("stock.stockUnit.code")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
+            transactionFormGroup.get("stock.stockUnit.uniqueName")?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
+            let baseRate: number;
+            if (response.stock.variant?.unitRates?.length) {
+                baseRate = this.getRateByUnit(transactionFormGroup.get("stock.stockUnit.uniqueName")?.value,response.stock.variant?.unitRates);
+            } else {
+                baseRate = response.stock.rate;
+            }
+            const exchangeRateValue = this.invoiceForm.get("exchangeRate")?.value ?? 1;
+            const rate = Number((baseRate / exchangeRateValue).toFixed(this.highPrecisionRate));
             transactionFormGroup.get("stock.rate.rateForAccount")?.patchValue(rate);
             transactionFormGroup.get("stock.skuCode")?.patchValue(response.stock.skuCode);
             transactionFormGroup.get("stock.skuCodeHeading")?.patchValue(response.stock.skuCodeHeading);
-            transactionFormGroup
-                .get("stock.stockUnit.code")
-                ?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
-            transactionFormGroup
-                .get("stock.stockUnit.uniqueName")
-                ?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
 
             if (response.stock.variant?.name) {
                 transactionFormGroup.get("stock.variant.name")?.patchValue(response.stock.variant?.name);
@@ -6238,6 +6298,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 ?.patchValue(amount / transactionFormGroup.get("stock.quantity")?.value);
         }
         this.checkIfEntriesHasStock();
+    }
+
+     /**
+     * Get rate by unit
+     *
+     * @param {string} stockUnitUniqueName
+     * @param {any[]} unitRates
+     * @returns {number}
+     * @memberof VoucherCreateComponent
+     */
+     private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
+        return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
     }
 
     /**
@@ -6518,11 +6590,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Calculates amount if advance receipt
+         * Calculates amount if advance receipt
      *
      * @private
-     * @param {FormGroup} entryFormGroup
-     * @param {boolean} isUpdate
+         * @param {FormGroup} entryFormGroup
+         * @param {boolean} isUpdate
      * @memberof VoucherCreateComponent
      */
     private calculateReceiptPaymentAmount(entryFormGroup: FormGroup, isUpdate: boolean = false): void {
@@ -6769,6 +6841,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         )?.stockUnitCode;
         if (selectedUnitCode) {
             transaction.get("stock.stockUnit.code")?.patchValue(selectedUnitCode);
+            transaction.get("stock.rate.rateForAccount")?.patchValue(this.getRateByUnit(selectedUnitCode, resolvedUnits));
         }
     }
 
@@ -6778,8 +6851,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
-        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
+        const dialogRef = this.dialog.open(
+            SalesPersonComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: { activeSalePersonUniqueName: this.invoiceForm.get('salesPersonUniqueName').value || "" }
+        }
+        );
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
     }
 
     /**
@@ -6789,5 +6867,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getSalesPersonList(): void {
         this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof VoucherCreateComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }

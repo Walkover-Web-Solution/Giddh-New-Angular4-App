@@ -4,20 +4,6 @@ dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 
-export const Configuration = {
-    'AppUrl': AppUrl,
-    'ApiUrl': ApiUrl,
-    'PORTAL_URL': PORTAL_URL,
-    'OTP_WIDGET_ID': OTP_WIDGET_ID,
-    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
-    'UkApiUrl': UkApiUrl,
-    'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER,
-    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
-    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
-    'RAZORPAY_KEY': RAZORPAY_KEY
-};
-
 /** Add Company business type*/
 export enum BusinessTypes {
     Registered = 'Registered',
@@ -28,6 +14,17 @@ export enum BusinessTypes {
 export enum BranchHierarchyType {
     Flatten = 'flatten',
     Tree = 'tree'
+};
+
+/** PDF Zoom Configuration Constants */
+export const IFRAME_ZOOM_CONFIG = {
+    FIT_PAGE: '#view=Fit',
+    FIT_HORIZONTAL: '#view=FitH',
+    FIT_VERTICAL: '#view=FitV',
+    ZOOM_50: '#zoom=50&view=FitH',
+    ZOOM_75: '#zoom=75&view=FitH',
+    ZOOM_100: '#zoom=100&view=FitH',
+    ZOOM_125: '#zoom=125&view=FitV'
 };
 
 /** Date Regex for 'MMM D, YYYY' */
@@ -120,7 +117,7 @@ export const PAGINATION_LIMIT = 50;
 /** Pagination count options */
 export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 /** API default count limit */
-export const API_COUNT_LIMIT = 20;
+export const DROPDOWN_ITEMS_COUNT_LIMIT = 20;
 /** Vouchers pagination limit  */
 export const ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT = 200;
 
@@ -592,23 +589,12 @@ export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'whozzat.com',
 ];
 
-
-/**
- * Enum for switching toggle button On and Off and changing its size
- *
- * @export
- * @enum {string}
- */
-export enum BootstrapToggleSwitch {
-    On = 'blue',
-    Off = 'gray',
-    Size = 'mini'
-}
-
 export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=${new Date().getTime()}`;
 export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
+export const OTP_WIDGET_ID = '326a63733354393830313330';
+export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1';
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
 export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
 export enum BROADCAST_CHANNELS {
@@ -648,7 +634,6 @@ export const BREAKPOINT_SCREEN_SIZE = {
     SMALL_DESKTOP_SCREEN_SIZE: '(1366px > width > 1024px)',
     TAB_SCREEN_SIZE: '(1024px > width)'
 }
-
 /** HTML tag name  */
 export enum HtmlElementEnum {
     Input = 'INPUT',
@@ -665,7 +650,8 @@ export const KeyCodesEnum = {
     ARROW_DOWN: 'ArrowDown',
     ARROW_UP: 'ArrowUp',
     ARROW_RIGHT: 'ArrowRight',
-    ARROW_LEFT: 'ArrowLeft' 
+    ARROW_LEFT: 'ArrowLeft',
+    TAB: 'Tab'
 };
 
 /** List of all the HTTP methods */
@@ -682,11 +668,12 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 
 /** Config for aside pane */
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
-    height: '100vh',
+    height: 'calc(100vh - var(--top-distance, 0px))',
     width: 'var(--aside-pane-width)',
     position: {
         right: '0',
-        bottom: '0'
+        bottom: '0',
+        top: 'var(--top-distance, 0px)'
     },
     disableClose: true
 };
@@ -717,4 +704,27 @@ export enum GetBifurcationType {
     QUATER = 'quater',
     QUARTER = 'quarter'
 }
-    
+/** Configuration */
+export const Configuration = {
+    'AppUrl': AppUrl,
+    'ApiUrl': ApiUrl,
+    'PORTAL_URL': PORTAL_URL,
+    'OTP_WIDGET_ID': OTP_WIDGET_ID,
+    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
+    'UkApiUrl': UkApiUrl,
+    'isElectron': isElectron,
+    'APP_FOLDER': APP_FOLDER,
+    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
+    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': RAZORPAY_KEY
+};
+
+/** Holds Dropdown label value interface */
+export interface IOption {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    isHilighted?: boolean;
+    additional?: any;
+    subVoucher?: string;
+}

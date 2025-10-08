@@ -22,15 +22,15 @@ import { MatSortModule } from '@angular/material/sort';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { MatInputModule } from '@angular/material/input';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { SharedModule } from '../shared/shared.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
-import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { MatMenuModule } from '@angular/material/menu';
+import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
 
 @NgModule({
     declarations: [
@@ -60,14 +60,14 @@ import { MatMenuModule } from '@angular/material/menu';
         Daterangepicker,
         DatepickerWrapperModule,
         MatInputModule,
-        BsDropdownModule.forRoot(),
+        
         SharedModule,
         GiddhPageLoaderModule,
         NoDataModule,
-        FinancialReportsModule,
         MatProgressSpinnerModule,
         HamburgerMenuModule,
-        MatMenuModule
+        MatMenuModule,
+        FinancialReportsModule
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService]

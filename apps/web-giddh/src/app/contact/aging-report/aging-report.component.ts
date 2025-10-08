@@ -1,6 +1,5 @@
 import {
     Component,
-    ComponentFactoryResolver,
     EventEmitter,
     OnInit,
     Output,
@@ -23,9 +22,6 @@ import { AppState } from "../../store";
 import { AgingReportActions } from "../../actions/aging-report.actions";
 import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
-import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
-import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as dayjs from "dayjs";
@@ -37,7 +33,8 @@ import { FormControl } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
+import { PageEvent } from "@angular/material/paginator";
+import { BranchHierarchyType, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
@@ -78,12 +75,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
     public isMobileScreen: boolean = false;
+    /** Page size options for mat-paginator */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public isAdvanceSearchApplied: boolean = false;
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
     @ViewChild("advanceSearch") advanceSearchTemplate: TemplateRef<any>;
-    @ViewChild("paginationChild", { static: false }) public paginationChild: ElementViewContainerRef;
-    @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Holds Template Reference for Unpaid Invoice Asidepane */
     @ViewChild("unpaidInvoice") public unpaidInvoice: TemplateRef<any>;
     /** Advance search component instance */
@@ -123,7 +120,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** Holds Unpaid invoice Dailog ref */
     public unpaidInvoiceDailogRef: MatDialogRef<any>;
     /** Holds Voucher name constant for Unpaid Invoice Get All API */
@@ -150,7 +147,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private agingReportActions: AgingReportActions,
         private cdr: ChangeDetectorRef,
         private breakpointObserver: BreakpointObserver,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private router: Router,
@@ -172,7 +168,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             if (data && data.results) {
                 this.agingReportDataSource.data = data.results;
                 this.dueAmountReportRequest.page = data.page;
-                setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
                 this.totalDueAmounts = data.overAllDueAmount;
                 this.totalFutureDueAmounts = data.overAllFutureDueAmount;
             }
@@ -319,42 +314,24 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.agingReportActions.OpenDueRange());
     }
 
-    public hideListItems() {
-        this.filterDropDownList.hide();
-    }
-
-    public pageChangedDueReport(event: any): void {
-        this.dueAmountReportRequest.page = event.page;
+    /**
+     * Handles mat-paginator page events
+     *
+     * @param {PageEvent} event Page event object from mat-paginator
+     * @memberof AgingReportComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.dueAmountReportRequest.page = this.dueAmountReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.dueAmountReportRequest.count = event.pageSize;
         this.getDueReport();
     }
 
-    public loadPaginationComponent(s) {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-        if (this.paginationChild && this.paginationChild.viewContainerRef) {
-            let viewContainerRef = this.paginationChild.viewContainerRef;
-            viewContainerRef.remove();
-
-            let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-            viewContainerRef.insert(componentInstanceView.hostView);
-
-            let componentInstance = componentInstanceView.instance as PaginationComponent;
-            componentInstance.totalPages = s.totalPages;
-            componentInstance.totalItems = s.count * s.totalPages;
-            componentInstance.itemsPerPage = s.count;
-            componentInstance.maxSize = 5;
-            componentInstance.writeValue(s.page);
-            componentInstance.boundaryLinks = true;
-            componentInstance.firstText = this.commonLocaleData?.app_first;
-            componentInstance.previousText = this.commonLocaleData?.app_previous;
-            componentInstance.nextText = this.commonLocaleData?.app_next;
-            componentInstance.lastText = this.commonLocaleData?.app_last;
-            componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
-                this.pageChangedDueReport(e);
-            });
-        }
-    }
-
-    public resetAdvanceSearch() {
+    /**
+     * Resets all advance search filters and parameters to default values
+     *
+     * @memberof AgingReportComponent
+     */
+    public resetAdvanceSearch(): void {
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         if (this.agingReportAdvanceSearch) {
@@ -574,16 +551,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public showUnpaidInvoiceList(accountUniqueName: string, range: string): void {
-        this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, {
-            height: '100vh',
-            width: '760px',
-            maxWidth: '65vw',
-            role: 'alertdialog',
-            ariaLabel: 'Unpaid Invoice',
-            position: {
-                right: '0'
-            }
-        });
+        this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, ASIDE_PANE_CONFIG);
         this.unpaidInvoiceData = [];
         this.unpaidInvoicePaginationData = undefined;
         this.getAllInvoices(accountUniqueName, range);

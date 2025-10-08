@@ -2,7 +2,8 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, delay, distinctUntilChanged, Observable, of, ReplaySubject, skip, take, takeUntil } from "rxjs";
+import { Observable, of, ReplaySubject } from "rxjs";
+import { takeUntil, take, debounceTime, distinctUntilChanged, delay, skip, filter } from 'rxjs/operators';
 import * as dayjs from "dayjs";
 import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
 import { FormControl } from "@angular/forms";
@@ -36,6 +37,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public deleteAccountmodalRef: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Flag to prevent duplicate API calls during account updates */
+    private isAccountUpdateInProgress: boolean = false;
     /** Holds localized text for this component */
     public localeData: any = {};
     /** Holds common localized text used across the app */
@@ -89,6 +92,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /** Flag indicating if the page needs to be refreshed */
     private isRefresh: boolean = null;
+    /** Flag to prevent duplicate API calls after account deletion */
+    private isRefreshingAfterDelete: boolean = false;
     /** Observable indicating if account data is being loaded */
     public getAccountsInProgress$: Observable<any> = this.componentStore.getLastAccountsInProgress$;
     /** Observable for the list of branches in the current company */
@@ -247,7 +252,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((queryParams) => {
-            if (queryParams) {
+            if (queryParams && !this.isAccountUpdateInProgress && !this.isRefreshingAfterDelete) {
                 this.isSearching = false;
                 this.selectedContact = null;
                 this.queryParams = queryParams;
@@ -319,6 +324,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
 
         this.isDeleteAccSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.isRefreshingAfterDelete = true;
                 this.contactList = [];
                 this.advanceFilters.page = 1;
                 this.advanceFilters.q = '';
@@ -328,7 +334,18 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     queryParams: { accountUniqueName: this.queryParams.accountUniqueName },
                     queryParamsHandling: 'merge', // keeps other params
                     replaceUrl: true // optionally replace history entry
+                }).then(() => {
+                    setTimeout(() => {
+                        this.isRefreshingAfterDelete = false;
+                    }, 100);
                 });
+            }
+        });
+
+        // Single subscription to handle all getContactsList responses
+        this.componentStore.getContactsList$.pipe(skip(1), takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.handleGetAllContactResponse(res);
             }
         });
     }
@@ -377,27 +394,48 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }, isPatch: boolean = false) {
         this.updateAccountInProcess$ = of(true);
+        this.isAccountUpdateInProgress = true;
+        
         if (isPatch) {
             this.store.dispatch(this.accountsAction.updateAccountV2Patch(accRequestObject?.value, accRequestObject.accountRequest));
         } else {
             accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
             this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
         }
-        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        
+        this.updateAccountIsSuccess$?.pipe(
+            filter(response => response !== null && response !== undefined),
+            take(1),
+            takeUntil(this.destroyed$)
+        ).subscribe(response => {
+            this.updateAccountInProcess$ = of(false);
             if (response) {
-                this.updateAccountInProcess$ = of(false);
+                // Navigate to update query params, then reset the flag to allow normal API calls
                 this.router.navigate([], {
                     relativeTo: this.activatedRoute,
                     queryParams: { accountUniqueName: accRequestObject?.value?.accountUniqueName },
                     queryParamsHandling: 'merge',
                     replaceUrl: true
+                }).then(() => {
+                    // Reset flag after navigation to allow query param subscription to work
+                    setTimeout(() => {
+                        this.isAccountUpdateInProgress = false;
+                        // Manually trigger contact list refresh after flag is reset
+                        this.getContactsListData(
+                            this.advanceFilters.from,
+                            this.advanceFilters.to,
+                            this.advanceFilters.page,
+                            "true",
+                            PAGINATION_LIMIT,
+                            this.advanceFilters.q ?? '',
+                            this.key,
+                            this.order,
+                            (this.currentBranch ? this.currentBranch.uniqueName : "")
+                        );
+                    }, 100);
                 });
             } else {
-                this.store.dispatch(this.accountsAction.resetActiveAccount());
-                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
-                setTimeout(() => {
-                    this.updateAccountInProcess$ = of(false);
-                }, 500);
+                this.isAccountUpdateInProgress = false;
             }
         });
     }
@@ -442,7 +480,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 currentContactList.push(item);
             });
 
-            if (this.isSearching) {
+            if (this.isSearching && !this.isRefreshingAfterDelete) {
                 // Handle page number is more than total pages in query params
                 if (this.totalPages < this.advanceFilters.page) {
                     this.advanceFilters.page = 1;
@@ -572,11 +610,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             order,
             postData: this.advanceSearchRequestModal,
             branchUniqueName
-        });
-        this.componentStore.getContactsList$.pipe(skip(1), takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.handleGetAllContactResponse(res);
-            }
         });
     }
 

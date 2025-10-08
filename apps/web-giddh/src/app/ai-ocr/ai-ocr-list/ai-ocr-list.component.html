@@ -158,6 +158,7 @@
                 class="mr-t15 d-block mr-b1"
                 *ngIf="
                     showClearFilter ||
+                    !dataSource?.filteredData?.length ||
                     ocrDocumentListForm?.controls['user']?.value ||
                     ocrDocumentListForm?.controls['fileName']?.value ||
                     ocrDocumentListForm?.controls['status']?.value ||
@@ -171,6 +172,7 @@
                     isCompany &&
                     !(
                         showClearFilter ||
+                        !dataSource?.filteredData?.length ||
                         ocrDocumentListForm?.controls['user']?.value ||
                         ocrDocumentListForm?.controls['fileName']?.value ||
                         ocrDocumentListForm?.controls['status']?.value ||
@@ -180,13 +182,12 @@
                 class="d-flex justify-content-center align-items-center"
             >
                 <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
-                <button mat-stroked-button color="primary" (click)="gotToBranchTab()">
+                <button mat-raised-button color="primary" (click)="gotToBranchTab()">
                     {{ localeData?.go_to_branch }}
                 </button>
             </div>
         </div>
         <div
-            class="pagination-wrapper justify-content-end"
             *ngIf="
                 ocrDocumentsRequestParams.totalItems > pageSizeOptions[0] && showData && !(ocrListInProgress$ | async)
             "

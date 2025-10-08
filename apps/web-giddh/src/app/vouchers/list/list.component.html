@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <div class="position-relative invoice-list overflow-visible">
+    <div class="position-relative invoice-list overflow-visible" *ngIf="showContent">
         <mat-tab-group
             mat-stretch-tabs="false"
             mat-align-tabs="start"
@@ -26,21 +26,30 @@
                                 mat-raised-button
                                 color="primary"
                                 [routerLink]="['/pages/vouchers/estimates/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ localeData?.new_estimate }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
-                        </div>
+                    </div>
                         <button
                             mat-stroked-button
                             (click)="setInitialAdvanceFilter()"
@@ -54,7 +63,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreEstimate"
                                 *ngIf="selectedVouchers?.length === 1 && !isCompany && !isConsolidatedBranch"
@@ -63,17 +72,17 @@
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreEstimate="matMenu" class="mr-t05">
-                                <button mat-menu-item (click)="deleteVoucherDialog()">
+                                <button mat-menu-item (click)="deleteVoucherDialog()" *ngIf="voucherApiVersion === 2">
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -434,7 +443,7 @@
                                             <button mat-menu-item (click)="actionEstimateProforma(element, 'expired')">
                                                 {{ localeData?.expired }}
                                             </button>
-                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                                 {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
@@ -476,17 +485,26 @@
                                 mat-raised-button
                                 color="primary"
                                 [routerLink]="['/pages/vouchers/proformas/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ localeData?.new_proforma }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
@@ -504,7 +522,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="selectedVouchers?.length === 1 && !isCompany && !isConsolidatedBranch"
@@ -513,17 +531,17 @@
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreProforma="matMenu" class="mr-t05">
-                                <button mat-menu-item (click)="deleteVoucherDialog()">
+                                <button mat-menu-item (click)="deleteVoucherDialog()" *ngIf="voucherApiVersion === 2">
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -882,7 +900,7 @@
                                             <button mat-menu-item (click)="actionEstimateProforma(element, 'expired')">
                                                 {{ localeData?.expired }}
                                             </button>
-                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                                 {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
@@ -914,7 +932,10 @@
 
             <!-- invoice-content-start -->
             <mat-tab [label]="localeData?.tabs?.invoices" *ngIf="activeTabGroup === 0">
-                <div class="vouchers-wrapper pt-3 px-4 overflow-visible" *ngIf="voucherType === voucherTypeEnum.sales && activeModule === 'list'">
+                <div
+                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    *ngIf="voucherType === voucherTypeEnum.sales && activeModule === 'list'"
+                >
                     <div
                         class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1"
                     >
@@ -923,7 +944,7 @@
                                 mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="createNewVoucher"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                                 class="width-150"
                             >
                                 <span>{{ localeData?.new_invoice }}</span>
@@ -938,12 +959,21 @@
                                 </button>
                             </mat-menu>
                             <div class="custom-datepicker-wrapper">
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
@@ -962,7 +992,7 @@
                         <div class="d-flex align-items-center column-gap1">
                             <!-- Cancel e-invoice button -->
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
@@ -972,10 +1002,10 @@
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreInvoice"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
+                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -998,13 +1028,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -1428,10 +1458,10 @@
                                         <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                             {{ commonLocaleData?.app_payment_status?.cancel }}
                                         </button>
-                                        <button mat-menu-item (click)="showEwayBillDialog(element)">
+                                        <button mat-menu-item (click)="showEwayBillDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ localeData?.generate_eway_bill }}
                                         </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                     </mat-menu>
@@ -1476,17 +1506,26 @@
                                 mat-raised-button
                                 color="primary"
                                 [routerLink]="['/pages/vouchers/debit-note/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ localeData?.new_dr_note }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
@@ -1505,7 +1544,7 @@
                         <div class="d-flex align-items-center column-gap1">
                             <!-- Cancel e-invoice button -->
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
@@ -1515,10 +1554,10 @@
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="morepurchase"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
+                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -1534,13 +1573,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -1899,7 +1938,7 @@
                                         <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                             {{ commonLocaleData?.app_payment_status?.cancel }}
                                         </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                     </mat-menu>
@@ -1941,17 +1980,28 @@
                                 color="primary"
                                 class="w-100 new-cr-width"
                                 [routerLink]="['/pages/vouchers/credit-note/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ localeData?.new_cr_note }}</span>
                             </button>
-                            <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <input
-                                    type="text"
-                                    name="selectedDateRange"
-                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker border-radius-2"
-                                />
+                            <div class="custom-datepicker-wrapper">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
+                                    <input
+                                        matInput
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
+                                    />
+                                </div>
                             </div>
                         </div>
                         <button
@@ -1968,7 +2018,7 @@
                         <div class="d-flex align-items-center column-gap1">
                             <!-- Cancel e-invoice button -->
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
@@ -1978,10 +2028,10 @@
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="morepurchase"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
+                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -1997,13 +2047,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -2355,7 +2405,7 @@
                                         <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                             {{ commonLocaleData?.app_payment_status?.cancel }}
                                         </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                     </mat-menu>
@@ -2390,7 +2440,7 @@
                     <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
                         <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                             <div class="d-flex align-items-center column-gap1">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     *ngIf="
                                         voucherType === voucherTypeEnum.creditNote ||
                                         voucherType === voucherTypeEnum.debitNote
@@ -2398,22 +2448,31 @@
                                     [name]="'invoiceType'"
                                     [options]="voucherTypes"
                                     (selectedOption)="voucherType = $event.value; getLedgersOfInvoice()"
-                                    [defaultValue]="voucherType | titlecase"
+                                    [labelValue]="voucherType | titlecase"
                                     [label]="commonLocaleData?.app_voucher_type"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                                 <div class="custom-datepicker-wrapper">
-                                    <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <div 
+                                        class="custom-datepicker" 
+                                        [matMenuTriggerFor]="universalDatepicker"
+                                        #universalDatepickerTrigger="matMenuTrigger"
+                                        role="button"
+                                        aria-haspopup="true"
+                                        aria-controls="universalDatepicker"
+                                    >
                                         <input
+                                            matInput
                                             type="text"
                                             name="selectedDateRange"
                                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                            class="giddh-datepicker date-range-picker border-radius-2"
+                                            class="giddh-datepicker date-range-picker"
+                                            readonly
                                         />
                                     </div>
                                 </div>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany && selectedPendingVouchers?.length > 0"
                                     (click)="generateBulkInvoice(false)"
@@ -2421,7 +2480,7 @@
                                     {{ localeData?.generate_multiple }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany && selectedPendingVouchers?.length > 0"
                                     (click)="generateBulkInvoice(true)"
@@ -2429,7 +2488,7 @@
                                     {{ localeData?.generate_compound }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany && selectedPendingVouchers?.length && hasSameVoucherAccount"
                                     (click)="invoiceGenerate()"
@@ -2633,17 +2692,26 @@
                                 mat-raised-button
                                 color="primary"
                                 [routerLink]="['/pages/vouchers/purchase-order/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ localeData?.new_order }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
@@ -2661,7 +2729,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
@@ -2670,7 +2738,7 @@
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #morepurchase="matMenu" class="mr-t05">
-                                <button mat-menu-item (click)="bulkUpdateDialog(true)">
+                                <button mat-menu-item (click)="bulkUpdateDialog(true)" *ngIf="voucherApiVersion === 2">
                                     {{ localeData?.bulk_update }}
                                 </button>
                                 <button mat-menu-item (click)="convertBillDialog()">
@@ -2679,17 +2747,17 @@
                                 <button mat-menu-item (click)="poBulkAction('expire')">
                                     {{ localeData?.expired }}
                                 </button>
-                                <button mat-menu-item (click)="deleteVoucherDialog()">
+                                <button mat-menu-item (click)="deleteVoucherDialog()" *ngIf="voucherApiVersion === 2">
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -2986,7 +3054,6 @@
                                         <button
                                             *ngIf="element?.status === 'open' && !isCompany && !isConsolidatedBranch"
                                             mat-stroked-button
-                                            color="primary"
                                             class="mat-icon-sm-btn icon-font-11"
                                             [matTooltip]="localeData?.convert_to_bill"
                                             [matTooltipPosition]="'above'"
@@ -2996,7 +3063,6 @@
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            color="primary"
                                             class="mat-icon-sm-btn icon-font-11"
                                             [matTooltip]="commonLocaleData?.app_send_email"
                                             [matTooltipPosition]="'above'"
@@ -3007,20 +3073,16 @@
                                         <button
                                             *ngIf="!isCompany && !isConsolidatedBranch"
                                             mat-stroked-button
-                                            color="primary"
                                             class="mat-icon-sm-btn"
                                             [matTooltip]="commonLocaleData?.app_copy"
                                             [matTooltipPosition]="'above'"
-                                            [routerLink]="[
-                                                '/pages/purchase-management/purchase-order/new/' + element.uniqueName
-                                            ]"
+                                            (click)="copyVoucher(element)"
                                         >
                                             <i class="icon-copy-small"></i>
                                         </button>
                                         <button
-                                            *ngIf="!isCompany && !isConsolidatedBranch"
+                                            *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                                             mat-stroked-button
-                                            color="primary"
                                             class="mat-icon-sm-btn"
                                             [matTooltip]="commonLocaleData?.app_delete"
                                             [matTooltipPosition]="'above'"
@@ -3066,29 +3128,38 @@
                                 mat-raised-button
                                 color="primary"
                                 [routerLink]="['/pages/vouchers/purchase/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ localeData?.new_bill }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -3454,7 +3525,7 @@
                                         >
                                             {{ commonLocaleData?.app_copy }}
                                         </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)">
+                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                     </mat-menu>
@@ -3495,17 +3566,26 @@
                                 mat-raised-button
                                 color="primary"
                                 [routerLink]="['/pages/vouchers/receipt/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ localeData?.new_receipt }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
@@ -3523,10 +3603,10 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreProforma"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
+                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -3536,13 +3616,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -3681,13 +3761,13 @@
                                                 [matTooltip]="element.voucherNumber"
                                                 matTooltipPosition="above"
                                             >
-                                            <a
-                                                href="javascript:;"
-                                                class="btn-link-2"
-                                                (click)="showVoucherPreview(element?.uniqueName)"
-                                            >
-                                                {{ element?.voucherNumber }}
-                                            </a>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="btn-link-2"
+                                                    (click)="showVoucherPreview(element?.uniqueName)"
+                                                >
+                                                    {{ element?.voucherNumber }}
+                                                </a>
                                             </td>
                                         </ng-container>
                                     </ng-container>
@@ -3906,17 +3986,26 @@
                                 mat-raised-button
                                 color="primary"
                                 [routerLink]="['/pages/vouchers/payment/create']"
-                                *ngIf="!isCompany && !isConsolidatedBranch"
+                                *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ localeData?.new_payment }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <div 
+                                    class="custom-datepicker" 
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
@@ -3934,10 +4023,10 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreProforma"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
+                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -3947,13 +4036,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
+                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap5">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">
+                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -4251,17 +4340,26 @@
                         <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                             <div class="d-flex align-items-center column-gap1">
                                 <div class="custom-datepicker-wrapper">
-                                    <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <div 
+                                        class="custom-datepicker" 
+                                        [matMenuTriggerFor]="universalDatepicker"
+                                        #universalDatepickerTrigger="matMenuTrigger"
+                                        role="button"
+                                        aria-haspopup="true"
+                                        aria-controls="universalDatepicker"
+                                    >
                                         <input
+                                            matInput
                                             type="text"
                                             name="selectedDateRange"
                                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                            class="giddh-datepicker date-range-picker border-radius-2"
+                                            class="giddh-datepicker date-range-picker"
+                                            readonly
                                         />
                                     </div>
                                 </div>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany"
                                     [hidden]="selectedPendingVouchers?.length === 0"
@@ -4270,7 +4368,7 @@
                                     {{ localeData?.generate_multiple }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="!isCompany"
                                     [hidden]="selectedPendingVouchers?.length === 0"
@@ -4396,14 +4494,6 @@
                                                             >{{ commonLocaleData?.app_goto_ledger }}</a
                                                         >
                                                     </li>
-                                                    <!-- <li class="text-left mr-t1">
-                                                        <a
-                                                            href="javascript:;"
-                                                            class="default-color"
-                                                            (click)="generateVoucher(element)"
-                                                            >{{ commonLocaleData?.app_generate_invoice }}</a
-                                                        >
-                                                    </li> -->
                                                 </ul>
                                             </mat-card-content>
                                         </mat-card>
@@ -4598,6 +4688,7 @@
                                                     </span>
                                                     <button
                                                         mat-stroked-button
+                                                        *ngIf="voucherApiVersion === 2"
                                                         class="mat-icon-md-btn"
                                                         [ngClass]="{
                                                             'opacity-5':
@@ -4853,6 +4944,7 @@
                                                         [matSuffix]="commonLocaleData?.app_days"
                                                     ></input-field>
                                                     <giddh-datepicker
+                                                        *ngIf="showInvoiceDate"
                                                         type="text"
                                                         (keydown.enter)="$event.preventDefault()"
                                                         [label]="localeData?.invoice_lock_date"
@@ -5327,9 +5419,9 @@
                                                         "
                                                         [name]="'initialCreditNoteNumber'"
                                                         [label]="localeData?.initial_no"
+                                                        formControlName="initialCreditNoteNumber"
                                                         [placeholder]="'00'"
                                                         [type]="'text'"
-                                                        formControlName="initialCreditNoteNumber"
                                                     ></input-field>
                                                 </div>
                                                 <mat-slide-toggle
@@ -5438,6 +5530,7 @@
                                                 </span>
                                                 <button
                                                     mat-stroked-button
+                                                    *ngIf="voucherApiVersion === 2"
                                                     class="mat-icon-md-btn"
                                                     [ngClass]="{
                                                         'opacity-5':
@@ -5590,6 +5683,7 @@
                                                 {{ localeData?.purchase_bill }}
                                             </h4>
                                             <giddh-datepicker
+                                                *ngIf="showPurchaseDate"
                                                 type="text"
                                                 (keydown.enter)="$event.preventDefault()"
                                                 [label]="localeData?.bill_lock_date"
@@ -5753,16 +5847,6 @@
                                             >
                                                 {{ getWhatsappPaymentReceiptSettingLabel(voucherTypeEnum.payment) }}
                                             </mat-slide-toggle>
-                                            <!--  Confirmed with Kriti that she was not aware of this setting due to the comment.
-                                            <mat-slide-toggle
-                                                name="createPaymentEntry"
-                                                class="disable-toggle slide-toggle d-block mb-3"
-                                                color="primary"
-                                                aria-label="auto create payment entry"
-                                                formControlName="createPaymentEntry"
-                                            >
-                                                Create payment entry
-                                            </mat-slide-toggle> -->
                                             <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
                                         </div>
                                     </ng-container>
@@ -5776,113 +5860,197 @@
             <!-- setting-content-end -->
 
             <!-- template-content-start -->
-            <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <div class="pd-t15" *ngIf="activeModule === 'templates'">
-                    <edit-invoice></edit-invoice>
-                </div>
-                <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
-                    <dropdown-field [name]="'design'" [label]="localeData?.select_design_for" [placeholder]="commonLocaleData?.app_select"
-                        class="w-50 template-design d-block">
-                    </dropdown-field>
+            <mat-tab
+                [label]="localeData?.tabs?.templates"
+                *ngIf="activeTabGroup === 0 || activeTabGroup === 1 || activeTabGroup === 2"
+            >
+                <div class="vouchers-wrapper pt-3 px-4" *ngIf="activeModule === 'templates'">
+                    <reactive-dropdown-field
+                        *ngIf="voucherType === voucherTypeEnum.purchase && selectedTemplate?.label"
+                        [name]="'design'"
+                        [label]="localeData?.select_design_for"
+                        [placeholder]="commonLocaleData?.app_select"
+                        [options]="purchaseTemplatesList"
+                        class="w-50 template-design d-block"
+                        (selectedOption)="templateSelect($event)"
+                        [labelValue]="selectedTemplate?.label"
+                    >
+                    </reactive-dropdown-field>
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">
-                                <h3 class="fonr-16">Design Template</h3>
+                                <h3 class="fonr-16">{{ localeData?.design_template }}</h3>
                                 <p class="my-3">
-                                    Click to add a template from our gallery. You can customize the template title,
-                                    columns,and headers in line item table.
+                                    {{ localeData?.template_gallery_info }}
                                 </p>
-                                <button mat-stroked-button color="primary" (click)="templateEdit()">Add New</button>
+                                <button
+                                    mat-raised-button
+                                    color="primary"
+                                    (click)="templateAction(null, 'create')"
+                                    *ngIf="voucherApiVersion === 2"
+                                >
+                                    {{ localeData?.add_new }}
+                                </button>
                             </mat-card-content>
                         </mat-card>
-                        <mat-card class="outline-card add-template-wrapper text-center">
-                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                <h3 class="fonr-16">Kriti - 28Sep</h3>
-                                <span class="default-wrap font-12 p-2 cursor-pointer">
-                                    <i class="icon-favorite-selected"></i>
-                                    Set as Default
-                                </span>
-                                <div class="d-flex column-gap1 justify-content-center">
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Preview"
-                                        matTooltipPosition="above"
-                                        (click)="templateDialog()"
+                        <ng-container *ngFor="let template of createdTemplatesList">
+                            <mat-card
+                                class="outline-card add-template-wrapper text-center"
+                                *ngIf="
+                                    [voucherTypeEnum.invoice, voucherTypeEnum.purchase_bill, voucherTypeEnum.purchase_order].includes(template.type) &&
+                                    [voucherTypeEnum.sales, voucherTypeEnum.purchase].includes(voucherType)
+                                "
+                            >
+                                <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                    <h3 class="fonr-16">{{ template.name }}</h3>
+                                    <span
+                                        *ngIf="template.isDefault"
+                                        [ngClass]="{ 'active': template.isDefault }"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
                                     >
-                                        <i class="icon-eye"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Edit Template"
-                                        matTooltipPosition="above"
-                                        (click)="templateEdit()"
+                                        <i class="icon-favorite-selected"></i>
+                                        {{ localeData?.default_template }}
+                                    </span>
+                                    <span
+                                        *ngIf="!template.isDefault"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        (click)="
+                                            setTemplateAsDefault(
+                                                template.uniqueName,
+                                                template.type === voucherTypeEnum.invoice
+                                                    ? voucherTypeEnum.invoice
+                                                    : template.type === voucherTypeEnum.purchase_bill
+                                                    ? voucherTypeEnum.purchase_bill
+                                                    : voucherTypeEnum.purchase_order
+                                            )
+                                        "
                                     >
-                                        <i class="icon-edit-pencil"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Delete"
-                                        matTooltipPosition="above"
-                                        (click)="deleteVoucherDialog()"
+                                        <i class="icon-favorite-selected"></i>
+                                        {{ localeData?.set_as_default }}
+                                    </span>
+                                    <div class="d-flex column-gap1 justify-content-center">
+                                        <button
+                                            mat-stroked-button
+                                            class="mat-icon-md-btn"
+                                            matTooltip="{{ localeData?.preview }}"
+                                            matTooltipPosition="above"
+                                            (click)="previewTemplate(template)"
+                                        >
+                                            <i class="icon-eye"></i>
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            class="mat-icon-md-btn"
+                                            [matTooltip]="localeData?.edit_template"
+                                            matTooltipPosition="above"
+                                            (click)="templateAction(template, 'edit')"
+                                        >
+                                            <i class="icon-edit-pencil"></i>
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            class="mat-icon-md-btn cursor-pointer"
+                                            [disabled]="template.isDefault"
+                                            [matTooltip]="localeData?.delete"
+                                            matTooltipPosition="above"
+                                            *ngIf="voucherApiVersion === 2"
+                                            (click)="
+                                                template.isDefault
+                                                    ? null
+                                                    : deleteTemplate(
+                                                          template,
+                                                          template.type === voucherTypeEnum.invoice
+                                                              ? voucherTypeEnum.invoice
+                                                              : template.type === voucherTypeEnum.purchase_bill
+                                                              ? voucherTypeEnum.purchase_bill
+                                                              : voucherTypeEnum.purchase_order
+                                                      )
+                                            "
+                                        >
+                                            <i class="icon-trash"></i>
+                                        </button>
+                                    </div>
+                                    <p
+                                        class="text-ellipsis d-inline-block template-content"
+                                        [matTooltip]="
+                                            template.createdBy.name.length > 13 ? template.createdBy.name : null
+                                        "
                                     >
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </div>
-                                <p class="text-ellipsis d-inline-block template-content">
-                                    Created by: Dilpreet Singh Dang
-                                </p>
-                            </mat-card-content>
-                        </mat-card>
-                        <mat-card class="outline-card add-template-wrapper text-center">
-                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                <h3 class="fonr-16">Kriti - 28Sep</h3>
-                                <span class="default-wrap font-12 p-2 cursor-pointer active">
-                                    <i class="icon-favorite-selected"></i>
-                                    Set as Default
-                                </span>
-                                <div class="d-flex column-gap1 justify-content-center">
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Preview"
-                                        matTooltipPosition="above"
-                                        (click)="templateDialog()"
+                                        {{ localeData?.created_by }} {{ template.createdBy?.name }}
+                                    </p>
+                                </mat-card-content>
+                            </mat-card>
+                            <mat-card
+                                class="outline-card add-template-wrapper text-center"
+                                *ngIf="
+                                    template.type === voucherTypeEnum.voucher &&
+                                    (voucherType === voucherTypeEnum.creditNote || voucherType === voucherTypeEnum.debitNote)
+                                "
+                            >
+                                <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                    <h3 class="fonr-16">{{ template.name }}</h3>
+                                    <span
+                                        *ngIf="template.isDefaultForVoucher"
+                                        [ngClass]="{ 'active': template.isDefaultForVoucher }"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
                                     >
-                                        <i class="icon-eye"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Edit Template"
-                                        matTooltipPosition="above"
-                                        (click)="templateEdit()"
+                                        <i class="icon-favorite-selected"></i>
+                                        {{ localeData?.default_template }}
+                                    </span>
+                                    <span
+                                        *ngIf="!template.isDefaultForVoucher"
+                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        (click)="setTemplateAsDefault(template.uniqueName, voucherTypeEnum.voucher)"
                                     >
-                                        <i class="icon-edit-pencil"></i>
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="mat-icon-md-btn"
-                                        matTooltip="Delete"
-                                        matTooltipPosition="above"
-                                        (click)="deleteVoucherDialog()"
+                                        <i class="icon-favorite-selected"></i>
+                                        {{ localeData?.set_as_default }}
+                                    </span>
+                                    <div class="d-flex column-gap1 justify-content-center">
+                                        <button
+                                            mat-stroked-button
+                                            class="mat-icon-md-btn"
+                                            matTooltip="{{ localeData?.preview }}"
+                                            matTooltipPosition="above"
+                                            (click)="previewTemplate(template)"
+                                        >
+                                            <i class="icon-eye"></i>
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            class="mat-icon-md-btn"
+                                            matTooltip="{{ localeData?.edit_template }}"
+                                            matTooltipPosition="above"
+                                            (click)="templateAction(template, 'edit')"
+                                        >
+                                            <i class="icon-edit-pencil"></i>
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            [disabled]="template.isDefaultForVoucher"
+                                            class="mat-icon-md-btn cursor-pointer"
+                                            matTooltip="{{ localeData?.delete }}"
+                                            *ngIf="voucherApiVersion === 2"
+                                            matTooltipPosition="above"
+                                            (click)="
+                                                template.isDefaultForVoucher
+                                                    ? null
+                                                    : deleteTemplate(template, 'voucher')
+                                            "
+                                        >
+                                            <i class="icon-trash"></i>
+                                        </button>
+                                    </div>
+                                    <p
+                                        class="text-ellipsis d-inline-block template-content"
+                                        [matTooltip]="
+                                            template.createdBy.name.length > 13 ? template.createdBy.name : null
+                                        "
                                     >
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </div>
-                                <p class="text-ellipsis d-inline-block template-content">
-                                    Created by: Dilpreet Singh Dang
-                                </p>
-                            </mat-card-content>
-                        </mat-card>
+                                        {{ localeData?.created_by }} {{ template.createdBy?.name }}
+                                    </p>
+                                </mat-card-content>
+                            </mat-card>
+                        </ng-container>
                     </div>
                 </div>
             </mat-tab>
@@ -5922,32 +6090,6 @@
                     [autoFocus]="show"
                     [formControl]="formControl"
                 ></text-field>
-            </div>
-        </div>
-    </ng-template>
-
-    <!-- Universal Datepicker  -->
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                >
-                </app-datepicker-wrapper>
             </div>
         </div>
     </ng-template>
@@ -6008,7 +6150,7 @@
     <!-- setting-tab-btn -->
     <ng-template #actionButtons>
         <div class="d-flex column-gap1 mt-4">
-            <button (click)="onSubmit()" mat-stroked-button color="primary">{{ commonLocaleData?.app_save }}</button>
+            <button (click)="onSubmit()" mat-raised-button color="primary">{{ commonLocaleData?.app_save }}</button>
             <button (click)="resetForm()" mat-stroked-button>{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </ng-template>
@@ -6072,3 +6214,26 @@
     >
     </app-email-send-dialog>
 </ng-template>
+
+<!-- Universal Datepicker -->
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

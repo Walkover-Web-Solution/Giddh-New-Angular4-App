@@ -6,7 +6,6 @@ import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.comp
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
 import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
@@ -24,7 +23,7 @@ import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
 import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { Configuration, PaymentProvider } from '../../app.constant';
+import { Configuration, IOption, PaymentProvider } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 
 @Component({
@@ -232,6 +231,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public paymentProvider: typeof PaymentProvider = PaymentProvider;
     /** This will hold razorpay key */
     public razorpayKey: string = '';
+    /** True if promo code is removed */
+    public removePromoCode: boolean = false;
     /** Hold true in production environment */
     public isProdMode: boolean = PRODUCTION_ENV;
 
@@ -444,8 +445,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         }
                         return;
                     }
-                } else if (response?.payuHtml) {      
-                    this.openPayUPayment(response.payuHtml);         
+                } else if (response?.payuHtml) {
+                    this.openPayUPayment(response.payuHtml);
                 } else {
                     if (response?.paypalOrderId && this.payType === 'buy') {
                         this.openWindow(response.paypalApprovalLink);
@@ -551,11 +552,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             }
                         });
                     } else {
+                        setTimeout(() => {
                         if (this.subscriptionId && this.isChangePlan) {
                             this.router.navigate(['/pages/user-details/subscription']);
                         } else {
                             this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                         }
+                        }, 100);
                     }
                 }
             }
@@ -581,8 +584,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.upgradeRegion = response?.region?.code;
             }
             const value = response?.region?.code !== 'IND' ? 1 : this.firstStepForm.get('duration')?.value === 'MONTHLY' ? 1 : 10;
-            if (response?.payuHtml) {      
-                this.openPayUPayment(response.payuHtml);  
+            if (response?.payuHtml) {
+                this.openPayUPayment(response.payuHtml);
             } else if (response && response.dueAmount >= value) {
                 if ((this.firstStepForm.get('duration')?.value === 'MONTHLY' || this.firstStepForm.get('duration')?.value === 'DAILY') && response?.region?.code !== 'IND') {
                     let model = {
@@ -968,6 +971,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                     duration: this.firstStepForm.get('duration')?.value
                 }
+                this.removePromoCode = false;
             } else {
                 request = {
                     promoCode: "",
@@ -975,6 +979,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     duration: this.firstStepForm.get('duration')?.value
                 }
                 this.firstStepForm.get('promoCode')?.setValue("");
+                this.removePromoCode = true;
             }
             this.setFinalAmount();
             this.changeDetection.detectChanges();
@@ -1348,6 +1353,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             });
         }
         this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
+        this.thirdStepForm.get('paymentProvider')?.patchValue(null);
         this.setFinalAmount();
         this.changeDetection.detectChanges();
     }
@@ -1372,8 +1378,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
-        // Clear the payment provider initially
-        this.thirdStepForm.get('paymentProvider')?.patchValue(null);
+        if (!this.removePromoCode && !this.thirdStepForm.get('paymentProvider')?.value) {
+            // Clear the payment provider initially
+            this.thirdStepForm.get('paymentProvider')?.patchValue(null);
+        }
 
         // Get the selected plan entity code and duration once
         const entityCode = this.selectedPlan?.entityCode;
@@ -1404,7 +1412,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
             // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
-            filterProviders(duration === 'YEARLY' ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
+            filterProviders((duration === 'YEARLY' || duration === 'MONTHLY' || duration === 'DAILY') ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
         }
 
         if (this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY && (duration === 'MONTHLY' || duration === 'DAILY')) {
@@ -1546,7 +1554,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public activateDialog(): void {
         this.dialog.open(ActivateDialogComponent, {
-            width: 'var(--aside-pane-width)',
+            panelClass: 'mat-dialog-md'
         })
     }
 
@@ -1795,29 +1803,29 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         // Open PayU HTML in new window
         const blob = new Blob([html], { type: 'text/html' });
         this.openWindow(URL.createObjectURL(blob));
-        
+
         // Listen for PayU response from new window
         const handlePayUMessage = (event: MessageEvent<{
             status: string;
             transactionId: string;
             provider: string;
-          }>) => {
+        }>) => {
             if (event.data?.status?.toLocaleLowerCase() === 'success' && event.data.transactionId) {
-              const model = {
-                payuTransactionId: event.data.transactionId,
-                paymentProvider: event.data.provider,
-                subscriptionId: this.subscriptionId,
-                duration: this.firstStepForm.get('duration')?.value
-              };
-              this.componentStore.changePlan(model);
-          
-              // remove listener
-              window.removeEventListener("message", handlePayUMessage);
+                const model = {
+                    payuTransactionId: event.data.transactionId,
+                    paymentProvider: event.data.provider,
+                    subscriptionId: this.subscriptionId,
+                    duration: this.firstStepForm.get('duration')?.value
+                };
+                this.componentStore.changePlan(model);
+
+                // remove listener
+                window.removeEventListener("message", handlePayUMessage);
             } else if (event.data?.status?.toLocaleLowerCase() === 'failed') {
                 // remove listener
                 window.removeEventListener("message", handlePayUMessage);
             }
-          };
-          window.addEventListener("message", handlePayUMessage);
+        };
+        window.addEventListener("message", handlePayUMessage);
     }
 }

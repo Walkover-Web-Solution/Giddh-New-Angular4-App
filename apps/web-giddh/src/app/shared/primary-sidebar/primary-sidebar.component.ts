@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
@@ -21,6 +20,9 @@ import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { AllItem, AllItems } from '../helpers/allItems';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ArrayDataSource } from '@angular/cdk/collections';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'primary-sidebar',
@@ -70,16 +72,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isGoToBranch: boolean = false;
     /** API menu items, required to show permissible items only in the menu */
     @Input() public apiMenuItems: Array<any> = [];
+    /** True, if sidebar needs to be expanded */
+    @Input() public isSidebarExpanded: boolean = false;
     /** True if command dialog is open */
     @Input() public showCommandDialog: boolean = false;
     /** Stores the instance of CMD+K dropdown */
     @ViewChild('navigationModal', { static: true }) public navigationModal: TemplateRef<any>; // CMD + K
     /** Holds the template reference of generic aside menu account */
     @ViewChild('genericAsideMenuAccountTemplate', { static: true }) public genericAsideMenuAccountTemplate: TemplateRef<any>;
-    /** Stores the instance of company detail dropdown */
-    @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
-    /** Stores the dropdown instances as querylist */
-    @ViewChildren('dropdown') itemDropdown: QueryList<BsDropdownDirective>;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -111,6 +111,17 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private previousUrl: string = "";
     /** Holds active company unique name */
     public ledgerAccount$: Observable<AccountResponse | AccountResponseV2>;
+    /** Holds current url queryParams */
+    public queryParams: any = {};
+    /** DataSource for the tree */
+    public dataSource = new ArrayDataSource([]);
+    /** Function to check if a node has children */
+    public hasChild = (_: number, node: any) => node.expandable;
+    /** Handle cdk tree control */
+    public treeControl = new FlatTreeControl<any>(
+        node => node.level,
+        node => node.expandable
+    );
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -124,6 +135,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private localeService: LocaleService,
         private salesAction: SalesActions,
         public dialog: MatDialog,
+        private activateRoute: ActivatedRoute
     ) {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.ledgerAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
@@ -157,21 +169,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    /**
-     * Returns true, if route with query params is activated
-     *
-     * @param {string} routeUrl Route URL without params
-     * @returns {boolean} True, if passed route is activated
-     * @memberof PrimarySidebarComponent
-     */
-    public isRouteWithParamsActive(routeUrl: string): boolean {
-        const queryParamsIndex = this.router.url?.indexOf('?');
-        const baseUrl = queryParamsIndex === -1 ? this.router.url :
-            this.router.url.slice(0, queryParamsIndex);
-        // For Trial balance module, strict comparison should be done
-        return this.router.url.includes('trial-balance-and-profit-loss') ? false : decodeURI(baseUrl) === decodeURI(routeUrl);
-    }
-
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardUpEvent(event: KeyboardEvent) {
@@ -199,15 +196,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.openCompanyBranchDropdown();
         }
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
-            this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
-            this.allItems?.map(items => {
-                items?.items?.map(item => {
-                    if (item?.additional?.queryParams?.voucherVersion) {
-                        delete item?.additional?.queryParams?.voucherVersion;
-                    }
-                    return item;
-                });
-            });
+            this.getVisibleMenuItems();
         }
 
         if ('showCommandDialog' in changes && changes.showCommandDialog.previousValue !== changes.showCommandDialog.currentValue && changes.showCommandDialog.currentValue) {
@@ -233,7 +222,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof PrimarySidebarComponent
      */
-    public ngOnInit(): void {
+    public ngOnInit(): void {   
+
+        /**Subscribe to queryParams */
+        this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams: any) => {
+            this.queryParams = queryParams?.tabIndex;
+        })
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -312,23 +306,16 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.previousUrl = this.currentUrl; // store old before updating
                 this.currentUrl = this.getCleanCurrentUrl(); // always clean
-                const queryParamsIndex = this.router.url?.indexOf('?');
-                const baseUrl = queryParamsIndex === -1 ? this.router.url :
-                this.router.url.slice(0, queryParamsIndex);
+                // Use the clean currentUrl for baseUrl instead of parsing router.url again
+                const baseUrl = this.currentUrl;
                 this.isActiveRoute = baseUrl;
                 this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
                     if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
                         return true;
                     }
                 })));
-                this.openActiveItem();
 
                 this.changeDetectorRef.detectChanges();
-            }
-            if (event instanceof NavigationStart) {
-                if (this.companyDetailsDropDownWeb.isOpen) {
-                    this.companyDetailsDropDownWeb.hide();
-                }
             }
         });
 
@@ -411,9 +398,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} e Create new group event
      * @memberof PrimarySidebarComponent
      */
-    public handleNewTeamCreationEmitter(e: any): void {
-        console.log("Trap 1");
-        
+    public handleNewTeamCreationEmitter(e: any): void {        
         if (e[0] === "group") {
             this.genericAsideMenuAccountDialogRef?.close();
             this.showManageGroupsModal(e[1]?.name);
@@ -495,8 +480,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         setTimeout(() => {
             if (item && item.type === 'MENU') {
                 if (item.additional && item.additional.tab) {
-                    if (item.uniqueName.includes('?')) {
-                        item.uniqueName = item.uniqueName?.split('?')[0];
+                    if (item.uniqueName.includes('?') || item.uniqueName.includes('&')) {
+                        // Clean URL by removing query parameters (both ? and & cases)
+                        item.uniqueName = item.uniqueName?.split('?')[0]?.split('&')[0];
                     }
                     this.router.navigate([item.uniqueName], {
                         queryParams: {
@@ -510,8 +496,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 // direct account scenario
                 let url = `ledger/${item.uniqueName}`;
+                // Get the redirect URL and clean it if it contains query parameters
+                let redirectUrl = this.previousUrl || this.currentUrl || '/';
+                // If redirectUrl contains query parameters, extract only the base path (handle both ? and & cases)
+                if (redirectUrl.includes('?') || redirectUrl.includes('&')) {
+                    redirectUrl = redirectUrl.split('?')[0]?.split('&')[0];
+                }
                 this.router.navigate([url], {
-                    queryParams: { redirectUrl: encodeURIComponent(this.previousUrl) }
+                    queryParams: { redirectUrl: encodeURIComponent(redirectUrl) }
                 });
             }
             // save data to db
@@ -604,35 +596,43 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public translationComplete(event: any): void {
         if (event) {
-            this.allItems = this.generalService.getVisibleMenuItems("sidebar", this.apiMenuItems, this.localeData?.items);
+            this.getVisibleMenuItems();
         }
     }
 
     /**
-     * Opens the active item and closes the rest
+     * Get visible menu items
      *
-     * @param {*} [itemIndex] Current item index
+     * @private
      * @memberof PrimarySidebarComponent
      */
-    public openActiveItem(itemIndex?: any): void {
-        if (itemIndex !== undefined) {
-            this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
-                if (index !== itemIndex) {
-                    dropdown.hide();
+    private getVisibleMenuItems(): void {
+        this.allItems = this.generalService.getVisibleMenuItems("sidebar", this.apiMenuItems, this.localeData?.items);
+        const flattenedItems: AllItems[] = [];
+        this.allItems.filter(item => !item.hide).forEach((menu, index) => {
+            menu['expandable'] = menu?.items?.length > 0;
+            menu['level'] = 0;
+            menu['isExpanded'] = false;
+            const childMenus = menu?.items;
+            delete menu['items'];
+            flattenedItems.push(menu);
+
+            childMenus?.forEach(item => {
+                if (item?.additional?.queryParams?.voucherVersion) {
+                    delete item?.additional?.queryParams?.voucherVersion;
                 }
+                const childMenu = {
+                    expandable: false, // Set static false due to only one level of menu
+                    level: 1,
+                    isExpanded: false,
+                    ...item
+                } as unknown as AllItems;
+                flattenedItems.push(childMenu);
             });
-        } else {
-            if (this.isOpen) {
-                const activeItemIndex = this.allItems?.findIndex(item => item.isActive);
-                this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
-                    if (index === activeItemIndex) {
-                        dropdown?.show();
-                    } else {
-                        dropdown?.hide();
-                    }
-                });
-            }
-        }
+        });
+        
+        this.allItems = flattenedItems;
+        this.dataSource = new ArrayDataSource(this.allItems);        
     }
 
     /**
@@ -651,14 +651,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public openAccountAsidePane(): void {
-        this.genericAsideMenuAccountDialogRef = this.dialog.open(this.genericAsideMenuAccountTemplate, {
-            position: {
-                top: '0',
-                right: '0'
-            },
-            height: '100vh',
-            width: 'var(--aside-pane-width)'
-        })
+        this.genericAsideMenuAccountDialogRef = this.dialog.open(this.genericAsideMenuAccountTemplate, ASIDE_PANE_CONFIG)
     }
 
     /**
@@ -704,4 +697,73 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.commandkDialogRef.close();
         }, 600);
     }
+
+    /**
+     * Get parent node of given node
+     * 
+     * @param node Node to get parent of
+     * @returns Parent node of given node
+     * @memberof PrimarySidebarComponent
+     */
+    public getParentNode(node: any): any {
+        const nodeIndex = this.allItems.indexOf(node);
+        for (let i = nodeIndex - 1; i >= 0; i--) {
+          if (this.allItems[i].level === node.level - 1) {
+            return this.allItems[i];
+          }
+        }
+        return null;
+      }
+    
+    /**
+     * Check if node should be rendered based on parent expansion state
+     * 
+     * @param node Node to check
+     * @returns True if node should be rendered, false otherwise
+     * @memberof PrimarySidebarComponent
+     */
+    public shouldRender(node: any): boolean {
+        let parent = this.getParentNode(node);
+        while (parent) {
+            if (!parent.isExpanded) {
+                return false;
+            }
+            parent = this.getParentNode(parent);
+        }
+        return true;
+    }
+
+     /**
+      * Toggle node expansion with accordion behavior
+      * Only one parent node can be expanded at a time
+      * 
+      * @param node Node to toggle
+      * @memberof PrimarySidebarComponent
+      */
+      public toggleNode(node: any): void {
+        if (node.expandable || (node?.level === 0)) {
+          if (node.isExpanded) {
+            node.isExpanded = false;
+          } else {
+            this.allItems.forEach(item => {
+              if (item.level === 0 && item !== node) {
+                item.isExpanded = false;
+              }
+            });
+            node.isExpanded = node.expandable;
+          }
+          this.dataSource = new ArrayDataSource(this.allItems);
+        }
+      }
+
+      /**
+      * Check if node is expanded
+      * 
+      * @param node Node to check
+      * @returns True if node is expanded, false otherwise
+      * @memberof PrimarySidebarComponent
+      */
+      public isExpanded(node: any): boolean {
+        return node.isExpanded || false;
+      }
 }

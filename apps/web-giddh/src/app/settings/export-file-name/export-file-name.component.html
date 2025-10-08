@@ -1,0 +1,67 @@
+<ng-container *ngIf="!isLoading">
+  <div *ngIf="moduleExportSettingArray?.length" class="d-flex flex-row justify-content-between">
+    <div class="col-lg-7 col-md-12">
+      <div class="pd-t2">
+        <h2>{{ localeData?.export_setting_description }}</h2>
+      </div>
+      <div class="settings-profile-tabs pd-t2" [formGroup]="exportModuleSettingForm">
+        <ng-container formArrayName="moduleExportSetting">
+          <ng-container *ngFor="let module of moduleExportSettingArray.controls; let i = index, let last = last">
+            <div [formGroupName]="i" class="d-flex flex-column pd-b2">
+              <div
+                  class="d-flex align-items-center column-gap1"
+              >
+                  <div class="width-setting-label mb-2">
+                    <span class="text-capitalize">
+                      {{ (module.get('exportName')?.value | replaceAll: '_' : ' ' | titlecase) }}*
+                    </span>
+                    <span>
+                      <i class="icon-info" [matTooltip]="localeData?.module_file_format?.replace('[module_name]', (module.get('exportName')?.value | replaceAll: '_' : ' ' | titlecase)).replace('[file_format]', module.get('suggestedFileFormat')?.value || localeData?.default_file_format)"
+                      matTooltipPosition="right" ></i>
+                    </span>
+                  </div>
+                  <div class="d-flex flex-column w-50">
+                    <mat-form-field appearance="outline">
+                      <input
+                        matInput
+                        #tribute="appTributeMention"
+                        (click)="tribute?.open()"
+                        formControlName="format"
+                        [placeholder]="commonLocaleData?.app_variable_search_hint"
+                        (input)="getFileFormat(module)"
+                        [appTributeMention]="tributeConfig"
+                        [appTributeMentionValues]="module.get('supportedVariableList')?.value || []"
+                      />
+                    </mat-form-field>
+                    <div class="font-12 word-break pd-t05 pd-b05 text-gray">
+                      {{ module.get('suggestedFileFormat')?.value }}
+                    </div>
+                  </div>
+              </div>
+              <mat-divider *ngIf="!last"></mat-divider>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <div class="pd-1 d-flex flex-column justify-content-between">
+      <ng-container *ngTemplateOutlet="saveButton"></ng-container> <!-- Top save button -->
+      <ng-container *ngTemplateOutlet="saveButton"></ng-container> <!-- Bottom save button -->
+    </div>
+  </div>
+  <div class="no-data" *ngIf="!moduleExportSettingArray?.length">
+    <no-data [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
+  </div>
+</ng-container>
+<giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+
+<ng-template #saveButton>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="updateModuleExportSetting()"
+    [disabled]="exportModuleSettingForm.invalid"
+  >
+    {{ commonLocaleData?.app_save }}
+  </button>
+</ng-template>

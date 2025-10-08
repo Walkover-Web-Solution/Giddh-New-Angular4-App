@@ -14,7 +14,7 @@
             <div class="discount-checkbox-wrapper d-flex flex-column">
                 <ng-container *ngFor="let discount of discountForm.get('discounts')['controls']; let i = index" formArrayName="discounts">
                     <ng-container [formGroupName]="i">
-                        <mat-checkbox formControlName="isActive" type="checkbox" color="primary"><span class="font-15">{{ discount?.get('name')?.value }}</span></mat-checkbox>
+                        <mat-checkbox formControlName="isActive" color="primary"><span class="font-15">{{ discount?.get('name')?.value }}</span></mat-checkbox>
                     </ng-container>
                 </ng-container>
             </div>

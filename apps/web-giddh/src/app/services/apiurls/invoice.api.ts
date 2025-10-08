@@ -20,8 +20,8 @@ export const INVOICE_API = {
     SAVE_INVOICE_WEBHOOK: COMMON_URL + 'settings/webhooks', // Save Webhook
     GET_RAZORPAY_DETAIL: COMMON_URL + 'razorpay', // Get RazorPay Detail
     SEND_INVOICE_ON_MAIL: COMMON_URL + PART_B + 'mail', // POST
-    DOWNLOAD_INVOICE_EXPORT_CSV: COMMON_URL + 'export-invoices?from=:from&to=:to&fileType=:fileType',
-    REMOVE_IMAGE_SIGNATURE: COMMON_URL + '/delete-image?imgUniqueName=:imgUniqueName',
+    DOWNLOAD_INVOICE_EXPORT_CSV: COMMON_URL + 'export-invoices-v2?from=:from&to=:to&fileType=:fileType',
+    REMOVE_IMAGE_SIGNATURE: COMMON_URL + 'delete-image?imgUniqueName=:imgUniqueName',
     CANCEL_E_INVOICE_API: COMMON_URL + 'invoice/:invoiceUniqueName/cancel-einvoice',
     CANCEL_CN_DN_E_INVOICE_API: COMMON_URL + 'voucher/:voucherUniqueName/cancel-einvoice',
     VERIFY_EMAIL: COMMON_URL + 'invoice-setting/verify-email?emailAddress=:emailAddress&scope=:scope&branchUniqueName=:branchUniqueName',
@@ -49,8 +49,8 @@ export const INVOICE_API_2 = {
 export const EWAYBILL_API = {
     GENERATE_EWAYBILL: EWAYBILL_COMMON_URL,
     LOGIN_EWAYBILL_USER: EWAYBILL_COMMON_URL + '/user',
-    DOWNLOAD_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download',
-    DOWNLOAD_DETAILED_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-detailed',
+    DOWNLOAD_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-v2',
+    DOWNLOAD_DETAILED_EWAY: EWAYBILL_COMMON_URL + '/:ewaybillNumber' + '/download-detailed-v2',
     CANCEL_EWAY_BILL: EWAYBILL_COMMON_URL + '/cancel',
     UPDATE_EWAY_VEHICLE: EWAYBILL_COMMON_URL + '/vehicle',
     VALIDATE_INVOICE_EWAYBILL: EWAYBILL_COMMON_URL + '/validate-invoice',

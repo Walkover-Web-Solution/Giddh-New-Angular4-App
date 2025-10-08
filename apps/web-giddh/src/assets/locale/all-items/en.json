@@ -513,6 +513,18 @@
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
                     ]
+                },
+                {
+                    "label": "Template",
+                    "link": "/pages/vouchers/preview/purchase/templates",
+                    "icon": "icon-template",
+                    "description": "Edit design & content of the template",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -942,6 +954,11 @@
                     "label": "Import",
                     "link": "/pages/import/select-type",
                     "icon": "icon-tally-import1"
+                },
+                {
+                    "label": "Multi-currency Report",
+                    "link": "/pages/multi-currency-report",
+                    "icon": "icon-multi-currency"
                 },
                 {
                     "label": "Project wise accounting",

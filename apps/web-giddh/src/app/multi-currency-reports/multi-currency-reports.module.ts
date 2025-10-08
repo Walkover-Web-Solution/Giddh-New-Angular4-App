@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,6 +37,7 @@ import { FinancialAccordionDirective } from './directives/financial-accordion.di
 import { BalanceSheetReportGridComponent } from './balance-sheet/components/balance-sheet-grid/balance-sheet-report-grid.component';
 import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/balance-sheet-grid/components/balance-sheet-grid-row/balance-sheet-report-grid-row.component';
 import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
     declarations: [
@@ -77,7 +76,6 @@ import { MatListModule } from '@angular/material/list';
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PopoverModule.forRoot(),
         AsideMenuAccountModule,
         MatTooltipModule,
         MatButtonModule,
@@ -85,9 +83,9 @@ import { MatListModule } from '@angular/material/list';
         MatSelectModule,
         FinancialSearchPipe,
         MatInputModule,
-        TooltipModule,
         MatTabsModule,
         MatListModule,
+        MatMenuModule,
         FormFieldsModule
     ],
 })

@@ -1,15 +1,16 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ChangeDetectionStrategy, TemplateRef, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ChangeDetectionStrategy, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
 import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter' // load on demand
 dayjs.extend(isSameOrAfter) // use plugin
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import { download } from '@giddh-workspaces/utils';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
 import { cloneDeep } from '../../../lodash-optimized';
 import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../../models/api-models/imports';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -43,8 +44,6 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public selectedFromDate: Date;
     /** Selected to date */
     public selectedToDate: Date;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
@@ -55,11 +54,9 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store modal reference */
-    public modalRef: BsModalRef;
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** This will store universalDate */
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+/** This will store universalDate */
     public universalDate: any;
     /** To show clear filter */
     public showClearFilter: boolean = false;
@@ -67,6 +64,9 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['importDate', 'by', 'module', 'importFile', 'count', 'errorSheet', 'succesSheet', 'expiry'];
     /** Hold the data of imports */
     public dataSource = ELEMENT_DATA;
+    /** This will use for import object */
+    /** This will use for page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** This will use for import object */
     public importRequest: ImportsRequest = {
         count: PAGINATION_LIMIT,
@@ -96,7 +96,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /** Instance of is electron variable */
     public isElectron: any = isElectron;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -228,14 +228,13 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /**
     * This function will change the page of activity logs
     *
-    * @param {*} event
+    * @param {PageEvent} event
     * @memberof ImportsComponent
     */
-    public pageChanged(event: any): void {
-        if (this.importRequest.page !== event.page) {
-            this.importRequest.page = event.page;
-            this.getImports();
-        }
+    public handlePageEvent(event: PageEvent): void {
+        this.importRequest.page = this.importRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.importRequest.count = event.pageSize;
+        this.getImports();
     }
 
     /**
@@ -248,7 +247,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -256,7 +255,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.showClearFilter = true;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -274,9 +273,6 @@ export class ImportsComponent implements OnInit, OnDestroy {
     *
     * @memberof ImportsComponent
     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
 
     /**
      *To show the datepicker
@@ -284,14 +280,12 @@ export class ImportsComponent implements OnInit, OnDestroy {
      * @param {*} element
      * @memberof ImportsComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**
@@ -324,18 +318,6 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body')?.classList?.remove('import-page');
-    }
-
-    /**
-   * Callback for translation response complete
-   *
-   * @param {boolean} event
-   * @memberof ImportsComponent
-   */
-    public translationComplete(event: boolean): void {
-        if (event) {
-            this.getImports(true);
-        }
     }
 
     /**
@@ -375,7 +357,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+                download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
@@ -395,7 +377,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
                 let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
-                return download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+                download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
             } else {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }

@@ -513,6 +513,18 @@
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
                     ]
+                },
+                {
+                    "label": "टेम्पलेट",
+                    "link": "/pages/vouchers/preview/purchase/templates",
+                    "icon": "icon-template",
+                    "description": "टेम्पलेटची रचना आणि सामग्री संपादित करा",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -938,6 +950,11 @@
                     "label": "गटाचे नाव",
                     "link": "/pages/import/select-type",
                     "icon": "icon-tally-import1"
+                },
+                {
+                    "label": "बहु-चलन अहवाल",
+                    "link": "/pages/multi-currency-report",
+                    "icon": "icon-multi-currency"
                 },
                 {
                     "label": "प्रकल्पनिहाय लेखांकन",

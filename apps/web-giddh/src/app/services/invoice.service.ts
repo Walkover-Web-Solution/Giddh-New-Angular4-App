@@ -618,7 +618,6 @@ export class InvoiceService {
             map((res) => {
                 let data: BaseResponse<string, UpdateEwayVehicle> = res;
                 data.request = model;
-                // data.queryString = {};
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, UpdateEwayVehicle>(e, model)));
@@ -894,15 +893,15 @@ export class InvoiceService {
     }
 
     /**
-     * Create trigger
-     *
-     * @param {any} model
-     * @return {*}  {Observable<BaseResponse<any, any>>}
-     * @memberof InvoiceService
-     */
+    * Create trigger
+    *
+    * @param {any} model
+    * @return {*}  {Observable<BaseResponse<any, any>>}
+    * @memberof InvoiceService
+    */
     public createTrigger(model: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.CREATE_TRIGGERS
-        ?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+            ?.replace(':companyUniqueName', this.generalService.companyUniqueName);
         return this.http.post(url, model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -921,8 +920,8 @@ export class InvoiceService {
      */
     public updateTrigger(model: any, uniqueName: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.UPDATE_TRIGGERS
-        ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
-        ?.replace(':uniqueName', uniqueName);
+            ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
+            ?.replace(':uniqueName', uniqueName);
         return this.http.put(url, model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -938,11 +937,11 @@ export class InvoiceService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InvoiceService
      */
-    public getTriggerList(request: {page: number, count: number}): Observable<BaseResponse<any, any>> {
+    public getTriggerList(request: { page: number, count: number }): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_ALL_TRIGGERS
-        ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
-        ?.replace(':page', request.page?.toString())
-        ?.replace(':count', request.count?.toString());
+            ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
+            ?.replace(':page', request.page?.toString())
+            ?.replace(':count', request.count?.toString());
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -960,8 +959,8 @@ export class InvoiceService {
      */
     public getTriggerDetails(uniqueName: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_TRIGGER_DETAILS
-        ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
-        ?.replace(':uniqueName', uniqueName);
+            ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
+            ?.replace(':uniqueName', uniqueName);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -979,8 +978,8 @@ export class InvoiceService {
      */
     public deleteTrigger(uniqueName: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.DELETE_TRIGGER
-        ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
-        ?.replace(':uniqueName', uniqueName);
+            ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
+            ?.replace(':uniqueName', uniqueName);
         return this.http.delete(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

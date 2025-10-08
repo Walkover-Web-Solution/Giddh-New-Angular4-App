@@ -10,11 +10,10 @@ import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
 import { cloneDeep, isEqual } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
 import { TitleCasePipe } from '@angular/common';
 import { TriggerComponentStore } from '../triggers/uitilty/trigger.store';
-import { PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
+import { IOption, PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
 import { AccountingGroupEnum } from '../Enums/common.enum';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
@@ -67,67 +66,16 @@ export class TemplateFroalaComponent implements OnInit {
     public emailSuggestionPrefix: string = '{';
     /** Hold email suggestion suffix */
     public emailSuggestionSuffix: string = '}';
+    /** Instance of is electron variable */
+    public isElectron: any = isElectron;
     /** Hold froala editor options */
-    public froalaOptions: any = {
-        key: FROALA_EDITOR_KEY,
-        attribution: false,
-        heightMin: 300,
-        heightMax: 300,
-        zIndex: 2501,
-        toolbarSticky: true,
-        toolbarButtons: {
-            moreText: {
-                buttons: [
-                    'bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'textColor',
-                    'backgroundColor', 'clearFormatting',
-                ],
-                align: 'left',
-                buttonsVisible: 9
-            },
-            moreRich: {
-                buttons: [
-                    'html', 'help',
-                    'fullscreen', 'emoticons', 'fontAwesome', 'insertHR'
-                ],
-                align: 'left',
-                buttonsVisible: 6
-            },
-            moreParagraph: {
-                buttons: [
-                    'alignLeft', 'alignCenter', 'alignRight', 'alignJustify',
-                    'formatOLSimple', 'formatOL', 'formatUL', 'paragraphFormat',
-                    'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'
-                ],
-                align: 'left',
-                buttonsVisible: 13
-            }
-        },
-        placeholderText: this.localeData?.email_content_suggestions,
-        charCounterCount: false,
-        wordCount: false,
-        htmlAllowedTags: ['.*'],
-        htmlAllowedAttrs: ['.*'],
-        events: {
-            initialized: (event) => {
-                this.froalaEditor = event.getEditor();
-                this.froalaEditor.events.on(
-                    'keydown',
-                    (e) => {
-                        if (e.which == FroalaEditor.KEYCODE.ENTER && this.froalaTribute.isActive) {
-                            return false;
-                        }
-                    },
-                    true
-                );
-            },
-            blur: () => { // Handles changes made in the code view when focus is lost
-                if (this.froalaEditor.codeView?.isActive()) {
-                    this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
-                    this.updateFormControl();
-                }
-            }
-        }
-    };
+    public froalaOptions: any;
+    /** Retry counter for Froala initialization */
+    private froalaInitRetryCount: number = 0;
+    /** Maximum retry attempts for Froala initialization */
+    private maxFroalaInitRetries: number = 5;
+    /** Retry delay in milliseconds */
+    private froalaInitRetryDelay: number = 500;
     /** Hold to email options */
     public toEmails: any[] = [];
     /** Hold selected to email options */
@@ -213,7 +161,10 @@ export class TemplateFroalaComponent implements OnInit {
         private generalService: GeneralService,
         private titleCasePipe: TitleCasePipe,
         private pageLeaveUtilityService: PageLeaveUtilityService
-    ) { }
+    ) {
+        // Initialize Froala options after environment detection
+        this.froalaOptions = this.getFroalaOptions();
+    }
 
     /**
      * Initializes the component and performs necessary operations.
@@ -302,6 +253,9 @@ export class TemplateFroalaComponent implements OnInit {
                     key: item
                 }));
 
+                if (!this.froalaEditor) {
+                    this.froalaOptions = this.getFroalaOptions();
+                }
                 setTimeout(() => {
                     this.initializeTribute(tributeSuggestions);
                 }, 300);
@@ -335,9 +289,9 @@ export class TemplateFroalaComponent implements OnInit {
                 
                 // Patch existing form instead of recreating it
                 this.emailForm.patchValue({
-                    to: response.to ?? null,
-                    cc: response.cc ?? null,
-                    bcc: response.bcc ?? null,
+                    to: response.to ?? [],
+                    cc: response.cc ?? [],
+                    bcc: response.bcc ?? [],
                     emailSubject: response.emailSubject ?? null,
                     html: response.html ?? null
                 }, { emitEvent: false });
@@ -382,7 +336,98 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     private updateFormControl(): void {
-        this.emailForm.get('html')?.patchValue(this.froalaEditor.html.get());
+        if (this.froalaEditor) {
+            const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
+            const htmlContent = this.froalaEditor.html.get();
+            currentForm.get('html')?.patchValue(htmlContent, { emitEvent: false });
+        }
+    }
+
+    /**
+     * This will return the froala options
+     *
+     * @return {*}  {*}
+     * @memberof TemplateFroalaComponent
+     */
+    public getFroalaOptions() : any {
+        return {
+            key: FROALA_EDITOR_KEY,
+            attribution: false,
+            heightMin: 300,
+            heightMax: 300,
+            zIndex: 2501,
+            toolbarSticky: true,
+            // Add Electron-specific configurations
+            requestWithCORS: this.isElectron ? false : true,
+            toolbarButtons: {
+                moreText: {
+                    buttons: [
+                        'bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'textColor',
+                        'backgroundColor', 'clearFormatting',
+                    ],
+                    align: 'left',
+                    buttonsVisible: 9
+                },
+                moreRich: {
+                    buttons: [
+                        'html', 'help',
+                        'fullscreen', 'emoticons', 'fontAwesome', 'insertHR'
+                    ],
+                    align: 'left',
+                    buttonsVisible: 6
+                },
+                moreParagraph: {
+                    buttons: [
+                        'alignLeft', 'alignCenter', 'alignRight', 'alignJustify',
+                        'formatOLSimple', 'formatOL', 'formatUL', 'paragraphFormat',
+                        'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'
+                    ],
+                    align: 'left',
+                    buttonsVisible: 13
+                }
+            },
+            placeholderText: this.localeData?.email_content_suggestions,
+            charCounterCount: false,
+            wordCount: false,
+            htmlAllowedTags: ['.*'],
+            htmlAllowedAttrs: ['.*'],
+            events: {
+                initialized: (event) => {
+                    this.froalaEditor = event.getEditor();
+                    
+                    // Add additional delay for Electron environment
+                    const setupDelay = this.isElectron ? 200 : 0;
+                    setTimeout(() => {
+                        this.setupFroalaEventHandlers();
+                        
+                        // Set initial content from form control with additional delay for Electron
+                        const contentDelay = this.isElectron ? 300 : 0;
+                        setTimeout(() => {
+                            const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
+                            const htmlValue = currentForm?.get('html')?.value;
+                            if (htmlValue) {
+                                this.froalaEditor.html.set(htmlValue);
+                            }
+                        }, contentDelay);
+                    }, setupDelay);
+                },
+                blur: () => { // Handles changes made in the code view when focus is lost
+                    if (this.froalaEditor?.codeView?.isActive()) {
+                        this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
+                        this.updateFormControl();
+                    }
+                },
+                'contentChanged': () => {
+                    this.updateFormControl();
+                },
+                // Add error handling for Electron
+                'error': (error) => {
+                    if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
+                        this.retryFroalaInitialization();
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -395,6 +440,61 @@ export class TemplateFroalaComponent implements OnInit {
         this.emailFocusStates.isTo = emailType === EmailType.To;
         this.emailFocusStates.isCc = emailType === EmailType.Cc;
         this.emailFocusStates.isBcc = emailType === EmailType.Bcc;
+    }
+
+    /**
+     * Sets up Froala event handlers
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private setupFroalaEventHandlers(): void {
+        if (this.froalaEditor) {
+            this.froalaEditor.events.on(
+                'keydown',
+                (e) => {
+                    if (e.which == FroalaEditor.KEYCODE.ENTER && this.froalaTribute?.isActive) {
+                        return false;
+                    }
+                },
+                true
+            );
+        }
+    }
+
+    /**
+     * Retries Froala editor initialization
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private retryFroalaInitialization(): void {
+        this.froalaInitRetryCount++;
+        setTimeout(() => {
+            this.froalaOptions = this.getFroalaOptions();
+        }, this.froalaInitRetryDelay * this.froalaInitRetryCount);
+    }
+
+    /**
+     * Initializes tribute with retry mechanism for Electron
+     *
+     * @private
+     * @param {any[]} tributeSuggestions
+     * @memberof TemplateFroalaComponent
+     */
+    private initializeTributeWithRetry(tributeSuggestions: any[]): void {
+        if (!tributeSuggestions || tributeSuggestions.length === 0) {
+            return;
+        }
+
+        const attemptInitialization = (attempt: number = 1) => {
+            if (this.froalaEditor && this.froalaEditor.el) {
+                this.initializeTribute(tributeSuggestions);
+            } else if (attempt < this.maxFroalaInitRetries) {
+                setTimeout(() => attemptInitialization(attempt + 1), this.froalaInitRetryDelay);
+            } 
+        };
+        attemptInitialization();
     }
 
     /**
@@ -414,7 +514,7 @@ export class TemplateFroalaComponent implements OnInit {
         }
 
         if (this.subjectTribute) {
-            this.froalaTribute.detach(this.subjectInputField.nativeElement);
+            this.subjectTribute.detach(this.subjectInputField.nativeElement);
         }
 
         this.froalaTribute = new Tribute({
@@ -428,10 +528,11 @@ export class TemplateFroalaComponent implements OnInit {
             values: tributeSuggestions,
             selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
         });
-
+        
         if (this.froalaEditor) {
             this.froalaTribute.attach(this.froalaEditor.el);
         }
+        
         if (this.subjectInputField && this.subjectInputField.nativeElement) {
             this.subjectTribute.attach(this.subjectInputField.nativeElement);
         }
@@ -512,9 +613,9 @@ export class TemplateFroalaComponent implements OnInit {
             }, { emitEvent: false });
         } else {
             this.emailForm = this.formBuilder.group({
-                to: [template?.to ?? null],
-                cc: [template?.cc ?? null],
-                bcc: [template?.bcc ?? null],
+                to: [template?.to ?? []],
+                cc: [template?.cc ?? []],
+                bcc: [template?.bcc ?? []],
                 voucherTypes: [[this.inputData]],
                 emailSubject: [template?.emailSubject ?? null],
                 html: [template?.html ?? null]
@@ -1044,7 +1145,7 @@ export class TemplateFroalaComponent implements OnInit {
             bcc: this.selectedBccEmails,
             cc: this.selectedCcEmails
         };
-
+        
         return isEqual(formRecipients, selectedRecipients);
     }
 }

@@ -75,10 +75,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
         this.isAddUnitOpen = false;
         this.isAddUnitOpen = !this.isAddUnitOpen;
     }
-    public toggleImport() {
-        this.closeAsidePane();
-        this._router.navigate(['pages', 'import', 'stock']);
-    }
+
     public backButtonPressed() {
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;

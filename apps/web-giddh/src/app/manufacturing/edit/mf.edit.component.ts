@@ -2,7 +2,6 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ToasterService } from './../../services/toaster.service';
-import { IOption } from './../../theme/ng-select/option.interface';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -12,7 +11,8 @@ import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { IStockItemDetail } from '../../models/interfaces/stocks-item.interface';
 import * as dayjs from 'dayjs';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
 import { InventoryService } from '../../services/inventory.service';
 import { createSelector } from 'reselect';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
@@ -23,6 +23,7 @@ import { SearchService } from '../../services/search.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { GeneralService } from '../../services/general.service';
 import { cloneDeep, forEach } from '../../lodash-optimized';
+import { IOption } from '../../app.constant';
 
 @Component({
     templateUrl: './mf.edit.component.html',
@@ -30,7 +31,9 @@ import { cloneDeep, forEach } from '../../lodash-optimized';
 })
 
 export class MfEditComponent implements OnInit, OnDestroy {
-    @ViewChild('manufacturingConfirmationModal', { static: true }) public manufacturingConfirmationModal: ModalDirective;
+    @ViewChild('manufacturingConfirmationTemplate', { static: true }) public manufacturingConfirmationTemplate: TemplateRef<any>;
+    /** Dialog reference for manufacturing confirmation modal */
+    private manufacturingConfirmationDialogRef: MatDialogRef<any>;
 
     public stockListDropDown$: Observable<IOption[]>;
     public allStocksDropDown$: Observable<IOption[]>;
@@ -128,7 +131,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private _toasty: ToasterService,
         private searchService: SearchService,
-        private warehouseActions: WarehouseActions
+        private warehouseActions: WarehouseActions,
+        private dialog: MatDialog
     ) {
         this.isGetManufactureStockInProgress$ = this.store.pipe(select(state => state.inventory.isGetManufactureStockInProgress), takeUntil(this.destroyed$));
         this.isStockWithRateInprogress$ = this.store.pipe(select(state => state.manufacturing.isStockWithRateInprogress), takeUntil(this.destroyed$));
@@ -396,8 +400,16 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.manufacturingActions.UpdateMfItem(dataToSave));
     }
 
+    /**
+     * Opens the manufacturing confirmation dialog
+     *
+     * @memberof MfEditComponent
+     */
     public deleteEntry() {
-        this.manufacturingConfirmationModal?.show();
+        this.manufacturingConfirmationDialogRef = this.dialog.open(this.manufacturingConfirmationTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     public getTotal(from, field) {
@@ -430,6 +442,12 @@ export class MfEditComponent implements OnInit, OnDestroy {
         return 0;
     }
 
+    /**
+     * Closes the manufacturing confirmation dialog and handles user response
+     *
+     * @param {boolean} userResponse - User's confirmation response
+     * @memberof MfEditComponent
+     */
     public closeConfirmationPopup(userResponse: boolean) {
         if (userResponse) {
             let manufacturingObj = cloneDeep(this.manufacturingDetails);
@@ -438,7 +456,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 manufacturingUniqueName: manufacturingObj?.uniqueName
             }));
         }
-        this.manufacturingConfirmationModal.hide();
+        this.manufacturingConfirmationDialogRef?.close();
     }
 
     public getCalculatedAmount(quantity, rate) {

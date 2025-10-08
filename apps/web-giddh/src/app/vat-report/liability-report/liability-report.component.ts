@@ -31,8 +31,8 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     public displayedColumns = ['start', 'end', 'due', 'status', 'action'];
     /** True if API Call is in progress */
     public isLoading: boolean;
-    /** This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /** This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** Holds Current Currency Symbol for Zimbabwe report */
     public vatReportCurrencySymbol: string = 'P';
     /** True, if API is in progress */
@@ -193,8 +193,8 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
 
         this.vatService.downloadVatLiabilityReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === "success") {
-                let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                return saveAs(blob, 'VatLiabilityReport.xlsx');
+                let blob = this.generalService.base64ToBlob(res.body.data, 'application/xls', 512);
+                return saveAs(blob, res.body.name);
             } else {
                 this.toaster.showSnackBar('error', res?.message);
             }
@@ -210,6 +210,6 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState = false;
     }
 }

@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -24,25 +23,13 @@ import { MatSelect } from '@angular/material/select';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { InventoryService } from '../../../services/inventory.service';
-import { BranchHierarchyType } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../../app.constant';
 import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
     selector: 'create-branch',
     templateUrl: './create-branch.component.html',
-    styleUrls: ['./create-branch.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./create-branch.component.scss']
 })
 export class CreateBranchComponent implements OnInit, OnDestroy {
     /** Hold Mat Select Reference */
@@ -476,15 +463,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     private openCreateBranchDialog(): void {
-        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
-            width: '760px',
-            height: '100vh !important',
-            disableClose: true,
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, ASIDE_PANE_CONFIG);
     }
 
     /**

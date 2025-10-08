@@ -1,3 +1,5 @@
+import { PAGINATION_LIMIT } from "../../app.constant";
+
 /*
 * Report Model to be iterated and displayed in tabular format
 * */
@@ -46,8 +48,10 @@ export class ReportsDetailedRequestFilter {
     public sort?: string;
     public sortBy?: string;
     public page?: number
-    public count?: number
+    public count?: number = PAGINATION_LIMIT;
     public branchUniqueName?: string;
+    public salesPersonUniqueName?: string;
+    public accountUniqueNames?: string[];
 }
 export class Balance {
     public amount: number;

@@ -61,14 +61,13 @@
                                 [showTaxColumn]="showTaxColumn"
                             ></address-settings>
                         </mat-tab>
-                        <mat-tab [label]="localeData?.other">
-                            <other-settings
+                        <mat-tab [label]="commonLocaleData?.app_export" *ngIf="currentOrganizationType !== 'BRANCH'">
+                            <export-file-name
+                                #exportFileNameComponent
                                 [organizationType]="currentOrganizationType"
-                                (saveProfile)="handleSaveProfile($event)"
-                                [profileData]="companyProfileObj"
                                 [localeData]="localeData"
-                            >
-                            </other-settings>
+                                [commonLocaleData]="commonLocaleData"
+                            ></export-file-name>
                         </mat-tab>
                     </mat-tab-group>
                 </div>

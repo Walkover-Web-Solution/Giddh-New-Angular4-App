@@ -1,60 +1,40 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 @Component({
     selector: 'inventory-inout-header',
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ],
     templateUrl: './inventory-header.component.html'
 })
 
 export class InventoryHeaderComponent implements OnInit, OnDestroy {
-    public asideMenuState: string = 'out';
+    /** Template reference for aside pane */
+    @ViewChild('asideMenuTemplate', { static: true }) public asideMenuTemplate: TemplateRef<any>;
+    /** Reference for aside pane dialog */
+    public asideMenuDialogRef: MatDialogRef<any>;
     public selectedAsideView: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _store: Store<AppState>) {
+    constructor(private _store: Store<AppState>, private dialog: MatDialog) {
 
     }
 
     public ngOnInit() {
         this._store.pipe(select(p => p.inventoryInOutState.entrySuccess), takeUntil(this.destroyed$)).subscribe(p => {
             if (p) {
-                this.toggleGroupStockAsidePane('');
+                this.openGroupStockAsidePaneDialog('');
             }
         });
     }
 
-    public toggleGroupStockAsidePane(view, event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    public openGroupStockAsidePaneDialog(view: string): void {
+        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
         this.selectedAsideView = view;
-    }
-
-    public toggleBodyClass() {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
     }
 
     /**

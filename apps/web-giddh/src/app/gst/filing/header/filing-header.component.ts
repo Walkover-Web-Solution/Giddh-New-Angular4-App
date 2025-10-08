@@ -4,10 +4,6 @@ import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purcha
 import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrJsonDownloadRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AlertConfig } from 'ngx-bootstrap/alert';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
@@ -20,35 +16,15 @@ import { GeneralService } from '../../../services/general.service';
 import { saveAs } from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
-import { MatDatepicker } from '@angular/material/datepicker';
 import { ServiceConfig } from '../../../services/service.config';
-import { BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../../app.constant';
 import { BreakpointObserver } from "@angular/cdk/layout";
 
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'filing-header',
     templateUrl: 'filing-header.component.html',
-    styleUrls: ['filing-header.component.scss'],
-    providers: [
-        {
-            provide: BsDropdownConfig, useValue: { autoClose: true },
-        },
-        {
-            provide: AlertConfig, useValue: {}
-        }
-    ],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in <=> out', animate('400ms ease-in-out')),
-        ])
-    ]
+    styleUrls: ['filing-header.component.scss']
 })
 export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -71,8 +47,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public cancelConfirmationDialogRef: MatDialogRef<any>;
     /** Holds cancel push to portal dialog template ref */
     @ViewChild("pushToPortalDialog") pushToPortalDialog: TemplateRef<any>;
-    /** Directive to get reference of element */
-    @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     /** Aside authentication dialog open */
     @ViewChild("asideAuthentication") asideAuthenticationDialog: TemplateRef<any>;
     public gstAuthenticated$: Observable<boolean>;
@@ -267,16 +241,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         if (selectedService) {
             this.selectedService = selectedService;
         }
-        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: 'var(--aside-pane-width)',
-            height: '100vh',
-            disableClose: true,
-            autoFocus: false
-        })
+        this.asideAuthenticationDialogRef = this.dialog.open(this.asideAuthenticationDialog, {...ASIDE_PANE_CONFIG, autoFocus: false});
     }
 
     /**
@@ -401,8 +366,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             request.to = this.currentPeriod.to;
             this.gstReconcileService.downloadGSTRJSON(request).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res?.status === "success") {
-                    let blobData = this.generalService.base64ToBlob(res?.body, "json", 512);
-                    return saveAs(blobData, `${this.activeCompanyGstNumber}.json`);
+                    let blobData = this.generalService.base64ToBlob(res?.body.data, "json", 512);
+                    return saveAs(blobData, res?.body.name);
                 } else {
                     this.toasty.showSnackBar('error', res?.message);
                 }
@@ -431,12 +396,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * Sets month/year
      *
-     * @param {*} date
-     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @param {*} date - Selected date from giddh-datepicker
      * @memberof FilingHeaderComponent
      */
-    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
-        datepicker?.close();
+    public setMonthAndYear(date: any): void {
         const selectedMonth = new Date(date);
         const firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
         const lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);

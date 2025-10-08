@@ -23,7 +23,7 @@
                         href="javascript:void(0)"
                         class="btn-link d-block w-100"
                         nav-vr-item
-                        *ngIf="showCreateNewButton"
+                        *ngIf="showCreateNewButton && voucherApiVersion === 2"
                         (click)="showAddNewForm(items, i)"
                         >{{ localeData?.create_new }}</a
                     >

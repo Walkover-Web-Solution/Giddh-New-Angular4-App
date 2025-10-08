@@ -1,11 +1,11 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatMenuTrigger } from '@angular/material/menu';
 import * as dayjs from 'dayjs';
 import { GeneralService } from '../services/general.service';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
@@ -22,10 +22,8 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /** This will store modal reference */
-    public modalRef: BsModalRef;
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
@@ -42,8 +40,6 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /** Universal date observer */
     public universalDate$: Observable<any>;
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Audit log form component reference */
     @ViewChild('auditLogFormComponent', { static: false }) public auditLogFormComponent: AuditLogsFormComponent;
     /** Audit log request */
@@ -55,7 +51,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute, private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
+    constructor(private store: Store<AppState>, private route: ActivatedRoute, private generalService: GeneralService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
     }
@@ -99,28 +95,17 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *To show the datepicker
+     * Toggles the datepicker menu open/close state.
      *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
+     * @param {boolean} isOpen Whether to open or close the datepicker menu
+     * @memberof AuditLogsComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof AuditLogsFormComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -131,7 +116,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -139,7 +124,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

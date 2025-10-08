@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from "@angular/material/button";
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 import { CreateNewInventoryAsideComponent } from "../create-new-inventory-aside-pane/create-new-inventory-aside.component";
+import { MatDialogModule } from "@angular/material/dialog";
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { CreateNewInventoryAsideComponent } from "../create-new-inventory-aside-
         MatTreeModule,
         MatIconModule,
         MatButtonModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        MatDialogModule
     ],
     exports: [
         InventorySidebarComponent,
