@@ -239,8 +239,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isProdMode: boolean = PRODUCTION_ENV;
     /** This will hold option selected state */
     public optionSelected: boolean = false;
-    /** This will hold gstin input  */
-    public gstinInput: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -695,7 +693,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.secondStepForm.get('taxNumber')?.valueChanges.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(value => {
             if (value) {
-                this.gstinInput = true;
                 this.optionSelected = false;
             }
         });
@@ -1280,8 +1277,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
-        const isGstinInput = this.secondStepForm.get('taxNumber')?.value && !this.gstinInput ? false : !this.isGstinValid;
-        if (this.selectedStep === 1 && this.secondStepForm.invalid || (this.secondStepForm.get('taxNumber')?.value && isGstinInput)) {
+        if (this.selectedStep === 1 && this.secondStepForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
