@@ -85,7 +85,7 @@
                             </amount-field>
                         </span>
                         <span *ngIf="element.openingBalance > 0">
-                            <span class="text-success" *ngIf="element.openBalanceType === 'DEBIT'">
+                            <span class="text-green" *ngIf="element.openBalanceType === 'DEBIT'">
                                 {{ localeData?.balance_type.dr }}</span
                             >
                             <span class="text-danger" *ngIf="element.openBalanceType === 'CREDIT'">
@@ -149,7 +149,7 @@
                             </amount-field>
                         </span>
                         <span *ngIf="element.closingBalance > 0">
-                            <span class="text-success" *ngIf="element.closeBalanceType === 'DEBIT'">
+                            <span class="text-green" *ngIf="element.closeBalanceType === 'DEBIT'">
                                 {{ localeData?.balance_type.dr }}</span
                             >
                             <span class="text-danger" *ngIf="element.closeBalanceType === 'CREDIT'">
@@ -190,7 +190,7 @@
             <i class="icon-cross"></i>
         </button>
     </div>
-    <mat-dialog-content class="modal-body pd-l2 pd-r2 clearfix">
+    <mat-dialog-content class="modal-body pd-l2 pd-r2 clear-both">
         <input-field
             *ngIf="messageBody.type == 'Email'"
             [type]="'text'"

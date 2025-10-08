@@ -5,10 +5,10 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <section id="list-manufacture" class="p-3 clearfix overflow-visible">
+    <section id="list-manufacture" class="p-3 clear-both overflow-visible">
         <hamburger-menu></hamburger-menu>
         <div class="col-12 col-sm-12">
-            <div class="form-fields clearfix">
+            <div class="form-fields clear-both">
                 <form class="col-12 pl-0 pr-0 mr-b05 manufacturing-form">
                     <div class="row">
                         <div class="d-flex flex-wrap gap-between w-100 mb-2">
@@ -98,7 +98,7 @@
             </div>
         </div>
         <!-- search form end -->
-        <section *ngIf="isReportLoading" class="clearfix mr-t100 col-md-12">
+        <section *ngIf="isReportLoading" class="clear-both mr-t100 col-md-12">
             <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </section>
         <div class="no-data mr-t100 col-12 col-sm-12" *ngIf="!isReportLoading && dataSource?.length === 0">
@@ -212,7 +212,7 @@
                 </button>
             </div>
             <mat-dialog-content class="dialog-body">
-                <div class="form-fields clearfix">
+                <div class="form-fields clear-both">
                     <form class="col-md-12 pl-0 pr-0 mr-b05">
                         <div class="row mt-2 mr-b15">
                             <div class="col-md-12 col-sm-12">

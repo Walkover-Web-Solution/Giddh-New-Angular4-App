@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="box section-center">
+    <div class="pd-15 section-center">
         <form [formGroup]="tagForm" >
             <div class="row">
                 <div class="col-12 px-0">
@@ -35,7 +35,7 @@
                         </mat-chip-grid>
                     </mat-form-field>
                    
-                    <div class="no-data font-24" *ngIf="!isLoading && !tags?.length">
+                    <div class="no-data font-size-24" *ngIf="!isLoading && !tags?.length">
                         <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                 </div>
                 <mat-dialog-content class="dialog-body">
                     <div [innerHTML]="confirmationMessage"></div>
-                    <div class="d-flex justify-content-end column-gap1 mt-3">
+                    <div class="d-flex justify-content-end column-gap-1 mt-3">
                         <button mat-raised-button mat-dialog-close color="primary" (click)="onUserConfirmation(true)">
                             {{ commonLocaleData?.app_yes }}
                         </button>

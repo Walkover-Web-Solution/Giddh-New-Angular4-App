@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="tb-wrapper clearfix">
+    <div class="tb-wrapper clear-both">
         <div class="mt-1 mr-b1 pull-right">
             <div class="tbpl-list">
                 <ul class="list-inline color-codes pull-right">
@@ -27,7 +27,7 @@
                 </ul>
             </div>
         </div>
-        <div class="table-container clearfix trial-balance">
+        <div class="table-container clear-both trial-balance">
             <section class="tb-section">
                 <div class="row">
                     <div
@@ -42,7 +42,7 @@
                             <span class="pd-r1"
                                 ><strong>{{ localeData?.particular }}</strong></span
                             >
-                            <i class="position-relative font-14 pd-r1 cursor-pointer d-flex align-items-center light-gray" id="showSearch" (click)="toggleSearch()"></i>
+                            <i class="position-relative  font-size-14 pd-r1 cursor-pointer d-flex align-items-center light-gray" id="showSearch" (click)="toggleSearch()"></i>
                         </span>
                         <span [hidden]="!showClearSearch" class="show-clear-search d-flex">
                             <input

@@ -1,5 +1,5 @@
 a {
-    @include text-decoration(none);
+    @include text-decoration(none, false);
     color: var(--mat-primary-color);
 }
 h1, h2, h3, h4, h5, h6 {
@@ -14,4 +14,10 @@ input {
 table {
     border-collapse: collapse;
     width: 100%;
+}
+ul, ol {
+    list-style: none;
+}
+textarea {
+    resize: none !important;
 }

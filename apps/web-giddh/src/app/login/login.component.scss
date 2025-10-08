@@ -229,15 +229,15 @@ button.close {
 }
 */
 
-/* UNUSED COMPONENT CLASS: btn-blue - Auto-commented by script
-.btn-blue {
+/* UNUSED COMPONENT CLASS: btn-text-primary - Auto-commented by script
+.btn-text-primary {
     color: var(--color-white) !important;
     border-color: var(--mat-primary-color);
     background: var(--mat-primary-color);
 }
 */
 
-.btn-blue:hover {
+.btn-text-primary:hover {
     color: var(--color-white) !important;
     border-color: var(--mat-primary-color);
     background: var(--mat-primary-color);
@@ -307,7 +307,7 @@ small {
 }
 
 .social-login li {
-    list-style: none;
+    // list-style: none;
     display: inline-block;
     margin-right: 15px;
 }
@@ -432,7 +432,7 @@ small {
 .app-ico ul li,
 .download-app ul li {
     display: inline-block;
-    list-style: none;
+    // list-style: none;
     border-radius: var(--mat-border-radius-0);
 }
 

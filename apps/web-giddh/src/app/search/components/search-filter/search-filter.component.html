@@ -1,5 +1,5 @@
 <section class="mr-t15 mr-b15">
-    <div class="d-flex column-gap15">
+    <div class="d-flex column-gap-15">
         <div class="d-inline-flex">
             <button
                 type="button"
@@ -21,7 +21,7 @@
                 >
                     <!-- repeater -->
                     <div
-                        class="position-relative query-list query-list d-flex"
+                        class="position-relative  query-list query-list d-flex"
                         [ngClass]="{ 'mr-t2': i !== 0 }"
                         formArrayName="searchQuery"
                         *ngFor="let item of searchQueryForm.get('searchQuery')['controls']; let i = index; let l = last"
@@ -84,7 +84,7 @@
                             </input-field>
 
                             <!--By and To: Not required in paginated API -->
-                            <span class="position-relative form-group option-value-field" *ngIf="item?.value.queryType === 'openingBalance'">
+                            <span class="position-relative  form-group option-value-field" *ngIf="item?.value.queryType === 'openingBalance'">
                                 <select-field
                                     [closeOnFocusOut]="true"
                                     class="width-balance-type"
@@ -98,7 +98,7 @@
                                     "
                                 ></select-field>
                             </span>
-                            <span class="position-relative form-group  option-value-field" *ngIf="item?.value.queryType === 'closingBalance'">
+                            <span class="position-relative  form-group  option-value-field" *ngIf="item?.value.queryType === 'closingBalance'">
                                 <select-field
                                     [closeOnFocusOut]="true"
                                     class="width-balance-type"
@@ -117,9 +117,9 @@
                             }}</label>
                         </div>
                     </div>
-                    <!--end of clearfix first row -->
+                    <!--end of clear-both first row -->
                     <!-- end repeater -->
-                    <div class="clearfix mr-t4 d-flex column-gap15">
+                    <div class="clear-both mr-t4 d-flex column-gap-15">
                         <button
                             [disabled]="searchQueryForm.invalid"
                             mat-raised-button
@@ -150,7 +150,7 @@
             {{ commonLocaleData?.app_reset }}
         </button>
     </div>
-    <div class="pull-right d-flex column-gap15">
+    <div class="pull-right d-flex column-gap-15">
         <button type="button" mat-raised-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
             {{ commonLocaleData?.app_download_csv }}
         </button>

@@ -7,7 +7,7 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
-        <div class="transactions-page pd-t1 position-relative clearfix">
+        <div class="transactions-page pd-t1 position-relative clear-both">
             <!-- ledger header -->
             <div class="col-md-12">
                 <div class="d-flex justify-content-between">
@@ -50,7 +50,7 @@
                             <a
                                 href="javascript:void(0);"
                                 aria-label="expand icon"
-                                class="cp"
+                                class="cursor-pointer"
                                 (click)="toggleExpand()"
                                 [matTooltip]="commonLocaleData?.app_expand_all"
                                 [matTooltipPosition]="'above'"
@@ -61,7 +61,7 @@
                             <a
                                 href="javascript:void(0);"
                                 aria-label="icon collapse"
-                                class="cp"
+                                class="cursor-pointer"
                                 (click)="toggleExpand()"
                                 [matTooltip]="commonLocaleData?.app_collapse_all"
                                 [matTooltipPosition]="'above'"
@@ -73,7 +73,7 @@
                     </div>
                     <div *ngIf="showAdvanceSearchIcon" class="clear-filter form-group mb-0">
                         <button mat-stroked-button (click)="initialRequest()">
-                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                     <div class="filter-export d-flex align-items-center">
@@ -106,15 +106,15 @@
                 </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
                     <button mat-stroked-button (click)="initialRequest()">
-                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                        <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
         </div>
 
         <div class="container-fluid overflow-visible">
-            <div class="clearfix mr-t15 daybook-table overflow-visible">
-                <div class="clearfix trial-balance table-responsive table-header-sticky overflow-visible">
+            <div class="clear-both mr-t15 daybook-table overflow-visible">
+                <div class="clear-both trial-balance table-responsive table-header-sticky overflow-visible">
                     <table
                         mat-table
                         class="w-100 on-mobile-view tb-head"

@@ -2,10 +2,10 @@
     <div>
         <div class="row">
             <div class="col-sm-6">
-                <p class="bold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem?.baseAccount?.name }}</p>
+                <p class="font-weight-semibold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem?.baseAccount?.name }}</p>
             </div>
             <div class="col-sm-6 text-right xs-left">
-                <div class="d-flex justify-content-end align-items-center column-gap1">
+                <div class="d-flex justify-content-end align-items-center column-gap-1">
                     <button
                         mat-raised-button
                         color="primary"
@@ -23,7 +23,7 @@
                     >
                         {{ localeData?.reject }}
                     </button>
-                    <span class="mr-b05 close-modal cp pull-right" (click)="closeDetailsMode()">
+                    <span class="mr-b05 close-modal cursor-pointer pull-right" (click)="closeDetailsMode()">
                         <img src="assets/images/multiply.svg" />
                     </span>
                 </div>
@@ -74,10 +74,10 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="d-inline-block mr-2">
-                                    <label class="font-15">
+                                    <label class="font-size-15">
                                         {{ entryAgainstObject.base }}<span class="text-danger">*</span>
                                     </label>
-                                    <div class="clearfix">
+                                    <div class="clear-both">
                                         <reactive-dropdown-field
                                             [ngClass]="{ 'error-box': showEntryAgainstRequired }"
                                             class="text-left multi-select entry-against"
@@ -103,7 +103,7 @@
                                 (click)="toggleEntryAgainst()"
                                 *ngIf="entryAgainstObject.against"
                             >
-                                <a href="javascript:void(0)" class="d-inline-block pt-3 font-15">
+                                <a href="javascript:void(0)" class="d-inline-block pt-3 font-size-15">
                                     {{ entryAgainstObject.against }}
                                 </a>
                             </div>

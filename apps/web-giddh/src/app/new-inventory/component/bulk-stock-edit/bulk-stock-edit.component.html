@@ -21,7 +21,7 @@
                 (selectedDynamicColumns)="setDisplayColumns($event)"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
-                [iconClass]="'icon-options font-16'"
+                [iconClass]="'icon-options font-size-16'"
                 [cssClass]="'bulk-stock-hide-show-button'"
             >
             </select-table-column>
@@ -61,7 +61,7 @@
                                 [matTooltip]="commonLocaleData?.app_advanced_filter"
                                 aria-label="filter"
                             >
-                                <i class="icon-advance-filter font-16"></i>
+                                <i class="icon-advance-filter font-size-16"></i>
                             </button>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                     <ng-container *ngIf="(!noDataFound || searchString) && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
-                                <table class="table table-bordered">
+                                <table class="table border">
                                     <thead>
                                         <tr (clickOutside)="hideTableHeadInput()">
                                             <!-- Variant Name -->
@@ -105,7 +105,7 @@
                                                         (click)="sort('variant_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -141,7 +141,7 @@
                                                         (click)="sort('variant_unique_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -175,7 +175,7 @@
                                                         (click)="sort('stock_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -211,7 +211,7 @@
                                                         (click)="sort('stock_unique_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -250,7 +250,7 @@
                                                         (click)="sort('stock_group_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -371,7 +371,7 @@
                                                         (click)="sort('purchase_rate')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -417,7 +417,7 @@
                                                         (click)="sort('sales_rate')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -454,7 +454,7 @@
                                                         (click)="sort('fixed_asset_rate')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>

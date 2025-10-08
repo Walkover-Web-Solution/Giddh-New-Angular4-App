@@ -1,5 +1,5 @@
 <div class="gstr-transactions-summary">
-    <p class="clearfix gstr-summary-title">{{ localeData?.filing?.nil_summary }}</p>
+    <p class="clear-both gstr-summary-title">{{ localeData?.filing?.nil_summary }}</p>
     <p class="text-muted half pd-t05">{{ localeData?.filing?.nil_summary_description }}</p>
     <div>
         <div *ngIf="nilSummary && nilSummary.inv">
@@ -7,22 +7,22 @@
                 <thead>
                     <tr>
                         <th class="text-left">
-                            <div class="position-relative">
+                            <div class="position-relative ">
                                 <div class="pull-left over-flow">{{ localeData?.filing?.supply_type }}</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div class="position-relative">
+                            <div class="position-relative ">
                                 <div class="over-flow">{{ localeData?.filing?.nil_amount }}</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div class="position-relative">
+                            <div class="position-relative ">
                                 <div class="over-flow">{{ localeData?.filing?.exempt_amount }}</div>
                             </div>
                         </th>
                         <th class="text-right">
-                            <div class="position-relative">
+                            <div class="position-relative ">
                                 <div class="over-flow">{{ localeData?.filing?.non_gst_amount }}</div>
                             </div>
                         </th>

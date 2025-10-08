@@ -11,7 +11,7 @@
                 - {{ log.accountName }} ({{ log.accountUniqueName }})</span
             >
         </p>
-        <div class="mr-t05 border-top-btm clearfix">
+        <div class="mr-t05 border-top-btm clear-both">
             <div>
                 <label class="pull-left">{{ commonLocaleData?.app_entity }}:</label>
                 <p class="pull-left mr-l05">{{ log.entityType }}</p>
@@ -67,7 +67,7 @@
             <table
                 mat-table
                 [dataSource]="log.log.transactions"
-                class="table table-bordered w-100"
+                class="table border w-100"
             >
                 <!-- Index Column -->
                 <ng-container matColumnDef="index">

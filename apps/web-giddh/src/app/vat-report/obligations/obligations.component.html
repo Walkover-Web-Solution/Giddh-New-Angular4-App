@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <hamburger-menu></hamburger-menu>
-    <div class="relative w-100">
+    <div class="position-relativew-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
         *ngIf="asideGstSidebarMenuState">
         <tax-sidebar 
@@ -13,7 +13,7 @@
     </div>
     <div class="obligations position-relative pd-15">
         <div class="container-fluid ml-0">
-            <div class="row align-items-center row-gap15">
+            <div class="row align-items-center row-gap-15">
                 <div class="col flex-grow-0">
                     <div class="custom-datepicker" 
                          [matMenuTriggerFor]="universalDatepicker"

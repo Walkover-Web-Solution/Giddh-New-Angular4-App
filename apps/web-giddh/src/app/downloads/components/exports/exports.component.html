@@ -26,12 +26,12 @@
                 </div>
                 <div class="clear-filter" *ngIf="showClearFilter">
                     <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
-                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                        <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
             <a
-                class="cursor-pointer pd-1 mr-r1 bdr d-flex"
+                class="cursor-pointer pd-1 mr-r1 border d-flex"
                 (click)="getDownloads()"
                 [matTooltip]="commonLocaleData?.app_refresh"
                 [matTooltipPosition]="'above'"

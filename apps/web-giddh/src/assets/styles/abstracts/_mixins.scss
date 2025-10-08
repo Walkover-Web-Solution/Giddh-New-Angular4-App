@@ -951,18 +951,21 @@
  * Apply text-decoration with all vendor prefixes and Firefox focus fix
  * 
  * @param {String} $value - The text-decoration value (none, underline, overline, line-through, unset, inherit)
+ * @param {Boolean} $important - Whether to add !important flag (default: true)
  */
-@mixin text-decoration($value) {
+@mixin text-decoration($value, $important: true) {
+    $importance: if($important, ' !important', '');
+    
     @if $value == unset {
-        -webkit-text-decoration: -webkit-initial !important;
-        -moz-text-decoration: -moz-initial !important;
-        -ms-text-decoration: initial !important;
-        text-decoration: unset !important;
+        -webkit-text-decoration: -webkit-initial#{$importance};
+        -moz-text-decoration: -moz-initial#{$importance};
+        -ms-text-decoration: initial#{$importance};
+        text-decoration: unset#{$importance};
     } @else {
-        -webkit-text-decoration: #{$value} !important;
-        -moz-text-decoration: #{$value} !important;
-        -ms-text-decoration: #{$value} !important;
-        text-decoration: #{$value} !important;
+        -webkit-text-decoration: #{$value}#{$importance};
+        -moz-text-decoration: #{$value}#{$importance};
+        -ms-text-decoration: #{$value}#{$importance};
+        text-decoration: #{$value}#{$importance};
     }
 
     // Remove dotted outline in Firefox for interactive elements
@@ -994,6 +997,18 @@
             @include text-decoration($value);
         }
     }
+}
+
+/**
+ * Square dimensions mixin for elements with equal width and height
+ * 
+ * @param {String|Number} $size - The size value for both width and height
+ * @param {Boolean} $important - Whether to add !important flag (default: false)
+ */
+@mixin square($size, $important: false) {
+    $priority: if($important, ' !important', '');
+    width: #{$size}#{$priority};
+    height: #{$size}#{$priority};
 }
 
 /**
@@ -1118,6 +1133,85 @@
     @each $name, $value in $radii {
         .border-radius-#{$name} {
             @include border-radius(var(--mat-border-radius-#{$name}));
+        }
+    }
+}
+
+/**
+ * Z-index utilities mixin
+ * Generates CSS custom properties in :root and corresponding utility classes for z-index values
+ * 
+ * @param {Map} $z-indexes - Map of class suffixes and their corresponding z-index values
+ */
+@mixin z-index-utilities(
+    $z-indexes: (
+        "n1": -1,
+        "0": 0,
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "9": 9,
+        "10": 10,
+        "99": 99,
+        "999": 999,
+        "1000": 1000,
+        "auto": auto,
+        "unset": unset,
+        "inherit": inherit,
+    )
+) {
+    // Generate CSS custom properties in :root
+    :root {
+        @each $name, $value in $z-indexes {
+            --z-index-#{$name}: #{$value};
+        }
+    }
+
+    // Generate utility classes
+    @each $name, $value in $z-indexes {
+        .z-index-#{$name} {
+            z-index: var(--z-index-#{$name}) !important;
+        }
+    }
+}
+
+/**
+ * Overflow utilities mixin
+ * Generates CSS custom properties in :root and corresponding utility classes for overflow values
+ * 
+ * @param {Map} $overflows - Map of class suffixes and their corresponding overflow values
+ */
+@mixin overflow-utilities(
+    $overflows: (
+        "hidden": hidden,
+        "visible": visible,
+        "auto": auto,
+        "scroll": scroll,
+        "clip": clip,
+        "unset": unset,
+        "inherit": inherit
+    )
+) {
+    // Generate utility classes for overflow
+    @each $name, $value in $overflows {
+        .overflow-#{$name} {
+            overflow: var(--overflow-#{$name}) !important;
+        }
+    }
+
+    // Generate utility classes for overflow-x
+    @each $name, $value in $overflows {
+        .overflow-x-#{$name} {
+            overflow-x: var(--overflow-#{$name}) !important;
+        }
+    }
+
+    // Generate utility classes for overflow-y
+    @each $name, $value in $overflows {
+        .overflow-y-#{$name} {
+            overflow-y: var(--overflow-#{$name}) !important;
         }
     }
 }

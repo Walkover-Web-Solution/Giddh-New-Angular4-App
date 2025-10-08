@@ -18,20 +18,20 @@
             </div>
             <div class="my-3" *ngIf="invoiceType.isSalesInvoice">
                 <p class="mr-b05">{{ localeData?.invoice_copy }}</p>
-                <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Original')"
+                <mat-checkbox color="primary" class="d-block font-size-15" (change)="onCopyTypeChange($event, 'Original')"
                     formControlName="copyTypeOriginal">
                     {{ localeData?.original }}
                 </mat-checkbox>
-                <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Transport')"
+                <mat-checkbox color="primary" class="d-block font-size-15" (change)="onCopyTypeChange($event, 'Transport')"
                     formControlName="copyTypeCustomer">
                     {{ localeData?.transport }}
                 </mat-checkbox>
-                <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Customer')"
+                <mat-checkbox color="primary" class="d-block font-size-15" (change)="onCopyTypeChange($event, 'Customer')"
                     formControlName="copyTypeTransport">
                     {{ commonLocaleData?.app_customer }}
                 </mat-checkbox>
             </div>
-            <div class="d-flex column-gap1" [ngClass]="{'mr-t1' : invoiceType?.isEstimateInvoice || invoiceType?.isProformaInvoice || invoiceType?.isDebitNote || invoiceType?.isCreditNote || invoiceType?.isReceiptInvoice || invoiceType?.isPaymentInvoice || invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice }">
+            <div class="d-flex column-gap-1" [ngClass]="{'mr-t1' : invoiceType?.isEstimateInvoice || invoiceType?.isProformaInvoice || invoiceType?.isDebitNote || invoiceType?.isCreditNote || invoiceType?.isReceiptInvoice || invoiceType?.isPaymentInvoice || invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice }">
                 <button mat-raised-button color="primary" type="submit">{{ commonLocaleData?.app_send }}</button>
                 <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
             </div>

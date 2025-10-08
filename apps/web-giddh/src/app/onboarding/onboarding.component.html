@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div id="main" class="welcome-container clearfix">
+    <div id="main" class="welcome-container clear-both">
         <div>
             <div class="row mt-2 mr-0 ml-0">
                 <div class="col-xl-5 col-lg-12 order-1 order-xl-0">
@@ -48,7 +48,7 @@
                     </mat-list>
                     <p class="border-btm mr-t4">{{ localeData?.have_data_tally }}</p>
                     <p [innerHTML]="localeData?.giddh_usage"></p>
-                    <div class="d-flex column-gap15">
+                    <div class="d-flex column-gap-15">
                         <a
                             mat-raised-button
                             color="primary"

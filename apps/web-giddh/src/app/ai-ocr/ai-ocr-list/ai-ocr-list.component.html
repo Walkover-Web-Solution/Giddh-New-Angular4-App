@@ -99,13 +99,13 @@
                         <td
                             mat-cell
                             *matCellDef="let element"
-                            class="position-relative text-left"
+                            class="position-relative  text-left"
                             matTooltipPosition="above"
                             [matTooltip]="element?.status?.toLowerCase() === 'failed' ? element?.files[0]?.error : ''"
                         >
                             <span
                                 [ngClass]="{
-                                    'text-success': element?.status?.toLowerCase() === 'completed',
+                                    'text-green': element?.status?.toLowerCase() === 'completed',
                                     'text-danger': element?.status?.toLowerCase() === 'failed'
                                 }"
                                 >{{ element?.status | uppercase }}</span
@@ -134,10 +134,10 @@
                                 "
                             ></ng-container>
                         </th>
-                        <td mat-cell *matCellDef="let element" class="position-relative text-left">
+                        <td mat-cell *matCellDef="let element" class="position-relative  text-left">
                             <span
                                 [ngClass]="{
-                                    'text-success': element?.convertedStatus?.toLowerCase() === 'completed',
+                                    'text-green': element?.convertedStatus?.toLowerCase() === 'completed',
                                     'text-danger': element?.convertedStatus?.toLowerCase() === 'failed'
                                 }"
                                 >{{ element?.convertedStatus | uppercase }}</span
@@ -181,7 +181,7 @@
                 "
                 class="d-flex justify-content-center align-items-center"
             >
-                <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+                <span class="font-size-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
                 <button mat-raised-button color="primary" (click)="gotToBranchTab()">
                     {{ localeData?.go_to_branch }}
                 </button>

@@ -242,7 +242,7 @@
 <ng-template #commonHeaderTemplateForReconciliationTable>
     <tr>
         <th class="text-left width-vendor" *ngIf="selectedGst === 'gstr1'">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.section"
                     [attr.title]="localeData?.section"
@@ -253,7 +253,7 @@
             </div>
         </th>
         <th id="4" class="text-left width-vendor">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="commonLocaleData?.app_gstin"
                     [attr.title]="commonLocaleData?.app_gstin"
@@ -265,7 +265,7 @@
         </th>
 
         <th class="text-left width-vendor">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="commonLocaleData?.app_voucher_no"
                     [attr.title]="commonLocaleData?.app_voucher_no"
@@ -277,7 +277,7 @@
         </th>
 
         <th class="text-left width-date">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.transaction_date"
                     [attr.title]="localeData?.filing?.transaction_date"
@@ -289,7 +289,7 @@
         </th>
 
         <th class="text-left width-supply">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.place_supply"
                     [attr.title]="localeData?.filing?.place_supply"
@@ -301,7 +301,7 @@
         </th>
 
         <th class="text-left width-date" *ngIf="selectedGst === GstReport.Gstr1">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.rate"
                     [attr.title]="localeData?.filing?.rate"
@@ -313,7 +313,7 @@
         </th>
 
         <th class="text-right width-amount">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.taxable_amount"
                     [attr.title]="localeData?.filing?.taxable_amount"
@@ -325,7 +325,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.igst"
                     [attr.title]="localeData?.filing?.igst"
@@ -337,7 +337,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.cgst"
                     [attr.title]="localeData?.filing?.cgst"
@@ -349,7 +349,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.sgst"
                     [attr.title]="localeData?.filing?.sgst"
@@ -361,7 +361,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.cess"
                     [attr.title]="localeData?.filing?.cess"
@@ -373,7 +373,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="commonLocaleData?.app_total_amount"
                     [attr.title]="commonLocaleData?.app_total_amount"

@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="clearfix">
+    <div class="clear-both">
         <div class="row">
             <div class="col-xl-9 col-12">
                 <form
@@ -65,9 +65,9 @@
                             >
                             </reactive-dropdown-field>
                         </div>
-                        <div class="mr-r15 mr text-primary">
+                        <div class="mr-r15 mr-05 text-primary">
                             <a
-                                class="expand-icon cursor-pointer d-flex font-16 bgWhiteMo bdr"
+                                class="expand-icon cursor-pointer d-flex font-size-16 bgWhiteMo border"
                                 (click)="emitExpand(true)"
                                 [matTooltip]="commonLocaleData?.app_expand_all"
                                 matTooltipPosition="above"
@@ -77,7 +77,7 @@
                                 </span>
                             </a>
                             <a
-                                class="expand-icon cursor-pointer d-flex font-16 bgWhiteMo bdr"
+                                class="expand-icon cursor-pointer d-flex font-size-16 bgWhiteMo border"
                                 (click)="emitExpand(false)"
                                 [matTooltip]="commonLocaleData?.app_collapse_all"
                                 matTooltipPosition="above"

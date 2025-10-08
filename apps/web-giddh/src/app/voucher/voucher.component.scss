@@ -231,10 +231,6 @@
                                 }
                             }
 
-                            .select-account-label {
-                                color: var(--color-black);
-                            }
-
                             amount-field {
                                 display: inline-block;
                             }
@@ -289,7 +285,7 @@
                         border: 1px solid var(--color-border-medium);
                     }
 
-                    &.text-success {
+                    &.text-green {
                         .attachment-add-icon {
                             border-color: var(--color-green);
                             font-size: var(--font-size-12);

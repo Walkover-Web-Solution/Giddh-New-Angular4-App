@@ -159,7 +159,7 @@
         line-height: 4.8 !important;
     }
     .grid-title-list:nth-child(even) {
-        background-color: var(--mat-primary-color-light);
+        background-color: var(--mat-text-primary-light);
         color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
@@ -250,7 +250,7 @@
 }
 */
 .selected {
-    background-color: var(--mat-primary-color-light);
+    background-color: var(--mat-text-primary-light);
 }
 .select-plan-head {
     text-align: center;
@@ -490,8 +490,8 @@
     .box {
         padding-top: 0 !important;
     }
-    /* UNUSED COMPONENT CLASS: text-gray - Auto-commented by script
-.text-gray {
+    /* UNUSED COMPONENT CLASS: text-light - Auto-commented by script
+.text-light {
         font-size: var(--font-size-16);
         font-weight: 500;
     }
@@ -710,8 +710,8 @@
 */
 
 ::ng-deep {
-    /* UNUSED COMPONENT CLASS: color-primary - Auto-commented by script
-.color-primary {
+    /* UNUSED COMPONENT CLASS: text-primary - Auto-commented by script
+.text-primary {
         color: var(--mat-primary-color) !important;
     }
 */

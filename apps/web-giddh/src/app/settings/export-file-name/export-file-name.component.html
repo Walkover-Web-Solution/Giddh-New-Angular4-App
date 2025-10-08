@@ -9,7 +9,7 @@
           <ng-container *ngFor="let module of moduleExportSettingArray.controls; let i = index, let last = last">
             <div [formGroupName]="i" class="d-flex flex-column pd-b2">
               <div
-                  class="d-flex align-items-center column-gap1"
+                  class="d-flex align-items-center column-gap-1"
               >
                   <div class="width-setting-label mb-2">
                     <span class="text-capitalize">
@@ -33,7 +33,7 @@
                         [appTributeMentionValues]="module.get('supportedVariableList')?.value || []"
                       />
                     </mat-form-field>
-                    <div class="font-12 word-break pd-t05 pd-b05 text-gray">
+                    <div class="font-size-12 word-break pd-t05 pd-b05 text-light">
                       {{ module.get('suggestedFileFormat')?.value }}
                     </div>
                   </div>

@@ -362,7 +362,7 @@
 
 .account-wrapper {
     width: 65%;
-    border-bottom: 1px solid var(--mat-primary-color-light);
+    border-bottom: 1px solid var(--mat-text-primary-light);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
@@ -376,7 +376,7 @@
     padding-bottom: 9px;
     margin-top: 3px;
     margin-left: 1px;
-    background-color: var(--mat-primary-color-light);
+    background-color: var(--mat-text-primary-light);
 }
 
 .view-only-field {
@@ -455,10 +455,10 @@
     height: 100%;
 }
 
-/* UNUSED COMPONENT CLASS: btn-light-blue - Auto-commented by script
-.btn-light-blue {
+/* UNUSED COMPONENT CLASS: btn-light-text-primary - Auto-commented by script
+.btn-light-text-primary {
     color: var(--mat-primary-color);
-    background-color: var(--mat-primary-color-light);
+    background-color: var(--mat-text-primary-light);
 }
 */
 

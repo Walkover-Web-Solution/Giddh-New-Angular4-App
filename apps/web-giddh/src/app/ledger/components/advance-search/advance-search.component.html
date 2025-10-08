@@ -10,7 +10,7 @@
     <div class="advance-search" [hidden]="isDefaultAccountsLoading || isDefaultStocksLoading || isDefaultGroupsLoading">
         <div class="dialog-header">
             <span>{{ commonLocaleData?.app_advance_search }}</span>
-            <div class="d-flex align-items-center column-gap1">
+            <div class="d-flex align-items-center column-gap-1">
                 <button 
                     mat-raised-button
                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
@@ -25,9 +25,9 @@
             </div>
         </div>
         <mat-dialog-content>
-            <div class="modal-body clearfix ledger-advance-search-field" id="export-body" *ngIf="advanceSearchForm">
+            <div class="modal-body clear-both ledger-advance-search-field" id="export-body" *ngIf="advanceSearchForm">
                 <form [formGroup]="advanceSearchForm">
-                    <div class="clearfix">
+                    <div class="clear-both">
                         <div class="row mb-2 ml-0 mr-0">
                             <div class="col-sm-5">
                                 <label>{{ commonLocaleData?.app_date_range }}</label>
@@ -135,7 +135,7 @@
                         </div>
                     </div>
     
-                    <div class="clearfix mt-2 pt-2 bd-rt mr-b1">
+                    <div class="clear-both mt-2 pt-2 border-top mr-b1">
                         <div class="row mr-0 ml-0">
                             <div class="col-md-5">
                                 <label>{{ commonLocaleData?.app_particulars }}</label>
@@ -188,7 +188,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="clearfix mr-b1">
+                    <div class="clear-both mr-b1">
                         <div class="row ml-0 mr-0">
                             <div class="col-md-5">
                                 <label>{{ commonLocaleData?.app_voucher_type }}</label>
@@ -238,7 +238,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="clearfix mt-2 pt-2 mr-b2">
+                    <div class="clear-both mt-2 pt-2 mr-b2">
                         <div class="row mr-0 ml-0">
                             <div class="col-md-5 d-flex align-items-center">
                                 <label>{{ commonLocaleData?.app_sales_person }}</label>
@@ -295,7 +295,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="clearfix mr-b1">
+                    <div class="clear-both mr-b1">
                         <div class="row ml-0 mr-0">
                             <div class="col-md-5 col-sm-3">
                                 <label>{{ commonLocaleData?.app_amount }}</label>
@@ -331,7 +331,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="clearfix mr-b1">
+                    <div class="clear-both mr-b1">
                         <div class="row mr-0 ml-0">
                             <div class="col-sm-5">
                                 <label>{{ localeData?.show_cancelled_entries }}</label>
@@ -367,8 +367,8 @@
                                 }}</mat-panel-title>
                             </mat-expansion-panel-header>
     
-                            <div class="clearfix mt-2">
-                                <div class="mr-b1 clearfix">
+                            <div class="clear-both mt-2">
+                                <div class="mr-b1 clear-both">
                                     <div class="row mr-0 ml-0">
                                         <div class="col-sm-5">
                                             <label>{{ commonLocaleData?.app_inventory }}</label>

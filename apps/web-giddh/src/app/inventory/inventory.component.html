@@ -24,7 +24,7 @@
                             [ngClass]="{ 'welcome-inventory-page': !activeView }"
                         >
                             <!-- uiView: inventory-detail -->
-                            <section class="container-fluid clearfix inventory-head">
+                            <section class="container-fluid clear-both inventory-head">
                                 <div *ngIf="shouldShowInventoryReport$ | async" class="wrap-top-inventory">
                                     <div *ngIf="isTabletScreen && activeView === 'group'" class="mr-b15">
                                         <button

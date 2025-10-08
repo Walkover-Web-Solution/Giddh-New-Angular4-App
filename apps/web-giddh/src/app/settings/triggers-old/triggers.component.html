@@ -8,7 +8,7 @@
     <div *ngIf="isCommunicationPlatformsLoading" class="mt-5">
         <giddh-page-loader></giddh-page-loader>
     </div>
-    <div class="discount box clearfix section-center position-relative overflow-visible" *ngIf="!isShowIntegrated && !communicationPlatforms?.MSG91?.isConnected && !isCommunicationPlatformsLoading">
+    <div class="discountpd-15clearfix section-center position-relative overflow-visible" *ngIf="!isShowIntegrated && !communicationPlatforms?.MSG91?.isConnected && !isCommunicationPlatformsLoading">
         <div
             class="initial-screen position-absolute text-center"
         >
@@ -41,10 +41,10 @@
             </button>
             <mat-menu #beforeMenu="matMenu" xPosition="before">
                 <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
-                    <span class="font-15 edit-buttons">{{ localeData?.communication?.edit_platform }}</span>
+                    <span class="font-size-15 edit-buttons">{{ localeData?.communication?.edit_platform }}</span>
                 </button>
                 <button mat-menu-item (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)">
-                    <span class="font-15 edit-buttons">{{ localeData?.communication?.remove_platform }}</span>
+                    <span class="font-size-15 edit-buttons">{{ localeData?.communication?.remove_platform }}</span>
                 </button>
             </mat-menu>
         </div>
@@ -76,7 +76,7 @@
         "
     >
         <button
-            class="cursor-pointer font-15 d-flex p-0 back-button mat-button msg-btn"
+            class="cursor-pointer font-size-15 d-flex p-0 back-button mat-button msg-btn"
             (click)="backToHomePage($event)"
             *ngIf="communicationPlatforms?.MSG91?.isConnected"
         >
@@ -99,7 +99,7 @@
             <button
                 mat-raised-button
                 color="primary"
-                class="font-15"
+                class="font-size-15"
                 [disabled]="isCommunicationPlatformVerificationInProcess"
                 (click)="verifyCommunicationPlatform('MSG91')"
             >
@@ -109,7 +109,7 @@
     </div>
     <ng-container *ngIf="!editCommunicationPlatform">
         <button
-            class="new-trigger font-15"
+            class="new-trigger font-size-15"
             mat-raised-button
             color="primary"
             *ngIf="!showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
@@ -231,7 +231,7 @@
         <div class="trigger-form-left-side">
             <div class="create-trigger-head">
                 <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
-                <p class="trigger-heading font-15">
+                <p class="trigger-heading font-size-15">
                     {{
                         triggerMode === "create" || triggerMode === "copy"
                             ? localeData?.communication?.create_trigger
@@ -291,7 +291,7 @@
                         (onClear)="createTrigger.condition.subConditions[0].action = ''"
                     >
                         <mat-option
-                            class="font-15"
+                            class="font-size-15"
                             *ngFor="let action of subConditionAction"
                             [selected]="action?.isChecked"
                             [value]="action"

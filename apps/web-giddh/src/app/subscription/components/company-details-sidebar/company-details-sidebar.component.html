@@ -8,10 +8,10 @@
 
     <mat-dialog-content class="dialog-body">
         <div class="aside-pane-form">
-            <p class="text-blue bold font-16 mr-b1 wb">{{ selectedCompany?.name }}</p>
-            <div class="row pd-b1 bd-rb mb-2">
+            <p class="text-primary font-weight-semibold font-size-16 mr-b1 wb">{{ selectedCompany?.name }}</p>
+            <div class="row pd-b1 border-bottom mb-2">
                 <div class="col-md-9">
-                    <ul class="company-list font-15 mb-0">
+                    <ul class="company-list font-size-15 mb-0">
                         <li>
                             {{ localeData?.subscription?.plan }}: {{ selectedCompany?.subscription?.planDetails?.name }}
                         </li>
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <p class="font-15 bold">{{ localeData?.subscription?.transactions_statement }}</p>
+            <p class="font-size-15 bold">{{ localeData?.subscription?.transactions_statement }}</p>
 
             <div class="table-subscription mt-1 xs-mb-2">
                 <div class="table-responsive">
@@ -40,7 +40,7 @@
                             <tr>
                                 <th>
                                     {{ localeData?.subscription?.consumptions }}
-                                    <span class="text-gray">{{ localeData?.subscription?.previous_current }}</span>
+                                    <span class="text-light">{{ localeData?.subscription?.previous_current }}</span>
                                 </th>
                                 <th>{{ commonLocaleData?.app_balance }}</th>
                                 <th class="text-right">{{ localeData?.subscription?.additional_charges }}</th>

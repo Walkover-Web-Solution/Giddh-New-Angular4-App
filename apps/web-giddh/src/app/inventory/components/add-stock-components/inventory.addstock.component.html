@@ -8,8 +8,8 @@
         </div>
 
         <div class="aside-body">
-            <section class="aside-pane-form clearfix margin-child-label">
-                <div class="clearfix">
+            <section class="aside-pane-form clear-both margin-child-label">
+                <div class="clear-both">
                     <div class="row">
                         <div class="form-group col-sm-5 col-12">
                             <label>Under Group</label>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
 
-                    <div class="clearfix row">
+                    <div class="clear-both row">
                         <div class="form-group col-sm-5 col-12">
                             <label>Stock Name <sup>*</sup></label>
                             <input type="text" name="name" class="form-control" formControlName="name" />
@@ -377,14 +377,14 @@
                                             (click)="addPurchaseUnitRates(i)"
                                             *ngIf="l"
                                         >
-                                            <i class="icon-plus add-row"></i>
+                                            <i class="icon-plus text-green"></i>
                                         </button>
                                         <button
                                             mat-stroked-button
                                             (click)="removePurchaseUnitRates(i)"
                                             *ngIf="!l"
                                         >
-                                            <i class="icon-cross delete"></i>
+                                            <i class="icon-cross text-red"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -454,10 +454,10 @@
                                     </div>
                                     <div class="pull-right unit-add">
                                         <button mat-stroked-button class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
-                                            <i class="icon-plus add-row"></i>
+                                            <i class="icon-plus text-green"></i>
                                         </button>
                                         <button mat-stroked-button (click)="removeSaleUnitRates(i)" *ngIf="!l">
-                                            <i class="icon-cross delete"></i>
+                                            <i class="icon-cross text-red"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -482,7 +482,7 @@
 
                 <section class="mr-t2 row mr-b3 col-12 col-sm-12" *ngIf="addStockForm?.value.isFsStock">
                     <div class="pd-l05 pd-r05">
-                        <p class="section-head bd-rb">
+                        <p class="section-head border-bottom">
                             <strong>{{ addStockForm.controls["name"]?.value }} (Made with)</strong>
                         </p>
                         <table class="no-hover width-100">
@@ -594,14 +594,14 @@
                                                 *ngIf="l"
                                                 [disabled]="disableStockButton"
                                             >
-                                                <i class="icon-plus add-row"></i>
+                                                <i class="icon-plus text-green"></i>
                                             </button>
                                             <button
                                                 mat-stroked-button
                                                 (click)="removeItemInLinkedStocks(i)"
                                                 *ngIf="!l"
                                             >
-                                                <i class="icon-cross delete"></i>
+                                                <i class="icon-cross text-red"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -657,9 +657,9 @@
         </div>
     </section>
 
-    <div class="clearfix"></div>
+    <div class="clear-both"></div>
     <!--manufactre details  -->
-    <div class="clearfix"></div>
+    <div class="clear-both"></div>
 </form>
 <!-- popup for the delete group -->
 <ng-template #deleteGroupStockTemplate>

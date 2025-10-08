@@ -38,10 +38,10 @@
                                     {{ localeData?.change_up_to_template }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            <div class="template-view d-flex column-gap1 px-3 pb-3">
+                            <div class="template-view d-flex column-gap-1 px-3 pb-3">
                                 <ng-container *ngFor="let template of sampleTemplates">
                                     <div
-                                        class="template-view-design bdr position-relative cursor-pointer"
+                                        class="template-view-design border position-relative cursor-pointer"
                                         (click)="
                                             templateMode === templateModeEnum.Update
                                                 ? showMessage()
@@ -75,7 +75,7 @@
                                     {{ localeData?.make_logo_edit }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            <div class="d-flex align-items-center column-gap15 px-3 pb-3">
+                            <div class="d-flex align-items-center column-gap-15 px-3 pb-3">
                                 <div class="float-left ml-4">
                                     <span class="logo-preview">
                                         <label
@@ -114,7 +114,7 @@
                                     <div class="pull-left mr-l1 mr-t1 choose-size">
                                         <div class="d-block">
                                             <p>{{ localeData?.size }}</p>
-                                            <div class="d-flex column-gap1">
+                                            <div class="d-flex column-gap-1">
                                                 <button
                                                     *ngFor="let size of imageSizes"
                                                     [disabled]="!customTemplate?.logoUniqueName"
@@ -224,7 +224,7 @@
                                     {{ localeData?.edit_print_setting }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            <div class="px-3 pb-3 d-flex align-items-center column-gap1 print-field">
+                            <div class="px-3 pb-3 d-flex align-items-center column-gap-1 print-field">
                                 <div class="w125">
                                     <input-field
                                         [allowDecimalDigitsOnly]="true"
@@ -338,7 +338,7 @@
                                 </mat-expansion-panel-header>
                                 <div class="template-scroll">
                                     <div>
-                                        <div class="mr-t1 px-3 d-flex flex-column row-gap5">
+                                        <div class="mr-t1 px-3 d-flex flex-column row-gap-05">
                                             <!-- company name -->
                                             <div *ngIf="sectionSettings?.header.companyName">
                                                 <div class="d-flex">
@@ -393,7 +393,7 @@
                                                             ></input-field>
                                                         </div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -683,7 +683,7 @@
                                                             ></input-field>
                                                         </div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -761,7 +761,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -837,7 +837,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -899,7 +899,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -947,7 +947,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1000,7 +1000,7 @@
                                                             ></input-field>
                                                         </div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -1018,7 +1018,7 @@
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.TallyTemplate"
                                             class="px-3 mr-t2"
                                         >
-                                            <p class="font-16 my-2">{{ localeData?.form }}</p>
+                                            <p class="font-size-16 my-2">{{ localeData?.form }}</p>
 
                                             <!-- form name tax invoice -->
                                             <div class="d-flex">
@@ -1035,7 +1035,7 @@
                                                 >
                                                 </mat-checkbox>
                                                 <div class="w-100 ml-2">
-                                                    <div class="d-flex flex-column row-gap1 mr-t1">
+                                                    <div class="d-flex flex-column row-gap-1 mr-t1">
                                                         <span>{{ localeData?.document_title }}</span>
                                                         <!-- form name invoice -->
                                                         <div
@@ -1064,7 +1064,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1097,7 +1097,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1112,8 +1112,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="px-3 d-flex flex-column row-gap5 mr-t2">
-                                            <p class="font-16 my-2">{{ localeData?.customer_details }}</p>
+                                        <div class="px-3 d-flex flex-column row-gap-05 mr-t2">
+                                            <p class="font-size-16 my-2">{{ localeData?.customer_details }}</p>
                                             <!-- customer name -->
                                             <div *ngIf="sectionSettings?.header.customerName">
                                                 <mat-checkbox
@@ -1188,10 +1188,10 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="px-3 d-flex flex-column row-gap5 mr-t2"
+                                            class="px-3 d-flex flex-column row-gap-05 mr-t2"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
-                                            <p class="font-16 my-2">{{ localeData?.billing_details }}</p>
+                                            <p class="font-size-16 my-2">{{ localeData?.billing_details }}</p>
                                             <!-- billing address -->
                                             <div *ngIf="sectionSettings?.header.billingAddress" class="mr-t2">
                                                 <div class="d-flex">
@@ -1250,7 +1250,7 @@
                                                             "
                                                         >
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1341,7 +1341,7 @@
                                                             "
                                                         >
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1357,10 +1357,10 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="px-3 pb-3 mr-t2 d-flex flex-column row-gap5"
+                                            class="px-3 pb-3 mr-t2 d-flex flex-column row-gap-05"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
-                                            <p class="font-16 my-2">{{ localeData?.shipping_details }}</p>
+                                            <p class="font-size-16 my-2">{{ localeData?.shipping_details }}</p>
                                             <!-- shipping address -->
                                             <div *ngIf="sectionSettings?.header.shippingAddress" class="mr-t2">
                                                 <div class="d-flex">
@@ -1410,7 +1410,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1489,7 +1489,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1518,7 +1518,7 @@
                                                         {{ localeData?.transport_details }}
                                                     </mat-panel-title>
                                                 </mat-expansion-panel-header>
-                                                <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap5">
+                                                <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap-05">
                                                     <!-- shipping date -->
                                                     <div *ngIf="sectionSettings?.header.shippingDate" class="mr-t1">
                                                         <div class="d-flex">
@@ -1556,7 +1556,7 @@
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-12">{{
+                                                                        <span class="light-gray font-size-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1606,7 +1606,7 @@
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-12">{{
+                                                                        <span class="light-gray font-size-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1664,7 +1664,7 @@
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-12">{{
+                                                                        <span class="light-gray font-size-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1698,7 +1698,7 @@
                                                         {{ localeData?.bulk_update_fields.custom_fields }}
                                                     </mat-panel-title>
                                                 </mat-expansion-panel-header>
-                                                <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap5">
+                                                <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap-05">
                                                     <div *ngIf="sectionSettings?.header.customField1" class="mr-t1">
                                                         <div class="d-flex">
                                                             <mat-checkbox
@@ -1735,7 +1735,7 @@
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-12">{{
+                                                                        <span class="light-gray font-size-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1787,7 +1787,7 @@
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-12">{{
+                                                                        <span class="light-gray font-size-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1839,7 +1839,7 @@
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-12">{{
+                                                                        <span class="light-gray font-size-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1874,7 +1874,7 @@
                                 <div class="template-scroll px-3">
                                     <div
                                         *ngIf="customTemplate.sections['table']"
-                                        class="d-flex flex-column row-gap5 mr-t1"
+                                        class="d-flex flex-column row-gap-05 mr-t1"
                                     >
                                         <div
                                             *ngIf="
@@ -1910,7 +1910,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -1998,7 +1998,7 @@
                                                         "
                                                     >
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2054,7 +2054,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -2099,7 +2099,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2172,7 +2172,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2232,7 +2232,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -2279,7 +2279,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2328,7 +2328,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2379,7 +2379,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -2416,7 +2416,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2487,7 +2487,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2541,7 +2541,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2585,7 +2585,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2647,7 +2647,7 @@
                                                                     templateTypeEnum.ThermalTemplate
                                                             }"
                                                         >
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2705,7 +2705,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-12">{{
+                                                            <span class="light-gray font-size-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2847,7 +2847,7 @@
                                 </mat-expansion-panel-header>
                                 <div class="template-scroll px-3">
                                     <div>
-                                        <div class="d-flex flex-column row-gap5">
+                                        <div class="d-flex flex-column row-gap-05">
                                             <ng-container
                                                 *ngIf="
                                                     customTemplate?.templateType === templateTypeEnum.GstTemplateA &&
@@ -2888,7 +2888,7 @@
                                                             </div>
                                                             <div>
                                                                 <p class="mt-1">
-                                                                    <span class="light-gray font-12">{{
+                                                                    <span class="light-gray font-size-12">{{
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
@@ -2942,7 +2942,7 @@
                                                             </div>
                                                             <div>
                                                                 <p class="mt-1">
-                                                                    <span class="light-gray font-12">{{
+                                                                    <span class="light-gray font-size-12">{{
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
@@ -3000,7 +3000,7 @@
                                                             </div>
                                                             <div>
                                                                 <p class="mt-1">
-                                                                    <span class="light-gray font-12">{{
+                                                                    <span class="light-gray font-size-12">{{
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
@@ -3073,7 +3073,7 @@
                                                             "
                                                         >
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3154,7 +3154,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3236,7 +3236,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3290,7 +3290,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3349,7 +3349,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3661,7 +3661,7 @@
                                                             "
                                                         >
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3733,7 +3733,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3806,7 +3806,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-12">{{
+                                                                <span class="light-gray font-size-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3826,7 +3826,7 @@
                                                 *ngIf="
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
-                                                class="clearfix mr-t1"
+                                                class="clear-both mr-t1"
                                             >
                                                 <mat-radio-group
                                                     [(ngModel)]="selectedSignatureType"
@@ -3835,7 +3835,7 @@
                                                     class="d-flex flex-wrap w-100"
                                                 >
                                                     <div class="d-flex w-100">
-                                                        <div class="clearfix" class="w-50">
+                                                        <div class="clear-both" class="w-50">
                                                             <div
                                                                 *ngIf="
                                                                     customTemplate?.templateType !==
@@ -3857,8 +3857,8 @@
                                                             >
                                                                 {{ localeData?.image_signature }}
                                                             </div>
-                                                            <div class="form-group mr-l3 clearfix d-flex column-gap15">
-                                                                <span class="clearfix">
+                                                            <div class="form-group mr-l3 clear-both d-flex column-gap-15">
+                                                                <span class="clear-both">
                                                                     <label
                                                                         class="upload-button text-center cursor-pointer"
                                                                         for="signatureImg-edit"
@@ -3916,7 +3916,7 @@
                                                             </div>
                                                         </div>
                                                         <div
-                                                            class="clearfix"
+                                                            class="clear-both"
                                                             class="col-lg-6 col-md-12"
                                                             *ngIf="
                                                                 customTemplate?.templateType !==
@@ -3928,7 +3928,7 @@
                                                                     {{ localeData?.slogan }}
                                                                 </mat-radio-button>
 
-                                                                <div class="form-group ml-3 clearfix">
+                                                                <div class="form-group ml-3 clear-both">
                                                                     <div>
                                                                         <div>
                                                                             <textarea

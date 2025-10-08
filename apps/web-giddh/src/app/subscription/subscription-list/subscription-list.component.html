@@ -186,7 +186,7 @@
                         <td
                             mat-cell
                             *matCellDef="let element"
-                            class="position-relative"
+                            class="position-relative "
                             [matTooltip]="element?.subscriptionId"
                             [matTooltipPosition]="'above'"  
                         >
@@ -195,17 +195,17 @@
                     </ng-container>
                     <ng-container matColumnDef="status">
                         <th mat-header-cell *matHeaderCellDef class="text-center">{{ commonLocaleData?.app_status }}</th>
-                        <td mat-cell *matCellDef="let element" class="position-relative">
-                            <span [ngClass]="{ 'text-success': element?.status?.toLowerCase() === 'active' }">{{
+                        <td mat-cell *matCellDef="let element" class="position-relative ">
+                            <span [ngClass]="{ 'text-green': element?.status?.toLowerCase() === 'active' }">{{
                                 element?.status | uppercase
                             }}</span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="renewalDate">
                         <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.renewal_date }}</th>
-                        <td mat-cell *matCellDef="let element" class="position-relative word-wrap">
+                        <td mat-cell *matCellDef="let element" class="position-relative  word-wrap">
                             <div
-                                class="renewal-date-column d-flex align-items-center justify-content-center column-gap1"
+                                class="renewal-date-column d-flex align-items-center justify-content-center column-gap-1"
                             >
                                 {{ element?.renewalDate }}
                                 <button

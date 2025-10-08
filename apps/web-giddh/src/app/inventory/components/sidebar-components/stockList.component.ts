@@ -16,7 +16,7 @@ import { takeUntil } from 'rxjs/operators';
     <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen">
       <li class="clearfix p-0" *ngFor="let item of Groups.stocks">
         <div class="in-list" [ngClass]="{'active':  (activeStockUniqueName$ | async) === item?.uniqueName}">
-          <a (click)="OpenStock(item, $event)" class="d-flex align-items-center flex-fill justify-content-between black-color">
+          <a (click)="OpenStock(item, $event)" class="d-flex align-items-center flex-fill justify-content-between text-default">
             <span class="span">{{item.name}}</span>
             <span class="d-block mr-r1" *ngIf="item.count" [hidden]="(activeStockUniqueName$ | async) === item?.uniqueName">
          {{item.count}}</span>

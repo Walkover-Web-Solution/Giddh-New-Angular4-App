@@ -131,7 +131,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     padding-left: 15px;
 }
 
-.total-col span.bd-rt {
+.total-col span.border-top {
     width: 150px;
     display: inline-flex;
     padding: 2px 0;
@@ -451,7 +451,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     .xs-table-block tr td {
         display: block;
     }
-    .ledg-head .ledger-book .left-col-new.bd-rr {
+    .ledg-head .ledger-book .left-col-new.border-right {
         border-right: 0 !important;
     }
     .remove-border-left-onmo {
@@ -466,7 +466,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
         width: 100%;
         display: inline-block;
     }
-    .entrypanel .primary-color {
+    .entrypanel .text-primary {
         padding-left: 15px;
         padding-top: 5px;
     }

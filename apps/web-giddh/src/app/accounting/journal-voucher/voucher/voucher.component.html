@@ -6,7 +6,7 @@
         <div class="bg-wrap">
             <div class="d-flex justify-content-between align-items-center w-100 pd-t2">
                 <div class="text-left mr-b1" (clickOutside)="showFromDatePicker = false">
-                    <span class="voucher-heading font-16">{{
+                    <span class="voucher-heading font-size-16">{{
                         journalVoucherForm.get("voucherType").value | uppercase
                     }}</span>
                 </div>
@@ -30,8 +30,8 @@
                     </div>
                 </div>
             </div>
-            <div class="clearfix" [style.min-height]="'calc(-262px + 100vh)'">
-                <div class="bd-rt">
+            <div class="clear-both" [style.min-height]="'calc(-262px + 100vh)'">
+                <div class="border-top">
                     <table class="table entry-table">
                         <thead>
                             <tr>
@@ -239,7 +239,7 @@
                 </div>
             </div>
 
-            <div class="clearfix row">
+            <div class="clear-both row">
                 <div class="col-xs-9 col-sm-9">
                     <div class="form-group">
                         <mat-form-field appearance="outline" class="w-50" floatLabel="always">
@@ -260,11 +260,11 @@
                     </div>
                 </div>
                 <div class="col-xs-3 col-sm-3">
-                    <div [hidden]="!showConfirmationBox" class="confirmation-box bdr text-center pd-2">
+                    <div [hidden]="!showConfirmationBox" class="confirmation-box border text-center pd-2">
                         <div>
                             <p>{{ localeData?.accept }}</p>
                             <div class="pd-t2">
-                                <div class="d-flex column-gap15 justify-content-center">
+                                <div class="d-flex column-gap-15 justify-content-center">
                                     <button
                                         mat-raised-button
                                         color="primary"
@@ -319,10 +319,10 @@
         </div>
     </form>
     <div class="sidebar-list form-control" [hidden]="!showLedgerAccountList">
-        <p class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'account'">
+        <p class="pd-1 border-bottom text-primary" *ngIf="selectedField === 'account'">
             {{ localeData?.ledger_accounts_list }}
         </p>
-        <p class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'stock'">{{ localeData?.stock_items_list }}</p>
+        <p class="pd-1 border-bottom text-primary" *ngIf="selectedField === 'stock'">{{ localeData?.stock_items_list }}</p>
         <div class="h-100">
             <ul *ngIf="inputForList?.length === 0" class="grp-list group-list-no-found users-last-list">
                 <li>
@@ -367,8 +367,8 @@
         </div>
     </div>
     <div class="sidebar-list form-control" [hidden]="!showDiscountSidebar">
-        <div class="bd-rb d-flex justify-content-between align-items-center pd">
-            <h3 class="primary-color">{{ localeData?.discount_list }}</h3>
+        <div class="border-bottom d-flex justify-content-between align-items-center pd">
+            <h3 class="text-primary">{{ localeData?.discount_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeDiscountSidebar()"></i>
         </div>
         <div [style.width]="width" class="h-100">
@@ -422,8 +422,8 @@
         </div>
     </div>
     <div class="sidebar-list form-control" [hidden]="!showTaxSidebar">
-        <div class="bd-rb d-flex justify-content-between align-items-center pd">
-            <h3 class="primary-color">{{ localeData?.tax_list }}</h3>
+        <div class="border-bottom d-flex justify-content-between align-items-center pd">
+            <h3 class="text-primary">{{ localeData?.tax_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeTaxSidebar()"></i>
         </div>
         <div [style.width]="width" class="h-100">
@@ -510,7 +510,7 @@
             [formGroup]="chequeDetailForm"
             class="new-account-form"
         >
-            <div class="clearfix mr-t1">
+            <div class="clear-both mr-t1">
                 <input-field
                     [autocomplete]="'off'"
                     [name]="'account1'"
@@ -525,7 +525,7 @@
                 >
                 </input-field>
             </div>
-            <div class="clearfix mr-t1 check-clearance-date">
+            <div class="clear-both mr-t1 check-clearance-date">
                 <giddh-datepicker
                     [name]="'entryDate'"
                     [placeholder]="giddhDateFormat"
@@ -540,7 +540,7 @@
                 </giddh-datepicker>
             </div>
         </form>
-        <div class="d-flex float-end column-gap15 mr-t1">
+        <div class="d-flex float-end column-gap-15 mr-t1">
             <button
                 mat-raised-button
                 color="primary"

@@ -15,7 +15,7 @@
                 [selectedIndex]="selectedStep"
                 (selectionChange)="onSelectedTab($event)"
                 [disableRipple]="firstStepForm.invalid"
-                class="bg-transparent text-black"
+                class="bg-transparent text-default"
             >
                 <mat-step [stepControl]="firstStepForm">
                     <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
@@ -61,7 +61,7 @@
                                             >
                                                 <ng-container *ngFor="let country of countrySource">
                                                     <mat-option [value]="country">
-                                                        <div class="d-flex w-100 align-items-center column-gap1">
+                                                        <div class="d-flex w-100 align-items-center column-gap-1">
                                                             <img
                                                                 [src]="
                                                                     getFlagUrl(
@@ -82,7 +82,7 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="d-flex column-gap15 align-items-center ml-auto"
+                                        class="d-flex column-gap-15 align-items-center ml-auto"
                                         *ngIf="inputData?.length"
                                     >
                                         <div class="custom-tab w-100">
@@ -115,18 +115,18 @@
                                             </div>
                                             <ng-container *ngFor="let plan of inputData">
                                                 <div
-                                                    class="grid-title-list list-grid-title font-15"
+                                                    class="grid-title-list list-grid-title font-size-15"
                                                     [ngClass]="{
                                                         'active-plan': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
                                                     <div class="plan-content d-flex flex-column h-100">
                                                         <p
-                                                            class="font-20 plan-title d-flex align-items-center justify-content-center"
+                                                            class="font-size-20 plan-title d-flex align-items-center justify-content-center"
                                                         >
                                                             {{ plan?.name }}
                                                         </p>
-                                                        <p *ngIf="plan?.description" class="font-15 feature-txt">
+                                                        <p *ngIf="plan?.description" class="font-size-15 feature-txt">
                                                             <span>
                                                                 {{ plan?.description }}
                                                             </span>
@@ -162,7 +162,7 @@
                                                                         plan?.yearlyAmountAfterDiscount !== 0
                                                                     "
                                                                 >
-                                                                    <span class="font-24 strong">
+                                                                    <span class="font-size-24 strong">
                                                                         <amount-field
                                                                             [useGiddhCurrencyPipe]="false"
                                                                             [spaceAfterCurrencySymbol]="false"
@@ -172,7 +172,7 @@
                                                                         >
                                                                         </amount-field>
                                                                     </span>
-                                                                    <span class="font-14"
+                                                                    <span class="font-size-14"
                                                                         >/{{
                                                                             commonLocaleData?.app_duration?.year
                                                                         }}</span
@@ -184,7 +184,7 @@
                                                                     plan?.yearlyAmount === 0 && !plan?.yearlyDiscount
                                                                 "
                                                             >
-                                                                <span class="font-24 strong">{{
+                                                                <span class="font-size-24 strong">{{
                                                                     localeData?.free
                                                                 }}</span>
                                                             </ng-container>
@@ -272,7 +272,7 @@
                                                                         plan?.monthlyAmountAfterDiscount !== 0
                                                                     "
                                                                 >
-                                                                    <span class="font-24 strong">
+                                                                    <span class="font-size-24 strong">
                                                                         <amount-field
                                                                             [useGiddhCurrencyPipe]="false"
                                                                             [spaceAfterCurrencySymbol]="false"
@@ -282,7 +282,7 @@
                                                                         >
                                                                         </amount-field>
                                                                     </span>
-                                                                    <span class="font-14"
+                                                                    <span class="font-size-14"
                                                                         >/{{
                                                                             commonLocaleData?.app_duration?.month
                                                                         }}</span
@@ -294,7 +294,7 @@
                                                                     plan?.monthlyAmount === 0 && !plan?.monthlyDiscount
                                                                 "
                                                             >
-                                                                <span class="font-24 strong">{{
+                                                                <span class="font-size-24 strong">{{
                                                                     localeData?.free
                                                                 }}</span>
                                                             </ng-container>
@@ -362,7 +362,7 @@
                                                             }"
                                                             (click)="selectPlan(plan)"
                                                         >
-                                                            <span class="font-14">
+                                                            <span class="font-size-14">
                                                                 {{ localeData?.select_plan }}
                                                             </span>
                                                         </button>
@@ -382,7 +382,7 @@
                                                             }"
                                                             (click)="selectPlan(plan)"
                                                         >
-                                                            <span class="font-14">
+                                                            <span class="font-size-14">
                                                                 {{ localeData?.select_plan }}
                                                             </span>
                                                         </button>
@@ -396,7 +396,7 @@
                                                 <span class="inner-name inner-name-bold mat-table-sticky">
                                                     <span>{{ localeData?.invoice_count }} </span>
                                                     <i
-                                                        class="icon-info cp"
+                                                        class="icon-info cursor-pointer"
                                                         [matTooltip]="commonLocaleData?.app_invoices"
                                                         [matTooltipPosition]="'above'"
                                                     ></i>
@@ -404,7 +404,7 @@
                                             </div>
                                             <ng-container *ngFor="let plan of inputData">
                                                 <div
-                                                    class="grid-title-list font-15 plan-row-height"
+                                                    class="grid-title-list font-size-15 plan-row-height"
                                                     [ngClass]="{
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
@@ -429,7 +429,7 @@
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
                                                     <span>{{ localeData?.bill_count }} </span>
-                                                    <i class="icon-info cp"></i>
+                                                    <i class="icon-info cursor-pointer"></i>
                                                 </span>
                                             </div>
                                             <ng-container *ngFor="let plan of inputData">
@@ -667,7 +667,7 @@
                         <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.select_billing }}</ng-template>
-                                <p class="font-16 strong d-flex align-items-center mb-3 plan-summary-heading">
+                                <p class="font-size-16 strong d-flex align-items-center mb-3 plan-summary-heading">
                                     {{ localeData?.create_billing }}
                                 </p>
                                 <mat-card class="outline-card change-billing-wrap">
@@ -730,7 +730,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <!-- Mobile Number -->
-                                                <div id="init-contact-wrapper" class="position-relative w-100">
+                                                <div id="init-contact-wrapper" class="position-relative  w-100">
                                                     <input
                                                         type="tel"
                                                         #initContact
@@ -869,24 +869,24 @@
                         <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.review_pay }}</ng-template>
-                                <p class="font-16 mb-3 strong d-flex align-items-center plan-summary-heading">
+                                <p class="font-size-16 mb-3 strong d-flex align-items-center plan-summary-heading">
                                     {{ localeData?.payment_details }}
                                 </p>
                                 <div class="new-plan">
                                     <mat-card class="outline-card">
                                         <mat-card-content>
-                                            <p class="font-16 strong mb-3">{{ localeData?.bill_to }}</p>
+                                            <p class="font-size-16 strong mb-3">{{ localeData?.bill_to }}</p>
                                             <div class="payment-header pb-3">
-                                                <span class="light-gray font-14 strong d-block">{{
+                                                <span class="light-gray font-size-14 strong d-block">{{
                                                     secondStepForm.get("billingName")?.value
                                                 }}</span>
-                                                <p class="light-gray font-14">
+                                                <p class="light-gray font-size-14">
                                                     {{ secondStepForm.get("email")?.value }}
                                                 </p>
-                                                <p class="light-gray font-14">
+                                                <p class="light-gray font-size-14">
                                                     {{ secondStepForm.get("mobileNumber")?.value }}
                                                 </p>
-                                                <p class="light-gray font-14">
+                                                <p class="light-gray font-size-14">
                                                     {{ secondStepForm.get("address")?.value }}
                                                 </p>
                                             </div>
@@ -956,7 +956,7 @@
     <!-- plan-summary -->
     <ng-template #planSummary>
         <div class="summary-wrapper">
-            <p class="font-16 mb-3 strong d-flex align-items-center plan-summary-heading">
+            <p class="font-size-16 mb-3 strong d-flex align-items-center plan-summary-heading">
                 {{ localeData?.plan_summary }}
             </p>
             <mat-card class="outline-card">
@@ -1056,7 +1056,7 @@
                                 {{ localeData?.including_tax }}
                             </p>
                         </div>
-                        <div class="position-relative mt-3" *ngIf="firstStepForm.get('planUniqueName').value">
+                        <div class="position-relative  mt-3" *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="w-100">
                                 <div class="d-flex align-items-center justify-content-between custom-mat-form-field">
                                     <mat-form-field appearance="outline">

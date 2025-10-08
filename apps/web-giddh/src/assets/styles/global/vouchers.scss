@@ -1,10 +1,8 @@
 .vouchers {
-    background-color: var(--color-light-gray);
-
     .vouchers-address-form {
         input,
         textarea {
-            background: var(--color-transparent);
+            // background: var(--color-transparent);
 
             // &::placeholder {
             //     color: var(--color-medium-gray) !important;
@@ -33,16 +31,16 @@
         // }
     }
 
-    input,
-    textarea,
-    mat-select {
-        &.form-control {
-            &:hover,
-            &:focus {
-                border-color: var(--color-dark-gray) !important;
-            }
-        }
-    }
+    // input,
+    // textarea,
+    // mat-select {
+    //     &.form-control {
+    //         &:hover,
+    //         &:focus {
+    //             border-color: var(--color-dark-gray) !important;
+    //         }
+    //     }
+    // }
 
     .vouchers-large-container {
         .change-currency {
@@ -116,10 +114,6 @@
         }
     }
 }
-
-// .text-success {
-//     color: var(--color-green);
-// }
 
 // template scroll
 .template-scroll {

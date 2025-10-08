@@ -157,7 +157,7 @@
 
     ul {
         padding: 0;
-        list-style: none;
+        // list-style: none;
         font-size: var(--font-size-15);
         font-weight: var(--font-weight-semibold);
 
@@ -192,7 +192,7 @@
             }
 
             &:hover {
-                background-color: var(--mat-primary-color-light);
+                background-color: var(--mat-text-primary-light);
             }
         }
     }

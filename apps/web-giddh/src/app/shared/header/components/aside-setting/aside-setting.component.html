@@ -8,7 +8,7 @@
     >
         <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
             <div class="aside-help-header relative" *ngIf="showSettingHeading">
-                <p class="font-15">{{ localeData?.page_heading }}</p>
+                <p class="font-size-15">{{ localeData?.page_heading }}</p>
                 <div hidden class="cursor-pointer" (click)="closeAsidePane($event)">
                     <i class="icon-cross"></i>
                 </div>
@@ -51,7 +51,7 @@
                                             <a
                                                 href="javascript:;"
                                                 aria-label="icon"
-                                                class="d-block clearfix"
+                                                class="d-block clear-both"
                                                 [routerLink]="tab?.link"
                                             >
                                                 <span [innerHTML]="tab?.icon"></span>
@@ -66,7 +66,7 @@
                                     <a
                                         href="javascript:;"
                                         aria-label="icon"
-                                        class="d-block clearfix"
+                                        class="d-block clear-both"
                                         [matMenuTriggerFor]="tagsMenu"
                                         #tagsMenuTrigger="matMenuTrigger"
                                         (menuOpened)="toggleTagMenu(true)"

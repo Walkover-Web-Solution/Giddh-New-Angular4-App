@@ -7,7 +7,7 @@
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid" *ngIf="monthOptions?.length > 0">
-        <div class="top-bar clearfix">
+        <div class="top-bar clear-both">
             <div class="form-inline">
                 <form #carried="ngForm" (ngSubmit)="getSalesBifurcation()">
                     <div class="pull-left d-flex align-center select-fields pd-b2">
@@ -202,7 +202,7 @@
                         <p class="p-heading">{{ bifurcationClients }}</p>
                     </div>
                     <div class="div-row mr-t3 mr-b3">
-                        <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
+                        <div class="div-cell font-size-15 strong">{{ localeData?.from_new_clients }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
@@ -278,7 +278,7 @@
                         </div>
                     </div>
                     <div class="div-row mr-t3 mr-b3">
-                        <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
+                        <div class="div-cell font-size-15 strong">{{ localeData?.from_old_clients }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
@@ -870,7 +870,7 @@
                                 : 'new-vs-old-invoices-data-new-sales-month'
                         "
                     >
-                        <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
+                        <div class="div-cell font-size-15 strong">{{ localeData?.from_new_clients }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="
@@ -946,7 +946,7 @@
                         </div>
                     </div>
                     <div class="div-row mr-t3 mr-b3" data-reference="quarter-old-clients">
-                        <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
+                        <div class="div-cell font-size-15 strong">{{ localeData?.from_old_clients }}</div>
                         <div
                             class="div-cell align-end"
                             [attr.data-reference]="

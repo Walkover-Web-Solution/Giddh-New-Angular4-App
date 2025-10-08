@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-lg-9 col-md-12">
                     <div class="left-column">
-                        <div class="panel-heading pl-0 pt-0 clearfix">
+                        <div class="panel-heading pl-0 pt-0 clear-both">
                             <div class="panel-heading-inner-content w-100">
                                 <div class="cursor-pointer">
                                     <span [matMenuTriggerFor]="revenueChartMenu" class="menu-trigger-btn" role="button" aria-label="income-select">
@@ -217,7 +217,7 @@
         </div>
         <mat-card class="mr-t15">
             <mat-card-content>
-                <div class="clearfix top-dates">
+                <div class="clear-both top-dates">
                     <div class="pull-left about-date">
                         <div class="active-date">
                             <span></span>{{ getPreviousWeekStartEndDate[0] | date }} -
@@ -252,7 +252,7 @@
                         <canvas id="revenueChartLargeCanvas" width="100%" height="300px" [hidden]="!chart"></canvas>
                     </div>
                 </div>
-                <div class="total-sale-data clearfix">
+                <div class="total-sale-data clear-both">
                     <div class="row">
                         <div class="col-sm-3 single-sale-data">
                             <div>

@@ -25,7 +25,7 @@
             .warehouse-list-wrapper {
                 .warehouse-list {
                     &:nth-child(odd) {
-                        background-color: var(--mat-primary-color-light);
+                        background-color: var(--mat-text-primary-light);
                     }
                 }
             }

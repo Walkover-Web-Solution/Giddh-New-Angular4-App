@@ -49,7 +49,7 @@
                                 <div class="row mr-b2 mt-1" *ngIf="activeAccountSharedWith?.length > 0">
                                     <div class="pd-l15 pd-r1 w-75">
                                         <ul class="shared-list">
-                                            <li *ngFor="let val of activeAccountSharedWith" class="clearfix">
+                                            <li *ngFor="let val of activeAccountSharedWith" class="clear-both">
                                                 <span class="pull-left">
                                                     <small class="user-email">{{ val?.emailId }}</small>
                                                 </span>
@@ -68,11 +68,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-wrap clearfix">
-                            <div class="clearfix">
+                        <div class="modal-wrap clear-both">
+                            <div class="clear-both">
                                 <span>{{ commonLocaleData?.app_or | titlecase }}</span>
                                 <a
-                                    class="btn-link share-link mr-b05 font-15"
+                                    class="btn-link share-link mr-b05 font-size-15"
                                     href="javascript:;"
                                     (click)="getMagicLink()"
                                 >

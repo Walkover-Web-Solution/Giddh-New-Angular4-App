@@ -117,7 +117,7 @@
             .warehouse-list-wrapper {
                 .warehouse-list {
                     &:nth-child(odd) {
-                        background-color: var(--mat-primary-color-light);
+                        background-color: var(--mat-text-primary-light);
                     }
                 }
             }
@@ -125,7 +125,7 @@
                 .warehouse-expanded-box-wrapper {
                     .warehouse-expanded-box {
                         &:nth-child(odd) {
-                            background-color: var(--mat-primary-color-light) !important;
+                            background-color: var(--mat-text-primary-light) !important;
                         }
                     }
                 }
@@ -454,7 +454,7 @@
                             padding: 0px 5px;
                             border-radius: var(--mat-border-radius-4);
                             margin-right: 55px;
-                            background-color: var(--mat-primary-color-light);
+                            background-color: var(--mat-text-primary-light);
                             position: relative;
                             right: 5px;
                             border: 0;
@@ -464,7 +464,7 @@
                             margin-right: 41px;
                             padding: 0px 5px;
                             border-radius: var(--mat-border-radius-4);
-                            background-color: var(--mat-primary-color-light);
+                            background-color: var(--mat-text-primary-light);
                             position: relative;
                             right: 4px;
                             border: 0;
@@ -483,7 +483,7 @@
                             height: 100%;
                             width: 392px;
                             &:nth-child(odd) {
-                                background-color: var(--mat-primary-color-light);
+                                background-color: var(--mat-text-primary-light);
                             }
                         }
                         .editable-input {

@@ -119,7 +119,7 @@
                             </button>
                             <mat-menu #menu="matMenu" class="icon-circle">
                                 <div (click)="$event.stopPropagation()">
-                                    <span class="create-txt font-16 d-block">
+                                    <span class="create-txt font-size-16 d-block">
                                         {{ commonLocaleData?.app_create_new }}
                                     </span>
                                     <div class="menu-dropdown-wrapper">
@@ -146,7 +146,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <ul class="d-flex column-gap2">
+                                            <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -206,7 +206,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <ul class="d-flex column-gap2">
+                                            <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -261,7 +261,7 @@
                                                 </span>
                                                 <span> {{ localeData?.branch_transfer }} </span>
                                             </div>
-                                            <ul class="d-flex column-gap2">
+                                            <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -291,7 +291,7 @@
                                                 </span>
                                                 <span> {{ localeData?.stock }} </span>
                                             </div>
-                                            <ul class="d-flex column-gap2">
+                                            <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -451,7 +451,7 @@
                             </button>
                         </li>
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
-                            <button mat-button class="p-1 font-15" (click)="dateSelectedCallback()">
+                            <button mat-button class="p-1 font-size-15" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
@@ -544,9 +544,9 @@
                         <mat-menu #profileMenu="matMenu">
                             <div class="user-profile-menu">
                                 <div class="user-info p-3" (click)="$event.stopPropagation()">
-                                    <span class="font-16">{{ userFullName }}</span>
+                                    <span class="font-size-16">{{ userFullName }}</span>
                                     <p
-                                        class="font-14 text-gray"
+                                        class="font-size-14 text-light"
                                         [matTooltip]="userEmail?.length > 26 ? userEmail : null"
                                         matTooltipPosition="left"
                                     >
@@ -556,7 +556,7 @@
                                 <mat-divider></mat-divider>
                                 <button
                                     mat-menu-item
-                                    class="font-16"
+                                    class="font-size-16"
                                     [routerLink]="['/pages/user-details/mobile-number']"
                                 >
                                     {{ commonLocaleData?.app_user_settings }}
@@ -564,7 +564,7 @@
                                 <mat-divider></mat-divider>
                                 <button
                                     mat-menu-item
-                                    class="font-16"
+                                    class="font-size-16"
                                     [routerLink]="['/pages/user-details/subscription']"
                                 >
                                     {{ commonLocaleData?.app_subscription }}
@@ -574,7 +574,7 @@
                                 <button mat-menu-item (click)="logout()">
                                     <div class="d-flex align-items-center">
                                         <i class="icon-logout mr-2"></i>
-                                        <span class="font-14">{{ localeData?.logout }}</span>
+                                        <span class="font-size-14">{{ localeData?.logout }}</span>
                                     </div>
                                 </button>
                             </div>
@@ -598,7 +598,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionEndNote() }}
+                <i class="icon-traingle-info font-size-15 mr-r1"></i> {{ getSubscriptionEndNote() }}
                 <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="go to plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
@@ -615,7 +615,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionEndedNote() }}
+                <i class="icon-traingle-info font-size-15 mr-r1"></i> {{ getSubscriptionEndedNote() }}
                 <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="text-primary cursor-pointer" aria-label="get select " (click)="goToSelectPlan()">
                     {{ localeData?.click_here }}
                 </a>
@@ -632,7 +632,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionTransactionEndedNote() }}
+                <i class="icon-traingle-info font-size-15 mr-r1"></i> {{ getSubscriptionTransactionEndedNote() }}
                 <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="get plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
@@ -648,7 +648,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i>
+                <i class="icon-traingle-info font-size-15 mr-r1"></i>
                 <span *ngIf="obligation.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining)"></span>
                 <span *ngIf="obligation.daysRemaining === 0 && !obligation.isExpired" [innerHTML]="localeData?.obligation_today_expired"></span>
                 <span *ngIf="obligation.isExpired" [innerHTML]="localeData?.obligation_expired_passed"></span>
@@ -664,7 +664,7 @@
     >
         <div class="white-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i>
+                <i class="icon-traingle-info font-size-15 mr-r1"></i>
                 <span *ngIf="liabilities.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining)"></span>
                 <span *ngIf="liabilities.daysRemaining === 0 && !liabilities.isExpired" [innerHTML]="localeData?.liabilities_today_expired"></span>
                 <span *ngIf="liabilities.isExpired" [innerHTML]="localeData?.liabilities_expired_passed"></span>
@@ -680,10 +680,10 @@
             </button>
         </div>
         <mat-dialog-content class="dialog-body">
-            <div class="clearfix mb-3">
+            <div class="clear-both mb-3">
                 <p [innerHTML]="getPlanExpiredNote()"></p>
             </div>
-            <div class="clearfix">
+            <div class="clear-both">
                 <ul class="list-inline upgrade-plan">
                     <li>
                         <button mat-raised-button color="primary" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
@@ -718,11 +718,11 @@
             </button>
         </div>
         <mat-dialog-content class="dialog-body">
-            <div class="clearfix mb-3">
+            <div class="clear-both mb-3">
                 <p class="mb-2" [innerHTML]="getTransactionLimitCrossedNote()"></p>
                 <p>{{ localeData?.continue_giddh_note }}</p>
             </div>
-            <div class="clearfix">
+            <div class="clear-both">
                 <ul class="list-inline">
                     <li>
                         <button mat-raised-button color="primary" (click)="goToSelectPlan()">

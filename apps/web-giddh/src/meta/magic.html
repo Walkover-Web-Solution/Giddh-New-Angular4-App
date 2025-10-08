@@ -12,7 +12,7 @@
     </div>
     <div id="app">
         <section class="light-gray-bg" id="magicLink">
-            <section class="blue-bg">
+            <section class="text-primary-bg">
                 <div class="container-fluid text-white text-center head-block">
                     <div class="vertical-center">{{ledgerData.companyName}}</div>
                 </div>
@@ -51,26 +51,26 @@
                 <div id="mob-cont" class="container">
                     <div class="row white-bg pd-b1 pd-t1">
                         <div class="col-4">
-                            <div class="font-12 text-color">Opening</div>
+                            <div class="font-size-12 text-color">Opening</div>
                             <div v-if="legderBalanceData && legderBalanceData.forwardedBalance">
                                 <!-- | number:'1.2-2' -->
-                                <span class="font-16 text-color">{{legderBalanceData.forwardedBalance.amount | currency
+                                <span class="font-size-16 text-color">{{legderBalanceData.forwardedBalance.amount | currency
                                     }}</span>
-                                <span class="font-15 text-color">{{legderBalanceData.forwardedBalance.type === 'DEBIT' ?
+                                <span class="font-size-15 text-color">{{legderBalanceData.forwardedBalance.type === 'DEBIT' ?
                                     'Dr' : 'Cr' }}</span>
                             </div>
                         </div>
-                        <div class="col-4 font-12 pd-t15">
+                        <div class="col-4 font-size-12 pd-t15">
                         </div>
                         <div class="col-4 text-right">
-                            <div class="font-12 text-color">
+                            <div class="font-size-12 text-color">
                                 Closing
                             </div>
                             <div v-if="legderBalanceData && legderBalanceData.closingBalance">
-                                <span class="font-15 text-color">{{ legderBalanceData.closingBalance.type === 'DEBIT' ?
+                                <span class="font-size-15 text-color">{{ legderBalanceData.closingBalance.type === 'DEBIT' ?
                                     'Dr' : 'Cr' }}</span>
                                 <!-- | number:'1.2-2' -->
-                                <span class="font-16 text-color">{{legderBalanceData.closingBalance.amount | currency
+                                <span class="font-size-16 text-color">{{legderBalanceData.closingBalance.amount | currency
                                     }}</span>
                             </div>
                         </div>
@@ -100,28 +100,28 @@
                                     id="debit" v-if="!selectedTab || selectedTab == 'debit'">
                                     <div class="row">
                                         <div class="col-12 pl-0 pr-0">
-                                            <table class="table table-bordered white-bg">
+                                            <table class="table border white-bg">
                                                 <thead>
                                                     <tr class="light-gray-bg">
                                                         <th colspan="3">
                                                             <span class="account-name">{{ledgerData.account.name}} is
                                                             </span>
                                                             <span class="rec">receiving</span>
-                                                            <span class="dr-cr-category pull-right text-gray">Dr</span>
+                                                            <span class="dr-cr-category pull-right text-light">Dr</span>
                                                         </th>
                                                     </tr>
-                                                    <tr class="light-gray-bg row mr-0 ml-0 bd-rl">
+                                                    <tr class="light-gray-bg row mr-0 ml-0 border-left">
                                                         <th class="col-3">Date</th>
-                                                        <th class="col-6 bd-rl">Particular</th>
-                                                        <th class="text-right col-3 bd-rl">Amount</th>
+                                                        <th class="col-6 border-left">Particular</th>
+                                                        <th class="text-right col-3 border-left">Amount</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="bd-rl">
-                                                    <tr class="ledger-row bd-rb row mr-0 ml-0"
+                                                <tbody class="border-left">
+                                                    <tr class="ledger-row border-bottom row mr-0 ml-0"
                                                         v-if="legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'DEBIT'">
                                                         <td class="col-3"></td>
-                                                        <td class="col-6 bd-rl">To Balance B/F</td>
-                                                        <td class="col-3 bd-rl text-right">
+                                                        <td class="col-6 border-left">To Balance B/F</td>
+                                                        <td class="col-3 border-left text-right">
                                                             <!-- | number: '1.2-2'  -->
                                                             <span
                                                                 v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'"
@@ -132,7 +132,7 @@
                                                                 >0</span>
                                                         </td>
                                                     </tr>
-                                                    <tr class="ledger-row bd-rb"
+                                                    <tr class="ledger-row border-bottom"
                                                         v-if="(legderBalanceData.forwardedBalance.type !== 'DEBIT') || (legderBalanceData.forwardedBalance.amount == 0)">
                                                         <td colspan="3" >&nbsp;</td>
                                                     </tr>
@@ -150,15 +150,15 @@
                                                                     <template
                                                                         v-for="txn in filterBy(ledger, searchText)">
                                                                         <tr
-                                                                            class="text-left magic-table bd-rb row mr-0 ml-0">
+                                                                            class="text-left magic-table border-bottom row mr-0 ml-0">
                                                                             <td class="col-3">{{ledger.entryDate}}</td>
-                                                                            <td class="col-6 bd-rl">To {{txn.inventory
+                                                                            <td class="col-6 border-left">To {{txn.inventory
                                                                                 && txn.inventory.stock ?
                                                                                 (txn.particular.name + ' (' +
                                                                                 txn.inventory.stock.name + ')'):
                                                                                 txn.particular.name}}
                                                                             </td>
-                                                                            <td class="col-3 bd-rl position-relative"
+                                                                            <td class="col-3 border-left position-relative"
                                                                                 v-bind:class="{'pd-r25': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                                 align="right">
                                                                                 {{txn.amount}}
@@ -220,28 +220,28 @@
                                     id="credit" v-if="!selectedTab || selectedTab == 'credit'">
                                     <div class="row">
                                         <div class="col-12 pl-0 pr-0">
-                                            <table class="table table-bordered white-bg">
+                                            <table class="table border white-bg">
                                                 <thead>
                                                     <tr class="light-gray-bg border-none">
                                                         <th colspan="3">
                                                             <span class="account-name">{{ledgerData.account.name}} is
                                                             </span>
                                                             <span class="rec">giving</span>
-                                                            <span class="dr-cr-category pull-right text-gray">Cr</span>
+                                                            <span class="dr-cr-category pull-right text-light">Cr</span>
                                                         </th>
                                                     </tr>
                                                     <tr class="light-gray-bg row mr-0 ml-0">
                                                         <th class="col-3">Date</th>
-                                                        <th class="col-6 bd-rl">Particular</th>
-                                                        <th class="text-right col-3 bd-rl bd-rr">Amount</th>
+                                                        <th class="col-6 border-left">Particular</th>
+                                                        <th class="text-right col-3 border-left border-right">Amount</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="bd-rl">
-                                                    <tr class="ledger-row row mr-0 ml-0 bd-rb"
+                                                <tbody class="border-left">
+                                                    <tr class="ledger-row row mr-0 ml-0 border-bottom"
                                                         v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                         <td class="col-3"></td>
-                                                        <td class="col-6 bd-rl">By Balance B/F</td>
-                                                        <td class="col-3 text-right bd-rl bd-rr">
+                                                        <td class="col-6 border-left">By Balance B/F</td>
+                                                        <td class="col-3 text-right border-left border-right">
                                                             <span
                                                                 v-if="legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                                 <!-- | number: '1.2-2' -->
@@ -252,9 +252,9 @@
                                                                 v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'">0</span>
                                                         </td>
                                                     </tr>
-                                                    <tr class="ledger-row bd-rb"
+                                                    <tr class="ledger-row border-bottom"
                                                         v-if="legderBalanceData.forwardedBalance.type !== 'CREDIT' || (legderBalanceData.forwardedBalance.amount == 0)">
-                                                        <td class="bd-rr" colspan="3">&nbsp;</td>
+                                                        <td class="border-right" colspan="3">&nbsp;</td>
                                                     </tr>
                                                     <tr v-for="ledger in ledgerData.ledgersTransactions.creditTransactions"
                                                         v-tooltip="'Total: '+ledger.amount+' '+ledger.type"
@@ -267,15 +267,15 @@
                                                                     <template
                                                                         v-for="txn in filterBy(ledger, searchText)">
                                                                         <tr
-                                                                            class="text-left magic-table bd-rb row mr-0 ml-0">
+                                                                            class="text-left magic-table border-bottom row mr-0 ml-0">
                                                                             <td class="col-3">{{ledger.entryDate}}</td>
-                                                                            <td class="col-6 bd-rl">By {{txn.inventory
+                                                                            <td class="col-6 border-left">By {{txn.inventory
                                                                                 && txn.inventory.stock ?
                                                                                 (txn.particular.name + ' (' +
                                                                                 txn.inventory.stock.name + ')'):
                                                                                 txn.particular.name}}
                                                                             </td>
-                                                                            <td class="col-3 bd-rl position-relative bd-rr"
+                                                                            <td class="col-3 border-left position-relative border-right"
                                                                                 v-bind:class="{'pd-r25': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                                 align="right">
                                                                                 {{txn.amount}}
@@ -319,7 +319,7 @@
                                                                 'Cr' : 'Dr' : ''}}
                                                                 <!-- | number: '1.2-2' -->
                                                                 <span
-                                                                    class="primary-color">{{legderBalanceData.closingBalance.amount
+                                                                    class="text-primary">{{legderBalanceData.closingBalance.amount
                                                                     | currency }}
                                                                 </span>
                                                             </span>
@@ -359,7 +359,7 @@
                                                 <td colspan="12" class="col-12 text-right h32 pd-r1">
                                                     <!-- | number: '1.2-2'  -->
                                                     <span
-                                                        class="bd-rt currency-width d-block float-right pd-t1 pd-b1">{{
+                                                        class="border-top currency-width d-block float-right pd-t1 pd-b1">{{
                                                         reckoningDebitTotal | currency }}</span>
                                                 </td>
                                             </tr>
@@ -375,7 +375,7 @@
                                                         By Balance C/F:
                                                         <!-- | number: '1.2-2' -->
                                                         <span
-                                                            class="primary-color">{{legderBalanceData.closingBalance.amount
+                                                            class="text-primary">{{legderBalanceData.closingBalance.amount
                                                             | currency }}
                                                         </span>
                                                     </span>
@@ -385,7 +385,7 @@
                                                 <td colspan="12" class="col-12 text-right h32 pd-r1">
                                                     <!-- | number: '1.2-2'  -->
                                                     <span
-                                                        class="bd-rt currency-width d-block float-right pd-t1 pd-b1">{{reckoningCreditTotal
+                                                        class="border-top currency-width d-block float-right pd-t1 pd-b1">{{reckoningCreditTotal
                                                         | currency }}</span>
                                                 </td>
                                             </tr>
@@ -405,7 +405,7 @@
                     <div class="row">
                         <div class="col-3">
                             <h1>Total Transactions
-                                <span class="primary-color">{{ledgerData.ledgersTransactions.totalItems}}</span>
+                                <span class="text-primary">{{ledgerData.ledgersTransactions.totalItems}}</span>
                             </h1>
                             <span class="mr-t1 mr-r2">Dr
                                 {{ledgerData.ledgersTransactions.debitTransactionsCount}}</span>
@@ -420,16 +420,16 @@
                                 {{ legderBalanceData.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
                         </div>
                         <div class="col-3">
-                            <h1 class="primary-color">Net Total
+                            <h1 class="text-primary">Net Total
                                 <span v-if="legderBalanceData.creditTotal > legderBalanceData.debitTotal">Credit</span>
                                 <span v-if="legderBalanceData.creditTotal < legderBalanceData.debitTotal">Debit</span>
                             </h1>
-                            <h3 class=" primary-color"
+                            <h3 class=" text-primary"
                                 v-if="legderBalanceData.creditTotal > legderBalanceData.debitTotal">
                                 <!-- | number:'1.2-2' -->
                                 {{legderBalanceData.creditTotal - legderBalanceData.debitTotal | currency }}
                             </h3>
-                            <h3 class=" primary-color"
+                            <h3 class=" text-primary"
                                 v-if="legderBalanceData.creditTotal < legderBalanceData.debitTotal">
                                 <!-- | number:'1.2-2' -->
                                 {{legderBalanceData.debitTotal - legderBalanceData.creditTotal | currency}}
@@ -460,7 +460,7 @@
                                 <div class="col-sm-12 col-md-6">
                                     <div class="d-flex">
                                         <div class="flex-grow-0">
-                                            <div class="clearfix">
+                                            <div class="clear-both">
                                                 <p class="mb-2">Desktop Apps</p>
                                                 <ul class="inner-logos list-style-ul">
                                                     <li id="media_image-4" class="widget widget-media-image">
@@ -500,7 +500,7 @@
 
 
                                         <div class="flex-grow-1">
-                                            <div class="clearfix">
+                                            <div class="clear-both">
                                                 <p class="mb-2">Mobile Apps</p>
                                                 <ul class="inner-logos list-style-ul">
                                                     <li id="media_image-6" class="widget widget-media-image">
@@ -621,14 +621,14 @@
             var bootstrap = $("<link />", {
                 rel: "stylesheet",
                 type: "text/css",
-                href: '../' + folderPath + 'assets/styles/bootstrap.min.css'
+                href: '../' + folderPath + 'assets/styles/vendors/_boostrap.css'
             });
             $('head').append(bootstrap);
 
             var awesome = $("<link />", {
                 rel: "stylesheet",
                 type: "text/css",
-                href: '../' + folderPath + 'assets/styles/font-awesome.css'
+                href: '../' + folderPath + 'assets/styles/vendors/font-awesome.css'
             });
             $('head').append(awesome);
 

@@ -39,7 +39,7 @@
                                 {{ bankaccount.name }}&nbsp;
                                 <i
                                     *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
-                                    class="icon-plus text-primary cursor-pointer font-12"
+                                    class="icon-plus text-primary cursor-pointer font-size-12"
                                     [matTooltip]="localeData?.connect_bank"
                                     matTooltipPosition="below"
                                     (click)="openBankLinkDialog(bankaccount)"

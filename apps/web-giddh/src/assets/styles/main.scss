@@ -1,14 +1,11 @@
 // ==========================================================================
 // MAIN STYLESHEET
 // ==========================================================================
-// This file imports all other stylesheets in the correct order
-// Following the 7-1 SCSS architecture pattern
 
 // FONTS
 // --------------------------------------------------------------------------
 // Import font files before any other styles
 @import '../fonts/Inter/_inter_fonts.css';
-
 
 
 // 1. ABSTRACTS
@@ -21,10 +18,10 @@
 // 2. VENDORS
 // --------------------------------------------------------------------------
 // Third-party CSS libraries and frameworks
-// @import '~@angular/material/theming';
+@import 'vendors/_boostrap.css';
 
 // 3. BASE
-// ---------------------------------------  -----------------------------------
+// --------------------------------------------------------------------------
 // Basic styles, resets, typography
 @import 'base/reset';
 @import 'base/typography';
@@ -34,6 +31,7 @@
 // --------------------------------------------------------------------------
 // Theme-specific styles and configurations
 @import 'themes/custom-theme';
+@import 'themes/theme-base-classes';
 
 // 5. MATERIAL DESIGN
 // --------------------------------------------------------------------------
@@ -41,6 +39,7 @@
 @import 'material/material-variables';
 @import 'material/material-overrides';
 @import 'material/material_customise';
+@import 'material/material-mixins';
 
 // 6. LAYOUT
 // --------------------------------------------------------------------------
@@ -66,8 +65,4 @@
 @import 'utilities/spacing';
 @import 'utilities/text';
 @import 'utilities/responsive';
-
-
-//Temp styles imports
-@import 'utilities/_boostrap.css';
-@import 'utilities/all-old.scss';
+@import 'utilities/other.scss';

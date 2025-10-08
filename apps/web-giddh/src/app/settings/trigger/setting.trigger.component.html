@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="box clearfix">
+    <div class="pd-15 clear-both">
         <p class="section-head pt-0">{{ localeData?.tab_heading }}</p>
         <div class="row">
             <form
@@ -115,7 +115,7 @@
             <div class="row">
                 <p class="section-head pd-t1">{{ localeData?.added_triggers }}</p>
                 <div class="table-responsive">
-                    <table class="table table-bordered trigger-table basic mr-b05 on-mobile-view">
+                    <table class="table border trigger-table basic mr-b05 on-mobile-view">
                         <thead [hidden]="!availableTriggers?.length">
                             <tr>
                                 <th>#</th>

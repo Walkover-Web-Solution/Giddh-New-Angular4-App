@@ -11,7 +11,7 @@
                 <mat-list role="list" *ngIf="showGstMenus">
                     <mat-list-item role="listitem">
                         <a
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             routerLinkActive
                             #gstdashboard="routerLinkActive"
                             [class.active]="gstdashboard.isActive"
@@ -35,7 +35,7 @@
                                 'disabled': !activeCompanyGstNumber || !isMonthSelected,
                                 'active': selectedGstModule === GstReport.Gstr3b
                             }"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             (click)="navigate(GstReport.Gstr3b)"
                         >
                             <span><i class="icon-GSTR"></i></span>
@@ -54,7 +54,7 @@
                                 'disabled': !activeCompanyGstNumber,
                                 'active': selectedGstModule === GstReport.Gstr1
                             }"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             (click)="navigate(GstReport.Gstr1)"
                         >
                             <span><i class="icon-GSTR"></i></span>
@@ -73,7 +73,7 @@
                                 'disabled': !activeCompanyGstNumber || !isMonthSelected,
                                 'active': selectedGstModule === GstReport.Gstr2
                             }"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             (click)="navigate(GstReport.Gstr2)"
                         >
                             <span><i class="icon-GSTR"></i></span>
@@ -86,7 +86,7 @@
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/invoice/ewaybill']"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             routerLinkActive
                             #ewaybill="routerLinkActive"
                             [class.active]="ewaybill.isActive"
@@ -99,7 +99,7 @@
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/reports/reverse-charge']"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             routerLinkActive
                             #reversecharge="routerLinkActive"
                             [class.active]="reversecharge.isActive"
@@ -111,7 +111,7 @@
                     <mat-list-item role="listitem">
                         <a
                             href="javascript:;"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             [routerLink]="['/pages/settings/taxes']"
                             routerLinkActive
                             #taxes="routerLinkActive"
@@ -124,7 +124,7 @@
                     <mat-list-item role="listitem" *ngIf="showGstMenus">
                         <a
                             href="javascript:;"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             routerLinkActive
                             #unitMapping="routerLinkActive"
                             [class.active]="unitMapping.isActive"
@@ -139,7 +139,7 @@
                     <mat-list-item role="listitem" *ngIf="showTaxMenus">
                         <a
                             href="javascript:;"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             routerLinkActive
                             #vatReport="routerLinkActive"
                             [class.active]="vatReport.isActive"
@@ -153,7 +153,7 @@
                     <mat-list-item role="listitem" *ngIf="showTaxMenus && isZimbabweCompany">
                         <a
                             href="javascript:;"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             routerLinkActive
                             #vatReport="routerLinkActive"
                             [class.active]="vatReport.isActive"
@@ -168,7 +168,7 @@
                         <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
-                                class="d-block clearfix"
+                                class="d-block clear-both"
                                 routerLinkActive
                                 #vatLiability="routerLinkActive"
                                 [class.active]="vatLiability.isActive"
@@ -182,7 +182,7 @@
                         <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
-                                class="d-block clearfix"
+                                class="d-block clear-both"
                                 routerLinkActive
                                 #vatPayment="routerLinkActive"
                                 [class.active]="vatPayment.isActive"
@@ -196,7 +196,7 @@
                         <mat-list-item role="listitem">
                             <a
                                 href="javascript:;"
-                                class="d-block clearfix"
+                                class="d-block clear-both"
                                 routerLinkActive
                                 #vatObligations="routerLinkActive"
                                 [class.active]="vatObligations.isActive"
@@ -210,7 +210,7 @@
                     <mat-list-item role="listitem" *ngIf="!isConsolidatedBranch">
                         <a
                             href="javascript:;"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             [routerLink]="['/pages/settings/addresses']"
                             routerLinkActive
                             #addaddress="routerLinkActive"
@@ -223,7 +223,7 @@
                     <mat-list-item role="listitem" *ngIf="showTaxMenus && (isZimbabweCompany || isKenyaCompany)">
                         <a
                             href="javascript:;"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             routerLinkActive
                             #withHeld="routerLinkActive"
                             [class.active]="withHeld.isActive"
@@ -236,7 +236,7 @@
                     <mat-list-item role="listitem" *ngIf="(isCompany || isConsolidatedBranch) && showGstMenus">
                         <a
                             href="javascript:;"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             routerLinkActive
                             #gstSetting="routerLinkActive"
                             [class.active]="gstSetting.isActive"
@@ -250,7 +250,7 @@
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/gstfiling/filing-status']"
-                            class="d-block clearfix"
+                            class="d-block clear-both"
                             routerLinkActive
                             #filingstatus="routerLinkActive"
                             [class.active]="filingstatus.isActive"
@@ -264,7 +264,7 @@
                             <a
                                 href="javascript:;"
                                 [routerLink]="['/pages/settings/manage-tax-authority']"
-                                class="d-block clearfix pd-r1"
+                                class="d-block clear-both pd-r1"
                                 routerLinkActive
                                 #taxAuthority="routerLinkActive"
                                 [class.active]="taxAuthority.isActive"
@@ -277,7 +277,7 @@
                             <a
                                 href="javascript:;"
                                 [routerLink]="['/pages/settings/reports/tax-authority']"
-                                class="d-block clearfix pd-r1"
+                                class="d-block clear-both pd-r1"
                                 routerLinkActive
                                 #taxAuthorityReport="routerLinkActive"
                                 [class.active]="taxAuthorityReport.isActive"
@@ -290,7 +290,7 @@
                             <a
                                 href="javascript:;"
                                 [routerLink]="['/pages/settings/reports/rate-wise']"
-                                class="d-block clearfix pd-r1"
+                                class="d-block clear-both pd-r1"
                                 routerLinkActive
                                 #rateWiseReport="routerLinkActive"
                                 [class.active]="rateWiseReport.isActive"
@@ -303,7 +303,7 @@
                             <a
                                 href="javascript:;"
                                 [routerLink]="['/pages/settings/reports/account-wise']"
-                                class="d-block clearfix pd-r1"
+                                class="d-block clear-both pd-r1"
                                 routerLinkActive
                                 #accountWise="routerLinkActive"
                                 [class.active]="accountWise.isActive"

@@ -8,7 +8,7 @@
         <div class="header">
             <button mat-stroked-button
                 aria-hidden="true"
-                class="cursor-pointer font-15 d-flex p-0 attachment-back-button"
+                class="cursor-pointer font-size-15 d-flex p-0 attachment-back-button"
                 [attr.aria-label]="commonLocaleData?.app_back"
                 disableRipple
                 type="button"
@@ -21,7 +21,7 @@
             <div class="left-side">
                 <mat-checkbox
                     *ngIf="voucherPdf || attachments?.length > 0"
-                    class="select-all font-15"
+                    class="select-all font-size-15"
                     color="primary"
                     [(ngModel)]="selectAll"
                     (change)="selectAllAttachments($event)"
@@ -37,7 +37,7 @@
                             ></mat-checkbox
                         >
                         <span
-                            class="cursor-pointer font-15"
+                            class="cursor-pointer font-size-15"
                             [ngClass]="{
                                 'active-file': voucherPdf?.uniqueName === previewedFile?.uniqueName
                             }"
@@ -61,7 +61,7 @@
                                     >&nbsp;</mat-checkbox
                                 >
                                 <span
-                                    class="file-name cursor-pointer font-15"
+                                    class="file-name cursor-pointer font-size-15"
                                     [ngClass]="{
                                         'active-file':
                                             attachment?.uniqueName === previewedFile?.uniqueName

@@ -73,13 +73,6 @@ ul.list-unstyled li a {
     color: var(--color-black);
 }
 
-.no-select {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
 .account {
     div {
         -webkit-line-clamp: 1;

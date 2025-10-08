@@ -29,14 +29,14 @@
                                 addressConfiguration?.type !== 'editBranch' &&
                                 addressConfiguration?.type !== 'editWarehouse'
                             "
-                            class="clearfix margin-child-label"
+                            class="clear-both margin-child-label"
                         >
                             <div
                                 *ngIf="companyName"
-                                class="font-15 mr-b15"
+                                class="font-size-15 mr-b15"
                                 [innerHTML]="getInformationSaveText(companyName)"
                             ></div>
-                            <div class="form-bg-aside clearfix">
+                            <div class="form-bg-aside clear-both">
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <input-field
@@ -149,7 +149,7 @@
                                     <!-- end -->
                                 </div>
 
-                                <div class="clearfix row">
+                                <div class="clear-both row">
                                     <div class="form-group col-12">
                                         <mat-form-field appearance="outline" class="w-100">
                                             <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
@@ -185,7 +185,7 @@
                                             <mat-label>{{ localeData?.link_entity }}</mat-label>
                                             <mat-chip-list
                                                 #chipList
-                                                class="d-flex flex-wrap column-gap5 row-gap1"
+                                                class="d-flex flex-wrap column-gap-05 row-gap-1"
                                             >
                                                 <mat-chip
                                                     *ngFor="
@@ -195,7 +195,7 @@
                                                 >
                                                     {{ selected?.name }}
                                                     <span matChipRemove
-                                                        ><i class="icon-cross font-14"></i
+                                                        ><i class="icon-cross font-size-14"></i
                                                     ></span>
                                                 </mat-chip>
                                             </mat-chip-list>
@@ -215,7 +215,7 @@
                                                     [value]="item"
                                                     (click)="selectEntity(item)"
                                                 >
-                                                    <a href="javascript:;" class="list-item d-flex column-gap1">
+                                                    <a href="javascript:;" class="list-item d-flex column-gap-1">
                                                         <span class="entity-icon">
                                                             <i
                                                                 [ngClass]="{
@@ -267,9 +267,9 @@
 
                         <section
                             *ngIf="addressConfiguration?.type === 'editBranch'"
-                            class="clearfix margin-child-label"
+                            class="clear-both margin-child-label"
                         >
-                            <div class="clearfix">
+                            <div class="clear-both">
                                 <div class="row">
                                     <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
                                     <div hidden class="form-group col-12">
@@ -335,11 +335,11 @@
                                     </div>
                                 </div>
 
-                                <div class="clearfix row">
+                                <div class="clear-both row">
                                     <div class="form-group col-12 linked-entities linked-add create">
                                         <mat-form-field appearance="outline" class="w-100">
                                             <mat-label>{{ localeData?.linked_addresses }}</mat-label>
-                                            <mat-chip-list class="d-flex flex-wrap column-gap5 row-gap1">
+                                            <mat-chip-list class="d-flex flex-wrap column-gap-05 row-gap-1">
                                                 <mat-chip
                                                     *ngFor="
                                                         let selected of addressForm?.get('linkedEntity')?.value
@@ -348,7 +348,7 @@
                                                 >
                                                     {{ selected?.label }}
                                                     <span matChipRemove
-                                                        ><i class="icon-cross font-14"></i
+                                                        ><i class="icon-cross font-size-14"></i
                                                     ></span>
                                                 </mat-chip>
                                             </mat-chip-list>
@@ -370,7 +370,7 @@
                                                 >
                                                     <a
                                                         href="javascript:void(0)"
-                                                        class="list-item d-flex column-gap1"
+                                                        class="list-item d-flex column-gap-1"
                                                     >
                                                         <span class="entity-icon">
                                                             <i
@@ -421,16 +421,16 @@
                             </div>
                             <div
                                 *ngIf="companyName"
-                                class="font-15 mt-2 mb-4"
+                                class="font-size-15 mt-2 mb-4"
                                 [innerHTML]="getBranchOfText(companyName)"
                             ></div>
                         </section>
 
                         <section
                             *ngIf="addressConfiguration?.type === 'editWarehouse'"
-                            class="clearfix margin-child-label"
+                            class="clear-both margin-child-label"
                         >
-                            <div class="clearfix">
+                            <div class="clear-both">
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <input-field
@@ -449,13 +449,13 @@
                                     </div>
                                 </div>
 
-                                <div class="clearfix row">
+                                <div class="clear-both row">
                                     <div class="form-group col-12 linked-entities linked-add create">
                                         <mat-form-field appearance="outline" class="w-100">
                                             <mat-label>{{ localeData?.linked_addresses }}</mat-label>
                                             <mat-chip-list
                                                 #chipList
-                                                class="d-flex flex-wrap column-gap5 row-gap1"
+                                                class="d-flex flex-wrap column-gap-05 row-gap-1"
                                             >
                                                 <mat-chip
                                                     *ngFor="let item of addressForm?.get('linkedEntity')?.value"
@@ -463,7 +463,7 @@
                                                 >
                                                     {{ item?.label }}
                                                     <span matChipRemove
-                                                        ><i class="icon-cross font-14"></i
+                                                        ><i class="icon-cross font-size-14"></i
                                                     ></span>
                                                 </mat-chip>
                                             </mat-chip-list>
@@ -485,7 +485,7 @@
                                                 >
                                                     <a
                                                         href="javascript:void(0)"
-                                                        class="list-item d-flex column-gap1"
+                                                        class="list-item d-flex column-gap-1"
                                                     >
                                                         <span class="entity-icon">
                                                             <i
@@ -534,7 +534,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div *ngIf="companyName" class="font-15 mt-2 mb-4">
+                            <div *ngIf="companyName" class="font-size-15 mt-2 mb-4">
                                 <!-- Headquarter name -->
                                 {{ getBranchOfText(companyName) }}
                             </div>

@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
-    <div class="relative w-100">
+    <div class="position-relativew-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
         *ngIf="asideTaxSidebarMenuState">
         <tax-sidebar (navigateEvent)="handleNavigation()"
@@ -14,7 +14,7 @@
         </div>
         <form (ngSubmit)="handleFormSubmit()" *ngIf="!isLoading">
             <div class="container-fluid ml-0">
-                    <div class="row align-items-center row-gap15">
+                    <div class="row align-items-center row-gap-15">
                     <input-field
                         class="tax-percentage-width"
                         [name]="'tax-percentage'"

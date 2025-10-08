@@ -7,11 +7,11 @@
 >
     <section [ngClass]="exportForm.get('exportType').value === exportTypeEnum.excel || exportForm.get('exportType').value === exportTypeEnum.csv ? 'mat-dialog-lg' : 'mat-dialog-md'">
         <div class="dialog-header d-flex justify-content-between align-items-center">
-            <span class="font-16 px-0"
+            <span class="font-size-16 px-0"
                 >{{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }}
                 {{ inputData?.totalItems }}</span
             >
-            <i mat-dialog-close class="icon-cross icon-font-16"></i>
+            <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
         </div>
         <div mat-dialog-content>
             <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
@@ -21,7 +21,7 @@
                 </p>
                 <!-- Export attachment -->
                 <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
-                    <div class="pd-b1 clearfix export-type d-flex column-gap15">
+                    <div class="pd-b1 clear-both export-type d-flex column-gap-15">
                         <div class="d-flex align-items-center">
                             <label class="w150">{{ localeData?.attachment }}:</label>
                             <mat-slide-toggle color="primary" name="attachmentExport" formControlName="attachmentExport">
@@ -46,12 +46,12 @@
                                 (click)="tribute?.open()"
                                 formControlName="selectedFormatList"
                                 [placeholder]="commonLocaleData?.app_variable_search_hint"
-                                class="form-control radius-none border-0 border-bottom"
+                                class="form-control radius-none border-none border-bottom"
                                 (ngModelChange)="getFileFormat()"
                                 [appTributeMention]="tributeConfig"
                                 [appTributeMentionValues]="fileFormatList"
                             />
-                            <div class="font-12 word-break pd-t05 pd-b05" *ngIf="exportForm.get('selectedFormatList').value?.length">
+                            <div class="font-size-12 word-break pd-t05 pd-b05" *ngIf="exportForm.get('selectedFormatList').value?.length">
                                 {{ exportForm.get("fileNameFormat").value }}
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                 </ng-container>
 
                 <!-- Export voucher -->
-                <div class="pd-b2 pd-t1 clearfix export-type" *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
+                <div class="pd-b2 pd-t1 clear-both export-type" *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
                     <label class="w150">{{ commonLocaleData?.app_voucher }}:</label>
                     <mat-slide-toggle color="primary" name="voucherExport" formControlName="voucherExport" (change)="onVoucherExportChange($event)">
                         <span>{{
@@ -131,7 +131,7 @@
 
                     <!-- Export Excel Columns -->
                     <ng-container *ngIf="exportForm.get('exportType').value === exportTypeEnum.excel || exportForm.get('exportType').value === exportTypeEnum.csv">
-                        <div class="font-15 mr-b2">
+                        <div class="font-size-15 mr-b2">
                             {{ localeData?.export_note }}
                         </div>
                         <mat-divider></mat-divider>

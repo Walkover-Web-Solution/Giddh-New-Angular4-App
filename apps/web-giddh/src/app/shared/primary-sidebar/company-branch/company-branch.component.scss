@@ -140,7 +140,7 @@
                 color: var(--color-dark-gray);
                 &:hover {
                     span {
-                        background-color: var(--mat-primary-color-light);
+                        background-color: var(--mat-text-primary-light);
                     }
                     /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu {
@@ -183,7 +183,7 @@
                     /* UNUSED COMPONENT CLASS: open - Auto-commented by script
 &
 .open {
-                        background-color: var(--mat-primary-color-light);
+                        background-color: var(--mat-text-primary-light);
                         margin: 0 -20px;
                         /* p UNUSED COMPONENT CLASS: show-more-branches - Auto-commented by script
 .show-more-branches {
@@ -296,7 +296,7 @@
                         word-break: break-all;
                         &.active {
                             color: var(--color-dark-gray) !important;
-                            background-color: var(--mat-primary-color-light) !important;
+                            background-color: var(--mat-text-primary-light) !important;
                         }
                         &:hover {
                             background-color: initial !important;
@@ -313,7 +313,7 @@
                     }
                     &:hover {
                         a {
-                            background-color: var(--mat-primary-color-light) !important;
+                            background-color: var(--mat-text-primary-light) !important;
                         }
                     }
                     .branch-alias,
@@ -355,7 +355,7 @@
                 }
             }
         }
-        .btn-sky-blue {
+        .btn-sky-text-primary {
             padding: 0px 10px;
             height: 30px;
         }
@@ -410,7 +410,7 @@
                                 }
                             }
                             &.active {
-                                background-color: var(--mat-primary-color-light);
+                                background-color: var(--mat-text-primary-light);
                                 position: sticky;
                                 top: 0;
                                 z-index: 991;
@@ -445,8 +445,8 @@
     }
 }
 }
-/* UNUSED COMPONENT CLASS: digit-blue - Auto-commented by script
-.digit-blue {
+/* UNUSED COMPONENT CLASS: digit-text-primary - Auto-commented by script
+.digit-text-primary {
     color: var(--mat-primary-color) !important;
 }
 */

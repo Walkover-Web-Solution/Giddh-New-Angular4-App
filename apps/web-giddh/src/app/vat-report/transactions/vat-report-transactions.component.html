@@ -17,9 +17,9 @@
             ></tax-sidebar>
         </div>
         <div class="container-fluid">
-            <div class="clearfix pd-t15">
+            <div class="clear-both pd-t15">
                 <button mat-stroked-button (click)="navigateToPreviousPage()">
-                    <i class="fa fa-angle-left font-16 mr-1"></i>
+                    <i class="fa fa-angle-left font-size-16 mr-1"></i>
                     <span>{{ commonLocaleData?.app_back }}</span>
                 </button>
                 <span *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">{{
@@ -31,7 +31,7 @@
                 <table
                     mat-table
                     [dataSource]="vatReportTransactions.results"
-                    class="table basic table-bordered mt-2 invoice-table desktop-table"
+                    class="table basic border mt-2 invoice-table desktop-table"
                     *ngIf="vatReportTransactions?.results?.length && !isLoading"
                 >
                     <ng-container matColumnDef="date">

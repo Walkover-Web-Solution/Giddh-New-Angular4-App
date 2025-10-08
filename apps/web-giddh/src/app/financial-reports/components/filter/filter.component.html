@@ -5,13 +5,13 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="clearfix">
+    <div class="clear-both">
         <div class="row">
-            <div class="col-12 d-flex justify-content-between align-items-start column-gap15">
+            <div class="col-12 d-flex justify-content-between align-items-start column-gap-15">
                 <form
                     [formGroup]="filterForm"
                     (submit)="filterData()"
-                    class="form-inline financial-select-year column-gap15 row-gap15"
+                    class="form-inline financial-select-year column-gap-15 row-gap-15"
                     name="fromToDateForm"
                     novalidate
                 >
@@ -134,7 +134,7 @@
                         <!-- Filter by Tag -->
                         <div class="form-group pull-left">
                             <a
-                                class="cp expand-icon"
+                                class="cursor-pointer expand-icon"
                                 (click)="emitExpand(true)"
                                 matTooltip="{{ commonLocaleData?.app_expand_all }}"
                                 matTooltipPosition="above"
@@ -143,7 +143,7 @@
                                 <span class="icon-expandIcon"></span>
                             </a>
                             <a
-                                class="cp expand-icon"
+                                class="cursor-pointer expand-icon"
                                 (click)="emitExpand(false)"
                                 matTooltip="{{ commonLocaleData?.app_collapse_all }}"
                                 matTooltipPosition="above"
@@ -157,9 +157,9 @@
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </form>
-                <div class="d-flex align-items-center column-gap1 download-data-icon">
+                <div class="d-flex align-items-center column-gap-1 download-data-icon">
                     <ng-container *ngIf="isReconciled !== null && !isProjectWiseAccounting">
-                        <p *ngIf="isReconcileModeDateRange" class="text-gray nowrap">{{ isReconcileModeDateRange }}</p>
+                        <p *ngIf="isReconcileModeDateRange" class="text-light nowrap">{{ isReconcileModeDateRange }}</p>
                         <ng-container *ngIf="showReconcileOptions">
                             <button
                                 *ngIf="!isReconciled"
@@ -206,7 +206,7 @@
                     >
                         {{ commonLocaleData?.app_back }}
                     </button>
-                    <div class="d-flex column-gap1">
+                    <div class="d-flex column-gap-1">
                         <trial-balance-export-csv
                             *ngIf="tbExportCsv"
                             [trialBalanceRequest]="filterForm?.value"

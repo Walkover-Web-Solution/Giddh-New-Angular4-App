@@ -22,7 +22,7 @@
                     class="company-name position-relative"
                     >
                     <h3
-                    class="font-15 d-flex flex-column cursor-pointer"
+                    class="font-size-15 d-flex flex-column cursor-pointer"
                     [checkPermission]="['MENU', 'MANAGE']"
                     >
                         <div class="d-flex flex-column">
@@ -53,7 +53,7 @@
                     </h3>
                 </li>
             </ul>
-            <div class="dropdown-menu company-branch-nav" *ngIf="showCompanyBranchSwitch">
+            <div class="dropdown-menu company-branch-nav left-0" *ngIf="showCompanyBranchSwitch">
                 <company-branch
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
@@ -67,11 +67,11 @@
                     Note: Account list is hide from design for now as we deploy on production remove all related code also
                     <div class="account-block mr-b2 pd-l2 pd-r2">
                     <div class="account-collapse">
-                        <p class="font-12 d-flex justify-content-between">
+                        <p class="font-size-12 d-flex justify-content-between">
                             {{ localeData?.accounts }}
                             <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i>
                         </p>
-                        <ul class="left-fixed-header list-style-none font-15 lh33 mr-t05">
+                        <ul class="left-fixed-header list-style-none font-size-15 lh33 mr-t05">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     aria-label="account"
@@ -108,7 +108,7 @@
                             class="dropdown-toggle"
                         >
                             <span [matTooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
-                            <i class="icon-right mr-l1 font-15"></i>
+                            <i class="icon-right mr-l1 font-size-15"></i>
                         </a>
                         <ul
                             class="dropdown-menu account-dropdown-collapse list-style-none sub-menu"
@@ -137,9 +137,9 @@
                     </div>
                 </div> -->
                 <div class="menu-block">
-                    <div class="menu-item-wrapper font-15">
+                    <div class="menu-item-wrapper font-size-15">
                         <div class="menu-item pd-l2 pd-r2">
-                            <p class="font-12">
+                            <p class="font-size-12">
                                 <span
                                     [routerLink]="['/pages/giddh-all-items']"
                                     class="d-inline-flex align-items-center cursor-pointer"
@@ -147,8 +147,8 @@
                                     {{ localeData?.menu }}
                                     <i class="icon-down-new mr-l05"></i>
                                 </span>
-                                <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
-                                    <i class="icon-go font-16"></i>
+                                <span class="text-light cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
+                                    <i class="icon-go font-size-16"></i>
                                 </span>
                             </p>
                         </div>
@@ -169,7 +169,7 @@
                                             <i [ngClass]="node?.icon"></i>
                                             <span class="item-name">{{ node.label }}</span>
                                         </span>
-                                        <i class="mr-l1 font-15 icon-right" [ngClass]="{'rotate-270': isExpanded(node)}"></i>
+                                        <i class="mr-l1 font-size-15 icon-right" [ngClass]="{'rotate-270': isExpanded(node)}"></i>
                                     </span>
                                 </div>
                             </cdk-tree-node>

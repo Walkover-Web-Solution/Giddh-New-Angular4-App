@@ -15,7 +15,7 @@
                             (click)="backToSubscriptions()"
                             *ngIf="!showLoader"
                         >
-                            <span class="d-inline-flex align-items-center justify-content-center column-gap1">
+                            <span class="d-inline-flex align-items-center justify-content-center column-gap-1">
                                 <i class="icon-left back-left"></i>
                                 {{ commonLocaleData?.app_back }}
                             </span>
@@ -58,7 +58,7 @@
                                 <mat-form-field appearance="fill" class="mat-input">
                                     <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ localeData?.billing_name }}
-                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                        <span [ngClass]="{ 'text-red-content': showLoader }" class="text-red"
                                             >*</span
                                         ></label
                                     >
@@ -80,7 +80,7 @@
                                 <mat-form-field appearance="fill" class="mat-input">
                                     <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ commonLocaleData?.app_email_id }}
-                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                        <span [ngClass]="{ 'text-red-content': showLoader }" class="text-red"
                                             >*</span
                                         ></label
                                     >
@@ -155,7 +155,7 @@
                                                 ? commonLocaleData?.app_state
                                                 : commonLocaleData?.app_region
                                         }}
-                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                        <span [ngClass]="{ 'text-red-content': showLoader }" class="text-red"
                                             >*
                                         </span></label
                                     >

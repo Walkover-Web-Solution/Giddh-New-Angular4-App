@@ -1,8 +1,7 @@
-// mat-form-field { width: 100%; }
 mat-form-field {
     &.mat-mdc-form-field {
-        width: 100%;
-        &:not(.initial-height, .mat-mdc-paginator-page-size-select) {
+        &:not(.initial-height, .mat-mdc-paginator-page-size-select, :has(textarea)) {
+            width: 100%;
             --mat-form-field-container-height: var(--custom-mat-form-field-height);
             .mdc-text-field--outlined {
                 height: var(--mat-form-field-container-height);
@@ -26,34 +25,34 @@ mat-form-field {
 //     }
 // }
 
-// .mat-mdc-snack-bar-container {
-//     .mdc-snackbar__surface{
-//         color: var(--color-white) !important;
-//         font-size: var(--font-size-15);
-//     }
-// }
-// .mat-mdc-snack-bar-container.error {
-//     .mdc-snackbar__surface{
-//         background-color: var(--color-red) !important;
-//     }
-// }
-// .mat-mdc-snack-bar-container.success {
-//     .mdc-snackbar__surface{
-//         background-color: var(--color-green) !important;
-//     }
-// }
-// .mat-mdc-snack-bar-container.warning, .mat-mdc-snack-bar-container.info {
-//     .mdc-snackbar__surface{
-//         background-color: var(--color-deep-orange) !important;
-//         .mdc-snackbar__label{
-//             color: var(--color-black) !important;
-//         }
-//         .snack-close-button {
-//             color: var(--color-black) !important;
-//         }
-//     }
+.mat-mdc-snack-bar-container {
+    .mdc-snackbar__surface{
+        color: var(--color-white) !important;
+        font-size: var(--font-size-15);
+    }
+}
+.mat-mdc-snack-bar-container.error {
+    .mdc-snackbar__surface{
+        background-color: var(--color-red) !important;
+    }
+}
+.mat-mdc-snack-bar-container.success {
+    .mdc-snackbar__surface{
+        background-color: var(--color-green) !important;
+    }
+}
+.mat-mdc-snack-bar-container.warning, .mat-mdc-snack-bar-container.info {
+    .mdc-snackbar__surface{
+        background-color: var(--color-deep-orange) !important;
+        .mdc-snackbar__label{
+            color: var(--color-black) !important;
+        }
+        .snack-close-button {
+            color: var(--color-black) !important;
+        }
+    }
 
-// }
+}
 
 .mat-mdc-snack-bar-container {
     .mat-mdc-snack-bar-label {

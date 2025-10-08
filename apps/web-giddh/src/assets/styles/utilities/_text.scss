@@ -38,3 +38,9 @@
 
 // Generate border-radius utility classes
 @include border-radius-utilities();
+
+// Generate z-index utility classes
+@include z-index-utilities();
+
+// Generate overflow utility classes
+@include overflow-utilities();

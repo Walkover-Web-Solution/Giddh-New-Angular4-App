@@ -17,10 +17,6 @@
     padding: 0;
 }
 
-.menu-list li {
-    list-style: none;
-}
-
 .menu-list li a {
     color: var(--color-black);
     padding: 7px 12px;
@@ -29,7 +25,7 @@
 }
 
 .menu-list li a:hover {
-    background: var(--mat-primary-color-light);
+    background: var(--mat-text-primary-light);
 }
 
 .menu-list li a/* UNUSED COMPONENT CLASS: isHidden - Auto-commented by script
@@ -39,12 +35,12 @@
 */
 
 // .active-child {
-//     background: var(--mat-primary-color-light);
+//     background: var(--mat-text-primary-light);
 //     padding-left: 20px;
 // }
 
 .active-parent {
-    background: var(--mat-primary-color-light);
+    background: var(--mat-text-primary-light);
 }
 
 // .active-child>span {

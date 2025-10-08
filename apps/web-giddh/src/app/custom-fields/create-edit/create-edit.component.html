@@ -8,7 +8,7 @@
     <hamburger-menu></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
-        <div class="relative create-custom-field-page mr-t2">
+        <div class="position-relativecreate-custom-field-page mr-t2">
             <button mat-stroked-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
                 <i class="back-left icon-left"></i>
                 {{ commonLocaleData?.app_back }}
@@ -16,7 +16,7 @@
             <div class="custom-field-wrapper relative">
                 <div>
                     <form #customFieldCreateEditForm="ngForm" novalidate autocomplete="off">
-                        <p class="mx-3 mb-3 mr-b2 font-15" *ngIf="!customFieldUniqueName">
+                        <p class="mx-3 mb-3 mr-b2 font-size-15" *ngIf="!customFieldUniqueName">
                             {{ localeData?.create_note }}
                         </p>
                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
@@ -87,7 +87,7 @@
                             </div>
                             <div class="row mr-b15" *ngIf="visibleFields.fieldOptions">
                                 <div class="col-sm-4 col-lg-4">
-                                    <label>{{ localeData?.options }} <span class="red-text">*</span></label>
+                                    <label>{{ localeData?.options }} <span class="text-red">*</span></label>
                                 </div>
                                 <div class="col-sm-8 col-lg-6">
                                     <div class="add-icon-delete mr-b15">
@@ -138,7 +138,7 @@
                                 <div class="col-8">
                                     <div class="d-flex align-items-center justify-content-space-between" *ngIf="voucherApiVersion === 2">
                                         <ng-container *ngIf="customFieldUniqueName">
-                                            <div class="d-flex column-gap15">
+                                            <div class="d-flex column-gap-15">
                                                 <button
                                                     mat-raised-button
                                                     color="primary"
@@ -162,7 +162,7 @@
                                             </div>
                                         </ng-container>
                                         <ng-container *ngIf="!customFieldUniqueName">
-                                            <div class="d-flex column-gap15">
+                                            <div class="d-flex column-gap-15">
                                                 <button
                                                     mat-raised-button
                                                     color="primary"

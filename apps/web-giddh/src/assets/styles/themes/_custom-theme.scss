@@ -16,14 +16,6 @@ $primary-palette-dark: palette.$giddh-primary-dark;
 $accent-palette-dark: palette.$giddh-accent-dark;
 $warn-palette-dark: palette.$giddh-warn-dark;
 
-// Theme configuration with density and typography
-@mixin theme($theme, $primary, $accent, $warn) {
-    // Apply the theme styles for Angular Material components
-    @include mat.all-component-themes($theme);
-    @include mat.all-component-densities($theme);
-    @include mixins.define-theme-colors($primary, $accent, $warn);
-  }
-
 // Light Theme Configuration
 $light-theme: mat.define-light-theme(
     (
@@ -48,20 +40,27 @@ $dark-theme: mat.define-dark-theme(
     )
 );
 
-// Apply themes based on the class attached to the body tag
+// Include common styles that don't change between themes (only once)
+@include mat.all-component-typographies($light-theme);
+@include mat.all-component-densities($light-theme);
+
+// Theme-specific mixin for colors only
+@mixin theme-colors($theme, $primary, $accent, $warn) {
+    // Apply only color-specific theme styles
+    @include mat.all-component-colors($theme);
+    @include mixins.define-theme-colors($primary, $accent, $warn);
+}
+
+// Apply theme-specific colors based on the class attached to the body tag
 .default-theme {
-    @include theme($light-theme, $primary-palette, $accent-palette, $warn-palette);
+    @include theme-colors($light-theme, $primary-palette, $accent-palette, $warn-palette);
 }
 
 .dark-theme {
-    @include theme($dark-theme, $primary-palette-dark, $accent-palette-dark, $warn-palette-dark);
+    @include theme-colors($dark-theme, $primary-palette-dark, $accent-palette-dark, $warn-palette-dark);
 }
 
-// @include mat.all-component-themes($light-theme);
-// @include mat.typography-hierarchy(typography.$exported-custom-typography);
-
-// // Common styles that don't change between themes
-// @include mat.all-component-densities($light-theme);
+// Common styles that don't change between themes are handled in the theme mixin above
 
 // Specific Angular Material component overrides
 body.mat-typography {

@@ -43,7 +43,7 @@
                         aria-label="Search or Clear"
                         (click)="searchValue?.value ? searchValue.setValue('') : null"
                     >
-                        <i [ngClass]="searchValue?.value ? 'icon-cross font-16' : 'icon-search font-16'"></i>
+                        <i [ngClass]="searchValue?.value ? 'icon-cross font-size-16' : 'icon-search font-size-16'"></i>
                     </button>
                 </mat-form-field>
                 <div *ngIf="showClearFilter">

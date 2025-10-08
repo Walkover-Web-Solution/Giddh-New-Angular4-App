@@ -14,7 +14,7 @@
             <div *ngIf="isLedgerAccountAllowsMultiCurrency" [ngClass]="{ 'col-4': currentTxn?.shouldShowRcmEntry,'col-12': !currentTxn?.shouldShowRcmEntry }">
                 <div class="multi-currency-wrapper ml-auto">
                     <ul
-                        class="list-inline font-15 d-flex align-items-center"
+                        class="list-inline font-size-15 d-flex align-items-center"
                     >
                         <li>
                             {{ commonLocaleData?.app_numbers?.one }}
@@ -90,7 +90,7 @@
                     <!-- Unit -->
                     <div *ngIf="currentTxn?.unitRate" class="custom-mat-form-field">
                         <mat-form-field [appearance]="'outline'" class="w-100">
-                            <mat-label class="font-12">{{ commonLocaleData?.app_unit }}</mat-label>
+                            <mat-label class="font-size-12">{{ commonLocaleData?.app_unit }}</mat-label>
                             <mat-select
                                 class="w-100"
                                 (openedChange)="isUnitOpen = $event"
@@ -150,7 +150,7 @@
                         </p>
                     </div>
                     <div class="align-self-center text-center">
-                        <label class="font-16">=</label>
+                        <label class="font-size-16">=</label>
                     </div>
                 </ng-container>
                 <!-- Amount -->
@@ -320,7 +320,7 @@
                     class="align-self-center text-center"
                     *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                 >
-                    <label class="font-16">=</label>
+                    <label class="font-size-16">=</label>
                 </div>
                 <!-- Total -->
                 <div *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
@@ -386,11 +386,11 @@
                             (change)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"
                             >{{ localeData?.other_tax }}</mat-checkbox
                         >
-                        <div class="clearfix">
+                        <div class="clear-both">
                             <div *ngIf="blankLedger.isOtherTaxesApplicable" class="pull-right">
                                 <span class="d-flex mr-b05">
-                                    <span class="align-item-center pd-r1">{{ blankLedger.otherTaxModal?.appliedOtherTax?.name }}</span>
-                                    <span class="d-flex align-item-center">
+                                    <span class="d-flex flex-column justify-content-center vertical-align-middle align-items-center pd-r1">{{ blankLedger.otherTaxModal?.appliedOtherTax?.name }}</span>
+                                    <span class="d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center">
                                         <a
                                             href="javascript:void(0)"
                                             (click)="isReadOnly ? '' : toggleOtherTaxesAsidePane(true)"
@@ -461,7 +461,7 @@
                 </mat-expansion-panel-header>
                 <div class="more-details">
                     <div>
-                        <div class="cheque pd-t05 clearfix">
+                        <div class="cheque pd-t05 clear-both">
                             <table>
                                 <tr>
                                     <td>
@@ -581,7 +581,7 @@
                                             (voucherApiVersion === 2 || selectedInvoiceForCreditNote)
                                         "
                                         [style.width.px]="selectedInvoiceForCreditNote ? 250 : 180"
-                                        class="cp remove-invoice hidden-xs d-flex align-items-center"
+                                        class="cursor-pointer remove-invoice hidden-xs d-flex align-items-center"
                                     >
                                         <div
                                             *ngIf="selectedInvoiceForCreditNote"
@@ -622,7 +622,7 @@
                                             (change)="handleVoucherAdjustment()"
                                             [(ngModel)]="isAdjustVoucherSelected"
                                         ></mat-checkbox>
-                                        <span class="text-black">
+                                        <span class="text-default">
                                             {{ localeData?.adjust_voucher | replace: "[VOUCHER_TYPE]":currentVoucherLabel }}
                                         </span>
                                     </td>
@@ -659,7 +659,7 @@
                                         class="cursor-pointer pr-0 w-auto"
                                         *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount"
                                     >
-                                        <div class="text-gray advance-receipt-edit mr-l1 d-flex align-items-baseline ">
+                                        <div class="text-light advance-receipt-edit mr-l1 d-flex align-items-baseline ">
                                             <i class="icon-edit-pencil pr-1"></i>
 
                                             <div class="d-flex" [ngClass]="{ 'flex-column' : currentTxn?.voucherAdjustments?.totalAdjustmentAmount > 999999999 }">
@@ -699,7 +699,7 @@
                                                     [appearance]="'outline'"
                                                     class="d-block"
                                                     [showToggleIcon]="false"
-                                                    [cssClass]="'mat-field-border bdr form-control'"
+                                                    [cssClass]="'mat-field-border border form-control'"
                                                     [disabled]="isReadOnly"
                                                     id="cheque-clearance-date"
                                                     (datepickerState)="datepickerState($event)"
@@ -754,8 +754,8 @@
                     <span *ngIf="showMatchingEntries">{{ localeData?.with }}</span>
                 </a>
                 <ul class="list-unstyled map-txn-container" *ngIf="showMatchingEntries">
-                    <li class="cp" *ngFor="let entry of matchingEntriesData" (click)="confirmBankTransactionMap(entry)">
-                        <table class="table table-bordered m-0">
+                    <li class="cursor-pointer" *ngFor="let entry of matchingEntriesData" (click)="confirmBankTransactionMap(entry)">
+                        <table class="table border m-0">
                             <tbody>
                                 <tr *ngFor="let txn of entry.transactions">
                                     <td>{{ entry?.entryDate }}</td>
@@ -781,7 +781,7 @@
             <div class="col-12 pd-t1 pd-b1">
                 <div class="row align-items-end">
                     <div class="col-5 pr-0">
-                        <div class="clearfix">
+                        <div class="clear-both">
                             <mat-form-field [appearance]="'outline'" class="w-100">
                                 <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
                                 <textarea
@@ -795,7 +795,7 @@
                             </mat-form-field>
                         </div>
 
-                        <div class="d-flex column-gap2 mr-t1">
+                        <div class="d-flex column-gap-2 mr-t1">
                             <div class="d-flex align-items-center">
                                 <input
                                     [disabled]="isReadOnly"
@@ -810,7 +810,7 @@
                                     class="upload-div pd-r1"
                                     [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
                                 >
-                                    <label for="invoiceFile" class="cp font-15">
+                                    <label for="invoiceFile" class="cursor-pointer font-size-15">
                                         <i class="icon-file" *ngIf="!isFileUploading && blankLedger?.attachedFile?.length"></i>
                                         <i class="fa fa-spinner rotate" *ngIf="isFileUploading"></i>
                                         <img 
@@ -828,7 +828,7 @@
                                     >
                                 </label>
                                 <div
-                                    class="file_attached d-flex align-items-center column-gap1"
+                                    class="file_attached d-flex align-items-center column-gap-1"
                                     *ngIf="blankLedger?.attachedFile?.length > 0"
                                 >
                                     <div class="attachment-file-name" [matTooltip]="blankLedger.attachedFileName" matTooltipPosition="left">{{ blankLedger.attachedFileName }}</div>
@@ -840,7 +840,7 @@
                                 </div>
                             </div>
                             <div class="cursor-pointer">
-                                <label class="pull-left cp font-15">
+                                <label class="pull-left cursor-pointer font-size-15">
                                     <mat-checkbox
                                         color="primary"
                                         id="ledger-generate-voucher"
@@ -858,7 +858,7 @@
                                         "
                                         [(ngModel)]="blankLedger.generateInvoice"
                                         (change)="manualGenerateVoucherChecked = $event?.checked"
-                                        ><span class="font-16">{{ commonLocaleData?.app_generate_voucher }}</span></mat-checkbox
+                                        ><span class="font-size-16">{{ commonLocaleData?.app_generate_voucher }}</span></mat-checkbox
                                     >
                                     <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry">
                                         <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="showAutoPaidTooltip()" (mouseleave)="hideAutoPaidTooltip()" aria-expanded="false"></span>
@@ -873,11 +873,11 @@
                         </div>
                     </div>
                     <div class="col-7 pl-2">
-                        <table class="width-100 font-14">
+                        <table class="width-100 font-size-14">
                             <tbody>
                                 <tr *ngIf="calculatedRoundOff">
                                     <td class="text-right">
-                                        <span class="primary-color">
+                                        <span class="text-primary">
                                             {{ commonLocaleData?.app_round_off }}:
                                             <span class="d-inline-flex">
                                                 <span class="d-inline-flex">
@@ -901,16 +901,16 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-right d-flex justify-content-end column-gap1" [ngClass]="{ 'flex-column-reverse' : blankLedger.compoundTotal > 9999 || blankLedger.compoundTotal }" >
+                                    <td class="text-right d-flex justify-content-end column-gap-1" [ngClass]="{ 'flex-column-reverse' : blankLedger.compoundTotal > 9999 || blankLedger.compoundTotal }" >
                                         <span
                                         [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection"
-                                        class="pd-b1 in-words primary-color"
+                                        class="pd-b1 in-words text-primary"
                                         *ngIf="currentTxn?.total"
                                     >
                                         {{ currentTxn?.total | myNumberToWordsPipe | lowercase }}
                                     </span>
 
-                                        <span class="pd-b1 primary-color">
+                                        <span class="pd-b1 text-primary">
                                             {{
                                                 localeData?.total_in_currency
                                                     | replace
@@ -942,7 +942,7 @@
                                 </tr>
                                 <tr>
                                     <td class="text-right">
-                                            <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                            <p class="text-primary" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                                 {{
                                                     localeData?.total_in_currency
                                                         | replace
@@ -973,7 +973,7 @@
                             </tbody>
                         </table>
 
-                    <div class="d-flex justify-content-end column-gap15 mr-t1">
+                    <div class="d-flex justify-content-end column-gap-15 mr-t1">
                         <button
                             mat-stroked-button
                             id="ledger-reset-button"
@@ -1056,11 +1056,11 @@
             (click)="!isReadOnly ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"
             [innerHTML]="localeData?.transaction_available_rc"
         ></label>
-        <span class="text-light font-12"> ({{ localeData?.tax_compulsory }})</span>
+        <span class="text-light font-size-12"> ({{ localeData?.tax_compulsory }})</span>
     </div>
 </ng-template>
 <ng-template #touristSchemeTemplate>
-    <div class="row font-15 mr-b1 mr-t15" *ngIf="isTouristSchemeApplicable">
+    <div class="row font-size-15 mr-b1 mr-t15" *ngIf="isTouristSchemeApplicable">
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
@@ -1108,7 +1108,7 @@
     </advance-receipt-adjustment-component>
 </ng-template>
 <ng-template #variantAndWarehouseDropdown>
-    <div class="d-flex column-gap1 my-2"  *ngIf="(currentTxn?.isStock && stockVariants | async) || (currentTxn?.selectedAccount?.stock && warehouses?.length > 1)">
+    <div class="d-flex column-gap-1 my-2"  *ngIf="(currentTxn?.isStock && stockVariants | async) || (currentTxn?.selectedAccount?.stock && warehouses?.length > 1)">
         <ng-container *ngIf="currentTxn?.isStock && stockVariants | async as variants">
             <div *ngIf="variants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
                 <reactive-dropdown-field

@@ -36,7 +36,7 @@
                                         [formGroup]="emailVerifyForm"
                                         *ngIf="loginUsing === 'email'"
                                     >
-                                        <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix">
+                                        <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clear-both">
                                             <input
                                                 class="form-control mr-b1"
                                                 formControlName="email"
@@ -53,7 +53,7 @@
                                                 Submit
                                             </button>
                                         </div>
-                                        <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix">
+                                        <div *ngIf="isLoginWithEmailSubmited$ | async" class="clear-both">
                                             <input
                                                 class="form-control mr-b1"
                                                 formControlName="token"
@@ -61,7 +61,7 @@
                                                 placeholder="Enter verification code here"
                                                 required
                                             />
-                                            <div class="clearfix mr-b2">
+                                            <div class="clear-both mr-b2">
                                                 <button
                                                     mat-raised-button color="primary"
                                                     [disabled]="!emailVerifyForm.controls['token'].valid"
@@ -77,7 +77,7 @@
                                                 </button>
                                                 <a
                                                     mat-stroked-button
-                                                    class="cp pull-right"
+                                                    class="cursor-pointer pull-right"
                                                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                                     href="javascript:void(0);"
                                                     >Resend code</a
@@ -89,7 +89,7 @@
 
                                     <!-- login with userName form -->
                                     <form
-                                        class="position-relative"
+                                        class="position-relative "
                                         id="signUpWithPwd"
                                         [formGroup]="signUpWithPasswdForm"
                                         (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)"
@@ -97,7 +97,7 @@
                                         [hidden]="isSignupWithPasswordSuccess$ | async"
                                         autocomplete="off"
                                     >
-                                        <div class="clearfix form-group">
+                                        <div class="clear-both form-group">
                                             <input
                                                 class="form-control mr-b1"
                                                 type="text"
@@ -135,7 +135,7 @@
                                         [formGroup]="signupVerifyForm"
                                         autocomplete="off"
                                     >
-                                        <div class="clearfix">
+                                        <div class="clear-both">
                                             <input
                                                 class="form-control mr-b1"
                                                 formControlName="verificationCode"
@@ -143,7 +143,7 @@
                                                 placeholder="Enter verification code here"
                                                 required
                                             />
-                                            <div class="clearfix mr-b2">
+                                            <div class="clear-both mr-b2">
                                                 <button
                                                     mat-raised-button color="primary"
                                                     [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
@@ -158,7 +158,7 @@
                                                 </button>
                                                 <a
                                                     mat-stroked-button
-                                                    class="cp pull-right"
+                                                    class="cursor-pointer pull-right"
                                                     (click)="LoginWithEmail(signupVerifyForm.controls['email']?.value)"
                                                     href="javascript:void(0);"
                                                     >Resend code</a
@@ -180,7 +180,7 @@
                                     <li class="google-ico msg91-ico">
                                         <a href="javascript:void(0);" (click)="signUpWithOtp()">
                                             <i class="ico-google ico-msg91">
-                                                <img src="./assets/images/msg91-icon-blue.svg" alt="msg91 icon" />
+                                                <img src="./assets/images/msg91-icon-text-primary.svg" alt="msg91 icon" />
                                             </i>
                                             <span>Signup with OTP</span></a
                                         >
@@ -209,7 +209,7 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
-            <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
+            <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clear-both form-group form-group-lg">
                 <input
                     class="form-control mr-t1"
                     formControlName="email"
@@ -228,7 +228,7 @@
                     Submit
                 </button>
             </div>
-            <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg">
+            <div *ngIf="isLoginWithEmailSubmited$ | async" class="clear-both form-group form-group-lg">
                 <input
                     class="form-control mr-t1"
                     formControlName="token"
@@ -254,7 +254,7 @@
                 </button>
                 <a
                     mat-stroked-button
-                    class="cp pull-right"
+                    class="cursor-pointer pull-right"
                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                     href="javascript:void(0);"
                     >Resend code</a
@@ -281,7 +281,7 @@
             novalidate
             [formGroup]="mobileVerifyForm"
         >
-            <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
+            <div class="clear-both form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
                 <reactive-dropdown-field
                     [options]="countryCodeList"
                     class="form-inline"
@@ -315,7 +315,7 @@
             >
                 {{ !(isLoginWithMobileInProcess$ | async) ? "Get Otp" : "Resend" }}
             </button>
-            <div class="clearfix form-group form-group-lg" *ngIf="isLoginWithMobileSubmited$ | async">
+            <div class="clear-both form-group form-group-lg" *ngIf="isLoginWithMobileSubmited$ | async">
                 <hr class="mrtb10" />
                 <input class="form-control square" placeholder="Enter OTP" formControlName="otp" />
                 <button
@@ -356,7 +356,7 @@
             novalidate
             [formGroup]="twoWayOthForm"
         >
-            <div class="clearfix form-group form-group-lg">
+            <div class="clear-both form-group form-group-lg">
                 <hr class="mrtb10" />
                 <input class="form-control square" placeholder="Enter OTP" formControlName="otp" />
                 <small>We have sent an OTP to your registered mobile number.</small>

@@ -59,7 +59,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
+                <div class="cursor-pointer advance-clear-filter-icons d-flex float-right column-gap-1">
                     <button
                         mat-raised-button
                         color="primary"
@@ -148,7 +148,7 @@
                     !isAdvanceSearchApplied
                 "
             >
-                <div class="align-item-center">
+                <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                     <button
                         mat-raised-button
@@ -196,21 +196,21 @@
 <!-- endregion -->
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-    <div class="icon-pointer cp">
+    <div class="icon-pointer cursor-pointer">
         <div
-            class="icon-sort-asc one text-light-2 d-block font-xxs"
+            class="icon-sort-asc one text-light d-block font-xxs"
             (click)="sort(col, 'asc')"
             *ngIf="key !== col"
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
         ></div>
         <div
-            class="icon-sort-asc text-light-2 d-block font-xxs"
+            class="icon-sort-asc text-light d-block font-xxs"
             (click)="sort(col, 'desc')"
             *ngIf="key === col && order === 'asc'"
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
         ></div>
         <div
-            class="icon-sort-asc text-light-2 d-block font-xxs"
+            class="icon-sort-asc text-light d-block font-xxs"
             *ngIf="key === col && order === 'desc'"
             (click)="sort(col, 'asc')"
             [ngClass]="{ 'active-text-color': key === col && order === 'desc' }"
@@ -318,7 +318,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
-                            class="font-italic"
+                            class="font-style-font-style-italic"
                             aria-label="days"
                         >
                             0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}
@@ -362,7 +362,7 @@
                             [matMenuTriggerFor]="agingDropdown"
                             mat-button
                             (click)="openAgingDropDown()"
-                            class="font-italic m-0"
+                            class="font-style-font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.fourth + 1 }}-{{
@@ -414,7 +414,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
-                            class="font-italic m-0"
+                            class="font-style-font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.fifth + 1 }}-{{
@@ -464,7 +464,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
-                            class="font-italic m-0"
+                            class="font-style-font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
@@ -591,11 +591,11 @@
                         >
                             <div class="d-flex justify-content-space-between align-items-center">
                                 <div>
-                                    <p class="font-14">
-                                        <span class="color-primary">{{ item?.voucherNumber }}</span> |
+                                    <p class="font-size-14">
+                                        <span class="text-primary">{{ item?.voucherNumber }}</span> |
                                         <span class="light-gray">{{ item?.voucherDate }}</span>
                                     </p>
-                                    <p class="customer-name font-16">
+                                    <p class="customer-name font-size-16">
                                         {{ item?.account?.customerName || item?.account?.name }}
                                     </p>
                                 </div>

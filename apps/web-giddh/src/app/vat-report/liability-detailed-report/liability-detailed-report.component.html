@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
-    <div class="relative w-100">
+    <div class="position-relativew-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
             *ngIf="asideGstSidebarMenuState">
             <tax-sidebar 
@@ -14,13 +14,13 @@
     <div class="detailed-liability-report mx-auto pd-15">
         <div class="mt-2">
             <button mat-stroked-button (click)="backToOverViewReport()">
-                <i class="fa fa-angle-left font-16 mr-1"></i>
+                <i class="fa fa-angle-left font-size-16 mr-1"></i>
                 <span>{{ commonLocaleData?.app_back }}</span>
             </button>
         </div>
         <div class="table-responsive mt-4">
             <table mat-table [dataSource]="vatLiabilityDetailedReport?.sections"
-                class="table basic table-bordered mt-2 invoice-table desktop-table"
+                class="table basic border mt-2 invoice-table desktop-table"
                 *ngIf="vatLiabilityDetailedReport?.sections?.length && !isLoading">
                 <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>

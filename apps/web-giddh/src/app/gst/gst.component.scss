@@ -117,7 +117,7 @@ svg.icon.gstr-icon {
 }
 
 // .return-content .count a {
-//     color: var(--dark-blue01);
+//     color: var(--mat-primary-color);
 // }
 
 .font-xxxlarge {
@@ -376,21 +376,21 @@ hr {
 }
 */
 
- /* ::ng-deep #monthPicker .btn-info > UNUSED COMPONENT CLASS: text-success - Auto-commented by script
-.text-success {
+ /* ::ng-deep #monthPicker .btn-info > UNUSED COMPONENT CLASS: text-green - Auto-commented by script
+.text-green {
     color: var(--mat-primary-color) !important;
 }
 */
-::ng-deep #monthPicker .btn-default.btn-info > .text-success {
+::ng-deep #monthPicker .btn-default.btn-info > .text-green {
     color: inherit !important;
 }
-::ng-deep #monthPicker .btn-info:hover .text-success {
+::ng-deep #monthPicker .btn-info:hover .text-green {
     color: var(--color-white) !important;
 }
-::ng-deep #monthPicker .btn-default > .text-success {
+::ng-deep #monthPicker .btn-default > .text-green {
     color: inherit !important;
 }
-::ng-deep #monthPicker .btn-default:hover > .text-success {
+::ng-deep #monthPicker .btn-default:hover > .text-green {
     color: var(--color-white) !important;
 }
 .parent {
@@ -423,7 +423,7 @@ hr {
 .list-inline {
     padding-left: 0;
     margin-left: -5px;
-    list-style: none;
+    // list-style: none;
     > li {
         display: inline-block;
         padding-right: 5px;

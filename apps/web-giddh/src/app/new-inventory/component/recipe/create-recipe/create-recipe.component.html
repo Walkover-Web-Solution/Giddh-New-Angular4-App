@@ -28,7 +28,7 @@
                     <div class="col-3">
                         <div class="row">
                             <div class="form-fields w-100">
-                                <div class="d-flex flex-column flex-wrap w-100 row-gap15">
+                                <div class="d-flex flex-column flex-wrap w-100 row-gap-15">
                                     <p class="section-head pb-2 w-100">{{ localeData?.finished_stock }}</p>
                                     <div *ngIf="stock?.variants?.length > 1" class="w-100">
                                         <reactive-dropdown-field
@@ -184,7 +184,7 @@
                                                         <td>
                                                             <a
                                                                 href="javascript:void(0);"
-                                                                class="d-flex justify-content-between align-item-center table-row-delete"
+                                                                class="d-flex justify-content-between d-flex flex-column justify-content-center vertical-align-middle align-items-center table-row-delete"
                                                                 *ngIf="recipe.linkedStocks?.length > 1"
                                                                 (click)="removeLinkedStock(i, j)"
                                                                 aria-label="delete icon"
@@ -330,7 +330,7 @@
                                                         <td>
                                                             <a
                                                                 href="javascript:void(0);"
-                                                                class="d-flex justify-content-between align-item-center table-row-delete"
+                                                                class="d-flex justify-content-between d-flex flex-column justify-content-center vertical-align-middle align-items-center table-row-delete"
                                                                 (click)="removeByProductLinkedStock(i, k)"
                                                                 aria-label="delete icon"
                                                             >

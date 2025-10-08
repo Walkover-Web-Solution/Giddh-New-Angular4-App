@@ -12,16 +12,16 @@
     <!-- nodata end -->
     <div>
         <div *ngIf="!noData" class="tb-wrapper">
-            <div class="mr-t2 clearfix">
+            <div class="mr-t2 clear-both">
                 <!--top heading  labels-->
                 <!--Main Grid-->
                 <div class="table-container" *ngIf="!hideData">
                     <div class="income mr-b1">
-                        <div class="clearfix profit-loss">
+                        <div class="clear-both profit-loss">
                             <table class="mr-b05 table basic bs-table-grid">
                                 <thead>
                                     <tr>
-                                        <th class="p-0 font-16" width="33.33%">
+                                        <th class="p-0 font-size-16" width="33.33%">
                                             <div
                                                 #searchContainer
                                                 (clickOutside)="clickedOutside($event, searchContainer)"
@@ -55,7 +55,7 @@
                                                 </div>
                                             </div>
                                         </th>
-                                        <th class="text-right font-16" width="33.33%">
+                                        <th class="text-right font-size-16" width="33.33%">
                                             {{ commonLocaleData?.app_as_of }}
                                             <span
                                                 *ngIf="
@@ -71,7 +71,7 @@
                                                 }}</span
                                             >
                                         </th>
-                                        <th class="text-right font-16" width="33.33%">
+                                        <th class="text-right font-size-16" width="33.33%">
                                             {{ commonLocaleData?.app_as_of }}
                                             <span
                                                 *ngIf="
@@ -94,7 +94,7 @@
                             <!--Grid-->
                             <div class="m-10">
                                 <div>
-                                    <strong class="font-15">{{ localeData?.equity_liabilities }}</strong>
+                                    <strong class="font-size-15">{{ localeData?.equity_liabilities }}</strong>
                                 </div>
                             </div>
                             <ng-template #groupDetails let-list let-padding="padding">
@@ -130,12 +130,12 @@
                             >
                             </ng-container>
                             <!--/Grid-->
-                            <div class="top-bar row clearfix">
+                            <div class="top-bar row clear-both">
                                 <div class="col-4 group">
-                                    <strong class="font-15">{{ localeData?.total_liabilities }}</strong>
+                                    <strong class="font-size-15">{{ localeData?.total_liabilities }}</strong>
                                 </div>
                                 <div class="col-4 group text-right">
-                                    <strong class="font-15">
+                                    <strong class="font-size-15">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="bsData?.liabTotal"
@@ -147,7 +147,7 @@
                                     </strong>
                                 </div>
                                 <div class="col-4 group text-right">
-                                    <strong class="font-15">
+                                    <strong class="font-size-15">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="bsData?.liabTotalEnd"
@@ -163,11 +163,11 @@
                     </div>
 
                     <div class="expenses">
-                        <div class="clearfix profit-loss">
+                        <div class="clear-both profit-loss">
                             <!--Grid-->
                             <div class="m-10">
                                 <div>
-                                    <strong class="font-15">{{ localeData?.ii_assets }}</strong>
+                                    <strong class="font-size-15">{{ localeData?.ii_assets }}</strong>
                                 </div>
                             </div>
                             <ng-template #groupDetails let-list let-padding="padding">
@@ -204,12 +204,12 @@
                         </div>
                     </div>
 
-                    <div class="top-bar row clearfix">
+                    <div class="top-bar row clear-both">
                         <div class="col-4 group">
-                            <strong class="font-15">{{ localeData?.total_assets }}</strong>
+                            <strong class="font-size-15">{{ localeData?.total_assets }}</strong>
                         </div>
                         <div class="col-4 group text-right">
-                            <strong class="font-15">
+                            <strong class="font-size-15">
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="bsData?.assetTotal"
@@ -221,7 +221,7 @@
                             </strong>
                         </div>
                         <div class="col-4 group text-right">
-                            <strong class="font-15">
+                            <strong class="font-size-15">
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="bsData?.assetTotalEnd"

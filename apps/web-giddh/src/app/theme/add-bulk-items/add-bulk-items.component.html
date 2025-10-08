@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event">
     <div class="bulk-entry">
         <div class="dialog-header">
-            <span class="font-16">{{ localeData?.add_bulk_items }}</span>
+            <span class="font-size-16">{{ localeData?.add_bulk_items }}</span>
             <i mat-dialog-close class="icon-cross"></i>
         </div>
         <div mat-dialog-content class="bulk-entry-body dialog-body d-flex">
@@ -85,7 +85,7 @@
                                                     </div>
 
                                                     <div
-                                                        class="d-flex align-items-center justify-content-between column-gap1">
+                                                        class="d-flex align-items-center justify-content-between column-gap-1">
                                                         <button mat-stroked-button (click)="alterQuantity(item, 'minus')">
                                                             <i class="icon-minus"></i>
                                                         </button>
@@ -93,14 +93,14 @@
                                                             formControlName="quantity" [minlength]="1"
                                                             [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
                                                         <button mat-stroked-button (click)="alterQuantity(item)">
-                                                            <i class="icon-add font-16 fw-bold"></i>
+                                                            <i class="icon-add font-size-16 font-weight-semibold"></i>
                                                         </button>
                                                         <button mat-button (click)="
                                                                 deleteSelectedItem(
                                                                     bulkIndex
                                                                 )
                                                             ">
-                                                            <i class="icon-cross font-16"></i>
+                                                            <i class="icon-cross font-size-16"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -109,7 +109,7 @@
                                     </ng-container>
                                 </ng-container>
                             </div>
-                            <div class="selected-item-action d-flex column-gap1">
+                            <div class="selected-item-action d-flex column-gap-1">
                                 <button mat-raised-button color="primary" (click)="saveBulkItems()">{{ commonLocaleData?.app_add }}</button>
                                 <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
                             </div>

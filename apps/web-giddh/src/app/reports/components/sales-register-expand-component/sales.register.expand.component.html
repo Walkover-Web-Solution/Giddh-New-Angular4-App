@@ -11,7 +11,7 @@
                 <div class="d-flex">
                     <div class="form-group expand-collapse-btn mr-3 mb-0">
                         <a
-                            class="cp"
+                            class="cursor-pointer"
                             (click)="emitExpand()"
                             matTooltip="{{ commonLocaleData?.app_expand_all }}"
                             matTooltipPosition="above"
@@ -20,7 +20,7 @@
                             <span class="icon-expandIcon"></span>
                         </a>
                         <a
-                            class="cp"
+                            class="cursor-pointer"
                             (click)="emitExpand()"
                             matTooltip="{{ commonLocaleData?.app_collapse_all }}"
                             matTooltipPosition="above"
@@ -56,7 +56,7 @@
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
-                <div class="dis middle top-bar-content-right-side">
+                <div class="dis vertical-align-middletop-bar-content-right-side">
                     <button 
                         mat-stroked-button
                         class="mr-r1"
@@ -244,7 +244,7 @@
                         <!-- Account Column -->
                         <ng-container matColumnDef="account">
                             <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_account }} </th>
-                            <td mat-cell *matCellDef="let item" (dblclick)="modalUniqueName = item?.uniqueName" class="cp no-dbl-click-select"> 
+                            <td mat-cell *matCellDef="let item" (dblclick)="modalUniqueName = item?.uniqueName" class="cursor-pointer no-dbl-click-select"> 
                                 {{ item.account.name }}
                                 <div
                                     *ngIf="modalUniqueName === item?.uniqueName"

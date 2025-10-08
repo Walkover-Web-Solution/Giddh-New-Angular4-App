@@ -11,8 +11,8 @@
     ></giddh-page-loader>
     <div class="invoice-preview-wrapper d-flex" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
         <div class="preview-list pd-b15">
-            <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
-                <div class="position-relative search-field flex-grow-1">
+            <div class="d-flex align-items-center column-gap-05 pd-15 w-100 list-responsive row-gap-1">
+                <div class="position-relative  search-field flex-grow-1">
                     <text-field
                         class="width-inherit"
                         [type]="'text'"
@@ -39,12 +39,12 @@
                                 }"
                                 (click)="setSelectedContact(item?.uniqueName, true)"
                             >
-                                <div class="d-flex justify-content-between align-items-center column-gap5">
+                                <div class="d-flex justify-content-between align-items-center column-gap-05">
                                     <div>
-                                        <span class="font-12 text-blue">
+                                        <span class="font-size-12 text-primary">
                                             {{ item?.uniqueName }}
                                         </span>
-                                        <p class="black-color pd-r3 text-wrap">
+                                        <p class="text-default pd-r3 text-wrap">
                                             {{ item?.name }}
                                         </p>
                                     </div>
@@ -63,8 +63,8 @@
             </div>
         </div>
         <div class="preview-content">
-            <div class="relative overflow-visible">
-                <div class="clearfix overflow-visible">
+            <div class="position-relativeoverflow-visible">
+                <div class="clear-both overflow-visible">
                     <div class="position-absolute back-button">
                         <button mat-stroked-button (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}

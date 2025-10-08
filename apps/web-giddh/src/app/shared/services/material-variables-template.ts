@@ -123,7 +123,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         /* primary color */
         --mdc-text-button-label-text-color: var(--mat-primary-color);
         --mat-text-button-state-layer-color: var(--mat-primary-color);
-        --mat-text-button-ripple-color: rgba(var(--mat-primary-color-rgb), var(--mat-hover-opacity));
+        --mat-text-button-ripple-color: rgba(var(--mat-text-primary-rgb), var(--mat-hover-opacity));
     }
 
     .mat-mdc-button.mat-accent {
@@ -272,7 +272,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-outlined-button-label-text-color: var(--mat-primary-color);
         --mdc-outlined-button-outline-color: rgba(var(--mat-text-color), 0.12);
         --mat-outlined-button-state-layer-color: var(--mat-primary-color);
-        --mat-outlined-button-ripple-color: rgba(var(--mat-primary-color-rgb), var(--mat-hover-opacity));
+        --mat-outlined-button-ripple-color: rgba(var(--mat-text-primary-rgb), var(--mat-hover-opacity));
     }
 
     .mat-mdc-outlined-button.mat-accent {
@@ -308,7 +308,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         /* primary color */
         --mdc-icon-button-icon-color: var(--mat-primary-color);
         --mat-icon-button-state-layer-color: var(--mat-primary-color);
-        --mat-icon-button-ripple-color: rgba(var(--mat-primary-color-rgb), var(--mat-hover-opacity));
+        --mat-icon-button-ripple-color: rgba(var(--mat-text-primary-rgb), var(--mat-hover-opacity));
     }
 
     .mat-mdc-icon-button.mat-accent {
@@ -609,10 +609,10 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         /* default/primary color */
         --mat-datepicker-calendar-date-selected-state-text-color: var(--mat-primary-contrast-color);
         --mat-datepicker-calendar-date-selected-state-background-color: var(--mat-primary-color);
-        --mat-datepicker-calendar-date-selected-disabled-state-background-color: rgba(var(--mat-primary-color-rgb), 0.4);
+        --mat-datepicker-calendar-date-selected-disabled-state-background-color: rgba(var(--mat-text-primary-rgb), 0.4);
         --mat-datepicker-calendar-date-today-selected-state-outline-color: var(--mat-primary-contrast-color);
-        --mat-datepicker-calendar-date-focus-state-background-color: rgba(var(--mat-primary-color-rgb), 0.3);
-        --mat-datepicker-calendar-date-hover-state-background-color: rgba(var(--mat-primary-color-rgb), 0.3);
+        --mat-datepicker-calendar-date-focus-state-background-color: rgba(var(--mat-text-primary-rgb), 0.3);
+        --mat-datepicker-calendar-date-hover-state-background-color: rgba(var(--mat-text-primary-rgb), 0.3);
         --mat-datepicker-toggle-active-state-icon-color: var(--mat-accent-color);
         --mat-datepicker-calendar-date-in-range-state-background-color: rgba(var(--mat-accent-color-rgb), 0.2);
         --mat-datepicker-calendar-date-in-comparison-range-state-background-color: rgba(var(--mat-warn-color-rgb), 0.2);
@@ -629,7 +629,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mat-datepicker-calendar-date-text-color: var(--mat-text-color);
         --mat-datepicker-calendar-date-outline-color: var(--mat-transparent-color);
         --mat-datepicker-calendar-date-disabled-state-text-color: var(--mat-disabled-color);
-        --mat-datepicker-calendar-date-preview-state-outline-color: rgba(var(--mat-primary-color-rgb), 0.24);
+        --mat-datepicker-calendar-date-preview-state-outline-color: rgba(var(--mat-text-primary-rgb), 0.24);
         --mat-datepicker-calendar-date-today-outline-color: rgba(var(--mat-text-color), 0.5);
         --mat-datepicker-range-input-disabled-state-separator-color: var(--mat-disabled-color);
         --mat-datepicker-range-input-disabled-state-text-color: var(--mat-disabled-color);
@@ -1009,7 +1009,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     .mat-mdc-progress-bar {
         /* default/primary color */
         --mdc-linear-progress-active-indicator-color: var(--mat-primary-color);
-        --mdc-linear-progress-track-color: rgba(var(--mat-primary-color-rgb), 0.25);
+        --mdc-linear-progress-track-color: rgba(var(--mat-text-primary-rgb), 0.25);
     }
 
     .mat-mdc-progress-bar.mat-accent {
@@ -1331,8 +1331,8 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-slider-with-tick-marks-disabled-container-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mdc-slider-handle-elevation: var(--mat-elevation-2);
         --mat-mdc-slider-ripple-color: var(--mat-primary-color);
-        --mat-mdc-slider-hover-ripple-color: rgba(var(--mat-primary-color-rgb), 0.05);
-        --mat-mdc-slider-focus-ripple-color: rgba(var(--mat-primary-color-rgb), 0.2);
+        --mat-mdc-slider-hover-ripple-color: rgba(var(--mat-text-primary-rgb), 0.05);
+        --mat-mdc-slider-focus-ripple-color: rgba(var(--mat-text-primary-rgb), 0.2);
         --mat-slider-value-indicator-opacity: 0.9;
 
         /* typography */
