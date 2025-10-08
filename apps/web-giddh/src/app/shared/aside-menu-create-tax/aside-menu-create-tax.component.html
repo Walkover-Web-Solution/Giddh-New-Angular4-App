@@ -175,7 +175,7 @@
                         [name]="'taxFileDate'"
                         [required]="true"
                         [options]="days"
-                        (selectedOption)="$event && taxForm.get('taxFileDate').patchValue(+$event.value)"
+                        (selectedOption)="taxForm.get('taxFileDate').patchValue($event.value)"
                     ></reactive-dropdown-field>
                 </div>
             </div>

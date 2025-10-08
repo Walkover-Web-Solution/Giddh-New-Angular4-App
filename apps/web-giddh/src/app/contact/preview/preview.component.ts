@@ -234,7 +234,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((params) => {
+        this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params) {
                 this.params = params;
                 this.contactActiveTab = params?.type;
@@ -244,7 +244,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((queryParams) => {
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams) => {
             if (queryParams && !this.isAccountUpdateInProgress) {
                 this.isSearching = false;
                 this.selectedContact = null;
