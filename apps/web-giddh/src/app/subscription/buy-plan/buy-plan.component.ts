@@ -562,10 +562,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                     if (this.subscriptionId && this.isChangePlan) {
                                         this.router.navigate(['/pages/user-details/subscription']);
                                     } else {
-                                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
-                                };
-                            }
-                        });
+                                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                                    };
+                                }
+                            });
                         }, 100);
                     } else {
                         setTimeout(() => {
@@ -740,7 +740,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.upgradePlan && this.upgradeRegion === 'GBR') {
             const reqObj = {
                 subscriptionId: this.upgradeSubscriptionId,
-                goCardLessBillingRequestId : this.goCardLessBillingRequestId
+                goCardLessBillingRequestId: this.goCardLessBillingRequestId
             };
             this.componentStore.activatePlan(reqObj);
             this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1405,7 +1405,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.isChangePlan || this.isRenewPlan) {
             reqObj['subscriptionId'] = this.subscriptionId;
         }
-
         if (this.selectedPlan?.uniqueName && reqObj?.countryCode) {
             this.componentStore.getCalculationData(reqObj);
         }
@@ -1778,7 +1777,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['taxNumber'].setValue(data.taxNumber);
         this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
         this.secondStepForm.controls['address'].setValue(data?.address);
+        if (data?.country) {
+            this.secondStepForm.controls['country'].setValue({ label: data.country.name, value: data.country.code, additional: data.country });
+        }
+        if (data?.state) {
+            this.secondStepForm.controls['state'].setValue({ label: data.state.name, value: data.state.code, additional: data.state });
+        } else {
+            this.secondStepForm.controls['state'].setValue({ abel: data.county.name, value: data.county.code, additional: data.county });
+        }
+
         this.initIntl(this.secondStepForm.get('mobileNumber')?.value);
+
         this.subscriptionForm.markAsPristine();
         this.changeDetection.detectChanges();
     }
