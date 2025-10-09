@@ -255,6 +255,7 @@
                                                             !branchTransferCreateEditForm?.get('sources.0.uniqueName')
                                                                 ?.value
                                                         "
+                                                        (onClear)="resetSenderAndRecieverName()"
                                                     >
                                                     </reactive-dropdown-field>
                                                     <i
@@ -484,6 +485,7 @@
                                                                   ).value
                                                                 : ''
                                                         "
+                                                        [forceClear]="forceClear"
                                                     >
                                                     </reactive-dropdown-field>
                                                 </div>
@@ -850,6 +852,7 @@
                                                                 'sources.0.warehouse.uniqueName'
                                                             )?.value
                                                         "
+                                                        [forceClear]="forceClear"
                                                     >
                                                     </reactive-dropdown-field>
                                                 </div>
@@ -938,6 +941,7 @@
                                                                 branchTransferCreateEditForm?.get('destinations.0.name')
                                                                     ?.value
                                                             "
+                                                            (onClear)="resetSenderAndRecieverName()"
                                                         >
                                                         </reactive-dropdown-field>
                                                         <i

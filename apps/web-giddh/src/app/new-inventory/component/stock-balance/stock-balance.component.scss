@@ -27,7 +27,10 @@
         .stock-balance-top-bar-left-side {
             display: flex;
             align-items: center;
-
+            
+            .stock-btn-height {
+                height: 40px;
+            }
             /* UNUSED COMPONENT CLASS: new-stock-btn - Auto-commented by script
 .new-stock-btn {
                 color: var(--color-white);
