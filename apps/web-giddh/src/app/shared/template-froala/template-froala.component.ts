@@ -70,8 +70,6 @@ export class TemplateFroalaComponent implements OnInit {
     public isElectron: any = isElectron;
     /** Hold froala editor options */
     public froalaOptions: any;
-    /** Guard to avoid reassigning froalaOptions after first setup */
-    private froalaOptionsSetOnce: boolean = false;
     /** Retry counter for Froala initialization */
     private froalaInitRetryCount: number = 0;
     /** Maximum retry attempts for Froala initialization */
@@ -166,7 +164,6 @@ export class TemplateFroalaComponent implements OnInit {
     ) {
         // Initialize Froala options after environment detection
         this.froalaOptions = this.getFroalaOptions();
-        this.froalaOptionsSetOnce = true;
     }
 
     /**
@@ -183,16 +180,6 @@ export class TemplateFroalaComponent implements OnInit {
         document.querySelector('body').classList.add('hide-chat-widget');
         this.isTrigger = this.inputData?.isTrigger;
         this.initializeForm();
-        // Ensure html control stays a string to avoid rendering objects (like options) into textarea
-        const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
-        const htmlCtrl = currentForm?.get('html');
-        if (htmlCtrl) {
-            htmlCtrl.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
-                if (typeof val !== 'string') {
-                    htmlCtrl.patchValue('', { emitEvent: false });
-                }
-            });
-        }
         this.getEmailContents();
         if (this.isTrigger) {
             this.triggerStore.createUpdateTriggerIsSuccess$.pipe(
@@ -266,7 +253,9 @@ export class TemplateFroalaComponent implements OnInit {
                     key: item
                 }));
 
-                // Do not reassign froalaOptions once set; it can force directive to teardown
+                if (!this.froalaEditor) {
+                    this.froalaOptions = this.getFroalaOptions();
+                }
                 setTimeout(() => {
                     this.initializeTribute(tributeSuggestions);
                 }, 300);
@@ -419,8 +408,6 @@ export class TemplateFroalaComponent implements OnInit {
                             if (htmlValue) {
                                 this.froalaEditor.html.set(htmlValue);
                             }
-                            // Ensure editor calculates correct height after initial content
-                            try { this.froalaEditor.size.refresh(); } catch (_) {}
                         }, contentDelay);
                     }, setupDelay);
                 },
@@ -432,8 +419,6 @@ export class TemplateFroalaComponent implements OnInit {
                 },
                 'contentChanged': () => {
                     this.updateFormControl();
-                    // Keep height stable on content updates
-                    try { this.froalaEditor.size.refresh(); } catch (_) {}
                 },
                 // Add error handling for Electron
                 'error': (error) => {
@@ -486,11 +471,7 @@ export class TemplateFroalaComponent implements OnInit {
     private retryFroalaInitialization(): void {
         this.froalaInitRetryCount++;
         setTimeout(() => {
-            // Only reassign options if editor hasn't been created yet
-            if (!this.froalaEditor && !this.froalaOptionsSetOnce) {
-                this.froalaOptions = this.getFroalaOptions();
-                this.froalaOptionsSetOnce = true;
-            }
+            this.froalaOptions = this.getFroalaOptions();
         }, this.froalaInitRetryDelay * this.froalaInitRetryCount);
     }
 
@@ -539,13 +520,13 @@ export class TemplateFroalaComponent implements OnInit {
         this.froalaTribute = new Tribute({
             trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
-            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}</span>`
+            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}</span>`
         });
 
         this.subjectTribute = new Tribute({
             trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
-            selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
+            selectTemplate: (item) => `${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}`
         });
         
         if (this.froalaEditor) {
@@ -894,49 +875,11 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-     * Safely destroys Froala editor and detaches Tribute instances
-     * to avoid null reference errors during dialog/component teardown.
-     *
-     * @private
-     * @memberof TemplateFroalaComponent
-     */
-    private destroyEditor(): void {
-        try {
-            // Detach tribute from Froala editor element if both exist
-            if (this.froalaTribute && this.froalaEditor?.el) {
-                try { this.froalaTribute.detach(this.froalaEditor.el); } catch (_) {}
-            }
-
-            // Detach tribute from subject input if exists
-            if (this.subjectTribute && this.subjectInputField?.nativeElement) {
-                try { this.subjectTribute.detach(this.subjectInputField.nativeElement); } catch (_) {}
-            }
-
-            // Remove any event handlers bound via Froala events API
-            if (this.froalaEditor?.events) {
-                try { this.froalaEditor.events.off('keydown'); } catch (_) {}
-            }
-
-            // Destroy Froala editor instance safely
-            if (this.froalaEditor?.destroy) {
-                try { this.froalaEditor.destroy(true); } catch (_) {}
-            }
-        } finally {
-            // Null out references
-            this.froalaEditor = null;
-            this.froalaTribute = null;
-            this.subjectTribute = null;
-        }
-    }
-
-    /**
      * Releases the memory
      *
      * @memberof TemplateFroalaComponent
      */
     public ngOnDestroy(): void {
-        // Ensure editor/tributes are torn down before Angular animation/dialog teardown
-        this.destroyEditor();
         document.querySelector('body').classList.remove('hide-chat-widget');
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -1115,10 +1058,6 @@ export class TemplateFroalaComponent implements OnInit {
                 { label: this.localeData?.day_of_week, value: OtherTimeOptionsEnum.DayOfWeek },
                 { label: this.localeData?.date_of_month, value: OtherTimeOptionsEnum.DayOfMonth }
             ];
-            // Update Froala placeholder without recreating options to prevent directive teardown
-            if (this.froalaOptions) {
-                this.froalaOptions.placeholderText = this.localeData?.email_content_suggestions;
-            }
         }
     }
 
