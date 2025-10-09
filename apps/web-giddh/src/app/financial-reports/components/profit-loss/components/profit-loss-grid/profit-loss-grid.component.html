@@ -126,12 +126,12 @@
                                 </section>
                                 <!--/Grid-->
                             </div>
-                            <div class="account clear-both row flex-no-wrap" *ngIf="plData && plData.incomeStatement && !hideData">
+                            <div class="account clear-both row flex-nowrap" *ngIf="plData && plData.incomeStatement && !hideData">
                                 <div class="col-4 group pl-sticky-group">
                                     <strong class="font-size-15">{{ localeData?.gross_profit }}</strong>
                                 </div>
                                 <div class="col group text-right pull-right p-0">
-                                    <div class="row flex-no-wrap">
+                                    <div class="row flex-nowrap">
                                         <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.grossProfit)">
                                             <strong class="col font-size-15 px-0 pd-r05 border-left">
                                                 <span class="d-inline-flex">
@@ -212,7 +212,7 @@
                                                 {{ localeData?.total_operating_expenses }}
                                             </div>
                                             <div class="col group text-right pull-right p-0">
-                                                <div class="row flex-no-wrap">
+                                                <div class="row flex-nowrap">
                                                     <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.operatingExpenses)">
                                                         <div class="col px-0 pd-r05 border-left row-height">
                                                             <ng-container
@@ -239,14 +239,14 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="account clear-both font-size-15 row flex-no-wrap"
+                                            class="account clear-both font-size-15 row flex-nowrap"
                                             *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
                                         >
                                             <div class="col-4 group pl-sticky-group">
                                                 <strong class="font-size-15">{{ localeData?.operating_profit_loss }}</strong>
                                             </div>
                                             <div class="col group text-right pull-right p-0">
-                                                <div class="row flex-no-wrap">
+                                                <div class="row flex-nowrap">
                                                     <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.operatingProfit)">
                                                         <strong class="col font-size-15 px-0 pd-r05 border-left">
                                                             <span class="d-inline-flex">
@@ -271,7 +271,7 @@
                                                     {{ localeData?.total_other_expense }}
                                                 </div>
                                                 <div class="col group text-right pull-right p-0">
-                                                    <div class="row flex-no-wrap">
+                                                    <div class="row flex-nowrap">
                                                         <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.otherExpenses)">
                                                             <div class="col px-0 pd-r05 border-left row-height">
                                                                 <span>
@@ -315,12 +315,12 @@
                     </div>
                     <div class="income-before-taxes">
                         <section class="clear-both profit-loss">
-                            <div class="account clear-both row flex-no-wrap" *ngIf="plData && plData?.incomeStatement && !hideData">
+                            <div class="account clear-both row flex-nowrap" *ngIf="plData && plData?.incomeStatement && !hideData">
                                 <div class="col-4 group pl-sticky-group">
                                     <strong class="font-size-15">{{ localeData?.income_before_taxes }}</strong>
                                 </div>
                                 <div class="col group text-right pull-right p-0">
-                                    <div class="row flex-no-wrap">
+                                    <div class="row flex-nowrap">
                                         <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.incomeBeforeTaxes)">
                                             <strong class="col font-size-15 px-0 pd-r05 border-left">
                                                 <span
@@ -358,7 +358,7 @@
                                     {{ localeData?.taxes_30 }}
                                 </div>
                                 <div class="col group text-right pull-right p-0">
-                                    <div class="row flex-no-wrap">
+                                    <div class="row flex-nowrap">
                                         <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.appliedTax)">
                                             <div class="col px-0 pd-r05 border-left row-height">
                                                 <span class="d-inline-flex">

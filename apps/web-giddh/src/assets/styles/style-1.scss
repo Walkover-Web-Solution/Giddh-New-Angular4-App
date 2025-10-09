@@ -2410,7 +2410,7 @@ form#groupDetailForm {
     position: relative;
     z-index: 5;
     height: 100vh;
-    color: var(--color-black);
+    // color: var(--color-black);
     background-color: var(--color-light-gray) !important;
 }
 .help-support-aside {
@@ -2422,23 +2422,11 @@ form#groupDetailForm {
         }
     }
 }
-.aside-pane {
-    max-width: 760px;
-    width: 100%;
-}
-.aside-overlay {
-    position: fixed;
-    top: var(--top-distance);
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 991;
-    background: var(--color-black);
-    opacity: 0.5;
-    -webkit-transition: opacity 0.15s linear;
-    -o-transition: opacity 0.15s linear;
-    transition: opacity 0.15s linear;
-}
+// .aside-pane {
+//     max-width: 760px;
+//     width: 100%;
+// }
+
 .aside-body {
     padding: 0 15px;
 }

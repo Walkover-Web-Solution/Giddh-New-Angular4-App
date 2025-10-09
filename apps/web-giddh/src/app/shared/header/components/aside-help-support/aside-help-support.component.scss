@@ -25,9 +25,6 @@
         z-index: 1;
         transform: rotate(45deg);
     }
-    .aside-pane{
-        overflow: auto;
-    }
 }
 :host.in #close {
     display: block;
@@ -62,9 +59,6 @@
 }
 */
 .aside-pane {
-    padding: 0;
-    background-color: var(--color-light-gray);
-    z-index: 9;
     .aside-help-header {
         display: flex;
         justify-content: space-between;
@@ -85,7 +79,6 @@
     }
     .help-aside-body {
         .faq-block {
-            padding: 15px;
             border-bottom: 1px solid var(--color-silver);
             a {
                 display: block;

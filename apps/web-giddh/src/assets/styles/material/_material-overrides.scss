@@ -3,6 +3,16 @@
     max-width: unset !important;
 }
 
+// / Dialog
+.mdc-dialog {
+    .mdc-dialog__content {
+        padding: 15px !important;
+    }
+    .mat-mdc-dialog-content {
+        max-height: unset;
+    }
+}
+
 // Customize Material Radio Button
 .mat-mdc-radio-group {
     display: flex;
@@ -15,13 +25,12 @@
     }
 }
 
-// Table 
+// Table
 table tr {
     &:hover {
         background-color: inherit !important;
     }
 }
-
 
 // Material Reset global utility class
 .mat-form-field-no-overlay {
@@ -35,4 +44,16 @@ table tr {
     .mdc-line-ripple {
         display: none;
     }
+}
+.mat-form-field-no-background {
+    .mdc-text-field--filled {
+        &:not(.mdc-text-field--disabled) {
+            background-color: var(--color-transparent);
+        }
+    }
+}
+.mat-form-field-clean {
+    @extend .mat-form-field-no-overlay;
+    @extend .mat-form-field-no-line-ripple;
+    @extend .mat-form-field-no-background;
 }

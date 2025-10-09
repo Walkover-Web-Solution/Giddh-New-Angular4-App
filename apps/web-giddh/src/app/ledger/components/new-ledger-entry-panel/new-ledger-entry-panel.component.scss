@@ -151,9 +151,6 @@
     display: inline-block;
     margin-bottom: 12px;
 }
-.in-words.words-inline {
-    float: right;
-}
 .passport-no-width {
     width: 150px;
     font-size: var(--font-size-12);
@@ -325,5 +322,10 @@ span {
                 min-width: auto !important;
             }
         }
+    }
+}
+.map-txn-container {
+    table tr td {
+        width: 25%;
     }
 }

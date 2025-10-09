@@ -9,14 +9,14 @@
     <section class="right-bar" *ngIf="!showWelcomePage">
         <section class="container-fluid clear-both pd-t15">
             <section class="h-100">
-                <div class="fb-1-container">
+                <div class="d-flex justify-content-center align-items-center">
                     <div class="d-flex job-work-content">
                         <div class="d-flex form-inline">
-                            <p class="mr-2 report-info d-inline-block font-weight-semibold text-capitalize font-size-16">
-                                <span *ngIf="type === 'stock'" class="report-info">{{ nameStockOrPerson }}</span
+                            <p class="mr-2 text-transform-capitalize d-inline-block font-weight-semibold text-capitalize font-size-16">
+                                <span *ngIf="type === 'stock'" class="text-transform-capitalize">{{ nameStockOrPerson }}</span
                                 >&nbsp;<span *ngIf="type === 'stock'">(Transaction Log)</span>
 
-                                <span *ngIf="type === 'person'" class="report-info"
+                                <span *ngIf="type === 'person'" class="text-transform-capitalize"
                                     ><span>{{ nameStockOrPerson }}</span></span
                                 >
                             </p>

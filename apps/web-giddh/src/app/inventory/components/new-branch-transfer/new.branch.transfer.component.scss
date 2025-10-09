@@ -362,21 +362,6 @@ tfoot td .table-sec.form-group {
     right: 0;
     z-index: 9999;
 }
-.aside-overlay.out {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.aside-overlay.in {
-    visibility: visible;
-    opacity: 0.6;
-    z-index: 991;
-}
-
-.aside-overlay {
-    transition: 0.5s all ease;
-    z-index: 9991;
-}
 .icon-pointer.active-text-color {
     color: var(--text-primary-color);
 }

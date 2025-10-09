@@ -344,9 +344,8 @@ tr.aging-table-top td {
     color: var(--text-primary-color);
 }
 
-.btn-primary.active,
-.btn-primary:active,
-.open > .dropdown-toggle/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
+/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
+.open > .dropdown-toggle
 .btn-primary {
     color: var(--color-black);
     background-color: var(--color-border-light);

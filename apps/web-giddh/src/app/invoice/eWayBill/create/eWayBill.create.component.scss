@@ -168,26 +168,6 @@
     border-bottom: 2px solid var(--color-silver);
 }
 
-.aside-overlay/* UNUSED COMPONENT CLASS: out - Auto-commented by script
-.out {
-    visibility: hidden;
-    opacity: 0;
-}
-*/
-
-.aside-overlay.in {
-    visibility: visible;
-    opacity: 0.6;
-    z-index: 991;
-}
-
-/* UNUSED COMPONENT CLASS: aside-overlay - Auto-commented by script
-.aside-overlay {
-    transition: 0.5s all ease;
-    z-index: 991;
-}
-*/
-
 /* UNUSED COMPONENT CLASS: date-input-icon - Auto-commented by script
 .date-input-icon {
     top: 9px;

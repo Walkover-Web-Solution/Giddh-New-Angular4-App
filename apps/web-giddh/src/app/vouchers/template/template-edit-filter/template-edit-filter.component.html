@@ -374,7 +374,6 @@
                                                             <input-field
                                                                 type="text"
                                                                 name="headerCompanyName"
-                                                                cssClass="form-control"
                                                                 [label]="commonLocaleData?.app_company_name"
                                                                 [maxlength]="50"
                                                                 [(ngModel)]="
@@ -659,7 +658,6 @@
                                                             <input-field
                                                                 type="text"
                                                                 maxlength="70"
-                                                                cssClass="form-control"
                                                                 name="gstComposition"
                                                                 [label]="
                                                                     localeData?.registered_under_composition_scheme
@@ -717,14 +715,12 @@
                                                                 onChangeFieldVisibility()
                                                             "
                                                             class="d-block"
-                                                            cssClass="form-control"
                                                         >
                                                         </mat-checkbox>
                                                         <div class="w-100 ml-2">
                                                             <div>
                                                                 <input-field
                                                                     type="text"
-                                                                    cssClass="form-control"
                                                                     [maxlength]="
                                                                         customTemplate.templateType ===
                                                                         templateTypeEnum.ThermalTemplate
@@ -801,7 +797,6 @@
                                                                 <input-field
                                                                     type="text"
                                                                     name="invoiceNo"
-                                                                    cssClass="form-control"
                                                                     [maxlength]="
                                                                         customTemplate.templateType ===
                                                                         templateTypeEnum.ThermalTemplate
@@ -882,7 +877,6 @@
                                                                 <input-field
                                                                     type="text"
                                                                     maxlength="15"
-                                                                    cssClass="form-control"
                                                                     name="invoiceDate"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['header'].data[
@@ -929,7 +923,6 @@
                                                             <div>
                                                                 <input-field
                                                                     type="text"
-                                                                    cssClass="form-control"
                                                                     maxlength="15"
                                                                     name="voucherNo"
                                                                     [(ngModel)]="
@@ -985,7 +978,6 @@
                                                             <input-field
                                                                 type="text"
                                                                 name="dueDate1"
-                                                                cssClass="form-control"
                                                                 [label]="localeData?.due_date"
                                                                 maxlength="15"
                                                                 [(ngModel)]="
@@ -1059,7 +1051,6 @@
                                                                             'formNameInvoice'
                                                                         ].display
                                                                     "
-                                                                    [cssClass]="'form-control'"
                                                                     maxlength="15"
                                                                 ></input-field>
                                                             </div>
@@ -1080,7 +1071,6 @@
                                                             <div class="option-value-field">
                                                                 <input-field
                                                                     [type]="'text'"
-                                                                    [cssClass]="'form-control'"
                                                                     maxlength="15"
                                                                     name="taxTitle"
                                                                     [(ngModel)]="
@@ -1229,7 +1219,6 @@
                                                                         ? 20
                                                                         : 18
                                                                 "
-                                                                cssClass="form-control"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['header'].data[
                                                                         'billingAddress'
@@ -1316,7 +1305,6 @@
                                                                         ].label
                                                                     "
                                                                     maxlength="15"
-                                                                    cssClass="form-control"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['header'].data[
                                                                             'billingGstin'
@@ -1387,7 +1375,6 @@
                                                                 "
                                                                 [type]="'text'"
                                                                 [name]="'shippAdd'"
-                                                                cssClass="form-control"
                                                                 name="shippingAddress"
                                                                 [maxlength]="
                                                                     customTemplate?.templateType ===
@@ -1470,7 +1457,6 @@
                                                                 "
                                                                 name="shippingGstin"
                                                                 maxlength="15"
-                                                                cssClass="form-control"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['header'].data[
                                                                         'shippingGstin'
@@ -1551,7 +1537,6 @@
                                                                             ].display
                                                                         "
                                                                         maxlength="15"
-                                                                        [cssClass]="'form-control'"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div>
@@ -1601,7 +1586,6 @@
                                                                             ].display
                                                                         "
                                                                         maxlength="15"
-                                                                        [cssClass]="'form-control'"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div>
@@ -1658,7 +1642,6 @@
                                                                                 'trackingNumber'
                                                                             ].display
                                                                         "
-                                                                        [cssClass]="'form-control'"
                                                                         maxlength="15"
                                                                     ></input-field>
                                                                 </div>
@@ -1729,7 +1712,6 @@
                                                                                 'customField1'
                                                                             ].display
                                                                         "
-                                                                        [cssClass]="'form-control'"
                                                                         maxlength="15"
                                                                     ></input-field>
                                                                 </div>
@@ -1769,7 +1751,6 @@
                                                                     <input-field
                                                                         [label]="localeData?.custom_field_2"
                                                                         [type]="'text'"
-                                                                        [cssClass]="'form-control'"
                                                                         maxlength="15"
                                                                         name="customField2"
                                                                         [(ngModel)]="
@@ -1821,7 +1802,6 @@
                                                                     <input-field
                                                                         [label]="localeData?.custom_field_3"
                                                                         [type]="'text'"
-                                                                        [cssClass]="'form-control'"
                                                                         maxlength="15"
                                                                         name="customField3"
                                                                         [(ngModel)]="
@@ -1896,7 +1876,6 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [label]="localeData?.s_no"
-                                                            [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="ss"
                                                             [(ngModel)]="
@@ -1979,7 +1958,6 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [label]="commonLocaleData?.app_date"
-                                                            [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="dt1"
                                                             [(ngModel)]="
@@ -2034,7 +2012,6 @@
                                                                 [type]="'text'"
                                                                 [label]="localeData?.item"
                                                                 [name]="'item'"
-                                                                [cssClass]="'form-control'"
                                                                 [maxlength]="
                                                                     customTemplate.templateType ===
                                                                     templateTypeEnum.TallyTemplate
@@ -2080,7 +2057,6 @@
                                                             [type]="'text'"
                                                             [label]="localeData?.item"
                                                             [name]="'item'"
-                                                            [cssClass]="'form-control'"
                                                             [maxlength]="
                                                                 customTemplate.templateType ===
                                                                 templateTypeEnum.TallyTemplate
@@ -2158,7 +2134,6 @@
                                                             [type]="'text'"
                                                             [label]="localeData?.hsn_sac"
                                                             [name]="'hsnsac'"
-                                                            [cssClass]="'form-control'"
                                                             maxlength="8"
                                                             name="hsn1"
                                                             [(ngModel)]="
@@ -2211,7 +2186,6 @@
                                                                 [type]="'text'"
                                                                 [label]="commonLocaleData?.app_quantity"
                                                                 [name]="'quantity'"
-                                                                [cssClass]="'form-control'"
                                                                 [maxlength]="
                                                                     customTemplate.templateType ===
                                                                     templateTypeEnum.TallyTemplate
@@ -2259,7 +2233,6 @@
                                                             [type]="'text'"
                                                             [label]="commonLocaleData?.app_quantity"
                                                             [name]="'quantity'"
-                                                            [cssClass]="'form-control'"
                                                             [maxlength]="
                                                                 customTemplate.templateType ===
                                                                 templateTypeEnum.TallyTemplate
@@ -2312,7 +2285,6 @@
                                                         <input-field
                                                             [label]="commonLocaleData?.app_description"
                                                             [type]="'text'"
-                                                            [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="dsc1"
                                                             [(ngModel)]="
@@ -2364,7 +2336,6 @@
                                                             <input-field
                                                                 [label]="localeData?.rate"
                                                                 [type]="'text'"
-                                                                [cssClass]="'form-control'"
                                                                 maxlength="10"
                                                                 name="rt1"
                                                                 [(ngModel)]="
@@ -2402,7 +2373,6 @@
                                                         <input-field
                                                             [label]="localeData?.rate"
                                                             [type]="'text'"
-                                                            [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="rt1"
                                                             [(ngModel)]="
@@ -2473,7 +2443,6 @@
                                                             [type]="'text'"
                                                             [label]="localeData?.discount_per_item"
                                                             maxlength="10"
-                                                            [cssClass]="'form-control'"
                                                             name="ds1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['discount'].label
@@ -2526,7 +2495,6 @@
                                                             [type]="'text'"
                                                             [label]="commonLocaleData?.app_taxable_value"
                                                             maxlength="14"
-                                                            [cssClass]="'form-control'"
                                                             name="tv1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['taxableValue']
@@ -2572,7 +2540,6 @@
                                                             [type]="'text'"
                                                             maxlength="10"
                                                             [label]="commonLocaleData?.app_tax"
-                                                            [cssClass]="'form-control'"
                                                             name="t1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['tax'].label
@@ -2627,7 +2594,6 @@
                                                                     ? 5
                                                                     : 6
                                                             "
-                                                            [cssClass]="'form-control'"
                                                             name="tot1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['total'].label
@@ -2689,7 +2655,6 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [label]="localeData?.previous_due"
-                                                            [cssClass]="'form-control'"
                                                             maxlength="14"
                                                             name="previousDue"
                                                             [(ngModel)]="
@@ -2803,7 +2768,6 @@
                                                             [label]="localeData?.show_bank_qr_code"
                                                             [type]="'text'"
                                                             [name]="'qrcode'"
-                                                            [cssClass]="'form-control'"
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
@@ -2874,7 +2838,6 @@
                                                                     [label]="localeData?.tcs"
                                                                     name="tcs"
                                                                     maxlength="10"
-                                                                    [cssClass]="'form-control'"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['footer'].data['tcs']
                                                                             .label
@@ -2928,7 +2891,6 @@
                                                                     name="tdsLabel"
                                                                     maxlength="10"
                                                                     [label]="localeData?.tds"
-                                                                    [cssClass]="'form-control'"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['footer'].data['tds']
                                                                             .label
@@ -2984,7 +2946,6 @@
                                                                     [label]="commonLocaleData?.app_total_due"
                                                                     maxlength="40"
                                                                     name="totalDue"
-                                                                    [cssClass]="'form-control'"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['footer'].data[
                                                                             'totalDue'
@@ -3049,7 +3010,6 @@
                                                                 [label]="commonLocaleData?.app_company_name"
                                                                 [type]="'text'"
                                                                 [maxlength]="50"
-                                                                [cssClass]="'form-control'"
                                                                 name="footerCompanyName"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['footer'].data[
@@ -3223,7 +3183,6 @@
                                                                 [label]="localeData?.total_quantity"
                                                                 name="totalQuantity"
                                                                 maxlength="13"
-                                                                [cssClass]="'form-control'"
                                                                 [placeholder]="localeData?.total_quantity"
                                                                 [disabled]="!sectionSettings?.table.quantity?.display"
                                                                 (keyup)="onChangeFieldVisibility()"
@@ -3275,7 +3234,6 @@
                                                                 [type]="'text'"
                                                                 [label]="localeData.discount"
                                                                 maxlength="10"
-                                                                [cssClass]="'form-control'"
                                                                 name="ds1"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['table'].data['discount']
@@ -3332,7 +3290,6 @@
                                                             ].label"
                                                                 [type]="'text'"
                                                                 maxlength="14"
-                                                                [cssClass]="'form-control'"
                                                                 name="tv1"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['footer'].data[
@@ -3483,7 +3440,6 @@
                                                             [label]="localeData?.show_bank_qr_code"
                                                             [floatLabel]="'always'"
                                                             name="bankQrCode"
-                                                            [cssClass]="'form-control'"
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             (ngModelChange)="onChangeFieldVisibility()"
@@ -3721,7 +3677,6 @@
                                                                 [type]="'text'"
                                                                 name="thanks"
                                                                 maxlength="30"
-                                                                [cssClass]="'form-control'"
                                                                 placeholder="{{ localeData?.thanks }}"
                                                                 [readonly]="!sectionSettings?.footer.thanks?.display"
                                                                 (keyup)="onChangeFieldVisibility()"
@@ -3790,7 +3745,6 @@
                                                                 [type]="'text'"
                                                                 name="textUnderSlogan"
                                                                 [label]="localeData?.text_under_image_signature"
-                                                                [cssClass]="'form-control'"
                                                                 [placeholder]="localeData?.text_under_slogan"
                                                                 [readonly]="
                                                                     !sectionSettings?.footer.textUnderSlogan?.display

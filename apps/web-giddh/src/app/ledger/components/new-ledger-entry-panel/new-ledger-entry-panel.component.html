@@ -903,8 +903,8 @@
                                 <tr>
                                     <td class="text-right d-flex justify-content-end column-gap-1" [ngClass]="{ 'flex-column-reverse' : blankLedger.compoundTotal > 9999 || blankLedger.compoundTotal }" >
                                         <span
-                                        [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection"
-                                        class="pd-b1 in-words text-primary"
+                                        [class.float-right]="shouldShowRcmTaxableAmount || shouldShowItcSection"
+                                        class="pd-b1 text-right text-transform-capitalize text-primary"
                                         *ngIf="currentTxn?.total"
                                     >
                                         {{ currentTxn?.total | myNumberToWordsPipe | lowercase }}

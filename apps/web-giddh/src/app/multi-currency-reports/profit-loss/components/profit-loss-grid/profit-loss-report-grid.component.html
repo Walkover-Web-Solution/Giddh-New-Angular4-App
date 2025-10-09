@@ -105,7 +105,7 @@
                         </div>
                     </section>
                 </div>
-                <div class="account clear-both row flex-no-wrap" *ngIf="plData && plData.incomeStatement && !hideData">
+                <div class="account clear-both row flex-nowrap" *ngIf="plData && plData.incomeStatement && !hideData">
                     <div class="col-4 group pl-sticky-group">
                         <strong class="font-size-15">{{ localeData?.gross_profit }}</strong>
                     </div>
@@ -185,7 +185,7 @@
                                 {{ localeData?.total_operating_expenses }}
                             </div>
                             <div class="col group text-right pull-right p-0">
-                                <div class="row flex-no-wrap">
+                                <div class="row flex-nowrap">
                                     <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.operatingExpenses)">
                                         <div class="col px-0 border-left row-height">
                                             <ng-container
@@ -212,7 +212,7 @@
                             </div>
                         </div>
                         <div
-                            class="account clear-both font-size-15 row flex-no-wrap"
+                            class="account clear-both font-size-15 row flex-nowrap"
                             *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
                         >
                             <div class="col-4 group pl-sticky-group">
@@ -277,7 +277,7 @@
                 </ng-container>
             </section>
         </div>
-        <div class="account clear-both row flex-no-wrap" *ngIf="plData && plData?.incomeStatement && !hideData">
+        <div class="account clear-both row flex-nowrap" *ngIf="plData && plData?.incomeStatement && !hideData">
             <div class="col-4 group pl-sticky-group">
                 <strong class="font-size-15">{{ localeData?.income_before_taxes }}</strong>
             </div>
@@ -317,7 +317,7 @@
                     {{ localeData?.taxes_30 }}
                 </div>
                 <div class="col  group text-right pull-right border-left p-0">
-                    <div class="row flex-no-wrap">
+                    <div class="row flex-nowrap">
                         <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.appliedTax)">
                             <div class="col px-0">
                                 <span class="d-inline-flex">
