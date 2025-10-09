@@ -520,13 +520,13 @@ export class TemplateFroalaComponent implements OnInit {
         this.froalaTribute = new Tribute({
             trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
-            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}</span>`
+            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}</span>`
         });
 
         this.subjectTribute = new Tribute({
             trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
-            selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
+            selectTemplate: (item) => `${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}`
         });
         
         if (this.froalaEditor) {
