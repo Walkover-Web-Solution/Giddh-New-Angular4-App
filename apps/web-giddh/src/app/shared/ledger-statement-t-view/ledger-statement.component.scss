@@ -514,8 +514,9 @@ sh-select:focus {
 */
 }
 
+/* UNUSED COMPONENT CLASS: mat-grid-title - Auto-commented by script
 .left-col-new .mat-grid-list .mat-grid-title:last-child,
-.left-col-new .mat-grid-list /* UNUSED COMPONENT CLASS: mat-grid-title - Auto-commented by script
+.left-col-new .mat-grid-list
 .mat-grid-title:last-child {
     border-right: 0px !important;
 }
@@ -526,7 +527,8 @@ sh-select:focus {
     border-left: 1px solid var(--color-silver) !important;
 }
 
-.ledg-head /* UNUSED COMPONENT CLASS: icomoon-ico - Auto-commented by script
+/* UNUSED COMPONENT CLASS: icomoon-ico - Auto-commented by script
+.ledg-head 
 .icomoon-ico {
     color: var(--color-dark-gray);
     width: 36px;
@@ -580,7 +582,8 @@ sh-select:focus {
 */
 }
 
-.advance-search-block /* UNUSED COMPONENT CLASS: icon-search - Auto-commented by script
+/* UNUSED COMPONENT CLASS: icon-search - Auto-commented by script
+.advance-search-block 
 .icon-search {
     right: 0;
     top: 0;
@@ -696,7 +699,8 @@ sh-select:focus {
     margin-right: 8px;
 }
 
-.ledg-head /* UNUSED COMPONENT CLASS: advance-search-block - Auto-commented by script
+/* UNUSED COMPONENT CLASS: advance-search-block - Auto-commented by script
+.ledg-head 
 .advance-search-block {
     height: 34px;
     vertical-align: middle;
@@ -717,7 +721,8 @@ sh-select:focus {
     justify-content: space-between;
 }
 
-.d-flex/* UNUSED COMPONENT CLASS: search-ledger-field - Auto-commented by script
+/* UNUSED COMPONENT CLASS: search-ledger-field - Auto-commented by script
+.d-flex
 .search-ledger-field {
     align-items: center;
     margin-right: 0;
@@ -905,7 +910,8 @@ sh-select:focus {
     flex-wrap: wrap;
 }
 
-.input-wrapper/* UNUSED COMPONENT CLASS: ipad-view-datepicker - Auto-commented by script
+/* UNUSED COMPONENT CLASS: ipad-view-datepicker - Auto-commented by script
+.input-wrapper
 .ipad-view-datepicker {
     display: none !important;
 }
@@ -1068,7 +1074,8 @@ input#ledger-search {
     // }
 }
 
-.mat-grid-tile/* UNUSED COMPONENT CLASS: select2-ledger - Auto-commented by script
+/* UNUSED COMPONENT CLASS: select2-ledger - Auto-commented by script
+.mat-grid-tile
 .select2-ledger {
     overflow: visible !important;
 }
@@ -1301,8 +1308,9 @@ input#ledger-search {
         padding-left: 20px;
     }
 
+    /* UNUSED COMPONENT CLASS: select2-container - Auto-commented by script
     .ledg-head .mat-grid-list .mat-grid-title,
-    .ledg-head .mat-grid-list .mat-grid-title /* UNUSED COMPONENT CLASS: select2-container - Auto-commented by script
+    .ledg-head .mat-grid-list .mat-grid-title 
 .select2-container {
         border-bottom: none;
         border-right: none;
@@ -1340,7 +1348,8 @@ input#ledger-search {
         padding-left: 80px !important;
     }
 
-    .ledger-book /* UNUSED COMPONENT CLASS: h-table - Auto-commented by script
+    /* UNUSED COMPONENT CLASS: h-table - Auto-commented by script
+    .ledger-book 
 .h-table {
         display: block;
         clear: both;
@@ -1589,3 +1598,7 @@ input#ledger-search {
     }
 }
 */
+
+.h32 {
+    height: 32px;
+}

@@ -44,7 +44,7 @@
                                  <button 
                                     aria-label="{{ option.label }}" 
                                     mat-menu-item 
-                                    class="w150" 
+                                    class="width-150" 
                                     [ngClass]="{ 'active': selectedArchivedOption?.[items?.groupUniqueName] === option?.value }" 
                                     (click)="onArchiveStatusFilter(items?.groupUniqueName, i, option?.value)"
                                 >
@@ -73,7 +73,7 @@
                                     href="javascript:void(0);"
                                     id="subGrp_{{ item.name }}"
                                     nav-vr-item
-                                    class="list-item isAcc d-block "
+                                    class="list-item d-block "
                                     (click)="onGroupClick(item, i)"
                                     [matTooltip]="(item.synonyms || item.name)"
                                     [matTooltipPosition]="'below'"
@@ -106,7 +106,7 @@
                             <ng-container *ngIf="item.type === 'ACCOUNT'">
                                 <a
                                     href="javascript:void(0);"
-                                    class="list-item  d-block"
+                                    class="list-item d-block"
                                     nav-vr-item
                                     id="acc_{{ item.name }}"
                                     [matTooltip]="item.name"

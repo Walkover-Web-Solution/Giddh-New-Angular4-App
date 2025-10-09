@@ -21,7 +21,7 @@
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
             <mat-tab [label]="localeData?.profit_and_loss">
-                <div class="pd-15" *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
+                <div class=" pd-15 " *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
                     <profit-loss [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
                 </div>
             </mat-tab>

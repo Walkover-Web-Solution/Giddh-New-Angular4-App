@@ -459,7 +459,7 @@
                                                     <td
                                                         [attr.data-title]="commonLocaleData?.app_particular"
                                                         [id]="'credit-id-' + i"
-                                                        class="position-relative  col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between column-gap-1"
+                                                        class="position-relative col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between column-gap-1"
                                                         [ngClass]="{
                                                             'other-account-entry':
                                                                 isPettyCash && txn?.particular?.uniqueName === 'others'
@@ -1061,7 +1061,7 @@
                                             <td
                                                 [attr.data-title]="commonLocaleData?.app_particular"
                                                 [id]="'credit-id-' + i"
-                                                class="position-relative  col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between column-gap-15"
+                                                class="position-relative col-9 select2-parent select2-ledger d-flex align-items-center justify-content-between column-gap-15"
                                                 [ngClass]="{
                                                     'other-account-entry':
                                                         isPettyCash && txn?.particular?.uniqueName === 'others'
@@ -1749,7 +1749,7 @@
 
                                             <div
                                                 *ngIf="vm.selectedLedger.isOtherTaxesApplicable"
-                                                class="pl-1 position-relative"
+                                                class="pl-1 position-relative "
                                             >
                                                 <a
                                                     href="javascript:void(0)"

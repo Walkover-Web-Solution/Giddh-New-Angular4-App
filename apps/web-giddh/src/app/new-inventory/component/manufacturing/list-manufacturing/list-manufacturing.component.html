@@ -188,17 +188,16 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </section>
-        <div *ngIf="(totalItems > pageSizeOptions[0]) && !isReportLoading">
-            <mat-paginator
-                [length]="totalItems"
-                [pageSize]="manufacturingSearchRequest.count"
-                [pageIndex]="currentPage"
-                [pageSizeOptions]="pageSizeOptions"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)"
-            ></mat-paginator>
-        </div>
+        <mat-paginator
+            *ngIf="(totalItems > pageSizeOptions[0]) && !isReportLoading"
+            [length]="totalItems"
+            [pageSize]="manufacturingSearchRequest.count"
+            [pageIndex]="currentPage"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
     </section>
 
     <!-- Advance Filter Modal -->

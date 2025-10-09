@@ -49,7 +49,7 @@
             <section class="pd-t3">
                 <!-- v-if="!isResponsive" -->
                 <div id="mob-cont" class="container">
-                    <div class="row white-bg pd-b1 pd-t1">
+                    <div class="row bg-white pd-b1 pd-t1">
                         <div class="col-4">
                             <div class="font-size-12 text-color">Opening</div>
                             <div v-if="legderBalanceData && legderBalanceData.forwardedBalance">
@@ -100,7 +100,7 @@
                                     id="debit" v-if="!selectedTab || selectedTab == 'debit'">
                                     <div class="row">
                                         <div class="col-12 pl-0 pr-0">
-                                            <table class="table border white-bg">
+                                            <table class="table border bg-white">
                                                 <thead>
                                                     <tr class="light-gray-bg">
                                                         <th colspan="3">
@@ -158,7 +158,7 @@
                                                                                 txn.inventory.stock.name + ')'):
                                                                                 txn.particular.name}}
                                                                             </td>
-                                                                            <td class="col-3 border-left position-relative"
+                                                                            <td class="col-3 border-left position-relative "
                                                                                 v-bind:class="{'pd-r25': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                                 align="right">
                                                                                 {{txn.amount}}
@@ -220,7 +220,7 @@
                                     id="credit" v-if="!selectedTab || selectedTab == 'credit'">
                                     <div class="row">
                                         <div class="col-12 pl-0 pr-0">
-                                            <table class="table border white-bg">
+                                            <table class="table border bg-white">
                                                 <thead>
                                                     <tr class="light-gray-bg border-none">
                                                         <th colspan="3">

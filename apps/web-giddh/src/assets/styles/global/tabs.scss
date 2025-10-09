@@ -30,20 +30,21 @@
 }
 
 // // custom
-// .custom-tab {
-//     .mat-button-toggle-appearance-standard {
-//         &.mat-button-toggle-checked {
-//             background-color: var(--bg-primary-color);
-//             color: var(--color-white);
-//         }
-//     }
+.custom-tab {
+    .mat-button-toggle-appearance-standard {
+        &.mat-button-toggle-checked {
+            background-color: var(--bg-primary-color);
+            color: var(--color-white);
+        }
+    }
 
-//     .mat-button-toggle-appearance-standard {
-//         .mat-button-toggle-label-content {
-//             line-height: 36px;
-//         }
-//     }
-// }
+    .mat-button-toggle-appearance-standard {
+        .mat-button-toggle-label-content {
+            // line-height: 36px;
+            --mat-standard-button-toggle-height: 36px;
+        }
+    }
+}
 
 // // for-box-tabs
 .tabs-box-wrap {

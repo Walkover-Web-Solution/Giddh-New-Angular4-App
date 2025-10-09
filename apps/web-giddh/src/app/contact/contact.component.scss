@@ -1,4 +1,3 @@
-// @import "../../assets/styles/_mixin.scss";
 @use "../../assets/styles/abstracts/_mixins" as *;
 // @mixin all-table {
 //     td {
@@ -68,7 +67,8 @@
     cursor: pointer;
 }
 
-.icon-pointer/* UNUSED COMPONENT CLASS: icon-class-search - Auto-commented by script
+/* UNUSED COMPONENT CLASS: icon-class-search - Auto-commented by script
+.icon-pointer
 .icon-class-search {
     top: 30%;
     color: var(--color-medium-gray);
@@ -76,14 +76,14 @@
 */
 
 /* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
-.icon-pointer .d-block.font-xxs.glyphicon/* UNUSED COMPONENT CLASS: glyphicon-triangle-top - Auto-commented by script
+.icon-pointer .d-block.font-size-9.glyphicon/* UNUSED COMPONENT CLASS: glyphicon-triangle-top - Auto-commented by script
 .glyphicon-triangle-top {
     line-height: 0.5;
     height: 8px;
 }
 */
 
-.icon-pointer .font-xxs {
+.icon-pointer .font-size-9 {
     font-size: var(--font-size-12);
 }
 
@@ -419,7 +419,8 @@ span.input-addon {
     min-width: 170px;
 }
 
-.customer-name /* UNUSED COMPONENT CLASS: icon-ellipse - Auto-commented by script
+/* UNUSED COMPONENT CLASS: icon-ellipse - Auto-commented by script
+.customer-name 
 .icon-ellipse {
     height: 14px;
     width: 14px;

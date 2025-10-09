@@ -2,10 +2,10 @@
 
 /*typography styles*/
 
-body.unresponsive {
-    padding: 0;
-    background: var(--color-black);
-}
+// body.unresponsive {
+//     padding: 0;
+//     background: var(--color-black);
+// }
 
 /* UNUSED COMPONENT CLASS: intro - Auto-commented by script
 .intro.login {
@@ -69,7 +69,8 @@ body.unresponsive {
     top: 4px;
 }
 
-#box /* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
+/* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
+#box 
 .glyphicon {
     max-height: 30px;
     position: absolute;
@@ -160,14 +161,16 @@ body.unresponsive {
     }
 }
 
-.intro /* UNUSED COMPONENT CLASS: lead - Auto-commented by script
+/* UNUSED COMPONENT CLASS: lead - Auto-commented by script
+.intro 
 .lead {
     text-align: center;
     font-size: var(--font-size-16);
 }
 */
 
-.btn-login/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
+/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
+.btn-login
 .btn-default {
     color: var(--color-black);
     background-color: var(--color-white);
@@ -182,7 +185,8 @@ body.unresponsive {
     box-shadow: none;
 }
 
-.intro /* UNUSED COMPONENT CLASS: intro-body - Auto-commented by script
+/* UNUSED COMPONENT CLASS: intro-body - Auto-commented by script
+.intro 
 .intro-body {
     display: table-cell;
     vertical-align: middle;
@@ -221,7 +225,8 @@ button.close {
     color: var(--color-black) !important;
 }
 
-:host ::ng-deep /* UNUSED COMPONENT CLASS: clear - Auto-commented by script
+/* UNUSED COMPONENT CLASS: clear - Auto-commented by script
+:host ::ng-deep 
 .clear {
     top: 50% !important;
     font-size: var(--font-size-24) !important;
@@ -398,7 +403,8 @@ small {
     padding: 4px 18px;
 }
 
-.slide-content /* UNUSED COMPONENT CLASS: btn-white - Auto-commented by script
+/* UNUSED COMPONENT CLASS: btn-white - Auto-commented by script
+.slide-content 
 .btn-white {
     color: var(--color-orange-light);
     border: 1px solid var(--color-white);

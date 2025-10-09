@@ -81,7 +81,8 @@
     }
 }
 
-button.btn/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
+/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
+button.btn
 .btn-filter {
     background: var(--color-border-light);
     border: 1px solid var(--color-border-light);
@@ -110,4 +111,27 @@ button.btn/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
 .daybook-w-300 {
     width: 300px;
     min-width: 300px;
+}
+:host ::ng-deep .daybook-table {
+    tr.mat-row,
+    tr.mat-footer-row {
+        border-top: 1px solid var(--color-silver);
+    }
+    td.mat-mdc-cell {
+        border-top: 1px solid var(--color-silver);
+    }
+    .nested-table {
+        > tbody {
+            tr {
+                td {
+                    border: 0 !important;
+                    padding: 8px 0;
+                }
+                // border-top: 1px solid var(--color-silver);
+                &:first-child {
+                    border-top: none !important;
+                }
+            }
+        }
+    }
 }

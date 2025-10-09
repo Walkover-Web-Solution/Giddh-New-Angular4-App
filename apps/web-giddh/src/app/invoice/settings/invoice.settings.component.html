@@ -19,7 +19,7 @@
 
                         <div class="pd-t15 pd-b15">
                             <div class="general-tab single-tab-block">
-                            <div class="pd-15 clear-both">
+                            <div class=" pd-15 clear-both">
                                 <form class="row" autocomplete="off">
                                     <div class="col-sm-12">
                                         <p class="clear-both border-bottom font-size-16">
@@ -91,7 +91,7 @@
 
                         <div class="pd-t15 pd-b15">
                             <div class="email-tab single-tab-block">
-                            <div class="pd-15 clear-both mb-2">
+                            <div class=" pd-15 clear-both mb-2">
                                 <p class="clear-both border-bottom font-size-16">
                                     {{ localeData?.email_sms }}
                                     <span>{{ localeData?.general_settings_applicable }}</span>
@@ -208,7 +208,7 @@
 
                         <div class="pd-t15 pd-b15">
                             <div class="estimate-tab single-tab-block">
-                            <div class="pd-15 clear-both mb-2">
+                            <div class=" pd-15 clear-both mb-2">
                                 <p class="clear-both border-bottom font-size-16">
                                     {{ localeData?.estimate_quotation }} <span></span>
                                 </p>
@@ -359,7 +359,7 @@
 
                         <div class="pd-t15 pd-b15">
                             <div class="estimate-tab sales-order-tab single-tab-block">
-                            <div class="pd-15 clear-both mb-2">
+                            <div class=" pd-15 clear-both mb-2">
                                 <p class="clear-both border-bottom font-size-16">{{ localeData?.proforma_invoice }} <span></span></p>
 
                                 <div class="clear-both">
@@ -484,7 +484,7 @@
 
                         <div class="pd-t15 pd-b15">
                             <div class="estimate-tab invoice-tab single-tab-block">
-                            <div class="pd-15 clear-both mb-2">
+                            <div class=" pd-15 clear-both mb-2">
                                 <p class="clear-both border-bottom font-size-16">
                                     {{ commonLocaleData?.app_invoice }} <span></span>
                                 </p>
@@ -588,17 +588,17 @@
                                                     </mat-slide-toggle>
                                                     <div class="d-inline-flex custom-estimation"
                                                         *ngIf="invoiceSetting.useCustomInvoiceNumber">
-                                                        <div class="d-inline-flex position-relative">
+                                                        <div class="d-inline-flex position-relative ">
                                                             <label>{{ localeData?.branch_prefix }}</label>
                                                             <input type="text" class="form-control" name="branchPrefix"
                                                                 [(ngModel)]="invoiceSetting.branchInvoiceNumberPrefix" />
                                                         </div>
-                                                        <div class="d-inline-flex position-relative">
+                                                        <div class="d-inline-flex position-relative ">
                                                             <label>{{ localeData?.sub_prefix }}</label>
                                                             <input type="text" class="form-control" name="prefixNumber"
                                                                 [(ngModel)]="invoiceSetting.invoiceNumberPrefix" />
                                                         </div>
-                                                        <div class="d-inline-flex position-relative">
+                                                        <div class="d-inline-flex position-relative ">
                                                             <label>{{ localeData?.initial_no }}</label>
                                                             <input type="text" class="form-control" name="initialNumber"
                                                                 [(ngModel)]="invoiceSetting.initialInvoiceNumber" />
@@ -819,7 +819,7 @@
                         </ng-template>
                         <div class="pd-t15 pd-b15">
                             <div class="general-tab single-tab-block">
-                            <div class="pd-15 clear-both">
+                            <div class=" pd-15 clear-both">
                                 <p class="clear-both border-bottom font-size-16">
                                     {{ commonLocaleData?.app_voucher_types?.debit_note }}
                                 </p>
@@ -842,17 +842,17 @@
                                                 </mat-slide-toggle>
                                                 <div class="d-inline-flex custom-estimation"
                                                     *ngIf="invoiceSetting.useCustomDebitNoteNumber">
-                                                    <div class="d-inline-flex position-relative">
+                                                    <div class="d-inline-flex position-relative ">
                                                         <label>{{ localeData?.branch_prefix }}</label>
                                                         <input type="text" class="form-control" name="branchPrefix"
                                                             [(ngModel)]="invoiceSetting.branchDebitNoteNumberPrefix" />
                                                     </div>
-                                                    <div class="d-inline-flex position-relative">
+                                                    <div class="d-inline-flex position-relative ">
                                                         <label>{{ localeData?.sub_prefix }}</label>
                                                         <input type="text" class="form-control" name="prefixNumber"
                                                             [(ngModel)]="invoiceSetting.debitNoteNumberPrefix" />
                                                     </div>
-                                                    <div class="d-inline-flex position-relative">
+                                                    <div class="d-inline-flex position-relative ">
                                                         <label>{{ localeData?.initial_no }}</label>
                                                         <input type="text" class="form-control" name="initialNumber"
                                                             [(ngModel)]="invoiceSetting.initialDebitNoteNumber" />
@@ -920,7 +920,7 @@
                         </ng-template>
                         <div class="pd-t15 pd-b15">
                             <div class="general-tab single-tab-block">
-                            <div class="pd-15 clear-both">
+                            <div class=" pd-15 clear-both">
                                 <p class="clear-both border-bottom font-size-16">
                                     {{ commonLocaleData?.app_voucher_types?.credit_note }}
                                 </p>
@@ -943,17 +943,17 @@
                                                 </mat-slide-toggle>
                                                 <div class="d-inline-flex custom-estimation"
                                                     *ngIf="invoiceSetting.useCustomCreditNoteNumber">
-                                                    <div class="d-inline-flex position-relative">
+                                                    <div class="d-inline-flex position-relative ">
                                                         <label>{{ localeData?.branch_prefix }}</label>
                                                         <input type="text" class="form-control" name="branchPrefix"
                                                             [(ngModel)]="invoiceSetting.branchCreditNoteNumberPrefix" />
                                                     </div>
-                                                    <div class="d-inline-flex position-relative">
+                                                    <div class="d-inline-flex position-relative ">
                                                         <label>{{ localeData?.sub_prefix }}</label>
                                                         <input type="text" class="form-control" name="prefixNumber"
                                                             [(ngModel)]="invoiceSetting.creditNoteNumberPrefix" />
                                                     </div>
-                                                    <div class="d-inline-flex position-relative">
+                                                    <div class="d-inline-flex position-relative ">
                                                         <label>{{ localeData?.initial_no }}</label>
                                                         <input type="text" class="form-control" name="initialNumber"
                                                             [(ngModel)]="invoiceSetting.initialCreditNoteNumber" />

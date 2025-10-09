@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="pd-15 clear-both">
+    <div class=" pd-15 clear-both">
         <p class="section-head pt-0">{{ localeData?.add_bank_account_form_heading }}</p>
         <div>
             <button mat-raised-button color="primary" (click)="connectBank()">{{ localeData?.connect_bank }}</button>
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <div class="pd-15 clear-both mr-t2" *ngIf="ebankAccounts && ebankAccounts.length">
+    <div class=" pd-15 clear-both mr-t2" *ngIf="ebankAccounts && ebankAccounts.length">
         <div >
             <p class="section-head pt-0">{{ localeData?.added_accounts }}</p>
             <div class="mt-1">

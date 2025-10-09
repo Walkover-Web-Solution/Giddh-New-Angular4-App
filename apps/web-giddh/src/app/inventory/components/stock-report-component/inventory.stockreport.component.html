@@ -4,7 +4,7 @@
             <!-- enable branch selection after implimentation from api-->
             <div class="d-flex">
                 <div class="mr-r15 sh-select-dropdown">
-                    <div class="select-style vertical-align-middle">
+                    <div class="select-style vertical-align-middle ">
                         <reactive-dropdown-field
                             [placeholder]="'Select Branch'"
                             formControlName="selectedEntity"
@@ -704,7 +704,7 @@
             <div class="row mr-t2">
                 <div class="col-sm-4">Select Category</div>
                 <div class="col-sm-4">
-                    <div class="select-style vertical-align-middle">
+                    <div class="select-style vertical-align-middle ">
                         <reactive-dropdown-field
                             [options]="CategoryOptions"
                             (onClear)="clearShSelect('filterCategory')"
@@ -715,7 +715,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="select-style vertical-align-middle" *ngIf="stockReportRequest.param !== 'qty_closing'">
+                    <div class="select-style vertical-align-middle " *ngIf="stockReportRequest.param !== 'qty_closing'">
                         <reactive-dropdown-field
                             [options]="CategoryTypeOptions"
                             (onClear)="clearShSelect('filterCategoryType')"

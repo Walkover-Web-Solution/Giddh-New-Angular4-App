@@ -181,18 +181,6 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This will close the settings popup if clicked outside and is mobile screen
-    *
-    * @param {*} [event]
-    * @memberof TaxSidebarComponent
-    */
-    public closeAsidePaneIfMobile(event?): void {
-        if (event?.target?.className !== "icon-bar") {
-            this.closeAsideEvent.emit(event);
-        }
-    }
-
-    /**
     * This will navigate the user to previous page
     *
     * @memberof TaxSidebarComponent

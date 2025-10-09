@@ -11,16 +11,13 @@
                     <thead>
                         <tr>
                             <th class="p-0 font-size-16" width="60%">
-                                <div
-                                    #searchContainer
-                                    (clickOutside)="clickedOutside($event, searchContainer)"
-                                >
-                                    <div
-                                        [ngClass]="{ 'd-none': showClearSearch }"
-                                        class="d-flex align-items-center"
-                                    >
+                                <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
+                                    <div [ngClass]="{ 'd-none': showClearSearch }" class="d-flex align-items-center">
                                         <span class="mr-l15 mr-r05">{{ localeData?.account }}</span>
-                                        <i class="position-relative  font-size-14 pd-r1 cursor-pointer d-flex align-items-center light-gray" (click)="toggleSearch()"></i>
+                                        <i
+                                            class="position-relative font-size-14 pd-r1 cursor-pointer d-flex align-items-center light-gray"
+                                            (click)="toggleSearch()"
+                                        ></i>
                                     </div>
                                     <div [hidden]="!showClearSearch">
                                         <input
@@ -37,12 +34,8 @@
                             </th>
                             <th class="text-right font-size-16" width="40%">
                                 {{ commonLocaleData?.app_as_of }}
-                                <span 
-                                    *ngIf="lastSyncDate.length && (lastSyncDate !== 'Invalid Date')"
-                                >
-                                    {{
-                                        lastSyncDate
-                                    }}</span
+                                <span *ngIf="lastSyncDate.length && lastSyncDate !== 'Invalid Date'">
+                                    {{ lastSyncDate }}</span
                                 >
                             </th>
                         </tr>
@@ -76,20 +69,22 @@
                     <ng-container
                         *ngTemplateOutlet="
                             groupDetails;
-                            context: { $implicit: plData.incArr | financialSearch: search, padding: 10 }
+                            context: { $implicit: plData.incArr | financialSearch : search, padding: 10 }
                         "
                     >
                     </ng-container>
                     <ng-container
                         *ngTemplateOutlet="
                             groupDetails;
-                            context: { $implicit: [cogsData] | financialSearch: search, padding: 10 }
+                            context: { $implicit: [cogsData] | financialSearch : search, padding: 10 }
                         "
                     >
                     </ng-container>
                     <section>
                         <div class="flex-nowrap row">
-                            <div class="col-4 group pl-sticky-group pd-l1">{{ localeData?.total_cost_of_goods_sold }}</div>
+                            <div class="col-4 group pl-sticky-group pd-l1">
+                                {{ localeData?.total_cost_of_goods_sold }}
+                            </div>
                             <div class="col border-left group text-right pull-right">
                                 <span>
                                     <span class="d-inline-flex">
@@ -177,16 +172,15 @@
                                 </div>
                             </div>
                         </section>
-                        <div
-                            class="group clear-both row"
-                            *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
-                        >
+                        <div class="group clear-both row" *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'">
                             <div class="col-4 group pl-sticky-group pd-l1">
                                 {{ localeData?.total_operating_expenses }}
                             </div>
                             <div class="col group text-right pull-right p-0">
                                 <div class="row flex-nowrap">
-                                    <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.operatingExpenses)">
+                                    <ng-container
+                                        *ngFor="let key of getKeys(plData?.incomeStatement?.operatingExpenses)"
+                                    >
                                         <div class="col px-0 border-left row-height">
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -235,9 +229,7 @@
                                 </span>
                             </div>
                         </div>
-                        <section
-                            *ngIf="grp.groupName && grp?.uniqueName === 'otherexpenses'"
-                        >
+                        <section *ngIf="grp.groupName && grp?.uniqueName === 'otherexpenses'">
                             <div class="flex-nowrap row">
                                 <div class="col-4 group pl-sticky-group pd-l1">
                                     {{ localeData?.total_other_expense }}
@@ -271,7 +263,7 @@
                 <ng-container
                     *ngTemplateOutlet="
                         groupDetails;
-                        context: { $implicit: plData.expArr | financialSearch: search, padding: 10 }
+                        context: { $implicit: plData.expArr | financialSearch : search, padding: 10 }
                     "
                 >
                 </ng-container>
@@ -306,17 +298,13 @@
             </div>
         </div>
         <ng-template
-            *ngIf="
-                plData &&
-                plData?.incomeStatement &&
-                plData?.incomeStatement.incomeBeforeTaxes.type === 'CREDIT'
-            "
+            *ngIf="plData && plData?.incomeStatement && plData?.incomeStatement.incomeBeforeTaxes.type === 'CREDIT'"
         >
             <div class="group clear-both font-size-15 row">
                 <div class="col-4 group pl-sticky-group pd-l1">
                     {{ localeData?.taxes_30 }}
                 </div>
-                <div class="col  group text-right pull-right border-left p-0">
+                <div class="col group text-right pull-right border-left p-0">
                     <div class="row flex-nowrap">
                         <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.appliedTax)">
                             <div class="col px-0">

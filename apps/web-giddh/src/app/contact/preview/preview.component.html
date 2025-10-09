@@ -12,7 +12,7 @@
     <div class="invoice-preview-wrapper d-flex" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
         <div class="preview-list pd-b15">
             <div class="d-flex align-items-center column-gap-05 pd-15 w-100 list-responsive row-gap-1">
-                <div class="position-relative  search-field flex-grow-1">
+                <div class="position-relative search-field flex-grow-1">
                     <text-field
                         class="width-inherit"
                         [type]="'text'"
@@ -63,7 +63,7 @@
             </div>
         </div>
         <div class="preview-content">
-            <div class="position-relativeoverflow-visible">
+            <div class="position-relative overflow-visible">
                 <div class="clear-both overflow-visible">
                     <div class="position-absolute back-button">
                         <button mat-stroked-button (click)="redirectToGetAllPage()">
@@ -82,7 +82,7 @@
                             <div class="wrapper-background pd-1 pd-t05 pd-b05 overflow-auto">
                                 <div class="account-statement-wrapper h-100">
                                     <mat-card
-                                        class="pd-15 mat-card-wrapper"
+                                        class=" pd-15 mat-card-wrapper"
                                         *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                     >
                                         <account-statement
@@ -126,7 +126,7 @@
                                     </div>
                                     <mat-card *ngIf="!(updateAccountInProcess$ | async)">
                                         <div
-                                            class="pd-15 flex-grow-1"
+                                            class=" pd-15 flex-grow-1"
                                             *ngIf="
                                                 !(updateAccountInProcess$ | async) &&
                                                 (activeAccount$ | async) &&

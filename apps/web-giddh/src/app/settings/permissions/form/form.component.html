@@ -29,7 +29,7 @@
                 </button>
                 <mat-menu #menu="matMenu">
                     <section class="mr-b1 time-span-dropdown custom-date-range-menu" (click)="$event.stopPropagation()">
-                        <div class="pd-15">
+                        <div class=" pd-15 ">
                             <mat-radio-group formControlName="periodOptions" class="d-flex flex-column">
                                 <mat-radio-button value="daterange" id="dateRange" color="primary"
                                     (click)="isOpenedInModal ? handleTimeSpanChange('daterange') : ''"
@@ -91,7 +91,7 @@
                     </button>
                     <mat-menu #menurange="matMenu">
                         <section class="ip-addresses-dropdown" role="menu" (click)="$event.stopPropagation()">
-                            <div class="pd-15">
+                            <div class=" pd-15 ">
                                 <mat-radio-group formControlName="ipOptions" class="d-flex flex-column">
                                     <mat-radio-button value="cidr_range" id="cidrRange" color="primary"
                                         (click)="isOpenedInModal ? handleIpAddressChange('cidr_range') : ''"

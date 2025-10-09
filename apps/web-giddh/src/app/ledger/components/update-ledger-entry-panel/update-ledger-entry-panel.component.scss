@@ -25,6 +25,10 @@ table.width-100 {
     position: relative;
 }
 
+.h32 {
+    height: 32px;
+}
+
 /* UNUSED COMPONENT CLASS: currency-type - Auto-commented by script
 .currency-type {
     position: absolute;
@@ -499,7 +503,8 @@ ng-select .select-drop i.fa.fa-caret-up::before {
         text-align: right;
         margin: 10px 0;
     }
-    .entrypanel /* UNUSED COMPONENT CLASS: bl-1 - Auto-commented by script
+    /* UNUSED COMPONENT CLASS: bl-1 - Auto-commented by script
+    .entrypanel 
 .bl-1 {
         border-left: 0;
     }

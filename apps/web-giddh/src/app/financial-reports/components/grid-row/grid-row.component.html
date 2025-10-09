@@ -85,7 +85,7 @@
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
-            <div class="col-4 account user-select-n d-flex align-items-center row-height" [style.padding-left]="padding + 20 + 'px !important'">
+            <div class="col-4 account user-select-none d-flex align-items-center row-height" [style.padding-left]="padding + 20 + 'px !important'">
                 <mat-checkbox
                     color="primary"
                     (change)="onItemChecked($event, account?.uniqueName, 'account')"

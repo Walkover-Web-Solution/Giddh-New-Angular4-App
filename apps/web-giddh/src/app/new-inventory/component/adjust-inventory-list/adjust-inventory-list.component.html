@@ -55,7 +55,7 @@
                     adjustInventoryListForm?.controls['entity']?.value
                 "
                 mat-stroked-button
-                class="min160 mx-auto"
+                class="min-width-160 mx-auto"
                 color="primary"
                 (click)="clearFilter()"
             >
@@ -349,7 +349,7 @@
             <span> {{ title }}</span>
             <i class="icon-search d-flex cursor-pointer align-items-center" (click)="toggleSearch(fieldName)"></i>
         </div>
-        <div class="input-container position-relative" [hidden]="!show">
+        <div class="input-container position-relative " [hidden]="!show">
             <text-field
                 [type]="'text'"
                 [placeholder]="getSearchFieldText(fieldName)"

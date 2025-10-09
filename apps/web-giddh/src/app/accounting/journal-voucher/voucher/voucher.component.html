@@ -367,12 +367,12 @@
         </div>
     </div>
     <div class="sidebar-list form-control" [hidden]="!showDiscountSidebar">
-        <div class="border-bottom d-flex justify-content-between align-items-center pd">
+        <div class="border-bottom d-flex justify-content-between align-items-center pd-05">
             <h3 class="text-primary">{{ localeData?.discount_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeDiscountSidebar()"></i>
         </div>
         <div [style.width]="width" class="h-100">
-            <div #dd class="menu" *ngIf="showDiscountSidebar" class="h-100">
+            <div #dd class="menu box-shadow-none border-left-none" *ngIf="showDiscountSidebar" class="h-100">
                 <div class="h-100">
                     <ul
                         role="discount-list"
@@ -422,12 +422,12 @@
         </div>
     </div>
     <div class="sidebar-list form-control" [hidden]="!showTaxSidebar">
-        <div class="border-bottom d-flex justify-content-between align-items-center pd">
+        <div class="border-bottom d-flex justify-content-between align-items-center pd-05">
             <h3 class="text-primary">{{ localeData?.tax_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeTaxSidebar()"></i>
         </div>
         <div [style.width]="width" class="h-100">
-            <div #dd class="menu" *ngIf="showTaxSidebar" class="h-100">
+            <div #dd class="menu box-shadow-none border-left-none" *ngIf="showTaxSidebar" class="h-100">
                 <div class="h-100">
                     <ul
                         role="tax-list"

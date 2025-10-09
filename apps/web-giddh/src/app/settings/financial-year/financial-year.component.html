@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="section-centerpd-15clearfix overflow-visible">
+    <div class="section-center pd-15 clear-both overflow-visible">
         <form class="overflow-visible">
             <div class="row overflow-visible">
                 <div class="col-sm-12 overflow-visible">
@@ -43,7 +43,7 @@
                             <a
                                 href="javascript:void(0);"
                                 aria-label="update financial year period"
-                                class="d-inline-block w150 text-primary underline"
+                                class="d-inline-block width-150 text-primary underline"
                                 (click)="fyPeriodDropdownIsOpen = true"
                                 *ngIf="!fyPeriodDropdownIsOpen; else fyPeriodDropdown"
                             >
@@ -54,7 +54,7 @@
                                     [openDropdown]="true"
                                     [showLabel]="false"
                                     [appearance]="'fill'"
-                                    class="w150"
+                                    class="width-150"
                                     [cssClass]="'w-100 p-1 border-color-transparent bg-transparent'"
                                     [label]="localeData?.financial_year_period"
                                     [name]="'selectedFYPeriod'"

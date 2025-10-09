@@ -99,7 +99,7 @@
                         <td
                             mat-cell
                             *matCellDef="let element"
-                            class="position-relative  text-left"
+                            class="position-relative text-left"
                             matTooltipPosition="above"
                             [matTooltip]="element?.status?.toLowerCase() === 'failed' ? element?.files[0]?.error : ''"
                         >
@@ -134,7 +134,7 @@
                                 "
                             ></ng-container>
                         </th>
-                        <td mat-cell *matCellDef="let element" class="position-relative  text-left">
+                        <td mat-cell *matCellDef="let element" class="position-relative text-left">
                             <span
                                 [ngClass]="{
                                     'text-green': element?.convertedStatus?.toLowerCase() === 'completed',

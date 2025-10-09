@@ -1,5 +1,5 @@
 <span
-    class="position-relative  tax-control-cmp custom-mat-form-field"
+    class="position-relative tax-control-cmp custom-mat-form-field"
 >
     <ng-container *ngIf="!showMatFormField">
         <label class="font-size-12" *ngIf="showHeading"
@@ -7,7 +7,7 @@
             <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
         >
         <a id="tax" class="clear-both">
-            <div class="multi-select adjust position-relative" id="tax-control-multi-select">
+            <div class="multi-select adjust position-relative " id="tax-control-multi-select">
                 <input
                     (keydown.enter)="$event.preventDefault(); toggleTaxMenu(true)"
                     matInput

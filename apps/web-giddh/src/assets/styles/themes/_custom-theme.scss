@@ -1,7 +1,7 @@
 @use "@angular/material" as mat;
 @use "./_custom-palette" as palette;
 @use "./custom_typography" as typography;
-@use "../mixin" as mixins;
+@use "../material/material-mixins" as mixins;
 // Base theme styles (common to all themes)
 @include mat.core();
 
@@ -48,7 +48,7 @@ $dark-theme: mat.define-dark-theme(
 @mixin theme-colors($theme, $primary, $accent, $warn) {
     // Apply only color-specific theme styles
     @include mat.all-component-colors($theme);
-    @include mixins.define-theme-colors($primary, $accent, $warn);
+    @include mixins.define-theme-colors($theme);
 }
 
 // Apply theme-specific colors based on the class attached to the body tag

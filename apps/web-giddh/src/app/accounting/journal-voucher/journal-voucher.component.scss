@@ -124,9 +124,9 @@
 //     background: var(--color-border-light) !important;
 // }
 
-:host ::ng-deep .menu {
-    box-shadow: none !important;
-}
+// :host ::ng-deep .menu {
+//     box-shadow: none !important;
+// }
 
 /* UNUSED COMPONENT CLASS: item - Auto-commented by script
 :host ::ng-deep .item /* UNUSED COMPONENT CLASS: list-item - Auto-commented by script
@@ -135,9 +135,9 @@
 }
 */
 
-:host ::ng-deep .menu {
-    border-left: 0 !important;
-}
+// :host ::ng-deep .menu {
+//     border-left: 0 !important;
+// }
 
 @media (max-width: 991px) {
     .account-wrapper {

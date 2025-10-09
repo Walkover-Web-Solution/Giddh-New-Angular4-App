@@ -196,7 +196,7 @@
                         </div>
 
                         <!-- Voucher Form Main Section -->
-                        <div class="vouchers-secondary-form position-relative"
+                        <div class="vouchers-secondary-form position-relative "
                             [ngClass]="{'vouchers-form-disable' : !invoiceForm.controls['account'].get('customerName')?.value }">
                             <div class="vouchers-small-container">
                                 <!-- Row 1 -->
@@ -244,7 +244,7 @@
                                                         localeData?.add_new_address }}</button>
                                                 </div>
                                             </mat-menu>
-                                            <div class="vouchers-address-form pd-15 border-radius-5"
+                                            <div class="vouchers-address-form pd-15 border-radius-4"
                                                 [ngClass]="{'without-taxnumber': !account?.taxTypeLabel}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
@@ -334,7 +334,7 @@
                                                 </div>
                                             </mat-menu>
 
-                                            <div class="vouchers-address-form pd-15 border-radius-5"
+                                            <div class="vouchers-address-form pd-15 border-radius-4"
                                                 [ngClass]="{'form-disabled': copyAccountBillingInShippingAddress, 'without-taxnumber': !account?.taxTypeLabel}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
@@ -393,7 +393,7 @@
 
                                             <!-- Mobile Number -->
                                             <div class="col-6 mr-t15">
-                                                <div id="init-contact-wrapper" class="position-relative  w-100">
+                                                <div id="init-contact-wrapper" class="position-relative w-100">
                                                     <input type="tel"
                                                         class="mat-form-field-border mat-form-field-height bg-transparent" #initContact
                                                         aria-autocomplete="none" autocomplete="off"
@@ -495,7 +495,7 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="vouchers-address-form pd-15 border-radius-5"
+                                        <div class="vouchers-address-form pd-15 border-radius-4"
                                             [ngClass]="{'without-taxnumber': !company?.taxTypeLabel}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
@@ -577,7 +577,7 @@
                                             </div>
                                         </mat-menu>
 
-                                        <div class="vouchers-address-form pd-15 border-radius-5"
+                                        <div class="vouchers-address-form pd-15 border-radius-4"
                                             [ngClass]="{'form-disabled': copyCompanyBillingInShippingAddress, 'without-taxnumber': !company?.taxTypeLabel}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
@@ -1381,7 +1381,7 @@
 
                                                     <!-- Total -->
                                                     <td [width]="hasStock ? '16%' : '16%'"
-                                                        class="total-column item-tax position-relative">
+                                                        class="total-column item-tax position-relative ">
                                                         <ng-container formGroupName="total">
                                                             <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                 <div class="wrap-td-data">

@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
-                        <div class="form-group position-relative">
+                        <div class="form-group position-relative ">
                             <label class="d-block">Quantity</label>
                             <input
                                 type="text"
@@ -81,7 +81,7 @@
 
     <!--  -->
     <ng-container *ngIf="!(isStockWithRateInprogress$ | async)">
-        <div class="pd-15 clear-both" *ngIf="manufacturingDetails.stockUniqueName">
+        <div class=" pd-15 clear-both" *ngIf="manufacturingDetails.stockUniqueName">
             <div class="row">
                 <!-- right column / add more resources -->
                 <div class="col-md-12 col-lg-6 source resources-table">
@@ -263,7 +263,7 @@
                             <tbody *ngIf="manufacturingDetails && liabilityGroupAccounts$ | async">
                                 <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index">
                                     <td colspan="1">
-                                        <div class="custom-select position-relative">
+                                        <div class="custom-select position-relative ">
                                             <reactive-dropdown-field
                                                 [options]="liabilityGroupAccounts$ | async"
                                                 [(ngModel)]="expense.baseAccount.uniqueName"
@@ -289,7 +289,7 @@
                                         <label class="pd-05">to</label>
                                     </td>
                                     <td>
-                                        <div class="custom-select position-relative">
+                                        <div class="custom-select position-relative ">
                                             <reactive-dropdown-field
                                                 [options]="expenseGroupAccounts$ | async"
                                                 [(ngModel)]="expense.transactions[0].account.uniqueName"

@@ -4,9 +4,9 @@
 }
 */
 
-.company-button {
-    background-color: var(--color-white);
-}
+// .company-button {
+//     background-color: var(--color-white);
+// }
 
 /* UNUSED COMPONENT CLASS: custom-header - Auto-commented by script
 .custom-header {
@@ -239,11 +239,6 @@ ul{
         border-radius: var(--mat-border-radius-16) !important;
         height: 34px;
         width: 240px;
-
-        input {
-            margin-right: 44px;
-            text-align: center !important;
-        }
     }
 }
 
@@ -288,7 +283,8 @@ ul{
 }
 */
 
-.nav-left-bar /* UNUSED COMPONENT CLASS: company-name-finance-year - Auto-commented by script
+/* UNUSED COMPONENT CLASS: company-name-finance-year - Auto-commented by script
+.nav-left-bar 
 .company-name-finance-year {
     display: inline;
     padding-left: 0;
@@ -297,7 +293,8 @@ ul{
 }
 */
 
-.nav-left-bar .company-name /* UNUSED COMPONENT CLASS: branch-unique-name - Auto-commented by script
+/* UNUSED COMPONENT CLASS: branch-unique-name - Auto-commented by script
+.nav-left-bar .company-name 
 .branch-unique-name {
     font-size: var(--font-size-12);
     color: var(--text-primary-color) !important;
@@ -384,7 +381,6 @@ ul{
         padding-left: 5px !important;
 
         input {
-            text-align: left !important;
             padding-left: 28px !important;
         }
     }
@@ -425,7 +421,7 @@ ul{
         }
 
         li {
-            border: none;
+            border: none !important;
 
             a {
                 display: flex;

@@ -38,11 +38,12 @@ span
 #inventory-sidebar {
     background: var(--color-white);
     width: 260px !important;
-    div.clearfix {
+    div.clear-both {
         height: 100vh;
     }
 }
-ul#dropdown-nested li /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
+/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
+ul#dropdown-nested li 
 .dropdown-menu {
     display: block !important;
     right: auto;

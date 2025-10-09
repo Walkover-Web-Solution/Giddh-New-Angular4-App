@@ -26,17 +26,14 @@
 .hilighted {
     color: var(--text-primary-color) !important;
     background-color: var(--color-border-light) !important;
+    &>a {
+        color: var(--text-primary-color) !important;
+    }
 }
 
 .account-list:hover {
     color: var(--text-primary-color) !important;
     background-color: var(--color-border-light) !important;
-}
-
-.hilighted {
-    &>a {
-        color: var(--text-primary-color) !important;
-    }
 }
 
 .text-overflow-ellipsis {

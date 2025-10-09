@@ -20,7 +20,7 @@
 
 <mat-dialog-content class="dialog-body">
     <div class="aside-pane-form position-relative overflow-auto pd-15">
-        <div class="form-body white-bg clear-both margin-child-label">
+        <div class="form-body bg-white clear-both margin-child-label">
             <!-- region not gst authenticated and before otp verified -->
             <div *ngIf="!gstAuthenticated && !gspSessionOtpAuthorized">
                 <!-- Choose Provider -->
@@ -264,7 +264,7 @@
                         </div>
                     </div>
 
-                    <div class="pd-15 white-bg">
+                    <div class=" pd-15 bg-white">
                         <div class="row mt-1">
                             <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
                                 <label [innerHTML]="localeData?.aside_menu?.type_submit"></label>

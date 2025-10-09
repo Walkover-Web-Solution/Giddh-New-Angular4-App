@@ -215,7 +215,7 @@
                     </div>
                 </div>
                 <div class="invoice-table mr-t15">
-                    <div class="table-responsive position-relative">
+                    <div class="table-responsive position-relative ">
                         <table
                             mat-table
                             [dataSource]="accountListData"
@@ -230,7 +230,7 @@
                                     mat-header-cell
                                     *matHeaderCellDef
                                     mat-sort-header
-                                    class="bg-black text-white black-and-white-table font-size-16 fw-900"
+                                    class="bg-black text-white black-and-white-table font-size-16 font-weight-bold"
                                 >
                                     {{ commonLocaleData?.app_date }}
                                 </th>
@@ -246,7 +246,7 @@
                                 <th
                                     mat-header-cell
                                     *matHeaderCellDef
-                                    class="bg-black text-white font-size-16 fw-900"
+                                    class="bg-black text-white font-size-16 font-weight-bold"
                                     #transactions
                                     (clickOutside)="handleClickOutside($event, transactions, 'transactions')"
                                 >
@@ -273,7 +273,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="details">
-                                <th mat-header-cell *matHeaderCellDef class="bg-black text-white font-size-16 fw-900">
+                                <th mat-header-cell *matHeaderCellDef class="bg-black text-white font-size-16 font-weight-bold">
                                     {{ localeData?.details }}
                                 </th>
                                 <td
@@ -289,7 +289,7 @@
                                 <th
                                     mat-header-cell
                                     *matHeaderCellDef
-                                    class="bg-black text-white sort-header-right text-right font-size-16 fw-900"
+                                    class="bg-black text-white sort-header-right text-right font-size-16 font-weight-bold"
                                 >
                                     {{ commonLocaleData?.app_amount }}
                                 </th>
@@ -312,7 +312,7 @@
                                 <th
                                     mat-header-cell
                                     *matHeaderCellDef
-                                    class="bg-black text-white sort-header-right text-right font-size-16 fw-900"
+                                    class="bg-black text-white sort-header-right text-right font-size-16 font-weight-bold"
                                 >
                                     {{ commonLocaleData?.app_payment }}
                                 </th>
@@ -333,7 +333,7 @@
                                 <th
                                     mat-header-cell
                                     *matHeaderCellDef
-                                    class="bg-black text-white sort-header-right text-right font-size-16 fw-900"
+                                    class="bg-black text-white sort-header-right text-right font-size-16 font-weight-bold"
                                 >
                                     {{ commonLocaleData?.app_balance }}
                                 </th>
@@ -356,7 +356,7 @@
                         </table>
                         <hr class="border-grey" />
                             <div class="d-flex justify-content-end">
-                                <span class="font-size-16 fw-900 pd-1">{{ localeData?.balance_due }}</span>
+                                <span class="font-size-16 font-weight-bold pd-1">{{ localeData?.balance_due }}</span>
                                 <span class="pd-1">
                                         {{
                                             balanceDue

@@ -72,7 +72,7 @@
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
-            <div class="col-4 account user-select-n" [style.padding-left]="padding + 20 + 'px !important'">
+            <div class="col-4 account user-select-none" [style.padding-left]="padding + 20 + 'px !important'">
                 <div
                     class="p-0 border-right-none text-danger"
                     [innerHTML]="account.name | lowercase | highlight: search"

@@ -13,8 +13,8 @@ import { takeUntil } from 'rxjs/operators';
     selector: 'stock-list',
     styleUrls: ['stockList.component.scss'],
     template: `
-    <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen">
-      <li class="clearfix p-0" *ngFor="let item of Groups.stocks">
+    <ul class="list-unstyled stock-items clear-both" [hidden]="!Groups.isOpen">
+      <li class="clear-both p-0" *ngFor="let item of Groups.stocks">
         <div class="in-list" [ngClass]="{'active':  (activeStockUniqueName$ | async) === item?.uniqueName}">
           <a (click)="OpenStock(item, $event)" class="d-flex align-items-center flex-fill justify-content-between text-default">
             <span class="span">{{item.name}}</span>

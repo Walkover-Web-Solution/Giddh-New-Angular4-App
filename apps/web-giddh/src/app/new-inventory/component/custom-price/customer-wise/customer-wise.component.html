@@ -66,7 +66,7 @@
                                         localeData?.add_inventory }} </button>
                                     <div class="d-flex align-items-center justify-content-end column-gap-05 w-50">
                                         <watch-video [cssClass]="'text-primary'" [moduleName]="'MRP_DISCOUNT'" *ngIf="!isTabScreen"></watch-video>
-                                        <div class="search-list position-relative" [formGroup]="searchForm"
+                                        <div class="search-list position-relative " [formGroup]="searchForm"
                                             *ngIf="!currentUser?.isTempUser">
                                             <text-field type="text" [placeholder]="commonLocaleData?.app_search"
                                                 [cssClass]="'form-control search-bar'"
@@ -165,7 +165,7 @@
                                                                                     matTooltipPosition="above"></span>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="overflow-visible variant-discount position-relative">
+                                                                        <td class="overflow-visible variant-discount position-relative ">
                                                                             <reactive-dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
@@ -215,7 +215,7 @@
 
                                                 <ng-container [formGroupName]="i">
                                                     <div>
-                                                        <table class="">
+                                                        <table>
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
                                                                     formArrayName="variants">
@@ -252,7 +252,7 @@
                                                                                     matTooltipPosition="above"></span>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="overflow-visible variant-discount position-relative">
+                                                                        <td class="overflow-visible variant-discount position-relative ">
                                                                             <reactive-dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"

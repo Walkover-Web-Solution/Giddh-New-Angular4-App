@@ -197,10 +197,6 @@
     }
 
     .plan-summary {
-        width: fit-content;
-        margin: auto;
-        column-gap: 20px;
-
         .plan-width {
             min-width: 500px;
             .plan-header{
@@ -297,11 +293,9 @@
     }
 }
 
-// responsive
-@media screen and (max-width: 1180px) {
-    .buy-plan-wrapper {
-        .plan-summary {
-            row-gap: 15px;
-        }
+:host ::ng-deep {
+    .mat-horizontal-content-container {
+        padding: 10px 20px 20px 20px !important;
+        overflow-x: auto !important;
     }
 }

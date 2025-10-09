@@ -7,7 +7,7 @@
 >
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <div [style.display]="showLoader ? 'none' : 'block'">
-        <div class="position-relativecreate-new-inventory-page static-tabs-on-page">
+        <div class="position-relative create-new-inventory-page static-tabs-on-page">
             <hamburger-menu *ngIf="!addStock"></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
                 <span class="pull-right position-relative z-index-1" [ngClass]="{ 'top-right-spacing': queryParams?.stockUniqueName && !addStock }">
@@ -135,7 +135,7 @@
                                             </mat-form-field>
                                         </div>
                                         <div
-                                            class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative"
+                                            class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative "
                                         >
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select
@@ -194,7 +194,7 @@
                                         <div class="col-6" *ngIf="!isVariantAvailable">
                                             <div class="variant-image">
                                                 <div *ngIf="!stockForm.variants[0].attachmentUniqueName">
-                                                    <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative"
+                                                    <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative "
                                                         [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
                                                         <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
                                                             [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
@@ -212,7 +212,7 @@
                                                 </div>
                                                 <div *ngIf="stockForm.variants[0].attachmentUniqueName">
                                                     <div
-                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative">
+                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative ">
                                                         <div class="attachment-add-icon font-size-12 text-center rounded-circle">
                                                             <i class="icon-tick"></i>
                                                         </div>
@@ -1015,7 +1015,7 @@
                                                                 <tr class="variant-row" *ngIf="variant.name">
                                                                     <td class="text-center variant-image">
                                                                         <div *ngIf="!variant.attachmentUniqueName">
-                                                                            <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative"
+                                                                            <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative "
                                                                                 [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
                                                                                 <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
                                                                                     [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
@@ -1031,7 +1031,7 @@
                                                                         </div>
                                                                         <div *ngIf="variant.attachmentUniqueName">
                                                                             <div
-                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative">
+                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative ">
                                                                                 <div class="attachment-add-icon text-center font-size-12 rounded-circle">
                                                                                     <i class="icon-tick"></i>
                                                                                 </div>

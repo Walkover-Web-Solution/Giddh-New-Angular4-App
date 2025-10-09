@@ -60,7 +60,7 @@
                             ></reactive-dropdown-field>
                         </div>
 
-                        <div class="position-relativeform-group" *ngIf="selectedField === 'dueDate'">
+                        <div class="position-relative form-group" *ngIf="selectedField === 'dueDate'">
                             <giddh-datepicker
                                 [(ngModel)]="updateDueDatesRequest.dueDate"
                                 [appearance]="'outline'"
@@ -117,7 +117,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <div class="position-relativeform-group">
+                                <div class="position-relative form-group">
                                     <reactive-dropdown-field
                                         [placeholder]="commonLocaleData?.app_state"
                                         [options]="allTemplatesOptions"
@@ -144,7 +144,7 @@
 
                     <div *ngIf="selectedField === 'customFields'" class="row mb-2">
                         <div class="col-md-4">
-                            <div class="position-relativeform-group">
+                            <div class="position-relative form-group">
                                 <div class="form-group">
                                     <input
                                         type="text"

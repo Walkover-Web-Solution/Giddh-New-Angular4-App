@@ -159,7 +159,7 @@
                 </div>
                 <ng-template [ngIf]="exportRequest.ledgerView">
                     <div class="row">
-                        <div class="col position-relative"
+                        <div class="col position-relative "
                             [ngClass]="{'export-ledger-right-tview': inputData?.isLedgerAccountAllowsMultiCurrency, 'export-border': inputData?.isLedgerAccountAllowsMultiCurrency}">
                             <div class="pd-b2 export-type"
                                 [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)">
@@ -199,7 +199,7 @@
                     </div>
                 </ng-template>
                 <div class="row">
-                    <div class="col export-border position-relative"
+                    <div class="col export-border position-relative "
                         [ngClass]="{'export-ledger-right': inputData?.isLedgerAccountAllowsMultiCurrency}">
                         <ng-template [ngIf]="!exportRequest.ledgerView">
                             <div class="pd-b2 export-type"

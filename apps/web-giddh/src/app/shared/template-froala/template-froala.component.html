@@ -317,7 +317,7 @@
 
             <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
                 <div
-                    class="form-group position-relative"
+                    class="form-group position-relative "
                     (click)="clickedInsideEmailSection && setEmailFocus(emailType.To)"
                 >
                     <div class="d-flex border-bottom">
@@ -373,7 +373,7 @@
                     </div>
                 </div>
                 <div
-                    class="form-group position-relative"
+                    class="form-group position-relative "
                     *ngIf="showCc && clickedInsideEmailSection"
                     (click)="setEmailFocus(emailType.Cc)"
                 >
@@ -407,7 +407,7 @@
                     </div>
                 </div>
                 <div
-                    class="form-group position-relative"
+                    class="form-group position-relative "
                     *ngIf="showBcc && clickedInsideEmailSection"
                     (click)="setEmailFocus(emailType.Bcc)"
                 >

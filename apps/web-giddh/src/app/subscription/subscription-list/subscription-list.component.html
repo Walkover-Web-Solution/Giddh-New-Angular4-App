@@ -18,13 +18,13 @@
                     subscriptionListForm?.controls['duration']?.value
                 "
                 mat-stroked-button
-                class="min160 mr-l1"
+                class="min-width-160 mr-l1"
                 color="primary"
                 (click)="clearFilter()"
             >
                 {{ commonLocaleData?.app_clear }}
             </button>
-            <div class="min160 mr-l1" *ngIf="!showClearFilter"></div>
+            <div class="min-width-160 mr-l1" *ngIf="!showClearFilter"></div>
             <div class="d-flex align-items-baseline">
                 <reactive-dropdown-field
                     [name]="'status'"
@@ -35,7 +35,7 @@
                     [labelValue]="selectedStatus"
                 >
                 </reactive-dropdown-field>
-                <button mat-raised-button class="min160 mr-l1" color="primary" *ngIf="voucherApiVersion === 2" (click)="createSubscription()">
+                <button mat-raised-button class="min-width-160 mr-l1" color="primary" *ngIf="voucherApiVersion === 2" (click)="createSubscription()">
                     + {{ commonLocaleData?.app_add }} {{ localeData?.tab_heading }}
                 </button>
             </div>
@@ -203,7 +203,7 @@
                     </ng-container>
                     <ng-container matColumnDef="renewalDate">
                         <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.renewal_date }}</th>
-                        <td mat-cell *matCellDef="let element" class="position-relative  word-wrap">
+                        <td mat-cell *matCellDef="let element" class="position-relative word-wrap">
                             <div
                                 class="renewal-date-column d-flex align-items-center justify-content-center column-gap-1"
                             >

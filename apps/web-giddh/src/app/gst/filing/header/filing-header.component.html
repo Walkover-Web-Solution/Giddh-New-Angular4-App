@@ -7,14 +7,14 @@
             </a>
             <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart img" />
 
-            <div class="text-vertical-align-middlenav-top">
-                <div class="text-vertical-align-middlehead head-font-weight d-flex align-items-center column-gap-1">
+            <div class="text-vertical-align-middle nav-top">
+                <div class="text-vertical-align-middle head head-font-weight d-flex align-items-center column-gap-1">
                     {{ localeData?.gstr1_label }}
                      <div *ngIf="showDate">
                         <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
                      </div>
                 </div>
-                <div class="font-xs text-vertical-align-middlefont-weight-regular">{{ localeData?.outward_supplies_details }}</div>
+                <div class="font-size-12 text-vertical-align-middle font-weight-regular">{{ localeData?.outward_supplies_details }}</div>
             </div>
         </div>
 
@@ -81,14 +81,14 @@
                 <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
             </a>
             <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="back img"  />
-            <div class="text-vertical-align-middlenav-top">
-                <div class="text-vertical-align-middlehead-font-weight d-flex align-items-center column-gap-1">
+            <div class="text-vertical-align-middle nav-top">
+                <div class="text-vertical-align-middle head-font-weight d-flex align-items-center column-gap-1">
                     {{ localeData?.gstr2_label }}
                     <div *ngIf="showDate">
                         <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
                      </div>
                 </div>
-                <div class="font-xs text-vertical-align-middlefont-weight-regular">{{ localeData?.inward_supplies_details }}</div>
+                <div class="font-size-12 text-vertical-align-middle font-weight-regular">{{ localeData?.inward_supplies_details }}</div>
             </div>
         </div>
         <div class="d-flex flex-column">
@@ -188,7 +188,7 @@
     <giddh-datepicker
         [monthYearMode]="true"
         [startView]="'multi-year'"
-        [cssClass]="'text-center w150'"
+        [cssClass]="'text-center width-150'"
         [startAt]="startAt"
         [placeholder]="date?.value ?? '--'"
         [appearance]="'outline'"

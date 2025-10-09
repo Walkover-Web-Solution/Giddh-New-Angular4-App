@@ -48,7 +48,7 @@ svg.icon.icon-xxlg-md {
     .return-top {
         display: inline-block;
         margin-left: 1%;
-        .font-xlarge {
+        .font-size-16 {
             margin: 3px auto;
         }
     }
@@ -62,7 +62,8 @@ svg.icon.icon-xxlg-md {
     margin: 22px 0;
 }
 
-.return-content /* UNUSED COMPONENT CLASS: return-filed - Auto-commented by script
+/* UNUSED COMPONENT CLASS: return-filed - Auto-commented by script
+.return-content 
 .return-filed {
     background-color: var(--color-green);
 }
@@ -91,10 +92,6 @@ svg.icon.gstr-icon {
     vertical-align: text-top;
 }
 
-.font-xs {
-    font-size: var(--font-size-12);
-}
-
 .return-body b {
     font-weight: 500;
 }
@@ -120,9 +117,9 @@ svg.icon.gstr-icon {
 //     color: var(--text-primary-color);
 // }
 
-.font-xxxlarge {
-    font-size: var(--font-size-24);
-}
+// .font-size-24 {
+//     font-size: var(--font-size-24);
+// }
 
 /* UNUSED COMPONENT CLASS: bottom-action - Auto-commented by script
 .bottom-action,
@@ -132,7 +129,8 @@ svg.icon.gstr-icon {
 }
 */
 
-.return-content /* UNUSED COMPONENT CLASS: line-gradient - Auto-commented by script
+/* UNUSED COMPONENT CLASS: line-gradient - Auto-commented by script
+.return-content 
 .line-gradient {
     border-image: linear-gradient(to right, #eee 0, #eee 30%, #fff 60%);
     border-image-slice: 1;
@@ -181,7 +179,8 @@ svg.icon.icon-xxlg-md {
 }
 */
 
-.return-body /* UNUSED COMPONENT CLASS: notification - Auto-commented by script
+/* UNUSED COMPONENT CLASS: notification - Auto-commented by script
+.return-body 
 .notification {
     padding-top: 25px;
     background: var(--color-white);
@@ -197,7 +196,8 @@ svg.icon.icon-xxlg-md {
 }
 */
 
-.filing-demo-video /* UNUSED COMPONENT CLASS: video-thumbnail - Auto-commented by script
+/* UNUSED COMPONENT CLASS: video-thumbnail - Auto-commented by script
+.filing-demo-video 
 .video-thumbnail {
     display: inline-block;
 }
@@ -208,7 +208,8 @@ svg.icon.icon-xxlg-md {
     height: 40px;
 }
 
-.filing-demo-video /* UNUSED COMPONENT CLASS: video-desc - Auto-commented by script
+/* UNUSED COMPONENT CLASS: video-desc - Auto-commented by script
+.filing-demo-video 
 .video-desc {
     display: inline-block;
     padding-left: 10px;
@@ -233,13 +234,15 @@ hr {
     border-top: 1px solid var(--color-silver);
 }
 
-.return-body .notification /* UNUSED COMPONENT CLASS: activity-graph - Auto-commented by script
+/* UNUSED COMPONENT CLASS: activity-graph - Auto-commented by script
+.return-body .notification 
 .activity-graph {
     padding: 20px 0 25px;
 }
 */
 
-.return-body .notification .activity-graph /* UNUSED COMPONENT CLASS: notify - Auto-commented by script
+/* UNUSED COMPONENT CLASS: notify - Auto-commented by script
+.return-body .notification .activity-graph 
 .notify {
     position: relative;
     padding-bottom: 30px;
@@ -256,7 +259,8 @@ hr {
     border-left: 1px solid var(--color-border-light);
 }
 
-.return-body .notification .activity-graph /* UNUSED COMPONENT CLASS: notify-circle - Auto-commented by script
+/* UNUSED COMPONENT CLASS: notify-circle - Auto-commented by script
+.return-body .notification .activity-graph 
 .notify-circle {
     width: 9px;
     height: 9px;
@@ -268,7 +272,8 @@ hr {
 }
 */
 
-.return-body .notification .activity-graph /* UNUSED COMPONENT CLASS: notify-content - Auto-commented by script
+/* UNUSED COMPONENT CLASS: notify-content - Auto-commented by script
+.return-body .notification .activity-graph 
 .notify-content {
     display: inline-block;
     width: 90%;
@@ -281,7 +286,7 @@ hr {
     margin-top: 10px;
 }
 
-.notify label.font-xs.text-muted strong {
+.notify label.font-size-12.text-muted strong {
     font-weight: 600;
     color: var(--color-dark-gray) !important;
 }
@@ -367,7 +372,8 @@ hr {
     z-index: 989;
 }
 */
-::ng-deep #monthPicker button.btn.btn-default/* UNUSED COMPONENT CLASS: btn-info - Auto-commented by script
+/* UNUSED COMPONENT CLASS: btn-info - Auto-commented by script
+::ng-deep #monthPicker button.btn.btn-default
 .btn-info {
     background: var(--bg-primary-color) !important;
     color: var(--color-white) !important;

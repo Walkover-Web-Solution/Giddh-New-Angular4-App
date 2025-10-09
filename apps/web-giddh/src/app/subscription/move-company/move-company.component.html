@@ -16,7 +16,7 @@
             <p class="text-default mb-2" [innerHTML]="getMovePlanText()"></p>
             <div class="row mb-2">
                 <div class="move-wrapper" [ngClass]="subscriptionMove ? 'col-9' : 'col-6'">
-                    <div *ngIf="subscriptionMove" class="position-relative  move-select">
+                    <div *ngIf="subscriptionMove" class="position-relative move-select">
                         <reactive-dropdown-field
                             [placeholder]="
                                 localeData?.subscription?.select_plan
@@ -33,7 +33,7 @@
                         >
                         </reactive-dropdown-field>
                     </div>
-                    <div *ngIf="!subscriptionMove" class="position-relative  move-select">
+                    <div *ngIf="!subscriptionMove" class="position-relative move-select">
                         <reactive-dropdown-field
                             [label]="commonLocaleData?.app_company"
                             [placeholder]="localeData?.select_company"

@@ -49,8 +49,6 @@
     @include border-radius(0 5px 5px 0);
 }
 
-
-
 // ===== COLORS =====
 // Primary colors
 .text-primary {
@@ -73,7 +71,7 @@
     color: var(--color-green);
 }
 .text-red {
-    color: var(--color-red);
+    color: var(--color-red) !important;
 }
 .text-saffron {
     color: var(--color-deep-orange) !important;
@@ -94,7 +92,6 @@
 // Font style
 .font-style-italic {
     font-style: italic !important;
-    font-weight: var(--font-weight-regular) !important;
 }
 
 // ===== BACKGROUNDS =====
@@ -117,7 +114,7 @@
     background: var(--color-transparent) !important;
     background-color: var(--color-transparent) !important;
 }
-.white-bg {
+.bg-white {
     background: var(--color-white) !important;
 }
 .custom-keyboard-dropdown-list-focus {
@@ -267,8 +264,6 @@
     padding-right: 50px !important;
 }
 
-
-
 // Margin - All sides
 .mr-05 {
     margin: 5px !important;
@@ -384,8 +379,6 @@
     margin-right: 50px !important;
 }
 
-
-
 // ===== LAYOUT =====
 
 // Text utilities
@@ -440,43 +433,17 @@
 }
 
 // Font sizes
-// .font-9 {
-//     font-size: var(--font-size-9);
-// }
 .icon-font-11 {
     font-size: 11px !important;
 }
-// .font-12 {
-//     font-size: var(--font-size-12) !important;
-// }
-// .font-14 {
-//     font-size: var(--font-size-14) !important;
-// }
-// .font-15,
-// .size-xs {
-//     font-size: var(--font-size-15) !important;
-// }
-// .font-16,
-// .icon-font-16 {
-//     font-size: var(--font-size-16) !important;
-// }
-// .font-20 {
-//     font-size: var(--font-size-20) !important;
-// }
 .icon-font-22 {
     font-size: 22px !important;
 }
-// .font-24 {
-//     font-size: var(--font-size-24) !important;
-// }
 .icon-font-48 {
     font-size: var(--font-size-48) !important;
 }
 
 // Table and alignment
-// .table-cell {
-//     display: table-cell;
-// }
 .vertical-align-middle {
     vertical-align: middle !important;
 }
@@ -510,8 +477,6 @@
     clear: both;
 }
 
-
-
 // ===== DIMENSIONS =====
 // Width
 .width-100 {
@@ -529,19 +494,12 @@
 .w125 {
     width: 125px !important;
 }
-.w150,
 .width-150 {
     width: 150px !important;
     min-width: 150px !important;
 }
 .w200 {
     width: 200px !important;
-}
-.w-fit-content {
-    width: fit-content !important;
-}
-.w-inherit {
-    width: inherit !important;
 }
 
 // Min width
@@ -554,7 +512,7 @@
 .min-width-100 {
     min-width: 100px;
 }
-.min160 {
+.min-width-160 {
     min-width: 160px;
 }
 
@@ -579,13 +537,9 @@
 }
 
 // Height
-.h32 {
-    height: 32px;
-}
 .min-height-100 {
     min-height: 100px;
 }
-
 
 // ===== DISPLAY & FLEXBOX =====
 // Display types
@@ -640,7 +594,6 @@
     row-gap: 50px !important;
 }
 
-
 // ===== INTERACTIONS =====
 // Pointer events
 .pointer-event-none {
@@ -650,24 +603,7 @@
     pointer-events: all !important;
 }
 
-// User select
-.user-select-none {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    -khtml-user-select: none;
-    user-select: none;
-}
-
 // ===== UTILITIES =====
-// Dialog widths
-.mat-dialog-sm {
-    width: 500px;
-}
-.mat-dialog-md {
-    width: 760px;
-}
-.mat-dialog-lg {
-    width: 1024px;
-    max-width: 80vw;
+.box-shadow-none {
+    box-shadow: none !important;
 }

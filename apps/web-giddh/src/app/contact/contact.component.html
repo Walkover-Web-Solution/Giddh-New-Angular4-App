@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="position-relativewhite-bg">
+    <div class="position-relative white-bg">
         <hamburger-menu></hamburger-menu>
         
         <mat-tab-group
@@ -47,7 +47,7 @@
                                     <form
                                         #invoiceForm="ngForm"
                                         novalidate
-                                        class="form-inline input-grp-date-range-picker position-relative"
+                                        class="form-inline input-grp-date-range-picker position-relative "
                                     >
                                         <div class="form-group d-flex flex-fill">
                                             <div class="custom-datepicker-wrapper">
@@ -1531,21 +1531,21 @@
     <ng-template #sortingTemplate let-col>
         <div class="icon-pointer cursor-pointer">
             <div
-                class="icon-sort-asc text-light d-block font-xxs"
+                class="icon-sort-asc text-light d-block font-size-9"
                 (click)="sort(col, 'asc')"
                 *ngIf="key !== col"
                 [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
             ></div>
 
             <div
-                class="icon-sort-asc text-light d-block font-xxs"
+                class="icon-sort-asc text-light d-block font-size-9"
                 (click)="sort(col, 'desc')"
                 *ngIf="key === col && order === 'asc'"
                 [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
             ></div>
 
             <div
-                class="icon-sort-asc text-light d-block font-xxs"
+                class="icon-sort-asc text-light d-block font-size-9"
                 *ngIf="key === col && order === 'desc'"
                 (click)="sort(col, 'asc')"
                 [ngClass]="{ 'active-text-color': key === col && order === 'desc' }"

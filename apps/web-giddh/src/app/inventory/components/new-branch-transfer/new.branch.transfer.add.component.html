@@ -110,7 +110,7 @@
                             <div class="col-xl-3 col-lg-4">
                                 <label> Sender's Name <span class="text-red">*</span> </label>
                             </div>
-                            <div class="col-xl-6 col-lg-8 position-relative">
+                            <div class="col-xl-6 col-lg-8 position-relative ">
                                 <input
                                     *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                     name="sourceName"
@@ -416,7 +416,7 @@
                             <div class="col-xl-3 col-lg-4">
                                 <label> Receiver's Name <span class="text-red">*</span> </label>
                             </div>
-                            <div class="col-xl-6 col-lg-8 position-relative">
+                            <div class="col-xl-6 col-lg-8 position-relative ">
                                 <reactive-dropdown-field
                                     *ngIf="isUpdateMode"
                                     [name]="'destinationName'"
@@ -555,7 +555,7 @@
                                                 [(ngModel)]="product.uniqueName"
                                                 (selectedOption)="selectProduct($event, product)"
                                             ></reactive-dropdown-field>
-                                            <div class="position-relative  wrap-hsn-box">
+                                            <div class="position-relative wrap-hsn-box">
                                                 <div
                                                     class="sku-code"
                                                     (click)="focusSkuNumber()"
@@ -633,7 +633,7 @@
                                                 Enter product details
                                             </div>
                                         </div>
-                                        <div class="position-relative  wrap-hsn-box">
+                                        <div class="position-relative wrap-hsn-box">
                                             <div
                                                 class="hsn-code text-right"
                                                 (click)="focusHsnNumber()"
@@ -736,7 +736,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="position-relative  min-wid-amt">
+                                    <td class="position-relative min-wid-amt">
                                         <div *ngIf="activeRow === i">
                                             <input
                                                 type="text"
@@ -1187,7 +1187,7 @@
                         <div class="pull-right position-relative d-flex column-gap-15">
                             <button
                                 type="button"
-                                mat-stroked-button class="d-inline-block vertical-align-middle"
+                                mat-stroked-button class="d-inline-block vertical-align-middle "
                                 [disabled]="isLoading"
                                 (click)="closeBranchTransferPopup()"
                             >
@@ -1196,7 +1196,7 @@
                             <button
                                 *ngIf="isBranch || isCompanyWithSingleBranch"
                                 type="button"
-                                mat-raised-button color="primary" class="d-inline-block vertical-align-vertical-align-middle{{
+                                mat-raised-button color="primary" class="d-inline-block vertical-align-middle {{
                                     newBranchTransferForm.invalid
                                 }}-{{ isValidSourceTaxNumber }}-{{ isValidDestinationTaxNumber }}"
                                 [disabled]="
@@ -1323,7 +1323,7 @@
                             Name
                             <div class="icon-pointer pull-right">
                                 <div
-                                    class="glyphicon glyphicon-triangle-top text-light d-block font-xxs"
+                                    class="glyphicon glyphicon-triangle-top text-light d-block font-size-9"
                                     (click)="sortButtonClicked('asc', 'transporterName')"
                                     [ngClass]="{
                                         'active-text-color':
@@ -1332,7 +1332,7 @@
                                     }"
                                 ></div>
                                 <div
-                                    class="glyphicon glyphicon-triangle-bottom text-light d-block font-xxs"
+                                    class="glyphicon glyphicon-triangle-bottom text-light d-block font-size-9"
                                     (click)="sortButtonClicked('desc', 'transporterName')"
                                     [ngClass]="{
                                         'active-text-color':
@@ -1346,7 +1346,7 @@
                             Transporter ID
                             <div class="icon-pointer pull-right">
                                 <div
-                                    class="glyphicon glyphicon-triangle-top text-light d-block font-xxs"
+                                    class="glyphicon glyphicon-triangle-top text-light d-block font-size-9"
                                     (click)="sortButtonClicked('asc', 'transporterId')"
                                     [ngClass]="{
                                         'active-text-color':
@@ -1355,7 +1355,7 @@
                                     }"
                                 ></div>
                                 <div
-                                    class="glyphicon glyphicon-triangle-bottom text-light d-block font-xxs"
+                                    class="glyphicon glyphicon-triangle-bottom text-light d-block font-size-9"
                                     (click)="sortButtonClicked('desc', 'transporterId')"
                                     [ngClass]="{
                                         'active-text-color':

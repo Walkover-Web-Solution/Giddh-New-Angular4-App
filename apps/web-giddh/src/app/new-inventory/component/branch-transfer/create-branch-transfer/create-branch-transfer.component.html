@@ -377,7 +377,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div
-                                            class="position-relative  info-field mr-b15"
+                                            class="position-relative info-field mr-b15"
                                             *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                         >
                                             <input-field
@@ -755,7 +755,7 @@
                                         </div>
                                         <div *ngIf="transferType === 'products'">
                                             <div class="mr-b15">
-                                                <div class="position-relative  info-field">
+                                                <div class="position-relative info-field">
                                                     <input-field
                                                         *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                                         [name]="'sourceName'"
@@ -788,7 +788,7 @@
                                                     >
                                                     </i>
                                                 </div>
-                                                <div class="position-relative  info-field" *ngIf="isUpdateMode">
+                                                <div class="position-relative info-field" *ngIf="isUpdateMode">
                                                     <reactive-dropdown-field
                                                         [name]="'senderName0'"
                                                         [label]="localeData?.sender_name"
@@ -919,7 +919,7 @@
                                         <div *ngIf="transferType === 'products'" formArrayName="destinations">
                                             <div [formGroupName]="0">
                                                 <div class="mr-b15">
-                                                    <div class="position-relative  info-field">
+                                                    <div class="position-relative info-field">
                                                         <reactive-dropdown-field
                                                             [name]="'receiverName'"
                                                             [label]="localeData?.receiver_name"
@@ -1062,7 +1062,7 @@
 
                                         <div *ngIf="transferType === 'senders'">
                                             <div
-                                                class="position-relative  info-field"
+                                                class="position-relative info-field"
                                                 *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                             >
                                                 <input-field
@@ -1276,7 +1276,7 @@
                                                         <span formGroupName="warehouse" class="w-100">
                                                             <div
                                                                 *ngIf="activeIndx === i"
-                                                                class="position-relative  w-100 fields-gap"
+                                                                class="position-relative w-100 fields-gap"
                                                             >
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
@@ -1330,7 +1330,7 @@
                                                                     >
                                                                     </text-field>
                                                                 </div>
-                                                                <div class="position-relative  pb-3">
+                                                                <div class="position-relative pb-3">
                                                                     <div
                                                                         class="pb-3"
                                                                         [ngClass]="{
@@ -1519,7 +1519,7 @@
                                                     <span>
                                                         <div
                                                             *ngIf="activeIndx === i"
-                                                            class="position-relative  w-100 fields-gap"
+                                                            class="position-relative w-100 fields-gap"
                                                         >
                                                             <select-field
                                                                 #selectAccount
@@ -1624,7 +1624,7 @@
                                                                     </div>
                                                                 </div>
                                                             </mat-menu>
-                                                            <div class="position-relative  pb-3">
+                                                            <div class="position-relative pb-3">
                                                                 <div class="pb-3">
                                                                     <textarea
                                                                         matInput
@@ -1963,7 +1963,7 @@
                                                         <span formGroupName="warehouse" class="w-100">
                                                             <div
                                                                 *ngIf="activeIndx === i"
-                                                                class="position-relative  w-100 fields-gap"
+                                                                class="position-relative w-100 fields-gap"
                                                             >
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
@@ -2024,7 +2024,7 @@
                                                                     >
                                                                     </text-field>
                                                                 </div>
-                                                                <div class="position-relative  pb-3">
+                                                                <div class="position-relative pb-3">
                                                                     <div
                                                                         class="pb-3"
                                                                         [ngClass]="{
@@ -2342,7 +2342,7 @@
                                     mat-raised-button
                                     color="primary"
                                     *ngIf="isBranch || isCompanyWithSingleBranch"
-                                    class="d-inline-block vertical-align-vertical-align-middle{{ branchTransferCreateEditForm.invalid }}-{{
+                                    class="d-inline-block vertical-align-middle {{ branchTransferCreateEditForm.invalid }}-{{
                                         isValidSourceTaxNumber
                                     }}-{{ isValidDestinationTaxNumber }}"
                                     (click)="submit()"

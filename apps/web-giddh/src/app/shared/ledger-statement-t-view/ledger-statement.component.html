@@ -9,7 +9,7 @@
         <ng-container *ngIf="!(isTransactionRequestInProcess$ | async)">
             <section class="container-fluid ledger-section pd-t15">
                 <!-- region ledger table-->
-                <div class="ledg-head transactions-page position-relative">
+                <div class="ledg-head transactions-page position-relative ">
                     <!-- region bank ledgers-->
                     <div class="clear-both"></div>
                     <!-- endregion -->
@@ -399,7 +399,7 @@
                                     colspan="{{ ledgerGridColumnsValue[2] }}"
                                     [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
                                     [attr.data-title]="commonLocaleData?.app_amount"
-                                    class="position-relative  text-right no-right-border flex-column align-items-end"
+                                    class="position-relative text-right no-right-border flex-column align-items-end"
                                 >
                                     <amount-field
                                         [amount]="txn.amount"
@@ -445,7 +445,7 @@
                             <table class="ledger-footer-1 left-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'">
-                                        <td colspan="12" class="col-xs-12 text-right text-whiteh32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right text-white h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'right'"
@@ -465,7 +465,7 @@
                                         </td>
                                     </tr>
                                     <tr class="total-col">
-                                        <td colspan="12" class="col-xs-12 text-right text-whiteh32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right text-white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="border-top padding-ledger">
                                                     <amount-field
@@ -494,7 +494,7 @@
                             <table class="ledger-footer-1 right-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'">
-                                        <td colspan="12" class="col-xs-12 text-right text-whiteh32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right text-white h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'right'"
@@ -513,7 +513,7 @@
                                         </td>
                                     </tr>
                                     <tr class="total-col">
-                                        <td colspan="12" class="col-xs-12 text-right text-whiteh32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right text-white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="border-top padding-ledger">
                                                     <amount-field

@@ -1,13 +1,56 @@
-// Examples mixins
-@mixin mat-button-variant($color) {
-    background-color: $color;
-    color: #fff;
-    &:hover {
-        background-color: lighten($color, 10%);
+@use "@angular/material" as mat;
+
+/** Consolidated mixin to define all theme color variables */
+@mixin define-theme-colors($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $foreground: map-get($theme, foreground);
+    $background: map-get($theme, background);
+
+    // Material Design color variables
+    --mat-primary-color: #{mat.get-color-from-palette($primary)};
+    --mat-accent-color: #{mat.get-color-from-palette($accent)};
+    --mat-warn-color: #{mat.get-color-from-palette($warn)};
+
+    // Theme color variables with contrast
+    $theme-color-map: (
+        'primary': ($primary, 'default'),
+        'primary-contrast': ($primary, 'default-contrast'),
+        'accent': ($accent, 'default'),
+        'accent-contrast': ($accent, 'default-contrast'),
+        'warn': ($warn, 'default'),
+        'warn-contrast': ($warn, 'default-contrast'),
+        'foreground': ($foreground, 'disabled-button'),
+        'background': ($background, 'disabled-button')
+    );
+
+    @each $name, $palette-info in $theme-color-map {
+        $palette: nth($palette-info, 1);
+        $variant: nth($palette-info, 2);
+
+        --theme-#{$name}-color: #{mat.get-color-from-palette($palette, $variant)};
+        
+        .theme-#{$name}-color {
+            color: var(--theme-#{$name}-color) !important;
+        }
+        
+        .bg-theme-#{$name}-color {
+            background-color: var(--theme-#{$name}-color) !important;
+        }
     }
 }
-@mixin mat-card-header($background-color) {
-    background-color: $background-color;
-    padding: 16px;
-    border-bottom: 1px solid #ddd;
-}
+
+// @mixin create-color-utilities() {
+//     $colors: 'primary', 'accent', 'warn';
+
+//     @each $name in $colors {
+//         .color-#{$name} {
+//             color: var(--mat-#{$name}-color) !important;
+//         }
+
+//         .background-#{$name} {
+//             background-color: var(--mat-#{$name}-color) !important;
+//         }
+//     }
+// }

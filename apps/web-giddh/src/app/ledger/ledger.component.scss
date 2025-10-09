@@ -53,7 +53,8 @@
 #ledger-transaction-left-list,
 #ledger-transaction-right-list {
     .mat-grid-tile {
-        .d-flex/* UNUSED COMPONENT CLASS: align-item-center - Auto-commented by script
+        /* UNUSED COMPONENT CLASS: align-item-center - Auto-commented by script
+        .d-flex
 .align-item-center {
             align-items: stretch !important;
         }
@@ -429,8 +430,9 @@ sh-select:focus {
         padding: 0 0px 350px;
     }
 }
+/* UNUSED COMPONENT CLASS: mat-grid-title - Auto-commented by script
 .left-col-new .mat-grid-list .mat-grid-title:last-child,
-.left-col-new .mat-grid-list /* UNUSED COMPONENT CLASS: mat-grid-title - Auto-commented by script
+.left-col-new .mat-grid-list
 .mat-grid-title:last-child {
     border-right: 0px !important;
 }
@@ -1052,8 +1054,9 @@ input#ledger-search {
     .stat-block {
         padding-left: 20px;
     }
+    /* UNUSED COMPONENT CLASS: select2-container - Auto-commented by script
     .ledg-head .mat-grid-list .mat-grid-title,
-    .ledg-head .mat-grid-list .mat-grid-title /* UNUSED COMPONENT CLASS: select2-container - Auto-commented by script
+    .ledg-head .mat-grid-list .mat-grid-title 
 .select2-container {
         border-bottom: none;
         border-right: none;
@@ -1288,4 +1291,7 @@ input#ledger-search {
                 display: none;
             }
     }
+}
+.h32 {
+    height: 32px;
 }

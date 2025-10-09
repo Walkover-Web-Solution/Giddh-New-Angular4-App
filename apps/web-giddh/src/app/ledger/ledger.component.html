@@ -52,7 +52,7 @@
                     </ul>
                 </div>
                 <!-- region ledger table-->
-                <div class="ledg-head transactions-page position-relative">
+                <div class="ledg-head transactions-page position-relative ">
                     <p class="w-100 float-left text-center font-size-16 pb-2 text-saffron" *ngIf="searchText || isAdvanceSearchImplemented">{{localeData?.opening_closing_balance_filter_message}}</p>
                     <!-- region ledger header -->
                     <div class="clear-both row mr-b15" [ngClass]="{ 'mr-b5': currentCompanyBranches?.length > 2 }">
@@ -831,7 +831,7 @@
                                                             <mat-grid-tile
                                                                 class="
                                                                     no-right-border
-                                                                    position-relative
+                                                                    position-relative 
                                                                     top-position-fix-{{ i }}
                                                                 "
                                                                 colspan={{ledgerGridColumnsValue[2]}}
@@ -1303,7 +1303,7 @@
                                         >
                                             <mat-grid-tile>
                                                 <div
-                                                    class="position-relativew-100 text-center d-flex align-items-center"
+                                                    class="position-relative w-100 text-center d-flex align-items-center"
                                                     [ngClass]="{
                                                         'compound-entry':
                                                             transactions.entryUniqueName === lc.selectedTxnUniqueName ||
@@ -1748,7 +1748,7 @@
                                                     <mat-grid-tile
                                                         [attr.data-title]="commonLocaleData?.app_amount"
                                                         colspan={{ledgerGridColumnsValue[2]}}
-                                                        class="position-relative  no-right-border"
+                                                        class="position-relative no-right-border"
                                                     >
                                                         <input
                                                             matInput
@@ -2075,7 +2075,7 @@
                                         colspan={{ledgerGridColumnsValue[2]}}
                                         [ngClass]="{ 'multicurrency-amount': isLedgerAccountAllowsMultiCurrency }"
                                         [attr.data-title]="commonLocaleData?.app_amount"
-                                        class="position-relative  text-right no-right-border flex-column align-items-end"
+                                        class="position-relative text-right no-right-border flex-column align-items-end"
                                     >
                                         <amount-field
                                             [amount]="txn.amount"
@@ -2137,7 +2137,7 @@
                                                         </ul>
                                                     </mat-grid-tile>
                                                     <mat-grid-tile
-                                                        class="position-relative  no-right-border"
+                                                        class="position-relative no-right-border"
                                                         colspan={{ledgerGridColumnsValue[2]}}
                                                         [attr.data-title]="commonLocaleData?.app_amount"
                                                     >
@@ -2255,7 +2255,7 @@
                             <table class="ledger-footer-1 left-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === transactionType.Credit">
-                                        <td colspan="12" class="col-xs-12 text-right text-whiteh32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right text-white h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'right'"
@@ -2278,7 +2278,7 @@
                                         class="total-col"
                                         *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
                                     >
-                                        <td colspan="12" class="col-xs-12 text-right text-whiteh32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right text-white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="border-top padding-ledger">
                                                     <amount-field
@@ -2307,7 +2307,7 @@
                             <table class="ledger-footer-1 right-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === transactionType.Debit">
-                                        <td colspan="12" class="col-xs-12 text-right text-whiteh32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right text-white h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'right'"
@@ -2329,7 +2329,7 @@
                                         class="total-col"
                                         *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
                                     >
-                                        <td colspan="12" class="col-xs-12 text-right text-whiteh32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right text-white h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="border-top padding-ledger">
                                                     <amount-field
@@ -2398,7 +2398,7 @@
                         </button>
                         <div
                             *ngIf="closingBalanceBeforeReconcile && !showLoader"
-                            class="pd-15 balance-detail mr-t2 mr-b2 clear-both text-center"
+                            class=" pd-15 balance-detail mr-t2 mr-b2 clear-both text-center"
                         >
                             <div class="row">
                                 <div class="col-md-6 col-sm-6 col-12 text-right">

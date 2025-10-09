@@ -353,7 +353,7 @@
                         <!-- endregion -->
                         <!-- Voucher Form Main Section -->
                         <div
-                            class="vouchers-secondary-form position-relative"
+                            class="vouchers-secondary-form position-relative "
                             [ngClass]="{
                                 'vouchers-form-disable':
                                     !invFormData.voucherDetails.customerName &&
@@ -510,7 +510,7 @@
                                                     'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo
                                                 }"
                                             >
-                                                <div class="address-field position-relative">
+                                                <div class="address-field position-relative ">
                                                     <textarea
                                                         matInput
                                                         name="billingDetails.address"
@@ -844,7 +844,7 @@
                                                     'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo
                                                 }"
                                             >
-                                                <div class="address-field position-relative">
+                                                <div class="address-field position-relative ">
                                                     <textarea
                                                         matInput
                                                         [readonly]="autoFillShipping"
@@ -986,7 +986,7 @@
                                     </div>
                                     <!-- Mobile Number -->
                                     <div class="col-6 mr-t15 mobile-number-wrapper">
-                                        <div id="init-contact-wrapper" class="position-relative  w-100">
+                                        <div id="init-contact-wrapper" class="position-relative w-100">
                                             <input-field
                                                 [name]="'accountDetails.mobileNumber'"
                                                 [type]="'tel'"
@@ -1488,7 +1488,7 @@
                                 >
                                     <div class="col-6" *ngIf="isCreditNote || isDebitNote">
                                         <div>
-                                            <div class="w-100 position-relative">
+                                            <div class="w-100 position-relative ">
                                                 <reactive-dropdown-field
                                                     #linkingDropdown
                                                     *ngIf="voucherApiVersion === 2"
@@ -2700,7 +2700,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="position-relative  item-tax"
+                                                <td class="position-relative item-tax"
 
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()" width="16%">
                                                     <div class="td-wrapper">

@@ -70,9 +70,7 @@ body {
     padding: 0 !important;
     margin: 0 !important;
     overflow: hidden;
-}
 
-body {
     &.page-leave-confirmation-modal-wrapper {
         .cdk-overlay-container,
         .cdk-global-overlay-wrapper {
@@ -85,15 +83,11 @@ body {
             z-index: 99999 !important;
         }
     }
-}
 
-
-body {
     div > a[href*="froala.com/wysiwyg-editor"] {
         display: none !important;
     }
-}
-body {
+
     &.template-wrapper {
         .invoice-list {
             mat-tab-body {
@@ -103,9 +97,7 @@ body {
             }
         }
     }
-}
 
-body {
     &.hide-chat-widget {
         chat-widget {
             display: none !important;
@@ -262,13 +254,6 @@ textarea {
         font-size: var(--font-size-15);
     }
 
-    /* UNUSED GLOBAL CLASS: display-mobile - Auto-commented by script
-    .display-mobile {
-        color: var(--color-medium-gray);
-        font-size: var(--font-size-15);
-    }
-    */
-
     .mobile-number {
         float: left;
     }
@@ -296,69 +281,19 @@ textarea {
 .updateledger-entry-panel-popup,
 .page-has-tabs,
 .ledger-body {
-    /* UNUSED GLOBAL CLASS: shipping-date - Auto-commented by script
-    .shipping-date {
-        padding-top: 6px !important;
-    }
-    */
-
     .custom-date-entries {
         position: relative;
 
-        /* UNUSED GLOBAL CLASS: edit-icon-custom-entry-date - Auto-commented by script
-        .edit-icon-custom-entry-date {
-            position: absolute !important;
-            right: 44% !important;
-            margin-top: -35px !important;
-            z-index: 0 !important;
-            top: 17px;
-        }
-        */
-
         giddh-datepicker {
             .mdc-text-field--no-label:not(.mdc-text-field--textarea) {
-                /* UNUSED GLOBAL CLASS: mat-mdc-form-field-input-control - Auto-commented by script
-                .mat-mdc-form-field-input-control {
-                    &.mdc-text-field__input,
-                    .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
-                        position: absolute;
-                        height: 23px !important;
-                        margin-top: 0;
-                        font-size: var(--font-size-12);
-                        padding-bottom: 0 !important;
-                        padding-left: 0;
-                    }
-                }
-                */
+                // Styles handled by Material Design
             }
 
             .mdc-text-field--filled:not(.mdc-text-field--disabled) {
                 background-color: transparent;
-
-                /* UNUSED GLOBAL CLASS: mdc-line-ripple - Auto-commented by script
-                .mdc-line-ripple {
-                    &::before {
-                        border: none;
-                    }
-                }
-                */
             }
 
-            /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
-            .mat-mdc-form-field {
-                &:hover {
-                    .mat-mdc-form-field-focus-overlay {
-                        opacity: 0;
-                    }
-                }
-            }
-            */
-
-            /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
-            .mat-form-field-wrapper
-                .mat-form-field-infix
-*/
-                .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
                 position: absolute;
                 height: 23px !important;
                 margin-top: 0;
@@ -366,23 +301,6 @@ textarea {
                 padding-bottom: 0 !important;
                 padding-left: 0;
             }
-
-            /* UNUSED GLOBAL CLASS: mat-form-field-flex - Auto-commented by script
-            .mat-form-field-flex {
-                border: none !important;
-                align-items: inherit !important;
-            }
-            */
-
-            /* UNUSED GLOBAL CLASS: mat-datepicker-toggle - Auto-commented by script
-            .mat-datepicker-toggle {
-                position: absolute;
-                right: 41%;
-                top: -3px;
-                opacity: 0;
-                z-index: 99;
-            }
-            */
         }
     }
 
@@ -394,52 +312,6 @@ textarea {
         margin: 0 !important;
         padding: 7px !important;
     }
-
-    /* UNUSED GLOBAL CLASS: billing-company - Auto-commented by script
-    .billing-company {
-        .mat-menu-content {
-            max-height: 200px;
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: copy-invoice-menu - Auto-commented by script
-    .copy-invoice-menu {
-        padding: 5px;
-        height: auto;
-        max-height: calc(210px);
-        overflow-y: auto !important;
-        min-width: 230px;
-
-        .line-height-initial {
-            &:focus {
-                box-shadow: none !important;
-            }
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: tax-control-menu - Auto-commented by script
-    .tax-control-menu {
-        button {
-            &:focus {
-                box-shadow: none !important;
-            }
-
-            .mat-checkbox-layout {
-                display: block !important;
-                width: 100% !important;
-            }
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: multicurrency-grandtotal - Auto-commented by script
-    .multicurrency-grandtotal {
-        width: 100%;
-        float: right;
-    }
-    */
 
     .exchange-rate-original {
         display: inline-block;
@@ -684,20 +556,6 @@ textarea {
         border-left: 2px solid var(--color-silver) !important;
     }
 
-    .mobile-margin {
-        /* UNUSED GLOBAL CLASS: mat-form-field - Auto-commented by script
-        .mat-form-field {
-            margin-top: 8px !important;
-        }
-        */
-    }
-
-    /* UNUSED GLOBAL CLASS: mat-form-field - Auto-commented by script
-    .mat-form-field {
-        width: 100% !important;
-    }
-    */
-
     .border-right {
         border-right: 2px solid var(--color-silver) !important;
     }
@@ -709,20 +567,10 @@ textarea {
             border: 1px solid var(--mat-primary-color) !important;
             font-size: var(--font-size-15) !important;
 
-            &:hover {
-                background-color: var(--mat-text-primary-light) !important;
-            }
-
+            &:hover,
             &:focus {
                 background-color: var(--mat-text-primary-light) !important;
             }
-
-            /* UNUSED GLOBAL CLASS: mat-mdc-chip-remove - Auto-commented by script
-            .mat-mdc-chip-remove {
-                font-size: 12px;
-                color: var(--color-dark-black) !important;
-            }
-            */
         }
     }
 }
@@ -833,39 +681,14 @@ textarea {
 }
 
 .select-multiple-chiplist-inventory {
-
     .mdc-text-field {
         @include border-radius(
-            var(--mat-border-radius-4), 
-            var(--mat-border-radius-0), 
-            var(--mat-border-radius-0), 
+            var(--mat-border-radius-4),
+            var(--mat-border-radius-0),
+            var(--mat-border-radius-0),
             var(--mat-border-radius-4)
         );
     }
-    /* UNUSED GLOBAL CLASS: mat-form-field-infix - Auto-commented by script
-    .mat-form-field-infix {
-        margin-bottom: 7px;
-        padding-top: 0;
-        border-top: 5px !important;
-        margin-top: 7px;
-        padding-bottom: 0px !important;
-        margin-left: 7px;
-        padding-left: 0 !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-chip-list-wrapper - Auto-commented by script
-    .mat-chip-list-wrapper {
-        padding: 8px !important;
-        padding-left: 0px !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-label-wrapper - Auto-commented by script
-    .mat-form-field-label-wrapper {
-        margin-top: 1px !important;
-    }
-    */
 }
 
 .autopaid {
@@ -1158,35 +981,20 @@ textarea {
                 border: 1px solid var(--color-silver) !important;
             }
         }
+
+        .text-field-container {
+            width: 30%;
+            margin-left: 10px;
+        }
     }
 
     .entry-date-container {
         float: right;
         width: 42%;
-
-        /* UNUSED GLOBAL CLASS: mdc-text-field - Auto-commented by script
-        .mdc-text-field {
-            padding: 0px !important;
-        }
-        */
     }
 
-    .amount1 {
-        .form-control {
-            &:focus {
-                border: 1px solid var(--color-silver) !important;
-            }
-        }
-    }
-
-    .amount2 {
-        .form-control {
-            &:focus {
-                border: 1px solid var(--color-silver) !important;
-            }
-        }
-    }
-
+    .amount1,
+    .amount2,
     .voucher-type {
         .form-control {
             &:focus {
@@ -1198,17 +1006,13 @@ textarea {
     .form-control {
         background-color: transparent !important;
         border: none !important;
-    }
 
-    .particular-account {
-        .text-field-container {
-            width: 30%;
-            margin-left: 10px;
+        &[disabled],
+        &[readonly] {
+            background-color: transparent !important;
         }
     }
 
-    .form-control[disabled],
-    .form-control[readonly],
     fieldset[disabled] .form-control {
         background-color: transparent !important;
     }
@@ -1223,44 +1027,34 @@ textarea {
 }
 
 .subscription-page {
-    .td-search-box .input-container {
-        position: relative;
-    }
-
-    .td-search-box .input-container input {
-        min-height: 38px;
-        width: 100%;
-        padding: 8px;
-        padding-right: 40px;
-        border: 0px;
-    }
-
-    .td-search-box .input-container i {
-        position: absolute;
-        right: 0px;
-        top: 9px;
-    }
-
-    .td-search-box .input-container input {
-        height: 36px;
-        min-width: 100%;
-        padding: 11px;
-        padding-right: 0;
-        color: var(--color-black);
-        border: none;
-        background-color: var(--color-light-gray);
-    }
-
     .td-search-box {
         padding: 0 0 0 10px !important;
-    }
 
-    .td-search-box .input-container {
-        position: relative;
+        .input-container {
+            position: relative;
+
+            input {
+                height: 36px;
+                min-width: 100%;
+                min-height: 38px;
+                width: 100%;
+                padding: 11px;
+                padding-right: 40px;
+                color: var(--color-black);
+                border: none;
+                background-color: var(--color-light-gray);
+            }
+
+            i {
+                position: absolute;
+                right: 0;
+                top: 9px;
+            }
+        }
     }
 }
 
-.company-button {
+// .company-button {
     /* UNUSED GLOBAL CLASS: mdc-button__label - Auto-commented by script
     .mdc-button__label {
         display: flex;
@@ -1268,7 +1062,7 @@ textarea {
         column-gap: 7px;
     }
     */
-}
+// }
 
 .word-wrap-dots {
     max-width: 230px;
@@ -1818,15 +1612,6 @@ aside-create-group {
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
 }
-
-// .border-none {
-//     border: none !important;
-// }
-
-/* end MDB tweaks */
-// .relative {
-//     position: relative;
-// }
 
 /* css end */
 
@@ -4317,17 +4102,17 @@ a.btn.btn-xs.btn-link.pull-right {
 //     }
 // }
 
-@media only screen and (max-width: 1030px) {
-    /* UNUSED GLOBAL CLASS: header-container - Auto-commented by script
-    .header-container {
-        position: relative;
-    }
-    */
+// @media only screen and (max-width: 1030px) {
+//     /* UNUSED GLOBAL CLASS: header-container - Auto-commented by script
+//     .header-container {
+//         position: relative;
+//     }
+//     */
 
-    body.unresponsive {
-        padding-top: 0;
-    }
-}
+//     body.unresponsive {
+//         padding-top: 0;
+//     }
+// }
 
 /* UNUSED GLOBAL CLASS: checkbox-inline - Auto-commented by script
 .checkbox-inline input[type="checkbox"],
@@ -4398,7 +4183,7 @@ a.btn.btn-xs.btn-link.pull-right {
 // .w125 {
 //     width: 125px !important;
 // }
-// .w150 {
+// .width-150 {
 //     width: 150px !important;
 // }
 // .w200 {
@@ -5273,7 +5058,7 @@ form label {
     margin-top: 7px;
 }
 
-// .clearfix {
+// .clear-both {
 //     clear: both;
 // }
 
@@ -6196,11 +5981,6 @@ input[type="checkbox"][disabled] {
     opacity: 2.2;
 }
 
-.nested-table > tbody tr td {
-    border: 0 !important;
-    padding: 8px 0;
-}
-
 .top-bar {
     padding-top: 10px !important;
     padding-bottom: 15px !important;
@@ -6672,9 +6452,13 @@ virtual-scroll .scrollable-content .item.selected > a {
 
 virtual-scroll {
     .scrollable-content {
-        .item.selected.hilighted {
-            .list-item {
-                background-color: var(--color-border-light);
+        .item {
+            &.selected {
+                &.hilighted {
+                    .list-item {
+                        background-color: var(--color-border-light);
+                    }
+                }
             }
         }
     }
@@ -7592,10 +7376,6 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-weight: 600;
 }
 
-.tax-engine .font-xs {
-    font-size: var(--font-size-12);
-}
-
 .tax-engine .text-middle {
     vertical-align: middle;
 }
@@ -8053,10 +7833,6 @@ perfect-scrollbar > .ps > .ps-overlay {
     word-wrap: break-word;
 }
 
-.font-xxs {
-    font-size: var(--font-size-9);
-}
-
 .tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
     border-right: 1px solid var(--color-silver);
 }
@@ -8427,21 +8203,21 @@ footer#footer.absolute-footer {
         }
     }
 
-    login {
-        .modal.fade {
-            .modal-body.clearfix {
-                #authModal {
-                    button[type="login"].ladda-button {
-                        /* UNUSED GLOBAL CLASS: ladda-label - Auto-commented by script
-                        .ladda-label {
-                            color: var(--color-white);
-                        }
-                        */
-                    }
-                }
-            }
-        }
-    }
+    // login {
+    //     .modal.fade {
+    //         .modal-body.clear-both {
+    //             #authModal {
+    //                 button[type="login"].ladda-button {
+    //                     /* UNUSED GLOBAL CLASS: ladda-label - Auto-commented by script
+    //                     .ladda-label {
+    //                         color: var(--color-white);
+    //                     }
+    //                     */
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 .master-page {
@@ -8940,10 +8716,6 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
         }
     }
     */
-}
-
-ul.dropdown-menu p.lead.pd {
-    font-size: var(--font-size-15);
 }
 
 .form-control {
@@ -12185,9 +11957,9 @@ inventory-master {
     }
     */
 
-    body.unresponsive {
-        padding-top: 0;
-    }
+    // body.unresponsive {
+    //     padding-top: 0;
+    // }
 
     .account-wrapper {
         width: 100% !important;
@@ -13711,11 +13483,6 @@ body.hide-scroll-body.master-page {
 //     .mat-step-icon-state-edit {
 //         background-color: var(--bg-primary-color);
 //     }
-// }
-
-// .mat-horizontal-content-container {
-//     padding: 10px 20px 20px 20px !important;
-//     overflow-x: auto !important;
 // }
 
 // .mat-step-text-label {

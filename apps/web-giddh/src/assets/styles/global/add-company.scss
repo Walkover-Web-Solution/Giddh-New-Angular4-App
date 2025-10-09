@@ -3,7 +3,7 @@
         padding: 0 16px !important;
     }
 }
-.add-company-wrapper {
+:host ::ng-deep .add-company-wrapper {
     .mat-horizontal-content-container {
         height: calc(100vh - 265px);
         overflow-y: auto;

@@ -3,3 +3,17 @@
     @extend .min-width-unset;
     padding-inline: 10px;
 }
+
+// Dialog widths
+.mat-dialog {
+    &-sm {
+        width: 500px;
+    }
+    &-md {
+        width: 760px;
+    }
+    &-lg {
+        width: 1024px;
+        max-width: 80vw;
+    }
+}

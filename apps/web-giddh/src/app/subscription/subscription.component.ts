@@ -295,6 +295,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('setting-sidebar-open');
+        document.querySelector('body').classList.remove('tabs-page');
     }
 
     /**

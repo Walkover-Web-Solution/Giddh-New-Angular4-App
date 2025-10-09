@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div *ngIf="!isLoading && connectedBankAccounts?.length === 0">
-        <div class="integrationpd-15clearfix section-center position-relative overflow-visible">
+        <div class="integration pd-15 clear-both section-center position-relative overflow-visible">
             <div class="form-group initial-screen position-absolute text-center mb-5">
                 <button
                     aria-label="connect bank"
@@ -27,7 +27,7 @@
                 isGocardlessSupportedCountry
             "
         >
-            <div class="clearfixpd-15mat-tab-bottom-spacing">
+            <div class="clear-both pd-15mat-tab-bottom-spacing">
                 <ng-container *ngIf="isIciciBankSupportedCountry">
                     <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
                     <div class="mb-2 bank-logo">

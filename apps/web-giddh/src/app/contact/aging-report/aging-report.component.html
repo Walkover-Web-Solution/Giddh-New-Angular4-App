@@ -198,19 +198,19 @@
 <ng-template #sortingTemplate let-col>
     <div class="icon-pointer cursor-pointer">
         <div
-            class="icon-sort-asc one text-light d-block font-xxs"
+            class="icon-sort-asc one text-light d-block font-size-9"
             (click)="sort(col, 'asc')"
             *ngIf="key !== col"
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
         ></div>
         <div
-            class="icon-sort-asc text-light d-block font-xxs"
+            class="icon-sort-asc text-light d-block font-size-9"
             (click)="sort(col, 'desc')"
             *ngIf="key === col && order === 'asc'"
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
         ></div>
         <div
-            class="icon-sort-asc text-light d-block font-xxs"
+            class="icon-sort-asc text-light d-block font-size-9"
             *ngIf="key === col && order === 'desc'"
             (click)="sort(col, 'asc')"
             [ngClass]="{ 'active-text-color': key === col && order === 'desc' }"
@@ -318,7 +318,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
-                            class="font-style-font-style-italic"
+                            class="font-style-italic"
                             aria-label="days"
                         >
                             0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}
@@ -362,7 +362,7 @@
                             [matMenuTriggerFor]="agingDropdown"
                             mat-button
                             (click)="openAgingDropDown()"
-                            class="font-style-font-style-italic m-0"
+                            class="font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.fourth + 1 }}-{{
@@ -414,7 +414,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
-                            class="font-style-font-style-italic m-0"
+                            class="font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.fifth + 1 }}-{{
@@ -464,7 +464,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
-                            class="font-style-font-style-italic m-0"
+                            class="font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
