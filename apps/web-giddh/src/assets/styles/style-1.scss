@@ -321,7 +321,7 @@ body {
 //     padding-left: 15px !important;
 // }
 // .pd-t15 {
-//     padding-top: 15px !important; 
+//     padding-top: 15px !important;
 // }
 // .pd-b15 {
 //     padding-bottom: 15px !important;
@@ -556,7 +556,7 @@ body {
 //     overflow-x: auto;
 // }
 // .list-style-none {
-    // list-style: none;
+// list-style: none;
 // }
 // .text-capitalize {
 //     text-transform: capitalize;
@@ -2132,14 +2132,14 @@ ul.pills {
     border-radius: var(--mat-border-radius-4);
     -webkit-box-shadow: 0 6px 12px var(--color-shadow-light);
     box-shadow: 0 6px 12px var(--color-shadow-light);
-    label{
+    label {
         font-size: var(--font-size-15) !important;
     }
-    .value-wrapper{
-        label{
+    .value-wrapper {
+        label {
             min-width: 60px !important;
         }
-        .percent-wrapper{
+        .percent-wrapper {
             input {
                 padding-right: 20px !important;
             }
@@ -2152,15 +2152,15 @@ ul.pills {
         font-size: 13px;
     }
 
-    ul{
+    ul {
         &.discount-list {
             // list-style: none;
             overflow: auto;
             max-height: 100px;
             min-height: 88px;
 
-            li{
-                &.discount-item{
+            li {
+                &.discount-item {
                     height: 40px;
                 }
             }
@@ -3159,54 +3159,54 @@ form {
 //     background-color: var(--mat-text-primary-light) !important;
 // }
 // .select-physical-product {
-    // .product-detail-content,
-    // .service-detail-content,
-    // .combo-detail-content,
-    // .text-field-container {
-    //     input {
-    //         width: 100%;
-    //         display: inline-block;
-    //     }
-    //     input[placeholder="Search"][type="text"] {
-    //         border: none;
-    //     }
-    //     input[placeholder="Product Unit"],
-    //     input[placeholder="Under Group"],
-    //     input[placeholder="Service Unit"],
-    //     .default-input-field {
-    //         width: 100%;
-    //         height: 36px;
-    //         border-radius: var(--mat-border-radius-4);
-    //         padding-left: 6px;
-    //         font-size: var(--font-size-15);
-    //     }
-    // }
-    // .product-detail-content {
-        // mat-select {
-        //     .mat-select-placeholder {
-        //         color: var(--color-silver);
-        //     }
-        //     .mat-select-min-line {
-        //         font-size: var(--font-size-15);
-        //     }
-        // }
-        // .mat-tab-label {
-        //     .mat-tab-label-content {
-        //         letter-spacing: 0px;
-        //         font: normal normal normal var(--font-size-15) / 22px;
-        //         font-family: var(--font-family);
-        //         color: var(--color-dark-gray) !important;
-        //     }
-        //     &:focus,
-        //     :active {
-        //         .mat-tab-label-content {
-        //             letter-spacing: 0px;
-        //             font: normal normal 600 var(--font-size-15) / 22px;
-        //             font-family: var(--font-family);
-        //             color: var(--text-primary-color) !important;
-        //         }
-        //     }
-        // }
+// .product-detail-content,
+// .service-detail-content,
+// .combo-detail-content,
+// .text-field-container {
+//     input {
+//         width: 100%;
+//         display: inline-block;
+//     }
+//     input[placeholder="Search"][type="text"] {
+//         border: none;
+//     }
+//     input[placeholder="Product Unit"],
+//     input[placeholder="Under Group"],
+//     input[placeholder="Service Unit"],
+//     .default-input-field {
+//         width: 100%;
+//         height: 36px;
+//         border-radius: var(--mat-border-radius-4);
+//         padding-left: 6px;
+//         font-size: var(--font-size-15);
+//     }
+// }
+// .product-detail-content {
+// mat-select {
+//     .mat-select-placeholder {
+//         color: var(--color-silver);
+//     }
+//     .mat-select-min-line {
+//         font-size: var(--font-size-15);
+//     }
+// }
+// .mat-tab-label {
+//     .mat-tab-label-content {
+//         letter-spacing: 0px;
+//         font: normal normal normal var(--font-size-15) / 22px;
+//         font-family: var(--font-family);
+//         color: var(--color-dark-gray) !important;
+//     }
+//     &:focus,
+//     :active {
+//         .mat-tab-label-content {
+//             letter-spacing: 0px;
+//             font: normal normal 600 var(--font-size-15) / 22px;
+//             font-family: var(--font-family);
+//             color: var(--text-primary-color) !important;
+//         }
+//     }
+// }
 //     }
 // }
 

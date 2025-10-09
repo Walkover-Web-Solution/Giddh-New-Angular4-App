@@ -1,6 +1,6 @@
 @charset "utf-8";
-@use './main.scss';
-@use './abstracts/mixins' as *;
+@use "./main.scss";
+@use "./abstracts/mixins" as *;
 @import "./vendors/json-tree.scss";
 @import "./vendors/json-diff.scss";
 @import "./vendors/intl.scss";
@@ -389,7 +389,7 @@ textarea {
     .mat-form-field-wrapper
         .mat-form-field-infix
 */
-        .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+    .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
         position: absolute;
         padding-top: 12px !important;
     }
@@ -929,7 +929,8 @@ textarea {
     }
 }
 
-.voucher-preview-edit, .giddh-mobile-wrapper {
+.voucher-preview-edit,
+.giddh-mobile-wrapper {
     .flag-input {
         /* UNUSED GLOBAL CLASS: mdc-floating-label - Auto-commented by script
         .mdc-floating-label {
@@ -1055,7 +1056,7 @@ textarea {
 }
 
 // .company-button {
-    /* UNUSED GLOBAL CLASS: mdc-button__label - Auto-commented by script
+/* UNUSED GLOBAL CLASS: mdc-button__label - Auto-commented by script
     .mdc-button__label {
         display: flex;
         align-items: center;
@@ -1246,8 +1247,6 @@ textarea {
 // .border-top {
 //     border-top: 1px solid var(--color-silver) !important;
 // }
-
-
 
 /* UNUSED GLOBAL CLASS: custom-giddh-datepicker - Auto-commented by script
 .custom-giddh-datepicker {
@@ -1576,7 +1575,6 @@ aside-create-group {
 // .table-cell {
 //     display: table-cell;
 // }
-
 
 /* table css need to removed at last (finish)*/
 /* UNUSED GLOBAL CLASS: modal-header - Auto-commented by script
@@ -2169,7 +2167,6 @@ ul.sub-list {
     display: none !important;
 }
 
-
 /* UNUSED GLOBAL CLASS: aging-table-top - Auto-commented by script
 .aging-table-top td {
     border: 0px solid !important;
@@ -2344,7 +2341,6 @@ ul.sub-list {
 // .text-light {
 //     color: var(--color-medium-gray) !important;
 // }
-
 
 // .text-saffron {
 //     color: var(--color-deep-orange) !important;
@@ -2809,7 +2805,8 @@ modal-container.modal {
 }
 */
 
-.custom-datepicker, .custom-datepicker-wrapper {
+.custom-datepicker,
+.custom-datepicker-wrapper {
     position: relative;
     width: 230px;
     i {
@@ -2828,7 +2825,8 @@ modal-container.modal {
             width: 14px;
         }
     }
-    .date-range-picker, input {
+    .date-range-picker,
+    input {
         position: relative;
         display: block;
         text-align: center;
@@ -9715,7 +9713,6 @@ button.ladda-button .ladda-label {
 }
 */
 
-
 /* UNUSED GLOBAL CLASS: edit-modal - Auto-commented by script
 .edit-modal {
     max-width: 300px;
@@ -12930,7 +12927,7 @@ hamburger-menu {
             //         }
             //     }
 
-                /* UNUSED GLOBAL CLASS: mat-column-history - Auto-commented by script
+            /* UNUSED GLOBAL CLASS: mat-column-history - Auto-commented by script
                 .mat-column-history {
                     .history-checkbox {
                         .mat-checkbox-inner-container-no-side-margin {
@@ -14367,7 +14364,7 @@ mat-list {
 .serial-no-column {
     min-width: 30px !important;
 }
-    
+
 // Global class use to show/hide element on hover
 .hover-trigger {
     .hover-target {
