@@ -1,0 +1,8 @@
+.mdc-dialog {
+    .mdc-dialog__content {
+        padding: 15px !important;
+    }
+    .mat-mdc-dialog-content {
+        max-height: unset;
+    }
+}

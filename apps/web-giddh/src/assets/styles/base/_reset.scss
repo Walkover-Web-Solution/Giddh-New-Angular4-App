@@ -1,8 +1,21 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 a {
     @include text-decoration(none, false);
     color: var(--text-primary-color);
 }
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-size: inherit;
     font-weight: inherit;
 }
@@ -15,7 +28,8 @@ table {
     border-collapse: collapse;
     width: 100%;
 }
-ul, ol {
+ul,
+ol {
     list-style: none;
 }
 textarea {

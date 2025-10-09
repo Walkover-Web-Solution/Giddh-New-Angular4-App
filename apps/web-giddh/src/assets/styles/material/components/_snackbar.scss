@@ -1,0 +1,60 @@
+
+.mat-mdc-snack-bar-container {
+    padding: 0 !important;
+    
+    .mdc-snackbar__surface {
+        color: var(--color-white) !important;
+        font-size: var(--font-size-15);
+    }
+    
+    .mat-mdc-snack-bar-label {
+        padding: 0 !important;
+    }
+    
+    .snack-container {
+        background-position-y: center;
+    }
+    
+    // Error state
+    &.error {
+        .mdc-snackbar__surface {
+            background-color: var(--color-red) !important;
+        }
+        
+        .snack-container {
+            background-image: url("../../../images/failure.svg");
+        }
+    }
+    
+    // Success state
+    &.success {
+        .mdc-snackbar__surface {
+            background-color: var(--color-green) !important;
+        }
+        
+        .snack-container {
+            background-image: url("../../../images/success.svg");
+        }
+    }
+    
+    // Warning and Info states (shared styles)
+    &.warning,
+    &.info {
+        .mdc-snackbar__surface {
+            background-color: var(--color-deep-orange) !important;
+            
+            .mdc-snackbar__label,
+            .snack-close-button {
+                color: var(--color-black) !important;
+            }
+        }
+    }
+    
+    &.warning .snack-container {
+        background-image: url("../../../images/exclamation-black.svg");
+    }
+    
+    &.info .snack-container {
+        background-image: url("../../../images/info-black.svg");
+    }
+}

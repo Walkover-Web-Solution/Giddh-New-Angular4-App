@@ -1,59 +1,12 @@
-// Mat Menu have default max-width: 280px;
-.mat-mdc-menu-panel {
-    max-width: unset !important;
-}
-
-// / Dialog
-.mdc-dialog {
-    .mdc-dialog__content {
-        padding: 15px !important;
-    }
-    .mat-mdc-dialog-content {
-        max-height: unset;
-    }
-}
-
-// Customize Material Radio Button
-.mat-mdc-radio-group {
-    display: flex;
-    column-gap: 15px;
-
-    .mat-mdc-radio-button {
-        .mdc-radio {
-            padding: 0 !important;
-        }
-    }
-}
+@import "./components/_form-field.scss";
+@import "./components/_snackbar.scss";
+@import "./components/_menu.scss";
+@import "./components/_dialog.scss";
+@import "./components/_radio.scss";
 
 // Table
 table tr {
     &:hover {
         background-color: inherit !important;
     }
-}
-
-// Material Reset global utility class
-.mat-form-field-no-overlay {
-    .mat-mdc-form-field {
-        .mat-mdc-form-field-focus-overlay {
-            display: none;
-        }
-    }
-}
-.mat-form-field-no-line-ripple {
-    .mdc-line-ripple {
-        display: none;
-    }
-}
-.mat-form-field-no-background {
-    .mdc-text-field--filled {
-        &:not(.mdc-text-field--disabled) {
-            background-color: var(--color-transparent);
-        }
-    }
-}
-.mat-form-field-clean {
-    @extend .mat-form-field-no-overlay;
-    @extend .mat-form-field-no-line-ripple;
-    @extend .mat-form-field-no-background;
 }

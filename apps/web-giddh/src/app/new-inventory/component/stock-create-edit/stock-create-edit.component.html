@@ -197,7 +197,7 @@
                                                     <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative "
                                                         [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
                                                         <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
-                                                            [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
+                                                            [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-0"
                                                             name="variantImage" id="Variant Image" (change)="uploadFile($event,0)" />
                                                         <ng-container *ngIf="uploadAttachmentInProgress$ | async">
                                                             <mat-spinner [diameter]="30"></mat-spinner>
@@ -1018,7 +1018,7 @@
                                                                             <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative "
                                                                                 [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
                                                                                 <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
-                                                                                    [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
+                                                                                    [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-0"
                                                                                     name="variantFile{{ i }}" id="variantFile{{ i }}" (change)="uploadFile($event, i)" />
                                                                                 <mat-spinner *ngIf="variant.isUploading"  [diameter]="30"></mat-spinner>
                                                                                 <ng-container *ngIf="!variant.isUploading">

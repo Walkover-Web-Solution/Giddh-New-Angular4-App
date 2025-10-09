@@ -1,0 +1,10 @@
+.mat-mdc-radio-group {
+    display: flex;
+    column-gap: 15px;
+
+    .mat-mdc-radio-button {
+        .mdc-radio {
+            padding: 0 !important;
+        }
+    }
+}

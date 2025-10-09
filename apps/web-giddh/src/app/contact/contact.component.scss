@@ -764,3 +764,17 @@ td.mat-cell {
         min-width: 170px !important;
     }
 }
+
+:host ::ng-deep .all-table {
+    .contact-header {
+        text-transform: capitalize !important;
+    }
+
+    td.mat-column-comment {
+        white-space: unset !important;
+    }
+
+    .comment-header {
+        min-width: 170px !important;
+    }
+}

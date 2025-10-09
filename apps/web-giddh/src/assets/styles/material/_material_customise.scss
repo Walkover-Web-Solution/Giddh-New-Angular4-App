@@ -17,3 +17,29 @@
         max-width: 80vw;
     }
 }
+
+// Material Reset global utility class
+.mat-form-field-no-overlay {
+    .mat-mdc-form-field {
+        .mat-mdc-form-field-focus-overlay {
+            display: none;
+        }
+    }
+}
+.mat-form-field-no-line-ripple {
+    .mdc-line-ripple {
+        display: none;
+    }
+}
+.mat-form-field-no-background {
+    .mdc-text-field--filled {
+        &:not(.mdc-text-field--disabled) {
+            background-color: var(--color-transparent);
+        }
+    }
+}
+.mat-form-field-clean {
+    @extend .mat-form-field-no-overlay;
+    @extend .mat-form-field-no-line-ripple;
+    @extend .mat-form-field-no-background;
+}
