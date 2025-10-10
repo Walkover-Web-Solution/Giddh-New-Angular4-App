@@ -114,8 +114,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("paymentAsideMenuTemplate", { static: true }) public paymentAsideMenuTemplate: TemplateRef<any>;
     /** Template reference for success payment dialog */
     @ViewChild('successTemplate', { static: true }) public successTemplate: TemplateRef<any>;
-    /** Dialog reference */
-    public successDialogRef: MatDialogRef<any>;
     /** Payment successful message */
     public paymentSuccessfulMessage: string = '';
     /** Reference for account aside menu dialog */
@@ -1321,21 +1319,11 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (event.isPaySuccess) {
                 this.clearSelectedContacts(false);
                 this.paymentSuccessfulMessage = event.paymentSuccessfulMessage;
-                this.openDialog(this.successTemplate);
+                this.dialog.open(this.successTemplate, { panelClass: 'mat-dialog-md' });
             }
             this.isBulkPaymentShow = false;
             this.selectedAccForPayment = null;
         }
-    }
-
-    /**
-     * To open success dialog
-     *
-     * @param {TemplateRef<any>} template
-     * @memberof ContactComponent
-     */
-    public openDialog(template: TemplateRef<any>): void {
-        this.dialog.open(template, { panelClass: 'mat-dialog-md' });
     }
 
     /**

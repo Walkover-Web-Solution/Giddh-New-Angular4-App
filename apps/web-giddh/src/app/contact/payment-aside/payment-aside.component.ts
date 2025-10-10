@@ -59,7 +59,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         bankPaymentTransactions: []
     };
     /** directive to emit boolean for close model */
-    @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter(true);
+    @Output() public closeModelEvent: EventEmitter<{
+        isPaySuccess: boolean, paymentSuccessfulMessage: string
+    }> = new EventEmitter(true);
     /** Integrated bank list sh-select options */
     public selectIntegratedBankList: IOption[] = [];
     /** Event emitter to close the Aside panel */
