@@ -1,6 +1,6 @@
 {
     "name": "giddh-workspaces",
-    "version": "9.0.1",
+    "version": "9.0.2",
     "license": "MIT",
     "scripts": {
         "ng": "ng",
@@ -66,7 +66,6 @@
         "@angular/router": "16.1.8",
         "@electron/packager": "^18.4.4",
         "@electron/rebuild": "^3.7.2",
-        "@getstation/electron-google-oauth2": "^14.0.0",
         "@giddh-workspaces/scss": "file:libs/scss",
         "@giddh-workspaces/utils": "file:libs/utils",
         "@giddh-workspaces/web": "file:xplat/web",
@@ -120,7 +119,7 @@
         "@angular/cli": "16.1.8",
         "@angular/compiler-cli": "16.1.8",
         "@angular/language-service": "16.1.8",
-        "@electron/notarize": "^3.1.0",
+        "@electron/notarize": "^2.1.0",
         "@ngrx/store-devtools": "16.1.0",
         "@types/file-saver": "^2.0.1",
         "@types/jquery": "3.5.1",
