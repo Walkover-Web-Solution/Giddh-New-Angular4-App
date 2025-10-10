@@ -244,11 +244,10 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+            if (response && this.selectedContact?.uniqueName) {
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact.uniqueName));
             }
         });
-
 
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params) {
