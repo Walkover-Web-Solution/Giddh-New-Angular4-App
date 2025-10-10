@@ -1334,19 +1334,8 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {TemplateRef<any>} template
      * @memberof ContactComponent
      */
-     public openDialog(template: TemplateRef<any>): void {
-        this.successDialogRef = this.dialog.open(template, {
-            panelClass: 'mat-dialog-md'
-        });
-    }
-
-    /**
-     * To close success dialog
-     *
-     * @memberof ContactComponent
-     */
-    public closeSuccessDialog(): void {
-        this.successDialogRef?.close();
+    public openDialog(template: TemplateRef<any>): void {
+        this.dialog.open(template, { panelClass: 'mat-dialog-md' });
     }
 
     /**
