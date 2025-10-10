@@ -123,6 +123,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public updateAccountIsSuccess$: Observable<boolean> = this.componentStore.updateAccountIsSuccess$;
     /** Observable indicating if an account delete was successful */
     public isDeleteAccSuccess$: Observable<any> = this.componentStore.isDeleteAccSuccess$;
+    /** Observable indicating if an account create was successful */
+    public createAccountIsSuccess$: Observable<any> = this.componentStore.createAccountIsSuccess$;
     /** Observable indicating if an account delete was successful */
     public lastDeletedAccountUniqueName$: Observable<any> = this.componentStore.lastDeletedAccountUniqueName$;
     /** Observable for the currently active account */
@@ -255,6 +257,13 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+            }
+        });
+
 
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params) {
