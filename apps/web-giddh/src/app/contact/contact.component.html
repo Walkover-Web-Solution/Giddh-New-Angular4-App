@@ -1647,3 +1647,21 @@
         </div>
     </ng-template>
 </ng-container>
+
+<ng-template #successTemplate>
+    <div class="dialog-header">
+        <span>{{ localeData?.payment_status }}</span>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="d-flex flex-column align-items-center justify-content-center row-gap5">
+            <div class="payment-img">
+                <img src="{{ imgPath }}payment-succes.svg" />
+            </div>
+            <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
+            <p>{{ paymentSuccessfulMessage }}</p>
+            <button mat-raised-button color="primary" mat-dialog-close aria-label="done">
+                {{ commonLocaleData?.app_done }}
+            </button>
+        </div>
+    </mat-dialog-content>
+</ng-template>
