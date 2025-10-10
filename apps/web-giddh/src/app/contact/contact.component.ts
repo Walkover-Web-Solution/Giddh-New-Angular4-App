@@ -112,6 +112,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("accountAsideMenuTemplate", { static: true }) public accountAsideMenuTemplate: TemplateRef<any>;
     /** Template reference for aside menu payment modal */
     @ViewChild("paymentAsideMenuTemplate", { static: true }) public paymentAsideMenuTemplate: TemplateRef<any>;
+    /** Template reference for success payment dialog */
+    @ViewChild('successTemplate', { static: true }) public successTemplate: TemplateRef<any>;
+    /** Dialog reference */
+    public successDialogRef: MatDialogRef<any>;
+    /** Payment successful message */
+    public paymentSuccessfulMessage: string = '';
     /** Reference for account aside menu dialog */
     public accountAsideMenuDialogRef: MatDialogRef<any>;
     /** Reference for payment aside menu dialog */
@@ -1310,15 +1316,37 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public closeBulkPaymentModel(event: any): void {
         //  if bulk paymemt success then clear all selected contacts lists
-        if (event) {
-            this.clearSelectedContacts(false);
-        }
-        this.isBulkPaymentShow = false;
-        this.selectedAccForPayment = null;
-
         if (this.bulkPaymentModalRef) {
             this.dialog.closeAll();
+            if (event.isPaySuccess) {
+                this.clearSelectedContacts(false);
+                this.paymentSuccessfulMessage = event.paymentSuccessfulMessage;
+                this.openDialog(this.successTemplate);
+            }
+            this.isBulkPaymentShow = false;
+            this.selectedAccForPayment = null;
         }
+    }
+
+    /**
+     * To open success dialog
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof ContactComponent
+     */
+     public openDialog(template: TemplateRef<any>): void {
+        this.successDialogRef = this.dialog.open(template, {
+            panelClass: 'mat-dialog-md'
+        });
+    }
+
+    /**
+     * To close success dialog
+     *
+     * @memberof ContactComponent
+     */
+    public closeSuccessDialog(): void {
+        this.successDialogRef?.close();
     }
 
     /**
