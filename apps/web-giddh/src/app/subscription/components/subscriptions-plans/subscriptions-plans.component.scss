@@ -8,7 +8,7 @@
 .select-plan-block {
     padding-bottom: 40px;
     background-color: var(--color-white);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     height: 97%;
 }
 */
@@ -80,7 +80,7 @@
         width: 370px;
         left: 0px;
         z-index: 9;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         position: sticky;
         background-color: var(--color-white);
         padding-top: 0px;
@@ -159,11 +159,11 @@
         line-height: 4.8 !important;
     }
     .grid-title-list:nth-child(even) {
-        background-color: var(--mat-text-primary-light);
+        background-color: var(--theme-primary-light);
         color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         width: 205px;
         font-weight: 500;
         font-size: var(--font-size-15);
@@ -172,14 +172,14 @@
         margin-right: 0 !important;
     }
     .grid-list {
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
     }
     .grid-title-list:nth-child(odd) {
         background-color: var(--color-white);
         color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         width: 205px;
         font-weight: 500;
         font-size: var(--font-size-15);
@@ -245,7 +245,7 @@
 }
 */
 .selected {
-    background-color: var(--mat-text-primary-light);
+    background-color: var(--theme-primary-light);
 }
 .select-plan-head {
     text-align: center;
@@ -288,21 +288,21 @@
     background: var(--color-white);
     padding: 30px 15px 15px 30px;
     box-shadow: 0px 3px 6px var(--color-shadow-light);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     transition: 0.5s all ease;
 }
 */
 .inner-your-account:hover,
 .inner-your-account.active {
     background: var(--color-border-light);
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 }
 .your-account:after,
 .your-account:before {
     content: "";
     display: block;
     width: 100%;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     height: 100%;
     position: absolute;
     z-index: 1;
@@ -449,7 +449,7 @@
 }
 */
 .see-all-features .inner-your-account {
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
     margin-bottom: 20px;
 }
 /* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
@@ -534,7 +534,7 @@
 }
 /* UNUSED COMPONENT CLASS: all-plans - Auto-commented by script
 .all-plans {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 */
 .btn-cancel {

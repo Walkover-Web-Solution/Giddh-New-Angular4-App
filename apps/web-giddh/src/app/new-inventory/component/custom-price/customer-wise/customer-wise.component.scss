@@ -71,7 +71,7 @@
             .customer-right-side {
                 width: calc(100% - $sidebar-width);
                 padding: 12px 16px;
-                border-left: 1px solid var(--color-silver);
+                border-left: 1px solid var(--border-color);
                 height: calc(100vh - 92px);
                 overflow-y: auto;
                 .right-heading {
@@ -251,7 +251,7 @@
                     min-width: 42px;
                     border-radius: var(--mat-border-radius-4);
                     color: var(--color-dark-gray) !important;
-                    border: 1px solid var(--color-silver);
+                    border: 1px solid var(--border-color);
                     background-color: var(--color-transparent);
                     i {
                         font-size: var(--font-size-15);

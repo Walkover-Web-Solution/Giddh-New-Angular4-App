@@ -1,6 +1,6 @@
 .backup-data {
     padding: 10px 0px;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     font-weight: 500;
     color: var(--color-black);
 }
@@ -18,7 +18,7 @@
     padding: 40px 67px;
     margin: 0 15px;
     border-radius: var(--mat-border-radius-0);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background: var(--color-light-gray);
     width: 50%;
     text-align: center;

@@ -53,7 +53,7 @@ body {
 }
 
 .total-details-box {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     padding: 15px;
     width: 100%;
@@ -287,7 +287,7 @@ body {
     .alert-danger {
         color: inherit;
         border: 2px dashed var(--color-red-light);
-        background-color: var(--color-white);
+        // background-color: var(--color-white);
     }
 
     .alert .close {
@@ -308,7 +308,7 @@ body {
     }
 
     tfoot td {
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
     }
 }
 .ledger-top-header-left {
@@ -393,7 +393,7 @@ body {
 }
 .new-icon-img {
     img {
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         background: var(--color-white);
         padding: 5px;
         border-radius: var(--mat-border-radius-4);
@@ -525,7 +525,7 @@ body {
 
         > section.income,
         > .cdk-virtual-scroll-viewport section.income {
-            border-left: 7px solid var(--mat-primary-color);
+            border-left: 7px solid var(--theme-primary-color);
         }
 
         > section.expenses,
@@ -595,7 +595,7 @@ no-data,
     margin: 7px;
     transition: all 0.5s ease-in-out;
     padding: 10px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     word-break: break-all;
     color: var(--color-black);
 
@@ -613,7 +613,7 @@ no-data,
         padding-bottom: 5px;
         padding-right: 45px;
         margin-bottom: 5px;
-        border-bottom: 1px solid var(--mat-primary-color);
+        border-bottom: 1px solid var(--theme-primary-color);
         text-overflow: ellipsis;
         max-width: 325px;
         white-space: nowrap;
@@ -674,7 +674,7 @@ no-data,
         background: var(--color-light-gray);
 
         > .title {
-            border-bottom: 2px solid var(--mat-primary-color);
+            border-bottom: 2px solid var(--theme-primary-color);
         }
     }
 
@@ -727,8 +727,8 @@ no-data,
     }
 
     .border-top-btm {
-        border-bottom: 1px solid var(--color-silver);
-        border-top: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
+        border-top: 1px solid var(--border-color);
         padding: 5px;
     }
 }
@@ -847,7 +847,7 @@ no-data,
     box-shadow: 0px 3px 28px 0 var(--color-shadow-light);
     font-family: var(--font-family);
     font-size: var(--font-size-15);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     z-index: 100;
 }
 
@@ -1056,7 +1056,7 @@ no-data,
     // list-style: none;
     background-color: var(--color-white);
     background-clip: padding-box;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     -webkit-box-shadow: 0 6px 12px var(--color-shadow-light);
     box-shadow: 0 6px 12px var(--color-shadow-light);
@@ -1108,7 +1108,7 @@ no-data,
     background-color: var(--color-white);
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     box-shadow: 0 6px 12px var(--color-shadow-light);
 
@@ -1161,7 +1161,7 @@ no-data,
             .select2-selection--single {
                 border-radius: var(--mat-border-radius-0);
                 background-color: var(--color-white);
-                border: 1px solid var(--color-silver);
+                border: 1px solid var(--border-color);
 
                 .select2-selection__rendered {
                     line-height: 32px;
@@ -1246,7 +1246,7 @@ no-data,
 
     &::before {
         content: " ";
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         display: inline-block;
         width: 57px;
         margin-right: 13px;
@@ -1254,7 +1254,7 @@ no-data,
 
     &::after {
         content: "";
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         display: inline-block;
         width: 57px;
         margin-left: 13px;
@@ -1512,7 +1512,7 @@ form {
     .line-height-initial {
         line-height: 17px;
         font-size: var(--font-size-12) !important;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         height: auto;
         margin: 0 !important;
         padding: 7px !important;
@@ -1563,23 +1563,23 @@ form {
 
 .trigger-form-right-side {
     .border-left {
-        border-left: 2px solid var(--color-silver) !important;
+        border-left: 2px solid var(--border-color) !important;
     }
 
     .border-right {
-        border-right: 2px solid var(--color-silver) !important;
+        border-right: 2px solid var(--border-color) !important;
     }
 
     .select-multiple-chiplist {
         .mat-mdc-chip.mat-mdc-chip-row {
             color: var(--color-dark-black) !important;
             background-color: var(--color-white) !important;
-            border: 1px solid var(--mat-primary-color) !important;
+            border: 1px solid var(--theme-primary-color) !important;
             font-size: var(--font-size-15) !important;
 
             &:hover,
             &:focus {
-                background-color: var(--mat-text-primary-light) !important;
+                background-color: var(--theme-primary-light) !important;
             }
         }
     }
@@ -1600,7 +1600,7 @@ form {
 
 .stock-balance-wrapper {
     .stock-mat-salect {
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         border-radius: var(--mat-border-radius-4) !important;
         padding: 8px;
         font-size: var(--font-size-15);
@@ -1711,7 +1711,7 @@ form {
 
     &:hover {
         .form-control {
-            border: 1px solid var(--color-silver) !important;
+            border: 1px solid var(--border-color) !important;
         }
     }
 }
@@ -1734,7 +1734,7 @@ form {
 
     .second-header-border {
         th {
-            border-top: 1px solid var(--color-silver) !important;
+            border-top: 1px solid var(--border-color) !important;
         }
     }
 }
@@ -1774,7 +1774,7 @@ form {
     .particular-account {
         .form-control {
             &:focus {
-                border: 1px solid var(--color-silver) !important;
+                border: 1px solid var(--border-color) !important;
             }
         }
 
@@ -1794,7 +1794,7 @@ form {
     .voucher-type {
         .form-control {
             &:focus {
-                border: 1px solid var(--color-silver) !important;
+                border: 1px solid var(--border-color) !important;
             }
         }
     }
@@ -1918,7 +1918,7 @@ form {
     .product-option-wrapper {
         /* UNUSED GLOBAL CLASS: mat-select - Auto-commented by script
         .mat-select {
-            border: 1px solid var(--color-silver);
+            border: 1px solid var(--border-color);
             border-radius: var(--mat-border-radius-4);
             height: 35px;
             display: flex !important;
@@ -2202,7 +2202,7 @@ aside-create-group {
     .account-wrapper {
         .from-or-to-acc[type="text"],
         .form-control.debit-credit[type="text"] {
-            border: 1px solid var(--color-silver) !important;
+            border: 1px solid var(--border-color) !important;
         }
     }
 }
@@ -2262,7 +2262,7 @@ aside-create-group {
     z-index: 9;
     position: relative;
     top: -4px;
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 
 .invoice-control .invoice-nav.navbar-nav > li > a:hover {
@@ -2295,7 +2295,7 @@ aside-create-group {
 }
 
 .invoice-control .nav-tabs > li.active > a {
-    border-bottom: 4px solid var(--mat-primary-color) !important;
+    border-bottom: 4px solid var(--theme-primary-color) !important;
     color: var(--text-primary-color) !important;
 }
 
@@ -2345,7 +2345,7 @@ aside-create-group {
 
 .company-list button.btn-link:hover {
     color: var(--text-primary-color);
-    background: var(--mat-text-primary-light);
+    background: var(--theme-primary-light);
     text-decoration: none;
 }
 
@@ -2363,7 +2363,7 @@ ul.sub-list {
 }
 
 .company-list .input-group {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
 }
@@ -2378,7 +2378,7 @@ ul.sub-list {
     border: 0px;
     font-size: var(--font-size-15);
     color: var(--color-black);
-    border-left: 1px solid var(--color-silver) !important;
+    border-left: 1px solid var(--border-color) !important;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -2439,7 +2439,7 @@ ul.sub-list {
     left: 0;
     width: 100%;
     padding: 10px 0px 0 43px !important;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 
     li {
         a {
@@ -2458,7 +2458,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     padding: 10px 0px 0 43px !important;
     background-color: var(--color-light-gray);
     z-index: 9;
@@ -2503,7 +2503,7 @@ ul.sub-list {
 .top-aging-table-box input {
     width: 43px !important;
     height: 26px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     padding: 5px;
     text-align: center;
     color: var(--color-dark-gray);
@@ -2533,7 +2533,7 @@ ul.sub-list {
 }
 
 .advance-search .input-group-addon {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background: none;
     border-left: 0 !important;
     border-radius: var(--mat-border-radius-4);
@@ -2580,7 +2580,7 @@ ul.sub-list {
     width: 0;
     height: 0;
     border: 5px solid transparent;
-    border-top-color: var(--color-silver);
+    border-top-color: var(--border-color);
 }
 
 .select-style select {
@@ -2590,7 +2590,7 @@ ul.sub-list {
     -moz-appearance: none;
     appearance: none;
     padding: 7px 22px 7px 7px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-0);
     background: var(--color-white);
     font-size: var(--font-size-15);
@@ -2614,7 +2614,7 @@ ul.sub-list {
 .choose-size label {
     font-weight: bold;
     display: inline-block;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: 50%;
     width: 30px !important;
     text-align: center;
@@ -2654,7 +2654,7 @@ ul.sub-list {
 .table-modal thead tr th {
     font-family: var(--font-family) !important;
     font-family: cursive;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 }
 
 .dropdown-left {
@@ -2690,7 +2690,7 @@ ul.sub-list {
 }
 
 .price-input {
-    border: 1px solid var(--color-silver) !important;
+    border: 1px solid var(--border-color) !important;
     font-size: var(--font-size-15) !important;
     background: var(--color-white) !important;
     padding: 1px 2px !important;
@@ -2701,7 +2701,7 @@ ul.sub-list {
 
 .btn-filter {
     background: var(--color-white);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     font-size: var(--font-size-15);
     padding: 4px 8px;
     line-height: initial !important;
@@ -2758,9 +2758,9 @@ ul.sub-list {
         width: 100% !important;
         padding: 0 10px !important;
         border-radius: var(--mat-border-radius-4);
-        border: 1px solid var(--color-silver);
-        // color: var(--color-black) !important;
-        // background: none !important;
+        border: 1px solid var(--border-color);
+        color: inherit !important;
+        background: none !important;
         // height: 33px;
         // border: 0px;
         // padding: 3px !important;
@@ -2774,7 +2774,7 @@ ul.sub-list {
     //     padding: 0 10px !important;
     //     height: var(--custom-mat-form-field-height);
     //     border-radius: var(--mat-border-radius-4);
-    //     // border: 1px solid var(--color-silver);
+    //     // border: 1px solid var(--border-color);
     //     // font-size: var(--font-size-15);
     //     // background: var(--color-transparent) !important;
     // }
@@ -2791,29 +2791,7 @@ ul.sub-list {
     }
 }
 
-.form-control {
-    padding: 6px !important;
-    width: 100%;
-    // color: var(--color-black) !important;
-    // background: var(--color-white) !important;
-    border: 1px solid var(--color-silver);
-    border-radius: var(--mat-border-radius-4);
-    outline: 0;
-    box-shadow: none;
-    font-size: var(--font-size-15) !important;
-    /* UNUSED GLOBAL CLASS: mat-mdc-select-placeholder - Auto-commented by script
-    .mat-mdc-select-placeholder,
-    .mat-mdc-select-arrow {
-        color: var(--color-black) !important;
-    }
-    */
 
-    /* UNUSED GLOBAL CLASS: mat-mdc-select-arrow - Auto-commented by script
-    .mat-mdc-select-arrow {
-        margin-left: 4px;
-    }
-    */
-}
 
 .sidebar {
     background: var(--color-border-light);
@@ -2851,7 +2829,7 @@ ul.sub-list {
 
 header .navbar {
     background-color: var(--color-light-gray);
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     padding: 3px 0;
 }
 
@@ -2914,7 +2892,7 @@ header .navbar {
 }
 
 #ledger {
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 
 .daterangepicker.ltr .ranges {
@@ -2982,7 +2960,7 @@ p.table-email {
 .top-five-cr-dr-table .basic > tbody > tr td:first-child,
 .top-five-cr-dr-table .basic > thead > tr th:first-child {
     border-left: none !important;
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 .tab-integration {
     .tab-pane.active {
@@ -3007,10 +2985,6 @@ p.table-email {
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-.position-relative label {
-    font-weight: 400;
 }
 .btn-success-outline:hover {
     color: var(--color-white) !important;
@@ -3048,13 +3022,6 @@ p.table-email {
     background: var(--color-green-light) !important;
 }
 
-/* UNUSED GLOBAL CLASS: btn-warning - Auto-commented by script
-.btn-warning {
-    color: var(--color-white) !important;
-    background-color: var(--color-deep-orange) !important;
-    border-color: var(--color-deep-orange) !important;
-}
-*/
 
 .btn-warning:not(:disabled):not(.disabled):active:focus,
 .btn-warning:not(:disabled):not(.disabled).active:focus,
@@ -3079,7 +3046,7 @@ p.table-email {
 .btn-danger:active:focus {
     background: var(--color-silver) !important;
     color: var(--color-red) !important;
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
     outline: none !important;
     box-shadow: none !important;
 }
@@ -3094,13 +3061,6 @@ p.table-email {
     border-color: var(--color-border-light) !important;
 }
 
-/* UNUSED GLOBAL CLASS: btn-cancel - Auto-commented by script
-.btn-cancel {
-    background: var(--color-border-light);
-    color: var(--color-black);
-    border-color: var(--color-border-light);
-}
-*/
 
 .btn-cancel:hover,
 .btn-cancel:active,
@@ -3108,7 +3068,7 @@ p.table-email {
 .btn-cancel:active:focus {
     background: var(--color-silver);
     color: var(--color-medium-gray);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     outline: none;
     box-shadow: none;
 }
@@ -3244,7 +3204,7 @@ p.table-email {
 }
 
 .daterangepicker td.in-range {
-    background-color: var(--mat-text-primary-light) !important;
+    background-color: var(--theme-primary-light) !important;
     border-color: transparent;
     color: var(--color-black);
     border-radius: var(--mat-border-radius-0);
@@ -3253,7 +3213,7 @@ p.table-email {
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 var(--color-shadow-light);
     color: var(--color-dark-gray);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     z-index: 9999 !important;
 }
 
@@ -3269,7 +3229,7 @@ p.table-email {
 .ranges li.active,
 .ranges li:hover {
     background: var(--bg-primary-color) !important;
-    border: 1px solid var(--mat-primary-color) !important;
+    border: 1px solid var(--theme-primary-color) !important;
     color: var(--color-white) !important;
 }
 
@@ -3291,7 +3251,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border: 1px solid var(--mat-primary-color) !important;
+    border: 1px solid var(--theme-primary-color) !important;
     border-radius: var(--mat-border-radius-0) !important;
     box-shadow: none;
 }
@@ -3426,7 +3386,7 @@ a.btn.btn-xs.btn-link.pull-right {
     width: 100%;
     float: left;
     border: 0;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 }
 
 .list-inline label {
@@ -3542,7 +3502,7 @@ a.btn.btn-xs.btn-link.pull-right {
     color: var(--color-dark-gray);
     font-size: var(--font-size-15) !important;
     padding: 5px 0 2px 0 !important;
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 .shared-list select {
@@ -3619,8 +3579,8 @@ select.form-control {
 }
 
 .link-stock-table {
-    border-top: 1px solid var(--color-silver);
-    border-left: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
 }
 
 .link-stock-table > tbody > tr > td {
@@ -3710,7 +3670,7 @@ select.form-control {
 .col-wrapper {
     width: 255px;
     float: left;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     min-height: 100%;
     height: 100%;
     position: relative;
@@ -3730,10 +3690,11 @@ select.form-control {
 
 .search-bar {
     position: relative;
-}
-
-.search-bar .form-control {
-    padding-right: 40px !important;
+    .form-control {
+        padding-right: 40px !important;
+        height: 34px;
+    
+    }
 }
 
 #Addaccount .form-inline select.form-control {
@@ -3741,8 +3702,6 @@ select.form-control {
 }
 
 form label {
-    // color: var(--color-black);
-    // font-weight: normal;
     padding-bottom: 0;
     font-size: var(--font-size-15);
     line-height: 2.3;
@@ -3755,7 +3714,7 @@ form label {
 
 #getGroupModal .border-left,
 #getGroupModal .border-right {
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 
 #getGroupModal .detailed label {
@@ -3769,7 +3728,7 @@ form label {
 }
 
 .ledger-panel .border-bottom {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .inline-table {
@@ -3824,25 +3783,25 @@ form label {
 .isActive {
     color: var(--color-white) !important;
     background: var(--bg-primary-color);
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 }
 
 .isActive:hover {
     color: var(--color-white) !important;
     background: var(--bg-primary-color);
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 }
 
 .isParent.isActive {
     color: var(--color-white) !important;
     background: var(--bg-primary-color) !important;
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 }
 
 .isParent.isActive:hover {
     color: var(--color-white) !important;
     background: var(--bg-primary-color) !important;
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 }
 
 .adjusted-content-width {
@@ -3871,7 +3830,7 @@ form label {
 
 #getGroupModal .border-left,
 #getGroupModal .border-right {
-    border-color: var(--color-light-gray);
+    border-color: var(--border-color);
 }
 
 #getGroupModal .detailed label {
@@ -3885,7 +3844,7 @@ form label {
 }
 
 .ledger-panel .border-bottom {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .form-box {
@@ -3957,7 +3916,7 @@ form label {
 }
 
 #getGroupModal hr {
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 
 .breadcrumb {
@@ -4046,10 +4005,6 @@ form label {
     margin-top: 7px;
 }
 
-// .clear-both {
-//     clear: both;
-// }
-
 .th-caption {
     display: table-caption;
 }
@@ -4078,7 +4033,7 @@ form label {
 }
 
 #manufacture .border-top {
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 
 #manufacture thead th {
@@ -4086,7 +4041,7 @@ form label {
 }
 
 #manufacture .source thead {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 #manufacture .source .link-stock {
@@ -4349,7 +4304,7 @@ form label {
 /*************************************************** Dashboard CSS  ****************************************************/
 #dashboard .panel-default {
     color: var(--color-dark-gray);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 
 #dashboard .panel-default > .panel-heading {
@@ -4383,7 +4338,7 @@ form label {
     background: var(--color-white);
     top: 0;
     right: 0;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: 50%;
 }
 
@@ -4400,7 +4355,7 @@ form label {
 }
 
 .radio-theme:checked:before {
-    border: 1px solid var(--mat-primary-color);
+    border: 1px solid var(--theme-primary-color);
 }
 
 .dropdown-container .dropdown-menu {
@@ -4414,7 +4369,7 @@ form label {
         float: left;
         width: 100%;
         margin-bottom: 0 !important;
-        border-bottom: 1px solid var(--color-silver) !important;
+        border-bottom: 1px solid var(--border-color) !important;
 
         label {
             width: auto !important;
@@ -4463,6 +4418,33 @@ form label {
 
 .square {
     border-radius: var(--mat-border-radius-0) !important;
+}
+
+.ledger-date {
+    .input-wrapper {
+        .mat-form-field {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        border: 0 !important;
+                        width: 100%;
+
+                        // input {
+                        //     border: 1px solid var(--border-color) !important;
+                        // }
+                    }
+                }
+            }
+        }
+
+        // .mdc-text-field--no-label:not(.mdc-text-field--textarea) {
+        //     .mat-mdc-form-field-input-control.mdc-text-field__input {
+        //         .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+        //             border: 1px solid var(--border-color) !important;
+        //         }
+        //     }
+        // }
+    }
 }
 
 .ledger-row td .select2-container--default .select2-results__option--highlighted[aria-selected] a {
@@ -4553,7 +4535,7 @@ form label {
 #customInvoice .template-editor .table > tbody > tr > td .form-control {
     margin: 7px 0;
     background: var(--color-white);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     border-radius: var(--mat-border-radius-0);
 }
 
@@ -4630,7 +4612,7 @@ form label {
     width: 100%;
     object-fit: contain;
     border-radius: var(--mat-border-radius-4);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 
 .logo-preview {
@@ -4715,7 +4697,7 @@ input[type="checkbox"][disabled] {
     border-radius: var(--mat-border-radius-4);
     color: var(--color-black);
     background: var(--color-border-light);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 
 .dashboard-filter label {
@@ -4730,7 +4712,7 @@ input[type="checkbox"][disabled] {
 
 .input-group-btn .btn-default {
     background: var(--color-border-light);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     color: var(--color-black);
 
     &:hover {
@@ -4900,7 +4882,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container thead tr th:first-child {
-    border-left: 6px solid var(--color-silver);
+    border-left: 6px solid var(--border-color);
 }
 
 .table-container {
@@ -4933,7 +4915,7 @@ input[type="checkbox"][disabled]:after {
 .active-toggle-btn {
     color: var(--color-white) !important;
     background-color: var(--bg-primary-color) !important;
-    border-color: var(--mat-primary-color) !important;
+    border-color: var(--theme-primary-color) !important;
 }
 
 .input-group-addon input[type="radio"] {
@@ -4948,12 +4930,12 @@ input[type="checkbox"][disabled]:after {
     background: var(--color-white);
     top: -1px;
     right: -2px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: 50%;
 }
 
 .input-group-addon input[type="radio"]:checked:before {
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 }
 
 .input-group-addon input[type="radio"]:checked:after {
@@ -5041,11 +5023,6 @@ virtual-scroll {
     background-color: var(--color-white) !important;
 }
 
-/* UNUSED GLOBAL CLASS: mat-select-panel - Auto-commented by script
-.mat-select-panel {
-    background-color: var(--color-white);
-}
-*/
 
 virtual-scroll .scrollable-content .item > a {
     color: var(--color-black);
@@ -5055,7 +5032,7 @@ virtual-scroll .scrollable-content .item > a {
     height: 100%;
     color: var(--color-black);
     background-color: var(--color-white);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 
     &:hover {
         background-color: var(--color-border-light);
@@ -5152,7 +5129,7 @@ table input[type="number"] {
 
 .user-list {
     padding: 15px 0;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     overflow: hidden;
 }
 
@@ -5176,30 +5153,22 @@ table input[type="number"] {
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px !important;
-    border-bottom: 1px solid var(--color-silver);
-    border-right: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
     color: var(--color-dark-gray);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.ledg-head table td.pd-r25 {
-    padding-right: 25px !important;
-}
-
 .ledg-head.entry-popup table td[class*="col-"] {
-    border-bottom: 1px solid var(--color-silver);
-    border-right: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
     color: var(--color-dark-gray);
     text-overflow: ellipsis;
     white-space: nowrap;
     position: relative;
-}
-
-.ledg-head.entry-popup table td.pd-r25 {
-    padding-right: 25px !important;
 }
 
 .total-col td {
@@ -5220,7 +5189,7 @@ table input[type="number"] {
 
 .ledger-stat {
     padding: 50px 0;
-    background: var(--color-white);
+    // background: var(--color-white);
     color: var(--color-dark-gray);
     font-size: var(--font-size-16);
     margin: 100px 0;
@@ -5258,10 +5227,10 @@ table input[type="number"] {
     width: 50%;
     left: 25%;
     bottom: 100px;
-    background: var(--color-white);
+    // background: var(--color-white);
     padding: 5px;
     font-size: var(--font-size-12);
-    color: var(--color-black);
+    // color: var(--color-black);
 }
 
 #pagination {
@@ -5283,19 +5252,19 @@ table input[type="number"] {
 .thead-background1 th {
     background: var(--color-light-gray);
     color: var(--color-dark-gray);
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     padding: 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .ledger-book {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     clear: both;
-    position: relative;
+    // position: relative;
     float: left;
     width: 100%;
-    background: var(--color-white);
+    // background: var(--color-white);
 }
 
 .table-amount label {
@@ -5336,13 +5305,1537 @@ table input[type="number"] {
     border-bottom: none !important;
 }
 
-/* ======================================= INVENTORY CSS ===================================== */
+/* ============================= GLOBAL STYLES ============================= */
+/*
+ * This file contains global styles organized according to SCSS 7-1 architecture
+ * 
+ * Table of Contents:
+ * 1. Base HTML Elements
+ * 2. Form Elements & Controls
+ * 3. Button Styles
+ * 4. Navigation & Layout
+ * 5. Modal & Dialog Styles
+ * 6. Table Styles
+ * 7. Component-Specific Styles
+ * 8. Utility Classes
+ * 9. Angular Material Overrides
+ * 10. Media Queries
+ */
+
+/* ============================= 1. BASE HTML ELEMENTS ============================= */
+
+// Base HTML element styles
+html {
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-15);
+    color: var(--color-black);
+    background-color: var(--color-white);
+    height: 100%;
+    
+    &.fixed {
+        overflow-y: hidden;
+    }
+    
+    &.page-leave-confirmation-modal-wrapper {
+        .cdk-overlay-container,
+        .cdk-global-overlay-wrapper {
+            z-index: 99999 !important;
+        }
+    }
+    
+    &.update-scroll-hidden {
+        overflow-y: hidden;
+    }
+    
+    &.prevent-body-scroll {
+        overflow-y: hidden !important;
+    }
+    
+    &.hide-scroll-body.master-page {
+        overflow-y: hidden !important;
+    }
+    
+    &.template-wrapper {
+        .invoice-list {
+            mat-tab-body {
+                &.mat-mdc-tab-body-active {
+                    z-index: unset !important;
+                }
+            }
+        }
+    }
+    
+    &.hide-chat-widget {
+        chat-widget {
+            display: none !important;
+        }
+    }
+    
+    .cdk-overlay-container {
+        .page-leave-confirmation-modal-backdrop {
+            z-index: 9999 !important;
+        }
+    }
+    
+    div > a[href*="froala.com/wysiwyg-editor"] {
+        display: none !important;
+    }
+}
+
+// Input elements
+// input {
+//     &[type="text"],
+//     &[type="email"],
+//     &[type="password"],
+//     &[type="number"] {
+//         font-family: var(--font-family);
+//         font-size: var(--font-size-15);
+        
+//         &::placeholder {
+//             color: var(--color-medium-gray);
+//         }
+//     }
+    
+//     &[type="checkbox"].cdk-visually-hidden {
+//         &::before,
+//         &::after {
+//             height: 1px !important;
+//             position: absolute !important;
+//             width: 1px !important;
+//             outline: 0px !important;
+//             border: none !important;
+//         }
+//     }
+// }
+
+// Table elements
+table {
+    font-family: var(--font-family);
+    
+    th,
+    td {
+        font-size: var(--font-size-15);
+    }
+}
+
+// Link elements
+a {
+    color: var(--text-primary-color);
+    text-decoration: none;
+    
+    &:hover {
+        color: var(--text-primary-color);
+        text-decoration: none;
+    }
+}
+
+/* ============================= 2. FORM ELEMENTS & CONTROLS ============================= */
+
+// Base form control styles
+.form-control {
+    padding: 6px !important;
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
+    outline: 0;
+    box-shadow: none;
+    font-size: var(--font-size-15) !important;
+    font-family: var(--font-family);
+    height: 43px;
+    
+    &:focus {
+        border-color: var(--theme-primary-color);
+        box-shadow: none;
+    }
+    
+    &::placeholder {
+        color: var(--color-medium-gray);
+    }
+    
+    &[readonly] {
+        background-color: var(--color-light-gray);
+        cursor: not-allowed;
+    }
+    
+    &:disabled {
+        background-color: var(--color-light-gray);
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+}
+
+// Form groups and layouts
+.form-group {
+    margin-bottom: 15px;
+    
+    label {
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-black);
+        margin-bottom: 5px;
+        display: block;
+    }
+}
+
+// Input groups
+.input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    
+    .input-group-prepend,
+    .input-group-append {
+        display: flex;
+        align-items: center;
+    }
+    
+    .input-group-text {
+        padding: 6px 12px;
+        background-color: var(--color-light-gray);
+        border: 1px solid var(--border-color);
+        color: var(--color-medium-gray);
+        font-size: var(--font-size-15);
+    }
+}
+
+// Select elements
+select {
+    &.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        background-size: 8px 10px;
+        padding-right: 30px;
+    }
+}
+
+// Textarea elements
+textarea {
+    &.form-control {
+        resize: vertical;
+        min-height: 80px;
+    }
+}
+
+// Checkbox and radio styles
+.form-check {
+    position: relative;
+    display: block;
+    padding-left: 25px;
+    margin-bottom: 10px;
+    
+    .form-check-input {
+        position: absolute;
+        margin-top: 3px;
+        margin-left: -25px;
+    }
+    
+    .form-check-label {
+        margin-bottom: 0;
+        cursor: pointer;
+    }
+}
+
+// Custom form field styles
+.mat-form-field-border {
+    border-radius: var(--mat-border-radius-4) !important;
+    border: 1px solid var(--border-color) !important;
+    
+    &.mat-form-field-height {
+        height: var(--custom-mat-form-field-height) !important;
+    }
+    
+    &:hover {
+        border-color: var(--border-color) !important;
+    }
+}
+
+// Readonly field styles
+.readonly-field {
+    .dropdown-bg {
+        display: none !important;
+    }
+}
+
+/* ============================= 3. BUTTON STYLES ============================= */
+
+// Base button styles
+.btn {
+    display: inline-block;
+    font-weight: var(--font-weight-normal);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 8px 16px;
+    font-size: var(--font-size-15);
+    line-height: 1.5;
+    border-radius: var(--mat-border-radius-4);
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+    text-decoration: none;
+    
+    &:focus,
+    &:active:focus {
+        outline: 0;
+        box-shadow: none;
+    }
+    
+    &:disabled,
+    &.disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+}
+
+// Primary button
+.btn-primary {
+    color: var(--color-white);
+    background-color: var(--theme-primary-color);
+    border-color: var(--theme-primary-color);
+    
+    &:hover,
+    &:focus,
+    &:active {
+        color: var(--color-white);
+        background-color: var(--mat-primary-dark);
+        border-color: var(--mat-primary-dark);
+    }
+    
+    &:disabled,
+    &.disabled {
+        color: var(--color-white);
+        background-color: var(--mat-primary-light);
+        border-color: var(--mat-primary-light);
+    }
+}
+
+// Success button
+.btn-success {
+    color: var(--color-white);
+    background-color: var(--color-green);
+    border-color: var(--color-green);
+    
+    &:hover,
+    &:focus,
+    &:active {
+        color: var(--color-white);
+        background-color: var(--color-green-dark);
+        border-color: var(--color-green-dark);
+    }
+    
+    &:disabled,
+    &.disabled {
+        color: var(--color-white);
+        background-color: var(--color-green-light);
+        border-color: var(--color-green-light);
+    }
+}
+
+// Danger button
+.btn-danger {
+    color: var(--color-white);
+    background-color: var(--color-red);
+    border-color: var(--color-red);
+    
+    &:hover,
+    &:focus,
+    &:active {
+        color: var(--color-white);
+        background-color: var(--color-red-dark);
+        border-color: var(--color-red-dark);
+    }
+    
+    &:disabled,
+    &.disabled {
+        color: var(--color-red);
+        background-color: var(--color-border-light);
+        border-color: var(--color-border-light);
+    }
+}
+
+// Secondary/Default button
+.btn-default,
+.btn-secondary {
+    color: var(--color-black);
+    background-color: var(--color-white);
+    border-color: var(--border-color);
+    
+    &:hover,
+    &:focus,
+    &:active {
+        color: var(--color-black);
+        background-color: var(--color-light-gray);
+        border-color: var(--color-medium-gray);
+    }
+    
+    &:disabled,
+    &.disabled {
+        opacity: 0.5;
+    }
+}
+
+// Link button
+.btn-link {
+    font-weight: var(--font-weight-normal);
+    color: var(--text-primary-color);
+    background-color: transparent;
+    border-color: transparent;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        color: var(--text-primary-color);
+        text-decoration: underline;
+        background-color: transparent;
+        border-color: transparent;
+    }
+    
+    &:disabled,
+    &.disabled {
+        color: var(--color-medium-gray);
+        text-decoration: none;
+    }
+}
+
+// Custom button variants
+.btn-cancel {
+    background: var(--color-border-light);
+    color: var(--color-black);
+    border-color: var(--color-border-light);
+    
+    &:hover,
+    &:active,
+    &:focus {
+        background: var(--color-silver);
+        color: var(--color-medium-gray);
+        border-color: var(--border-color);
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+.btn-filter {
+    background-color: var(--color-white);
+    border: 1px solid var(--border-color);
+    color: var(--color-black);
+    
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: var(--color-light-gray);
+        border-color: var(--color-medium-gray);
+    }
+}
+
+.btn-green {
+    background-color: var(--color-green);
+    border-color: var(--color-green);
+    color: var(--color-white);
+    
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: var(--color-green-dark);
+        border-color: var(--color-green-dark);
+    }
+}
+
+// Button sizes
+.btn-sm {
+    padding: 4px 8px;
+    font-size: var(--font-size-12);
+    border-radius: var(--mat-border-radius-2);
+}
+
+.btn-lg {
+    padding: 12px 24px;
+    font-size: var(--font-size-18);
+    border-radius: var(--mat-border-radius-6);
+}
+
+// Button groups
+.btn-group {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+    
+    .btn {
+        position: relative;
+        flex: 1 1 auto;
+        
+        &:not(:first-child) {
+            margin-left: -1px;
+        }
+        
+        &:not(:last-child):not(.dropdown-toggle) {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        &:not(:first-child) {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+}
+
+// Custom button styles
+.custom-btn {
+    color: var(--color-black);
+}
+
+.small-button {
+    width: 100% !important;
+    margin-right: 0 !important;
+    float: left !important;
+    margin-bottom: 12px !important;
+    min-width: auto !important;
+}
+
+.create-btn-inventory {
+    padding: 0 26px;
+}
+
+/* ============================= 4. NAVIGATION & LAYOUT ============================= */
+
+// Container and layout styles
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.container-fluid {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+// Grid system
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+// Navigation styles
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid var(--border-color);
+    
+    .nav-item {
+        margin-bottom: -1px;
+        
+        .nav-link {
+            border: 1px solid transparent;
+            border-top-left-radius: var(--mat-border-radius-4);
+            border-top-right-radius: var(--mat-border-radius-4);
+            padding: 8px 16px;
+            color: var(--color-medium-gray);
+            text-decoration: none;
+            
+            &:hover,
+            &:focus {
+                border-color: var(--border-color);
+                color: var(--color-black);
+            }
+            
+            &.active {
+                color: var(--text-primary-color);
+                background-color: var(--color-white);
+                border-color: var(--border-color);
+            }
+        }
+    }
+}
+
+// Sidebar styles
+.sidebar {
+    background: var(--color-border-light);
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.nav-left-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 100vh;
+    background-color: var(--color-white);
+    border-right: 1px solid var(--border-color);
+    z-index: 999;
+    transition: all 0.3s ease;
+    
+    &.width-60 {
+        .sidebar-collapse {
+            .sub-menu {
+                display: none !important;
+            }
+        }
+    }
+}
+
+// Menu states
+.menu_open {
+    .nav-left-bar {
+        width: 240px;
+    }
+    
+    #content-wrapper {
+        padding-left: 240px;
+    }
+    
+    .inventory-footer,
+    .create-group-footer,
+    .stock-group-footer {
+        left: 240px;
+        width: 100%;
+    }
+    
+    .inventory-sidebar {
+        left: 0 !important;
+    }
+    
+    .sales-register {
+        width: calc(100% - 240px) !important;
+    }
+    
+    .plan-wrapper {
+        padding-left: 240px !important;
+    }
+}
+
+// Header styles
+.header {
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+#primary-new-header.primary-main-header {
+    &.open {
+        padding-left: 15px !important;
+    }
+}
+
+// Content wrapper
+#content-wrapper {
+    padding-left: 60px;
+    // padding-top: 60px;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+}
+
+// Breadcrumbs
+.breadcrumbs {
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    list-style: none;
+    background-color: var(--color-light-gray);
+    // border-radius: var(--mat-border-radius-4);
+    
+    .breadcrumb-item {
+        display: inline-block;
+        
+        &:not(:last-child)::after {
+            content: "/";
+            margin: 0 8px;
+            color: var(--color-medium-gray);
+        }
+        
+        a {
+            color: var(--text-primary-color);
+            text-decoration: none;
+            
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        
+        &.active {
+            color: var(--color-medium-gray);
+        }
+    }
+}
+
+// Hamburger menu
+hamburger-menu {
+    position: relative;
+    z-index: 990;
+}
+
+// Company name styles
+.company-name {
+    ul li > span {
+        color: var(--color-black) !important;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}
+
+// Plan wrapper
+.plan-wrapper {
+    padding-left: 60px;
+    
+    &.menu_open {
+        padding-left: 240px !important;
+    }
+}
+
+// Setting sidebar states
+.setting-sidebar-open {
+    &.on-setting-page,
+    &.on-user-page {
+        &:not(.gst-sidebar-open) {
+            .plan-wrapper {
+                padding-left: 60px !important;
+            }
+        }
+    }
+    
+    &.aside-setting.on-setting-page .plan-wrapper,
+    &.aside-setting.on-user-page .plan-wrapper {
+        padding-right: 240px !important;
+    }
+    
+    .plan-wrapper,
+    &.on-user-page .plan-wrapper {
+        padding-right: 0 !important;
+    }
+    
+    #content-wrapper {
+        padding-left: 0;
+    }
+}
+
+// GST sidebar states
+.gst-sidebar-open {
+    .nav-left-bar {
+        transition: all 100ms linear;
+        transform: translate3d(-100px, 0px, 0px);
+        box-shadow: 0 0 3px var(--color-shadow-light) !important;
+        
+        &.create-account {
+            transform: none;
+        }
+    }
+    
+    .gst-sidebar {
+        left: 60px !important;
+    }
+    
+    #content-wrapper {
+        padding-left: 300px !important;
+    }
+    
+    .plan-wrapper {
+        padding-left: 300px !important;
+    }
+    
+    .menu_open {
+        .gst-sidebar {
+            left: 60px !important;
+        }
+        
+        #content-wrapper {
+            padding-left: 240px;
+        }
+        
+        .plan-wrapper {
+            padding-left: 60px;
+        }
+    }
+    
+    .daterangepicker.show-calendar {
+        z-index: 99 !important;
+    }
+    
+    &.on-setting-page.aside-setting {
+        #content-wrapper {
+            padding-right: 0;
+        }
+    }
+}
+
+// Sales register layout
+.sales-register {
+    width: calc(100% - 60px) !important;
+}
+
+/* ============================= 5. MODAL & DIALOG STYLES ============================= */
+
+// Base modal styles
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    outline: 0;
+    
+    &.show {
+        display: block;
+    }
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--color-black);
+    
+    &.show {
+        opacity: 0.5;
+    }
+}
+
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 56px auto;
+    padding: 0 10px;
+    pointer-events: none;
+    
+    &.modal-sm {
+        max-width: 300px;
+    }
+    
+    &.modal-lg {
+        max-width: 800px;
+    }
+    
+    &.modal-xl {
+        max-width: 1000px !important;
+    }
+}
+
+.modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: var(--color-white);
+    background-clip: padding-box;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-6);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    outline: 0;
+}
+
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    border-top-left-radius: var(--mat-border-radius-6);
+    border-top-right-radius: var(--mat-border-radius-6);
+    
+    .modal-title {
+        margin-bottom: 0;
+        line-height: 1.5;
+        font-size: var(--font-size-18);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-black);
+    }
+    
+    .close {
+        padding: 0;
+        background-color: transparent;
+        border: 0;
+        font-size: var(--font-size-24);
+        font-weight: var(--font-weight-bold);
+        line-height: 1;
+        color: var(--color-medium-gray);
+        text-shadow: none;
+        opacity: 0.5;
+        cursor: pointer;
+        
+        &:hover,
+        &:focus {
+            color: var(--color-black);
+            text-decoration: none;
+            opacity: 0.75;
+        }
+    }
+}
+
+.modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-color);
+    border-bottom-right-radius: var(--mat-border-radius-6);
+    border-bottom-left-radius: var(--mat-border-radius-6);
+    
+    .btn + .btn {
+        margin-left: 10px;
+    }
+}
+
+// Angular Material Dialog overrides
+.mat-dialog-container {
+    background-color: var(--color-white);
+    border-radius: var(--mat-border-radius-6);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    
+    .modal-dialog {
+        margin: 0px auto;
+        padding: 0px;
+    }
+}
+
+.mat-dialog-title {
+    font-size: var(--font-size-18);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-black);
+    margin: 0 0 20px 0;
+}
+
+.mat-dialog-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-height: 90%;
+    width: 100%;
+}
+
+.mat-dialog-actions {
+    justify-content: flex-end;
+    padding: 15px 0 0 0;
+    
+    .btn + .btn {
+        margin-left: 10px;
+    }
+}
+
+// Custom modal classes
+.receipt-note-modal {
+    max-width: 100% !important;
+}
+
+.edit-modal {
+    &.modal-small {
+        display: none;
+    }
+}
+
+.manage-account-popup {
+    &.modal {
+        background-color: var(--color-light-gray);
+        opacity: 1;
+    }
+}
+
+// Specific modal styles
+.update-ledger-overlay .modal-backdrop.show {
+    z-index: 991 !important;
+}
+
+// Dialog panel classes for Angular Material
+.mat-dialog-sm {
+    width: 500px;
+    max-width: 90vw;
+}
+
+.mat-dialog-md {
+    width: 760px;
+    max-width: 90vw;
+}
+
+.mat-dialog-lg {
+    width: 1024px;
+    max-width: 80vw;
+}
+
+// Custom overlay styles
+.custom-cdk-overlay-wrapper {
+    padding: 4px 8px;
+    border-radius: var(--mat-border-radius-4);
+    box-shadow: var(--mat-menu-box-shadow);
+    background-color: var(--color-border-light);
+}
+
+// Sidebar modal styles
+.json-sidebar,
+.logs-sidebar,
+.subscription-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+}
+
+/* ============================= 6. TABLE STYLES ============================= */
+
+// Base table styles
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+    color: var(--color-black);
+    background-color: transparent;
+    border-collapse: collapse;
+    
+    th,
+    td {
+        padding: 8px 12px;
+        vertical-align: top;
+        border-top: 1px solid var(--border-color);
+        font-size: var(--font-size-15);
+        line-height: 1.5;
+    }
+    
+    thead th {
+        vertical-align: bottom;
+        border-bottom: 2px solid var(--border-color);
+        font-weight: var(--font-weight-semibold);
+        background-color: var(--color-light-gray);
+    }
+    
+    tbody + tbody {
+        border-top: 2px solid var(--border-color);
+    }
+}
+
+// Table variants
+.table-striped {
+    tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    &.transactions-table {
+        white-space: nowrap;
+    }
+}
+
+.table-bordered {
+    border: 1px solid var(--border-color);
+    
+    th,
+    td {
+        border: 1px solid var(--border-color);
+    }
+    
+    thead {
+        th,
+        td {
+            border-bottom-width: 2px;
+        }
+    }
+}
+
+.table-hover {
+    tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.075);
+    }
+}
+
+// Table responsive wrapper
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    
+    .table {
+        margin-bottom: 0;
+    }
+}
+
+// Custom table classes
+.table-container {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
+}
+
+.table-header-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+// Angular Material table overrides
+.mat-table {
+    background-color: var(--color-white);
+    font-family: var(--font-family);
+    
+    .mat-header-cell {
+        color: var(--color-black);
+        font-weight: var(--font-weight-semibold);
+        font-size: var(--font-size-15);
+        background-color: var(--color-light-gray);
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .mat-cell {
+        color: var(--color-black);
+        font-size: var(--font-size-15);
+        border-bottom: 1px solid var(--color-light-gray);
+    }
+    
+    .mat-row:hover {
+        background-color: var(--color-light-gray);
+    }
+}
+
+// List table wrapper
+.list-table-wrapper {
+    th.mat-header-cell {
+        padding: 0 6px !important;
+        border-bottom: 0 !important;
+    }
+    
+    td.mat-cell {
+        border-bottom: 0 !important;
+    }
+    
+    .table th {
+        border-top: 0 !important;
+    }
+}
+
+// Specific table styles
+.transactions-table {
+    &.table-striped {
+        white-space: nowrap;
+    }
+}
+
+.reconciliations-table {
+    // Specific styles for reconciliation tables can be added here
+    font-size: var(--font-size-15);
+}
+
+.search-table {
+    min-width: 140px;
+}
+
+// Table amount styles
+.table-amount {
+    &[disabled] {
+        input {
+            background-color: var(--color-border-light) !important;
+        }
+    }
+}
+
+// Serial number column
+.serial-no-column {
+    min-width: 30px !important;
+}
+
+// Main table responsive styles
+.main-table {
+    tbody {
+        tr {
+            td {
+                &:first-child {
+                    min-width: 242px !important;
+                }
+            }
+        }
+    }
+}
+
+// Empty table state
+.empty-table {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--color-medium-gray);
+    
+    .empty-message {
+        font-size: var(--font-size-16);
+        margin-bottom: 10px;
+    }
+    
+    .empty-description {
+        font-size: var(--font-size-14);
+        color: var(--color-dark-gray);
+    }
+}
+
+// Table row states
+.table-row {
+    &:hover {
+        .table-menu-first-td {
+            visibility: visible;
+        }
+    }
+}
+
+.table-menu-first-td {
+    font-size: var(--font-size-15);
+    vertical-align: middle;
+    visibility: hidden;
+    color: var(--color-dark-gray);
+    width: 18px;
+}
+
+/* ============================= 7. COMPONENT-SPECIFIC STYLES ============================= */
+
+/* ============================= 8. UTILITY CLASSES ============================= */
+// Display utilities
+.d-none {
+    display: none !important;
+}
+
+.d-block {
+    display: block !important;
+}
+
+.d-inline {
+    display: inline !important;
+}
+
+.d-inline-block {
+    display: inline-block !important;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.d-inline-flex {
+    display: inline-flex !important;
+}
+
+// Flex utilities
+.flex-row {
+    flex-direction: row !important;
+}
+
+.flex-column {
+    flex-direction: column !important;
+}
+
+.justify-content-start {
+    justify-content: flex-start !important;
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+.justify-content-end {
+    justify-content: flex-end !important;
+}
+
+.justify-content-between {
+    justify-content: space-between !important;
+}
+
+.align-items-start {
+    align-items: flex-start !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.align-items-end {
+    align-items: flex-end !important;
+}
+
+// // Margin utilities
+// .m-0 { margin: 0 !important; }
+// .m-1 { margin: 4px !important; }
+// .m-2 { margin: 8px !important; }
+// .m-3 { margin: 12px !important; }
+// .m-4 { margin: 16px !important; }
+// .m-5 { margin: 20px !important; }
+
+// .mt-0 { margin-top: 0 !important; }
+// .mt-1 { margin-top: 4px !important; }
+// .mt-2 { margin-top: 8px !important; }
+// .mt-3 { margin-top: 12px !important; }
+// .mt-4 { margin-top: 16px !important; }
+// .mt-5 { margin-top: 20px !important; }
+
+// .mb-0 { margin-bottom: 0 !important; }
+// .mb-1 { margin-bottom: 4px !important; }
+// .mb-2 { margin-bottom: 8px !important; }
+// .mb-3 { margin-bottom: 12px !important; }
+// .mb-4 { margin-bottom: 16px !important; }
+// .mb-5 { margin-bottom: 20px !important; }
+
+// .ml-0 { margin-left: 0 !important; }
+// .ml-1 { margin-left: 4px !important; }
+// .ml-2 { margin-left: 8px !important; }
+// .ml-3 { margin-left: 12px !important; }
+// .ml-4 { margin-left: 16px !important; }
+// .ml-5 { margin-left: 20px !important; }
+
+// .mr-0 { margin-right: 0 !important; }
+// .mr-1 { margin-right: 4px !important; }
+// .mr-2 { margin-right: 8px !important; }
+// .mr-3 { margin-right: 12px !important; }
+// .mr-4 { margin-right: 16px !important; }
+// .mr-5 { margin-right: 20px !important; }
+
+// // Padding utilities
+// .p-0 { padding: 0 !important; }
+// .p-1 { padding: 4px !important; }
+// .p-2 { padding: 8px !important; }
+// .p-3 { padding: 12px !important; }
+// .p-4 { padding: 16px !important; }
+// .p-5 { padding: 20px !important; }
+
+// .pt-0 { padding-top: 0 !important; }
+// .pt-1 { padding-top: 4px !important; }
+// .pt-2 { padding-top: 8px !important; }
+// .pt-3 { padding-top: 12px !important; }
+// .pt-4 { padding-top: 16px !important; }
+// .pt-5 { padding-top: 20px !important; }
+
+// .pb-0 { padding-bottom: 0 !important; }
+// .pb-1 { padding-bottom: 4px !important; }
+// .pb-2 { padding-bottom: 8px !important; }
+// .pb-3 { padding-bottom: 12px !important; }
+// .pb-4 { padding-bottom: 16px !important; }
+// .pb-5 { padding-bottom: 20px !important; }
+
+// .pl-0 { padding-left: 0 !important; }
+// .pl-1 { padding-left: 4px !important; }
+// .pl-2 { padding-left: 8px !important; }
+// .pl-3 { padding-left: 12px !important; }
+// .pl-4 { padding-left: 16px !important; }
+// .pl-5 { padding-left: 20px !important; }
+
+// .pr-0 { padding-right: 0 !important; }
+// .pr-1 { padding-right: 4px !important; }
+// .pr-2 { padding-right: 8px !important; }
+// .pr-3 { padding-right: 12px !important; }
+// .pr-4 { padding-right: 16px !important; }
+// .pr-5 { padding-right: 20px !important; }
+
+// // Width and height utilities
+// .w-25 { width: 25% !important; }
+// .w-50 { width: 50% !important; }
+// .w-75 { width: 75% !important; }
+// .w-100 { width: 100% !important; }
+// .w-auto { width: auto !important; }
+
+// .h-25 { height: 25% !important; }
+// .h-50 { height: 50% !important; }
+// .h-75 { height: 75% !important; }
+// .h-100 { height: 100% !important; }
+// .h-auto { height: auto !important; }
+
+// // Position utilities
+// .position-static { position: static !important; }
+// .position-relative { position: relative !important; }
+// .position-absolute { position: absolute !important; }
+// .position-fixed { position: fixed !important; }
+// .position-sticky { position: sticky !important; }
+
+// // Float utilities
+// .float-left { float: left !important; }
+// .float-right { float: right !important; }
+// .float-none { float: none !important; }
+
+// // Overflow utilities
+// .overflow-hidden { overflow: hidden !important; }
+// .overflow-auto { overflow: auto !important; }
+// .overflow-visible { overflow: visible !important; }
+
+
+// // Color utilities
+// .text-primary { color: var(--text-primary-color) !important; }
+// .text-secondary { color: var(--color-medium-gray) !important; }
+// .text-success { color: var(--color-green) !important; }
+// .text-danger { color: var(--color-red) !important; }
+// .text-warning { color: var(--color-orange) !important; }
+// .text-info { color: var(--color-blue) !important; }
+// .text-light { color: var(--color-light-gray) !important; }
+// .text-dark { color: var(--color-black) !important; }
+// .text-muted { color: var(--color-medium-gray) !important; }
+// .text-white { color: var(--color-white) !important; }
+
+// // Background utilities
+// .bg-primary { background-color: var(--theme-primary-color) !important; }
+// .bg-secondary { background-color: var(--color-light-gray) !important; }
+// .bg-success { background-color: var(--color-green) !important; }
+// .bg-danger { background-color: var(--color-red) !important; }
+// .bg-warning { background-color: var(--color-orange) !important; }
+// .bg-info { background-color: var(--color-blue) !important; }
+// .bg-light { background-color: var(--color-light-gray) !important; }
+// .bg-dark { background-color: var(--color-black) !important; }
+// .bg-white { background-color: var(--color-white) !important; }
+// .bg-transparent { background-color: transparent !important; }
+
+// // Border utilities
+// .border { border: 1px solid var(--border-color) !important; }
+// .border-0 { border: 0 !important; }
+// .border-top { border-top: 1px solid var(--border-color) !important; }
+// .border-right { border-right: 1px solid var(--border-color) !important; }
+// .border-bottom { border-bottom: 1px solid var(--border-color) !important; }
+// .border-left { border-left: 1px solid var(--border-color) !important; }
+
+// .border-primary { border-color: var(--theme-primary-color) !important; }
+// .border-secondary { border-color: var(--border-color) !important; }
+// .border-success { border-color: var(--color-green) !important; }
+// .border-danger { border-color: var(--color-red) !important; }
+// .border-warning { border-color: var(--color-orange) !important; }
+// .border-info { border-color: var(--color-blue) !important; }
+// .border-light { border-color: var(--border-color) !important; }
+// .border-dark { border-color: var(--color-black) !important; }
+// .border-white { border-color: var(--color-white) !important; }
+
+// // Border radius utilities
+// .rounded { border-radius: var(--mat-border-radius-4) !important; }
+// .rounded-sm { border-radius: var(--mat-border-radius-2) !important; }
+// .rounded-lg { border-radius: var(--mat-border-radius-6) !important; }
+// .rounded-circle { border-radius: 50% !important; }
+// .rounded-0 { border-radius: 0 !important; }
+
+// // Shadow utilities
+// .shadow-sm { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) !important; }
+// .shadow { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important; }
+// .shadow-lg { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important; }
+// .shadow-none { box-shadow: none !important; }
+
+// // Cursor utilities
+// .cursor-pointer { cursor: pointer !important; }
+// .cursor-default { cursor: default !important; }
+// .cursor-not-allowed { cursor: not-allowed !important; }
+
+// Visibility utilities
+// .visible { visibility: visible !important; }
+// .invisible { visibility: hidden !important; }
+
+// Custom utility classes
+.section-center {
+    max-width: var(--center-content-max-width) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.word-wrap {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+}
+
+.text-truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+// Icon utilities
+.icon-font-14 {
+    font-size: 14px;
+}
+
+// Image utilities
+.image-as-icon-color {
+    filter: var(--color-image-filter-quaternary);
+}
+
+// Error and validation utilities
+.error-box {
+    border-color: var(--color-red) !important;
+    background-color: rgba(255, 0, 0, 0.05) !important;
+}
+
+.success-box {
+    border-color: var(--color-green) !important;
+    background-color: rgba(0, 255, 0, 0.05) !important;
+}
+
+// Loading and skeleton utilities
+.skeleton-common-class {
+    background: var(--color-border-light);
+    color: transparent !important;
+    position: relative;
+    overflow: hidden !important;
+    
+    &::before {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            to right,
+            var(--color-silver) 62%,
+            var(--color-silver) 50%,
+            var(--color-light-gray) 100%
+        );
+        animation-name: gradient-animation;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        filter: blur(21px);
+        position: absolute;
+        left: 0%;
+        top: 0;
+        content: "";
+        overflow: hidden !important;
+    }
+}
+
+@keyframes gradient-animation {
+    from {
+        left: 0%;
+    }
+    
+    to {
+        left: 100%;
+    }
+}
+
+/* ============================= 9. ANGULAR MATERIAL OVERRIDES ============================= */
+
+/* ============================= ICONS ============================= */
 .form-header {
     height: 57.8px;
     padding: 20px 15px;
     background: var(--bg-primary-color);
     color: var(--color-white);
-    border-bottom: 1px solid var(--mat-primary-color);
+    border-bottom: 1px solid var(--theme-primary-color);
     display: flex;
     align-items: center;
 }
@@ -5386,7 +6879,7 @@ table input[type="number"] {
 .long-code-details figure ul li {
     // list-style: none;
     padding: 12px 0;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .long-code-details figure ul li:last-child {
@@ -5501,7 +6994,7 @@ table input[type="number"] {
 
                 > th,
                 td {
-                    border: 1px solid var(--color-silver) !important;
+                    border: 1px solid var(--border-color) !important;
                     padding: 10px 30px 10px 10px !important;
                     background-color: var(--color-white) !important;
                 }
@@ -5530,7 +7023,7 @@ table input[type="number"] {
 
 .tax-engine .list-filter {
     padding: 15px !important;
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
     min-height: 80px;
 }
 
@@ -5730,7 +7223,7 @@ table input[type="number"] {
 .tax-engine hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary {
@@ -5748,7 +7241,7 @@ table input[type="number"] {
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary .transactions-table {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 
 .tax-engine .table.transactions-table,
@@ -5773,7 +7266,7 @@ table input[type="number"] {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
@@ -5783,7 +7276,7 @@ table input[type="number"] {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 
 .tax-engine .table caption + thead tr:first-child td,
@@ -5796,7 +7289,7 @@ table input[type="number"] {
 }
 
 .tax-engine .table thead > tr > th {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     color: var(--color-dark-gray);
 }
 
@@ -5821,7 +7314,7 @@ table input[type="number"] {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 
 .tax-engine {
@@ -5831,7 +7324,7 @@ table input[type="number"] {
                 & > tr {
                     &:not(.secondary-row) + tr.secondary-row {
                         & > td {
-                            border-top: 1px solid var(--color-silver) !important;
+                            border-top: 1px solid var(--border-color) !important;
                         }
                     }
 
@@ -5843,7 +7336,7 @@ table input[type="number"] {
                         & > td {
                             border: none !important;
                             background-color: var(--color-white) !important;
-                            border-right: 1px solid var(--color-silver) !important;
+                            border-right: 1px solid var(--border-color) !important;
                             font-size: var(--font-size-15) !important;
                             padding: 13px !important;
                         }
@@ -6013,7 +7506,7 @@ table input[type="number"] {
 }
 
 .tax-engine .transactions-overview .transaction-info:hover {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     box-shadow: 0 0 20px 3px var(--color-shadow-light);
 }
 
@@ -6082,7 +7575,7 @@ table input[type="number"] {
 }
 
 .tax-engine .table.reconciliations-table {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .tax-engine .table-fixed,
@@ -6096,7 +7589,7 @@ table input[type="number"] {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 
 .tax-engine .table.reconciliations-table thead > tr > th {
@@ -6129,7 +7622,7 @@ table input[type="number"] {
 }
 
 .tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown {
@@ -6139,7 +7632,7 @@ table input[type="number"] {
 }
 
 .tax-engine .table.reconciliations-table tbody > tr:hover .actions-dropdown-btn {
-    border: 1px solid var(--mat-primary-color);
+    border: 1px solid var(--theme-primary-color);
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown-btn,
@@ -6178,7 +7671,7 @@ table input[type="number"] {
 
 .tax-engine .header-band {
     width: 100%;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     padding: 5px 0;
     margin-bottom: 15px;
 }
@@ -6198,7 +7691,7 @@ table input[type="number"] {
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 
 .tax-engine svg.icon.filing-step-icon {
@@ -6288,7 +7781,7 @@ app-header {
     background-color: transparent;
     border: none;
     display: block;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     width: 100%;
     text-align: left;
     padding: 6px;
@@ -6348,6 +7841,52 @@ app-header {
     width: 165%;
 }
 
+.other-details-section,
+.collapse-pane,
+.left-col-new,
+.right-col-new {
+    giddh-datepicker {
+        .mat-mdc-form-field {
+            min-width: 100% !important;
+        }
+    }
+}
+.ledg-head {
+    .ledger-row {
+        .mat-input-element {
+            min-height: 38px;
+            height: 38px;
+            background-color: var(--color-white) !important;
+        }
+    }
+    .mat-form-field-appearance-fill {
+        .mat-form-field-flex {
+            background: var(--color-white) !important;
+        }
+    }
+    .ledger-book {
+        .left-col-new,
+        .right-col-new {
+            .mat-grid-list {
+                .mat-grid-tile {
+                    .mat-grid-tile-content {
+                        position: relative !important;
+                        width: 100%;
+                        justify-content: flex-start !important;
+                    }
+                    &:nth-child(3) {
+                        .mat-grid-tile-content {
+                            justify-content: center !important;
+                            flex-direction: column;
+                            align-items: flex-end;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 #middleBody .horizontal-form,
 .view-forms .horizontal-form {
     max-width: var(--aside-pane-width) !important;
@@ -6403,7 +7942,7 @@ footer#footer.absolute-footer {
             .wrap-account-sidebar {
                 .grp-wrapper {
                     .col-wrapper {
-                        border-color: var(--color-silver);
+                        border-color: var(--border-color);
 
                         &:nth-child(1) {
                             background-color: var(--color-white);
@@ -6417,7 +7956,7 @@ footer#footer.absolute-footer {
             account-operations {
                 #middleBody {
                     .top-bar {
-                        border-color: var(--color-silver) !important;
+                        border-color: var(--border-color) !important;
                     }
                 }
             }
@@ -6435,7 +7974,7 @@ footer#footer.absolute-footer {
             .wrap-account-sidebar {
                 .grp-wrapper {
                     .col-wrapper {
-                        border-color: var(--color-silver);
+                        border-color: var(--border-color);
 
                         &:nth-child(1) {
                             background-color: var(--color-white);
@@ -6449,7 +7988,7 @@ footer#footer.absolute-footer {
             account-operations {
                 #middleBody {
                     .top-bar {
-                        border-color: var(--color-silver) !important;
+                        border-color: var(--border-color) !important;
                     }
                 }
             }
@@ -6584,7 +8123,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     width: 0px;
     height: 0px;
     display: block;
-    border-top: 5px solid var(--color-silver);
+    border-top: 5px solid var(--border-color);
     border-bottom: 5px solid transparent;
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
@@ -6643,7 +8182,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 }
 
 .icon-btn .btn-xs {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     color: var(--color-black);
     background-color: var(--color-border-light);
 }
@@ -6735,29 +8274,20 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 
 .dashboard-container input[type="checkbox"]:checked:after {
     background-color: var(--bg-primary-color);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 
 .dashboard-container input[type="checkbox"]:checked:before {
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 
 .dashboard-container input[type="checkbox"]:after {
-    border: 1px solid var(--color-silver);
-}
-
-.form-control {
-    height: 36px;
-    font-size: var(--font-size-15) !important;
-
-    // &::placeholder {
-    //     color: var(--color-silver);
-    // }
+    border: 1px solid var(--border-color);
 }
 
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
-    border-bottom: 4px solid var(--mat-primary-color) !important;
+    border-bottom: 4px solid var(--theme-primary-color) !important;
     font-weight: var(--font-weight-semibold);
     background-color: inherit;
 }
@@ -6768,7 +8298,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 
 .dropdown-menu > li > a:hover {
     color: var(--text-primary-color) !important;
-    background: var(--mat-text-primary-light) !important;
+    background: var(--theme-primary-light) !important;
 }
 
 .debit-blank-row td .form-control,
@@ -6793,7 +8323,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     margin-left: 0 !important;
     border-radius: var(--mat-border-radius-4);
     background-color: var(--color-white);
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 
 #invoice-setting ul.nav-tabs > li {
@@ -6801,8 +8331,8 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 }
 
 #invoice-setting .nav > li > a.active {
-    border: 1px solid var(--mat-primary-color) !important;
-    border-bottom-color: var(--mat-primary-color) !important;
+    border: 1px solid var(--theme-primary-color) !important;
+    border-bottom-color: var(--theme-primary-color) !important;
     color: var(--text-primary-color) !important;
     background-color: var(--color-white) !important;
 }
@@ -6829,7 +8359,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     left: 0;
     width: 100%;
     padding: 10px 0px 0 15px !important;
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 .setting-page .nav > li > a {
@@ -6866,7 +8396,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     font-size: var(--font-size-16);
     border-radius: var(--mat-border-radius-4);
     background-color: var(--color-white);
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 
 #tab-integration .nav-tabs > li a:hover {
@@ -6874,10 +8404,10 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 }
 
 #tab-integration .nav-tabs > li a.active {
-    border: 1px solid var(--mat-primary-color) !important;
+    border: 1px solid var(--theme-primary-color) !important;
     font-family: var(--font-family);
     color: var(--text-primary-color) !important;
-    border-color: var(--mat-primary-color) !important;
+    border-color: var(--theme-primary-color) !important;
     background-color: var(--color-white);
 }
 
@@ -6890,7 +8420,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     color: var(--color-dark-gray);
     text-align: center;
     background-color: var(--color-border-light);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     border-left: none !important;
 }
@@ -6903,7 +8433,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 }
 
 .date-advance-search .input-group input.form-control {
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 
 // table.basic td {
@@ -6974,7 +8504,7 @@ button.btn.btn-filter {
 }
 
 .select2-ledger .menu .list-item:hover {
-    background: var(--mat-text-primary-light) !important;
+    background: var(--theme-primary-light) !important;
 }
 
 .select2-ledger .menu .item:hover a {
@@ -6988,7 +8518,7 @@ button.ladda-button .ladda-label {
 }
 
 .ng-select-wrap.select-list.select-group .below {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     height: 36px;
     align-items: center;
     display: flex;
@@ -6996,7 +8526,7 @@ button.ladda-button .ladda-label {
 
 .ng-select-wrap.select-list ng-select .below {
     width: 100% !important;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     height: 36px;
     display: flex;
     align-items: center;
@@ -7022,7 +8552,7 @@ button.ladda-button .ladda-label {
 .on-setting-page {
     /* UNUSED GLOBAL CLASS: other-taxes-input - Auto-commented by script
     .other-taxes-input {
-        border: 1px solid var(--color-silver) !important;
+        border: 1px solid var(--border-color) !important;
     }
     */
 
@@ -7075,7 +8605,7 @@ button.ladda-button .ladda-label {
         text-field {
             input {
                 border: none;
-                border-bottom: 1px solid var(--color-silver);
+                border-bottom: 1px solid var(--border-color);
             }
         }
     }
@@ -7113,7 +8643,7 @@ button.ladda-button .ladda-label {
         padding: 10px;
         vertical-align: middle;
         min-height: 67px !important;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
 
         .option-label {
             color: var(--color-black);
@@ -7172,7 +8702,7 @@ button.ladda-button .ladda-label {
     */
 
     .po-mat-select {
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         border-radius: var(--mat-border-radius-4) !important;
         padding: 10px 0;
         font-size: var(--font-size-12);
@@ -7287,7 +8817,7 @@ button.ladda-button .ladda-label {
 
 .aside-panel-ledger .btn-lg:hover {
     color: var(--color-white) !important;
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
     background-color: var(--bg-primary-color) !important;
 }
 
@@ -7303,7 +8833,7 @@ button.ladda-button .ladda-label {
     position: relative !important;
     top: -4px !important;
     margin-bottom: 10px;
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 .receipt-note-modal {
@@ -7321,7 +8851,7 @@ button.ladda-button .ladda-label {
 
 .create-acc-form li.highlighted.selected,
 .create-acc-form li.highlighted {
-    background-color: var(--mat-text-primary-light) !important;
+    background-color: var(--theme-primary-light) !important;
 }
 
 .create-acc-form li.highlighted.selected .account-list-item,
@@ -7362,22 +8892,22 @@ button.ladda-button .ladda-label {
 
 .checkbox-custom:checked + .checkbox-custom-label:before {
     background: var(--bg-primary-color);
-    border: 2px solid var(--mat-primary-color);
+    border: 2px solid var(--theme-primary-color);
 }
 
 .radio-custom + .radio-custom-label:before {
     border-radius: 50%;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 
 .radio-custom:checked + :before {
     background: var(--bg-primary-color);
-    border: 1px solid var(--mat-primary-color);
+    border: 1px solid var(--theme-primary-color);
     box-shadow: inset 0px 0px 0px 4px var(--color-shadow-light);
 }
 
 .checkbox-custom:focus + .checkbox-custom-label:before {
-    border: 1px solid var(--mat-primary-color);
+    border: 1px solid var(--theme-primary-color);
 }
 
 .select2-parent.select2-ledger .update-ledger-account input {
@@ -7590,7 +9120,7 @@ span#HW_badge_cont:nth-child(3) {
     mat-card {
         margin-bottom: 20px;
         min-height: 426px;
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         background-color: var(--color-white);
         box-shadow: none !important;
         padding: 0 !important;
@@ -7621,7 +9151,7 @@ span#HW_badge_cont:nth-child(3) {
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 var(--color-shadow-light);
     color: var(--color-medium-gray);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     z-index: 9999 !important;
 }
 
@@ -8012,7 +9542,7 @@ giddh-datepicker {
 }
 .master-custom-tabs.custom-tabs {
     .nav-tabs {
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         padding: 0 0 0 15px !important;
         background-color: var(--color-light-gray);
         z-index: 9;
@@ -8032,7 +9562,7 @@ giddh-datepicker {
 
     li.active {
         a {
-            border-bottom: 4px solid var(--mat-primary-color) !important;
+            border-bottom: 4px solid var(--theme-primary-color) !important;
             color: var(--text-primary-color) !important;
         }
     }
@@ -8413,7 +9943,7 @@ body.update-scroll-hidden {
                     &.active {
                         a {
                             color: var(--text-primary-color) !important;
-                            border-bottom: 2px solid var(--mat-primary-color) !important;
+                            border-bottom: 2px solid var(--theme-primary-color) !important;
                         }
                     }
 
@@ -8512,7 +10042,7 @@ body.update-scroll-hidden {
                 .mat-menu-content {
                     button:focus {
                         box-shadow: none !important;
-                        background-color: var(--mat-text-primary-light);
+                        background-color: var(--theme-primary-light);
                     }
                 }
             }
@@ -8568,7 +10098,7 @@ body.update-scroll-hidden {
             &.mat-mdc-chip {
                 &:not(.mdc-evolution-chip--disabled) {
                     --mdc-chip-elevated-container-color: var(--color-border-light) !important;
-                    border: 1px solid var(--color-silver);
+                    border: 1px solid var(--border-color);
 
                     /* UNUSED GLOBAL CLASS: mdc-evolution-chip__text-label - Auto-commented by script
                     .mdc-evolution-chip__text-label {
@@ -8989,7 +10519,7 @@ body.hide-scroll-body.master-page {
                         input {
                             padding-left: 5px !important;
                             padding-right: 17px !important;
-                            background-color: var(--mat-text-primary-light) !important;
+                            background-color: var(--theme-primary-light) !important;
                             width: 81px;
 
                             &:active,
@@ -9320,7 +10850,7 @@ hamburger-menu {
                         input {
                             padding-left: 5px !important;
                             padding-right: 17px !important;
-                            background-color: var(--mat-text-primary-light) !important;
+                            background-color: var(--theme-primary-light) !important;
 
                             &:active,
                             &:focus {
@@ -9666,7 +11196,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
     .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
-        border: 1px solid var(--color-silver) !important;
+        border: 1px solid var(--border-color) !important;
         padding: 0 11px !important;
     }
 }
@@ -9770,7 +11300,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 
     .breadcrumbs {
-        border-top: 1px solid var(--color-silver);
+        border-top: 1px solid var(--border-color);
     }
 
     #getGroupModal #middleBody {
@@ -10144,6 +11674,43 @@ input[type="checkbox"].cdk-visually-hidden::after {
 body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
+.template-froala-wrapper {
+    .balance-options {
+        height: auto !important;
+        padding-bottom: 5px !important;
+
+        /* UNUSED GLOBAL CLASS: mat-select-search-input - Auto-commented by script
+        .mat-select-search-input {
+            padding: 16px 36px 16px 16px !important;
+            box-sizing: border-box !important;
+        }
+        */
+
+        /* UNUSED GLOBAL CLASS: mat-select-search-inner - Auto-commented by script
+        .mat-select-search-inner {
+            position: absolute !important;
+            top: 0 !important;
+            border-bottom-width: 1px !important;
+            border-bottom-style: solid !important;
+            z-index: 100 !important;
+            font-size: inherit !important;
+            box-shadow: none !important;
+            border-radius: var(--mat-border-radius-0) !important;
+        }
+        */
+
+        /* UNUSED GLOBAL CLASS: mat-select-search-clear - Auto-commented by script
+        .mat-select-search-clear {
+            margin-right: 0 !important;
+        }
+        */
+    }
+}
+
+
+
+
+
 
 // Class with respect to body
 body {

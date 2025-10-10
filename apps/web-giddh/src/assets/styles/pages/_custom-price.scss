@@ -51,7 +51,7 @@
                                         input {
                                             height: var(--custom-mat-form-field-height);
                                             &:focus {
-                                                border-color: var(--mat-primary-color) !important;
+                                                border-color: var(--theme-primary-color) !important;
                                             }
                                         }
                                     }

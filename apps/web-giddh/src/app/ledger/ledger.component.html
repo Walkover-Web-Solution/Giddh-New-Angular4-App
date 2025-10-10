@@ -153,9 +153,9 @@
                                         (keyup)="search(searchText)"
                                         [label]="commonLocaleData?.app_search"
                                         [placeholder]="localeData?.search_ledger"
-                                        [matPrefixIcon]="'icon-search font-size-15'"
+                                        [matPrefixIcon]="'icon-search font-size-15 px-2'"
                                         (suffixClick)="searchText = ''; search(searchText)"
-                                        [matSuffixIcon]="searchText ? 'icon-cross font-size-12' : ''"
+                                        [matSuffixIcon]="searchText ? 'icon-cross font-size-12 pd-15' : ''"
                                     >
                                     </input-field>
                                     <a
@@ -358,7 +358,7 @@
                                 <span class="input-wrapper">
                                     <mat-form-field
                                         appearance="fill"
-                                        class="w-100 custom-input-field"
+                                        class="w-100 custom-input-field mat-form-field-clean"
                                     >
                                         <input
                                             matInput
@@ -557,7 +557,7 @@
 
                         <!-- Middle Element | Current Account Name in Statement view -->
                          <div class="col-4 d-grid align-content-center">
-                            <p *ngIf="ledgerView == ledgerViewEnum.StatementView" class="ledger-head border-none text-center mt-0">
+                            <p *ngIf="ledgerView == ledgerViewEnum.StatementView" class="ledger-head mat-app-background border-none text-center mt-0">
                                 <b class="text-primary-heading font-size-15 mr-auto cursor-pointer" (dblclick)="openAccountAsidePane()"> {{ lc.ledgerUnderStandingObj.accountName }}</b>
                             </p>
                          </div>
@@ -643,7 +643,7 @@
                                     </div>
                                 </div>
                                 <div class="wrap-transaction-map clear-both">
-                                    <div class="w-100 ledger-head mt-0">
+                                    <div class="w-100 ledger-head mat-app-background mt-0">
                                         <mat-grid-list cols="2" rowHeight="37px">
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_debit }}
@@ -754,7 +754,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field mr-l05" [ngClass]="{'pd-l2': !(selectedBankTrxWhileHovering !==
+                                                                    <span class="custom-input-field mat-form-field-clean mr-l05" [ngClass]="{'pd-l2': !(selectedBankTrxWhileHovering !==
                                                                     txn.id && !selectedDebitTransactionIds.has(txn?.id))}">
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
@@ -1019,7 +1019,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field ml-1">
+                                                                    <span class="custom-input-field mat-form-field-clean ml-1">
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
@@ -1190,7 +1190,7 @@
                                     </div>
                                     <mat-paginator
                                         *ngIf="bankTransactionsResponse?.totalItems > pageSizeOptions[0]"
-                                        class="hide-total-items"
+                                        class="hide-total-items mat-app-background"
                                         [length]="bankTransactionsResponse?.totalPages * bankTransactionsResponse.countPerPage" 
                                         [pageSize]="bankTransactionsResponse.countPerPage" 
                                         [pageSizeOptions]="pageSizeOptions" 
@@ -1251,7 +1251,7 @@
                     <mat-grid-list
                         cols="2"
                         rowHeight="50px"
-                        class="ledger-head"
+                        class="ledger-head mat-app-background"
                         *ngIf="ledgerView == ledgerViewEnum?.TView && !isTabletScreen || (isTabletScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile !== 'all')"
                     >
                         <mat-grid-tile
@@ -1714,7 +1714,7 @@
                                                         <div class="d-flex align-items-center column-gap-05">
                                                             <span class="ledger-checkbox pull-left"> </span>
                                                             <giddh-datepicker
-                                                                class="custom-input-field pd-t1"
+                                                                class="custom-input-field mat-form-field-clean pd-t1"
                                                                 name="ledgDate"
                                                                 [(ngModel)]="lc.blankLedger.entryDate"
                                                                 [placeholder]="lc.formatPlaceholder"
@@ -2111,7 +2111,7 @@
                                                         >
                                                             <span class="ledger-checkbox pull-left"> </span>
                                                             <giddh-datepicker
-                                                                class="custom-input-field"
+                                                                class="custom-input-field mat-form-field-clean"
                                                                 name="bsdateledger"
                                                                 (datepickerState)="datepickerState($event)"
                                                                 [(ngModel)]="lc.blankLedger.entryDate"
@@ -2849,7 +2849,7 @@
                 <reactive-dropdown-field
                     [data]="isLedgerEntry ? (cr ? transactionType.Credit : transactionType.Debit) : null "
                     *ngIf="isLedgerEntry || txn.showDropdown"
-                    class="w-100"
+                    class="w-100 mat-form-field-clean"
                     [cssClass]="'bg-transparent pd-l1 pd-r1 ' + (isLedgerEntry ? (cr ? ' CREDIT' : ' DEBIT') : '')"
                     (keydown.enter)="$event.preventDefault()"
                     [disabled]="
@@ -3283,7 +3283,7 @@
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan={{ledgerStatementViewGridColumnsValue[0]}}>
                                 <div class="p-2 d-flex align-items-center column-gap-05 w-100 h-100">
                                     <giddh-datepicker
-                                        class="custom-input-field pd-t1"
+                                        class="custom-input-field pd-t1 mat-form-field-clean"
                                         name="bsdateledger"
                                         (datepickerState)="datepickerState($event)"
                                         [(ngModel)]="lc.blankLedger.entryDate"

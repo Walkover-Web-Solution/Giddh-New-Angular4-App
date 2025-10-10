@@ -18,7 +18,7 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid var(--color-silver);
+            border: 2px solid var(--border-color);
             border-radius: var(--mat-border-radius-circle);
             transition: background-color 1s;
             background-color: var(--color-white);
@@ -40,7 +40,7 @@
 .steps-wizard:before {
     content: " ";
     position: absolute;
-    border-top: 2px solid var(--color-silver);
+    border-top: 2px solid var(--border-color);
     right: 0;
     left: 0;
     top: 40%;

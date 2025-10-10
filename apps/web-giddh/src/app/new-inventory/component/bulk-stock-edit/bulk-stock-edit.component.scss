@@ -46,7 +46,7 @@
                     .border-line {
                         border: 2px solid transparent;
                         &.active {
-                            border-color: var(--mat-primary-color);
+                            border-color: var(--theme-primary-color);
                         }
                         .custom-padding {
                             padding: 6px 10px;
@@ -55,7 +55,7 @@
                     //========= PLEASE UN COMMENT BELOW CODE TO SHOW LINE ON HOVER ON THE TABLE CELL =============
                     // &:hover{
                     //     .border-line{
-                    //         border-color: var(--mat-primary-color);
+                    //         border-color: var(--theme-primary-color);
                     //     }
                     // }
                     &.min-width-140 {

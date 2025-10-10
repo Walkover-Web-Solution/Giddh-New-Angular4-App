@@ -1,5 +1,5 @@
 .border-top {
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 
 .flex-fill {
@@ -53,7 +53,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 }
 
 /* .icon-pointer  UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
@@ -194,7 +194,7 @@
     border-radius: var(--mat-border-radius-0);
     padding: 0px;
     input[type="checkbox"]:after {
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         width: 15px;
         height: 15px;
         top: 2px;
@@ -229,7 +229,7 @@ button[aria-expanded="true"] i {
 */
 /* UNUSED COMPONENT CLASS: table-border - Auto-commented by script
 .table-border {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 */
 /* UNUSED COMPONENT CLASS: border-none - Auto-commented by script
@@ -310,7 +310,7 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: var(--font-size-16);
     margin-left: 10px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     color: var(--text-primary-color);
     background: var(--color-white);
@@ -329,7 +329,7 @@ button[aria-expanded="true"] i {
 button.btn
 .btn-filter {
     background: var(--color-border-light);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     font-size: var(--font-size-15);
     color: var(--text-primary-color);
     display: inline-flex;
@@ -354,7 +354,7 @@ button.btn
     display: table;
 }
 .icon-btn {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     height: 36px;
     width: 36px;
@@ -369,7 +369,7 @@ button.btn
         tr {
             &:last-child {
                 td {
-                    border-bottom: 1px solid var(--color-silver);
+                    border-bottom: 1px solid var(--border-color);
                 }
             }
         }

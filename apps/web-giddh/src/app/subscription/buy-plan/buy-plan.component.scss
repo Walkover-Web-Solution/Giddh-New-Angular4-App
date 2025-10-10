@@ -99,11 +99,11 @@
     .grid-title-list {
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         min-width: 230px;
         font-weight: 500;
         font-size: var(--font-size-15);
-        border-left: 1px solid var(--color-silver);
+        border-left: 1px solid var(--border-color);
     }
 
     .plan-table {
@@ -112,7 +112,7 @@
         overflow: hidden;
         white-space: nowrap;
         box-shadow: none !important;
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         border-radius: var(--mat-border-radius-4);
     }
 
@@ -136,7 +136,7 @@
             min-width: 260px;
             left: 0px;
             z-index: 9;
-            border-bottom: 1px solid var(--color-silver);
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             background-color: var(--color-white);
             padding-top: 0px;
@@ -152,9 +152,9 @@
     }
 
     .active-plan {
-        border-top: 2px solid var(--mat-primary-color);
-        border-left: 2px solid var(--mat-primary-color);
-        border-right: 2px solid var(--mat-primary-color);
+        border-top: 2px solid var(--theme-primary-color);
+        border-left: 2px solid var(--theme-primary-color);
+        border-right: 2px solid var(--theme-primary-color);
     }
 
     .selected-plan-button {
@@ -173,12 +173,12 @@
     }
 
     .active-plan-td {
-        border-left: 2px solid var(--mat-primary-color) !important;
-        border-right: 2px solid var(--mat-primary-color) !important;
+        border-left: 2px solid var(--theme-primary-color) !important;
+        border-right: 2px solid var(--theme-primary-color) !important;
     }
 
     .active-plan-td-bottom {
-        border-bottom: 2px solid var(--mat-primary-color) !important;
+        border-bottom: 2px solid var(--theme-primary-color) !important;
     }
 
     .summary-wrapper {
@@ -240,7 +240,7 @@
 .plan-table-wrapper {
     max-width: 100%;
     overflow: auto;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
 
     .plan-table {
@@ -248,7 +248,7 @@
 
         /* UNUSED COMPONENT CLASS: mat-mdc-header-cell - Auto-commented by script
 .mat-mdc-header-cell {
-            border-right: 1px solid var(--color-silver) !important;
+            border-right: 1px solid var(--border-color) !important;
             background-color: var(--color-white) !important;
             z-index: 2 !important;
             padding: 0px !important;
@@ -258,13 +258,13 @@
 
         /* UNUSED COMPONENT CLASS: mat-mdc-table-sticky-border-elem-left - Auto-commented by script
 .mat-mdc-table-sticky-border-elem-left {
-            border-right: 1px solid var(--color-silver);
+            border-right: 1px solid var(--border-color);
         }
 */
 
         td {
             &.mat-mdc-cell {
-                border-right: 1px solid var(--color-silver);
+                border-right: 1px solid var(--border-color);
                 background-color: var(--color-white) !important;
                 white-space: nowrap !important;
                 min-width: 230px;

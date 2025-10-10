@@ -64,7 +64,7 @@
         display: flex;
         justify-content: space-between;
         padding: 18px 15px;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         position: sticky;
         top: 0;
         background-color: inherit;
@@ -80,7 +80,7 @@
     }
     .help-aside-body {
         .faq-block {
-            border-bottom: 1px solid var(--color-silver);
+            border-bottom: 1px solid var(--border-color);
             a {
                 display: block;
                 color: var(--color-black);
@@ -96,7 +96,7 @@
         }
         .feature-block {
             padding: 15px;
-            border-bottom: 1px solid var(--color-silver);
+            border-bottom: 1px solid var(--border-color);
             ul {
                 // list-style: none;
                 li {
@@ -113,7 +113,7 @@
         }
         .download-block {
             padding: 15px;
-            border-bottom: 1px solid var(--color-silver);
+            border-bottom: 1px solid var(--border-color);
             h3 {
                 color: var(--color-black);
             }

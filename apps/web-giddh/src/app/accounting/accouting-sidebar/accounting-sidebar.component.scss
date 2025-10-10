@@ -25,7 +25,7 @@
 }
 
 .menu-list li a:hover {
-    background: var(--mat-text-primary-light);
+    background: var(--theme-primary-light);
 }
 
 /* UNUSED COMPONENT CLASS: isHidden - Auto-commented by script
@@ -36,12 +36,12 @@
 */
 
 // .active-child {
-//     background: var(--mat-text-primary-light);
+//     background: var(--theme-primary-light);
 //     padding-left: 20px;
 // }
 
 .active-parent {
-    background: var(--mat-text-primary-light);
+    background: var(--theme-primary-light);
 }
 
 // .active-child>span {

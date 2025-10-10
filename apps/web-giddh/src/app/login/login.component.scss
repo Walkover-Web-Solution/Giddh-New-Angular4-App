@@ -174,14 +174,14 @@
 .btn-default {
     color: var(--color-black);
     background-color: var(--color-white);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 */
 
 .btn-login.btn-default:hover {
     color: var(--color-black) !important;
     background-color: var(--color-white);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     box-shadow: none;
 }
 
@@ -237,14 +237,14 @@ button.close {
 /* UNUSED COMPONENT CLASS: btn-text-primary - Auto-commented by script
 .btn-text-primary {
     color: var(--color-white) !important;
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
     background: var(--bg-primary-color);
 }
 */
 
 .btn-text-primary:hover {
     color: var(--color-white) !important;
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
     background: var(--bg-primary-color);
 }
 
@@ -336,13 +336,13 @@ small {
 
 .linkedin-ico a {
     color: var(--text-primary-color);
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 }
 */
 
 .google-ico a {
     background: var(--bg-primary-color);
-    border-color: var(--mat-primary-color) !important;
+    border-color: var(--theme-primary-color) !important;
     color: var(--color-white);
     padding-left: 40px !important;
 }
@@ -379,7 +379,7 @@ small {
 */
 
 .login-option a {
-    border-bottom: 2px dotted var(--mat-primary-color);
+    border-bottom: 2px dotted var(--theme-primary-color);
 }
 
 .slide-content h1 {
@@ -566,13 +566,13 @@ small {
 .btn-secondary {
     border-radius: var(--mat-border-radius-4);
     color: var(--color-white);
-    border: 1px solid var(--mat-primary-color);
+    border: 1px solid var(--theme-primary-color);
     background-color: var(--bg-primary-color);
 }
 */
 .btn-secondary:hover {
     color: var(--color-white) !important;
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
     background-color: var(--bg-primary-color);
 }
 

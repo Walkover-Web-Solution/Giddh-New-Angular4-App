@@ -62,7 +62,7 @@ p {
     overflow: auto;
     /* font-size: 93%; */
     background: var(--color-white);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     padding: 0;
 }
 
@@ -240,7 +240,7 @@ header img {
 }
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 /* UNUSED COMPONENT CLASS: tcs - Auto-commented by script
  // tcs 
@@ -260,7 +260,7 @@ header img {
 .tcs table th {
     border-radius: var(--mat-border-radius-0);
     padding: 5px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     vertical-align: top;
     text-align: right;
 }
@@ -303,7 +303,7 @@ header img {
 #default table.item td {
     border-radius: var(--mat-border-radius-0);
     padding: 7px;
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
     line-height: 1.2rem;
     vertical-align: top;
 }
@@ -337,7 +337,7 @@ header img {
 }
 
 #default aside h1 {
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     border-bottom-style: solid;
 }
 
@@ -366,7 +366,7 @@ header img {
 /* UNUSED COMPONENT CLASS: subfooter - Auto-commented by script
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     margin: 3px 0;
 }
 */
@@ -536,7 +536,7 @@ strong {
     width: 60%;
     height: 1px;
     margin: 0px 0 auto auto;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 */
 
@@ -568,7 +568,7 @@ strong {
 // .tax-table tbody tr td,
 // .tax-table tfoot tr th {
 //     padding: 6px;
-//     border-right: 1px solid var(--color-silver);
+//     border-right: 1px solid var(--border-color);
 // }
 
 // .tax-table thead tr th:last-child,
@@ -581,7 +581,7 @@ strong {
 //     padding-top: 0px !important;
 // }
 // .tax-table.item tfoot tr th {
-//     border-bottom: 1px solid var(--color-silver);
+//     border-bottom: 1px solid var(--border-color);
 // }
 // .tax-table tbody tr td {
 //     border-top: 0px solid;
@@ -589,7 +589,7 @@ strong {
 /* UNUSED COMPONENT CLASS: warehouse-table - Auto-commented by script
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;

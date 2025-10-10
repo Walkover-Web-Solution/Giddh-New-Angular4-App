@@ -33,7 +33,7 @@
 }
 .left-column {
     margin: 5px 0;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 
     .panel-body {
         .chart-div {
@@ -97,7 +97,7 @@ span.icon-collapse-icon:hover {
 */
 /* UNUSED COMPONENT CLASS: single-bank-detail - Auto-commented by script
 .single-bank-detail {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
@@ -109,7 +109,7 @@ span.icon-collapse-icon:hover {
 */
 .total-sales-header {
     background-color: var(--color-white);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     padding: 15px 15px 20px;
 }
@@ -121,7 +121,7 @@ span.icon-collapse-icon:hover {
 /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
 .date-range-block 
 .form-control {
-    border: 1px solid var(--mat-primary-color);
+    border: 1px solid var(--theme-primary-color);
 }
 */
 .date-range-input {
@@ -212,7 +212,7 @@ span.icon-collapse-icon:hover {
 .panel {
     padding: 15px;
     border-radius: var(--mat-border-radius-0);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 
     position: relative;
 }
@@ -234,7 +234,7 @@ span.date-wise-sale {
 }
 
 .single-sale-data {
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     min-height: 78px;
 }
 .total-sale-data {
@@ -254,10 +254,10 @@ span.date-wise-sale {
     font-weight: var(--font-weight-semibold);
 }
 input:read-only {
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 input:read-only:focus {
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 .total-sales-header label {
     margin-bottom: 5px;

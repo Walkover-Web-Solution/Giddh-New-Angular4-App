@@ -21,7 +21,7 @@
             border-bottom-right-radius: 5px !important;
             border: none;
             &:focus {
-                border-color: var(--color-silver) !important;
+                border-color: var(--border-color) !important;
             }
             // &::placeholder {
             //     color: var(--color-dark-gray) !important;
@@ -39,7 +39,7 @@
             justify-content: center;
             align-items: center;
             background-color: var(--color-light-gray);
-            border: 1px solid var(--color-silver);
+            border: 1px solid var(--border-color);
             border-radius: var(--mat-border-radius-4);
             border-left: none;
             border-top-left-radius: 0px !important;
@@ -140,7 +140,7 @@
                 color: var(--color-dark-gray);
                 &:hover {
                     span {
-                        background-color: var(--mat-text-primary-light);
+                        background-color: var(--theme-primary-light);
                     }
                     /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu {
@@ -183,7 +183,7 @@
                     /* UNUSED COMPONENT CLASS: open - Auto-commented by script
 &
 .open {
-                        background-color: var(--mat-text-primary-light);
+                        background-color: var(--theme-primary-light);
                         margin: 0 -20px;
                         /* p UNUSED COMPONENT CLASS: show-more-branches - Auto-commented by script
 .show-more-branches {
@@ -296,7 +296,7 @@
                         word-break: break-all;
                         &.active {
                             color: var(--color-dark-gray) !important;
-                            background-color: var(--mat-text-primary-light) !important;
+                            background-color: var(--theme-primary-light) !important;
                         }
                         &:hover {
                             background-color: initial !important;
@@ -313,7 +313,7 @@
                     }
                     &:hover {
                         a {
-                            background-color: var(--mat-text-primary-light) !important;
+                            background-color: var(--theme-primary-light) !important;
                         }
                     }
                     .branch-alias,
@@ -410,7 +410,7 @@
                                 }
                             }
                             &.active {
-                                background-color: var(--mat-text-primary-light);
+                                background-color: var(--theme-primary-light);
                                 position: sticky;
                                 top: 0;
                                 z-index: 991;

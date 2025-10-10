@@ -1,6 +1,6 @@
 // Border styles
 .border {
-    border: 1px solid var(--color-silver) !important;
+    border: 1px solid var(--border-color) !important;
 }
 .border-color-transparent {
     border-color: var(--color-transparent) !important;
@@ -8,19 +8,19 @@
 
 // Border sides
 .border-top {
-    border-top: 1px solid var(--color-silver) !important;
+    border-top: 1px solid var(--border-color) !important;
 }
 .border-bottom {
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 .border-left {
-    border-left: 1px solid var(--color-silver);
+    border-left: 1px solid var(--border-color);
 }
 .border-right {
-    border-right: 1px solid var(--color-silver) !important;
+    border-right: 1px solid var(--border-color) !important;
 }
 .border-bottom {
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 // Border removal
@@ -117,10 +117,10 @@
     background: var(--color-white) !important;
 }
 .custom-keyboard-dropdown-list-focus {
-    background-color: var(--mat-text-primary-light);
+    background-color: var(--theme-primary-light);
 }
 .sky-blue-bg {
-    background-color: var(--mat-text-primary-light);
+    background-color: var(--theme-primary-light);
 }
 
 // ===== SPACING =====
@@ -474,6 +474,11 @@
 // Float and clear
 .clear-both {
     clear: both;
+    &::after {
+        display: block;
+        clear: both;
+        content: "";
+    }
 }
 
 // ===== DIMENSIONS =====

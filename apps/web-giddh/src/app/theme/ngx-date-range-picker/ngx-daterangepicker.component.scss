@@ -399,7 +399,7 @@ $dark-theme: mat.define-dark-theme(
                 background-color: var(--bg-primary-color) !important;
                 border-radius: 50%;
                 color: var(--color-white) !important;
-                border-color: var(--mat-primary-color);
+                border-color: var(--theme-primary-color);
             }
             &:hover {
                 span {
@@ -411,7 +411,7 @@ $dark-theme: mat.define-dark-theme(
         }
         // Date Range
         &.in-range {
-            background-color: var(--mat-text-primary-light);
+            background-color: var(--theme-primary-light);
             border-color: transparent;
             color: var(--color-black);
             // TODO: Should this be static or should it be parameterized?
@@ -421,7 +421,7 @@ $dark-theme: mat.define-dark-theme(
         }
         &.in-range::before {
             content: "";
-            background-color: var(--mat-text-primary-light) !important;
+            background-color: var(--theme-primary-light) !important;
             width: 100%;
             height: 100%;
             left: 0px;
@@ -431,7 +431,7 @@ $dark-theme: mat.define-dark-theme(
         }
         &.in-range.end-date::before {
             content: "";
-            background-color: var(--mat-text-primary-light) !important;
+            background-color: var(--theme-primary-light) !important;
             width: 84%;
             height: 100%;
             left: 0px;
@@ -442,7 +442,7 @@ $dark-theme: mat.define-dark-theme(
         }
         &.start-date::before {
             content: "";
-            background-color: var(--mat-text-primary-light) !important;
+            background-color: var(--theme-primary-light) !important;
             width: 100%;
             height: 100%;
             left: 0;
@@ -603,7 +603,7 @@ $dark-theme: mat.define-dark-theme(
         cursor: not-allowed;
     }
     .label-input {
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         border-radius: var(--mat-border-radius-4);
         color: var(--color-dark-gray);
         height: 30px;
@@ -614,7 +614,7 @@ $dark-theme: mat.define-dark-theme(
         padding: 0 0 0 28px;
         width: 100%;
         &.active {
-            border: 1px solid var(--mat-primary-color);
+            border: 1px solid var(--theme-primary-color);
             border-radius: var(--mat-border-radius-4);
         }
     }
@@ -645,7 +645,7 @@ $dark-theme: mat.define-dark-theme(
     .show-ranges {
         /* UNUSED COMPONENT CLASS: drp-calendar - Auto-commented by script
 .drp-calendar.left {
-            border-left: 1px solid var(--color-silver);
+            border-left: 1px solid var(--border-color);
         }
 */
     }
@@ -655,7 +655,7 @@ $dark-theme: mat.define-dark-theme(
         margin: 0;
         display: flex;
         flex-direction: column;
-        border-left: 1px solid var(--color-silver);
+        border-left: 1px solid var(--border-color);
         background-color: var(--color-white);
         height: 490px !important;
         .range-container {
@@ -668,7 +668,7 @@ $dark-theme: mat.define-dark-theme(
                 flex-direction: column;
                 li {
                     position: relative;
-                    border-bottom: 1px solid var(--color-silver) !important;
+                    border-bottom: 1px solid var(--border-color) !important;
                     button {
                         padding: 12px 10px;
                         width: 100%;
@@ -726,7 +726,7 @@ $dark-theme: mat.define-dark-theme(
                         }
                         &.active {
                             background-color: var(--bg-primary-color);
-                            border-left: 3px solid var(--mat-primary-color) !important;
+                            border-left: 3px solid var(--theme-primary-color) !important;
                             font-weight: var(--font-weight-semibold);
                             color: var(--color-white);
                             .available {
@@ -745,7 +745,7 @@ $dark-theme: mat.define-dark-theme(
                     }
                 }
                 li:hover {
-                    background-color: var(--mat-text-primary-light);
+                    background-color: var(--theme-primary-light);
                 }
             }
             ul.range-list {
@@ -863,7 +863,7 @@ $dark-theme: mat.define-dark-theme(
     display: none;
 }
 .md-drppicker td.in-range.in-range-start.in-range-end span {
-    background-color: var(--mat-text-primary-light) !important;
+    background-color: var(--theme-primary-light) !important;
     border-radius: 50%;
     color: var(--color-black) !important;
     border-color: var(--color-dark-gray);
@@ -886,7 +886,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     display: none;
 }
 .md-drppicker .td-div.in-range.in-range-start.in-range-end span {
-    background-color: var(--mat-text-primary-light) !important;
+    background-color: var(--theme-primary-light) !important;
     border-radius: 50%;
     color: var(--color-black) !important;
     border-color: var(--color-dark-gray);
@@ -1100,7 +1100,7 @@ td:hover span {
     span {
         background-color: var(--bg-primary-color) !important;
         color: var(--color-white) !important;
-        border-color: var(--mat-primary-color) !important;
+        border-color: var(--theme-primary-color) !important;
     }
 }
 
@@ -1109,7 +1109,7 @@ td:hover span {
     span {
         background-color: var(--bg-primary-color) !important;
         color: var(--color-white) !important;
-        border-color: var(--mat-primary-color) !important;
+        border-color: var(--theme-primary-color) !important;
     }
 }
 /* new calendar */
@@ -1119,7 +1119,7 @@ td:hover span {
     background-color: var(--color-white) !important;
 
     span {
-        background-color: var(--mat-text-primary-light) !important;
+        background-color: var(--theme-primary-light) !important;
         color: var(--color-black) !important;
     }
 
@@ -1244,7 +1244,7 @@ td span {
 }
 
 .activatedDate {
-    background-color: var(--mat-text-primary-light);
+    background-color: var(--theme-primary-light);
 }
 
 .activatedDate span {
@@ -1280,7 +1280,7 @@ td span {
     right: 0;
     top: 0;
     z-index: 9999;
-    border: 1px solid var(--color-silver) !important;
+    border: 1px solid var(--border-color) !important;
     border-radius: var(--mat-border-radius-4);
     box-shadow: 0 6px 1 var(--color-shadow-light);
     border-bottom: none;
@@ -1374,7 +1374,7 @@ td span {
     display: flex;
     flex-direction: column;
     max-width: 340px;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     line-height: 100%;
     .calender-container-wrapper {
         flex: 1 1 auto;
@@ -1431,7 +1431,7 @@ td span {
                         width: 50%;
                         display: flex;
                         padding-bottom: 6px;
-                        border-bottom: 3px solid var(--mat-text-primary-light);
+                        border-bottom: 3px solid var(--theme-primary-light);
                         input {
                             width: 95px;
                             height: auto;
@@ -1457,7 +1457,7 @@ td span {
                             cursor: pointer;
                         }
                         &.focused-date {
-                            border-bottom-color: var(--mat-primary-color);
+                            border-bottom-color: var(--theme-primary-color);
                             cursor: pointer;
                             input {
                                 color: var(--text-primary-color);
@@ -1467,7 +1467,7 @@ td span {
                     }
 
                     .activeSelectedDate {
-                        border-bottom-color: var(--mat-primary-color) !important;
+                        border-bottom-color: var(--theme-primary-color) !important;
                         box-shadow: none !important;
                         &.invalid-date-input {
                             border-bottom-color: var(--color-red) !important;
@@ -1515,7 +1515,7 @@ td span {
 }
 
 .days-upto-select {
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
     ul {
         margin: 0 auto;
         padding: 0;
@@ -1572,7 +1572,7 @@ td span {
                 &.active {
                     background-color: var(--bg-primary-color);
                     color: var(--color-white);
-                    border-left: 3px solid var(--mat-primary-color) !important;
+                    border-left: 3px solid var(--theme-primary-color) !important;
                 }
                 &[disabled] {
                     opacity: 0.3;
@@ -1585,11 +1585,11 @@ td span {
                 font-size: var(--font-size-12);
                 margin-bottom: 0;
                 border: none;
-                border-bottom: 1px solid var(--color-silver);
+                border-bottom: 1px solid var(--border-color);
                 color: var(--color-black);
                 background-color: transparent;
                 &:focus {
-                    border-bottom-color: var(--mat-primary-color) !important;
+                    border-bottom-color: var(--theme-primary-color) !important;
                     box-shadow: 0 1px 0 0 var(--color-shadow-light) !important;
                     outline: none;
                 }

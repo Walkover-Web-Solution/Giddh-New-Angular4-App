@@ -1218,6 +1218,86 @@
 }
 
 /**
+ * ABSOLUTE POSITIONING MIXINS
+ * ===========================
+ * Optimized absolute positioning patterns with modern browser support
+ */
+
+/**
+ * Base absolute positioning mixin with transform support
+ * 
+ * @param {String} $top - Top position value (default: null)
+ * @param {String} $left - Left position value (default: null)
+ * @param {String} $transform - Transform value (default: null)
+ */
+@mixin absolute-position($top: null, $left: null, $transform: null) {
+    position: absolute !important;
+    
+    @if $top {
+        top: #{$top} !important;
+    }
+    
+    @if $left {
+        left: #{$left} !important;
+    }
+    
+    @if $transform {
+        // Cross-browser transform support with all vendor prefixes
+        -webkit-transform: #{$transform} !important;
+        -moz-transform: #{$transform} !important;
+        -ms-transform: #{$transform} !important;
+        -o-transform: #{$transform} !important;
+        transform: #{$transform} !important;
+    }
+}
+
+/**
+ * Vertical center positioning mixin
+ * Centers element vertically using absolute positioning and transform
+ * 
+ * @param {String} $left - Optional left position (default: null)
+ */
+@mixin absolute-center-vertical($left: null) {
+    @include absolute-position(50%, $left, translateY(-50%));
+}
+
+/**
+ * Horizontal center positioning mixin  
+ * Centers element horizontally using absolute positioning and transform
+ * 
+ * @param {String} $top - Optional top position (default: null)
+ */
+@mixin absolute-center-horizontal($top: null) {
+    @include absolute-position($top, 50%, translateX(-50%));
+}
+
+/**
+ * Perfect center positioning mixin
+ * Centers element both horizontally and vertically using absolute positioning and transform
+ */
+@mixin absolute-center() {
+    @include absolute-position(50%, 50%, translate(-50%, -50%));
+}
+
+/**
+ * Absolute positioning utilities mixin
+ * Generates utility classes for common absolute positioning patterns
+ */
+@mixin absolute-positioning-utilities() {
+    .absolute-center-vertical {
+        @include absolute-center-vertical();
+    }
+
+    .absolute-center-horizontal {
+        @include absolute-center-horizontal();
+    }
+
+    .absolute-center {
+        @include absolute-center();
+    }
+}
+
+/**
  * Typography variables and utilities mixin
  * Generates CSS custom properties in :root and corresponding utility classes
  * @param {String} $property - The CSS property name (font-weight, font-size, line-height)

@@ -25,7 +25,7 @@
         height: 77vh;
         background-color: var(--color-white);
         .left-side {
-            border-right: 1px solid var(--color-silver);
+            border-right: 1px solid var(--border-color);
             width: 35%;
             padding: 10px 10px 10px 13px;
             position: relative;
@@ -96,13 +96,13 @@
             .right-side-buttons {
                 display: flex;
                 background-color: var(--color-white);
-                border: 1px solid var(--color-silver);
+                border: 1px solid var(--border-color);
                 border-radius: var(--mat-border-radius-4);
                 min-width: 67px;
                 float: right;
                 margin-right: 2px;
                 span {
-                    border-left: 1px solid var(--color-silver);
+                    border-left: 1px solid var(--border-color);
                     padding: 5px;
                     display: flex;
                     justify-content: center;

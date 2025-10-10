@@ -142,16 +142,16 @@
 
 .table-modal tbody td {
     border-top: 0px solid !important;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 }
 
 .table-modal thead th {
-    border-right: 1px solid var(--color-silver) !important;
+    border-right: 1px solid var(--border-color) !important;
 }
 
 /* UNUSED COMPONENT CLASS: table-modal - Auto-commented by script
 .table-modal {
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 */
 
@@ -166,7 +166,7 @@
 }
 
 .table-modal tbody tr td .icon-edit {
-    border-bottom: 2px solid var(--color-silver);
+    border-bottom: 2px solid var(--border-color);
 }
 
 /* UNUSED COMPONENT CLASS: date-input-icon - Auto-commented by script

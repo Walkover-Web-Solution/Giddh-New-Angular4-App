@@ -205,7 +205,7 @@ ul.list-unstyled li a {
 
     a:hover {
         color: var(--text-primary-color) !important;
-        background-color: var(--mat-text-primary-light);
+        background-color: var(--theme-primary-light);
     }
 }
 */
@@ -258,7 +258,7 @@ td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer
 
 tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
 tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 .position-relative.word-wrap {
@@ -357,7 +357,7 @@ tr.aging-table-top td {
 i.icon-options {
     width: 36px;
     height: 36px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background-color: var(--color-white);
     color: var(--color-black);
     font-size: 20px;
@@ -374,7 +374,7 @@ i.icon-options {
 i.icon-options:hover {
     background: var(--bg-primary-color);
     color: var(--color-light-gray);
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 }
 
 .search-field {
@@ -410,7 +410,7 @@ span.input-addon {
 }
 
 .aging-table thead tr th {
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
     position: relative;
     padding-right: 10px !important;
 }
@@ -579,7 +579,7 @@ button.btn.btn-filter {
 //         }
 //     }
 //     .mat-header-row {
-//         border-bottom: 1.5px solid var(--color-silver);
+//         border-bottom: 1.5px solid var(--border-color);
 //     }
 //     .icon-search:before {
 //         position: relative;
@@ -604,9 +604,9 @@ button.btn.btn-filter {
 /* UNUSED COMPONENT CLASS: btn-filters - Auto-commented by script
 .btn-filters {
     @include common-filters(
-        var(--mat-primary-color),
+        var(--theme-primary-color),
         var(--color-border-light),
-        1px solid var(--color-silver)
+        1px solid var(--border-color)
     );
 }
 */
@@ -718,7 +718,7 @@ button.btn.btn-filter {
 
 .arrow-icon {
     @include square(30px, true);
-    border: 2px solid var(--color-silver);
+    border: 2px solid var(--border-color);
     right: 14px;
     top: 20px;
 
@@ -749,7 +749,7 @@ button.btn.btn-filter {
 .dropdown-toggle {
     color: var(--color-black);
     background-color: var(--color-light-gray);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 */
 th.mat-header-cell {

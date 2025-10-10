@@ -35,15 +35,15 @@
 //     border-right: none !important;
 //     border-left: none !important;
 //     background-color: var(--color-white);
-//     border-color: var(--color-silver);
+//     border-color: var(--border-color);
 // }
 
 // .basic > thead > tr > th {
 //     color: var(--text-primary-color) !important;
-//     border-right: 1px solid var(--color-silver);
+//     border-right: 1px solid var(--border-color);
 //     padding: 15px 11px !important;
 //     font-weight: 400;
-//     border-bottom: 1px solid var(--color-silver);
+//     border-bottom: 1px solid var(--border-color);
 //     font-weight: var(--font-weight-semibold);
 //     font-size: var(--font-size-15);
 // }
@@ -53,7 +53,7 @@
 // }
 
 // .table-bordered {
-//     border-color: var(--color-silver);
+//     border-color: var(--border-color);
 // }
 
 // .overflow-x-hidden {
@@ -171,7 +171,7 @@
 /* UNUSED GLOBAL CLASS: billing-shipping-value - Auto-commented by script
 .billing-shipping-value {
     .select-field-input {
-        border-bottom: 1px solid var(--color-silver) !important;
+        border-bottom: 1px solid var(--border-color) !important;
         border: 0;
         margin-bottom: 1px !important;
         background-color: transparent !important;
@@ -377,7 +377,7 @@
 .select-multiple-icon-options {
     width: 36px;
     height: 36px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background-color: var(--color-white);
     color: var(--color-black);
     font-size: var(--font-size-15);
@@ -394,7 +394,7 @@
     &:hover {
         background: var(--bg-primary-color);
         color: var(--color-light-gray);
-        border-color: var(--mat-primary-color);
+        border-color: var(--theme-primary-color);
     }
 }
 */
@@ -492,7 +492,7 @@
     .mdc-data-table__row {
         .active-plan-td-bottom {
             border-bottom: 2px solid !important;
-            border-bottom-color: var(--mat-primary-color) !important;
+            border-bottom-color: var(--theme-primary-color) !important;
         }
     }
 }
@@ -632,7 +632,7 @@
 }
 
 // .border-top {
-//     border-top: 1px solid var(--color-silver) !important;
+//     border-top: 1px solid var(--border-color) !important;
 // }
 
 /* UNUSED GLOBAL CLASS: custom-giddh-datepicker - Auto-commented by script
@@ -744,7 +744,7 @@
 // }
 
 // .border-bottom {
-//     border-bottom: 1px solid var(--color-silver) !important;
+//     border-bottom: 1px solid var(--border-color) !important;
 // }
 
 /* start MDB tweaks */
@@ -795,7 +795,7 @@
 //     display: block;
 //     overflow: hidden;
 //     cursor: pointer;
-//     border: 1px solid var(--mat-primary-color);
+//     border: 1px solid var(--theme-primary-color);
 //     border-radius: 30px;
 // }
 
@@ -822,7 +822,7 @@
     border-radius: 30px;
     transition: all 0.3s ease-in 0s;
     background-color: var(--bg-primary-color);
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 }
 */
 
@@ -1017,7 +1017,7 @@
 
 /* UNUSED GLOBAL CLASS: aging-table-top - Auto-commented by script
 .aging-table-top .top-aging-table-top {
-    background: var(--mat-text-primary-light) !important;
+    background: var(--theme-primary-light) !important;
 }
 */
 
@@ -1076,7 +1076,7 @@
 .pagination > li > a {
     background: var(--color-white) !important;
     color: var(--color-black) !important;
-    border: 1px solid var(--mat-primary-color) !important;
+    border: 1px solid var(--theme-primary-color) !important;
 }
 */
 
@@ -1084,7 +1084,7 @@
 .pagination > li.active > a {
     color: var(--color-white) !important;
     background: var(--bg-primary-color) !important;
-    border: 1px solid var(--mat-primary-color) !important;
+    border: 1px solid var(--theme-primary-color) !important;
 }
 */
 
@@ -1270,7 +1270,7 @@ modal-container.modal {
 .input-search .input-group-addon {
     background: var(--color-white);
     border-right: 0px;
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     color: var(--color-medium-gray);
     font-size: var(--font-size-12);
     padding-top: 10px;
@@ -1284,7 +1284,7 @@ modal-container.modal {
     background: var(--color-white);
     border-radius: 0px 2px 2px 0px !important;
     border-left: 0px;
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 */
 
@@ -1456,7 +1456,7 @@ modal-container.modal {
 
 // .form-control:focus {
 //     outline: none;
-//     border-color: var(--mat-primary-color) !important;
+//     border-color: var(--theme-primary-color) !important;
 //     box-shadow: none;
 // }
 
@@ -1477,7 +1477,7 @@ modal-container.modal {
 /* UNUSED GLOBAL CLASS: btn-pink - Auto-commented by script
 .btn-pink {
     background: var(--bg-primary-color);
-    border: 1px solid var(--mat-primary-color);
+    border: 1px solid var(--theme-primary-color);
     color: var(--color-white);
 
     &:hover {
@@ -1498,7 +1498,7 @@ modal-container.modal {
 /* UNUSED GLOBAL CLASS: btn-default - Auto-commented by script
 .btn-default {
     background: var(--color-white) !important;
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
     color: var(--color-black) !important;
 }
 */
@@ -1528,7 +1528,7 @@ modal-container.modal {
 /* UNUSED GLOBAL CLASS: ledger-header - Auto-commented by script
 .ledger-header thead th {
     background: var(--color-white);
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 }
 */
 
@@ -1542,7 +1542,7 @@ modal-container.modal {
 
 /* UNUSED GLOBAL CLASS: ledger-container - Auto-commented by script
 .ledger-container table tr.bg3 th {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-left: 0;
 }
 */
@@ -1666,7 +1666,7 @@ modal-container.modal {
 
 // input[type="checkbox"]:checked:after {
 //     background-color: var(--bg-primary-color);
-//     border-color: var(--mat-primary-color);
+//     border-color: var(--theme-primary-color);
 // }
 
 
@@ -1962,7 +1962,7 @@ modal-container.modal {
 .navbar-right .dropdown-menu,
 .pull-right > .dropdown-menu {
     top: 54px;
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 */
 
@@ -2047,7 +2047,7 @@ modal-container.modal {
 /* UNUSED GLOBAL CLASS: pop-panel - Auto-commented by script
 .pop-panel .form-control {
     background: var(--color-orange-light);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 */
 
@@ -2128,7 +2128,7 @@ modal-container.modal {
 
 // .dashed {
 //     border-style: dashed;
-//     border-color: var(--color-silver);
+//     border-color: var(--border-color);
 // }
 
 /* UNUSED GLOBAL CLASS: modal-header - Auto-commented by script
@@ -2136,11 +2136,11 @@ modal-container.modal {
     position: relative;
     background: var(--bg-primary-color) !important;
     color: var(--color-white);
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
     height: 65px;
     display: flex;
     align-items: center;
-    border-color: var(--mat-primary-color);
+    border-color: var(--theme-primary-color);
 
     .icon-cross {
         color: var(--color-white);
@@ -2186,7 +2186,7 @@ modal-container.modal {
 
 // .ledger-panel {
 //     // .border-bottom {
-//     //     border-bottom: 1px solid var(--color-silver);
+//     //     border-bottom: 1px solid var(--border-color);
 //     // }
 
 //     .more-details {
@@ -2385,7 +2385,7 @@ modal-container.modal {
 /* UNUSED GLOBAL CLASS: companyGst - Auto-commented by script
 .companyGst .gst {
     padding-bottom: 20px;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 */
 
@@ -2445,7 +2445,7 @@ modal-container.modal {
 .pagination > li > span:focus,
 .pagination > li > span:hover {
     background-color: var(--color-silver) !important;
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 */
 
@@ -2585,7 +2585,7 @@ modal-container.modal {
     font-weight: bold;
     // list-style: none;
     display: inline-block;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: 50%;
     width: 30px;
     text-align: center;
@@ -2659,7 +2659,7 @@ modal-container.modal {
 
 /* UNUSED GLOBAL CLASS: calendar-dropdown - Auto-commented by script
 .calendar-dropdown {
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     margin-top: 1px;
     border-radius: var(--mat-border-radius-0);
 }
@@ -2835,7 +2835,7 @@ modal-container.modal {
     position: relative;
     transition: all 0.3s ease;
     width: 100%;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     color: var(--color-dark-gray);
     padding: 0 7px;
@@ -2887,33 +2887,10 @@ modal-container.modal {
 /* UNUSED GLOBAL CLASS: option-box - Auto-commented by script
 .option-box {
     background: var(--color-border-light);
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     margin-bottom: 10px;
 }
 */
-
-// .ledger-book {
-//     .left-col-new,
-//     .right-col-new {
-//         .mat-grid-list {
-//             .mat-grid-tile {
-//                 .mat-grid-tile-content {
-//                     position: relative !important;
-//                     width: 100%;
-//                     justify-content: flex-start !important;
-//                 }
-//                 &:nth-child(3) {
-//                     .mat-grid-tile-content {
-//                         justify-content: center !important;
-//                         flex-direction: column;
-//                         align-items: flex-end;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
 
 /* UNUSED GLOBAL CLASS: divide-ico - Auto-commented by script
 .divide-ico {
@@ -2937,7 +2914,7 @@ modal-container.modal {
     width: 270px;
     right: 4px;
     padding: 0px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     left: -15px !important;
 }
 */
@@ -3037,7 +3014,7 @@ modal-container.modal {
 
 /* UNUSED GLOBAL CLASS: tbpl-dropdown - Auto-commented by script
 .tbpl-dropdown > li {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 */
 
@@ -3573,7 +3550,7 @@ GST filing
 /* UNUSED GLOBAL CLASS: bs-datepicker-body - Auto-commented by script
 .bs-datepicker-body table.days span.active:not(.select-start):before,
 .bs-datepicker-body table.days span.in-range:not(.select-start):before {
-    background: var(--mat-text-primary-light);
+    background: var(--theme-primary-light);
 }
 */
 
@@ -3610,7 +3587,7 @@ GST filing
 .radio-custom + .radio-custom-label:before {
     content: "";
     background: var(--color-white);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     display: inline-block;
     vertical-align: middle;
     width: 18px;
@@ -3712,7 +3689,7 @@ GST filing
             justify-content: space-between;
             padding-top: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid var(--color-silver);
+            border-bottom: 1px solid var(--border-color);
             margin-bottom: 15px;
 
             span {
@@ -3746,7 +3723,7 @@ GST filing
                 input {
                     width: 130px;
                     height: 51px;
-                    border: 1px solid var(--color-silver);
+                    border: 1px solid var(--border-color);
                     border-radius: var(--mat-border-radius-4);
                     padding: 0 15px;
                     font-size: var(--font-size-15);
@@ -3850,7 +3827,7 @@ GST filing
 .select-border-bottom {
     .form-control {
         border: none;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         width: 100%;
     }
 }
@@ -3918,7 +3895,7 @@ GST filing
                     font-size: var(--font-size-15);
                     width: 220px;
                     padding: 3px 10px;
-                    border: 1px solid var(--color-silver);
+                    border: 1px solid var(--border-color);
                     background-color: var(--color-white);
 
                     // &::placeholder {
@@ -4080,7 +4057,7 @@ GST filing
 
 /* UNUSED GLOBAL CLASS: inventory-dashboard - Auto-commented by script
 .inventory-dashboard .box {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-0);
 }
 */
@@ -4158,7 +4135,7 @@ body {
 
 /* UNUSED GLOBAL CLASS: change-address-dropdown - Auto-commented by script
 .change-address-dropdown li {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 4px;
 }
 */
@@ -4173,7 +4150,7 @@ body {
 /* UNUSED GLOBAL CLASS: more-add-button - Auto-commented by script
 .more-add-button {
     .icon-undo {
-        border: 1px solid var(--mat-primary-color);
+        border: 1px solid var(--theme-primary-color);
         width: 34px;
         height: 34px;
         display: flex;
@@ -4324,7 +4301,7 @@ body {
                 .modal-body {
                     input,
                     textarea {
-                        border: 1px solid var(--color-silver);
+                        border: 1px solid var(--border-color);
 
                         .cdk-overlay-pane {
                             .mat-dialog-container {
@@ -4337,7 +4314,7 @@ body {
                                 .modal-body {
                                     input,
                                     textarea {
-                                        border: 1px solid var(--color-silver);
+                                        border: 1px solid var(--border-color);
                                     }
                                 }
                             }
@@ -4371,7 +4348,7 @@ body {
                             .modal-body {
                                 input,
                                 textarea {
-                                    border: 1px solid var(--color-silver);
+                                    border: 1px solid var(--border-color);
                                 }
                             }
                         }
@@ -4387,7 +4364,7 @@ body {
                 .mat-menu-content {
                     button:focus {
                         box-shadow: none !important;
-                        background-color: var(--mat-text-primary-light);
+                        background-color: var(--theme-primary-light);
                     }
                 }
             }
@@ -4542,7 +4519,7 @@ body {
 
 /* UNUSED GLOBAL CLASS: sky-text-primary-bg - Auto-commented by script
 .sky-text-primary-bg {
-    background-color: var(--mat-text-primary-light);
+    background-color: var(--theme-primary-light);
 }
 */
 
@@ -4563,78 +4540,6 @@ body {
 }
 */
 
-/** Angular material datepicker **/
-/* UNUSED GLOBAL CLASS: mat-calendar-controls - Auto-commented by script
-.mat-calendar-controls {
-    .mdc-button {
-        .mdc-button__label {
-            color: var(--color-white);
-        }
-    }
-}
-*/
-
-/* UNUSED GLOBAL CLASS: mat-calendar-header - Auto-commented by script
-.mat-calendar-header {
-    padding: 2px 8px 2px 8px !important;
-    background-color: var(--bg-primary-color);
-    color: var(--color-white);
-}
-*/
-
-/* UNUSED GLOBAL CLASS: mat-calendar-controls - Auto-commented by script
-.mat-calendar-controls {
-    margin: 0% calc(33% / 7 - 16px) !important;
-}
-*/
-
-/* UNUSED GLOBAL CLASS: mat-calendar-arrow - Auto-commented by script
-.mat-calendar-arrow {
-    border-top-color: var(--color-white) !important;
-    fill: var(--color-white);
-}
-*/
-
-/* UNUSED GLOBAL CLASS: mat-datepicker-content - Auto-commented by script
-.mat-datepicker-content .mat-calendar-next-button,
-.mat-datepicker-content .mat-calendar-previous-button {
-    color: var(--color-white) !important;
-}
-*/
-
-/* UNUSED GLOBAL CLASS: mat-calendar-content - Auto-commented by script
-.mat-calendar-content {
-    padding: 0px 8px 0px 8px !important;
-    background-color: var(--color-white);
-}
-*/
-
-/* UNUSED GLOBAL CLASS: mat-calendar-body-label - Auto-commented by script
-.mat-calendar-body-label {
-    visibility: hidden !important;
-}
-*/
-
-
-/* UNUSED GLOBAL CLASS: mat-calendar-table-header - Auto-commented by script
-.mat-calendar-table-header th {
-    padding: 10px 0 10px 0 !important;
-    color: var(--color-black);
-}
-*/
-
-/* UNUSED GLOBAL CLASS: mat-calendar-table-header - Auto-commented by script
-.mat-calendar-table-header th.mat-calendar-table-header-divider {
-    padding: 0px !important;
-}
-*/
-
-/* UNUSED GLOBAL CLASS: mat-datepicker-content - Auto-commented by script
-.mat-datepicker-content .mat-calendar {
-    height: 325px !important;
-    background-color: var(--color-white);
-}
-*/
 /* UNUSED GLOBAL CLASS: custom-modalbox - Auto-commented by script
 .custom-modalbox {
     height: 635px !important;
@@ -4645,7 +4550,7 @@ body {
 .activation-key {
     /* UNUSED GLOBAL CLASS: mat-input-element - Auto-commented by script
     .mat-input-element {
-        border: 1px solid var(--color-silver) !important;
+        border: 1px solid var(--border-color) !important;
     }
     */
 }
@@ -4778,10 +4683,10 @@ body {
     }
     */
 
-    .hamburger-menu {
-        position: relative;
-        z-index: 99999;
-    }
+    // .hamburger-menu {
+    //     position: relative;
+    //     z-index: 99999;
+    // }
 
     /* UNUSED GLOBAL CLASS: mat-mdc-table - Auto-commented by script
     .mat-mdc-table tbody > tr > td:first-child {
@@ -5154,40 +5059,6 @@ voucher-component {
 */
 
 
-
-
-.ledger-date {
-    .input-wrapper {
-        /* UNUSED GLOBAL CLASS: mat-form-field - Auto-commented by script
-        .mat-form-field {
-            .mat-form-field-wrapper {
-                .mat-form-field-flex {
-                    .mat-form-field-infix {
-                        border: 0 !important;
-                        width: 100%;
-
-                        input {
-                            border: 1px solid var(--color-silver) !important;
-                        }
-                    }
-                }
-            }
-        }
-        */
-
-        .mdc-text-field--no-label:not(.mdc-text-field--textarea) {
-            .mat-mdc-form-field-input-control.mdc-text-field__input {
-                /* UNUSED GLOBAL CLASS: mat-mdc-text-field-wrapper - Auto-commented by script
-                .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
-                    border: 1px solid var(--color-silver) !important;
-                }
-                */
-            }
-        }
-    }
-}
-
-
 // .dropdown-bg {
 //     background-color: var(--color-white);
 //     width: 20px;
@@ -5383,7 +5254,7 @@ aside-menu-product-service {
 // outline-card
 // .mat-mdc-card {
 //     &.outline-card {
-//         border: 1px solid var(--color-silver);
+//         border: 1px solid var(--border-color);
 //         box-shadow: none;
 //     }
 // }
@@ -5403,29 +5274,6 @@ aside-menu-product-service {
         }
     }
 }
-
-//  Material checkbox color
-// .mat-mdc-checkbox {
-//     .mdc-form-field {
-//         .mdc-checkbox {
-//             .mdc-checkbox__background {
-//                 border-color: var(--color-black) !important;
-//             }
-//         }
-//     }
-// }
-
-// .text-white {
-//     color: var(--white-color) !important;
-// }
-
-// .text-underline {
-//     text-decoration: underline !important;
-
-//     &:hover {
-//         text-decoration: underline !important;
-//     }
-// }
 
 
 // .font-weight-semibold {
@@ -5592,38 +5440,7 @@ aside-menu-product-service {
 //     border-bottom-right-radius: 5px !important;
 // }
 
-.template-froala-wrapper {
-    .balance-options {
-        height: auto !important;
-        padding-bottom: 5px !important;
 
-        /* UNUSED GLOBAL CLASS: mat-select-search-input - Auto-commented by script
-        .mat-select-search-input {
-            padding: 16px 36px 16px 16px !important;
-            box-sizing: border-box !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-inner - Auto-commented by script
-        .mat-select-search-inner {
-            position: absolute !important;
-            top: 0 !important;
-            border-bottom-width: 1px !important;
-            border-bottom-style: solid !important;
-            z-index: 100 !important;
-            font-size: inherit !important;
-            box-shadow: none !important;
-            border-radius: var(--mat-border-radius-0) !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-clear - Auto-commented by script
-        .mat-select-search-clear {
-            margin-right: 0 !important;
-        }
-        */
-    }
-}
 
 /** In mobile number field if multiple flag are visible,
  use this class to fix the issue */
@@ -5689,7 +5506,6 @@ aside-menu-product-service {
 
 // For giddh-datepicker month year picker placeholder color
 giddh-datepicker {
-    /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
     .mat-mdc-form-field {
         &.month-year-picker {
             .mat-mdc-text-field-wrapper {
@@ -5703,5 +5519,4 @@ giddh-datepicker {
             }
         }
     }
-    */
 }

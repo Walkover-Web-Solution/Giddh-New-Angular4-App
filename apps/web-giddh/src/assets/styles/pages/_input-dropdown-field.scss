@@ -69,12 +69,12 @@
 //         }
 //     }
 
-//     .mat-form-field-appearance-outline {
-//         .mat-mdc-form-field-icon-suffix {
-//             margin-left: 0;
-//             margin-right: 15px;
-//         }
-//     }
+    .mat-form-field-appearance-outline {
+        .mat-mdc-form-field-icon-suffix {
+            margin-left: 0;
+            margin-right: 15px;
+        }
+    }
 
 //     .mat-mdc-form-field-subscript-wrapper {
 //         display: none;
@@ -257,7 +257,7 @@
 // .search-datepicker {
 //     giddh-datepicker {
 //         .mat-mdc-form-field-flex {
-//             border: 1px solid var(--color-silver) !important;
+//             border: 1px solid var(--border-color) !important;
 //             border-radius: var(--mat-border-radius-4) !important;
 //         }
 
@@ -278,50 +278,50 @@
 //     }
 // }
 
-// .ledger-row {
-//     giddh-datepicker {
-        // .mat-mdc-form-field {
-        //     min-width: 71px;
-        //     max-width: 111px;
-        // }
+.ledger-row {
+    giddh-datepicker {
+        .mat-mdc-form-field {
+            min-width: 71px;
+            max-width: 111px;
+        }
 
-        // .mat-datepicker-input {
-        //     position: absolute;
-        //     margin-top: 12px;
-        // }
+        .mat-datepicker-input {
+            position: absolute;
+            margin-top: 12px;
+        }
 
-        // .mat-datepicker-toggle {
-        //     position: relative;
-        //     left: 86px;
+        .mat-datepicker-toggle {
+            position: relative;
+            left: 86px;
 
-        //     .mdc-icon-button {
-        //         svg {
-        //             position: absolute;
-        //             top: 12px;
-        //             left: 0px;
-        //         }
-        //     }
-        // }
+            .mdc-icon-button {
+                svg {
+                    position: absolute;
+                    top: 12px;
+                    left: 0px;
+                }
+            }
+        }
 
-        // .mat-datepicker-input {
-        //     position: absolute;
-        //     margin-top: 12px;
-        // }
+        .mat-datepicker-input {
+            position: absolute;
+            margin-top: 12px;
+        }
 
-        // .mat-datepicker-toggle {
-        //     position: relative;
-        //     left: 86px;
+        .mat-datepicker-toggle {
+            position: relative;
+            left: 86px;
 
-        //     .mdc-icon-button {
-        //         svg {
-        //             position: absolute;
-        //             top: 12px;
-        //             left: 0px;
-        //         }
-        //     }
-        // }
-//     }
-// }
+            .mdc-icon-button {
+                svg {
+                    position: absolute;
+                    top: 12px;
+                    left: 0px;
+                }
+            }
+        }
+    }
+}
 
 .mat-mdc-form-field-subscript-wrapper {
     display: none;
@@ -437,43 +437,6 @@ ngx-mat-select-search {
     }
 }
 
-/*----- checkbox -----*/
-// .mdc-checkbox {
-//     margin-left: -8px !important;
-//     padding-right: 4px !important;
-
-//     .mat-mdc-checkbox-ripple {
-//         display: none;
-//     }
-
-//     .mdc-checkbox__native-control {
-//         margin: 0 !important;
-//     }
-
-//     input[type="checkbox"][disabled] {
-//         opacity: 0;
-//     }
-
-//     input[type="checkbox"]::before,
-//     input[type="checkbox"]::after {
-//         display: none;
-//     }
-// }
-
-// .mat-mdc-checkbox-touch-target {
-//     height: 18px !important;
-//     width: 18px !important;
-//     left: 60% !important;
-// }
-
-// .mdc-checkbox .mdc-checkbox__native-control {
-//     width: 18px !important;
-//     height: 18px !important;
-// }
-
-// .mdc-checkbox__ripple {
-//     display: none !important;
-// }
 
 /*----- radio-button -----*/
 
@@ -488,7 +451,7 @@ ngx-mat-select-search {
 
 //         .mdc-radio__native-control:enabled:checked + .mdc-radio__background {
 //             .mdc-radio__outer-circle {
-//                 // border-color: var(--mat-primary-color) !important;
+//                 // border-color: var(--theme-primary-color) !important;
 //             }
 
 //             .mdc-radio__inner-circle {
@@ -506,19 +469,19 @@ ngx-mat-select-search {
 
 /*---- custom ----*/
 .custom-input-field {
-    // .mdc-text-field--filled {
-    //     padding: 0;
-    // }
+    .mdc-text-field--filled {
+        padding: 0;
+    }
 
     &.share-input-width {
         width: 80%;
     }
 
-    // .mat-mdc-form-field-infix {
-    //     padding-top: 0 !important;
-    //     padding-bottom: 0 !important;
-    //     min-height: 2rem !important;
-    // }
+    .mat-mdc-form-field-infix {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        min-height: 2rem !important;
+    }
 }
 
 /*--- manufacturing edit ---*/
@@ -671,34 +634,6 @@ body {
     bottom: 0px;
     background-color: var(--mat-autocomplete-background-color);
 }
-
-// matIconPrefix input field
-input-field {
-    .prefix-icon-field {
-        i {
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-        }
-
-        // &.mat-mdc-form-field {
-        //   .mat-mdc-text-field-wrapper {
-        //       .mat-mdc-form-field-infix {
-        //           padding-left: 20px !important;
-        //       }
-        //   }
-
-        //     .mdc-text-field--outlined {
-        //         .mdc-notched-outline {
-        //             .mdc-notched-outline__leading {
-        //                 width: max(40px, var(--mdc-shape-small, 4px)) !important;
-        //             }
-        //         }
-        //     }
-        // }
-    }
-}
-
 // .readonly-field {
 //     .dropdown-bg {
 //         display: none !important;

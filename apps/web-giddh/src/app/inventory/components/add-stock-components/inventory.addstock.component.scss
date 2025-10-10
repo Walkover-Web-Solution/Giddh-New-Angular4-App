@@ -16,7 +16,7 @@
 */
 
 .table-label {
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     td {
         padding-top: 12px !important;
         padding-bottom: 5px;
@@ -39,7 +39,7 @@
         background: none;
         border: none;
         max-width: 108px;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
     }
     /* UNUSED COMPONENT CLASS: item-label - Auto-commented by script
 .item-label {
@@ -55,7 +55,7 @@
     i {
         margin-left: 10px;
         padding-bottom: 3px;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
     }
     .new-custom-btn {
         font-size: var(--font-size-12);

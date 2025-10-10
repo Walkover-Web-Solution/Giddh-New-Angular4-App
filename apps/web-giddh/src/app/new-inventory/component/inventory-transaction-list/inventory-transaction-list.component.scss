@@ -26,7 +26,7 @@
 
 /* UNUSED COMPONENT CLASS: stock-mat-salect - Auto-commented by script
 .stock-mat-salect {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4) !important;
     padding: 8px;
     font-size: var(--font-size-15);
@@ -120,7 +120,7 @@ font-weight: 400 !important;
 .mat-standard-chip {
         color: var(--color-dark-black) !important;
         background-color: var(--color-white) !important;
-        border: 1px solid var(--mat-primary-color) !important;
+        border: 1px solid var(--theme-primary-color) !important;
         font-size: var(--font-size-12) !important;
     }
 */

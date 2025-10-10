@@ -164,7 +164,7 @@
         }
 
         .vouchers-large-container {
-            border-top: 1px solid var(--color-silver);
+            border-top: 1px solid var(--border-color);
 
             #init-contact-wrapper {
                 input {
@@ -179,7 +179,7 @@
                         th,
                         td {
                             padding: 16px 8px;
-                            border: 1px solid var(--color-silver);
+                            border: 1px solid var(--border-color);
 
                             &:not(:first-child, :nth-child(2)) {
                                 text-align: right;
@@ -339,7 +339,7 @@
             }
 
             .vouchers-actions {
-                border-top: 1px solid var(--color-silver);
+                border-top: 1px solid var(--border-color);
             }
         }
     }

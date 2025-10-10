@@ -103,14 +103,14 @@
 
     .input-group {
         .input-group-addon {
-            border-left: 1px solid var(--color-silver) !important;
+            border-left: 1px solid var(--border-color) !important;
         }
 
         input {
-            border-left: 1px solid var(--color-silver) !important;
+            border-left: 1px solid var(--border-color) !important;
 
             &:focus {
-                border-left: 1px solid var(--mat-primary-color) !important;
+                border-left: 1px solid var(--theme-primary-color) !important;
             }
         }
     }
@@ -170,7 +170,7 @@ a
     padding: 3px 10px;
     background-color: var(--color-white);
     color: var(--color-black);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 */
 

@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     background-color: var(--color-white);
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     font-size: var(--font-size-16);
     font-weight: var(--font-weight-bold);
     padding-top: 10px;
@@ -17,7 +17,7 @@ section.receipt-note {
     padding-top: 15px;
     padding-bottom: 15px;
     color: var(--color-black);
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 .receipt-note-content {
     font-size: var(--font-size-15);
@@ -33,7 +33,7 @@ section.receipt-note {
 }
 #table-receipt th,
 #table-receipt td {
-    border-left: 1px solid var(--color-silver) !important;
+    border-left: 1px solid var(--border-color) !important;
 }
 #table-receipt td {
     vertical-align: top !important;
@@ -106,10 +106,10 @@ tfoot td .table-sec.form-group {
     padding-bottom: 60px;
 }
 .multiple-products-wrapper table thead {
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 .multiple-products-wrapper table tbody {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 #actionPane {
     background-color: var(--color-silver);
@@ -126,7 +126,7 @@ tfoot td .table-sec.form-group {
 .hsn-code-dropdown {
     position: absolute;
     background-color: var(--color-white);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     width: 100%;
     max-width: 250px;
@@ -148,7 +148,7 @@ tfoot td .table-sec.form-group {
 .hsn-code-dropdown input {
     width: 100%;
     padding: 5px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background-color: var(--color-white);
 }
 
@@ -204,14 +204,14 @@ tfoot td .table-sec.form-group {
 }
 .branch-transfer-report .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     padding-left: 45px !important;
     position: relative;
     z-index: 99;
     cursor: default;
 }
 .branch-transfer-report .input-group input.form-control:focus {
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 .branch-transfer-report .btn-group.show {
     display: inline !important;
@@ -284,7 +284,7 @@ tfoot td .table-sec.form-group {
 }
 .trash-icon-delete a {
     color: var(--color-medium-gray);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: 50%;
     text-align: center;
     width: 20px;
@@ -307,7 +307,7 @@ tfoot td .table-sec.form-group {
     color: var(--color-white);
 }
 .transfer-type-checked:before {
-    border: 1px solid var(--mat-primary-color);
+    border: 1px solid var(--theme-primary-color);
 }
 .transfer-type-checked:after {
     content: " ";

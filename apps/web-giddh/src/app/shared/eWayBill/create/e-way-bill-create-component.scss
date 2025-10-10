@@ -31,16 +31,16 @@
 }
 
 .table-modal {
-    border: 1px solid var(--color-silver) !important;
+    border: 1px solid var(--border-color) !important;
 
     th {
-        border-right: 1px solid var(--color-silver) !important;
+        border-right: 1px solid var(--border-color) !important;
     }
     
     td {
         border-top: 0px solid !important;
-        border-right: 1px solid var(--color-silver);
-        border-bottom: 1px solid var(--color-silver) !important;
+        border-right: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color) !important;
 
         button {
             background: none;

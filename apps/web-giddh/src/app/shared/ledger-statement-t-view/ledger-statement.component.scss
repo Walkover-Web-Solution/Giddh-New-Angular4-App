@@ -1,19 +1,18 @@
-    .content-wrapper-statement {
-        position: relative;
-        z-index: 1;
-    }
+.content-wrapper-statement {
+    position: relative;
+    z-index: 1;
+}
 .wrap-transaction-map {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-bottom: none !important;
 
     .ledger-book {
         box-shadow: none;
 
         .left-col-new {
-            border-right: 1px solid var(--color-silver);
+            border-right: 1px solid var(--border-color);
         }
 
-        /* UNUSED COMPONENT CLASS: checkbox-span - Auto-commented by script
 .checkbox-span {
             height: 49px;
             min-height: 49px;
@@ -22,7 +21,6 @@
             align-items: center;
             transform: translateX(-45%);
         }
-*/
 
         .checked {
             display: contents;
@@ -33,19 +31,17 @@
             display: flex;
 
             @for $i from 0 through $columns {
-                .top-position-fix-#{$i}
-                {
+                .top-position-fix-#{$i} {
                     top: $i + px !important;
                 }
             }
 
-            /*& UNUSED COMPONENT CLASS: highlighted-transaction - Auto-commented by script
-.highlighted-transaction {
+            
+            &.highlighted-transaction {
                 .mat-grid-tile {
                     background-color: var(--color-success-light) !important;
                 }
             }
-*/
 
             &:not(.highlighted-transaction) {
                 &:hover {
@@ -69,45 +65,38 @@
 #ledger-transaction-left-list,
 #ledger-transaction-right-list {
     .mat-grid-tile {
-        /* .d-flex UNUSED COMPONENT CLASS: align-item-center - Auto-commented by script
-.align-item-center {
+        .d-flex.align-item-center {
             align-items: stretch !important;
         }
-*/
 
-//         input,
-//         sh-select,
-//         /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
-// .form-control {
-//             min-height: 49px;
-//             height: 49px;
-//             border: 0 !important;
-//         }
-// */
+        input,
+        .form-control {
+            min-height: 49px;
+            height: 49px;
+            border: 0 !important;
+        }
     }
 
-//     .ledger-row {
-//         &:first-child {
-//             .mat-grid-tile {
-//                 /* UNUSED COMPONENT CLASS: mat-grid-tile-content - Auto-commented by script
-// .mat-grid-tile-content {
-//                     left: 20px;
-//                     position: relative;
-//                 }
-// */
-//             }
-//         }
-//     }
+    .ledger-row {
+        &:first-child {
+            .mat-grid-tile {
+                .mat-grid-tile-content {
+                    left: 20px;
+                    position: relative;
+                }
+            }
+        }
+    }
 }
 
 #ledger-transaction-left-list .mat-grid-tile,
 #ledger-transaction-right-list .mat-grid-tile {
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 #ledger-transaction-right-list,
 #ledger-transaction-left-list {
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 .form-control,
@@ -115,17 +104,10 @@ input {
     color: var(--color-black);
 }
 
-/* UNUSED COMPONENT CLASS: notfound-option - Auto-commented by script
-.notfound-option {
-    display: flex;
-    justify-content: space-between;
-}
-*/
-
 .ledg-head .mat-grid-list .mat-grid-tile {
     padding: 8px 10px;
-    border-bottom: 1px solid var(--color-silver) !important;
-    border-right: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color) !important;
+    border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -147,40 +129,27 @@ input {
     }
 }
 
-/* UNUSED COMPONENT CLASS: transaction-mapped-table - Auto-commented by script
-/* UNUSED COMPONENT CLASS: transaction-mapped - Auto-commented by script
 .transaction-mapped-table .mat-grid-tile {
     padding: 10px !important;
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
-*/
 
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
     background-color: var(--color-white);
 }
 
- /* .ledg-head table td UNUSED COMPONENT CLASS: pd-r25 - Auto-commented by script
-.pd-r25 {
-    padding-right: 25px !important;
-}
-*/
-
 /* UNUSED COMPONENT CLASS: entry-popup - Auto-commented by script
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid var(--color-silver);
-    border-right: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 */
-
-.ledg-head.entry-popup table td.pd-r25 {
-    padding-right: 25px !important;
-}
 
 .transaction-mapped-table {
     /* UNUSED COMPONENT CLASS: top-head-table - Auto-commented by script
@@ -203,10 +172,9 @@ table.ledger-footer-1 td[class*="col-"] {
 
     .ledger-main {
         .ledger-row.row {
-
             td,
             th {
-                border-bottom: 1px solid var(--color-silver) !important;
+                border-bottom: 1px solid var(--border-color) !important;
                 border-top: none !important;
             }
 
@@ -286,7 +254,7 @@ table.ledger-footer-1 td[class*="col-"] {
 
 .ledger-stat {
     padding: 10px 15px 0;
-    background: var(--color-white);
+    // background: var(--color-white);
     color: var(--color-dark-gray);
     font-size: var(--font-size-16);
     box-shadow: 0px 2px 6px var(--color-shadow-light);
@@ -354,7 +322,7 @@ table.ledger-footer-1 td[class*="col-"] {
     left: 5% !important;
     right: 5%;
     bottom: 100px;
-    background: var(--color-white);
+    // background: var(--color-white);
     padding: 5px;
     font-size: var(--font-size-12);
     z-index: 0;
@@ -367,7 +335,7 @@ table.ledger-footer-1 td[class*="col-"] {
     text-align: center;
 }
 
-.pagination>li>a:hover {
+.pagination > li > a:hover {
     color: var(--color-red);
 }
 
@@ -382,7 +350,7 @@ table.ledger-footer-1 td[class*="col-"] {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 */
 
@@ -390,20 +358,16 @@ table.ledger-footer-1 td[class*="col-"] {
     padding: 6px;
 }
 
-.pd-r25 {
-    padding-right: 25px !important;
-}
-
 .thead-background1 th {
     background: var(--color-white);
     color: var(--color-black);
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-15);
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 
 .ledger-main .form-control,
@@ -412,7 +376,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .ledger-book {
-    border: 0px solid var(--color-silver);
+    border: 0px solid var(--border-color);
     clear: both;
     position: relative;
     float: left;
@@ -486,16 +450,6 @@ input[type="date"]::-webkit-outer-spin-button {
     border: unset !important;
 }
 */
-
-sh-select:focus {
-    outline: 1px var(--color-red) solid;
-}
-
-.notfound-option.active {
-    background: var(--color-border-light) !important;
-    padding: 2px 5px !important;
-}
-
 .amount-total {
     font-size: var(--font-size-12);
     color: var(--color-medium-gray);
@@ -503,7 +457,7 @@ sh-select:focus {
 }
 
 .ledger-book {
-/* UNUSED COMPONENT CLASS: statement-view - Auto-commented by script
+    /* UNUSED COMPONENT CLASS: statement-view - Auto-commented by script
     .left-col-new,
     .right-col-new,
     
@@ -524,7 +478,7 @@ sh-select:focus {
 
 .left-col-new .mat-grid-list .mat-grid-title:first-child,
 .left-col-new .mat-grid-list .mat-grid-title:first-child {
-    border-left: 1px solid var(--color-silver) !important;
+    border-left: 1px solid var(--border-color) !important;
 }
 
 /* UNUSED COMPONENT CLASS: icomoon-ico - Auto-commented by script
@@ -534,7 +488,7 @@ sh-select:focus {
     width: 36px;
     min-width: 36px;
     height: 36px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     padding: 3px;
     display: flex;
     justify-content: center;
@@ -547,7 +501,7 @@ sh-select:focus {
 .advance-search-block input {
     background: var(--color-light-gray) !important;
     height: 28px;
-    border-color: var(--color-light-gray) !important;
+    border-color: var(--border-color) !important;
 }
 
 .advance-search-block input::placeholder {
@@ -600,7 +554,7 @@ sh-select:focus {
 */
 
 .ledger-book .ledger-footer-1 .total-col .border-top {
-    border-top: 1px solid var(--color-silver) !important;
+    border-top: 1px solid var(--border-color) !important;
 }
 
 .ledger-book .ledger-footer-1 .total-col .border-top {
@@ -641,7 +595,7 @@ sh-select:focus {
 }
 
 .ledger-stat h1 {
-    color: var(--color-black);
+    // color: var(--color-black);
     font-size: var(--font-size-15);
     margin-bottom: 10px;
 }
@@ -660,7 +614,7 @@ sh-select:focus {
 }
 
 .stat-block {
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -671,16 +625,16 @@ sh-select:focus {
 }
 
 .stat-block:nth-child(2) {
-    border-bottom: 8px solid var(--mat-primary-color);
+    border-bottom: 8px solid var(--theme-primary-color);
 }
 
 .stat-block:nth-child(3) {
-    border-bottom: 8px solid var(--mat-primary-color);
+    border-bottom: 8px solid var(--theme-primary-color);
 }
 
 .stat-block:last-child {
     border-right: none;
-    border-bottom: 8px solid var(--mat-text-primary-light);
+    border-bottom: 8px solid var(--theme-primary-light);
 }
 
 /* UNUSED COMPONENT CLASS: advance-search-filter - Auto-commented by script
@@ -710,13 +664,6 @@ sh-select:focus {
 }
 */
 
-/* UNUSED COMPONENT CLASS: modal-ledger - Auto-commented by script
-.modal-ledger {
-    width: 100%;
-    max-width: 1350px;
-}
-*/
-
 .justify-content-between {
     justify-content: space-between;
 }
@@ -733,7 +680,7 @@ sh-select:focus {
 /* UNUSED COMPONENT CLASS: clear-filter-btn - Auto-commented by script
 .clear-filter-btn {
     border-radius: var(--mat-border-radius-4);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     color: var(--color-dark-gray);
     font-size: var(--font-size-15);
     background-color: var(--color-white);
@@ -751,7 +698,6 @@ sh-select:focus {
 }
 
 .search-ledger-field {
-
     /* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
 /* UNUSED COMPONENT CLASS: btn-danger - Auto-commented by script
 .btn-danger,
@@ -767,7 +713,6 @@ sh-select:focus {
         margin-right: 8px !important;
     }
 */
-
 }
 
 .transaction-in-short {
@@ -805,21 +750,19 @@ sh-select:focus {
     box-sizing: content-box !important;
     color: var(--color-black) !important;
     text-align: center;
-    border: 1px solid var(--color-silver) !important;
+    border: 1px solid var(--border-color) !important;
 
     &:focus {
-        border-color: var(--mat-primary-color);
+        border-color: var(--theme-primary-color);
     }
 }
 
 .ipad-view-datepicker {
-    /* UNUSED COMPONENT CLASS: date-range-picker - Auto-commented by script
 .date-range-picker {
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         border-radius: var(--mat-border-radius-16);
         width: 203px !important;
     }
-*/
 }
 
 .download-invoice-ledger {
@@ -864,14 +807,14 @@ sh-select:focus {
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
-                border-bottom: 1px solid var(--color-silver);
+                border-bottom: 1px solid var(--border-color);
                 font-size: var(--font-size-15);
             }
 
             .second-row {
                 td {
                     &:first-child {
-                        border-right: 1px solid var(--color-silver);
+                        border-right: 1px solid var(--border-color);
                         width: 60%;
                     }
 
@@ -901,7 +844,7 @@ sh-select:focus {
     }
 
     .mat-grid-list {
-        border-top: 1px solid var(--color-silver);
+        border-top: 1px solid var(--border-color);
     }
 }
 
@@ -941,11 +884,11 @@ sh-select:focus {
 
             &:first-child {
                 padding-right: 15px;
-                border-left: 1px solid var(--color-silver);
+                border-left: 1px solid var(--border-color);
             }
 
             &:last-child {
-                border-right: 1px solid var(--color-silver);
+                border-right: 1px solid var(--border-color);
             }
         }
     }
@@ -978,7 +921,7 @@ sh-select:focus {
 
     /* UNUSED COMPONENT CLASS: transaction-table-row - Auto-commented by script
 .transaction-table-row table td {
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
     }
 */
 
@@ -1010,7 +953,7 @@ sh-select:focus {
 
 /* UNUSED COMPONENT CLASS: list-item - Auto-commented by script
 .list-item {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 */
 
@@ -1063,10 +1006,10 @@ sh-select:focus {
 input#ledger-search {
     padding-left: 27px !important;
     background-color: transparent !important;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 
     &:focus {
-        border: 1px solid var(--color-silver) !important;
+        border: 1px solid var(--border-color) !important;
     }
 
     // &::placeholder {
@@ -1096,11 +1039,6 @@ input#ledger-search {
 }
 
 /*responsive*/
-.modal-ledger {
-    width: 70%;
-    max-width: 100% !important;
-}
-
 .ledger-head {
     position: relative;
 }
@@ -1110,7 +1048,7 @@ input#ledger-search {
     top: 0px;
     z-index: 1;
     background-color: var(--color-white);
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 /* UNUSED COMPONENT CLASS: show-if-ledger-open - Auto-commented by script
@@ -1168,7 +1106,7 @@ input#ledger-search {
     .ledg-head .mat-grid-tile-content {
         color: var(--color-black);
     }
-/* UNUSED COMPONENT CLASS: mat-input-element - Auto-commented by script
+    /* UNUSED COMPONENT CLASS: mat-input-element - Auto-commented by script
     .ledg-head .ledger-row 
 .mat-input-element {
         color: var(--color-black) !important;
@@ -1185,25 +1123,7 @@ input#ledger-search {
 }
 */
 
-@media only screen and (max-width: 1540px) {
-    .modal-ledger {
-        width: 85%;
-    }
-}
-
 @media only screen and (max-width: 1366px) {
-    .modal-ledger {
-        width: 100%;
-        margin: 0 auto;
-        padding: 15px;
-    }
-
-    /* UNUSED COMPONENT CLASS: show-if-update-ledger-open - Auto-commented by script
-.show-if-update-ledger-open {
-        height: 230px;
-    }
-*/
-
     /* UNUSED COMPONENT CLASS: linked-entities - Auto-commented by script
 .linked-entities {
         max-width: 155px;
@@ -1409,7 +1329,7 @@ input#ledger-search {
 
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child,
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child {
-        border-left: 0px solid var(--color-silver) !important;
+        border-left: 0px solid var(--border-color) !important;
     }
 
     .ledg-head.some.transactions-page {
@@ -1468,7 +1388,7 @@ input#ledger-search {
             width: 36px;
             height: 36px;
             background-color: var(--color-white);
-            border: 1px solid var(--color-silver);
+            border: 1px solid var(--border-color);
             text-align: center;
             align-items: center;
             justify-content: center;
@@ -1587,7 +1507,7 @@ input#ledger-search {
 /* UNUSED COMPONENT CLASS: bank-menu - Auto-commented by script
 .bank-menu {
     padding: 3px !important;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     width: 36px;
     height: 36px;

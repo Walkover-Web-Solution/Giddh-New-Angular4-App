@@ -54,7 +54,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     color: var(--color-medium-gray);
     left: 0;
 }
@@ -80,7 +80,7 @@
     background-color: var(--color-white);
     margin-bottom: 15px;
     font-size: var(--font-size-15);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 
 .card-basic-details span:nth-child(2) {
@@ -121,12 +121,12 @@
 
 .card-basic-details {
     padding: 20px;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 /* UNUSED COMPONENT CLASS: branch-sales-details - Auto-commented by script
 .branch-sales-details {
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
     padding-top: 20px;
 
     label {
@@ -218,7 +218,7 @@
 .clear-filter-btn {
         color: var(--text-primary-color);
         font-size: var(--font-size-15);
-        border: 1px solid var(--mat-primary-color);
+        border: 1px solid var(--theme-primary-color);
         border-radius: var(--mat-border-radius-16);
         padding: 0 12px;
         width: 150px !important;
@@ -300,7 +300,7 @@
         &:before {
             content: "\2605";
             position: absolute;
-            border-color: var(--mat-primary-color);
+            border-color: var(--theme-primary-color);
             color: var(--text-primary-color);
         }
     }

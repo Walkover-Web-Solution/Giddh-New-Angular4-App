@@ -30,7 +30,7 @@
 }
 
 #single-role td {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 #single-role thead th {
@@ -43,7 +43,7 @@
 #single-role thead th:first-child {
     color: var(--color-dark-gray);
     text-align: left;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 }
 
 #single-role tbody tr td:first-child input[type="checkbox"]:checked:after {
@@ -73,7 +73,7 @@
 
 .new-col {
     background: var(--color-light-gray);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 
 .role-head {
@@ -131,7 +131,7 @@
 
 #single-role tbody tr td:nth-child(1n + 2) input[type="checkbox"]:checked:after {
     background: var(--color-light-gray);
-    border-color: var(--color-light-gray);
+    border-color: var(--border-color);
     content: "";
 }
 
@@ -149,7 +149,7 @@
     content: "\f00d";
     font-family: FontAwesome;
     background: var(--color-light-gray);
-    border-color: var(--color-light-gray);
+    border-color: var(--border-color);
 }
 .role-head .vertical-center {
     max-width: 100%;

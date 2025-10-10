@@ -44,3 +44,6 @@
 
 // Generate overflow utility classes
 @include overflow-utilities();
+
+// Generate absolute positioning utility classes
+@include absolute-positioning-utilities();

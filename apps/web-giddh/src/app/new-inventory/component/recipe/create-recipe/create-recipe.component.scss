@@ -46,7 +46,7 @@
         }
 */
         .manufacturing-border {
-            border-bottom: 1px solid var(--color-silver);
+            border-bottom: 1px solid var(--border-color);
         }
         .section-head {
             font-size: var(--font-size-16);
@@ -94,7 +94,7 @@
                     }
                 }
                 thead {
-                    border-bottom: 1px solid var(--color-silver);
+                    border-bottom: 1px solid var(--border-color);
                     tr {
                         th {
                             color: var(--text-primary-color);
@@ -117,8 +117,8 @@
                     }
                 }
                 tfoot {
-                    border-top: 1px solid var(--color-silver);
-                    border-bottom: 1px solid var(--color-silver);
+                    border-top: 1px solid var(--border-color);
+                    border-bottom: 1px solid var(--border-color);
                     tr {
                         td {
                             color: var(--color-black);
@@ -202,7 +202,7 @@
 */
         .add-recipe {
             color: var(--text-primary-color);
-            border-bottom: 1px solid var(--color-silver);
+            border-bottom: 1px solid var(--border-color);
             button {
                 span {
                     font-size: var(--font-size-24);
@@ -248,7 +248,7 @@
     width: 35px;
     border-radius: var(--mat-border-radius-4);
     color: var(--color-dark-gray);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background-color: var(--color-transparent);
     margin-left: 15px;
 }

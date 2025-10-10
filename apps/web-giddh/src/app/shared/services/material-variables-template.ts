@@ -56,7 +56,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     html {
         /* default/primary color */
-        --mat-badge-background-color: var(--mat-primary-color);
+        --mat-badge-background-color: var(--theme-primary-color);
         --mat-badge-text-color: var(--mat-primary-contrast-color);
         --mat-badge-disabled-state-background-color: var(--mat-disabled-background-color);
         --mat-badge-disabled-state-text-color: var(--mat-disabled-color);
@@ -71,13 +71,13 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-badge-accent {
         /* accent color */
-        --mat-badge-background-color: var(--mat-accent-color);
+        --mat-badge-background-color: var(--theme-accent-color);
         --mat-badge-text-color: var(--mat-accent-contrast-color);
     }
 
     .mat-badge-warn {
         /* warn color */
-        --mat-badge-background-color: var(--mat-warn-color);
+        --mat-badge-background-color: var(--theme-warn-color);
         --mat-badge-text-color: var(--mat-warn-contrast-color);
     }
 
@@ -121,22 +121,22 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-button.mat-primary {
         /* primary color */
-        --mdc-text-button-label-text-color: var(--mat-primary-color);
-        --mat-text-button-state-layer-color: var(--mat-primary-color);
+        --mdc-text-button-label-text-color: var(--theme-primary-color);
+        --mat-text-button-state-layer-color: var(--theme-primary-color);
         --mat-text-button-ripple-color: rgba(var(--mat-text-primary-rgb), var(--mat-hover-opacity));
     }
 
     .mat-mdc-button.mat-accent {
         /* accent color */
-        --mdc-text-button-label-text-color: var(--mat-accent-color);
-        --mat-text-button-state-layer-color: var(--mat-accent-color);
+        --mdc-text-button-label-text-color: var(--theme-accent-color);
+        --mat-text-button-state-layer-color: var(--theme-accent-color);
         --mat-text-button-ripple-color: rgba(var(--mat-accent-color-rgb), var(--mat-hover-opacity));
     }
 
     .mat-mdc-button.mat-warn {
         /* warn color */
-        --mdc-text-button-label-text-color: var(--mat-warn-color);
-        --mat-text-button-state-layer-color: var(--mat-warn-color);
+        --mdc-text-button-label-text-color: var(--theme-warn-color);
+        --mat-text-button-state-layer-color: var(--theme-warn-color);
         --mat-text-button-ripple-color: rgba(var(--mat-warn-color-rgb), var(--mat-hover-opacity));
     }
 
@@ -168,7 +168,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-unelevated-button.mat-primary {
         /* primary color */
-        --mdc-filled-button-container-color: var(--mat-primary-color);
+        --mdc-filled-button-container-color: var(--theme-primary-color);
         --mdc-filled-button-label-text-color: var(--mat-primary-contrast-color);
         --mat-filled-button-state-layer-color: var(--mat-primary-contrast-color);
         --mat-filled-button-ripple-color: rgba(var(--mat-primary-contrast-color), var(--mat-hover-opacity));
@@ -176,7 +176,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-unelevated-button.mat-accent {
         /* accent color */
-        --mdc-filled-button-container-color: var(--mat-accent-color);
+        --mdc-filled-button-container-color: var(--theme-accent-color);
         --mdc-filled-button-label-text-color: var(--mat-accent-contrast-color);
         --mat-filled-button-state-layer-color: var(--mat-accent-contrast-color);
         --mat-filled-button-ripple-color: rgba(var(--mat-accent-contrast-color), var(--mat-hover-opacity));
@@ -184,7 +184,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-unelevated-button.mat-warn {
         /* warn color */
-        --mdc-filled-button-container-color: var(--mat-warn-color);
+        --mdc-filled-button-container-color: var(--theme-warn-color);
         --mdc-filled-button-label-text-color: var(--mat-warn-contrast-color);
         --mat-filled-button-state-layer-color: var(--mat-warn-contrast-color);
         --mat-filled-button-ripple-color: rgba(var(--mat-warn-contrast-color), var(--mat-hover-opacity));
@@ -219,7 +219,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-raised-button.mat-primary {
         /* primary color */
-        --mdc-protected-button-container-color: var(--mat-primary-color);
+        --mdc-protected-button-container-color: var(--theme-primary-color);
         --mdc-protected-button-label-text-color: var(--mat-primary-contrast-color);
         --mat-protected-button-state-layer-color: var(--mat-primary-contrast-color);
         --mat-protected-button-ripple-color: rgba(var(--mat-primary-contrast-color), var(--mat-hover-opacity));
@@ -227,7 +227,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-raised-button.mat-accent {
         /* accent color */
-        --mdc-protected-button-container-color: var(--mat-accent-color);
+        --mdc-protected-button-container-color: var(--theme-accent-color);
         --mdc-protected-button-label-text-color: var(--mat-accent-contrast-color);
         --mat-protected-button-state-layer-color: var(--mat-accent-contrast-color);
         --mat-protected-button-ripple-color: rgba(var(--mat-accent-contrast-color), var(--mat-hover-opacity));
@@ -235,7 +235,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-raised-button.mat-warn {
         /* warn color */
-        --mdc-protected-button-container-color: var(--mat-warn-color);
+        --mdc-protected-button-container-color: var(--theme-warn-color);
         --mdc-protected-button-label-text-color: var(--mat-warn-contrast-color);
         --mat-protected-button-state-layer-color: var(--mat-warn-contrast-color);
         --mat-protected-button-ripple-color: rgba(var(--mat-warn-contrast-color), var(--mat-hover-opacity));
@@ -269,25 +269,25 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-outlined-button.mat-primary {
         /* primary color */
-        --mdc-outlined-button-label-text-color: var(--mat-primary-color);
+        --mdc-outlined-button-label-text-color: var(--theme-primary-color);
         --mdc-outlined-button-outline-color: rgba(var(--mat-text-color), 0.12);
-        --mat-outlined-button-state-layer-color: var(--mat-primary-color);
+        --mat-outlined-button-state-layer-color: var(--theme-primary-color);
         --mat-outlined-button-ripple-color: rgba(var(--mat-text-primary-rgb), var(--mat-hover-opacity));
     }
 
     .mat-mdc-outlined-button.mat-accent {
         /* accent color */
-        --mdc-outlined-button-label-text-color: var(--mat-accent-color);
+        --mdc-outlined-button-label-text-color: var(--theme-accent-color);
         --mdc-outlined-button-outline-color: rgba(var(--mat-text-color), 0.12);
-        --mat-outlined-button-state-layer-color: var(--mat-accent-color);
+        --mat-outlined-button-state-layer-color: var(--theme-accent-color);
         --mat-outlined-button-ripple-color: rgba(var(--mat-accent-color-rgb), var(--mat-hover-opacity));
     }
 
     .mat-mdc-outlined-button.mat-warn {
         /* warn color */
-        --mdc-outlined-button-label-text-color: var(--mat-warn-color);
+        --mdc-outlined-button-label-text-color: var(--theme-warn-color);
         --mdc-outlined-button-outline-color: rgba(var(--mat-text-color), 0.12);
-        --mat-outlined-button-state-layer-color: var(--mat-warn-color);
+        --mat-outlined-button-state-layer-color: var(--theme-warn-color);
         --mat-outlined-button-ripple-color: rgba(var(--mat-warn-color-rgb), var(--mat-hover-opacity));
     }
 
@@ -306,22 +306,22 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-icon-button.mat-primary {
         /* primary color */
-        --mdc-icon-button-icon-color: var(--mat-primary-color);
-        --mat-icon-button-state-layer-color: var(--mat-primary-color);
+        --mdc-icon-button-icon-color: var(--theme-primary-color);
+        --mat-icon-button-state-layer-color: var(--theme-primary-color);
         --mat-icon-button-ripple-color: rgba(var(--mat-text-primary-rgb), var(--mat-hover-opacity));
     }
 
     .mat-mdc-icon-button.mat-accent {
         /* accent color */
-        --mdc-icon-button-icon-color: var(--mat-accent-color);
-        --mat-icon-button-state-layer-color: var(--mat-accent-color);
+        --mdc-icon-button-icon-color: var(--theme-accent-color);
+        --mat-icon-button-state-layer-color: var(--theme-accent-color);
         --mat-icon-button-ripple-color: rgba(var(--mat-accent-color-rgb), var(--mat-hover-opacity));
     }
 
     .mat-mdc-icon-button.mat-warn {
         /* warn color */
-        --mdc-icon-button-icon-color: var(--mat-warn-color);
-        --mat-icon-button-state-layer-color: var(--mat-warn-color);
+        --mdc-icon-button-icon-color: var(--theme-warn-color);
+        --mat-icon-button-state-layer-color: var(--theme-warn-color);
         --mat-icon-button-ripple-color: rgba(var(--mat-warn-color-rgb), var(--mat-hover-opacity));
     }
 
@@ -355,7 +355,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     html .mat-mdc-fab.mat-primary,
     html .mat-mdc-mini-fab.mat-primary {
         /* primary color */
-        --mdc-fab-container-color: var(--mat-primary-color);
+        --mdc-fab-container-color: var(--theme-primary-color);
         --mat-fab-foreground-color: var(--mat-primary-contrast-color);
         --mat-fab-state-layer-color: var(--mat-primary-contrast-color);
         --mat-fab-ripple-color: rgba(var(--mat-primary-contrast-color-rgb), var(--mat-hover-opacity));
@@ -364,7 +364,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     html .mat-mdc-fab.mat-accent,
     html .mat-mdc-mini-fab.mat-accent {
         /* accent color */
-        --mdc-fab-container-color: var(--mat-accent-color);
+        --mdc-fab-container-color: var(--theme-accent-color);
         --mat-fab-foreground-color: var(--mat-accent-contrast-color);
         --mat-fab-state-layer-color: var(--mat-accent-contrast-color);
         --mat-fab-ripple-color: rgba(var(--mat-accent-contrast-color-rgb), var(--mat-hover-opacity));
@@ -373,7 +373,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     html .mat-mdc-fab.mat-warn,
     html .mat-mdc-mini-fab.mat-warn {
         /* warn color */
-        --mdc-fab-container-color: var(--mat-warn-color);
+        --mdc-fab-container-color: var(--theme-warn-color);
         --mat-fab-foreground-color: var(--mat-warn-contrast-color);
         --mat-fab-state-layer-color: var(--mat-warn-contrast-color);
         --mat-fab-ripple-color: rgba(var(--mat-warn-contrast-color-rgb), var(--mat-hover-opacity));
@@ -468,17 +468,17 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-checkbox-disabled-selected-icon-color: var(--mat-disabled-color);
         --mdc-checkbox-disabled-unselected-icon-color: var(--mat-disabled-color);
         --mdc-checkbox-selected-checkmark-color: var(--mat-accent-contrast-color);
-        --mdc-checkbox-selected-focus-icon-color: var(--mat-accent-color);
-        --mdc-checkbox-selected-hover-icon-color: var(--mat-accent-color);
-        --mdc-checkbox-selected-icon-color: var(--mat-accent-color);
-        --mdc-checkbox-selected-pressed-icon-color: var(--mat-accent-color);
+        --mdc-checkbox-selected-focus-icon-color: var(--theme-accent-color);
+        --mdc-checkbox-selected-hover-icon-color: var(--theme-accent-color);
+        --mdc-checkbox-selected-icon-color: var(--theme-accent-color);
+        --mdc-checkbox-selected-pressed-icon-color: var(--theme-accent-color);
         --mdc-checkbox-unselected-focus-icon-color: var(--mat-text-color);
         --mdc-checkbox-unselected-hover-icon-color: var(--mat-text-color);
         --mdc-checkbox-unselected-icon-color: rgba(var(--mat-text-color-rgb), 0.54);
         --mdc-checkbox-unselected-pressed-icon-color: rgba(var(--mat-text-color-rgb), 0.54);
-        --mdc-checkbox-selected-focus-state-layer-color: var(--mat-accent-color);
-        --mdc-checkbox-selected-hover-state-layer-color: var(--mat-accent-color);
-        --mdc-checkbox-selected-pressed-state-layer-color: var(--mat-accent-color);
+        --mdc-checkbox-selected-focus-state-layer-color: var(--theme-accent-color);
+        --mdc-checkbox-selected-hover-state-layer-color: var(--theme-accent-color);
+        --mdc-checkbox-selected-pressed-state-layer-color: var(--theme-accent-color);
         --mdc-checkbox-unselected-focus-state-layer-color: var(--mat-text-color);
         --mdc-checkbox-unselected-hover-state-layer-color: var(--mat-text-color);
         --mdc-checkbox-unselected-pressed-state-layer-color: var(--mat-text-color);
@@ -489,17 +489,17 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-checkbox-disabled-selected-icon-color: var(--mat-disabled-color);
         --mdc-checkbox-disabled-unselected-icon-color: var(--mat-disabled-color);
         --mdc-checkbox-selected-checkmark-color: var(--mat-primary-contrast-color);
-        --mdc-checkbox-selected-focus-icon-color: var(--mat-primary-color);
-        --mdc-checkbox-selected-hover-icon-color: var(--mat-primary-color);
-        --mdc-checkbox-selected-icon-color: var(--mat-primary-color);
-        --mdc-checkbox-selected-pressed-icon-color: var(--mat-primary-color);
+        --mdc-checkbox-selected-focus-icon-color: var(--theme-primary-color);
+        --mdc-checkbox-selected-hover-icon-color: var(--theme-primary-color);
+        --mdc-checkbox-selected-icon-color: var(--theme-primary-color);
+        --mdc-checkbox-selected-pressed-icon-color: var(--theme-primary-color);
         --mdc-checkbox-unselected-focus-icon-color: var(--mat-text-color);
         --mdc-checkbox-unselected-hover-icon-color: var(--mat-text-color);
         --mdc-checkbox-unselected-icon-color: rgba(var(--mat-text-color), 0.54);
         --mdc-checkbox-unselected-pressed-icon-color: rgba(var(--mat-text-color), 0.54);
-        --mdc-checkbox-selected-focus-state-layer-color: var(--mat-primary-color);
-        --mdc-checkbox-selected-hover-state-layer-color: var(--mat-primary-color);
-        --mdc-checkbox-selected-pressed-state-layer-color: var(--mat-primary-color);
+        --mdc-checkbox-selected-focus-state-layer-color: var(--theme-primary-color);
+        --mdc-checkbox-selected-hover-state-layer-color: var(--theme-primary-color);
+        --mdc-checkbox-selected-pressed-state-layer-color: var(--theme-primary-color);
         --mdc-checkbox-unselected-focus-state-layer-color: var(--mat-text-color);
         --mdc-checkbox-unselected-hover-state-layer-color: var(--mat-text-color);
         --mdc-checkbox-unselected-pressed-state-layer-color: var(--mat-text-color);
@@ -510,17 +510,17 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-checkbox-disabled-selected-icon-color: var(--mat-disabled-color);
         --mdc-checkbox-disabled-unselected-icon-color: var(--mat-disabled-color);
         --mdc-checkbox-selected-checkmark-color: var(--mat-warn-contrast-color);
-        --mdc-checkbox-selected-focus-icon-color: var(--mat-warn-color);
-        --mdc-checkbox-selected-hover-icon-color: var(--mat-warn-color);
-        --mdc-checkbox-selected-icon-color: var(--mat-warn-color);
-        --mdc-checkbox-selected-pressed-icon-color: var(--mat-warn-color);
+        --mdc-checkbox-selected-focus-icon-color: var(--theme-warn-color);
+        --mdc-checkbox-selected-hover-icon-color: var(--theme-warn-color);
+        --mdc-checkbox-selected-icon-color: var(--theme-warn-color);
+        --mdc-checkbox-selected-pressed-icon-color: var(--theme-warn-color);
         --mdc-checkbox-unselected-focus-icon-color: var(--mat-text-color);
         --mdc-checkbox-unselected-hover-icon-color: var(--mat-text-color);
         --mdc-checkbox-unselected-icon-color: rgba(var(--mat-text-color-rgb), 0.54);
         --mdc-checkbox-unselected-pressed-icon-color: rgba(var(--mat-text-color-rgb), 0.54);
-        --mdc-checkbox-selected-focus-state-layer-color: var(--mat-warn-color);
-        --mdc-checkbox-selected-hover-state-layer-color: var(--mat-warn-color);
-        --mdc-checkbox-selected-pressed-state-layer-color: var(--mat-warn-color);
+        --mdc-checkbox-selected-focus-state-layer-color: var(--theme-warn-color);
+        --mdc-checkbox-selected-hover-state-layer-color: var(--theme-warn-color);
+        --mdc-checkbox-selected-pressed-state-layer-color: var(--theme-warn-color);
         --mdc-checkbox-unselected-focus-state-layer-color: var(--mat-text-color);
         --mdc-checkbox-unselected-hover-state-layer-color: var(--mat-text-color);
         --mdc-checkbox-unselected-pressed-state-layer-color: var(--mat-text-color);
@@ -553,8 +553,8 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     .mat-mdc-standard-chip.mat-mdc-chip-highlighted.mat-primary {
         /* primary color */
         --mdc-chip-disabled-label-text-color: var(--mat-primary-contrast-color);
-        --mdc-chip-elevated-container-color: var(--mat-primary-color);
-        --mdc-chip-elevated-disabled-container-color: var(--mat-primary-color);
+        --mdc-chip-elevated-container-color: var(--theme-primary-color);
+        --mdc-chip-elevated-disabled-container-color: var(--theme-primary-color);
         --mdc-chip-focus-state-layer-color: var(--mat-primary-contrast-color);
         --mdc-chip-focus-state-layer-opacity: var(--mat-focus-opacity);
         --mdc-chip-label-text-color: var(--mat-primary-contrast-color);
@@ -608,12 +608,12 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     html {
         /* default/primary color */
         --mat-datepicker-calendar-date-selected-state-text-color: var(--mat-primary-contrast-color);
-        --mat-datepicker-calendar-date-selected-state-background-color: var(--mat-primary-color);
+        --mat-datepicker-calendar-date-selected-state-background-color: var(--theme-primary-color);
         --mat-datepicker-calendar-date-selected-disabled-state-background-color: rgba(var(--mat-text-primary-rgb), 0.4);
         --mat-datepicker-calendar-date-today-selected-state-outline-color: var(--mat-primary-contrast-color);
         --mat-datepicker-calendar-date-focus-state-background-color: rgba(var(--mat-text-primary-rgb), 0.3);
         --mat-datepicker-calendar-date-hover-state-background-color: rgba(var(--mat-text-primary-rgb), 0.3);
-        --mat-datepicker-toggle-active-state-icon-color: var(--mat-accent-color);
+        --mat-datepicker-toggle-active-state-icon-color: var(--theme-accent-color);
         --mat-datepicker-calendar-date-in-range-state-background-color: rgba(var(--mat-accent-color-rgb), 0.2);
         --mat-datepicker-calendar-date-in-comparison-range-state-background-color: rgba(var(--mat-warn-color-rgb), 0.2);
         --mat-datepicker-calendar-date-in-overlap-range-state-background-color: rgba(var(--mat-success-color-rgb), 0.3);
@@ -651,7 +651,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     .mat-datepicker-content.mat-accent {
         /* accent color */
         --mat-datepicker-calendar-date-selected-state-text-color: var(--mat-accent-contrast-color);
-        --mat-datepicker-calendar-date-selected-state-background-color: var(--mat-accent-color);
+        --mat-datepicker-calendar-date-selected-state-background-color: var(--theme-accent-color);
         --mat-datepicker-calendar-date-selected-disabled-state-background-color: rgba(var(--mat-accent-color-rgb), 0.4);
         --mat-datepicker-calendar-date-today-selected-state-outline-color: var(--mat-accent-contrast-color);
         --mat-datepicker-calendar-date-focus-state-background-color: rgba(var(--mat-accent-color-rgb), 0.3);
@@ -665,12 +665,12 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     .mat-datepicker-content.mat-warn {
         /* warn color */
         --mat-datepicker-calendar-date-selected-state-text-color: var(--mat-warn-contrast-color);
-        --mat-datepicker-calendar-date-selected-state-background-color: var(--mat-warn-color);
+        --mat-datepicker-calendar-date-selected-state-background-color: var(--theme-warn-color);
         --mat-datepicker-calendar-date-selected-disabled-state-background-color: rgba(var(--mat-warn-color-rgb), 0.4);
         --mat-datepicker-calendar-date-today-selected-state-outline-color: var(--mat-warn-contrast-color);
         --mat-datepicker-calendar-date-focus-state-background-color: rgba(var(--mat-warn-color-rgb), 0.3);
         --mat-datepicker-calendar-date-hover-state-background-color: rgba(var(--mat-warn-color-rgb), 0.3);
-        --mat-datepicker-toggle-active-state-icon-color: var(--mat-warn-color);
+        --mat-datepicker-toggle-active-state-icon-color: var(--theme-warn-color);
         --mat-datepicker-calendar-date-in-range-state-background-color: rgba(var(--mat-warn-color-rgb), 0.2);
         --mat-datepicker-calendar-date-in-overlap-range-state-background-color: rgba(var(--mat-success-color-rgb), 0.3);
         --mat-datepicker-calendar-date-in-overlap-range-selected-state-background-color: var(--mat-success-color);
@@ -678,12 +678,12 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-datepicker-toggle-active.mat-accent {
         /* accent color */
-        --mat-datepicker-toggle-active-state-icon-color: var(--mat-accent-color);
+        --mat-datepicker-toggle-active-state-icon-color: var(--theme-accent-color);
     }
 
     .mat-datepicker-toggle-active.mat-warn {
         /* warn color */
-        --mat-datepicker-toggle-active-state-icon-color: var(--mat-warn-color);
+        --mat-datepicker-toggle-active-state-icon-color: var(--theme-warn-color);
     }
 
     .mat-calendar-controls .mat-mdc-icon-button.mat-mdc-button-base {
@@ -747,10 +747,10 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     html {
         /* default/primary color */
-        --mat-form-field-focus-select-arrow-color: var(--mat-primary-color);
+        --mat-form-field-focus-select-arrow-color: var(--theme-primary-color);
         --mat-form-field-disabled-input-text-placeholder-color: var(--mat-disabled-color);
         --mat-form-field-state-layer-color: var(--mat-text-color);
-        --mat-form-field-error-text-color: var(--mat-warn-color);
+        --mat-form-field-error-text-color: var(--theme-warn-color);
         --mat-form-field-select-option-text-color: var(--mat-text-color);
         --mat-form-field-select-disabled-option-text-color: var(--mat-disabled-color);
         --mat-form-field-enabled-select-arrow-color: rgba(var(--mat-text-color), 0.54);
@@ -782,12 +782,12 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-form-field.mat-accent {
         /* accent color */
-        --mat-form-field-focus-select-arrow-color: var(--mat-accent-color);
+        --mat-form-field-focus-select-arrow-color: var(--theme-accent-color);
     }
 
     .mat-mdc-form-field.mat-warn {
         /* warn color */
-        --mat-form-field-focus-select-arrow-color: var(--mat-warn-color);
+        --mat-form-field-focus-select-arrow-color: var(--theme-warn-color);
     }
 
     html {
@@ -797,9 +797,9 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-filled-text-field-container-shape: var(--border-radius-4);
 
         /* primary/default color */
-        --mdc-filled-text-field-caret-color: var(--mat-primary-color);
-        --mdc-filled-text-field-focus-active-indicator-color: var(--mat-primary-color);
-        --mdc-filled-text-field-focus-label-text-color: var(--mat-primary-color);
+        --mdc-filled-text-field-caret-color: var(--theme-primary-color);
+        --mdc-filled-text-field-focus-active-indicator-color: var(--theme-primary-color);
+        --mdc-filled-text-field-focus-label-text-color: var(--theme-primary-color);
         --mdc-filled-text-field-container-color: var(--mat-form-field-background-color);
         --mdc-filled-text-field-disabled-container-color: var(--mat-form-field-disabled-background-color);
         --mdc-filled-text-field-label-text-color: rgba(var(--mat-text-color), 0.6);
@@ -807,15 +807,15 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-filled-text-field-input-text-color: var(--mat-text-color);
         --mdc-filled-text-field-disabled-input-text-color: var(--mat-disabled-color);
         --mdc-filled-text-field-input-text-placeholder-color: rgba(var(--mat-text-color), 0.6);
-        --mdc-filled-text-field-error-focus-label-text-color: var(--mat-warn-color);
-        --mdc-filled-text-field-error-label-text-color: var(--mat-warn-color);
-        --mdc-filled-text-field-error-caret-color: var(--mat-warn-color);
+        --mdc-filled-text-field-error-focus-label-text-color: var(--theme-warn-color);
+        --mdc-filled-text-field-error-label-text-color: var(--theme-warn-color);
+        --mdc-filled-text-field-error-caret-color: var(--theme-warn-color);
         --mdc-filled-text-field-active-indicator-color: rgba(var(--mat-text-color), 0.42);
         --mdc-filled-text-field-disabled-active-indicator-color: rgba(var(--mat-text-color), 0.06);
         --mdc-filled-text-field-hover-active-indicator-color: var(--mat-text-color);
-        --mdc-filled-text-field-error-active-indicator-color: var(--mat-warn-color);
-        --mdc-filled-text-field-error-focus-active-indicator-color: var(--mat-warn-color);
-        --mdc-filled-text-field-error-hover-active-indicator-color: var(--mat-warn-color);
+        --mdc-filled-text-field-error-active-indicator-color: var(--theme-warn-color);
+        --mdc-filled-text-field-error-focus-active-indicator-color: var(--theme-warn-color);
+        --mdc-filled-text-field-error-hover-active-indicator-color: var(--theme-warn-color);
 
         /* typography */
         --mdc-filled-text-field-label-text-font: var(--font-family);
@@ -826,16 +826,16 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-form-field.mat-accent {
         /* accent color */
-        --mdc-filled-text-field-caret-color: var(--mat-accent-color);
-        --mdc-filled-text-field-focus-active-indicator-color: var(--mat-accent-color);
-        --mdc-filled-text-field-focus-label-text-color: var(--mat-accent-color);
+        --mdc-filled-text-field-caret-color: var(--theme-accent-color);
+        --mdc-filled-text-field-focus-active-indicator-color: var(--theme-accent-color);
+        --mdc-filled-text-field-focus-label-text-color: var(--theme-accent-color);
     }
 
     .mat-mdc-form-field.mat-warn {
         /* warn color */
-        --mdc-filled-text-field-caret-color: var(--mat-warn-color);
-        --mdc-filled-text-field-focus-active-indicator-color: var(--mat-warn-color);
-        --mdc-filled-text-field-focus-label-text-color: var(--mat-warn-color);
+        --mdc-filled-text-field-caret-color: var(--theme-warn-color);
+        --mdc-filled-text-field-focus-active-indicator-color: var(--theme-warn-color);
+        --mdc-filled-text-field-focus-label-text-color: var(--theme-warn-color);
     }
 
     html {
@@ -847,23 +847,23 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-outlined-text-field-container-shape: var(--border-radius-4);
 
         /* primary/default color */
-        --mdc-outlined-text-field-caret-color: var(--mat-primary-color);
-        --mdc-outlined-text-field-focus-outline-color: var(--mat-primary-color);
-        --mdc-outlined-text-field-focus-label-text-color: var(--mat-primary-color);
+        --mdc-outlined-text-field-caret-color: var(--theme-primary-color);
+        --mdc-outlined-text-field-focus-outline-color: var(--theme-primary-color);
+        --mdc-outlined-text-field-focus-label-text-color: var(--theme-primary-color);
         --mdc-outlined-text-field-label-text-color: rgba(var(--mat-text-color), 0.6);
         --mdc-outlined-text-field-disabled-label-text-color: var(--mat-disabled-color);
         --mdc-outlined-text-field-input-text-color: var(--mat-text-color);
         --mdc-outlined-text-field-disabled-input-text-color: var(--mat-disabled-color);
         --mdc-outlined-text-field-input-text-placeholder-color: rgba(var(--mat-text-color), 0.6);
-        --mdc-outlined-text-field-error-caret-color: var(--mat-warn-color);
-        --mdc-outlined-text-field-error-focus-label-text-color: var(--mat-warn-color);
-        --mdc-outlined-text-field-error-label-text-color: var(--mat-warn-color);
+        --mdc-outlined-text-field-error-caret-color: var(--theme-warn-color);
+        --mdc-outlined-text-field-error-focus-label-text-color: var(--theme-warn-color);
+        --mdc-outlined-text-field-error-label-text-color: var(--theme-warn-color);
         --mdc-outlined-text-field-outline-color: rgba(var(--mat-text-color), 0.38);
         --mdc-outlined-text-field-disabled-outline-color: rgba(var(--mat-text-color), 0.06);
         --mdc-outlined-text-field-hover-outline-color: var(--mat-text-color);
-        --mdc-outlined-text-field-error-focus-outline-color: var(--mat-warn-color);
-        --mdc-outlined-text-field-error-hover-outline-color: var(--mat-warn-color);
-        --mdc-outlined-text-field-error-outline-color: var(--mat-warn-color);
+        --mdc-outlined-text-field-error-focus-outline-color: var(--theme-warn-color);
+        --mdc-outlined-text-field-error-hover-outline-color: var(--theme-warn-color);
+        --mdc-outlined-text-field-error-outline-color: var(--theme-warn-color);
 
         /* typography */
         --mdc-outlined-text-field-label-text-font: var(--font-family);
@@ -874,16 +874,16 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-form-field.mat-accent {
         /* accent color */
-        --mdc-outlined-text-field-caret-color: var(--mat-accent-color);
-        --mdc-outlined-text-field-focus-outline-color: var(--mat-accent-color);
-        --mdc-outlined-text-field-focus-label-text-color: var(--mat-accent-color);
+        --mdc-outlined-text-field-caret-color: var(--theme-accent-color);
+        --mdc-outlined-text-field-focus-outline-color: var(--theme-accent-color);
+        --mdc-outlined-text-field-focus-label-text-color: var(--theme-accent-color);
     }
 
     .mat-mdc-form-field.mat-warn {
         /* warn color */
-        --mdc-outlined-text-field-caret-color: var(--mat-warn-color);
-        --mdc-outlined-text-field-focus-outline-color: var(--mat-warn-color);
-        --mdc-outlined-text-field-focus-label-text-color: var(--mat-warn-color);
+        --mdc-outlined-text-field-caret-color: var(--theme-warn-color);
+        --mdc-outlined-text-field-focus-outline-color: var(--theme-warn-color);
+        --mdc-outlined-text-field-focus-label-text-color: var(--theme-warn-color);
     }
 
     html {
@@ -895,15 +895,15 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     }
 
     .mat-icon.mat-primary {
-        --mat-icon-color: var(--mat-primary-color);
+        --mat-icon-color: var(--theme-primary-color);
     }
 
     .mat-icon.mat-accent {
-        --mat-icon-color: var(--mat-accent-color);
+        --mat-icon-color: var(--theme-accent-color);
     }
 
     .mat-icon.mat-warn {
-        --mat-icon-color: var(--mat-warn-color);
+        --mat-icon-color: var(--theme-warn-color);
     }
 
     html {
@@ -931,7 +931,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         /* colors */
         --mdc-list-list-item-trailing-supporting-text-color: rgba(var(--mat-text-color), 0.54);
         --mdc-list-list-item-trailing-icon-color: rgba(var(--mat-text-color), 0.54);
-        --mdc-list-list-item-selected-trailing-icon-color: var(--mat-primary-color);
+        --mdc-list-list-item-selected-trailing-icon-color: var(--theme-primary-color);
         --mdc-list-list-item-disabled-state-layer-color: var(--mat-transparent-color);
         --mdc-list-list-item-disabled-state-layer-opacity: 0;
         --mdc-list-list-item-disabled-label-text-opacity: var(--mat-disabled-opacity);
@@ -1008,44 +1008,44 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-progress-bar {
         /* default/primary color */
-        --mdc-linear-progress-active-indicator-color: var(--mat-primary-color);
+        --mdc-linear-progress-active-indicator-color: var(--theme-primary-color);
         --mdc-linear-progress-track-color: rgba(var(--mat-text-primary-rgb), 0.25);
     }
 
     .mat-mdc-progress-bar.mat-accent {
         /* accent color */
-        --mdc-linear-progress-active-indicator-color: var(--mat-accent-color);
+        --mdc-linear-progress-active-indicator-color: var(--theme-accent-color);
         --mdc-linear-progress-track-color: rgba(var(--mat-accent-color-rgb), 0.25);
     }
 
     .mat-mdc-progress-bar.mat-warn {
         /* warn color */
-        --mdc-linear-progress-active-indicator-color: var(--mat-warn-color);
+        --mdc-linear-progress-active-indicator-color: var(--theme-warn-color);
         --mdc-linear-progress-track-color: rgba(var(--mat-warn-color-rgb), 0.25);
     }
 
     html {
         --mdc-circular-progress-active-indicator-width: 4px;
         --mdc-circular-progress-size: 48px;
-        --mdc-circular-progress-active-indicator-color: var(--mat-primary-color);
+        --mdc-circular-progress-active-indicator-color: var(--theme-primary-color);
     }
 
     .mat-mdc-progress-spinner.mat-accent {
-        --mdc-circular-progress-active-indicator-color: var(--mat-accent-color);
+        --mdc-circular-progress-active-indicator-color: var(--theme-accent-color);
     }
 
     .mat-mdc-progress-spinner.mat-warn {
-        --mdc-circular-progress-active-indicator-color: var(--mat-warn-color);
+        --mdc-circular-progress-active-indicator-color: var(--theme-warn-color);
     }
 
     .mat-primary {
-        --mat-full-pseudo-checkbox-selected-icon-color: var(--mat-primary-color);
+        --mat-full-pseudo-checkbox-selected-icon-color: var(--theme-primary-color);
         --mat-full-pseudo-checkbox-selected-checkmark-color: var(--mat-background-color);
         --mat-full-pseudo-checkbox-unselected-icon-color: rgba(var(--mat-text-color), 0.7);
         --mat-full-pseudo-checkbox-disabled-selected-checkmark-color: var(--mat-background-color);
         --mat-full-pseudo-checkbox-disabled-unselected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mat-full-pseudo-checkbox-disabled-selected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
-        --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--mat-primary-color);
+        --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--theme-primary-color);
         --mat-minimal-pseudo-checkbox-disabled-selected-checkmark-color: rgba(
             var(--mat-text-color),
             var(--mat-disabled-opacity)
@@ -1053,13 +1053,13 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     }
 
     .mat-accent {
-        --mat-full-pseudo-checkbox-selected-icon-color: var(--mat-accent-color);
+        --mat-full-pseudo-checkbox-selected-icon-color: var(--theme-accent-color);
         --mat-full-pseudo-checkbox-selected-checkmark-color: var(--mat-background-color);
         --mat-full-pseudo-checkbox-unselected-icon-color: rgba(var(--mat-text-color), 0.7);
         --mat-full-pseudo-checkbox-disabled-selected-checkmark-color: var(--mat-background-color);
         --mat-full-pseudo-checkbox-disabled-unselected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mat-full-pseudo-checkbox-disabled-selected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
-        --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--mat-accent-color);
+        --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--theme-accent-color);
         --mat-minimal-pseudo-checkbox-disabled-selected-checkmark-color: rgba(
             var(--mat-text-color),
             var(--mat-disabled-opacity)
@@ -1067,13 +1067,13 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     }
 
     .mat-warn {
-        --mat-full-pseudo-checkbox-selected-icon-color: var(--mat-warn-color);
+        --mat-full-pseudo-checkbox-selected-icon-color: var(--theme-warn-color);
         --mat-full-pseudo-checkbox-selected-checkmark-color: var(--mat-background-color);
         --mat-full-pseudo-checkbox-unselected-icon-color: rgba(var(--mat-text-color), 0.7);
         --mat-full-pseudo-checkbox-disabled-selected-checkmark-color: var(--mat-background-color);
         --mat-full-pseudo-checkbox-disabled-unselected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mat-full-pseudo-checkbox-disabled-selected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
-        --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--mat-warn-color);
+        --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--theme-warn-color);
         --mat-minimal-pseudo-checkbox-disabled-selected-checkmark-color: rgba(
             var(--mat-text-color),
             var(--mat-disabled-opacity)
@@ -1092,12 +1092,12 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-radio-unselected-hover-icon-color: var(--mat-text-color);
         --mdc-radio-unselected-icon-color: rgba(var(--mat-text-color), 0.54);
         --mdc-radio-unselected-pressed-icon-color: rgba(var(--mat-text-color), 0.54);
-        --mdc-radio-selected-focus-icon-color: var(--mat-primary-color);
-        --mdc-radio-selected-hover-icon-color: var(--mat-primary-color);
-        --mdc-radio-selected-icon-color: var(--mat-primary-color);
-        --mdc-radio-selected-pressed-icon-color: var(--mat-primary-color);
+        --mdc-radio-selected-focus-icon-color: var(--theme-primary-color);
+        --mdc-radio-selected-hover-icon-color: var(--theme-primary-color);
+        --mdc-radio-selected-icon-color: var(--theme-primary-color);
+        --mdc-radio-selected-pressed-icon-color: var(--theme-primary-color);
         --mat-radio-ripple-color: var(--mat-text-color);
-        --mat-radio-checked-ripple-color: var(--mat-primary-color);
+        --mat-radio-checked-ripple-color: var(--theme-primary-color);
         --mat-radio-disabled-label-color: rgba(var(--mat-text-color), 0.5);
     }
 
@@ -1107,12 +1107,12 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-radio-unselected-hover-icon-color: var(--mat-text-color);
         --mdc-radio-unselected-icon-color: rgba(var(--mat-text-color), 0.54);
         --mdc-radio-unselected-pressed-icon-color: rgba(var(--mat-text-color), 0.54);
-        --mdc-radio-selected-focus-icon-color: var(--mat-accent-color);
-        --mdc-radio-selected-hover-icon-color: var(--mat-accent-color);
-        --mdc-radio-selected-icon-color: var(--mat-accent-color);
-        --mdc-radio-selected-pressed-icon-color: var(--mat-accent-color);
+        --mdc-radio-selected-focus-icon-color: var(--theme-accent-color);
+        --mdc-radio-selected-hover-icon-color: var(--theme-accent-color);
+        --mdc-radio-selected-icon-color: var(--theme-accent-color);
+        --mdc-radio-selected-pressed-icon-color: var(--theme-accent-color);
         --mat-radio-ripple-color: var(--mat-text-color);
-        --mat-radio-checked-ripple-color: var(--mat-accent-color);
+        --mat-radio-checked-ripple-color: var(--theme-accent-color);
         --mat-radio-disabled-label-color: rgba(var(--mat-text-color), 0.5);
     }
 
@@ -1122,12 +1122,12 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-radio-unselected-hover-icon-color: var(--mat-text-color);
         --mdc-radio-unselected-icon-color: rgba(var(--mat-text-color), 0.54);
         --mdc-radio-unselected-pressed-icon-color: rgba(var(--mat-text-color), 0.54);
-        --mdc-radio-selected-focus-icon-color: var(--mat-warn-color);
-        --mdc-radio-selected-hover-icon-color: var(--mat-warn-color);
-        --mdc-radio-selected-icon-color: var(--mat-warn-color);
-        --mdc-radio-selected-pressed-icon-color: var(--mat-warn-color);
+        --mdc-radio-selected-focus-icon-color: var(--theme-warn-color);
+        --mdc-radio-selected-hover-icon-color: var(--theme-warn-color);
+        --mdc-radio-selected-icon-color: var(--theme-warn-color);
+        --mdc-radio-selected-pressed-icon-color: var(--theme-warn-color);
         --mat-radio-ripple-color: var(--mat-text-color);
-        --mat-radio-checked-ripple-color: var(--mat-warn-color);
+        --mat-radio-checked-ripple-color: var(--theme-warn-color);
         --mat-radio-disabled-label-color: rgba(var(--mat-text-color), 0.5);
     }
 
@@ -1143,8 +1143,8 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mat-select-placeholder-text-color: rgba(var(--mat-text-color), 0.6);
         --mat-select-enabled-arrow-color: rgba(var(--mat-text-color), 0.54);
         --mat-select-disabled-arrow-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
-        --mat-select-focused-arrow-color: var(--mat-primary-color);
-        --mat-select-invalid-arrow-color: var(--mat-warn-color);
+        --mat-select-focused-arrow-color: var(--theme-primary-color);
+        --mat-select-invalid-arrow-color: var(--theme-warn-color);
 
         /* typography */
         --mat-select-trigger-text-font: var(--font-family);
@@ -1162,8 +1162,8 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mat-select-placeholder-text-color: rgba(var(--mat-text-color), 0.6);
         --mat-select-enabled-arrow-color: rgba(var(--mat-text-color), 0.54);
         --mat-select-disabled-arrow-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
-        --mat-select-focused-arrow-color: var(--mat-accent-color);
-        --mat-select-invalid-arrow-color: var(--mat-warn-color);
+        --mat-select-focused-arrow-color: var(--theme-accent-color);
+        --mat-select-invalid-arrow-color: var(--theme-warn-color);
     }
 
     .mat-mdc-form-field.mat-warn {
@@ -1174,8 +1174,8 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mat-select-placeholder-text-color: rgba(var(--mat-text-color), 0.6);
         --mat-select-enabled-arrow-color: rgba(var(--mat-text-color), 0.54);
         --mat-select-disabled-arrow-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
-        --mat-select-focused-arrow-color: var(--mat-warn-color);
-        --mat-select-invalid-arrow-color: var(--mat-warn-color);
+        --mat-select-focused-arrow-color: var(--theme-warn-color);
+        --mat-select-invalid-arrow-color: var(--theme-warn-color);
     }
 
     html {
@@ -1216,17 +1216,17 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-slide-toggle {
         /* default/primary color */
-        --mdc-switch-selected-focus-state-layer-color: var(--mat-primary-color);
-        --mdc-switch-selected-handle-color: var(--mat-primary-color);
-        --mdc-switch-selected-hover-state-layer-color: var(--mat-primary-color);
-        --mdc-switch-selected-pressed-state-layer-color: var(--mat-primary-color);
-        --mdc-switch-selected-focus-handle-color: var(--mat-primary-color);
-        --mdc-switch-selected-hover-handle-color: var(--mat-primary-color);
-        --mdc-switch-selected-pressed-handle-color: var(--mat-primary-color);
-        --mdc-switch-selected-focus-track-color: var(--mat-primary-color);
-        --mdc-switch-selected-hover-track-color: var(--mat-primary-color);
-        --mdc-switch-selected-pressed-track-color: var(--mat-primary-color);
-        --mdc-switch-selected-track-color: var(--mat-primary-color);
+        --mdc-switch-selected-focus-state-layer-color: var(--theme-primary-color);
+        --mdc-switch-selected-handle-color: var(--theme-primary-color);
+        --mdc-switch-selected-hover-state-layer-color: var(--theme-primary-color);
+        --mdc-switch-selected-pressed-state-layer-color: var(--theme-primary-color);
+        --mdc-switch-selected-focus-handle-color: var(--theme-primary-color);
+        --mdc-switch-selected-hover-handle-color: var(--theme-primary-color);
+        --mdc-switch-selected-pressed-handle-color: var(--theme-primary-color);
+        --mdc-switch-selected-focus-track-color: var(--theme-primary-color);
+        --mdc-switch-selected-hover-track-color: var(--theme-primary-color);
+        --mdc-switch-selected-pressed-track-color: var(--theme-primary-color);
+        --mdc-switch-selected-track-color: var(--theme-primary-color);
         --mdc-switch-disabled-selected-handle-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mdc-switch-disabled-selected-icon-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mdc-switch-disabled-selected-track-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
@@ -1264,32 +1264,32 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-slide-toggle.mat-accent {
         /* accent color */
-        --mdc-switch-selected-focus-state-layer-color: var(--mat-accent-color);
-        --mdc-switch-selected-handle-color: var(--mat-accent-color);
-        --mdc-switch-selected-hover-state-layer-color: var(--mat-accent-color);
-        --mdc-switch-selected-pressed-state-layer-color: var(--mat-accent-color);
-        --mdc-switch-selected-focus-handle-color: var(--mat-accent-color);
-        --mdc-switch-selected-hover-handle-color: var(--mat-accent-color);
-        --mdc-switch-selected-pressed-handle-color: var(--mat-accent-color);
-        --mdc-switch-selected-focus-track-color: var(--mat-accent-color);
-        --mdc-switch-selected-hover-track-color: var(--mat-accent-color);
-        --mdc-switch-selected-pressed-track-color: var(--mat-accent-color);
-        --mdc-switch-selected-track-color: var(--mat-accent-color);
+        --mdc-switch-selected-focus-state-layer-color: var(--theme-accent-color);
+        --mdc-switch-selected-handle-color: var(--theme-accent-color);
+        --mdc-switch-selected-hover-state-layer-color: var(--theme-accent-color);
+        --mdc-switch-selected-pressed-state-layer-color: var(--theme-accent-color);
+        --mdc-switch-selected-focus-handle-color: var(--theme-accent-color);
+        --mdc-switch-selected-hover-handle-color: var(--theme-accent-color);
+        --mdc-switch-selected-pressed-handle-color: var(--theme-accent-color);
+        --mdc-switch-selected-focus-track-color: var(--theme-accent-color);
+        --mdc-switch-selected-hover-track-color: var(--theme-accent-color);
+        --mdc-switch-selected-pressed-track-color: var(--theme-accent-color);
+        --mdc-switch-selected-track-color: var(--theme-accent-color);
     }
 
     .mat-mdc-slide-toggle.mat-warn {
         /* warn color */
-        --mdc-switch-selected-focus-state-layer-color: var(--mat-warn-color);
-        --mdc-switch-selected-handle-color: var(--mat-warn-color);
-        --mdc-switch-selected-hover-state-layer-color: var(--mat-warn-color);
-        --mdc-switch-selected-pressed-state-layer-color: var(--mat-warn-color);
-        --mdc-switch-selected-focus-handle-color: var(--mat-warn-color);
-        --mdc-switch-selected-hover-handle-color: var(--mat-warn-color);
-        --mdc-switch-selected-pressed-handle-color: var(--mat-warn-color);
-        --mdc-switch-selected-focus-track-color: var(--mat-warn-color);
-        --mdc-switch-selected-hover-track-color: var(--mat-warn-color);
-        --mdc-switch-selected-pressed-track-color: var(--mat-warn-color);
-        --mdc-switch-selected-track-color: var(--mat-warn-color);
+        --mdc-switch-selected-focus-state-layer-color: var(--theme-warn-color);
+        --mdc-switch-selected-handle-color: var(--theme-warn-color);
+        --mdc-switch-selected-hover-state-layer-color: var(--theme-warn-color);
+        --mdc-switch-selected-pressed-state-layer-color: var(--theme-warn-color);
+        --mdc-switch-selected-focus-handle-color: var(--theme-warn-color);
+        --mdc-switch-selected-hover-handle-color: var(--theme-warn-color);
+        --mdc-switch-selected-pressed-handle-color: var(--theme-warn-color);
+        --mdc-switch-selected-focus-track-color: var(--theme-warn-color);
+        --mdc-switch-selected-hover-track-color: var(--theme-warn-color);
+        --mdc-switch-selected-pressed-track-color: var(--theme-warn-color);
+        --mdc-switch-selected-track-color: var(--theme-warn-color);
     }
 
     html {
@@ -1315,12 +1315,12 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-slider-with-tick-marks-inactive-container-opacity: 0.6;
 
         /* default/primary color */
-        --mdc-slider-handle-color: var(--mat-primary-color);
-        --mdc-slider-focus-handle-color: var(--mat-primary-color);
-        --mdc-slider-hover-handle-color: var(--mat-primary-color);
-        --mdc-slider-active-track-color: var(--mat-primary-color);
-        --mdc-slider-inactive-track-color: var(--mat-primary-color);
-        --mdc-slider-with-tick-marks-inactive-container-color: var(--mat-primary-color);
+        --mdc-slider-handle-color: var(--theme-primary-color);
+        --mdc-slider-focus-handle-color: var(--theme-primary-color);
+        --mdc-slider-hover-handle-color: var(--theme-primary-color);
+        --mdc-slider-active-track-color: var(--theme-primary-color);
+        --mdc-slider-inactive-track-color: var(--theme-primary-color);
+        --mdc-slider-with-tick-marks-inactive-container-color: var(--theme-primary-color);
         --mdc-slider-with-tick-marks-active-container-color: var(--mat-text-color);
         --mdc-slider-disabled-active-track-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mdc-slider-disabled-handle-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
@@ -1330,7 +1330,7 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mdc-slider-with-overlap-handle-outline-color: var(--mat-text-color);
         --mdc-slider-with-tick-marks-disabled-container-color: rgba(var(--mat-text-color), var(--mat-disabled-opacity));
         --mdc-slider-handle-elevation: var(--mat-elevation-2);
-        --mat-mdc-slider-ripple-color: var(--mat-primary-color);
+        --mat-mdc-slider-ripple-color: var(--theme-primary-color);
         --mat-mdc-slider-hover-ripple-color: rgba(var(--mat-text-primary-rgb), 0.05);
         --mat-mdc-slider-focus-ripple-color: rgba(var(--mat-text-primary-rgb), 0.2);
         --mat-slider-value-indicator-opacity: 0.9;
@@ -1345,28 +1345,28 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-mdc-slider.mat-accent {
         /* accent color */
-        --mdc-slider-handle-color: var(--mat-accent-color);
-        --mdc-slider-focus-handle-color: var(--mat-accent-color);
-        --mdc-slider-hover-handle-color: var(--mat-accent-color);
-        --mdc-slider-active-track-color: var(--mat-accent-color);
-        --mdc-slider-inactive-track-color: var(--mat-accent-color);
-        --mdc-slider-with-tick-marks-inactive-container-color: var(--mat-accent-color);
+        --mdc-slider-handle-color: var(--theme-accent-color);
+        --mdc-slider-focus-handle-color: var(--theme-accent-color);
+        --mdc-slider-hover-handle-color: var(--theme-accent-color);
+        --mdc-slider-active-track-color: var(--theme-accent-color);
+        --mdc-slider-inactive-track-color: var(--theme-accent-color);
+        --mdc-slider-with-tick-marks-inactive-container-color: var(--theme-accent-color);
         --mdc-slider-with-tick-marks-active-container-color: var(--mat-text-color);
-        --mat-mdc-slider-ripple-color: var(--mat-accent-color);
+        --mat-mdc-slider-ripple-color: var(--theme-accent-color);
         --mat-mdc-slider-hover-ripple-color: rgba(var(--mat-accent-color-rgb), 0.05);
         --mat-mdc-slider-focus-ripple-color: rgba(var(--mat-accent-color-rgb), 0.2);
     }
 
     .mat-mdc-slider.mat-warn {
         /* warn color */
-        --mdc-slider-handle-color: var(--mat-warn-color);
-        --mdc-slider-focus-handle-color: var(--mat-warn-color);
-        --mdc-slider-hover-handle-color: var(--mat-warn-color);
-        --mdc-slider-active-track-color: var(--mat-warn-color);
-        --mdc-slider-inactive-track-color: var(--mat-warn-color);
-        --mdc-slider-with-tick-marks-inactive-container-color: var(--mat-warn-color);
+        --mdc-slider-handle-color: var(--theme-warn-color);
+        --mdc-slider-focus-handle-color: var(--theme-warn-color);
+        --mdc-slider-hover-handle-color: var(--theme-warn-color);
+        --mdc-slider-active-track-color: var(--theme-warn-color);
+        --mdc-slider-inactive-track-color: var(--theme-warn-color);
+        --mdc-slider-with-tick-marks-inactive-container-color: var(--theme-warn-color);
         --mdc-slider-with-tick-marks-active-container-color: var(--mat-text-color);
-        --mat-mdc-slider-ripple-color: var(--mat-warn-color);
+        --mat-mdc-slider-ripple-color: var(--theme-warn-color);
         --mat-mdc-slider-hover-ripple-color: rgba(var(--mat-warn-color-rgb), 0.05);
         --mat-mdc-slider-focus-ripple-color: rgba(var(--mat-warn-color-rgb), 0.2);
     }
@@ -1394,11 +1394,11 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     html {
         /* primary/default color */
         --mat-stepper-header-icon-foreground-color: var(--mat-text-color);
-        --mat-stepper-header-selected-state-icon-background-color: var(--mat-primary-color);
+        --mat-stepper-header-selected-state-icon-background-color: var(--theme-primary-color);
         --mat-stepper-header-selected-state-icon-foreground-color: var(--mat-background-color);
-        --mat-stepper-header-done-state-icon-background-color: var(--mat-primary-color);
+        --mat-stepper-header-done-state-icon-background-color: var(--theme-primary-color);
         --mat-stepper-header-done-state-icon-foreground-color: var(--mat-background-color);
-        --mat-stepper-header-edit-state-icon-background-color: var(--mat-primary-color);
+        --mat-stepper-header-edit-state-icon-background-color: var(--theme-primary-color);
         --mat-stepper-header-edit-state-icon-foreground-color: var(--mat-background-color);
         --mat-stepper-container-color: var(--mat-background-color);
         --mat-stepper-line-color: rgba(var(--mat-text-color), 0.12);
@@ -1407,9 +1407,9 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
         --mat-stepper-header-label-text-color: rgba(var(--mat-text-color), 0.7);
         --mat-stepper-header-optional-label-text-color: rgba(var(--mat-text-color), 0.7);
         --mat-stepper-header-selected-state-label-text-color: var(--mat-text-color);
-        --mat-stepper-header-error-state-label-text-color: var(--mat-warn-color);
+        --mat-stepper-header-error-state-label-text-color: var(--theme-warn-color);
         --mat-stepper-header-icon-background-color: rgba(var(--mat-text-color), 0.7);
-        --mat-stepper-header-error-state-icon-foreground-color: var(--mat-warn-color);
+        --mat-stepper-header-error-state-icon-foreground-color: var(--theme-warn-color);
         --mat-stepper-header-error-state-icon-background-color: var(--mat-transparent-color);
 
         /* size */
@@ -1428,22 +1428,22 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     .mat-step-header.mat-accent {
         /* accent color */
         --mat-stepper-header-icon-foreground-color: var(--mat-text-color);
-        --mat-stepper-header-selected-state-icon-background-color: var(--mat-accent-color);
+        --mat-stepper-header-selected-state-icon-background-color: var(--theme-accent-color);
         --mat-stepper-header-selected-state-icon-foreground-color: var(--mat-background-color);
-        --mat-stepper-header-done-state-icon-background-color: var(--mat-accent-color);
+        --mat-stepper-header-done-state-icon-background-color: var(--theme-accent-color);
         --mat-stepper-header-done-state-icon-foreground-color: var(--mat-background-color);
-        --mat-stepper-header-edit-state-icon-background-color: var(--mat-accent-color);
+        --mat-stepper-header-edit-state-icon-background-color: var(--theme-accent-color);
         --mat-stepper-header-edit-state-icon-foreground-color: var(--mat-background-color);
     }
 
     .mat-step-header.mat-warn {
         /* warn color */
         --mat-stepper-header-icon-foreground-color: var(--mat-text-color);
-        --mat-stepper-header-selected-state-icon-background-color: var(--mat-warn-color);
+        --mat-stepper-header-selected-state-icon-background-color: var(--theme-warn-color);
         --mat-stepper-header-selected-state-icon-foreground-color: var(--mat-background-color);
-        --mat-stepper-header-done-state-icon-background-color: var(--mat-warn-color);
+        --mat-stepper-header-done-state-icon-background-color: var(--theme-warn-color);
         --mat-stepper-header-done-state-icon-foreground-color: var(--mat-background-color);
-        --mat-stepper-header-edit-state-icon-background-color: var(--mat-warn-color);
+        --mat-stepper-header-edit-state-icon-background-color: var(--theme-warn-color);
         --mat-stepper-header-edit-state-icon-foreground-color: var(--mat-background-color);
     }
 
@@ -1494,72 +1494,72 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
     .mat-mdc-tab-group,
     .mat-mdc-tab-nav-bar {
         /* default/primary color */
-        --mdc-tab-indicator-active-indicator-color: var(--mat-primary-color);
+        --mdc-tab-indicator-active-indicator-color: var(--theme-primary-color);
         --mat-tab-header-disabled-ripple-color: rgba(var(--mat-text-color), 0.5);
         --mat-tab-header-pagination-icon-color: var(--mat-text-color);
         --mat-tab-header-inactive-label-text-color: rgba(var(--mat-text-color), 0.6);
-        --mat-tab-header-active-label-text-color: var(--mat-primary-color);
-        --mat-tab-header-active-ripple-color: var(--mat-primary-color);
-        --mat-tab-header-inactive-ripple-color: var(--mat-primary-color);
+        --mat-tab-header-active-label-text-color: var(--theme-primary-color);
+        --mat-tab-header-active-ripple-color: var(--theme-primary-color);
+        --mat-tab-header-inactive-ripple-color: var(--theme-primary-color);
         --mat-tab-header-inactive-focus-label-text-color: rgba(var(--mat-text-color), 0.6);
         --mat-tab-header-inactive-hover-label-text-color: rgba(var(--mat-text-color), 0.6);
-        --mat-tab-header-active-focus-label-text-color: var(--mat-primary-color);
-        --mat-tab-header-active-hover-label-text-color: var(--mat-primary-color);
-        --mat-tab-header-active-focus-indicator-color: var(--mat-primary-color);
-        --mat-tab-header-active-hover-indicator-color: var(--mat-primary-color);
+        --mat-tab-header-active-focus-label-text-color: var(--theme-primary-color);
+        --mat-tab-header-active-hover-label-text-color: var(--theme-primary-color);
+        --mat-tab-header-active-focus-indicator-color: var(--theme-primary-color);
+        --mat-tab-header-active-hover-indicator-color: var(--theme-primary-color);
     }
 
     .mat-mdc-tab-group.mat-accent,
     .mat-mdc-tab-nav-bar.mat-accent {
         /* accent color */
-        --mdc-tab-indicator-active-indicator-color: var(--mat-accent-color);
+        --mdc-tab-indicator-active-indicator-color: var(--theme-accent-color);
         --mat-tab-header-disabled-ripple-color: rgba(var(--mat-text-color), 0.5);
         --mat-tab-header-pagination-icon-color: var(--mat-text-color);
         --mat-tab-header-inactive-label-text-color: rgba(var(--mat-text-color), 0.6);
-        --mat-tab-header-active-label-text-color: var(--mat-accent-color);
-        --mat-tab-header-active-ripple-color: var(--mat-accent-color);
-        --mat-tab-header-inactive-ripple-color: var(--mat-accent-color);
+        --mat-tab-header-active-label-text-color: var(--theme-accent-color);
+        --mat-tab-header-active-ripple-color: var(--theme-accent-color);
+        --mat-tab-header-inactive-ripple-color: var(--theme-accent-color);
         --mat-tab-header-inactive-focus-label-text-color: rgba(var(--mat-text-color), 0.6);
         --mat-tab-header-inactive-hover-label-text-color: rgba(var(--mat-text-color), 0.6);
-        --mat-tab-header-active-focus-label-text-color: var(--mat-accent-color);
-        --mat-tab-header-active-hover-label-text-color: var(--mat-accent-color);
-        --mat-tab-header-active-focus-indicator-color: var(--mat-accent-color);
-        --mat-tab-header-active-hover-indicator-color: var(--mat-accent-color);
+        --mat-tab-header-active-focus-label-text-color: var(--theme-accent-color);
+        --mat-tab-header-active-hover-label-text-color: var(--theme-accent-color);
+        --mat-tab-header-active-focus-indicator-color: var(--theme-accent-color);
+        --mat-tab-header-active-hover-indicator-color: var(--theme-accent-color);
     }
 
     .mat-mdc-tab-group.mat-warn,
     .mat-mdc-tab-nav-bar.mat-warn {
         /* warn color */
-        --mdc-tab-indicator-active-indicator-color: var(--mat-warn-color);
+        --mdc-tab-indicator-active-indicator-color: var(--theme-warn-color);
         --mat-tab-header-disabled-ripple-color: rgba(var(--mat-text-color), 0.5);
         --mat-tab-header-pagination-icon-color: var(--mat-text-color);
         --mat-tab-header-inactive-label-text-color: rgba(var(--mat-text-color), 0.6);
-        --mat-tab-header-active-label-text-color: var(--mat-warn-color);
-        --mat-tab-header-active-ripple-color: var(--mat-warn-color);
-        --mat-tab-header-inactive-ripple-color: var(--mat-warn-color);
+        --mat-tab-header-active-label-text-color: var(--theme-warn-color);
+        --mat-tab-header-active-ripple-color: var(--theme-warn-color);
+        --mat-tab-header-inactive-ripple-color: var(--theme-warn-color);
         --mat-tab-header-inactive-focus-label-text-color: rgba(var(--mat-text-color), 0.6);
         --mat-tab-header-inactive-hover-label-text-color: rgba(var(--mat-text-color), 0.6);
-        --mat-tab-header-active-focus-label-text-color: var(--mat-warn-color);
-        --mat-tab-header-active-hover-label-text-color: var(--mat-warn-color);
-        --mat-tab-header-active-focus-indicator-color: var(--mat-warn-color);
-        --mat-tab-header-active-hover-indicator-color: var(--mat-warn-color);
+        --mat-tab-header-active-focus-label-text-color: var(--theme-warn-color);
+        --mat-tab-header-active-hover-label-text-color: var(--theme-warn-color);
+        --mat-tab-header-active-focus-indicator-color: var(--theme-warn-color);
+        --mat-tab-header-active-hover-indicator-color: var(--theme-warn-color);
     }
 
     .mat-mdc-tab-group.mat-background-primary,
     .mat-mdc-tab-nav-bar.mat-background-primary {
-        --mat-tab-header-with-background-background-color: var(--mat-primary-color);
+        --mat-tab-header-with-background-background-color: var(--theme-primary-color);
         --mat-tab-header-with-background-foreground-color: var(--mat-background-color);
     }
 
     .mat-mdc-tab-group.mat-background-accent,
     .mat-mdc-tab-nav-bar.mat-background-accent {
-        --mat-tab-header-with-background-background-color: var(--mat-accent-color);
+        --mat-tab-header-with-background-background-color: var(--theme-accent-color);
         --mat-tab-header-with-background-foreground-color: var(--mat-background-color);
     }
 
     .mat-mdc-tab-group.mat-background-warn,
     .mat-mdc-tab-nav-bar.mat-background-warn {
-        --mat-tab-header-with-background-background-color: var(--mat-warn-color);
+        --mat-tab-header-with-background-background-color: var(--theme-warn-color);
         --mat-tab-header-with-background-foreground-color: var(--mat-background-color);
     }
 
@@ -1607,19 +1607,19 @@ export const MATERIAL_VARIABLES_CSS_TEMPLATE = `
 
     .mat-toolbar.mat-primary {
         /* primary color */
-        --mat-toolbar-container-background-color: var(--mat-primary-color);
+        --mat-toolbar-container-background-color: var(--theme-primary-color);
         --mat-toolbar-container-text-color: var(--mat-background-color);
     }
 
     .mat-toolbar.mat-accent {
         /* accent color */
-        --mat-toolbar-container-background-color: var(--mat-accent-color);
+        --mat-toolbar-container-background-color: var(--theme-accent-color);
         --mat-toolbar-container-text-color: var(--mat-background-color);
     }
 
     .mat-toolbar.mat-warn {
         /* warn color */
-        --mat-toolbar-container-background-color: var(--mat-warn-color);
+        --mat-toolbar-container-background-color: var(--theme-warn-color);
         --mat-toolbar-container-text-color: var(--mat-background-color);
     }
 

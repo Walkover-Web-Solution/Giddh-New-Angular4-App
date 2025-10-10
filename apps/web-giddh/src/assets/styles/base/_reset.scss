@@ -23,7 +23,10 @@ button,
 input {
     outline: none !important;
 }
-
+input {
+    color: inherit;
+    background-color: var(--color-transparent);
+}
 table {
     border-collapse: collapse;
     width: 100%;

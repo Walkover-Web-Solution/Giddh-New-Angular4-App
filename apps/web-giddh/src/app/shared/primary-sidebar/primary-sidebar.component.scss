@@ -6,7 +6,7 @@
     padding-top: 0 !important;
     // background-color: var(--color-white);
     .company-branch-block {
-        background-color: var(--mat-text-primary-light);
+        background-color: var(--theme-primary-light);
         .branch-connection {
             padding: 14px 0;
         }
@@ -165,7 +165,7 @@
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color(var(--color-white), var(--mat-primary-color));
+                @include highlight-color(var(--color-white), var(--theme-primary-color));
             }
         }
         p {
@@ -237,7 +237,7 @@
             height: 20px;
             background-color: var(--color-white);
             border-radius: 50%;
-            border: 1px solid var(--color-silver);
+            border: 1px solid var(--border-color);
             transform: rotate(90deg);
             position: absolute;
             top: 70px;
@@ -342,7 +342,7 @@
             left: 60px !important;
             z-index: 9999999 !important;
             background-color: var(--color-white) !important;
-            border: 1px solid var(--mat-primary-color) !important;
+            border: 1px solid var(--theme-primary-color) !important;
             border-radius: var(--mat-border-radius-0);
             width: 180px;
             top: 0px !important;

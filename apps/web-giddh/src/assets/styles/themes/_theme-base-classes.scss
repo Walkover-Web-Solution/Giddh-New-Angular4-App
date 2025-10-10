@@ -1,15 +1,25 @@
 body,
 body {
-    --text-primary-color: var(--mat-primary-color);
-    --bg-primary-color: var(--mat-primary-color);
-    // --forground-color: var(--mat-text-primary-light);
+    --text-primary-color: var(--theme-primary-color);
+    --bg-primary-color: var(--theme-primary-color);
+    --border-color: var(--theme-foreground-color);
 
-    --border-color: var(--color-border-light);
-    --mat-primary-color: #1a237e;  // CURRENTLY TAKE THIS COLOR FORM MAT THEME
-    --mat-text-primary-light: #1a237e26;
+    // Theme color base variables with contrast : CURRENTLY TAKE THIS COLOR FORM MAT THEME
+    // --theme-primary-color: #1a237e;
+    // --theme-primary-contrast-color: white;
+    // --theme-accent-color: #198754;
+    // --theme-accent-contrast-color: white;
+    // --theme-warn-color: #dc3545;
+    // --theme-warn-contrast-color: white;
+    // --theme-foreground-color: rgba(0, 0, 0, 0.26);
+    // --theme-background-color: rgba(0, 0, 0, 0.12);
+
+    --theme-primary-light: color-mix(in srgb, var(--theme-primary-color) 15%, transparent);
+    --theme-accent-light: color-mix(in srgb, var(--theme-accent-color) 15%, transparent);
+    --theme-warn-light: color-mix(in srgb, var(--theme-warn-color) 15%, transparent);
 
     &.default-theme, &.dark-theme {
-        --color-black: rgba(0, 0, 0, 0.87);
+        --color-black: #0D0D0D;
         --color-danger-light: #e545561a;
         --color-orange-light: #e58a0026;
         --color-red-light: #e5455626;

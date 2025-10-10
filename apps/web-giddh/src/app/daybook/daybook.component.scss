@@ -5,12 +5,12 @@
     position: relative;
     z-index: 1;
     cursor: default;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     width: 230px;
 }
 
 .date-range-picker:focus {
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 /* UNUSED COMPONENT CLASS: input-wrapper - Auto-commented by script
 .input-wrapper {
@@ -68,7 +68,7 @@
     width: 40px;
     height: 40px;
     background-color: var(--color-white);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     display: flex;
     justify-content: center;
@@ -115,10 +115,10 @@ button.btn
 :host ::ng-deep .daybook-table {
     tr.mat-row,
     tr.mat-footer-row {
-        border-top: 1px solid var(--color-silver);
+        border-top: 1px solid var(--border-color);
     }
     td.mat-mdc-cell {
-        border-top: 1px solid var(--color-silver);
+        border-top: 1px solid var(--border-color);
     }
     .nested-table {
         > tbody {
@@ -127,7 +127,7 @@ button.btn
                     border: 0 !important;
                     padding: 8px 0;
                 }
-                // border-top: 1px solid var(--color-silver);
+                // border-top: 1px solid var(--border-color);
                 &:first-child {
                     border-top: none !important;
                 }

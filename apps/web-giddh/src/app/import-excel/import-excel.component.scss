@@ -16,7 +16,7 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid var(--color-silver);
+            border: 2px solid var(--border-color);
             border-radius: var(--mat-border-radius-circle);
             transition: background-color 1s;
             background-color: var(--color-white);
@@ -104,7 +104,7 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background: var(--color-light-gray);
     padding: 15px;
     cursor: pointer;

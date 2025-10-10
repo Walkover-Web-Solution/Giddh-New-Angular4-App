@@ -10,7 +10,7 @@
 .receipt-wrapper .doc-checkbox:checked,
 /* UNUSED COMPONENT CLASS: doc-actions - Auto-commented by script
 .doc-actions {
-    border-color: var(--mat-primary-color) !important;
+    border-color: var(--theme-primary-color) !important;
     background: var(--bg-primary-color);
     color: var(--color-white);
 }
@@ -98,7 +98,7 @@ svg.icon.gstr-icon {
 
 .return-content .line {
     margin: 5px 18px;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .return-content .line::before {
@@ -175,7 +175,7 @@ svg.icon.icon-xxlg-md {
 .btn-default {
     color: var(--color-black);
     background-color: var(--color-light-gray);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
 */
 
@@ -231,7 +231,7 @@ svg.icon.icon-xxlg-md {
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 
 /* UNUSED COMPONENT CLASS: activity-graph - Auto-commented by script
@@ -298,11 +298,11 @@ hr {
     color: var(--color-dark-gray);
     cursor: default;
     background-color: var(--color-white);
-    border: 2px solid var(--color-silver);
+    border: 2px solid var(--border-color);
     border-right: 0 !important;
     border-left: 0 !important;
     border-top: 0 !important;
-    border-bottom-color: var(--mat-primary-color);
+    border-bottom-color: var(--theme-primary-color);
 }
 */
 

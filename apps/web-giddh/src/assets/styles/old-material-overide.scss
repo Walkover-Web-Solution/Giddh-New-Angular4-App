@@ -37,3 +37,11 @@
     margin-right: -15px;
     margin-left: -15px;
 }
+
+.alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-transparent);
+    border-radius: .25rem;
+}

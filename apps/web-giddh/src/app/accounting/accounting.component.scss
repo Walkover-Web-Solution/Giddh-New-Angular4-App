@@ -32,7 +32,7 @@
 //     font-weight: normal;
 //     padding: 8px 6px;
 //     color: var(--color-black);
-//     border-color: var(--color-silver);
+//     border-color: var(--border-color);
 // }
 
 // .entry-table {
@@ -58,7 +58,7 @@
 
 // .entry-table tbody tr td .form-control.focus:focus {
 //     background: transparent !important;
-//     border: 1px solid var(--color-silver) !important;
+//     border: 1px solid var(--border-color) !important;
 // }
 
 // .active-row-transparent {
@@ -66,7 +66,7 @@
 // }
 
 // .active-row {
-//     background: var(--mat-text-primary-light) !important;
+//     background: var(--theme-primary-light) !important;
 // }
 
 // .confirmation-box {
@@ -88,7 +88,7 @@
 //     border-bottom: 1px solid;
 //     margin: 10px 0;
 //     font-size: var(--font-size-15);
-//     border-color: var(--color-silver);
+//     border-color: var(--border-color);
 //     margin-bottom: 3px;
 // }
 
@@ -160,7 +160,7 @@
 //     padding: 0 !important;
 //     border: 0;
 //     z-index: 0;
-//     border-left: 1px solid var(--color-silver);
+//     border-left: 1px solid var(--border-color);
 // }
 
 // .sidebar-list h3 {
@@ -178,7 +178,7 @@
 // }
 
 // textarea[name="narration"]:focus {
-//     border: 1px solid var(--color-silver) !important;
+//     border: 1px solid var(--border-color) !important;
 // }
 
 // .custom-entry-date {
@@ -189,7 +189,7 @@
 // }
 
 // input[name="entryDate"]:focus {
-//     border: 1px solid var(--color-silver) !important;
+//     border: 1px solid var(--border-color) !important;
 //     background-color: transparent !important;
 // }
 

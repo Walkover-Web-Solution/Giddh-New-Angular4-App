@@ -111,19 +111,6 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     color: var(--color-dark-gray);
 }
 
-/* UNUSED COMPONENT CLASS: notfound-option - Auto-commented by script
-.notfound-option.active {
-    background: var(--color-border-light) !important;
-    padding: 2px 5px !important;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: p-0 - Auto-commented by script
-.p-0 {
-    padding: 0px !important;
-}
-*/
-
 .amount-total {
     font-size: var(--font-size-12);
     color: var(--color-medium-gray);
@@ -219,7 +206,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .adjust-receipt {
     padding: 10px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     margin-top: 10px;
     position: relative;
 }
@@ -483,7 +470,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     }
     #credit-select input,
     #debit-select input {
-        border: 1px solid var(--color-silver) !important;
+        border: 1px solid var(--border-color) !important;
         height: 36px;
     }
     .ledger-main .form-control {

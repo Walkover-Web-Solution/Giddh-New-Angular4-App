@@ -1,12 +1,12 @@
 .unit-mapping-grid-list {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     .grid-box {
         font-size: var(--font-size-15);
     }
 
     .grid-box-head,
     .grid-box-content {
-        border-right: 1px solid var(--color-silver);
+        border-right: 1px solid var(--border-color);
         .unit-value {
             width: 130px;
             display: -webkit-box;
@@ -16,7 +16,7 @@
         }
     }
     .grid-box-head {
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         .unit-box {
             width: 82px;
         }

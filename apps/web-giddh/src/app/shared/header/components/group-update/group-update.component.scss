@@ -32,7 +32,7 @@
 */
 
 .move-group-form .list-item {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 /* UNUSED COMPONENT CLASS: form-box - Auto-commented by script
 .form-box .btn {
@@ -42,11 +42,11 @@
 .manage-group-account-form {
     .form-group {
         .ladda-button[type="submit"] {
-            border-color: var(--mat-primary-color) !important;
+            border-color: var(--theme-primary-color) !important;
             background-color: var(--bg-primary-color) !important;
             color: var(--color-white) !important;
             &:hover {
-                border-color: var(--mat-primary-color) !important;
+                border-color: var(--theme-primary-color) !important;
                 background-color: var(--bg-primary-color) !important;
             }
         }

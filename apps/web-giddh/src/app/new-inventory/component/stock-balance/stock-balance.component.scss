@@ -13,7 +13,7 @@
 .stocks-list-head {
         width: 100%;
         overflow: hidden;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
     }
 */
 
@@ -75,7 +75,7 @@
                 padding: 0px 8px;
                 margin-right: 10px;
                 color: var(--text-primary-color);
-                border: 1px solid var(--mat-primary-color);
+                border: 1px solid var(--theme-primary-color);
                 background-color: var(--color-white);
                 img {
                     height: 18px;
@@ -90,7 +90,7 @@
                 padding: 0px 7px;
                 top: 0px;
                 left: 0px;
-                border: 1px solid var(--color-silver);
+                border: 1px solid var(--border-color);
                 background-color: var(--color-white);
 
                 img {
@@ -107,7 +107,7 @@
         float: left !important;
         white-space: nowrap;
         box-shadow: none !important;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         width: min-content;
         display: grid;
         grid-template-columns: 240px auto;
@@ -120,7 +120,7 @@
             .warehouse-list-wrapper {
                 .warehouse-list {
                     &:nth-child(odd) {
-                        background-color: var(--mat-text-primary-light);
+                        background-color: var(--theme-primary-light);
                     }
                 }
             }
@@ -128,7 +128,7 @@
                 .warehouse-expanded-box-wrapper {
                     .warehouse-expanded-box {
                         &:nth-child(odd) {
-                            background-color: var(--mat-text-primary-light) !important;
+                            background-color: var(--theme-primary-light) !important;
                         }
                     }
                 }
@@ -283,7 +283,7 @@
         }
         .list-head {
             display: flex;
-            border-bottom: 1px solid var(--color-silver);
+            border-bottom: 1px solid var(--border-color);
             height: 62px;
             width: fit-content;
             align-items: center;
@@ -458,7 +458,7 @@
                             padding: 0px 5px;
                             border-radius: var(--mat-border-radius-4);
                             margin-right: 55px;
-                            background-color: var(--mat-text-primary-light);
+                            background-color: var(--theme-primary-light);
                             position: relative;
                             right: 5px;
                             border: 0;
@@ -468,7 +468,7 @@
                             margin-right: 41px;
                             padding: 0px 5px;
                             border-radius: var(--mat-border-radius-4);
-                            background-color: var(--mat-text-primary-light);
+                            background-color: var(--theme-primary-light);
                             position: relative;
                             right: 4px;
                             border: 0;
@@ -487,7 +487,7 @@
                             height: 100%;
                             width: 392px;
                             &:nth-child(odd) {
-                                background-color: var(--mat-text-primary-light);
+                                background-color: var(--theme-primary-light);
                             }
                         }
                         .editable-input {
@@ -672,15 +672,15 @@
     /* UNUSED COMPONENT CLASS: input-group - Auto-commented by script
 /* UNUSED COMPONENT CLASS: input-group-addon - Auto-commented by script
 .input-group-addon {
-        border-left: 1px solid var(--color-silver) !important;
+        border-left: 1px solid var(--border-color) !important;
     }
 */
 
     input {
-        border-left: 1px solid var(--color-silver) !important;
+        border-left: 1px solid var(--border-color) !important;
 
         &:focus {
-            border-left: 1px solid var(--mat-primary-color) !important;
+            border-left: 1px solid var(--theme-primary-color) !important;
         }
     }
 }

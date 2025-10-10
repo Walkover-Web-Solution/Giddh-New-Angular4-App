@@ -103,15 +103,15 @@
 
     .input-group {
         .input-group-addon {
-            border-left: 1px solid var(--color-silver) !important;
+            border-left: 1px solid var(--border-color) !important;
         }
 
         input {
-            border-left: 1px solid var(--color-silver) !important;
+            border-left: 1px solid var(--border-color) !important;
             border-radius: var(--mat-border-radius-4);
 
             &:focus {
-                border-left: 1px solid var(--mat-primary-color) !important;
+                border-left: 1px solid var(--theme-primary-color) !important;
             }
         }
     }
@@ -178,7 +178,7 @@ form
 .move-to-group {
     /* UNUSED COMPONENT CLASS: list-item - Auto-commented by script
 .list-item {
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
     }
 */
 }
