@@ -129,11 +129,11 @@ span {
     border-bottom: 1px solid var(--border-color);
 }
 */
-.entry-against {
-    &.error-box {
-        border-radius: var(--mat-border-radius-8);
-    }
-}
+// .entry-against {
+//     &.error-box {
+//         border-radius: var(--mat-border-radius-8);
+//     }
+// }
 @media only screen and (max-width: 1440px) {
     .petty-cash {
         height: initial;

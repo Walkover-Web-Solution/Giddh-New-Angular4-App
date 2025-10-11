@@ -23,6 +23,7 @@ button,
 input {
     outline: none !important;
 }
+textarea,
 input {
     color: inherit;
     background-color: var(--color-transparent);
@@ -30,6 +31,12 @@ input {
 table {
     border-collapse: collapse;
     width: 100%;
+    tr {
+        th, td {
+            text-align: left;
+            vertical-align: middle;
+        }
+    }
 }
 ul,
 ol {

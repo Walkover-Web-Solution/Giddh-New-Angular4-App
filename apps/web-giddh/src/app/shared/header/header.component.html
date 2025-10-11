@@ -31,7 +31,7 @@
         class="nav-left-bar mat-app-background"
         [ngClass]="{
             'open': isSidebarExpanded,
-            'unvisible': companyList?.length === 0 && !isSubscriptionModule,
+            'visibility-hidden': companyList?.length === 0 && !isSubscriptionModule,
             'hide-sidebar': isSubscriptionModule
         }"
         (clickOutside)="closeSidebarMobile($event)"
@@ -54,7 +54,7 @@
         <div
             class="primary-main-header"
             id="primary-new-header"
-            [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 && !isSubscriptionModule }"
+            [ngClass]="{ 'open': sideMenu.isopen, 'visibility-hidden': companyList?.length === 0 && !isSubscriptionModule }"
         >
             <div class="d-flex justify-content-between align-items-center h-100">
                 <div *ngIf="companyList?.length && (isSubscriptionModule || isSubscriptionPage)">

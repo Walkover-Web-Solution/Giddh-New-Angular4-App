@@ -47,3 +47,9 @@
 
 // Generate absolute positioning utility classes
 @include absolute-positioning-utilities();
+
+// Generate visibility utility classes
+@include visibility-utilities();
+
+// Generate pointer-events utility classes
+@include pointer-events-utilities();

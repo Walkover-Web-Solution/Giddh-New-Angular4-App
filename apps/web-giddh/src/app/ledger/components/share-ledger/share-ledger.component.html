@@ -12,100 +12,102 @@
             </button>
         </div>
         <mat-dialog-content class="dialog-body" id="SharePop">
-            <div class="row">
-                <div class="col-12">
-                    <div class="modal-wrap">
-                        <div class="form-group add-mailer">
-                            <!--share account from-->
-                            <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
-                                <div class="input-group d-flex align-items-center">
-                                    <input-field
-                                        class="w-75"
-                                        [type]="'email'"
-                                        [name]="'userEmail'"
-                                        [(ngModel)]="email"
-                                        [pattern]="'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$'"
-                                        [required]="true"
-                                        [label]="localeData?.share_with"
-                                        [placeholder]="commonLocaleData?.app_email_id"
-                                    >
-                                    </input-field>
-                                    <span class="input-group-btn mr-l3">
-                                        <button
-                                            mat-raised-button
-                                            color="primary"
-                                            class="share-ledger-button d-flex align-items-center"
-                                            type="submit"
-                                            [disabled]="shareAccountForm.invalid"
-                                            (click)="shareAccount()"
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="modal-wrap">
+                            <div class="form-group add-mailer">
+                                <!--share account from-->
+                                <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
+                                    <div class="input-group d-flex align-items-center">
+                                        <input-field
+                                            class="w-75"
+                                            [type]="'email'"
+                                            [name]="'userEmail'"
+                                            [(ngModel)]="email"
+                                            [pattern]="'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$'"
+                                            [required]="true"
+                                            [label]="localeData?.share_with"
+                                            [placeholder]="commonLocaleData?.app_email_id"
                                         >
-                                            {{ commonLocaleData?.app_share }}
-                                        </button>
-                                    </span>
-                                </div>
-                            </form>
-                            <!--shared with array-->
-                            <div class="row mr-b2 mt-1" *ngIf="activeAccountSharedWith?.length > 0">
-                                <div class="pd-l15 pd-r1 w-75">
-                                    <ul class="shared-list">
-                                        <li *ngFor="let val of activeAccountSharedWith" class="clear-both">
-                                            <span class="pull-left">
-                                                <small class="user-email">{{ val?.emailId }}</small>
-                                            </span>
-                                            <span>
-                                                <span class="delete-icon w-inherit pull-right">
-                                                    <i
-                                                        (click)="unShareAccount(val?.uniqueName)"
-                                                        class="icon-cross"
-                                                        aria-hidden="true"
-                                                    ></i>
+                                        </input-field>
+                                        <span class="input-group-btn mr-l3">
+                                            <button
+                                                mat-raised-button
+                                                color="primary"
+                                                class="share-ledger-button d-flex align-items-center"
+                                                type="submit"
+                                                [disabled]="shareAccountForm.invalid"
+                                                (click)="shareAccount()"
+                                            >
+                                                {{ commonLocaleData?.app_share }}
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                                <!--shared with array-->
+                                <div class="row mr-b2 mt-1" *ngIf="activeAccountSharedWith?.length > 0">
+                                    <div class="pd-l15 pd-r1 w-75">
+                                        <ul class="shared-list">
+                                            <li *ngFor="let val of activeAccountSharedWith" class="clear-both">
+                                                <span class="pull-left">
+                                                    <small class="user-email">{{ val?.emailId }}</small>
                                                 </span>
-                                            </span>
-                                        </li>
-                                    </ul>
+                                                <span>
+                                                    <span class="delete-icon w-inherit pull-right">
+                                                        <i
+                                                            (click)="unShareAccount(val?.uniqueName)"
+                                                            class="icon-cross"
+                                                            aria-hidden="true"
+                                                        ></i>
+                                                    </span>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-wrap clear-both">
-                        <div class="clear-both">
-                            <span>{{ commonLocaleData?.app_or | titlecase }}</span>
-                            <a
-                                class="btn-link share-link mr-b05 font-size-15"
-                                href="javascript:;"
-                                (click)="getMagicLink()"
-                            >
-                                {{ localeData?.get_shareable_link }}
-                            </a>
-                            <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
-                        </div>
-                        <div class="input-group d-flex align-items-center mr-t15 mr-b15">
-                            <input-field
-                                class="w-75"
-                                [type]="'text'"
-                                [name]="'userEmail'"
-                                [(ngModel)]="magicLink"
-                                [readonly]="true"
-                                [disabled]="true"
-                                [label]="localeData?.url"
-                            >
-                            </input-field>
-                            <span class="input-group-btn mr-l3">
-                                <button
-                                    mat-raised-button
-                                    type="button"
-                                    color="primary"
-                                    [disabled]="!magicLink ? 'disabled' : null"
-                                    class="share-ledger-button d-flex align-items-center"
-                                    (click)="toggleIsCopied()"
-                                    ngxClipboard
-                                    [cbContent]="magicLink"
+                        <div class="modal-wrap clear-both">
+                            <div class="clear-both">
+                                <span>{{ commonLocaleData?.app_or | titlecase }}</span>
+                                <a
+                                    class="btn-link share-link mr-b05 font-size-15"
+                                    href="javascript:;"
+                                    (click)="getMagicLink()"
                                 >
-                                    {{ commonLocaleData?.app_copy }}
-                                </button>
-                            </span>
+                                    {{ localeData?.get_shareable_link }}
+                                </a>
+                                <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
+                            </div>
+                            <div class="input-group d-flex align-items-center mr-t15 mr-b15">
+                                <input-field
+                                    class="w-75"
+                                    [type]="'text'"
+                                    [name]="'userEmail'"
+                                    [(ngModel)]="magicLink"
+                                    [readonly]="true"
+                                    [disabled]="true"
+                                    [label]="localeData?.url"
+                                >
+                                </input-field>
+                                <span class="input-group-btn mr-l3">
+                                    <button
+                                        mat-raised-button
+                                        type="button"
+                                        color="primary"
+                                        [disabled]="!magicLink ? 'disabled' : null"
+                                        class="share-ledger-button d-flex align-items-center"
+                                        (click)="toggleIsCopied()"
+                                        ngxClipboard
+                                        [cbContent]="magicLink"
+                                    >
+                                        {{ commonLocaleData?.app_copy }}
+                                    </button>
+                                </span>
+                            </div>
+                            <small class="mr-t1 light-gray">{{ localeData?.share_note }}</small>
                         </div>
-                        <small class="mr-t1 light-gray">{{ localeData?.share_note }}</small>
                     </div>
                 </div>
             </div>

@@ -86,7 +86,7 @@
             // position: relative;
             // left: 16px;
             padding: 0 20px;
-            color: var(--color-white);
+            // color: var(--color-white);
             font-size: 18px;
         }
     }
@@ -178,10 +178,10 @@ ul{
                     &:hover {
                         .icon-circle{
                             background-color: var(--color-white);
-                            i[class^='icon-'],
-                            i[class*=' icon-'] {
-                              color: var(--text-primary-color) !important;
-                            }
+                            // i[class^='icon-'],
+                            // i[class*=' icon-'] {
+                            //   color: var(--text-primary-color) !important;
+                            // }
                         }
                       }
                 }
@@ -193,7 +193,7 @@ ul{
                 &:hover{
                     button {
                         background-color: var(--color-white) !important;
-                        color: var(--text-primary-color) !important;
+                        color: var(--color-black) !important;
                     }
                 }
             }

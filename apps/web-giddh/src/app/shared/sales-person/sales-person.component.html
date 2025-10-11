@@ -6,6 +6,7 @@
     [keyboardShortcut]="'esc'"
     (onShortcutPress)="closeDialog()"
 >
+<div class="aside-dialog-wrapper">
     <div class="dialog-header">
         <p class="modal-title">{{ commonLocaleData?.app_sales_person }}</p>
         <i (click)="closeDialog()" aria-label="close icon" class="icon-cross"></i>
@@ -21,7 +22,7 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <form [formGroup]="salesPersonForm" (ngSubmit)="onSubmit()">
-                    <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mr-l15 mr-r15 mr-b15">
+                    <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mr-b15">
                         <div>
                             <input-field
                                 tabindex="1"
@@ -140,7 +141,7 @@
                         </td>
                     </ng-container>
                     
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let rowHistory; columns: displayedColumns; let i = index" (mouseover)="activeRowIndex = i" (mouseout)="activeRowIndex = -1"></tr>
                 </table>
                 <mat-paginator
@@ -156,4 +157,5 @@
             </ng-template>
         </section>
     </mat-dialog-content>
+</div>
 </ng-container>

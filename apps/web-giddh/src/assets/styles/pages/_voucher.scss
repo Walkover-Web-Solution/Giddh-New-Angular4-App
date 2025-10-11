@@ -8,6 +8,22 @@
             }
          }
      }
+     .vouchers-entry-table {
+        table {
+            tr {
+                td { 
+                    input,
+                    textarea,
+                    mat-select {
+                        &:not(.hsn-sac-code){
+                            border: none !important;
+                            background-color: var(--color-transparent) !important;
+                        }
+                    }
+                } 
+            } 
+        }
+    }
 }
 
 .hsn-code-dropdown {

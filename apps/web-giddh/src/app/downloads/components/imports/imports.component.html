@@ -60,16 +60,15 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <a
-                        class="cursor-pointer pd-1 mr-r1 border d-flex"
-                        (click)="getImports()"
-                        [matTooltip]="commonLocaleData?.app_refresh"
-                        [matTooltipPosition]="'above'"
-                    >
-                        <span class="icon-refresh"></span>
-                    </a>
-                </div>
+                <button 
+                    mat-stroked-button
+                    class="btn-stroked-icon"
+                    (click)="getImports()"
+                    [matTooltip]="commonLocaleData?.app_refresh"
+                    [matTooltipPosition]="'above'"
+                >
+                    <span class="icon-refresh"></span>
+                </button>
             </div>
             <div *ngIf="isLoading">
                 <giddh-page-loader></giddh-page-loader>
@@ -183,24 +182,24 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
+                <mat-paginator
+                    *ngIf="importRequest?.totalItems > pageSizeOptions[0] && !isLoading"
+                    [length]="importRequest?.totalItems"
+                    [pageSize]="importRequest.count"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [pageIndex]="importRequest.page - 1"
+                    (page)="handlePageEvent($event)"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                >
+                </mat-paginator>
             </div>
+            <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+                <div class="no-data">
+                    <p>{{ commonLocaleData?.app_no_record_found }}</p>
+                </div>
+            </section>
         </div>
-        <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
-            <div class="no-data">
-                <p>{{ commonLocaleData?.app_no_record_found }}</p>
-            </div>
-        </section>
-        <mat-paginator
-            *ngIf="importRequest?.totalItems > pageSizeOptions[0] && !isLoading"
-            [length]="importRequest?.totalItems"
-            [pageSize]="importRequest.count"
-            [pageSizeOptions]="pageSizeOptions"
-            [pageIndex]="importRequest.page - 1"
-            (page)="handlePageEvent($event)"
-            [showFirstLastButtons]="true"
-            [hidePageSize]="false"
-        >
-        </mat-paginator>
     </section>
     <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
         <ng-template matMenuContent>

@@ -18,7 +18,7 @@
             <div class="dashboard-reconnect-block full-height" *ngIf="requestInFlight">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <div class="chart-div" [hidden]="requestInFlight">
+            <div class="chart-div" [ngClass]="{ 'visibility-hidden': requestInFlight }">
                 <div class="row">
                     <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                         <div class="d-flex justify-content-center dashboard-doughnut-chart-container">

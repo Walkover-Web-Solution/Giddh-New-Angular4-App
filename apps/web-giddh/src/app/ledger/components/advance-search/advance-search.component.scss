@@ -17,14 +17,6 @@
     margin-left: 16px;
 }
 
-::ng-deep {
-    .advance-search {
-        .clear-both {
-            background-color: var(--color-white) !important;
-        }
-    }
-}
-
 @media (min-width: 1200px) {
     /* UNUSED COMPONENT CLASS: container - Auto-commented by script
 .container {

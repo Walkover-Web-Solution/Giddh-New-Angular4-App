@@ -69,19 +69,19 @@
 
 /*---- variant ----*/
 .option-value-field {
-    // text-field,
-    // select-field {
-    //     input {
-    //         padding: 11px 16px !important;
-    //         border: 1px solid var(--border-color) !important;
-    //         border-radius: var(--mat-border-radius-4);
-    //         height: auto;
+    text-field,
+    select-field {
+        input {
+            padding: 11px 16px !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: var(--mat-border-radius-4);
+            height: auto;
 
-    //         &.disabled {
-    //             background-color: var(--color-light-gray) !important;
-    //         }
-    //     }
-    // }
+            &.disabled {
+                background-color: var(--color-light-gray) !important;
+            }
+        }
+    }
 
     select-field {
         position: relative;
@@ -105,13 +105,13 @@
         }
     }
     /* common text-field */
-    // &.text-value-field {
-    //     text-field {
-    //         input {
-    //             padding: 13px 16px !important;
-    //         }
-    //     }
-    // }
+    &.text-value-field {
+        text-field {
+            input {
+                padding: 13px 16px !important;
+            }
+        }
+    }
 }
 
 // body {
@@ -233,35 +233,35 @@ inventory-master {
 // For Bulk Stock Edit
 .bulk-stock {
     .bulk-stock-hide-show-button {
-        padding-left: 28px;
-        border: 1px solid var(--border-color);
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: var(--mat-border-radius-4);
         height: 40px;
         width: 40px;
+        padding-left: 28px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--mat-border-radius-4);
     }
-    // &-body {
-    //     .bulk-stock-table {
-    //         table {
-    //             th,
-    //             td {
-    //                 input {
-    //                     width: 100%;
-    //                     height: inherit;
-    //                     border: none;
-    //                     padding: 6px 10px;
-    //                     background: transparent;
-    //                 }
-    //                 .vertical-margin {
-    //                     margin: 5.4px 0;
-    //                     padding: 0 10px;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    &-body {
+        .bulk-stock-table {
+            table {
+                th,
+                td {
+                    input {
+                        width: 100%;
+                        height: inherit;
+                        border: none;
+                        padding: 6px 10px;
+                        background: transparent;
+                    }
+                    .vertical-margin {
+                        margin: 5.4px 0;
+                        padding: 0 10px;
+                    }
+                }
+            }
+        }
+    }
 }
 
     /*---- create-menufacturing ----*/

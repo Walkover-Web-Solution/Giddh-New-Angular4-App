@@ -21,8 +21,8 @@
         'accent-contrast': ($accent, 'default-contrast'),
         'warn': ($warn, 'default'),
         'warn-contrast': ($warn, 'default-contrast'),
-        'foreground': ($foreground, 'disabled-button'),
-        'background': ($background, 'disabled-button')
+        'foreground': ($foreground, 'text'),
+        'background': ($background, 'background')
     );
 
     @each $name, $palette-info in $theme-color-map {

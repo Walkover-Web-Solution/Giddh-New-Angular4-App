@@ -34,7 +34,7 @@
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <div class="dashboard-doughnut-chart-container">
+            <div class="dashboard-doughnut-chart-container" [ngClass]="{ 'visibility-hidden': requestInFlight }">
                 <canvas id="totaloverDueChartCanvas" [ngClass]="{ 'hide-chart': !dataFound }"></canvas>
                 <div class="no-data-available" *ngIf="!dataFound">
                     <img src="{{ imgPath }}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found" />

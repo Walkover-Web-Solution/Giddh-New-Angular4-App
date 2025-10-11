@@ -16,7 +16,7 @@
                     novalidate
                 >
                     <div
-                        class="form-group linked-entities"
+                        class="linked-entities"
                         *ngIf="
                             showLabels &&
                             !isProjectWiseAccounting &&
@@ -24,20 +24,17 @@
                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                         "
                     >
-                        <div class="form-group">
-                            <reactive-dropdown-field
-                                [options]="currentCompanyBranches"
-                                formControlName="branchUniqueName"
-                                class="company-branch-dropdown"
-                                (selectedOption)="handleBranchChange($event)"
-                                [placeholder]="commonLocaleData?.app_select_entity"
-                                [labelValue]="currentBranch?.name"
-                            >
-                            </reactive-dropdown-field>
-                        </div>
+                        <reactive-dropdown-field
+                            [options]="currentCompanyBranches"
+                            formControlName="branchUniqueName"
+                            class="company-branch-dropdown"
+                            (selectedOption)="handleBranchChange($event)"
+                            [placeholder]="commonLocaleData?.app_select_entity"
+                            [labelValue]="currentBranch?.name"
+                        >
+                        </reactive-dropdown-field>
                     </div>
-                    <div class="form-group" *ngIf="showLabels">
-                        <div class="form-group">
+                    <div *ngIf="showLabels">
                             <reactive-dropdown-field
                                 [options]="dateOptions"
                                 (selectedOption)="dateOptionIsSelected($event)"
@@ -47,10 +44,8 @@
                                 formControlName="selectedDateOption"
                             >
                             </reactive-dropdown-field>
-                        </div>
                     </div>
-                    <div class="form-group" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
-                        <div class="form-group">
+                    <div *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
                             <reactive-dropdown-field
                                 [options]="financialOptions"
                                 formControlName="selectedFinancialYearOption"
@@ -59,10 +54,8 @@
                                 [label]="commonLocaleData?.app_financial_year"
                                 [placeholder]="commonLocaleData?.app_datepicker?.select_financial_year"
                             ></reactive-dropdown-field>
-                        </div>
                     </div>
                     <div
-                        class="form-group relative datepicker-field"
                         *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
                     >
                         <div 
@@ -106,7 +99,7 @@
                             </ng-template>
                         </mat-menu>
                     </div>
-                    <div class="form-group" *ngIf="plBsExportXLS">
+                    <div *ngIf="plBsExportXLS">
                         <giddh-compare-with-date-range-picker
                             [endDate]="toDate"
                             [startDate]="fromDate"
@@ -115,9 +108,9 @@
                         >
                         </giddh-compare-with-date-range-picker>
                     </div>
-                    <div class="form-group" *ngIf="!showLoader">
+                    <ng-container *ngIf="!showLoader">
                         <div
-                            class="form-group pull-left mr-r15 d-inline-flex relative"
+                            class="pull-left mr-r15 d-inline-flex position-relative"
                             *ngIf="!isProjectWiseAccounting && tags?.length"
                         >
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
@@ -132,27 +125,16 @@
                             </reactive-dropdown-field>
                         </div>
                         <!-- Filter by Tag -->
-                        <div class="form-group pull-left">
-                            <a
-                                class="cursor-pointer expand-icon"
-                                (click)="emitExpand(true)"
-                                matTooltip="{{ commonLocaleData?.app_expand_all }}"
-                                matTooltipPosition="above"
-                                *ngIf="!expandAll"
-                            >
-                                <span class="icon-expandIcon"></span>
-                            </a>
-                            <a
-                                class="cursor-pointer expand-icon"
-                                (click)="emitExpand(false)"
-                                matTooltip="{{ commonLocaleData?.app_collapse_all }}"
-                                matTooltipPosition="above"
-                                *ngIf="expandAll"
-                            >
-                                <span class="icon-collapse"></span>
-                            </a>
-                        </div>
-                    </div>
+                         <button
+                            mat-stroked-button
+                            class="btn-stroked-icon"
+                            (click)="emitExpand(true)"
+                            [matTooltip]="expandAll ? commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all"
+                            matTooltipPosition="above"
+                         >
+                            <i [ngClass]="expandAll ? 'icon-collapse' : 'icon-expandIcon'"></i>
+                         </button>
+                    </ng-container>
                     <button mat-raised-button color="primary" type="submit">
                         {{ commonLocaleData?.app_search }}
                     </button>
@@ -195,9 +177,15 @@
                             <span class="d-inline-block nowrap">{{ localeData?.switch_back_to_reconcile_mode }}</span>
                         </button>
                     </ng-container>
-                    <a class="cursor-pointer" (click)="refreshData()" matTooltip="{{ localeData?.reload_data }}">
-                        <span class="icon-refresh"></span>
-                    </a>
+                    <button
+                        mat-stroked-button
+                        class="btn-stroked-icon"
+                        (click)="refreshData()"
+                        [matTooltip]="localeData?.reload_data"
+                        matTooltipPosition="above"
+                    >
+                        <i class="icon-refresh"></i>
+                    </button>
                     <button
                         class="ml-1"
                         *ngIf="isProjectWiseAccounting"

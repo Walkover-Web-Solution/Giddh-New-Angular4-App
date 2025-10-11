@@ -26,7 +26,7 @@
     font-size: var(--font-size-15) !important;
     border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4) !important;
-    color: var(--color-black) !important;
+    // color: var(--color-black) !important;
     box-shadow: none;
 }
 .intl-error {
@@ -126,11 +126,18 @@
 .iti--separate-dial-code .iti__flag-container {
     right: auto;
 }
-input-field{
+mat-form-field {
     .iti--allow-dropdown .iti__flag-container,
     .iti--separate-dial-code .iti__flag-container {
         right: auto;
         left: -12px !important;
+        transform: translate(-4px, -13px);
+        min-height: 48px;
+        z-index: 9;
+        & + input {
+            top: -7.5px;
+            padding-left: 35px !important;
+        }
     }
 }
 .iti--allow-dropdown .iti__flag-container:hover {

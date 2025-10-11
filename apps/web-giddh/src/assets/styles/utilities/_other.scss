@@ -53,7 +53,9 @@
 .text-primary {
     color: var(--text-primary-color) !important;
 }
-
+.text-color-inherit {
+    color: inherit !important;
+}
 // Grayscale colors
 .text-light {
     color: var(--color-medium-gray) !important;
@@ -545,6 +547,10 @@
     min-height: 100px;
 }
 
+.max-height-65vh {
+    max-height: 65vh !important;
+}
+
 // ===== DISPLAY & FLEXBOX =====
 // Display types
 .d-inline-grid {
@@ -647,4 +653,14 @@
             visibility: visible;
         }
     }
+}
+
+
+[hidden],
+[hidden].d-flex,
+[hidden].d-block,
+[hidden].d-inline,
+[hidden].d-inline-block,
+[hidden].d-inline-flex {
+    display: none !important;
 }

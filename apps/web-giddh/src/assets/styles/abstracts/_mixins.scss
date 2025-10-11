@@ -1318,3 +1318,105 @@
         }
     }
 }
+
+/**
+ * Cross-browser pointer-events mixin for individual use
+ * Apply pointer-events with vendor prefixes for maximum compatibility
+ * 
+ * @param {String} $value - The pointer-events value (auto, none, visiblePainted, visibleFill, visibleStroke, visible, painted, fill, stroke, all, unset, inherit)
+ */
+@mixin pointer-events($value) {
+    @if $value == unset {
+        -webkit-pointer-events: -webkit-initial !important;
+        -moz-pointer-events: -moz-initial !important;
+        -ms-pointer-events: initial !important;
+        pointer-events: unset !important;
+    } @else {
+        -webkit-pointer-events: #{$value} !important;
+        -moz-pointer-events: #{$value} !important;
+        -ms-pointer-events: #{$value} !important;
+        pointer-events: #{$value} !important;
+    }
+}
+
+/**
+ * Pointer events utility mixin
+ * Generates utility classes for pointer-events property with cross-browser support
+ * 
+ * @param {Map} $pointer-events - Map of class suffixes and their corresponding pointer-events values
+ */
+@mixin pointer-events-utilities(
+    $pointer-events: (
+        "auto": auto,
+        "none": none,
+        "visible": visible,
+        "painted": painted,
+        "fill": fill,
+        "stroke": stroke,
+        "all": all,
+        "unset": unset,
+        "inherit": inherit,
+    )
+) {
+    @each $name, $value in $pointer-events {
+        .pointer-events-#{$name} {
+            @include pointer-events($value);
+        }
+    }
+}
+
+/**
+ * Cross-browser visibility mixin for individual use
+ * Apply visibility with vendor prefixes for maximum compatibility
+ * 
+ * @param {String} $value - The visibility value (visible, hidden, collapse, unset, inherit)
+ */
+@mixin visibility($value) {
+    @if $value == unset {
+        -webkit-visibility: -webkit-initial !important;
+        -moz-visibility: -moz-initial !important;
+        -ms-visibility: initial !important;
+        visibility: unset !important;
+    } @else {
+        -webkit-visibility: #{$value} !important;
+        -moz-visibility: #{$value} !important;
+        -ms-visibility: #{$value} !important;
+        -o-visibility: #{$value} !important;
+        visibility: #{$value} !important;
+    }
+}
+
+/**
+ * Visibility utility mixin
+ * Generates utility classes for visibility property with cross-browser support
+ * 
+ * @param {Map} $visibilities - Map of class suffixes and their corresponding visibility values
+ */
+@mixin visibility-utilities(
+    $visibilities: (
+        "visible": visible,
+        "hidden": hidden,
+        "collapse": collapse,
+        "unset": unset,
+        "inherit": inherit,
+    )
+) {
+    @each $name, $value in $visibilities {
+        .visibility-#{$name} {
+            @include visibility($value);
+        }
+    }
+}
+
+/**
+ * THEME-BASED MIXIN
+ * ==================
+ * Apply content based on theme (default or dark)
+ * 
+ * @param {String} $theme - Theme name (default or dark)
+ */
+@mixin theme($theme) {
+    .#{$theme}-theme & {
+        @content;
+    }
+}

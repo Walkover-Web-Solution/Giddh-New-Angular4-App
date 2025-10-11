@@ -203,7 +203,7 @@
                                                             <mat-spinner [diameter]="30"></mat-spinner>
                                                         </ng-container>
                                                         <ng-container *ngIf="!(uploadAttachmentInProgress$ | async)">
-                                                            <div class="attachment-add-icon font-size-12 text-center rounded-circle">
+                                                            <div class="attachment-add-icon font-size-12 text-center border-radius-circle">
                                                                 <i class="icon-add"></i>
                                                             </div>
                                                             <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
@@ -213,7 +213,7 @@
                                                 <div *ngIf="stockForm.variants[0].attachmentUniqueName">
                                                     <div
                                                         class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative ">
-                                                        <div class="attachment-add-icon font-size-12 text-center rounded-circle">
+                                                        <div class="attachment-add-icon font-size-12 text-center border-radius-circle">
                                                             <i class="icon-tick"></i>
                                                         </div>
                                                         <img class="cursor-pointer" [matTooltip]="localeData?.preview_image" matTooltipPosition="above"
@@ -825,7 +825,7 @@
                                                                                     (ngModelChange)="
                                                                                         validateOptionValue(i, j)
                                                                                     "
-                                                                                    class="inventory-category-field-input"
+                                                                                    [cssClass]="'d-block w-100'"
                                                                                     [type]="'text'"
                                                                                 ></text-field>
                                                                             </div>
@@ -1022,7 +1022,7 @@
                                                                                     name="variantFile{{ i }}" id="variantFile{{ i }}" (change)="uploadFile($event, i)" />
                                                                                 <mat-spinner *ngIf="variant.isUploading"  [diameter]="30"></mat-spinner>
                                                                                 <ng-container *ngIf="!variant.isUploading">
-                                                                                    <div class="attachment-add-icon text-center font-size-12 rounded-circle">
+                                                                                    <div class="attachment-add-icon text-center font-size-12 border-radius-circle">
                                                                                         <i class="icon-add"></i>
                                                                                     </div>
                                                                                     <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
@@ -1032,7 +1032,7 @@
                                                                         <div *ngIf="variant.attachmentUniqueName">
                                                                             <div
                                                                                 class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative ">
-                                                                                <div class="attachment-add-icon text-center font-size-12 rounded-circle">
+                                                                                <div class="attachment-add-icon text-center font-size-12 border-radius-circle">
                                                                                     <i class="icon-tick"></i>
                                                                                 </div>
                                                                                 <img class="cursor-pointer" [matTooltip]="localeData?.preview_image" matTooltipPosition="above"

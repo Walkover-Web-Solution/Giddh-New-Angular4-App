@@ -64,22 +64,22 @@
     display: none !important;
 }
 
-.expand-collapse-btn a {
-    width: 40px;
-    height: 40px;
-    background-color: var(--color-white);
-    border: 1px solid var(--border-color);
-    border-radius: var(--mat-border-radius-4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: var(--font-size-16);
-    color: var(--text-primary-color);
-    &:hover {
-        background: var(--bg-primary-color);
-        color: var(--color-white);
-    }
-}
+// .expand-collapse-btn a {
+//     width: 40px;
+//     height: 40px;
+//     background-color: var(--color-white);
+//     border: 1px solid var(--border-color);
+//     border-radius: var(--mat-border-radius-4);
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     font-size: var(--font-size-16);
+//     color: var(--text-primary-color);
+//     &:hover {
+//         background: var(--bg-primary-color);
+//         color: var(--color-white);
+//     }
+// }
 
 /* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
 button.btn

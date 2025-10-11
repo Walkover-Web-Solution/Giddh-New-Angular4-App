@@ -6,6 +6,14 @@
     padding-inline: 10px;
 }
 
+.btn-no-ripple {
+    &.mat-mdc-icon-button {
+        .mat-mdc-button-persistent-ripple {
+            display: none;
+        }
+    }
+}
+
 // Dialog widths
 .mat-dialog {
     &-sm {

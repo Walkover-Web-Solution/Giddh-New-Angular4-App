@@ -31,11 +31,12 @@
                     <!-- Account Archive Status Filter Button -->
                      <ng-container *ngIf="i !== 1">
                          <button 
-                             class="h-auto p-0"
+                             class="h-auto p-0 btn-no-ripple"
                              mat-icon-button
                              [matTooltip]="commonLocaleData?.app_filter"
                              [matTooltipPosition]="'above'"
                              [matMenuTriggerFor]="archiveStatusMenu"
+                             [disableRipple]="true"
                          >
                             <i class="icon-advance-filter font-size-15"></i>
                          </button>

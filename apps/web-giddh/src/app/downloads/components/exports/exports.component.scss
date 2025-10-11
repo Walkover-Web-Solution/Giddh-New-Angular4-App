@@ -2,7 +2,7 @@
     .download-table {
         width: 100%;
         .download-table-btn {
-            color: var(--color-dark-gray);
+            // color: var(--color-dark-gray);
             background-color: var(--color-transparent);
             box-shadow: none;
             border-radius: var(--mat-border-radius-4);
@@ -21,10 +21,10 @@
         text-align: center;
         justify-content: center;
     }
-    .clear-filter {
-        color: var(--text-primary-color);
-        cursor: pointer;
-    }
+    // .clear-filter {
+    //     color: var(--text-primary-color);
+    //     cursor: pointer;
+    // }
     /* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
 .btn-success {
         background-color: var(--color-green);

@@ -69,12 +69,17 @@
 //         }
 //     }
 
-    .mat-form-field-appearance-outline {
-        .mat-mdc-form-field-icon-suffix {
-            margin-left: 0;
-            margin-right: 15px;
-        }
+.mat-form-field-appearance-outline {
+    .mat-mdc-form-field-icon-suffix {
+        margin-left: 0;
+        margin-right: 15px;
     }
+}
+mat-select {
+    .mat-mdc-select-arrow {
+        color: inherit;
+    }
+}
 
 //     .mat-mdc-form-field-subscript-wrapper {
 //         display: none;
@@ -327,7 +332,6 @@
     display: none;
 }
 
-
 // .mdc-text-field--filled {
 //     &:not(.mdc-text-field--disabled) {
 //         background-color: transparent !important;
@@ -437,7 +441,6 @@ ngx-mat-select-search {
     }
 }
 
-
 /*----- radio-button -----*/
 
 // .mat-mdc-radio-group {
@@ -500,10 +503,12 @@ ngx-mat-select-search {
 body {
     .cdk-overlay-container {
         .cdk-overlay-pane {
-            &:has(.email-dropdown-width) { // Need change this code in panelClass or class
+            &:has(.email-dropdown-width) {
+                // Need change this code in panelClass or class
                 width: 400px !important;
             }
-            &:has(.menu-width-150) {// Need change this code in panelClass or class
+            &:has(.menu-width-150) {
+                // Need change this code in panelClass or class
                 width: 150px !important;
             }
             // .mat-mdc-autocomplete-panel {

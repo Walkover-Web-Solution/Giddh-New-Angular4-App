@@ -28,7 +28,7 @@
     padding-top: 20px;
     padding-bottom: 3px;
     font-size: var(--font-size-15);
-    color: var(--color-black);
+    // color: var(--color-black);
 }
 .table thead th {
     vertical-align: bottom;
@@ -40,10 +40,10 @@
 .last-card {
     min-height: auto !important;
 }
-table.basic th {
+table th {
     font-size: var(--font-size-15);
     color: var(--text-primary-color);
-    background-color: var(--color-white);
+    // background-color: var(--color-white);
 }
 .cr-dr-body {
     padding: 15px;

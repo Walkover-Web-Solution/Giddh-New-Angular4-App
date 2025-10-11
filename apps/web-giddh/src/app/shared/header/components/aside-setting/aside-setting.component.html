@@ -6,7 +6,7 @@
         (commonLocaleData)="commonLocaleData = $event"
         (translationComplete)="translationComplete($event)"
     >
-        <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
+        <div class="aside-pane mat-app-background mat-app-background" (clickOutside)="closeAsidePaneIfMobile($event)">
             <div class="aside-help-header relative" *ngIf="showSettingHeading">
                 <p class="font-size-15">{{ localeData?.page_heading }}</p>
                 <div hidden class="cursor-pointer" (click)="closeAsidePane($event)">

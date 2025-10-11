@@ -21,7 +21,7 @@
                 [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
-                    <div class="header-content-sticky vendor-z-index">
+                    <div class="header-content-sticky vendor-z-index mr-b15">
                         <div
                             class="top-bar customer-top-bar clear-both"
                             [ngClass]="{ 'vendor-top-bar': activeTab === 'vendor' }"
@@ -44,33 +44,25 @@
                                     </reactive-dropdown-field>
 
                                     <!-- Universal Date Range Picker -->
-                                    <form
-                                        #invoiceForm="ngForm"
-                                        novalidate
-                                        class="form-inline input-grp-date-range-picker position-relative "
-                                    >
-                                        <div class="form-group d-flex flex-fill">
-                                            <div class="custom-datepicker-wrapper">
-                                                <div 
-                                                    class="custom-datepicker" 
-                                                    [matMenuTriggerFor]="universalDatepicker"
-                                                    #universalDatepickerTrigger="matMenuTrigger"
-                                                    role="button"
-                                                    aria-haspopup="true"
-                                                    aria-controls="universalDatepicker"
-                                                >
-                                                    <input
-                                                        matInput
-                                                        type="text"
-                                                        name="selectedDateRange"
-                                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                                        class="giddh-datepicker date-range-picker"
-                                                        readonly
-                                                    />
-                                                </div>
-                                            </div>
+                                    <div class="custom-datepicker-wrapper">
+                                        <div 
+                                            class="custom-datepicker" 
+                                            [matMenuTriggerFor]="universalDatepicker"
+                                            #universalDatepickerTrigger="matMenuTrigger"
+                                            role="button"
+                                            aria-haspopup="true"
+                                            aria-controls="universalDatepicker"
+                                        >
+                                            <input
+                                                matInput
+                                                type="text"
+                                                name="selectedDateRange"
+                                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                                class="giddh-datepicker date-range-picker"
+                                                readonly
+                                            />
                                         </div>
-                                    </form>
+                                    </div>
                                     <div class="dis pull-left on-desktop-view align-items-center">
                                         <div class="btn-group pull-right d-flex column-gap-15">
                                             <button
@@ -110,11 +102,10 @@
                                     </button>
                                 </div>
                                 <!-- Invoice filter section ends -->
-                                <div class="button-content">
+                                <div class="button-content" *ngIf="selectedCheckedContacts?.length > 0">
                                     <button
                                         mat-stroked-button
                                         class="desktop-button-filter"
-                                        *ngIf="selectedCheckedContacts?.length > 0"
                                         (click)="clearSelectedContacts()"
                                         aria-label="clear"
                                     >
@@ -185,7 +176,7 @@
                                 "
                             >
                                 <div
-                                    class="total-details-box mr-r05 d-flex justify-content-between count-box bg-white align-items-end position-relative min-width-230 max-width-378"
+                                    class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end position-relative min-width-230 max-width-378 mat-app-background"
                                 >
                                     <h5>
                                         <ng-container *ngIf="!selectedCheckedContacts?.length">{{

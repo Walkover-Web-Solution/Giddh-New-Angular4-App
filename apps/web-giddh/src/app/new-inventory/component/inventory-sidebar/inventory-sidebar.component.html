@@ -5,12 +5,12 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="aside-pane inventory-aside-pane" asideInventorySidebarMenuState>
+    <div class="aside-pane mat-app-background inventory-aside-pane mat-app-background" asideInventorySidebarMenuState>
         <div class="help-aside-body">
             <div class="back-to-main-slider">
                 <a [routerLink]="['/pages/giddh-all-items']" href="javascript:void(0);" aria-label="home icon">
                     <span>
-                        <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top">
+                        <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top image-as-icon-color">
                     </span>
                 </a>
                 <p class="heading">{{ localeData?.sidebar?.inventory }}</p>

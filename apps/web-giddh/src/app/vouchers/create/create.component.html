@@ -733,11 +733,10 @@
                                     <!-- Reverse Charge Checkbox -->
                                     <div class="col-12"
                                         *ngIf="showTaxColumn && (invoiceType.isPurchaseInvoice || (currentVoucherFormDetails?.rcmAllowed && (company.countryName === 'India' || company.countryName === 'United Kingdom')))">
-                                        <mat-checkbox (keydown.enter)="$event.preventDefault()" #rcmCheckbox
-                                            id="reverse-charge" formControlName="isRcmEntry"
-                                            (change)="changeRcmCheckboxState($event)" class="mr-r1" name="rcmEntry"
-                                            [disabled]="isEinvoiceGenerated" color="primary">
+                                        <mat-checkbox 
+                                            [disabled]="true" [color]="primary">
                                         </mat-checkbox>
+                                        hero
                                         <label for="reverse-charge"
                                             (click)="!isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"
                                             [innerHTML]="localeData?.transaction_reverse_charge">
@@ -1120,7 +1119,7 @@
                                                     <td [width]="hasStock ? '15%' : '17%'" class="text-left description"
                                                         *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
                                                         <ng-container *ngIf="activeEntryIndex === entryIndex">
-                                                            <textarea rows="2" matInput class="form-control mt-2"
+                                                            <textarea rows="2" matInput class="form-control"
                                                                 placeholder="Add Description"
                                                                 name="transactionDescription{{entryIndex}}"
                                                                 formControlName="description"

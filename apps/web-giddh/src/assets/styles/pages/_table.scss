@@ -1,26 +1,26 @@
 .mat-mdc-table {
     // background: var(--color-white) !important;
-    &.table-striped {
-        .mdc-data-table__content {
-            .mat-mdc-row {
-                &:hover {
-                    &:not(.no-hover) {
-                        // .mat-mdc-cell {
-                        //     background-color: var(--color-drag-bottom-shadow) !important;
-                        // }
-                    }
-                }
+    // &.table-striped {
+    //     .mdc-data-table__content {
+    //         .mat-mdc-row {
+    //             &:hover {
+    //                 &:not(.no-hover) {
+    //                     // .mat-mdc-cell {
+    //                     //     background-color: var(--color-drag-bottom-shadow) !important;
+    //                     // }
+    //                 }
+    //             }
 
-                &:not(.no-strip) {
-                    &:nth-of-type(odd) {
-                        .mat-mdc-cell {
-                            // background-color: var(--color-light-gray) !important;
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //             &:not(.no-strip) {
+    //                 &:nth-of-type(odd) {
+    //                     .mat-mdc-cell {
+    //                         // background-color: var(--color-light-gray) !important;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     .mat-mdc-header-row {
         .mat-mdc-header-cell {

@@ -421,7 +421,7 @@
                                                             <td class="table-amount">
                                                                 <i
                                                                     [ngClass]="{
-                                                                        'unvisible':
+                                                                        'visibility-hidden':
                                                                             activeLinkedStockIndex !== i ||
                                                                             manufacturingObject.manufacturingDetails[0]
                                                                                 .linkedStocks?.length <= 1
@@ -610,7 +610,7 @@
                                                             <td class="table-delete">
                                                                 <i
                                                                     [ngClass]="{
-                                                                        'unvisible': activeOtherExpenseIndex !== i
+                                                                        'visibility-hidden': activeOtherExpenseIndex !== i
                                                                     }"
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"
@@ -816,7 +816,7 @@
                                                             <td class="table-delete">
                                                                 <i
                                                                     [ngClass]="{
-                                                                        'unvisible':
+                                                                        'visibility-hidden':
                                                                             activeByProductLinkedStockIndex !== i
                                                                     }"
                                                                     class="icon-trash cursor-pointer"

@@ -60,19 +60,17 @@
 }
 
 .td-search-box {
-    /* UNUSED COMPONENT CLASS: input-container - Auto-commented by script
 .input-container {
         input {
             height: 36px;
             min-width: 100%;
             padding: 11px 40px 11px 11px;
-            color: var(--color-black);
+            // color: var(--color-black);
             border: none;
             background-color: var(--color-light-gray);
             border-radius: var(--mat-border-radius-4);
         }
     }
-*/
 }
 
 .inventory-report-table {

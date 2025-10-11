@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="header-content-sticky aging-report-z-index">
+    <div class="header-content-sticky aging-report-z-index mr-b15">
         <div
             *ngIf="
                 (dueAmountReportData$ | async)?.results?.length ||
@@ -7,7 +7,7 @@
                 showClearFilter ||
                 isAdvanceSearchApplied
             "
-            class="top-bar aging-top-bar d-flex justify-content-between"
+            class="top-bar aging-top-bar d-flex align-items-center justify-content-between"
         >
             <div class="aging-form-inline">
                 <div class="btn-group pull-left on-desktop-view">
@@ -570,7 +570,7 @@
     <div class="unpaid-invoice-aside-pane">
         <div class="header d-flex justify-content-space-between align-items-center">
             <p>{{ localeData?.unpaid_invoices }}</p>
-            <button mat-button class="rounded-circle" (click)="unpaidInvoiceDailogRef.close()" aria-label="cross icon">
+            <button mat-button class="border-radius-circle" (click)="unpaidInvoiceDailogRef.close()" aria-label="cross icon">
                 <i class="icon-cross"></i>
             </button>
         </div>

@@ -8,9 +8,9 @@
         .total-sale {
             border-radius: var(--mat-border-radius-4);
 
-            p {
-                color: var(--color-dark-gray);
-            }
+            // p {
+            //     color: var(--color-dark-gray);
+            // }
 
             &.opening-box {
                 span {
@@ -24,12 +24,12 @@
                 }
             }
 
-            &.payment-receipt,
-            &.closing-box {
-                span {
-                    color: var(--color-dark-gray);
-                }
-            }
+            // &.payment-receipt,
+            // &.closing-box {
+            //     span {
+            //         color: var(--color-dark-gray);
+            //     }
+            // }
         }
     }
 
