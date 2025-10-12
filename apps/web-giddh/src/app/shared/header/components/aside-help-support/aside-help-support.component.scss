@@ -83,7 +83,7 @@
             border-bottom: 1px solid var(--border-color);
             a {
                 display: block;
-                color: var(--color-black);
+                color: var(--theme-foreground-color);
 
                 p {
                     font-size: var(--font-size-15);
@@ -95,7 +95,7 @@
             }
         }
         .feature-block {
-            padding: 15px;
+            padding: 15px 10px;
             border-bottom: 1px solid var(--border-color);
             ul {
                 // list-style: none;
@@ -104,7 +104,7 @@
                     font-weight: var(--font-weight-semibold);
                     margin-bottom: 10px;
                     a {
-                        color: var(--color-black);
+                        color: var(--theme-foreground-color);
                         display: flex;
                         padding: 5px 0;
                     }
@@ -112,10 +112,10 @@
             }
         }
         .download-block {
-            padding: 15px;
+            padding: 15px 10px;
             border-bottom: 1px solid var(--border-color);
             h3 {
-                color: var(--color-black);
+                color: var(--theme-foreground-color);
             }
             h4 {
                 padding-bottom: 5px;
@@ -129,7 +129,7 @@
                     width: 50%;
                     padding-bottom: 10px;
                     a {
-                        color: var(--color-black);
+                        color: var(--theme-foreground-color);
                         padding-bottom: 15px;
                         font-size: var(--font-size-15);
                     }
@@ -155,7 +155,7 @@
             line-height: 1.5;
             p {
                 a,i  {
-                    color: var(--color-black);
+                    color: var(--theme-foreground-color);
                 }
             }
         }

@@ -4,11 +4,15 @@
         padding: 0 20px;
         .input-group-text {
             padding: 8px !important;
-            color: var(--color-dark-gray);
+            // color: var(--color-dark-gray);
             background-color: var(--color-light-gray);
             border: none;
             position: relative;
-            left: -1px;
+            // left: -1px;
+            border-top-left-radius: var(--mat-border-radius-4) !important;
+            border-bottom-left-radius: var(--mat-border-radius-4) !important;
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
         }
         input {
             border-left: none;
@@ -17,8 +21,8 @@
             background-color: var(--color-light-gray) !important;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
-            border-top-right-radius: 5px !important;
-            border-bottom-right-radius: 5px !important;
+            border-top-right-radius: var(--mat-border-radius-4) !important;
+            border-bottom-right-radius: var(--mat-border-radius-4) !important;
             border: none;
             &:focus {
                 border-color: var(--border-color) !important;
@@ -156,10 +160,10 @@
                     margin-bottom: 0 !important;
                     padding: 0 20px;
                     &.active {
-                        background-color: var(--color-light-gray) !important;
+                        background-color: var(--theme-primary-light) !important;
                     }
                     &:hover {
-                        background-color: var(--color-light-gray) !important;
+                        background-color: var(--theme-primary-light) !important;
                     }
                     span {
                         white-space: normal;

@@ -1,7 +1,4 @@
 #branch-transfer-create {
-    background-color: var(--color-white);
-    color: var(--color-black);
-
     .branch-transfer-header {
         padding: 10px 15px;
         border-bottom: 1px solid var(--border-color);
@@ -49,7 +46,7 @@
                     text-align: right;
                     border: 1px solid var(--border-color);
                     vertical-align: top !important;
-                    color: var(--color-black);
+                    color: var(--theme-foreground-color);
                     font-weight: 400;
 
                     &:first-child {
@@ -111,7 +108,7 @@
                                 .icon-info {
                                     margin-left: 10px;
                                     font-size: 15px;
-                                    color: var(--color-black);
+                                    color: var(--theme-foreground-color);
                                 }
                             }
 

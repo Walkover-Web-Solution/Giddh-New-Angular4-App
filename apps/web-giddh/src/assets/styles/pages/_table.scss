@@ -94,29 +94,29 @@ invoice-preview-details-component {
 // This CSS and class are written to make the table's header sticky while scrolling the page. To apply a sticky header, use these classes wherever needed.
 $listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors here, separated by commas (,)
 
-// .table-header-sticky {
-//     &:not(:has(#{$listOfNotApplyBelowCodeSelectors})) {
-//         table {
-//             border-collapse: inherit;
-//         }
+.table-header-sticky {
+    &:not(:has(#{$listOfNotApplyBelowCodeSelectors})) {
+        table {
+            border-collapse: inherit;
+        }
 
-//         .mat-mdc-tab-group {
-//             overflow: visible !important;
-//         }
+        .mat-mdc-tab-group {
+            overflow: visible !important;
+        }
 
-//         .mat-mdc-tab-body-wrapper {
-//             overflow: visible !important;
+        .mat-mdc-tab-body-wrapper {
+            overflow: visible !important;
 
-//             .mat-mdc-tab-body {
-//                 overflow: visible !important;
+            .mat-mdc-tab-body {
+                overflow: visible !important;
 
-//                 .mat-mdc-tab-body-content {
-//                     overflow: visible !important;
-//                 }
-//             }
-//         }
-//     }
-// }
+                .mat-mdc-tab-body-content {
+                    overflow: visible !important;
+                }
+            }
+        }
+    }
+}
 
 // .header-content-sticky {
 //     position: sticky;

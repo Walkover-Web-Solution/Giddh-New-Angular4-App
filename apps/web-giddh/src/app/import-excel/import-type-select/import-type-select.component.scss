@@ -33,8 +33,7 @@
 }
 
 /* UNUSED COMPONENT CLASS: has-error - Auto-commented by script
-.has-error /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
-.form-control {
+.has-error .form-control {
     border-color: var(--color-red) !important;
 }
 */
@@ -49,10 +48,10 @@
     width: 100%;
     background-color: var(--color-white);
 }
-.text-link-2 {
-    color: var(--text-primary-color) !important;
-    &:hover {
-        color: var(--text-primary-color) !important;
+    .text-link-2 {
+        color: var(--theme-primary-color) !important;
+        &:hover {
+            color: var(--theme-primary-color) !important;
     }
 }
 @media (max-width: 991px) {
@@ -65,14 +64,12 @@
     }
 }
 
-.import-type {
-    /* UNUSED COMPONENT CLASS: icon-import - Auto-commented by script
-.icon-import, /* UNUSED COMPONENT CLASS: icon-invoice-new - Auto-commented by script
-.icon-invoice-new {
-        background: var(--color-light-gray);
-        width: 90px;
-        height: 90px;
-        line-height: 90px;
-    }
-*/
+/* UNUSED COMPONENT CLASS: icon-import - Auto-commented by script
+.import-type .icon-import,
+.import-type .icon-invoice-new {
+    background: var(--color-light-gray);
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
 }
+*/

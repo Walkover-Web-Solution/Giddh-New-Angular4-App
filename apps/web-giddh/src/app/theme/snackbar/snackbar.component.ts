@@ -54,7 +54,7 @@ export class SnackBarComponent implements OnInit {
 
         this.timeout = setTimeout(() => {
             this.dismiss();
-        }, 30000);
+        }, 3000);
 
         this.changeDetection.detectChanges();
     }

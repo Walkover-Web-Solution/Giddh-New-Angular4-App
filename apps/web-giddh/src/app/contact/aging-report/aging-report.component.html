@@ -568,7 +568,7 @@
 
 <ng-template #unpaidInvoice>
     <div class="unpaid-invoice-aside-pane">
-        <div class="header d-flex justify-content-space-between align-items-center">
+        <div class="header d-flex justify-content-between align-items-center">
             <p>{{ localeData?.unpaid_invoices }}</p>
             <button mat-button class="border-radius-circle" (click)="unpaidInvoiceDailogRef.close()" aria-label="cross icon">
                 <i class="icon-cross"></i>
@@ -583,7 +583,7 @@
                             [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined"
                             [ngClass]="{ 'cursor-default': item?.voucherNumber === 'OPENING BALANCE' }"
                         >
-                            <div class="d-flex justify-content-space-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <p class="font-size-14">
                                         <span class="text-primary">{{ item?.voucherNumber }}</span> |

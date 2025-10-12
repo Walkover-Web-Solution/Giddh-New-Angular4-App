@@ -1463,7 +1463,7 @@
                             }"
                         >
                             <!-- region debit transaction header-->
-                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px">
+                            <mat-grid-list class="mat-app-background" cols={{ledgerGridTotalColumns}} rowHeight="50px">
                                 <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[0]}}>
                                     <span class="cursor-pointer">{{ commonLocaleData?.app_date }}</span>
                                 </mat-grid-tile>
@@ -2255,7 +2255,7 @@
                             <table class="ledger-footer-1 left-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === transactionType.Credit">
-                                        <td colspan="12" class="col-xs-12 text-right text-white h32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'right'"
@@ -2278,9 +2278,9 @@
                                         class="total-col"
                                         *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
                                     >
-                                        <td colspan="12" class="col-xs-12 text-right text-white h32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
-                                                <span class="border-top padding-ledger">
+                                                <span class="padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningDebitTotal"
                                                         [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2307,7 +2307,7 @@
                             <table class="ledger-footer-1 right-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === transactionType.Debit">
-                                        <td colspan="12" class="col-xs-12 text-right text-white h32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'right'"
@@ -2329,9 +2329,9 @@
                                         class="total-col"
                                         *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
                                     >
-                                        <td colspan="12" class="col-xs-12 text-right text-white h32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
-                                                <span class="border-top padding-ledger">
+                                                <span class="padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningCreditTotal"
                                                         [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2973,6 +2973,7 @@
                 <section class="statement-view">
                     <!-- Mat grid list #1 (Statement Header) -->
                     <mat-grid-list
+                        class="mat-app-background"
                         cols={{ledgerStatementViewGridTotalColumns}}
                         rowHeight="50px"
                     >

@@ -54,13 +54,13 @@ $dark-theme: mat.define-dark-theme(
 
 .md-drppicker {
     font-family: var(--font-family);
-    color: var(--color-black);
+    color: var(--theme-foreground-color);
     border-radius: var(--mat-border-radius-4);
     width: 278px;
     display: flex;
     margin-top: 0;
     font-size: var(--font-size-15);
-    background-color: var(--color-white);
+    background-color: var(--theme-background-color);
     box-shadow: 0 2px 4px 0 var(--color-shadow-light), 0 2px 8px 0 var(--color-shadow-light);
     &.double {
         width: 100%;
@@ -222,10 +222,10 @@ $dark-theme: mat.define-dark-theme(
         /* new calendar */
     }
     .calendar-table {
-        border: 1px solid var(--color-white);
+        border: 1px solid var(--color-transparent);
         padding: 4px;
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--color-white);
+        background-color: var(--theme-background-color);
     }
 
     table,
@@ -240,10 +240,10 @@ $dark-theme: mat.define-dark-theme(
         color: var(--color-medium-gray);
     }
     th.month.drp-animate,
-    .month.drp-animate {
+    .month.drp-animate {    
         font-size: var(--font-size-12);
         text-align: left;
-        color: var(--color-black);
+        color: var(--theme-foreground-color);
         font-weight: 600;
         .year-name {
             padding-left: 5px;
@@ -376,15 +376,15 @@ $dark-theme: mat.define-dark-theme(
     }
     td,
     .td-div {
-        color: var(--text-primary-color);
+        color: var(--theme-foreground-color);
         margin: 0em 0;
-        background-color: var(--color-white) !important;
+        background-color: var(--theme-background-color) !important;
         &.off {
             &,
             &.in-range,
             &.start-date,
             &.end-date {
-                background-color: var(--color-white);
+                background-color: var(--theme-background-color);
                 border-color: transparent;
                 color: var(--color-medium-gray);
             }
@@ -404,7 +404,7 @@ $dark-theme: mat.define-dark-theme(
             &:hover {
                 span {
                     background-color: var(--color-light-gray) !important;
-                    color: var(--color-black) !important;
+                    color: var(--theme-foreground-color) !important;
                     border-color: var(--color-dark-gray);
                 }
             }
@@ -413,7 +413,7 @@ $dark-theme: mat.define-dark-theme(
         &.in-range {
             background-color: var(--theme-primary-light);
             border-color: transparent;
-            color: var(--color-black);
+            color: var(--theme-foreground-color);
             // TODO: Should this be static or should it be parameterized?
             border-radius: var(--mat-border-radius-0);
             z-index: 9;
@@ -543,7 +543,7 @@ $dark-theme: mat.define-dark-theme(
 
     select {
         display: inline-block;
-        background-color: var(--color-white);
+        background-color: var(--theme-background-color);
         width: 100%;
         padding: 5px;
         border: 1px solid var(--color-light-gray);
@@ -656,7 +656,7 @@ $dark-theme: mat.define-dark-theme(
         display: flex;
         flex-direction: column;
         border-left: 1px solid var(--border-color);
-        background-color: var(--color-white);
+        background-color: var(--theme-background-color);
         height: 490px !important;
         .range-container {
             ul {
@@ -677,8 +677,8 @@ $dark-theme: mat.define-dark-theme(
                         text-align: left;
                         cursor: pointer;
                         font-size: var(--font-size-15);
-                        color: var(--color-black);
-                        background-color: var(--color-white);
+                        color: var(--theme-foreground-color);
+                        background-color: var(--theme-background-color);
                         border-left: 3px solid transparent !important;
                         font-family: var(--font-family) !important;
                         transition: all 100ms ease;
@@ -691,7 +691,7 @@ $dark-theme: mat.define-dark-theme(
                             position: absolute;
                             z-index: 1017;
                             min-width: 96px;
-                            background-color: var(--color-white);
+                            background-color: var(--theme-background-color);
                             box-shadow: 0px 2px 8px var(--color-shadow-light);
                             left: 28px;
                             top: -3px;
@@ -828,7 +828,7 @@ $dark-theme: mat.define-dark-theme(
 */
     .clear {
         box-shadow: none;
-        background-color: var(--color-white) !important;
+        background-color: var(--theme-background-color) !important;
         svg {
             color: var(--color-red);
             fill: currentColor;
@@ -841,12 +841,12 @@ $dark-theme: mat.define-dark-theme(
     }
     ::-webkit-scrollbar-track {
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--color-white);
+        background-color: var(--theme-background-color);
     }
 
     ::-webkit-scrollbar-thumb {
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--color-white);
+        background-color: var(--theme-background-color);
     }
 }
 .md-drppicker td.in-range.in-range-start::before {
@@ -865,7 +865,7 @@ $dark-theme: mat.define-dark-theme(
 .md-drppicker td.in-range.in-range-start.in-range-end span {
     background-color: var(--theme-primary-light) !important;
     border-radius: 50%;
-    color: var(--color-black) !important;
+    color: var(--theme-foreground-color) !important;
     border-color: var(--color-dark-gray);
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before {
@@ -888,7 +888,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 .md-drppicker .td-div.in-range.in-range-start.in-range-end span {
     background-color: var(--theme-primary-light) !important;
     border-radius: 50%;
-    color: var(--color-black) !important;
+    color: var(--theme-foreground-color) !important;
     border-color: var(--color-dark-gray);
 }
 .td-div.in-range.in-range-start.in-range-hovered.in-range-end::before {
@@ -1042,12 +1042,12 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
             }
             .ranges::-webkit-scrollbar-track {
                 border-radius: var(--mat-border-radius-4);
-                background-color: var(--color-white);
+                background-color: var(--theme-background-color);
             }
 
             .ranges::-webkit-scrollbar-thumb {
                 border-radius: var(--mat-border-radius-4);
-                background-color: var(--color-white);
+                background-color: var(--theme-background-color);
             }
         }
         &.rtl {
@@ -1116,11 +1116,11 @@ td:hover span {
 
 .md-drppicker td.end-date.active,
 .md-drppicker .td-div.end-date.active {
-    background-color: var(--color-white) !important;
+    background-color: var(--theme-background-color) !important;
 
     span {
         background-color: var(--theme-primary-light) !important;
-        color: var(--color-black) !important;
+        color: var(--theme-foreground-color) !important;
     }
 
     .available:hover {
@@ -1248,12 +1248,12 @@ td span {
 }
 
 .activatedDate span {
-    color: var(--color-black) !important;
+    color: var(--theme-foreground-color) !important;
     background-color: transparent !important;
 }
 
 .activatedDate.in-range.in-range-start span {
-    color: var(--color-black);
+    color: var(--theme-foreground-color);
 }
 .activatedDate:hover {
     span {
@@ -1276,7 +1276,7 @@ td span {
 
 .sub-ranges-cal {
     position: static;
-    background-color: var(--color-white);
+    background-color: var(--theme-background-color);
     right: 0;
     top: 0;
     z-index: 9999;
@@ -1310,7 +1310,7 @@ td span {
                 left: 7px;
                 top: 11px;
                 transform: rotate(0) !important;
-                filter: invert(0);
+                filter: var(--color-image-filter-quaternary);
             }
         }
     }
@@ -1324,12 +1324,12 @@ td span {
     }
     .date-picker-scroll::-webkit-scrollbar-track {
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--color-white);
+        background-color: var(--theme-background-color);
     }
 
     .date-picker-scroll::-webkit-scrollbar-thumb {
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--color-white);
+        background-color: var(--theme-background-color);
     }
 }
 
@@ -1385,7 +1385,7 @@ td span {
                 position: sticky;
                 top: 0;
                 z-index: 1;
-                background-color: var(--color-white);
+                background-color: var(--theme-background-color);
                 .sticky-header {
                     width: calc(100% - 3px) !important;
                     th.days-td {
@@ -1411,10 +1411,10 @@ td span {
                         width: 30px !important;
                         min-width: unset !important;
                         height: 30px;
-                        background-color: var(--color-silver) !important;
+                        background-color: var(--theme-primary-light) !important;
                         border-radius: 50px;
                         padding: 0 15px;
-                        filter: invert(0);
+                        filter: var(--color-image-filter-quaternary);
                     }
                 }
             }
@@ -1439,8 +1439,8 @@ td span {
                             padding: 0;
                             border: none;
                             border-bottom: none;
-                            color: var(--color-black);
-                            background-color: var(--color-white);
+                            color: var(--theme-foreground-color);
+                            background-color: var(--theme-background-color);
                             &.activeSelectedDate {
                                 border-bottom: none;
                             }
@@ -1460,7 +1460,7 @@ td span {
                             border-bottom-color: var(--theme-primary-color);
                             cursor: pointer;
                             input {
-                                color: var(--text-primary-color);
+                                color: var(--theme-foreground-color);
                                 cursor: pointer;
                             }
                         }
@@ -1530,14 +1530,14 @@ td span {
                 text-align: left;
                 cursor: pointer;
                 font-size: var(--font-size-12);
-                color: var(--color-black);
+                color: var(--theme-foreground-color);
                 font-family: var(--font-family);
                 transition: all 100ms ease;
                 .drop-down {
                     position: absolute;
                     z-index: 1017;
                     min-width: 96px;
-                    background-color: var(--color-white);
+                    background-color: var(--theme-background-color);
                     box-shadow: 0px 2px 8px var(--color-shadow-light);
                     left: 28px;
                     top: -3px;
@@ -1586,7 +1586,7 @@ td span {
                 margin-bottom: 0;
                 border: none;
                 border-bottom: 1px solid var(--border-color);
-                color: var(--color-black);
+                color: var(--theme-foreground-color);
                 background-color: transparent;
                 &:focus {
                     border-bottom-color: var(--theme-primary-color) !important;

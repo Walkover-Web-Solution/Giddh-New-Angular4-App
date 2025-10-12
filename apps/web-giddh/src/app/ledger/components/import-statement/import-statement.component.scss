@@ -22,7 +22,7 @@
         width: 120px !important;
         border-radius: var(--mat-border-radius-0);
         text-align: center;
-        background-color: var(--color-light-gray);
+        background-color: var(--theme-primary-light);
         margin-left: -34px;
     }
     input[type="file"] {
@@ -57,13 +57,13 @@
     >div {
         height: 230px;
         p {
-            color: var(--color-black);
+            color: var(--theme-foreground-color);
         }
     }
 
     &:hover {
         >div {
-            background-color: var(--color-light-gray);
+            background-color: var(--theme-primary-light);
         }
     }
 }

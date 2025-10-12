@@ -307,7 +307,7 @@ table.ledger-footer-1 td[class*="col-"] {
 .ledger-book {
     border: 0px solid var(--border-color);
     clear: both;
-    // position: relative;
+    position: relative;
     float: left;
     width: 100%;
     margin-bottom: 16px;
@@ -443,7 +443,13 @@ input[type="date"]::-webkit-outer-spin-button {
 .ledger-book .ledger-footer-1 .total-col .border-top {
     border: none;
 }
-
+:host ::ng-deep .advance-search-by-date {
+    mat-form-field {
+        .mat-mdc-form-field-focus-overlay {
+            border-radius: 50px;
+        }
+    }
+}
 .advance-search-by-date {
     display: inline-flex;
     position: relative;

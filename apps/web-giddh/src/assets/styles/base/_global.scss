@@ -1133,7 +1133,7 @@ no-data,
     margin: 0px 0 0;
     font-size: var(--font-size-15);
     text-align: left;
-    background-color: var(--color-white);
+    background-color: var(--theme-background-color);
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
     border: 1px solid var(--border-color);
@@ -5295,7 +5295,7 @@ table input[type="number"] {
 .ledger-book {
     border: 1px solid var(--border-color);
     clear: both;
-    // position: relative;
+    position: relative;
     float: left;
     width: 100%;
     // background: var(--color-white);
@@ -11771,7 +11771,7 @@ body.prevent-body-scroll {
         border-right: none;
         // background: var(--color-white);
         padding: 15px 11px;
-        border-bottom: 1px solid var(--color-silver);
+        // border-bottom: 1px solid var(--color-silver);
         // font-weight: var(--font-weight-semibold);
     }
     thead > tr > th {

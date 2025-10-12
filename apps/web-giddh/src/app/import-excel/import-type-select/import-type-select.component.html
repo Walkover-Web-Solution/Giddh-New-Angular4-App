@@ -39,13 +39,13 @@
                     </li>
                     <ng-container *ngIf="isBranch || branches?.length === 1">
                         <li>
-                            <a [routerLink]="['/pages', 'import', voucherType.AccountWise]" href="javascript:void(0);">
+                            <a class="text-link-2 h-100" [routerLink]="['/pages', 'import', voucherType.AccountWise]" href="javascript:void(0);">
                                 <img src="{{ imgPath }}new/account.svg" alt="account wise" />
                                 <p>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.account_wise }}</p>
                             </a> 
                         </li>
                         <li>
-                            <a [routerLink]="['/pages', 'import', voucherType.VoucherWise]" href="javascript:void(0);">
+                            <a class="text-link-2 h-100" [routerLink]="['/pages', 'import', voucherType.VoucherWise]" href="javascript:void(0);">
                                 <img src="{{ imgPath }}new/voucher.svg" alt="voucher wise" />
                                 <p>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.voucher_wise }}</p>
                             </a> 
