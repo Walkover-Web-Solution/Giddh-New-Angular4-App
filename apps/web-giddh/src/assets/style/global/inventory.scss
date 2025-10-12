@@ -62,7 +62,7 @@ report-filters {
 inventory-sidebar {
     .mat-mdc-icon-button {
         &.mat-mdc-button-base {
-            width: 40px;
+            width: 40px !important;
         }
     }
 }

@@ -30,3 +30,31 @@
     --line-height-32: 32px;
     --line-height-36: 36px;
 }
+
+/* Specific optimizations for mat-form-field labels */
+/* .mat-mdc-floating-label,
+.mdc-floating-label,
+.mat-mdc-form-field-label,
+.mat-form-field-label {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
+    font-feature-settings: "kern" 1;
+    transform: translateZ(0); 
+    font-family: var(--font-family) !important;
+    font-size: var(--font-size-12) !important;
+    line-height: var(--line-height-16) !important;
+    font-weight: var(--font-weight-regular) !important;
+} */
+
+/* Input field typography */
+/* .mat-mdc-input-element,
+.mdc-text-field__input,
+.mat-input-element {
+    font-family: var(--font-family) !important;
+    font-size: var(--font-size-14) !important;
+    line-height: var(--line-height-20) !important;
+    font-weight: var(--font-weight-regular) !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+} */
