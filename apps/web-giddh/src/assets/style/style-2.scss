@@ -11960,17 +11960,7 @@ body.prevent-body-scroll {
     }
 }
 
-// *::-webkit-scrollbar {
-//     width: 6px;
-//     height: 5px;
-// }
-
-// *::-webkit-scrollbar-track {
-//     background: var(--color-white);
-// }
-
 *::-webkit-scrollbar-thumb {
-    // background: var(--color-white);
     border-radius: 5px;
     min-height: 60px;
 }
