@@ -41,6 +41,7 @@ export class VatReportTransactionsRequest {
     section: any;
     page: any;
     count: any;
+    country: string;
 }
 
 export class VatDetailedReportRequest extends VatReportTransactionsRequest {

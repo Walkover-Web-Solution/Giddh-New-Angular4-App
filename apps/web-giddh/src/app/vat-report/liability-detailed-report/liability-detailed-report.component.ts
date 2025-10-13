@@ -27,7 +27,8 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         page: 1,
         count: PAGINATION_LIMIT,
         section: '',
-        currencyCode: 'BWP'
+        currencyCode: 'BWP',
+        country: ''
     };
     /** True if API is calling in progress */
     public isLoading: boolean = false;
