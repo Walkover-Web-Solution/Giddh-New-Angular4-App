@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
@@ -235,8 +235,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public removePromoCode: boolean = false;
     /** Hold true in production environment */
     public isProdMode: boolean = PRODUCTION_ENV;
-    /** This will hold option selected state */
-    public optionSelected: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -395,17 +393,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
             if (!this.isNewUserLoggedIn) {
                 this.getBillingDetails();
-                this.getBillingDetails$.pipe(delay(1000), takeUntil(this.destroyed$)).subscribe(data => {
+                this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data && data?.uniqueName) {
                         this.getBillingData = true;
                         this.setFormValues(data);
                         this.selectedCountry = data.country?.name;
                         this.selectedState = data?.state ? data.state?.name : data.county?.name;
-                        if (this.secondStepForm.get('taxNumber')?.value && this.secondStepForm.get('taxNumber')?.value?.length >= 2) {
-                            setTimeout(() => {
-                                this.validateGstNumber();
-                            }, 50);
-                        }
                     }
                 });
             }
@@ -560,11 +553,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         setTimeout(() => {
-                            if (this.subscriptionId && this.isChangePlan) {
-                                this.router.navigate(['/pages/user-details/subscription']);
-                            } else {
-                                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
-                            }
+                        if (this.subscriptionId && this.isChangePlan) {
+                            this.router.navigate(['/pages/user-details/subscription']);
+                        } else {
+                            this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                        }
                         }, 100);
                     }
                 }
@@ -678,12 +671,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             } else {
                 this.isSubscriptionRegion = true;
                 this.setUserCountry();
-            }
-        });
-
-        this.secondStepForm.get('taxNumber')?.valueChanges.pipe(delay(500), takeUntil(this.destroyed$)).subscribe(value => {
-            if (value) {
-                this.optionSelected = false;
             }
         });
 
@@ -1129,7 +1116,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getStates(): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
             if (response) {
                 this.states = [];
                 this.countyList = [];
@@ -1160,14 +1146,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This will use validate gst number
-    *
-    * @memberof BuyPlanComponent
-    */
+     * This will use validate gst number
+     *
+     * @memberof BuyPlanComponent
+     */
     public validateGstNumber(): void {
         let isValid: boolean = false;
         if (this.secondStepForm.get('taxNumber')?.value) {
-            if (this.formFields['taxName']) {
+            if (this.formFields['taxName']?.label) {
                 if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                     for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                         let regex = new RegExp(this.formFields['taxName']['regex'][key]);
@@ -1178,6 +1164,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else {
                     isValid = true;
                 }
+
                 if (!isValid) {
                     let text = this.commonLocaleData?.app_invalid_tax_name;
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
@@ -1189,7 +1176,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.isGstinValid = true;
                 }
             }
-            this.changeDetection.detectChanges();
         }
 
         if (this.secondStepForm.get('taxNumber')?.value?.length >= 2) {
@@ -1205,17 +1191,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     return true;
                 }
             });
-            this.changeDetection.detectChanges();
         } else {
             this.disabledState = false;
             this.isGstinValid = false;
             this.selectedState = '';
             this.selectedStateCode = '';
-            if (!this.optionSelected) {
-                this.secondStepForm.controls['state'].setValue(null);
-            }
-            this.changeDetection.detectChanges();
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1263,6 +1245,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
+
         if (this.selectedStep === 1 && this.secondStepForm.invalid) {
             this.isFormSubmitted = true;
             return;
@@ -1469,6 +1452,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public selectCountry(event: any): void {
         if (event?.value) {
+
             this.selectedCountry = event.label;
             this.secondStepForm.controls['country'].setValue(event);
             this.secondStepForm.get('taxNumber')?.setValue('');
@@ -1558,13 +1542,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     public selectState(event: any): void {
         if (event?.value) {
-            this.optionSelected = true;
             this.selectedState = event.label;
-
-            this.secondStepForm.controls['state'].patchValue({
-                name: event.label,
-                code: event.value
-            });
+            this.secondStepForm.controls['state'].setValue(event);
         }
     }
 
@@ -1763,10 +1742,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['pincode'].setValue(data.pincode);
         this.secondStepForm.controls['taxNumber'].setValue(data.taxNumber);
         this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
+        this.selectCountry({ label: data.country.name, value: data.country.code, additional: data.country });
+        if (data?.state) {
+            this.selectState({ label: data.state.name, value: data.state.code, additional: data.state });
+        } else {
+            this.selectState({ label: data.county.name, value: data.county.code, additional: data.county });
+        }
         this.secondStepForm.controls['address'].setValue(data?.address);
         this.initIntl(this.secondStepForm.get('mobileNumber')?.value);
-        this.subscriptionForm.markAsPristine();
-        this.changeDetection.detectChanges();
     }
 
     /**

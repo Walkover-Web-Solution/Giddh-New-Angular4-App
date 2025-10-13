@@ -563,7 +563,7 @@
                                                     ((customTemplate?.templateType === templateTypeEnum.GstTemplateA ||
                                                         customTemplate?.templateType ===
                                                             templateTypeEnum.ThermalTemplate) &&
-                                                        voucherType === voucherTypeEnum.sales &&
+                                                            (voucherType === voucherTypeEnum.sales || voucherType === voucherTypeEnum.voucher) &&
                                                         customTemplate?.sections?.['header']?.data?.['showCompanyAddress']) ||
                                                     customTemplate?.templateType === templateTypeEnum.TallyTemplate
                                                 "
