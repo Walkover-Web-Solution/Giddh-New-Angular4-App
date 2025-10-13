@@ -477,6 +477,9 @@
 }
 
 // Float and clear
+.float-left { float: left !important; }
+.float-right { float: right !important; }
+.float-none { float: none !important; }
 .clear-both {
     clear: both;
     &::after {

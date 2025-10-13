@@ -4,7 +4,7 @@
         <p class="text-muted half pd-t05">{{ localeData?.filing?.transaction_summary_filing }}</p>
     </div>
 
-    <hr class="m-0" *ngIf="!isTransactionSummary && selectedGst === GstReport.Gstr2" />
+    <hr class="m-0" *ngIf="isTransactionSummary && selectedGst === GstReport.Gstr2" />
 
     <div class="gstr-transactions-summary">
         <div class="text-uppercase title" *ngIf="!isTransactionSummary">{{ localeData?.filing?.overall_summary }}</div>

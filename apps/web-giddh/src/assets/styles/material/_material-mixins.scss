@@ -8,21 +8,72 @@
     $foreground: map-get($theme, foreground);
     $background: map-get($theme, background);
 
-    // Material Design color variables
-    // --mat-primary-color: #{mat.get-color-from-palette($primary)};
-    // --mat-accent-color: #{mat.get-color-from-palette($accent)};
-    // --mat-warn-color: #{mat.get-color-from-palette($warn)};
+    // Complete Example Start
+    // $theme-color-map: (
+    //     'primary': ($primary, 'default'),
+    //     'primary-contrast': ($primary, 'default-contrast'),
+    //     'accent': ($accent, 'default'),
+    //     'accent-contrast': ($accent, 'default-contrast'),
+    //     'warn': ($warn, 'default'),
+    //     'warn-contrast': ($warn, 'default-contrast'),
+
+    //     // Foreground variants
+    //     'foreground': ($foreground, 'text'),
+    //     'secondary-text': ($foreground, 'secondary-text'),
+    //     'disabled-text': ($foreground, 'disabled-text'),
+    //     'hint-text': ($foreground, 'hint-text'),
+    //     'icon': ($foreground, 'icon'),
+    //     'divider': ($foreground, 'divider'),
+
+    //     // Background variants
+    //     'background': ($background, 'background'),
+    //     'card': ($background, 'card'),
+    //     'dialog': ($background, 'dialog'),
+    //     'hover': ($background, 'hover'),
+    //     'app-bar': ($background, 'app-bar'),
+    //     'raised-button': ($background, 'raised-button'),
+    //     'tooltip': ($background, 'tooltip')
+    // );
+    // Complete Example End
 
     // Theme color variables with contrast
     $theme-color-map: (
-        'primary': ($primary, 'default'),
-        'primary-contrast': ($primary, 'default-contrast'),
-        'accent': ($accent, 'default'),
-        'accent-contrast': ($accent, 'default-contrast'),
-        'warn': ($warn, 'default'),
-        'warn-contrast': ($warn, 'default-contrast'),
-        'foreground': ($foreground, 'text'),
-        'background': ($background, 'background')
+        "primary": (
+            $primary,
+            "default",
+        ),
+        "primary-contrast": (
+            $primary,
+            "default-contrast",
+        ),
+        "accent": (
+            $accent,
+            "default",
+        ),
+        "accent-contrast": (
+            $accent,
+            "default-contrast",
+        ),
+        "warn": (
+            $warn,
+            "default",
+        ),
+        "warn-contrast": (
+            $warn,
+            "default-contrast",
+        ),
+        "foreground": (
+            $foreground,
+            "text",
+        ),
+        "background": (
+            $background,
+            "background",
+        ),
+        "border": (
+            $foreground,
+            "divider",
+        ),
     );
 
     @each $name, $palette-info in $theme-color-map {
@@ -30,27 +81,12 @@
         $variant: nth($palette-info, 2);
 
         --theme-#{$name}-color: #{mat.get-color-from-palette($palette, $variant)};
-        
+
         .theme-#{$name}-color {
             color: var(--theme-#{$name}-color) !important;
         }
-        
-        .bg-theme-#{$name}-color {
+        .theme-#{$name}-bg-color {
             background-color: var(--theme-#{$name}-color) !important;
         }
     }
 }
-
-// @mixin create-color-utilities() {
-//     $colors: 'primary', 'accent', 'warn';
-
-//     @each $name in $colors {
-//         .color-#{$name} {
-//             color: var(--mat-#{$name}-color) !important;
-//         }
-
-//         .background-#{$name} {
-//             background-color: var(--mat-#{$name}-color) !important;
-//         }
-//     }
-// }

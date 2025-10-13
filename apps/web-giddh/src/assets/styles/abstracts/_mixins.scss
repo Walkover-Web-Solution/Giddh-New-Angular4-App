@@ -1198,21 +1198,21 @@
     // Generate utility classes for overflow
     @each $name, $value in $overflows {
         .overflow-#{$name} {
-            overflow: var(--overflow-#{$name}) !important;
+            overflow: #{$value} !important;
         }
     }
 
     // Generate utility classes for overflow-x
     @each $name, $value in $overflows {
         .overflow-x-#{$name} {
-            overflow-x: var(--overflow-#{$name}) !important;
+            overflow-x: #{$value} !important;
         }
     }
 
     // Generate utility classes for overflow-y
     @each $name, $value in $overflows {
         .overflow-y-#{$name} {
-            overflow-y: var(--overflow-#{$name}) !important;
+            overflow-y: #{$value} !important;
         }
     }
 }

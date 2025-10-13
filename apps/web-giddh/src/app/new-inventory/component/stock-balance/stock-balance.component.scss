@@ -113,26 +113,26 @@
         grid-template-columns: 240px auto;
 
         &:hover {
-            background-color: var(--color-light-gray);
+            // background-color: var(--color-light-gray);
             .grid-title-left {
-                background-color: var(--color-light-gray);
+                // background-color: var(--color-light-gray);
             }
-            .warehouse-list-wrapper {
-                .warehouse-list {
-                    &:nth-child(odd) {
-                        background-color: var(--theme-primary-light);
-                    }
-                }
-            }
-            .stock-display-wrapper {
-                .warehouse-expanded-box-wrapper {
-                    .warehouse-expanded-box {
-                        &:nth-child(odd) {
-                            background-color: var(--theme-primary-light) !important;
-                        }
-                    }
-                }
-            }
+            // .warehouse-list-wrapper {
+            //     .warehouse-list {
+            //         &:nth-child(odd) {
+            //             background-color: var(--theme-primary-light);
+            //         }
+            //     }
+            // }
+            // .stock-display-wrapper {
+            //     .warehouse-expanded-box-wrapper {
+            //         .warehouse-expanded-box {
+            //             &:nth-child(odd) {
+            //                 background-color: var(--theme-primary-light) !important;
+            //             }
+            //         }
+            //     }
+            // }
         }
         .warehouse-list-wrapper {
             min-height: 56px;
@@ -146,9 +146,9 @@
                 position: relative;
                 left: 1px;
                 min-height: 56px;
-                &:nth-child(odd) {
-                    background-color: var(--color-light-gray);
-                }
+                // &:nth-child(odd) {
+                //     background-color: var(--color-light-gray);
+                // }
 
                 .stock-list-body {
                     .stock-list-box {
@@ -260,7 +260,7 @@
         }
 */
         .grid-title-list {
-            color: var(--color-black) !important;
+            // color: var(--color-black) !important;
             line-height: 26px;
             min-width: 140px;
             font-weight: 700;
@@ -294,7 +294,7 @@
                 box-shadow: 1px 0px 0px var(--color-shadow-light);
                 overflow: hidden;
                 z-index: 2;
-                background-color: var(--color-white);
+                background-color: var(--theme-background-color);
                 mat-form-field {
                     top: 11px;
                     input::placeholder {
@@ -312,7 +312,7 @@
                     border-radius: var(--mat-border-radius-4);
                     padding: 8px 10px;
                     color: var(--text-primary-color);
-                    background-color: var(--color-light-gray) !important;
+                    // background-color: var(--color-light-gray) !important;
                 }
             }
             .group-list-head {
@@ -324,16 +324,16 @@
                 margin-right: 14px;
                 left: 6px;
             }
-            .wrapper-warehouse {
-                .warehouse-list-head {
-                    &:nth-child(odd) {
-                        background-color: var(--color-light-gray);
-                    }
-                    &:nth-child(even) {
-                        background-color: var(--color-white);
-                    }
-                }
-            }
+            // .wrapper-warehouse {
+            //     .warehouse-list-head {
+            //         &:nth-child(odd) {
+            //             background-color: var(--color-light-gray);
+            //         }
+            //         &:nth-child(even) {
+            //             background-color: var(--color-white);
+            //         }
+            //     }
+            // }
         }
         .stock-table-wrapper {
             display: flex;
@@ -342,7 +342,7 @@
                 .grid-title-left {
                     .inner-name {
                         font-size: var(--font-size-15);
-                        color: var(--color-black);
+                        // color: var(--color-black);
                     }
                     .stock-details {
                         font-size: var(--font-size-12);
@@ -640,7 +640,7 @@
 */
 }
 .white-color {
-    background-color: var(--color-white) !important;
+    background-color: var(--theme-primary-light) !important;
 }
 /* UNUSED COMPONENT CLASS: gray-color - Auto-commented by script
 .gray-color {
@@ -648,10 +648,10 @@
 }
 */
 .expanded-stock-table-with-opacity {
-    background-color: var(--color-light-gray);
+    background-color: var(--theme-primary-light);
 }
 .expanded-stock-table-without-opacity {
-    background-color: var(--color-light-gray) !important;
+    background-color: var(--theme-primary-light) !important;
 }
 
 @media (max-width: 1180px) {

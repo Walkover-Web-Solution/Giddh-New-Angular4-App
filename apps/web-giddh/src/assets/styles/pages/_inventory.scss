@@ -59,13 +59,13 @@
 // }
 
 /*---- inventory-sidebar ----*/
-// inventory-sidebar {
-//     .mat-mdc-icon-button {
-//         &.mat-mdc-button-base {
-//             width: 40px;
-//         }
-//     }
-// }
+inventory-sidebar {
+    .mat-mdc-icon-button {
+        &.mat-mdc-button-base {
+            width: 40px !important;
+        }
+    }
+}
 
 /*---- variant ----*/
 .option-value-field {

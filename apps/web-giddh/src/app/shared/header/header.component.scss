@@ -337,16 +337,17 @@ ul{
 }
 
 /*notification css*/
-.white-row {
-    background-color: var(--color-white);
+.warning-msg-row {
+    background-color: var(--theme-warn-light);
     padding: 10px 15px;
     font-size: var(--font-size-15);
     box-shadow: 1px 1px 3px var(--color-shadow-light);
-    color: var(--color-black);
+    color: var(--theme-foreground-color);
 
     p {
         font-weight: var(--font-weight-semibold);
         font-size: var(--font-size-15);
+        color: var(--theme-foreground-color);
     }
 
     span.icon-traingle-info {
@@ -368,7 +369,7 @@ ul{
     }
 }
 
-.white-row.menu_open {
+.warning-msg-row.menu_open {
     margin-left: 240px;
 }
 

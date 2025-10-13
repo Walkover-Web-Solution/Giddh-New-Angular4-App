@@ -110,13 +110,13 @@
                             height: 27px;
                             width: 100%;
                             line-height: 15px;
-                            &:hover {
-                                color: var(--text-primary-color);
-                                background-color: var(--color-white);
+                            // &:hover {
+                                // color: var(--text-primary-color);
+                                // background-color: var(--color-white);
                                 // .sidebar-menu-icons {
                                 //     filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
                                 // }
-                            }
+                            // }
                         }
                     }
                     .list {
