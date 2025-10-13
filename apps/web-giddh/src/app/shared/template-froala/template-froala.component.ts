@@ -453,11 +453,12 @@ export class TemplateFroalaComponent implements OnInit {
             this.froalaEditor.events.on(
                 'keydown',
                 (e) => {
-                    if (e.which == FroalaEditor.KEYCODE.ENTER && this.froalaTribute?.isActive) {
+                    console.log("Triggered : ", e);         
+                    if ((e.which == FroalaEditor.KEYCODE.ENTER || e.which == FroalaEditor.KEYCODE.BACKSPACE) && this.froalaTribute?.isActive) {
+                        console.log("Run : ", e);  
                         return false;
                     }
-                },
-                true
+                }
             );
         }
     }
