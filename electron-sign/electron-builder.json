@@ -51,6 +51,7 @@
             "zip"
         ],
         "icon": "./resources/icon.ico",
+        "publisherName": "Walkover Web Solutions Private Limited",
         "legalTrademarks": "",
         "signAndEditExecutable": false
     },

@@ -1,3 +1,4 @@
+
 import { UpdateDownloadedEvent, autoUpdater } from 'electron-updater';
 import { MessageBoxOptions, dialog } from 'electron';
 
