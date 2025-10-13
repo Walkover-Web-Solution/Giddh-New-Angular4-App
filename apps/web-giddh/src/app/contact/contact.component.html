@@ -1624,18 +1624,18 @@
         let-formControl="formControl"
     >
         <div class="search-table">
-            <div class="align-items-center d-flex" [hidden]="show">
+            <div class="d-flex align-items-center column-gap1" [hidden]="show">
                 <button
                     mat-icon-button
                     aria-label="search"
                     (click)="toggleSearch(fieldName)"
-                    class="customer-vendor-name-search-icon"
+                    class="customer-vendor-name-search-icon p-0 w-auto"
                 >
                     <span class="icon-search"></span>
                 </button>
                 <span> {{ title }}</span>
             </div>
-            <div class="align-items-center d-flex pd-l14" [hidden]="!show">
+            <div class="d-flex align-items-center" [hidden]="!show">
                 <text-field
                     [type]="'text'"
                     [placeholder]="getSearchFieldText(fieldName)"

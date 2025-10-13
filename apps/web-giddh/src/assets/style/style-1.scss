@@ -5,12 +5,17 @@
     font-family: var(--font-family);
 }
 
+/* Font rendering optimizations to prevent blurry text */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
 html,
 body {
     height: 100%;
     font-family: var(--font-family) !important;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     font-size: var(--font-size-15) !important;
 }
 
@@ -661,7 +666,7 @@ aside-menu-account .container-fluid {
     background: var(--color-light-gray);
 }
 .due-box {
-    background: var(--color-due-box-background);
+    background: var(--color-red-light);
     h5 {
         .number-total {
             color: var(--color-red);

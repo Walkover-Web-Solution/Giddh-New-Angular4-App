@@ -763,7 +763,7 @@
     }
     ::-webkit-scrollbar-track {
         border-radius: 4px;
-        background-color: var(--color-scrollbar-primary-track-background);
+        background-color: var(--color-white);
     }
 
     ::-webkit-scrollbar-thumb {
@@ -957,7 +957,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
             }
             .ranges::-webkit-scrollbar-track {
                 border-radius: 4px;
-                background-color: var(--color-scrollbar-primary-track-background);
+                background-color: var(--color-white);
             }
 
             .ranges::-webkit-scrollbar-thumb {
@@ -1243,7 +1243,7 @@ td span {
     }
     .date-picker-scroll::-webkit-scrollbar-track {
         border-radius: 4px;
-        background-color: var(--color-scrollbar-primary-track-background);
+        background-color: var(--color-white);
     }
 
     .date-picker-scroll::-webkit-scrollbar-thumb {

@@ -944,14 +944,15 @@ button.btn.btn-filter {
 }
 
 .arrow-icon {
-    right: 14px;
-    top: 20px;
-    width: 30px;
-    height: 30px;
-    border: 2px solid var(--color-silver);
     display: flex;
     justify-content: center;
     align-items: center;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px !important;
+    height: 30px !important;
+    border: 2px solid var(--color-silver);
 }
 .arrow-icon:hover {
     color: var(--color-light-gray);

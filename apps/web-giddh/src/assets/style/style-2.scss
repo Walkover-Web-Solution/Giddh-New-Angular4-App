@@ -1,5 +1,5 @@
 @charset "utf-8";
-@use './themes/_custom-theme.scss';
+@use "./themes/_custom-theme.scss";
 @import "./json-tree.scss";
 @import "./json-diff.scss";
 @import "./intl.scss";
@@ -907,7 +907,8 @@ textarea {
     }
 }
 
-.voucher-preview-edit, .giddh-mobile-wrapper {
+.voucher-preview-edit,
+.giddh-mobile-wrapper {
     .flag-input {
         .mdc-floating-label {
             padding-left: 40px !important;
@@ -9395,7 +9396,6 @@ input.checkbox-custom[type="checkbox"] {
     padding: 0 !important;
 }
 
-
 .edit-modal {
     max-width: 300px;
     margin: 0 auto;
@@ -11960,17 +11960,7 @@ body.prevent-body-scroll {
     }
 }
 
-*::-webkit-scrollbar {
-    width: 6px;
-    height: 5px;
-}
-
-*::-webkit-scrollbar-track {
-    background: var(--color-scrollbar-primary-track-background);
-}
-
 *::-webkit-scrollbar-thumb {
-    background: var(--color-white);
     border-radius: 5px;
     min-height: 60px;
 }
@@ -12638,7 +12628,7 @@ hamburger-menu {
                 width: 39%;
             }
 
-            .customise-filter-button {  
+            .customise-filter-button {
                 border-radius: 0;
                 margin-right: 0 !important;
                 height: 100%;
@@ -13877,7 +13867,7 @@ mat-list {
 .serial-no-column {
     min-width: 30px !important;
 }
-    
+
 // Global class use to show/hide element on hover
 .hover-trigger {
     .hover-target {
@@ -13903,6 +13893,28 @@ giddh-datepicker {
                     }
                 }
             }
+        }
+    }
+}
+
+// Temp Code to fix Only CSS Version 2 bugs
+button {
+    &.mat-mdc-icon-button {
+        .mat-mdc-button-persistent-ripple {
+            display: none;
+        }
+    }
+}
+.mat-mdc-form-field {
+    .mat-mdc-form-field-focus-overlay {
+        display: none;
+    }
+    .mdc-line-ripple {
+        display: none;
+    }
+    .mdc-text-field--filled {
+        &:not(.mdc-text-field--disabled) {
+            background-color: var(--color-transparent);
         }
     }
 }

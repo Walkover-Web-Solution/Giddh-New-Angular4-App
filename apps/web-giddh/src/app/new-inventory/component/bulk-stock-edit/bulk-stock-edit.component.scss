@@ -45,9 +45,9 @@
                     color: var(--color-black);
                     .border-line {
                         border: 2px solid transparent;
-                        &.active {
-                            border-color: var(--color-blue-primary);
-                        }
+                        // &.active {
+                        //     border-color: var(--color-blue-primary);
+                        // }
                         .custom-padding {
                             padding: 6px 10px;
                         }
