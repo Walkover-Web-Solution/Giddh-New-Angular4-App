@@ -701,7 +701,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     txn.isUpdated = true;
                 }
             }
-            // check if txn.selectedAccount is aleready set so it means account name is changed without firing deselect event
+            // check if txn.selectedAccount is already set so it means account name is changed without firing deselect event
             if (txn?.selectedAccount) {
                 // check if discount is added and update component as needed
                 this.vm.discountArray.map(d => {
@@ -714,9 +714,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 txn.particular.name = e.label;
                 txn.particular.uniqueName = e.value;
             }
-            // if ther's stock entry
+            // if there's stock entry
             if (e.additional?.stock) {
-                // check if we aleready have stock entry
+                // check if we already have stock entry
                 if (this.vm.isThereStockEntry(e?.value)) {
                     txn.particular.uniqueName = null;
                     txn.particular.name = null;
@@ -724,7 +724,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.toaster.showSnackBar("warning", this.localeData?.multiple_stock_entry_error);
                     return;
                 } else {
-                    // add unitArrys in txn for stock entry
+                    // add unitArrays in txn for stock entry
                     let requestObject;
                     if (e.additional.stock) {
                         requestObject = {
@@ -2416,10 +2416,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
 
-        if (this.voucherApiVersion === 2) {
-            this.vm.calculateOtherTaxes(this.vm.selectedLedger.otherTaxModal);
-        }
-
         // check if entry allows to show discount and taxes box
         // first check with opened lager
         if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
@@ -2450,6 +2446,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.generateCompoundTotal();
         }
         this.vm.generatePanelAmount();
+        if (this.voucherApiVersion === 2) {
+            setTimeout(() => {
+                this.vm.calculateOtherTaxes(this.vm.selectedLedger.otherTaxModal);
+            }, 200);
+        }
         if (this.isAdvanceReceipt) {
             setTimeout(() => {
                 this.handleAdvanceReceiptChange();
