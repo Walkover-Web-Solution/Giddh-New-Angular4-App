@@ -66,6 +66,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public showLoader: boolean = false;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Flag to temporarily disable page leave confirmation after successful operations */
+    private skipPageLeaveConfirmation: boolean = false;
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
     /** True if tax selection box is open */
@@ -77,7 +79,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Returns true if form has actual unsaved changes else false */
     public get showPageLeaveConfirmation(): boolean {
         
-        if (!this.groupForm || !this.initialFormValues) {
+        if (!this.groupForm || !this.initialFormValues || this.skipPageLeaveConfirmation) {
             return false;
         }
         
@@ -371,7 +373,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.inventoryService.UpdateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
-                    this.groupForm.markAsPristine();
+                    this.clearPageLeaveConfirmation();
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_update);
                     if (!this.addGroup) {
                         this.getStockGroups();
@@ -392,6 +394,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.inventoryService.CreateStockGroup(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
+                    this.clearPageLeaveConfirmation();
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_create);
 
                     if (!this.addGroup) {
@@ -404,6 +407,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     }
                 } else {
                     this.toggleLoader(false);
+                    this.clearPageLeaveConfirmation();
                     this.toaster.showSnackBar("error", response?.message);
                 }
                 this.changeDetection.detectChanges();
@@ -620,6 +624,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.inventoryService.DeleteStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
+                        this.clearPageLeaveConfirmation();
                         this.toaster.showSnackBar("success", this.localeData?.group_delete);
                         if (this.addGroup) {
                             this.closeAsideEvent.emit();
@@ -643,6 +648,21 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     private toggleLoader(showLoader: boolean): void {
         this.showLoader = showLoader;
+    }
+
+    /**
+     * Clears page leave confirmation by setting skip flag
+     *
+     * @private
+     * @memberof CreateUpdateGroupComponent
+     */
+    private clearPageLeaveConfirmation(): void {
+        this.skipPageLeaveConfirmation = true;
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        // Reset the flag after a short delay to allow normal functionality to resume
+        setTimeout(() => {
+            this.skipPageLeaveConfirmation = false;
+        }, 1000);
     }
 
     /**

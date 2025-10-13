@@ -19,9 +19,6 @@ import { AccountsAction } from "../../actions/accounts.actions";
 import { AccountRequestV2 } from "../../models/api-models/Account";
 import { cloneDeep } from "../../lodash-optimized";
 import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
-import { AccountService } from "../../services/account.service";
-import { SalesActions } from "../../actions/sales/sales.action";
-
 @Component({
     selector: "preview",
     templateUrl: "./preview.component.html",
@@ -160,8 +157,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public showEditAccount$: Observable<boolean> = this.componentStore.showEditAccount$;
     /** Enum representing standard accounting group unique names */
     public AccountingGroupEnum = AccountingGroupEnum;
-    /** Property to track if the user has updated before */
-    private hasUpdatedBefore: boolean = false;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean> = this.componentStore.isAddAndManageOpenedFromOutside$;
     /** Holds true if master is open */
@@ -176,9 +171,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
-        private accountsAction: AccountsAction,
-        private accountService: AccountService,
-        private salesAction: SalesActions
+        private accountsAction: AccountsAction
     ) {
     }
 
@@ -241,7 +234,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((params) => {
+        this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params) {
                 this.params = params;
                 this.contactActiveTab = params?.type;
@@ -251,8 +244,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((queryParams) => {
-            if (queryParams && !this.isAccountUpdateInProgress && !this.isRefreshingAfterDelete) {
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams) => {
+            if (queryParams && !this.isAccountUpdateInProgress) {
                 this.isSearching = false;
                 this.selectedContact = null;
                 this.queryParams = queryParams;
@@ -274,7 +267,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 if (searchString) {
                     this.search.setValue(searchString);
                 } else {
-                    this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                    if (!this.isRefreshingAfterDelete) {
+                        this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                    }
                 }
             }
         });
@@ -395,14 +390,14 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }, isPatch: boolean = false) {
         this.updateAccountInProcess$ = of(true);
         this.isAccountUpdateInProgress = true;
-        
+
         if (isPatch) {
             this.store.dispatch(this.accountsAction.updateAccountV2Patch(accRequestObject?.value, accRequestObject.accountRequest));
         } else {
             accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
             this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
         }
-        
+
         this.updateAccountIsSuccess$?.pipe(
             filter(response => response !== null && response !== undefined),
             take(1),
