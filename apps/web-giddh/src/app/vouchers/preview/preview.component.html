@@ -220,7 +220,7 @@
                             </ng-container>
                             <button
                                 mat-menu-item
-                                (click)="actionVoucher('cancel')"
+                                (click)="openCancelVoucherDialog('cancel')"
                                 *ngIf="[voucherTypeEnum.sales, voucherTypeEnum.purchaseOrder, voucherTypeEnum.creditNote, voucherTypeEnum.debitNote].includes(voucherType)"
                             >
                                 {{ commonLocaleData?.app_payment_status?.cancel }}
