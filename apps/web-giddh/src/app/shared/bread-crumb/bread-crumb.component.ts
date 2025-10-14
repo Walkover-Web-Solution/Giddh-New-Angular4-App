@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { filter, ReplaySubject, takeUntil } from 'rxjs';
 import { NavigationStart, Router } from '@angular/router';
-import { GeneralService } from '../../services/general.service';
+import { BreadCrumbService } from '../../services/bread-crum.service';
 
 @Component({
     selector: 'bread-crumb',
@@ -17,7 +17,7 @@ export class BreadCrumbComponent {
 
     constructor(
         private router: Router,
-        public generalService: GeneralService
+        public breadCrumbService: BreadCrumbService
     ) {
     }
 
@@ -27,7 +27,7 @@ export class BreadCrumbComponent {
      * @returns boolean indicating if any breadcrumb path is found in the URL
      */
     private checkBreadCrumbPath(url: string): boolean {
-        return this.generalService?.getBreadCrumbPath()?.some(path => path?.url && url.includes(path.url)) ?? false;
+        return this.breadCrumbService?.getBreadCrumbPath()?.some(path => path?.url && url.includes(path.url)) ?? false;
     }
 
     /**
@@ -37,7 +37,7 @@ export class BreadCrumbComponent {
         this.router.events.pipe(
             filter(event => (event instanceof NavigationStart && !this.checkBreadCrumbPath(event.url))),
             takeUntil(this.destroyed$)).subscribe(() => {
-                this.generalService.setBreadCrumbPath([]);
+                this.breadCrumbService.setBreadCrumbPath([]);
             });
     }
 
@@ -46,8 +46,8 @@ export class BreadCrumbComponent {
      * @param index - The index of the breadcrumb path to navigate to
      */
     public navigateTo(index?: number): void {
-        let currentPath = this.generalService.getBreadCrumbPath();
-        this.generalService.setBreadCrumbPath(currentPath.slice(0, index + 1));
+        let currentPath = this.breadCrumbService.getBreadCrumbPath();
+        this.breadCrumbService.setBreadCrumbPath(currentPath.slice(0, index + 1));
         this.router.navigate([currentPath[index].url], { queryParams: currentPath[index].queryParams });
     }
 
