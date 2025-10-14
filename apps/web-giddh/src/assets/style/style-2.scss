@@ -13918,3 +13918,21 @@ button {
         }
     }
 }
+
+.mobile-number-container {
+    mat-select {
+        width: auto;
+        // border: 1px dashed blue;
+        padding: 0 !important;
+        .mat-mdc-select-arrow {
+            svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+    }
+    input, input.mat-mdc-text-field-wrapper {
+        border: 1px dashed red !important;
+        height: inherit !important;
+    }
+}
