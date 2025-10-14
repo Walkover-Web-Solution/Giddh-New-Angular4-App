@@ -93,7 +93,7 @@
                                                     <ng-container *ngIf="!isKenyaCompany">
                                                         <a
                                                             href="javascript:;"
-                                                            (click)="viewVatReportTransactions(element.section)"
+                                                            (click)="viewVatReportTransactions(element.section, element.description)"
                                                             >{{ element.description }}
                                                         </a>
                                                         <a
@@ -507,7 +507,7 @@
                                                 <td mat-cell *matCellDef="let element" width="45%">
                                                     <a  *ngIf="element.sectionClickable"
                                                         href="javascript:;"
-                                                        (click)="viewVatReportTransactions(element.order)"
+                                                        (click)="viewVatReportTransactions(element.order, element.description)"
                                                         >{{ element.description }}
                                                     </a>
                                                     <span *ngIf="!element.sectionClickable">{{ element.description }}</span>
@@ -550,7 +550,7 @@
                                                 <td mat-cell *matCellDef="let element">
                                                     <a  *ngIf="element.sectionClickable"
                                                         href="javascript:;"
-                                                        (click)="viewVatReportTransactions(element.order)"
+                                                        (click)="viewVatReportTransactions(element.order, element.description)"
                                                         >{{ element.description }}
                                                     </a>
                                                     <span *ngIf="!element.sectionClickable">{{ element.description }}</span>

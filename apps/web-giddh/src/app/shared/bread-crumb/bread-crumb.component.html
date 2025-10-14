@@ -1,0 +1,23 @@
+<nav *ngIf="generalService.getBreadCrumbPath()?.length > 0">
+    <ol class="breadcrumb">
+        <li 
+            *ngFor="let crumb of generalService.getBreadCrumbPath(); let last = last let index = index"
+            [ngClass]="{ 'active text-underline': !last }"
+        >
+            <a 
+                *ngIf="!last && crumb.url" 
+                (click)="navigateTo(index)"
+                href="javascript:;"
+                class="breadcrumb-link"
+            >
+                {{ crumb.showBreadcrumb }}
+            </a>
+            <span 
+                *ngIf="last" 
+                class="breadcrumb-current"
+            >
+                {{ crumb.showBreadcrumb }}
+            </span>
+        </li>
+    </ol>
+</nav>

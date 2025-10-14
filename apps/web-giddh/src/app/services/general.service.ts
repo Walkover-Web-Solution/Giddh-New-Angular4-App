@@ -79,6 +79,37 @@ export class GeneralService {
         this._createNewCompany = newCompanyRequest;
     }
 
+    /**
+     * Stores the breadcrumb path for navigation
+     */
+    public breadCrumbPath: { url: string , queryParams: any, showBreadcrumb: string}[] = [];
+
+    /**
+     * Sets the current path on the breadcrumb path
+     * @param path - The path to set
+     */
+    public setCurrentPathOnBreadCrumbPath(path: any) {
+        this.breadCrumbPath.push(path);
+        localStorage.setItem('breadCrumbPath', JSON.stringify(this.breadCrumbPath));
+    }
+
+    /**
+     * Sets the breadcrumb path
+     * @param path - The path to set
+     */
+    public setBreadCrumbPath(path: { url: string , queryParams: any, showBreadcrumb: string}[]) {
+        localStorage.setItem('breadCrumbPath', JSON.stringify(path));
+        this.breadCrumbPath = path;
+    }
+
+    /**
+     * Gets the breadcrumb path
+     * @returns The breadcrumb path
+     */
+    public getBreadCrumbPath(): { url: string , queryParams: any, showBreadcrumb: string}[] {
+        return JSON.parse(localStorage.getItem('breadCrumbPath'));
+    }
+
     public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
     public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
