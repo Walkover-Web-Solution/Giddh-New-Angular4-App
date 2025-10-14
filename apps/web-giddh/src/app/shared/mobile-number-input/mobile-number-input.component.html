@@ -1,0 +1,85 @@
+<div class="mobile-number-container custom-mat-form-field">
+    <mat-form-field appearance="outline" floatLabel="always" class="pointer-event-none mobile-input">
+        <mat-label>{{ label }}</mat-label>
+        <div class="input-wrapper d-flex column-gap1">
+            <div class="country-select-wrapper" (click)="$event.stopPropagation()">
+                <mat-select
+                    [formControl]="countryControl"
+                    [placeholder]="'Country'"
+                    panelWidth="400px"
+                    (selectionChange)="onCountryChange($event.value)"
+                >
+                    <mat-select-trigger>
+                        <span *ngIf="selectedCountry" class="selected-country-trigger">
+                            <img
+                                *ngIf="isImageFlag(selectedCountry); else emojiFlag"
+                                [src]="getFlagDisplay(selectedCountry)"
+                                [alt]="selectedCountry.name + ' flag'"
+                                class="flag-image"
+                            />
+                            <ng-template #emojiFlag>
+                                <span class="flag">{{ getFlagDisplay(selectedCountry) }}</span>
+                            </ng-template>
+                            <!-- <span class="dial-code">{{ selectedCountry.dialCode }}</span> -->
+                        </span>
+                        <span *ngIf="!selectedCountry" class="placeholder-text">Select Country</span>
+                    </mat-select-trigger>
+                    <mat-option *ngFor="let country of countries" [value]="country">
+                        <span class="country-option">
+                            <img
+                                *ngIf="isImageFlag(country); else emojiOption"
+                                [src]="getFlagDisplay(country)"
+                                [alt]="country.name + ' flag'"
+                                class="flag-image"
+                            />
+                            <ng-template #emojiOption>
+                                <span class="flag">{{ getFlagDisplay(country) }}</span>
+                            </ng-template>
+                            <span class="country-name">{{ country.name }}</span>
+                            <span class="d-inline-flex align-items-center">
+                                <span class="native-name" *ngIf="country.nativeName !== country.name && country.nativeName !== country.dialCode"
+                                    >({{ country.nativeName }})</span
+                                >
+                                <span class="dial-code text-gray">{{ country.dialCode }}</span>
+                            </span>
+                        </span>
+                    </mat-option>
+                </mat-select>
+            </div>
+            <input
+                #mobileInput
+                matInput
+                type="tel"
+                class="flex-grow-1"
+                [formControl]="mobileControl"
+                [placeholder]="placeholder || selectedCountry?.placeholder || 'Enter mobile number'"
+                (input)="onMobileInput($event)"
+                (keypress)="onKeyPress($event)"
+                (click)="$event.stopPropagation()"
+                autocomplete="tel"
+            />
+        </div>
+        <!-- <mat-error *ngIf="mobileControl.hasError('required')">
+            Mobile number is required
+        </mat-error>
+        <mat-error *ngIf="mobileControl.hasError('invalidLength')">
+            Mobile number must be between {{ selectedCountry?.minLength }} and {{ selectedCountry?.maxLength }} digits
+        </mat-error>
+        <mat-error *ngIf="mobileControl.hasError('invalidPattern')">
+            Please enter valid mobile number for {{ selectedCountry?.name }}
+        </mat-error> -->
+    </mat-form-field>
+    <p class="font-12 text-gray">{{ getFullPhoneNumber() }}</p>
+    <span class="text-danger" *ngIf="mobileControl.hasError('required')"> Mobile number is required </span>
+    <span class="text-danger" *ngIf="mobileControl.hasError('invalidLength')">
+        <ng-container *ngIf="selectedCountry?.minLength === selectedCountry?.maxLength; else rangeMessage">
+            Mobile number must be exactly {{ selectedCountry?.minLength }} digits
+        </ng-container>
+        <ng-template #rangeMessage>
+            Mobile number must be between {{ selectedCountry?.minLength }} and {{ selectedCountry?.maxLength }} digits
+        </ng-template>
+    </span>
+    <span class="text-danger" *ngIf="mobileControl.hasError('invalidPattern')">
+        Please enter valid mobile number for {{ selectedCountry?.name }}
+    </span>
+</div>
