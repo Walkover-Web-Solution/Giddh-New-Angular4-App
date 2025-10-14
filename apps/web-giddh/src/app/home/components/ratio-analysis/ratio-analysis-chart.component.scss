@@ -4,11 +4,11 @@
 }
 .ratio-analysis-panel-body h1 {
     font-size: var(--font-size-15);
-    color: var(--color-nero);
+    color: var(--color-black);
 }
 
 .ratio-analysis-panel-body small {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     font-size: var(--font-size-15);
 }
 .ratio-chart-block {
@@ -28,7 +28,7 @@
         &:after {
             position: absolute;
             content: "";
-            border-bottom: 1px solid var(--color-iron);
+            border-bottom: 1px solid var(--color-silver);
             bottom: 0;
             height: 1px;
             width: 90%;

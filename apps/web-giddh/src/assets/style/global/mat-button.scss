@@ -3,21 +3,21 @@
 .mat-mdc-outlined-button,
 .mat-raised-button {
     &.mat-primary {
-        color: var(--color-giddh-blue) !important;
+        color: var(--color-blue-primary) !important;
     }
     .mat-button-focus-overlay {
-        background-color: var(--color-primary-header-background) !important;
+        background-color: var(--color-blue-primary) !important;
     }
 }
 .mat-mdc-outlined-button {
-    color: var(--color-default-button) !important;
+    color: var(--color-black) !important;
     border-color: var(--color-fields-border) !important;
     &.mat-primary {
-        color: var(--color-giddh-blue) !important;
+        color: var(--color-blue-primary) !important;
     }
     &.header-btn {
-        color: var(--color-white-tertiary) !important;
-        border-color: var(--color-white-tertiary) !important;
+        color: var(--color-white) !important;
+        border-color: var(--color-white) !important;
     }
 }
 
@@ -41,7 +41,7 @@ button {
             &.ladda-button {
                 &:not(:disabled) {
                     .ladda-label {
-                        color: var(--color-giddh-blue) !important;
+                        color: var(--color-blue-primary) !important;
                         display: contents;
                         width: auto;
                         height: auto;
@@ -51,7 +51,7 @@ button {
                     div {
                         div {
                             div {
-                                background: var(--color-giddh-blue) !important;
+                                background: var(--color-blue-primary) !important;
                             }
                         }
                     }
@@ -67,7 +67,7 @@ button {
         &.mat-primary {
             &:disabled {
                 .ladda-label {
-                    color: var(--color-giddh-blue) !important;
+                    color: var(--color-blue-primary) !important;
                 }
             }
         }
@@ -90,7 +90,7 @@ button {
 .mat-icon-button {
     i,
     .mat-icon {
-        color: var(--color-primary-icon);
+        color: var(--color-black);
     }
 }
 

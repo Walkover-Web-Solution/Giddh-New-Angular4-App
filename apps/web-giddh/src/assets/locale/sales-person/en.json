@@ -1,5 +1,6 @@
 {
     "archive_confirmation_message": "Are you sure you want to archive sales person ?",
+    "unarchive_confirmation_message": "Are you sure you want to unarchive sales person ?",
     "transfer_and_archive": "Transfer & Archive",
     "delete_confirmation_message": "Do you want to delete sales person?",
     "transfer_and_delete": "Transfer and Delete",

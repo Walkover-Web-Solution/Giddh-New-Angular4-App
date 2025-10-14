@@ -1,7 +1,7 @@
 .mat-mdc-menu-content {
     display: contents;
     .mat-mdc-menu-item {
-        color: var(--color-common-primary-text);
+        color: var(--color-black);
 
         &.active {
             padding-right: 30px;
@@ -20,7 +20,7 @@
                 height: 6px;
                 transform-origin: center;
                 margin: auto;
-                color: var(--color-giddh-blue);
+                color: var(--color-blue-primary);
             }
         }
     }

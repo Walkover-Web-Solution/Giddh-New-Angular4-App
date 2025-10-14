@@ -2457,34 +2457,68 @@ export class GeneralService {
         cleanupCallback: () => void,
         isNavigatingRef: { value: boolean }
     ): void {
+        let pendingNavigationUrl: string = '';
+        
         // Listen for navigation attempts
         router.events.pipe(
             filter(event => event instanceof NavigationStart),
             takeUntil(destroyed$)
         ).subscribe((event: NavigationStart) => {
             // Only intercept if we have unsaved changes and this is a different route
-            if (hasUnsavedChangesCallback() && !isNavigatingRef.value && event.url !== router.url) {
-                // Set flag to prevent multiple dialogs
-                isNavigatingRef.value = true;
+            if (hasUnsavedChangesCallback() && event.url !== router.url) {
+                // Always update the pending navigation URL to the most recent attempt
+                pendingNavigationUrl = event.url;
                 
-                // Cancel the current navigation
-                router.navigateByUrl(router.url, { skipLocationChange: true });
-                
-                // Show confirmation dialog
-                let dialogRef = pageLeaveUtilityService.openDialog();
-                
-                dialogRef.afterClosed().subscribe((action) => {
-                    if (action) {
+                if (!isNavigatingRef.value) {
+                    // Set flag to prevent multiple dialogs
+                    isNavigatingRef.value = true;
+                    
+                    // Cancel the current navigation
+                    router.navigateByUrl(router.url, { skipLocationChange: true });
+                    
+                    // Show confirmation dialog
+                    let dialogRef = pageLeaveUtilityService.openDialogWithoutAutoCleanup();
+                    
+                    dialogRef.afterClosed().subscribe((action) => {
+                        
+                        // Remove body CSS class that was added when dialog opened
+                        document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
+                        
+                        if (action === true) {
                         // User confirmed to leave - clean up and navigate
-                        pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                        cleanupCallback();
-                        isNavigatingRef.value = false;
-                        router.navigateByUrl(event.url);
-                    } else {
-                        // User cancelled - reset navigation flag
-                        isNavigatingRef.value = false;
-                    }
-                });
+                            
+                            pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                            cleanupCallback();
+                            
+                            // Use setTimeout to ensure navigation happens after all cleanup
+                            setTimeout(() => {
+                                // Reset navigation flag after cleanup but before navigation
+                                isNavigatingRef.value = false;
+                                
+                                // Try Angular navigation first (smooth SPA navigation)
+                                router.navigateByUrl(pendingNavigationUrl, { replaceUrl: false }).then(
+                                    (success) => {
+                                        if (!success) {
+                                            // Try with different navigation options
+                                            return router.navigateByUrl(pendingNavigationUrl, { 
+                                                skipLocationChange: false,
+                                                replaceUrl: false 
+                                            });
+                                        }
+                                        return success;
+                                    }
+                                )
+                            }, 200);
+                        } else {
+                            // User cancelled or closed dialog (false, null, undefined) - reset navigation flag and cleanup
+                            pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                            isNavigatingRef.value = false;
+                        }
+                    });
+                } else {
+                    // Dialog is already open, just cancel this navigation attempt
+                    router.navigateByUrl(router.url, { skipLocationChange: true });
+                }
             }
         });
     }
@@ -2505,5 +2539,81 @@ export class GeneralService {
         pageLeaveUtilityService.removeBrowserConfirmationDialog();
         isNavigatingRef.value = false;
     }
-}
 
+    /**
+     * Global registry for unsaved changes callbacks
+     * Components can register their hasUnsavedChanges callback here
+     */
+    private unsavedChangesCallbacks: (() => boolean)[] = [];
+    private markFormsAsPristineCallbacks: (() => void)[] = [];
+
+    /**
+     * Register a callback to check for unsaved changes
+     *
+     * @param {() => boolean} callback - Function to check for unsaved changes
+     * @returns {() => void} - Unregister function
+     * @memberof GeneralService
+     */
+    public registerUnsavedChangesCallback(callback: () => boolean): () => void {
+        this.unsavedChangesCallbacks.push(callback);
+        
+        // Return unregister function
+        return () => {
+            const index = this.unsavedChangesCallbacks.indexOf(callback);
+            if (index > -1) {
+                this.unsavedChangesCallbacks.splice(index, 1);
+            }
+        };
+    }
+
+    /**
+     * Register a callback to mark forms as pristine
+     *
+     * @param {() => void} callback - Function to mark forms as pristine
+     * @returns {() => void} - Unregister function
+     * @memberof GeneralService
+     */
+    public registerMarkFormsAsPristineCallback(callback: () => void): () => void {
+        this.markFormsAsPristineCallbacks.push(callback);
+        
+        // Return unregister function
+        return () => {
+            const index = this.markFormsAsPristineCallbacks.indexOf(callback);
+            if (index > -1) {
+                this.markFormsAsPristineCallbacks.splice(index, 1);
+            }
+        };
+    }
+
+    /**
+     * Check for unsaved changes globally across all registered components
+     *
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkForUnsavedChanges(): boolean {
+        return this.unsavedChangesCallbacks.some(callback => {
+            try {
+                return callback();
+            } catch (error) {
+                console.warn('Error checking unsaved changes:', error);
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Mark all forms as pristine globally across all registered components
+     *
+     * @memberof GeneralService
+     */
+    public markAllFormsAsPristine(): void {
+        this.markFormsAsPristineCallbacks.forEach(callback => {
+            try {
+                callback();
+            } catch (error) {
+                console.warn('Error marking forms as pristine:', error);
+            }
+        });
+    }
+}

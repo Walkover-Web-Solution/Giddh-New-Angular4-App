@@ -1,4 +1,4 @@
-@import "../../../../assets/style/mixin-common.scss";
+@import "../../../../assets/style/_mixin.scss";
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -20,7 +20,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -36,9 +36,9 @@
     height: 36px;
     min-width: 100%;
     padding: 11px;
-    color: var(--color-nero);
+    color: var(--color-black);
     border: none;
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
     border-radius: 5px;
 }
 
@@ -47,9 +47,9 @@
     background-color: var(--color-white);
     z-index: 1000;
     width: 257px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
     border-radius: 4px;
-    box-shadow: 0 7px 24px var(--color-primary-common-box-shadow);
+    box-shadow: 0 7px 24px var(--color-shadow-light);
 }
 .account-detail-modal-div {
     height: 100%;
@@ -60,7 +60,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: var(--color-primary-purchase-register-expand-account-detail-custom-header-background);
+    background: var(--color-light-gray);
 }
 
 .account-detail-custom-title {
@@ -74,7 +74,7 @@
 }
 
 .custom-detail h4 {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     margin-top: 7px;
     font-size: var(--font-size-15) !important;
     font-family: var(--font-family) !important;
@@ -82,11 +82,11 @@
 
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-silver);
 }
 
 ul.list-unstyled li a {
-    color: var(--color-nero);
+    color: var(--color-black);
 }
 
 .li-link {
@@ -94,7 +94,7 @@ ul.list-unstyled li a {
 }
 
 .btn-group > a {
-    color: var(--color-nero);
+    color: var(--color-black);
 }
 
 .ac-detail,
@@ -110,7 +110,7 @@ ul.list-unstyled li a {
 }
 
 .text-purple {
-    color: var(--color-blue) !important;
+    color: var(--color-blue-primary) !important;
 }
 
 .responsive {
@@ -169,7 +169,7 @@ ul#dropdown-nested li .caret {
 }
 
 .custom-month-select li:hover a.dropdown-item {
-    background-color: var(--color-dark-fog);
+    background-color: var(--color-border-light);
 }
 
 .custom-month-select button.btn {
@@ -204,11 +204,11 @@ table th {
 }
 .icon-pointer {
     cursor: pointer;
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
     margin-left: 6px;
 }
 .icon-pointer .active-text-color {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 .table-middle th .d-flex {
     align-items: center;
@@ -226,11 +226,11 @@ table th {
     align-items: center;
     background-color: var(--color-white);
     font-size: var(--font-size-16);
-    color: var(--color-giddh-blue);
-    border: 1px solid var(--color-primary-button-border);
+    color: var(--color-blue-primary);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
     &:hover {
-        background: var(--color-blue);
+        background: var(--color-blue-primary);
         color: var(--color-white);
     }
 }
@@ -238,17 +238,17 @@ table th {
     .icon-options {
         width: 36px;
         height: 36px;
-        border: 1px solid var(--color-primary-button-border);
+        border: 1px solid var(--color-silver);
         border-radius: 5px;
         background-color: var(--color-white);
-        color: var(--color-giddh-blue);
+        color: var(--color-blue-primary);
         font-size: 20px;
         position: relative;
         padding: 7px;
         &:hover {
-            background: var(--color-blue);
+            background: var(--color-blue-primary);
             color: var(--color-white);
-            border-color: var(--color-blue);
+            border-color: var(--color-blue-primary);
         }
     }
     .btn-group.d-flex.open.show {
@@ -260,10 +260,10 @@ table th {
                 position: relative;
                 top: 1px;
                 right: 10px;
-                background-color: var(--color-secondary-button-background);
-                color: var(--color-white-tertiary) !important;
+                background-color: var(--color-blue-primary);
+                color: var(--color-white) !important;
                 &:hover {
-                    background-color: var(--color-secondary-button-background-hover);
+                    background-color: var(--color-blue-primary);
                 }
             }
         }
@@ -271,10 +271,10 @@ table th {
 }
 
 .verticle-align-top a {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 
     &:hover {
-        color: var(--color-blue);
+        color: var(--color-blue-primary);
     }
 }
 
@@ -289,19 +289,19 @@ table th {
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
-    border-bottom: 1px solid var(--color-common-secondary-border);
+    border-bottom: 1px solid var(--color-silver);
     .nav-report {
         li {
             font-weight: var(--font-weight-semibold);
             font-size: var(--font-size-16);
             a {
-                color: var(--color-giddh-blue);
+                color: var(--color-blue-primary);
             }
         }
     }
     .custom-month-select {
         font-weight: var(--font-weight-semibold);
-        color: var(--color-giddh-blue);
+        color: var(--color-blue-primary);
         .btn {
             font-size: var(--font-size-16);
             padding: 0;
@@ -324,9 +324,9 @@ table th {
 
 .btn-filters {
     @include common-filters(
-        var(--color-giddh-blue),
-        var(--color-filter-background),
-        1px solid var(--color-primary-button-border)
+        var(--color-blue-primary),
+        var(--color-border-light),
+        1px solid var(--color-silver)
     );
 }
 

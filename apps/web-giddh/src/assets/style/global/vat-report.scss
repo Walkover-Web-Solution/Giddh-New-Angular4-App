@@ -35,7 +35,7 @@
             &.bordered-table {
                 tr {
                     th,td {
-                        border: 1px solid var(--color-table-primary-content-bar-border) !important;
+                        border: 1px solid var(--color-silver) !important;
                     }
                 }
             }
@@ -44,14 +44,14 @@
                 th,
                 td {
                     &.bg-grey {
-                        background-color: var(--color-wild-sand) !important;
+                        background-color: var(--color-light-gray) !important;
                     }
                 }
             }
         }
 
         tfoot {
-            background-color: var(--color-wild-sand);
+            background-color: var(--color-light-gray);
         }
     }
 
@@ -68,12 +68,12 @@
 
 .white-box {
     .table-heading {
-        color: var(--color-giddh-blue);
+        color: var(--color-blue-primary);
         font-size: var(--font-size-16);
     }
 
     .inner-table-heading {
-        color: var(--color-giddh-blue);
+        color: var(--color-blue-primary);
     }
 
     table {
@@ -81,7 +81,7 @@
             tr {
                 td {
                     .btn-link {
-                        color: var(--color-table-secondary-heading) !important;
+                        color: var(--color-blue-primary) !important;
                     }
                 }
             }
@@ -138,7 +138,7 @@
         .mdc-data-table__content {
             .mat-mdc-row {
                 .mat-mdc-cell {
-                    background-color: var(--color-body-background) !important;
+                    background-color: var(--color-white) !important;
                 }
             }
         }

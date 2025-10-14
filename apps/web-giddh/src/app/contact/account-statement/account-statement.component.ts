@@ -25,7 +25,7 @@ import { saveAs } from 'file-saver';
 export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-/** Template reference for the advance search modal */
+    /** Template reference for the advance search modal */
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** Reference to the Material paginator component */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -100,6 +100,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public clearFilter: boolean = false;
     /** Holds transaction type */
     public transactionType: typeof TransactionType = TransactionType;
+    /** Balance due */
+    public balanceDue: string = '';
 
     constructor(
         public dialog: MatDialog,
@@ -119,12 +121,20 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             this.isLoading = false;
             if (response && response.transactionDetailList?.length) {
-                    this.accountListData = response.transactionDetailList;
-                    this.responseAccountList = response;
-                    this.totalRecords = response.totalItems;
+                this.accountListData = response.transactionDetailList;
+                this.responseAccountList = response;
+                this.totalRecords = response.totalItems;
+                this.balanceDue = this.responseAccountList.accountSummary?.closingBalance?.amount >= 0
+                    ? (this.responseAccountList.accountSummary.closingBalance.type ===
+                        this.transactionType.Credit
+                        ? "-"
+                        : "") +
+                    (this.responseAccountList.accountAddress?.currency?.symbol ?? "") +
+                    this.responseAccountList.accountSummary.closingBalance.amount
+                    : ""
             }
         });
-        
+
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -431,10 +441,13 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public exportAccountStatement(): void {
         const requestObj = {
-            accountUniqueName: this.accountListRequest.accountUniqueName,
-            query: this.accountListRequest.q,
-            from: this.accountListRequest.from,
-            to: this.accountListRequest.to
+            queryParam: {
+                accountUniqueName: this.accountListRequest.accountUniqueName,
+                query: this.accountListRequest.q,
+                from: this.accountListRequest.from,
+                to: this.accountListRequest.to
+            },
+            payload: this.advanceFiltersApplied ? this.advanceSearchRequest.dataToSend : {}
         }
         this.contactComponentStore.exportAccountStatement(requestObj);
     }

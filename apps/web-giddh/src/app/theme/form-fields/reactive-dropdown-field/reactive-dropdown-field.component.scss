@@ -8,9 +8,9 @@
     .arrow-dropdown {
         width: 0;
         height: 0;
-        border-left: 5px solid var(--color-transparent-background);
-        border-right: 5px solid var(--color-transparent-background);
-        border-top: 5px solid var(--color-popup-list-input-text) !important;
+        border-left: 5px solid var(--color-transparent);
+        border-right: 5px solid var(--color-transparent);
+        border-top: 5px solid var(--color-black) !important;
         top: 8px;
         right: 4px;
     }

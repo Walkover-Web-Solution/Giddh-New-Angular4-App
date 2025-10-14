@@ -115,16 +115,6 @@ $giddh-accent: mat.define-palette($custom-accent-palette, 900);    // #198754
 $giddh-warn: mat.define-palette($custom-warn-palette, 900);        // #dc3545
 
 // Dark theme variants - using lighter shades for better contrast on dark backgrounds
-$giddh-primary-dark: mat.define-palette($custom-primary-palette, 200);  // #9fa8da (lighter indigo)
-$giddh-accent-dark: mat.define-palette($custom-accent-palette, 200);    // #a5d6a7 (lighter green)
-$giddh-warn-dark: mat.define-palette($custom-warn-palette, 200);        // #ef9a9a (lighter red)
-
-// Export palettes for use in other theme files
-$exported-primary-palette: $giddh-primary;
-$exported-accent-palette: $giddh-accent;
-$exported-warn-palette: $giddh-warn;
-
-// Export dark theme palettes
-$exported-primary-palette-dark: $giddh-primary-dark;
-$exported-accent-palette-dark: $giddh-accent-dark;
-$exported-warn-palette-dark: $giddh-warn-dark;
+$giddh-primary-dark: mat.define-palette($custom-primary-palette, 500);  // #9fa8da (lighter indigo)
+$giddh-accent-dark: mat.define-palette($custom-accent-palette, 500);    // #a5d6a7 (lighter green)
+$giddh-warn-dark: mat.define-palette($custom-warn-palette, 500);        // #ef9a9a (lighter red)

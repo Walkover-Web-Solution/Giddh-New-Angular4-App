@@ -1,5 +1,5 @@
 .wrapper-background {
-    background-color: var(--color-common-quinary-background-for-all-components);
+    background-color: var(--color-light-gray);
     height: calc(100vh - 200px);
 }
 .search-field {
@@ -23,7 +23,7 @@
         .single-invoice-detail {
             &:hover,
             &.active {
-                background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
+                background-color: var(--color-light-gray);
             }
         }
     }
@@ -52,7 +52,7 @@
 .contact-no-data-message {
     margin-top: 150px;
     font-size: var(--font-size-32);
-    color: var(--color-common-primary-text);
+    color: var(--color-black);
     height: 200px;
 }
 

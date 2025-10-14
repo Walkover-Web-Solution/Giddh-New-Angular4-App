@@ -3,12 +3,12 @@
         &.flexy-child-1 {
             height: 100%;
             .child-wrapper {
-                background-color: var(--color-body-background);
+                background-color: var(--color-white);
                 height: calc(100vh - (58.7px + 30px));
                 width: 730px;
                 overflow: auto;
                 margin: 15px 0;
-                box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+                box-shadow: 0px 3px 6px var(--color-shadow-light);
             }
         }
     }

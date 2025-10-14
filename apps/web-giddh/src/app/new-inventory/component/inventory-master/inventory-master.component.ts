@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { InventoryService } from "../../../services/inventory.service";
-import { debounceTime, distinctUntilChanged, takeUntil, filter } from "rxjs/operators";
-import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
+import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { UntypedFormControl } from "@angular/forms";
 import { cloneDeep } from "../../../lodash-optimized";
@@ -63,6 +63,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     @ViewChild(StockCreateEditComponent) createUpdateStockComponent: StockCreateEditComponent;
     /** Flag to track if navigation is in progress to avoid infinite loops */
     private isNavigatingRef = { value: false };
+    /** Unregister functions for GeneralService callbacks */
+    private unregisterUnsavedChangesCallback: () => void;
+    private unregisterMarkFormsAsPristineCallback: () => void;
 
     constructor(
         private inventoryService: InventoryService,
@@ -73,25 +76,6 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private generalService: GeneralService
     ) {
-        this.setupNavigationListener();
-    }
-
-    /**
-     * Sets up navigation listener to intercept route changes and show confirmation dialog
-     * Uses common method from GeneralService
-     *
-     * @private
-     * @memberof InventoryMasterComponent
-     */
-    private setupNavigationListener(): void {
-        this.generalService.setupNavigationListener(
-            this.router,
-            this.pageLeaveUtilityService,
-            this.destroyed$,
-            () => this.hasUnsavedChanges(),
-            () => this.markFormsAsPristine(),
-            this.isNavigatingRef
-        );
     }
 
     /**
@@ -135,8 +119,6 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             this.createUpdateStockComponent.captureInitialFormValues();
         }
         
-        // Common cleanup for page leave confirmation
-        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
     }
 
     /**
@@ -145,6 +127,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public ngOnInit(): void {
+        // Register callbacks with GeneralService for global access
+        this.unregisterUnsavedChangesCallback = this.generalService.registerUnsavedChangesCallback(() => this.hasUnsavedChanges());
+        this.unregisterMarkFormsAsPristineCallback = this.generalService.registerMarkFormsAsPristineCallback(() => this.markFormsAsPristine());
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (this.inventoryType !== params.type) {
                 this.inventoryType = params.type?.toUpperCase();
@@ -191,19 +176,27 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     this.resetCurrentStockAndGroup();
                     this.showCreateButtons = false;
                 }
-                this.masterColumnsData = [];
             }
         });
     }
 
     /**
-     * Lifecycle hook for destroy component
+     * Lifecycle hook that is called when component is destroyed
      *
      * @memberof InventoryMasterComponent
      */
     public ngOnDestroy(): void {
+        // Unregister callbacks from GeneralService
+        if (this.unregisterUnsavedChangesCallback) {
+            this.unregisterUnsavedChangesCallback();
+        }
+        if (this.unregisterMarkFormsAsPristineCallback) {
+            this.unregisterMarkFormsAsPristineCallback();
+        }
+        
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
     }
 
     /**

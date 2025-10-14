@@ -4,7 +4,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
-import { takeUntil, distinctUntilChanged, filter } from "rxjs/operators";
+import { takeUntil, distinctUntilChanged } from "rxjs/operators";
 import { CompanyActions } from "../../../actions/company.actions";
 import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -67,6 +67,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public showLoader: boolean = false;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Flag to temporarily disable page leave confirmation after successful operations */
+    private skipPageLeaveConfirmation: boolean = false;
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
     /** True if tax selection box is open */
@@ -78,7 +80,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Returns true if form has actual unsaved changes else false */
     public get showPageLeaveConfirmation(): boolean {
         
-        if (!this.groupForm || !this.initialFormValues) {
+        if (!this.groupForm || !this.initialFormValues || this.skipPageLeaveConfirmation) {
             return false;
         }
         
@@ -90,8 +92,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
     /** Discounts list */
     public discountsList: IDiscountList[] = [];
-    /** Flag to track if navigation is in progress to avoid infinite loops */
-    private isNavigatingRef = { value: false };
     /** Store initial form values to compare for actual changes */
     private initialFormValues: any = null;
 
@@ -112,24 +112,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private generalService: GeneralService
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.setupNavigationListener();
-    }
-
-    /**
-     * Sets up navigation listener to intercept route changes and show confirmation dialog
-     *
-     * @private
-     * @memberof CreateUpdateGroupComponent
-     */
-    private setupNavigationListener(): void {
-        this.generalService.setupNavigationListener(
-            this.router,
-            this.pageLeaveUtilityService,
-            this.destroyed$,
-            () => this.showPageLeaveConfirmation,
-            () => this.groupForm.markAsPristine(),
-            this.isNavigatingRef
-        );
     }
 
     /**
@@ -394,8 +376,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.inventoryService.UpdateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
-                    this.groupForm.markAsPristine();
-                    this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
+                    this.clearPageLeaveConfirmation();
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_update);
                     if (!this.addGroup) {
                         this.getStockGroups();
@@ -416,7 +397,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.inventoryService.CreateStockGroup(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
-                    this.isNavigatingRef.value = false;
+                    this.clearPageLeaveConfirmation();
                     this.toaster.showSnackBar("success", this.localeData?.stock_group_create);
 
                     if (!this.addGroup) {
@@ -429,6 +410,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     }
                 } else {
                     this.toggleLoader(false);
+                    this.clearPageLeaveConfirmation();
                     this.toaster.showSnackBar("error", response?.message);
                 }
                 this.changeDetection.detectChanges();
@@ -501,7 +483,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.isFormSubmitted = false;
         this.groupForm.reset();
         this.groupForm.markAsPristine();
-        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
         this.groupForm?.patchValue({ showCodeType: "hsn" });
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
@@ -512,7 +493,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         }
         this.selectedTaxes = [];
         this.processedTaxes = [];
-        this.showTaxField = true;
         
         // Capture initial form values for comparison after form is fully initialized
         setTimeout(() => {
@@ -647,7 +627,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.inventoryService.DeleteStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
-                        this.generalService.cleanupPageLeaveConfirmation(this.pageLeaveUtilityService, this.isNavigatingRef);
+                        this.clearPageLeaveConfirmation();
                         this.toaster.showSnackBar("success", this.localeData?.group_delete);
                         if (this.addGroup) {
                             this.closeAsideEvent.emit();
@@ -671,6 +651,21 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     private toggleLoader(showLoader: boolean): void {
         this.showLoader = showLoader;
+    }
+
+    /**
+     * Clears page leave confirmation by setting skip flag
+     *
+     * @private
+     * @memberof CreateUpdateGroupComponent
+     */
+    private clearPageLeaveConfirmation(): void {
+        this.skipPageLeaveConfirmation = true;
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        // Reset the flag after a short delay to allow normal functionality to resume
+        setTimeout(() => {
+            this.skipPageLeaveConfirmation = false;
+        }, 1000);
     }
 
     /**

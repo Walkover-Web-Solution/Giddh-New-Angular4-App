@@ -8,14 +8,14 @@
     display: contents;
 }
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue);
-    background: var(--color-dark-fog);
+    color: var(--color-blue-primary);
+    background: var(--color-border-light);
 }
 .z-index-for-aside {
     z-index: 99999;
 }
 .authenticate-btn {
-    border: 1px solid var(--color-blue);
+    border: 1px solid var(--color-blue-primary);
 }
 
 .list-inline {
@@ -27,7 +27,7 @@
 }
 .btn-wrapper-filling-header {
     .btn-primary {
-        border-color: var(--color-blue);
+        border-color: var(--color-blue-primary);
     }
 }
 .head-font-weight {

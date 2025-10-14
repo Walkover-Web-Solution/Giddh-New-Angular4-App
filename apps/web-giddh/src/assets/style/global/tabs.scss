@@ -1,27 +1,27 @@
 .mat-mdc-tab-group {
     .mat-mdc-tab-header {
-        border-bottom: 1px solid var(--color-tab-primary-border-bottom);
+        border-bottom: 1px solid var(--color-silver);
 
         .mat-mdc-tab-header {
             padding-left: 15px !important;
-            background-color: var(--color-tab-primary-background);
+            background-color: var(--color-white);
         }
 
         .mat-mdc-tab {
             .mdc-tab__text-label {
                 font-size: var(--font-size-16);
-                color: var(--color-tab-primary-inactive);
+                color: var(--color-dark-gray);
                 // for voucher
                 .voucher-svg {
-                    fill: var(--color-tab-primary-inactive);
+                    fill: var(--color-dark-gray);
                 }
             }
 
             &.mdc-tab--active {
                 .mdc-tab__text-label {
-                    color: var(--color-giddh-blue);
+                    color: var(--color-blue-primary);
                     .voucher-svg {
-                        fill: var(--color-giddh-blue);
+                        fill: var(--color-blue-primary);
                     }
                 }
             }
@@ -33,7 +33,7 @@
 .custom-tab {
     .mat-button-toggle-appearance-standard {
         &.mat-button-toggle-checked {
-            background-color: var(--color-giddh-blue);
+            background-color: var(--color-blue-primary);
             color: var(--color-white);
         }
     }
@@ -55,7 +55,7 @@
     .mat-mdc-tab-labels {
         column-gap: 35px;
         .mat-mdc-tab {
-            border: 1px solid var(--color-rectangular-tab-inactive-secondary-border);
+            border: 1px solid var(--color-silver);
             width: 120px;
             height: 120px!important;
             border-radius: 4px;
@@ -70,8 +70,8 @@
                 border: none;
             }
             &.mdc-tab-indicator--active {
-                border-color: var(--color-giddh-blue);
-                box-shadow: 0 6px 7px var(--color-primary-common-box-shadow);
+                border-color: var(--color-blue-primary);
+                box-shadow: 0 6px 7px var(--color-shadow-light);
             }
         }
     }

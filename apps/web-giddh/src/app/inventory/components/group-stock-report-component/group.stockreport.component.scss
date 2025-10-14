@@ -1,5 +1,5 @@
 .bd-rt {
-    border-color: var(--color-common-secondary-border);
+    border-color: var(--color-silver);
 }
 
 :host ::ng-deep .fb-1-container {
@@ -70,7 +70,7 @@ table {
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -91,9 +91,9 @@ table {
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-nero);
+    color: var(--color-black);
     border: none;
-    background-color: var(--color-sidebar-primary-search-bar-background);
+    background-color: var(--color-light-gray);
 }
 
 .td-search-box .input-container i {
@@ -108,7 +108,7 @@ table {
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-table-primary-header-bar-border);
+    border-right: 1px solid var(--color-silver);
 }
 
 .icon-pointer .glyphicon {
@@ -116,12 +116,12 @@ table {
 }
 
 .td-search-box div i:hover {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue);
-    background: var(--color-dark-fog);
+    color: var(--color-blue-primary);
+    background: var(--color-border-light);
 }
 
 .stock-input {
@@ -137,7 +137,7 @@ table {
 }
 
 .footer-tr td {
-    background-color: var(--color-dark-fog);
+    background-color: var(--color-border-light);
 }
 
 .total-footer {
@@ -146,7 +146,7 @@ table {
     .foot-item {
         padding: 41px;
         h2 {
-            color: var(--color-gray);
+            color: var(--color-medium-gray);
             font-size: var(--font-size-16);
             margin-bottom: 10px;
         }
@@ -196,11 +196,11 @@ table {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 
 .icon-pointer .active-text-color {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 
 .custom-datepicker-wrapper-group {
@@ -227,7 +227,7 @@ table {
         }
         .operators {
             font-size: var(--font-size-32);
-            color: var(--color-gray);
+            color: var(--color-medium-gray);
         }
         h2 {
             font-size: var(--font-size-16);
@@ -265,11 +265,11 @@ table {
 }
 
 .text-purple {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 
 .btn-link-2 {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 
 .mr-b100 {
@@ -296,9 +296,9 @@ td.border-right-none {
     justify-content: center;
     align-items: center;
     font-size: var(--font-size-16);
-    border: 1px solid var(--color-primary-button-border);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     background: var(--color-white);
 }
 
@@ -315,10 +315,10 @@ td.border-right-none {
 }
 
 button.btn.btn-filter {
-    background: var(--color-dark-fog);
-    border: 1px solid var(--color-primary-button-border);
+    background: var(--color-border-light);
+    border: 1px solid var(--color-silver);
     font-size: var(--font-size-15);
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -330,7 +330,7 @@ button.btn.btn-filter {
 }
 
 .inventory-stock-table input.form-control.stock-input {
-    color: var(--color-nero);
+    color: var(--color-black);
     text-align: left;
 }
 
@@ -346,7 +346,7 @@ button.btn.btn-filter {
     text-transform: none;
 }
 .icon-btn {
-    border: 1px solid var(--color-primary-button-border);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
     height: 36px;
     width: 36px;
@@ -380,9 +380,9 @@ button.btn.btn-filter {
 }
 
 .input-group-addon {
-    border: 1px solid var(--color-common-secondary-border);
+    border: 1px solid var(--color-silver);
     border-left: 0;
-    background-color: var(--color-dark-fog);
+    background-color: var(--color-border-light);
 }
 
 @media (max-width: 1622px) {

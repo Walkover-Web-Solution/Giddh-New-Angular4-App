@@ -58,10 +58,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         totalAmount: '',
         bankPaymentTransactions: []
     };
-    /** Template reference for success payment model */
-    @ViewChild('successTemplate', { static: true }) public successTemplate: TemplateRef<any>;
     /** directive to emit boolean for close model */
-    @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public closeModelEvent: EventEmitter<{
+        isPaySuccess: boolean, paymentSuccessfulMessage: string
+    }> = new EventEmitter(true);
     /** Integrated bank list sh-select options */
     public selectIntegratedBankList: IOption[] = [];
     /** Event emitter to close the Aside panel */
@@ -153,18 +153,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         this.integratedBankList$ = this.store.pipe(select(p => p.company && p.company.integratedBankList), takeUntil(this.destroyed$));
         this.isGetAllIntegratedBankInProgress$ = this.store.pipe(select(storeBank => storeBank.company && storeBank.company.isGetAllIntegratedBankInProgress), takeUntil(this.destroyed$));
-    }
-
-    /**
-     *To open success bulk payment model
-     *
-     * @param {TemplateRef<any>} template
-     * @memberof PaymentAsideComponent
-     */
-    public openDialog(template: TemplateRef<any>): void {
-        this.successDialogRef = this.dialog.open(template, {
-            panelClass: 'mat-dialog-md'
-        });
     }
 
     public ngOnInit() {
@@ -340,8 +328,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUserId, this.selectedBankUniqueName, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === 'success') {
                 this.paymentSuccessfulMessage = res.body?.Message;
-                this.closePaymentModel(true);
-                this.openDialog(this.successTemplate);
+                this.closePaymentModel(true, this.paymentSuccessfulMessage);
             } else {
                 if (res?.status === 'error' && res?.code === 'BANK_ERROR') {
                     this.toaster.showSnackBar("warning", res?.message);
@@ -373,11 +360,11 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @returns {*}
      * @memberof PaymentAsideComponent
      */
-    public closePaymentModel(isPaySuccess: boolean): void {
+    public closePaymentModel(isPaySuccess: boolean, paymentSuccessfulMessage: string = ''): void {
         this.resetFormData();
         this.totalSelectedAccountAmount = null;
         this.selectedAccForPayment = null;
-        this.closeModelEvent.emit(isPaySuccess);
+        this.closeModelEvent.emit({isPaySuccess, paymentSuccessfulMessage});
     }
 
     /**

@@ -20,7 +20,7 @@
                 }
 
                 span {
-                    color: var(--color-sidebar-primary-anchor-text);
+                    color: var(--color-dark-gray);
 
                     i {
                         margin-right: 10px;
@@ -46,38 +46,38 @@
             }
 
             &:hover {
-                background-color: var(--color-giddh-common-background);
+                background-color: var(--color-blue-primary);
 
                 a {
                     span {
-                        color: var(--color-primary-right-sidebar-list-text-hover) !important;
+                        color: var(--color-white) !important;
 
                         i {
-                            color: var(--color-primary-right-sidebar-list-text-hover) !important;
+                            color: var(--color-white) !important;
                         }
                     }
 
                     span {
-                        color: var(--color-primary-right-sidebar-list-text-hover) !important;
+                        color: var(--color-white) !important;
                     }
                 }
             }
         }
 
         .active-link {
-            background-color: var(--color-sidebar-anchor-text-hover);
+            background-color: var(--color-blue-primary);
 
             a {
                 span {
-                    color: var(--color-primary-right-sidebar-list-text-hover) !important;
+                    color: var(--color-white) !important;
 
                     i {
-                        color: var(--color-primary-right-sidebar-list-text-hover) !important;
+                        color: var(--color-white) !important;
                     }
                 }
 
                 span {
-                    color: var(--color-primary-right-sidebar-list-text-hover) !important;
+                    color: var(--color-white) !important;
                 }
             }
         }

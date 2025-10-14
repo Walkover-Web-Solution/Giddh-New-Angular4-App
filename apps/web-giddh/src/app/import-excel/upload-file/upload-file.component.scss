@@ -21,7 +21,7 @@
 .upload-icon {
     font-size: 62px;
     float: none;
-    color: var(--color-dark-fog);
+    color: var(--color-border-light);
 }
 
 .sample-file-btn {
@@ -30,7 +30,7 @@
 }
 
 .dashed-border {
-    border: 2px dashed var(--color-common-secondary-border);
+    border: 2px dashed var(--color-silver);
 }
 
 .import-type {
@@ -48,8 +48,8 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--color-iron);
-    background: var(--color-wild-sand);
+    border: 1px solid var(--color-silver);
+    background: var(--color-light-gray);
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -69,7 +69,7 @@
 }
 
 .has-error .form-control {
-    border-color: var(--color-danger) !important;
+    border-color: var(--color-red) !important;
 }
 
 #csvUploadInput {
@@ -91,21 +91,21 @@
     background: var(--color-white);
     text-align: left;
     position: absolute;
-    border: 1px solid var(--color-secondary-input-bar-border);
+    border: 1px solid var(--color-silver);
     border-radius: 2px !important;
     padding: 6px 12px !important;
     outline: 0;
-    color: var(--color-common-primary-text);
+    color: var(--color-black);
     font-size: var(--font-size-15);
     width: calc(100% - 95px);
 }
 .select-file {
-    color: var(--color-primary-select-file);
+    color: var(--color-green);
 }
 .file-upload-panel {
     width: 100%;
     text-align: left;
-    border: 1px solid var(--color-secondary-input-bar-border);
+    border: 1px solid var(--color-silver);
     padding: 8px;
     border-radius: 4px;
 }
@@ -125,10 +125,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--color-blue);
+                color: var(--color-blue-primary);
             }
             .icon-favorite-selected {
-                color: var(--color-blue);
+                color: var(--color-blue-primary);
             }
         }
     }

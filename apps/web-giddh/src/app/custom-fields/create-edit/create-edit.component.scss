@@ -22,10 +22,10 @@
                 cursor: pointer;
                 padding: 10px;
                 &.icon-plus {
-                    color: var(--color-blue);
+                    color: var(--color-blue-primary);
                 }
                 &.icon-trash {
-                    color: var(--color-gray);
+                    color: var(--color-medium-gray);
                 }
             }
         }

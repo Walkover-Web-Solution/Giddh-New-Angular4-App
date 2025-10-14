@@ -7,7 +7,7 @@
     li {
         display: flex;
         align-items: center;
-        color: var(--color-giddh-blue);
+        color: var(--color-blue-primary);
         button {
             margin: 10px;
             padding: 0;
@@ -17,7 +17,7 @@
             top: var(--top-distance);
             left: 0;
             i {
-                color: var(--color-primary-header-icons);
+                color: var(--color-light-gray);
             }
         }
     }
@@ -46,7 +46,7 @@
             display: flex;
             button {
                 i {
-                    color: var(--color-primary-header-icons);
+                    color: var(--color-light-gray);
                 }
             }
             h4 {

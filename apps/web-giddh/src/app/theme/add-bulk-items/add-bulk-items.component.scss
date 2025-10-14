@@ -6,7 +6,7 @@
 
     .bulk-entry-body {
         .bulk-entry-list {
-            border-right: 1px solid var(--color-common-primary-border);
+            border-right: 1px solid var(--color-silver);
             padding-right: 16px;
             width: 40%;
 
@@ -68,8 +68,8 @@
                 padding-top: 10px;
                 padding-bottom: 10px;
                 height: calc(#{$height} - 196px);
-                border-top: 1px solid var(--color-common-primary-border);
-                border-bottom: 1px solid var(--color-common-primary-border);
+                border-top: 1px solid var(--color-silver);
+                border-bottom: 1px solid var(--color-silver);
 
                 mat-list-item {
                     height: auto;

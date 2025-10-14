@@ -9,7 +9,7 @@
             }
             .input-group-text {
                 border: none;
-                background-color: var(--color-primary-all-items-input-group-input-background);
+                background-color: var(--color-border-light);
                 height: 50px;
                 position: relative;
                 top: 0px;
@@ -18,10 +18,10 @@
     }
     .all-item-block {
         .main-item {
-            border-bottom: 1px solid var(--color-primary-all-items-page-wrapper-block-border);
+            border-bottom: 1px solid var(--color-border-light);
             margin-bottom: 20px;
             h3 {
-                color: var(--color-primary-all-items-page-heading);
+                color: var(--color-blue-primary);
                 font-weight: var(--font-weight-semibold);
                 i {
                     font-size: 22px;
@@ -42,7 +42,7 @@
                         margin-bottom: 10px;
                         display: flex;
                         align-items: center;
-                        color: var(--color-primary-all-items-page-single-menu-items-heading);
+                        color: var(--color-dark-gray);
                         i {
                             font-size: 22px;
 
@@ -60,7 +60,7 @@
                     }
                     &:hover,
                     &.active {
-                        background-color: var(--color-giddh-blue) !important;
+                        background-color: var(--color-blue-primary) !important;
                         h4,
                         p {
                             color: var(--color-white);
@@ -99,7 +99,7 @@
         margin-bottom: 5px;
         display: flex;
         align-items: center;
-        color: var(--color-primary-all-items-page-single-menu-items-heading);
+        color: var(--color-dark-gray);
 
         i {
             font-size: 22px;
@@ -113,13 +113,13 @@
     }
 
     p {
-        color: var(--color-primary-all-items-page-single-menu-items-body);
+        color: var(--color-medium-gray);
         font-size: var(--font-size-12);
     }
 
     &:hover,
     &.active {
-        background-color: var(--color-giddh-blue) !important;
+        background-color: var(--color-blue-primary) !important;
 
         h4,
         p {
