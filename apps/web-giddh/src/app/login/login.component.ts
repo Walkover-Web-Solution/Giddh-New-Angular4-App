@@ -505,6 +505,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.toaster.errorToast(error?.message);
             }
         };
+        console.log(configuration);
 
         /* OTP LOGIN */
         if (window['initSendOTP'] === undefined) {
