@@ -2,8 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const electronNotarize = require('@electron/notarize');
 module.exports = async function (params) {
+    const { notarize } = await import('@electron/notarize');
     // Only notarize the app on Mac OS only.
     if (process.platform !== 'darwin') {
         return;
@@ -17,7 +17,7 @@ module.exports = async function (params) {
     }
 
     try {
-        await electronNotarize.notarize({
+        await notarize({
             appBundleId: appId,
             appPath: appPath,
             appleId: process.env.NOTARIZE_EMAIL, // enter Credential to generate mac's electron build
