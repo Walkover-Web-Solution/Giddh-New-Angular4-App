@@ -157,9 +157,12 @@ xplat/**/*.ngfactory.ts
 xplat/**/*.ngsummary.json
 
 /apps/electron-giddh/src/node_modules
-
 package-lock.json
-/apps/electron-giddh/src/
+/apps/electron-giddh/src/*
+!/apps/electron-giddh/src/WindowManager.ts
+!/apps/electron-giddh/src/StateManager.ts
+!/apps/electron-giddh/src/AppUpdater.ts
+!/apps/electron-giddh/src/AppMenuManager.ts
 
 #
 .env
