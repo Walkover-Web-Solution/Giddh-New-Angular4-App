@@ -145,16 +145,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private route: ActivatedRoute
     ) {
-        this.aiOcrService.getOcrData$.next(null);
-        this.aiOcrService.ocrList$.next(null);
-        this.aiOcrService.aiOcrDetails$.next(null);
-        this.aiOcrService.uploadDataSuccess$.next(null);
-        this.aiOcrService.saveAndNext$.next(null);
-        this.aiOcrService.skipAndNext$.next(null);
-        this.aiOcrService.dateRangeEmit$.next(null);
-        this.aiOcrService.sendListData$.next(null);
-        this.aiOcrService.resetData$.next(null);
-        this.aiOcrService.selectBranch$.next(null);
         this.selectedToggle = OcrAction.List;
     }
 
@@ -166,6 +156,18 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.route.params.pipe(delay(100), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.aiOcrService.getOcrData$.next(null);
+                this.aiOcrService.ocrList$.next(null);
+                this.aiOcrService.aiOcrDetails$.next(null);
+                this.aiOcrService.uploadDataSuccess$.next(null);
+                this.aiOcrService.saveAndNext$.next(null);
+                this.aiOcrService.skipAndNext$.next(null);
+                this.aiOcrService.dateRangeEmit$.next(null);
+                this.aiOcrService.sendListData$.next(null);
+                this.aiOcrService.resetData$.next(null);
+                this.aiOcrService.selectBranch$.next(null);
+                this.aiOcrStore.reset();
+                this.ledgerComponentStore.reset();
                 // End previous route scope and clear any existing interval before starting new scope
                 this.routeScope$.next();
                 this.routeScope$.complete();
@@ -174,6 +176,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     clearInterval(this.completedIntervalId);
                     this.completedIntervalId = null;
                 }
+                // Reset local state on route change to avoid stale UI/state
                 this.ocrType = "";
                 this.initialUpload = true;
                 this.mainPageUploadFile = false;
@@ -181,13 +184,14 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.listCount = 0;
                 this.countVariable = 0;
                 this.ocrType = response.type;
-                this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
+                
+                this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
                     if (response) {
                         this.isConsolidatedBranch = response.isBranchConsolidated;
                         this.changeDetection.detectChanges();
                     }
                 });
-                this.aiOcrStore.branches$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe(response => {
+                this.aiOcrStore.branches$.pipe(takeUntil(this.routeScope$)).subscribe(response => {
                     if (response) {
                         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
                         this.changeDetection.detectChanges();
@@ -195,7 +199,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 });
                 this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
 
-                this.ocrMainList$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                this.ocrMainList$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
                     if (!res) {
                         return;
                     }
@@ -215,7 +219,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     this.changeDetection.detectChanges();
                 });
 
-                this.ocrExtractDocuments$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                this.ocrExtractDocuments$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
                     this.ocrCurrentToken = res?.token ? res.token : "";
                     this.aiOcrService.saveAndNext$.next(null);
                     this.aiOcrService.skipAndNext$.next(null);
@@ -241,7 +245,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     }
                 }, 5000);
 
-                this.ocrMainListInProgress$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((inProgress: boolean) => {
+                this.ocrMainListInProgress$.pipe(takeUntil(this.routeScope$)).subscribe((inProgress: boolean) => {
                     this.aiOcrService.ocrList$.next(this.ocrList);
                     this.isLoading = inProgress;
                     this.selectedToggle = OcrAction.List;
@@ -249,7 +253,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 });
 
                 // Update countVariable when the completed count is retrieved
-                this.ocrCompletedCount$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((count: number) => {
+                this.ocrCompletedCount$.pipe(takeUntil(this.routeScope$)).subscribe((count: number) => {
                     if (count != null) {
                         this.countVariable = count;
                         this.buttonDisabled = this.countVariable === 0 ? true : false;
@@ -258,13 +262,13 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 });
 
                 // Disable or enable the button toggle based on the progress status
-                this.ocrCompletedCountInProgress$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((inProgress: boolean) => {
+                this.ocrCompletedCountInProgress$.pipe(takeUntil(this.routeScope$)).subscribe((inProgress: boolean) => {
                     this.buttonDisabled = inProgress;
                     this.changeDetection.detectChanges();
                 });
 
                 if (this.selectedToggle === OcrAction.List) {
-                    this.aiOcrStore.branches$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe(branchList => {
+                    this.aiOcrStore.branches$.pipe(takeUntil(this.routeScope$)).subscribe(branchList => {
                         if (branchList) {
                             this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
                             if (!this.isCompany) {
@@ -280,20 +284,20 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         }
                     });
 
-                    this.aiOcrService.sendListData$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
+                    this.aiOcrService.sendListData$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
                         if (response) {
                             this.getListData(response);
                         }
                     });
 
-                    this.aiOcrStore.activeCompany$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
+                    this.aiOcrStore.activeCompany$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
                         if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                             this.activeCompany = response;
                         }
                     });
 
                     /** Universal date observer */
-                    this.aiOcrStore.universalDate$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((dateObj) => {
+                    this.aiOcrStore.universalDate$.pipe(takeUntil(this.routeScope$)).subscribe((dateObj) => {
                         if (dateObj) {
                             if (this.countVariable > 0) {
                                 this.initialUpload = false;
@@ -314,7 +318,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     });
                 }
 
-                this.ocrUploadSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                this.ocrUploadSuccess$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
                     if (!res) {
                         return;
                     }
@@ -330,7 +334,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 });
 
                 this.ledgerComponentStore.uploadVoucherSuccess$
-                    .pipe(takeUntil(this.destroyed$))
+                    .pipe(takeUntil(this.routeScope$))
                     .subscribe((voucherResponse) => {
                         if (voucherResponse) {
                             this.aiOcrStore.importOcrDocument({
@@ -340,7 +344,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         }
                     });
 
-                this.ocrImportSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                this.ocrImportSuccess$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
                     if (res && res.requestId) {
                         if (this.mainPageUploadFile) {
                             this.getAllOcrDocuments(false);
@@ -350,7 +354,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
                     if (response?.type === OcrAction.Save && response !== null) {
                         this.aiOcrService.saveAndNextSuccess$.next(null);
                         this.aiOcrService.skipAndNext$.next(null);
@@ -361,7 +365,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                this.aiOcrService.skipAndNext$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.aiOcrService.skipAndNext$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
                     if (response?.type === OcrAction.Skip && response !== null) {
                         this.aiOcrService.saveAndNextSuccess$.next(null);
                         this.aiOcrService.skipAndNext$.next(null);
@@ -371,7 +375,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                this.aiOcrService.ocrListToCreate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.aiOcrService.ocrListToCreate$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
                     if (response) {
                         this.rowData = response;
                         this.buttonDisabled = false;
@@ -548,7 +552,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public resetData(): void {
         this.showClearFilter = false;
         /** Universal date observer */
-        this.aiOcrStore.universalDate$.subscribe((dateObj) => {
+        this.aiOcrStore.universalDate$.pipe(takeUntil(this.routeScope$)).subscribe((dateObj) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -599,9 +603,17 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         this.aiOcrService.uploadDataSuccess$.next(null);
         this.aiOcrService.saveAndNext$.next(null);
         this.aiOcrService.skipAndNext$.next(null);
+        this.aiOcrService.dateRangeEmit$.next(null);
+        this.aiOcrService.sendListData$.next(null);
+        this.aiOcrService.resetData$.next(null);
+        this.aiOcrService.selectBranch$.next(null);
         if (this.completedIntervalId) {
             clearInterval(this.completedIntervalId);
             this.completedIntervalId = null;
+        }
+        if (this.broadcast) {
+            try { this.broadcast.close?.(); } catch { }
+            this.broadcast = null;
         }
         this.routeScope$.next();
         this.routeScope$.complete();
