@@ -30,6 +30,7 @@ import { MatInputModule } from '@angular/material/input';
 import { LightboxModule } from 'ngx-lightbox';
 import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
     declarations: [
@@ -66,7 +67,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         MatInputModule,
         LightboxModule,
         MatMenuModule,
-        FormFieldsModule
+        FormFieldsModule,
+        MatFormFieldModule
     ],
     exports: [
         ExpensesComponent,

@@ -29,4 +29,11 @@
     --line-height-24: 24px;
     --line-height-32: 32px;
     --line-height-36: 36px;
+
+    /* Letter Spacing */
+    --letter-spacing-normal: normal;
+    --letter-spacing-tight: -0.025em;
+    --letter-spacing-wide: 0.025em;
+    --letter-spacing-wider: 0.05em;
+    --letter-spacing-widest: 0.1em;
 }
