@@ -444,6 +444,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             this.showData = false;
             this.ocrDocumentsRequestParams.totalItems = 0;
         }
+        this.changeDetection.detectChanges();
     }
 
     /**

@@ -2,7 +2,7 @@
     .nav.nav-tabs {
         margin-bottom: 20px;
         padding: 12px 0px 0 15px !important;
-        background-color: var(--color-wild-sand);
+        background-color: var(--color-light-gray);
         z-index: 9;
         position: relative;
         top: -4px;
@@ -14,7 +14,7 @@
 }
 
 .table-border-top {
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-silver);
 }
 
 .table-border-bottom tbody tr td,
@@ -22,31 +22,31 @@
     border-right: 0px !important;
     border-left: 0px !important;
     border-bottom: 0px !important;
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-silver);
     white-space: normal;
 }
 
 .table-border-bottom .last-row td {
-    background: var(--color-wild-sand);
+    background: var(--color-light-gray);
     padding: 14px 10px;
     font-weight: bold;
 }
 
 .table-border-bottom thead tr th {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
 }
 
 .return-sel {
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
     border-radius: 18px;
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
 }
 
 .datepicker-border {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
 }
 
 .tax-engine {
@@ -77,18 +77,18 @@
             tr {
                 td {
                     a {
-                        color: var(--color-table-secondary-heading) !important;
+                        color: var(--color-blue-primary) !important;
                     }
 
                     .btn-link {
-                        color: var(--color-table-secondary-heading) !important;
+                        color: var(--color-blue-primary) !important;
                     }
                 }
             }
         }
 
         tfoot {
-            background-color: var(--color-wild-sand);
+            background-color: var(--color-light-gray);
         }
     }
 }

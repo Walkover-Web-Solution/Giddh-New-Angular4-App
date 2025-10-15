@@ -30,6 +30,7 @@ import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store"
 import { PreviewVariantImageComponent } from "../preview-variant-image/preview-variant-image.component";
 import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 
 @Component({
     selector: "stock-create-edit",
@@ -302,7 +303,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         private manufacturingService: ManufacturingService,
         private componentStore: InventoryComponentStore,
         private commonService: CommonService,
-        private voucherComponentStore: VoucherComponentStore
+        private voucherComponentStore: VoucherComponentStore,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
     }
 
@@ -407,6 +409,36 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 }
             });
 
+    }
+
+    /**
+     * Hook for after view initialization - ensures ViewChild elements are available
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public ngAfterViewInit(): void {
+        // Capture initial form values after view is initialized
+        setTimeout(() => {
+            this.captureInitialFormValues();
+        }, 500);
+
+        // Set up form value change listener after view is initialized
+        setTimeout(() => {
+            if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
+                this.stockCreateEditForm.form.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(formValues => {
+                    // Check if all important form fields are blank/empty
+                    const isFormBlank = this.isStockFormCompletelyBlank(formValues);
+
+                    if (isFormBlank) {
+                        // Update initial values to current blank state to prevent popup
+                        setTimeout(() => {
+                            this.captureInitialFormValues();
+                        }, 100);
+                    }
+                });
+                this.changeDetection.detectChanges();
+            }
+        }, 1000);
     }
 
     /**

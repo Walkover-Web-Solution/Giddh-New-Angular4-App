@@ -207,11 +207,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         setTimeout(() => {
-            this._generalService.addLinkTag("./assets/css/font-awesome.css");
+            this._generalService.addLinkTag("./assets/style/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
-            this._generalService.addLinkTag("./assets/css/toastr.css");
-            this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
-            this._generalService.addLinkTag("./assets/css/lightbox.css");
+            this._generalService.addLinkTag("./assets/style/toastr.css");
+            this._generalService.addLinkTag("./assets/style/ladda-themeless.min.css");
+            this._generalService.addLinkTag("./assets/style/lightbox.css");
 
             /* RAZORPAY */
             if (window['Razorpay'] === undefined) {
@@ -235,7 +235,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             /* Xml */
         }, 1000);
 
-        this._generalService.addLinkTag("./assets/css/code-mirror.css");
+        this._generalService.addLinkTag("./assets/style/code-mirror.css");
 
 
         // if (this._generalService.getUrlParameter("region") === "uk") {

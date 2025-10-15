@@ -1,11 +1,11 @@
 :host ::ng-deep .dropdown-menu > li > a:hover {
-    color: var(--color-blue);
-    background: var(--color-dark-fog);
+    color: var(--color-blue-primary);
+    background: var(--color-border-light);
 }
 /* my css */
 .successful-file-detail h3,
 .gst-return-date h3 {
-    color: var(--color-nero);
+    color: var(--color-black);
     font-size: var(--font-size-24);
     margin: 20px 0 7px;
 }
@@ -15,6 +15,6 @@
     font-size: var(--font-size-15);
 }
 .file-your-return {
-    border: 1px solid var(--color-blue);
+    border: 1px solid var(--color-blue-primary);
     border-radius: 2px;
 }

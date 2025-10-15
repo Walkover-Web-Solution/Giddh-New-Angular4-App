@@ -43,7 +43,7 @@ import { AppState } from '../../../../store';
 import { digitsOnly } from '../../../helpers';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -392,10 +392,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             const index = this.portalIndex;
             let change = mappings.at(index);
-            let mobileNo = '';
-            if (this.intl) {
-                mobileNo = this.intl['init-contact-portal_' + (index)]?.getNumber();
-            }
+            // let mobileNo = '';
+            // if (this.intl) {
+            //     mobileNo = this.intl['init-contact-portal_' + (index)]?.getNumber();
+            // }
             let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
             if (defaultUser) {
                 defaultUser.get('default').patchValue(false);
@@ -417,7 +417,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
                 }
-                change.get('contactNo')?.setValue(mobileNo);
+                // change.get('contactNo')?.setValue(mobileNo);
                 let lastOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
                 mappings.controls.forEach((control, i) => {
@@ -444,21 +444,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         this.addAccountForm.valueChanges.pipe(
             debounceTime(700),
-            distinctUntilChanged((prev, curr) => (prev?.attentionTo === curr?.attentionTo) && (prev?.mobileNo === curr?.mobileNo) && (prev?.email === curr?.email)),
+            distinctUntilChanged(isEqual),
             takeUntil(this.destroyed$))
             .subscribe((response) => {
                 const users = this.addAccountForm.get('portalDomain') as FormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
-                    let mobileNo = '';
-                    if (response?.mobileNo && this.intl) {
-                        mobileNo = this.intl['init-contact-update']?.getNumber();
-                    }
+                    // let mobileNo = '';
+                    // if (response?.mobileNo && this.intl) {
+                    //     mobileNo = this.intl['init-contact-update']?.getNumber();
+                    // }
                     if (user) {
                         if (!this.isPortalDefault) {
                             user?.get('name').setValue(response?.attentionTo);
                             user?.get('email').setValue(response?.email);
-                            user?.get('contactNo').setValue(mobileNo);
+                            user?.get('contactNo').setValue(response?.mobileNo);
                             user?.get('default').setValue(true);
                         }
                     } else {
@@ -470,13 +470,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
-                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true });
+                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true });
                                 setValue = true;
                                 return;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true };
+                            let data = { name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true };
                             this.addNewPortalUser(data);
                         }
                     }
@@ -549,13 +549,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         const interval = setInterval(() => {
             const element = document.getElementById('init-contact-update');
             const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-            
+
             if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-update');
                 clearInterval(interval);
             }
         }, 500); // Reduced interval for faster detection
-        
+
         // Add fallback timeout to prevent infinite loop
         setTimeout(() => {
             clearInterval(interval);
@@ -868,7 +868,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public reInitializeMobileField(fieldId: string): void {
         const element = document.getElementById(fieldId);
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-        
+
         if (element && intlTelInput && !this.intl[fieldId]) {
             this.onlyPhoneNumber(fieldId);
         }
@@ -912,13 +912,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         const interval = setInterval(() => {
             const element = document.getElementById('init-contact-portal_' + lastIndex);
             const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-            
+
             if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
             }
         }, 200); // Faster checking for dynamic elements
-        
+
         // Add fallback timeout
         setTimeout(() => {
             clearInterval(interval);
@@ -1172,12 +1172,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency, { onlySelf: true });
             accountRequest.currency = this.selectedCurrency;
         }
-        if (this.intl) {
-            let mobileNo = this.intl['init-contact-update']?.getNumber();
-            if (mobileNo) {
-                accountRequest['mobileNo'] = mobileNo;
-            }
-        }
+        // if (this.intl) {
+        //     let mobileNo = this.intl['init-contact-update']?.getNumber();
+        //     if (mobileNo) {
+        //         accountRequest['mobileNo'] = mobileNo;
+        //     }
+        // }
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
@@ -2654,7 +2654,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => accountRequest['uniqueName'] = activeAccountState?.uniqueName);
         }
         accountRequest['archive'] = !this.addAccountForm.get('archive')?.value;
-        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));  
+        this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
         this.updateViaPatchApi.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: accountRequest['uniqueName'] },
             accountRequest
@@ -2680,7 +2680,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
+    }
+
+    /**
+     * Checks if a sales person exists by unique name
+     *
+     * @private
+     * @param {string} uniqueName - The unique name to search for
+     * @param {any[]} salesPersonList - Array of sales persons to search in
+     * @returns {boolean} True if sales person exists, false otherwise
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
+        if (!uniqueName || !salesPersonList?.length) return false;
+        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 
     /**
