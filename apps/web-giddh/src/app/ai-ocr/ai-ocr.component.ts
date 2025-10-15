@@ -319,7 +319,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 }
 
                 this.ocrUploadSuccess$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
-                    console.log("res", res);
                     if (!res) {
                         return;
                     }
@@ -337,7 +336,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.ledgerComponentStore.uploadVoucherSuccess$
                     .pipe(takeUntil(this.routeScope$))
                     .subscribe((voucherResponse) => {
-                        console.log("voucherResponse", voucherResponse);
                         if (voucherResponse) {
                             this.aiOcrStore.importOcrDocument({
                                 signedUrlResponse: this.signedUrlResponse,
@@ -347,7 +345,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     });
 
                 this.ocrImportSuccess$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
-                    console.log("res", res);
                     if (res && res.requestId) {
                         if (this.mainPageUploadFile) {
                             this.getAllOcrDocuments(false);
