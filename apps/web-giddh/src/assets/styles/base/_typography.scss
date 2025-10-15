@@ -38,3 +38,12 @@
   '32': 32px,
   '36': 36px
 ));
+
+// Letter Spacing Variables and Classes
+@include typography-utilities('letter-spacing', (
+  'normal': normal,
+  'tight': -0.025em,
+  'wide': 0.025em,
+  'wider': 0.05em,
+  'widest': 0.1em
+));
