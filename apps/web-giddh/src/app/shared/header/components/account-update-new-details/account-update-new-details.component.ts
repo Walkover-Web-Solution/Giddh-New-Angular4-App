@@ -2696,18 +2696,4 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (!uniqueName || !salesPersonList?.length) return false;
         return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
-
-    /**
-     * Checks if a sales person exists by unique name
-     *
-     * @private
-     * @param {string} uniqueName - The unique name to search for
-     * @param {any[]} salesPersonList - Array of sales persons to search in
-     * @returns {boolean} True if sales person exists, false otherwise
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
-        if (!uniqueName || !salesPersonList?.length) return false;
-        return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
-    }
 }
