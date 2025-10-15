@@ -188,7 +188,7 @@ export class AiOcrService {
                     ?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
                     ?.replace(":currentToken", encodeURIComponent(req.type === "skip" ? req.token : ""))
                     ?.replace(":nextToken", encodeURIComponent(req.type === "save" ? req.token : ""))
-                    ?.replace(":voucherType", encodeURIComponent(req.type ? req.type : ""))
+                    ?.replace(":voucherType", encodeURIComponent((req.type && req.type !== "skip" && req.type !== "save") ? req.type : ""))
                     ?.replace(":requestId", encodeURIComponent(req.row?.requestId ? req.row?.requestId : ""))
             )
             .pipe(
