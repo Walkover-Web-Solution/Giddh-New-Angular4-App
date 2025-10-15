@@ -20,6 +20,7 @@ import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { GeneralActions } from "../../actions/general/general.actions";
 import { ActivatedRoute } from "@angular/router";
+import { VoucherTypeEnum } from "../../models/api-models/Sales";
 
 @Component({
     selector: "ai-ocr-list",
@@ -107,10 +108,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     ) {
     }
 
-    public selectVoucher(value: any, element: any): void {
-        console.log(value, element);
-    }
-
     /**
      * Initializes the component by subscribing to route parameters and fetching ocr data.
      *
@@ -131,14 +128,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.ocrType = response.type;
                 this.transactionOptions = this.ocrType === 'income'
                     ? [
-                        { label: 'Sales', value: 'sales' },
-                        { label: 'Credit Note', value: 'credit-note' },
-                        { label: 'Receipt', value: 'receipt' }
+                        { label: this.commonLocaleData?.app_voucher_types?.sales, value: VoucherTypeEnum.sales },
+                        { label: this.commonLocaleData?.app_voucher_types?.credit_note, value: VoucherTypeEnum.creditNote },
+                        { label: this.commonLocaleData?.app_voucher_types?.receipt, value: VoucherTypeEnum.receipt }
                     ]
                     : [
-                        { label: 'Purchase', value: 'purchase' },
-                        { label: 'Debit Note', value: 'debit-note' },
-                        { label: 'Payment', value: 'payment' }
+                        { label: this.commonLocaleData?.app_voucher_types?.purchase, value: VoucherTypeEnum.purchase },
+                        { label: this.commonLocaleData?.app_voucher_types?.debit_note, value: VoucherTypeEnum.debitNote },
+                        { label: this.commonLocaleData?.app_voucher_types?.payment, value: VoucherTypeEnum.payment }
                     ];
                 /** Get Ocr List */
                 this.aiOcrService.mainPage$.pipe(
@@ -557,5 +554,22 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.routeScope$.complete();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will be used to check null or undefined values.
+     *
+     * @param {*} voucherTypeObj
+     * @param {*} element
+     * @return {*} {boolean}
+     * @memberof AiOcrListComponent
+     */
+    public selectVoucher(voucherTypeObj: any, element: any): void {
+        const req = {
+            row: element,
+            type: voucherTypeObj.value,
+            list: this.transactionOptions
+        }
+        this.aiOcrService.ocrListToCreate$.next(req);
     }
 }

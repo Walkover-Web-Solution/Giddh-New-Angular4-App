@@ -134,6 +134,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public mainPageUploadFile: boolean = false;
     /** This will use for ocr type */
     public ocrType: string = "";
+    /** This will use for row data */
+    public rowData: any;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -179,7 +181,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.listCount = 0;
                 this.countVariable = 0;
                 this.ocrType = response.type;
-                console.log(this.initialUpload, this.mainPageUploadFile, this.initialUploadFile);
                 this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
                     if (response) {
                         this.isConsolidatedBranch = response.isBranchConsolidated;
@@ -203,7 +204,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     if (this.initialUploadFile) {
                         this.initialUpload = false;
                     }
-                    console.log(this.initialUpload, this.mainPageUploadFile, this.initialUploadFile);
                     // Update list data
                     this.listCount = res.totalItems || 0;
                     this.ocrMainList = res;
@@ -370,6 +370,14 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         this.changeDetection.detectChanges();
                     }
                 });
+
+                this.aiOcrService.ocrListToCreate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                    if (response) {
+                        this.rowData = response;
+                        this.buttonDisabled = false;
+                        this.onToggleChange(OcrAction.Create);
+                    }
+                });
             }
         });
     }
@@ -423,7 +431,12 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             return;
         }
         if (value === OcrAction.Create && !this.buttonDisabled) {
-            this.aiOcrStore.getExtractDocuments("");
+            if (this.rowData) {
+                this.selectedToggle = OcrAction.Create;
+                this.aiOcrStore.getExtractDocuments(this.rowData);
+            } else {
+                this.aiOcrStore.getExtractDocuments("");
+            }
         } else if (value === OcrAction.List) {
             this.selectedToggle = value;
         }
