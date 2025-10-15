@@ -1,12 +1,12 @@
-<div class="mobile-number-container custom-mat-form-field">
+<div class="mobile-number-container custom-mat-form-field" [id]="id || undefined">
     <mat-form-field appearance="outline" floatLabel="always" class="pointer-event-none mobile-input">
         <mat-label>{{ label }}</mat-label>
         <div class="input-wrapper d-flex column-gap1">
             <div class="country-select-wrapper" (click)="$event.stopPropagation()">
                 <mat-select
                     [formControl]="countryControl"
-                    [placeholder]="'Country'"
                     panelWidth="400px"
+                    [id]="id ? id + '-country' : undefined"
                     (selectionChange)="onCountryChange($event.value)"
                 >
                     <mat-select-trigger>
@@ -52,6 +52,8 @@
                 type="tel"
                 class="flex-grow-1"
                 [formControl]="mobileControl"
+                [id]="id ? id + '-mobile' : undefined"
+                [name]="name || 'mobileNumber'"
                 [placeholder]="placeholder || selectedCountry?.placeholder || 'Enter mobile number'"
                 (input)="onMobileInput($event)"
                 (keypress)="onKeyPress($event)"

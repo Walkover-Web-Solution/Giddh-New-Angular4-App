@@ -34,7 +34,11 @@ export function mobileNumberValidator(country: Country | null) {
         } else {
             // Case 2: Number without + but with dial code digits
             const dialCodeWithoutPlus = country.dialCode.substring(1); // Remove + from dial code
-            if (phoneNumber.startsWith(dialCodeWithoutPlus)) {
+            
+            // Only remove dial code if the number is longer than expected mobile number length
+            // This prevents removing valid mobile number digits that happen to start with dial code
+            if (phoneNumber.startsWith(dialCodeWithoutPlus) && 
+                phoneNumber.length > country.maxLength) {
                 phoneNumber = phoneNumber.substring(dialCodeWithoutPlus.length);
             }
         }
@@ -85,8 +89,15 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     
     /** Default country code */
     @Input() public defaultCountry: string = '+91';
-    /** Default country code */
+    
+    /** Placeholder text for the mobile input field */
     @Input() public placeholder: string;
+    
+    /** Unique identifier for the component instance */
+    @Input() public id: string;
+    
+    /** Name attribute for the component instance */
+    @Input() public name: string;
     
     /** Whether to use image flags instead of emoji flags */
     @Input() public useImageFlags: boolean = false;
@@ -381,13 +392,64 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         } else if (this.selectedCountry) {
             // Scenario 2: Check if number contains dial code without +
             const dialCodeWithoutPlus = this.selectedCountry.dialCode.substring(1);
-            if (value.startsWith(dialCodeWithoutPlus)) {
+            
+            // Only remove dial code if we have enough digits to be confident it's a duplicate
+            // For India (+91), wait for at least 4 digits total (91 + 2 more digits)
+            // For other countries, wait for dial code + at least 2 more digits
+            let minDigitsRequired = dialCodeWithoutPlus.length + 2;
+            
+            // Special case for India: user typing 919111525164 should wait until 9191 (4 digits)
+            if (this.selectedCountry.code === 'IN') {
+                minDigitsRequired = Math.max(4, dialCodeWithoutPlus.length + 2);
+            }
+            
+            if (value.startsWith(dialCodeWithoutPlus) && 
+                value.length >= minDigitsRequired &&
+                value.length > this.selectedCountry.maxLength) {
                 // Extract mobile number part (everything after dial code)
                 const mobileNumber = value.substring(dialCodeWithoutPlus.length);
-                this.mobileControl.setValue(mobileNumber, { emitEvent: false });
-                target.value = mobileNumber;
+                
+                // Additional validation: ensure the remaining number looks like a valid mobile number
+                // (starts with valid mobile number patterns for the country)
+                if (this.isValidMobileNumberStart(mobileNumber)) {
+                    this.mobileControl.setValue(mobileNumber, { emitEvent: false });
+                    target.value = mobileNumber;
+                    
+                    // Set cursor position to end of input
+                    setTimeout(() => {
+                        target.setSelectionRange(mobileNumber.length, mobileNumber.length);
+                    }, 0);
+                }
             }
         }
+    }
+
+    /**
+     * Validates if a mobile number starts with valid digits for the selected country
+     * 
+     * @param {string} mobileNumber - Mobile number to validate
+     * @returns {boolean} True if the number starts with valid digits
+     * @private
+     * @memberof MobileNumberInputComponent
+     */
+    private isValidMobileNumberStart(mobileNumber: string): boolean {
+        if (!this.selectedCountry || !mobileNumber) {
+            return false;
+        }
+        
+        // For India (+91), valid mobile numbers start with 6, 7, 8, or 9
+        if (this.selectedCountry.code === 'IN') {
+            return /^[6-9]/.test(mobileNumber);
+        }
+        
+        // For US/Canada (+1), valid mobile numbers start with 2-9 (area code)
+        if (this.selectedCountry.code === 'US' || this.selectedCountry.code === 'CA') {
+            return /^[2-9]/.test(mobileNumber);
+        }
+        
+        // For other countries, use a more generic validation
+        // Most mobile numbers don't start with 0 or 1
+        return /^[2-9]/.test(mobileNumber);
     }
 
     /**
