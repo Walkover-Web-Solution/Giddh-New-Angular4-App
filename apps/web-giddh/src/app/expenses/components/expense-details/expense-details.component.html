@@ -55,46 +55,41 @@
             <div class="col-sm-12">
                 <div class="petty-cash">
                     <div class="bg-color pd-b1">
-                        <div class="row">
+                        <div class="row mr-t2">
                             <div class="col-12">
-                                <div class="form-group mb-2 custom-input-field">
-                                    <mat-form-field appearance="fill" class="w-100">
-                                        <label>{{ commonLocaleData?.app_description }}</label>
-                                        <textarea
-                                            matInput
-                                            name="comment"
-                                            class="textarea form-control mat-field-border mt-2"
-                                            [(ngModel)]="comment"
-                                            [placeholder]="localeData?.description_placeholder"
-                                        ></textarea>
-                                    </mat-form-field>
-                                </div>
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
+                                    <textarea
+                                        matInput
+                                        rows="3"
+                                        [name]="'comment'"
+                                        [(ngModel)]="comment"
+                                        [placeholder]="localeData?.description_placeholder"
+                                    ></textarea>
+                                </mat-form-field>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mr-t2">
                             <div class="col-8">
                                 <div class="d-inline-block mr-2">
-                                    <label class="font-size-15">
-                                        {{ entryAgainstObject.base }}<span class="text-danger">*</span>
-                                    </label>
-                                    <div class="clear-both">
-                                        <reactive-dropdown-field
-                                            [ngClass]="{ 'error-box': showEntryAgainstRequired }"
-                                            class="text-left multi-select entry-against"
-                                            [name]="'depositAccountUniqueName'"
-                                            [options]="entryAgainstObject.dropDownOption"
-                                            [(ngModel)]="entryAgainstObject.model"
-                                            (selectedOption)="onSelectEntryAgainstAccount($event)"
-                                            (onClear)="onClearEntryAgainstAccount()"
-                                            [placeholder]="commonLocaleData?.app_select_account"
-                                            [enableDynamicSearch]="true"
-                                            [isPaginationEnabled]="true"
-                                            (scrollEnd)="handleAccountScrollEnd()"
-                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                            [labelValue]="entryAgainstObject?.name"
-                                        >
-                                        </reactive-dropdown-field>
-                                    </div>
+                                    <reactive-dropdown-field
+                                        [ngClass]="{ 'error-box': showEntryAgainstRequired }"
+                                        class="text-left multi-select entry-against"
+                                        [name]="'depositAccountUniqueName'"
+                                        [options]="entryAgainstObject.dropDownOption"
+                                        [(ngModel)]="entryAgainstObject.model"
+                                        (selectedOption)="onSelectEntryAgainstAccount($event)"
+                                        (onClear)="onClearEntryAgainstAccount()"
+                                        [label]="entryAgainstObject.base"
+                                        [required]="true"
+                                        [placeholder]="commonLocaleData?.app_select_account"
+                                        [enableDynamicSearch]="true"
+                                        [isPaginationEnabled]="true"
+                                        (scrollEnd)="handleAccountScrollEnd()"
+                                        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                        [labelValue]="entryAgainstObject?.name"
+                                    >
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
 

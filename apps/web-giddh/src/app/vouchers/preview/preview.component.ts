@@ -822,7 +822,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
     * Open Adjust payment dialog
     *
-    * @memberof VoucherListComponent
+    * @memberof VouchersPreviewComponent
     */
     public showAdjustmentDialog(): void {
         this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: this.selectedInvoice?.account?.uniqueName, payload: { uniqueName: this.selectedInvoice?.uniqueName, voucherType: this.voucherType } });
@@ -1190,12 +1190,33 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handle Cancel Voucher Dialog
+     *
+     * @param {*} voucher
+     * @memberof VouchersPreviewComponent
+     */
+    public openCancelVoucherDialog(action: any): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.cancel_voucher_confirmation_message, this.commonLocaleData)
+            }
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.actionVoucher(action);
+            }
+        });
+    }
+
 
     /**
      * Handle Estimate Proforma Actions API Call
      *
      * @param {string} action
-     * @memberof VoucherListComponent
+     * @memberof VouchersPreviewComponent
      */
     public actionEstimateProforma(action: string): void {
         const model = {
@@ -1216,7 +1237,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
      * Convert To Invoice API Call
      *
-     * @memberof VoucherListComponent
+     * @memberof VouchersPreviewComponent
      */
     public convertToInvoice(): void {
         const model = {
@@ -1238,7 +1259,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
      * Convert To Proforma API Call
      *
-     * @memberof VoucherListComponent
+     * @memberof VouchersPreviewComponent
      */
     public convertToProforma(): void {
         this.componentStore.convertToProforma({

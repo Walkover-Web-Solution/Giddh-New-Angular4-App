@@ -11703,3 +11703,43 @@ body {
         }
     }
 }
+
+// Temp Code to fix Only CSS Version 2 bugs
+button {
+    &.mat-mdc-icon-button {
+        .mat-mdc-button-persistent-ripple {
+            display: none;
+        }
+    }
+}
+.mat-mdc-form-field {
+    .mat-mdc-form-field-focus-overlay {
+        display: none;
+    }
+    .mdc-line-ripple {
+        display: none;
+    }
+    .mdc-text-field--filled {
+        &:not(.mdc-text-field--disabled) {
+            background-color: var(--color-transparent);
+        }
+    }
+}
+
+.mobile-number-container {
+    mat-select {
+        width: auto;
+        // border: 1px dashed blue;
+        padding: 0 !important;
+        .mat-mdc-select-arrow {
+            svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+    }
+    input, input.mat-mdc-text-field-wrapper {
+        // border: 1px dashed red !important;
+        height: inherit !important;
+    }
+}
