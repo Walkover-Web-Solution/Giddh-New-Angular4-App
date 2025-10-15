@@ -145,7 +145,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private route: ActivatedRoute
     ) {
-        this.selectedToggle = OcrAction.List;
     }
 
     /**
@@ -166,6 +165,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.aiOcrService.sendListData$.next(null);
                 this.aiOcrService.resetData$.next(null);
                 this.aiOcrService.selectBranch$.next(null);
+                this.selectedToggle = OcrAction.List;
                 this.aiOcrStore.reset();
                 this.ledgerComponentStore.reset();
                 // End previous route scope and clear any existing interval before starting new scope
