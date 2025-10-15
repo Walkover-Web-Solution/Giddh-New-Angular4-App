@@ -678,18 +678,22 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         
         let mobileNumber = this.mobileControl.value.replace(/\s+/g, '');
         
-        // Check if mobile number already contains the dial code
+        // Check if mobile number already contains the dial code with +
         if (mobileNumber.startsWith(this.selectedCountry.dialCode)) {
             return mobileNumber;
         }
         
-        // Check if mobile number starts with dial code without +
+        // Check if mobile number starts with dial code without + AND is longer than expected
+        // This prevents treating valid mobile numbers that happen to start with dial code digits
+        // as having duplicate dial codes
         const dialCodeWithoutPlus = this.selectedCountry.dialCode.substring(1);
-        if (mobileNumber.startsWith(dialCodeWithoutPlus)) {
+        if (mobileNumber.startsWith(dialCodeWithoutPlus) && 
+            mobileNumber.length > this.selectedCountry.maxLength) {
+            // Only remove dial code if the number is longer than expected (indicating duplicate)
             return this.selectedCountry.dialCode + mobileNumber.substring(dialCodeWithoutPlus.length);
         }
         
-        // Otherwise, just prepend the dial code
+        // Otherwise, just prepend the dial code (normal case)
         return this.selectedCountry.dialCode + mobileNumber;
     }
 
