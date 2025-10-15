@@ -442,36 +442,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     /**
-     * Hook for after view initialization - ensures ViewChild elements are available
-     *
-     * @memberof StockCreateEditComponent
-     */
-    public ngAfterViewInit(): void {
-        // Capture initial form values after view is initialized
-        setTimeout(() => {
-            this.captureInitialFormValues();
-        }, 500);
-
-        // Set up form value change listener after view is initialized
-        setTimeout(() => {
-            if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
-                this.stockCreateEditForm.form.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(formValues => {
-                    // Check if all important form fields are blank/empty
-                    const isFormBlank = this.isStockFormCompletelyBlank(formValues);
-
-                    if (isFormBlank) {
-                        // Update initial values to current blank state to prevent popup
-                        setTimeout(() => {
-                            this.captureInitialFormValues();
-                        }, 100);
-                    }
-                });
-                this.changeDetection.detectChanges();
-            }
-        }, 1000);
-    }
-
-    /**
      * Add option value
      *
      * @param {number} optionIndex
