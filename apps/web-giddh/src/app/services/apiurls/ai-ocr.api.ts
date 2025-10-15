@@ -5,5 +5,5 @@ export const AI_OCR_API = {
     UPLOAD_DOCUMENTS: UNIVERSAL_URI_OCR + '/signed-url?fileName=:fileName&branchUniqueName=:branchUniqueName',
     IMPORT: UNIVERSAL_URI_OCR + '/document/upload?type=DOCUMENT_IMPORT&branchUniqueName=:branchUniqueName&ocrType=:ocrType',
     COMPLETED_COUNT: 'company/:companyUniqueName/completed-document-count?voucherVersion=2&branchUniqueName=:branchUniqueName&ocrType=:ocrType',
-    EXTRACT_DOCUMENTS: 'company/:companyUniqueName/ocr-data?currentToken=:currentToken&nextToken=:nextToken&voucherVersion=2&voucherType=:voucherType'
+    EXTRACT_DOCUMENTS: 'company/:companyUniqueName/ocr-data?currentToken=:currentToken&nextToken=:nextToken&voucherVersion=2&voucherType=:voucherType&requestId=:requestId'
 };
