@@ -94,6 +94,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public showClearFilter: boolean = false;
     /** This will use for ocr type */
     public ocrType: string = "";
+    /** This will use for transaction type */
     public transactionOptions: Array<{ label: string; value: string }> = [];
 
     constructor(

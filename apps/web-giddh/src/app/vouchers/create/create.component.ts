@@ -633,19 +633,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
 
-    public selectVoucherType(type: string) {
-        this.selectedVoucherType = type?.toLowerCase();
-        const req = {
-            row: this.rowData,
-            type: this.selectedVoucherType,
-            list: this.transactionOptions
-        }
-        this.voucherType = this.vouchersUtilityService.parseVoucherType(req.type);
-        this.getVoucherType();
-        this.invoiceForm.get("type").patchValue(this.voucherType);
-        this.aiOcrService.ocrListToCreate$.next(req);
-    }
-
     /**
      * Lifecycle hook for component initialization
      *
@@ -6959,5 +6946,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
         if (!uniqueName || !salesPersonList?.length) return false;
         return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
+    }
+
+    /**
+      * Select voucher type
+      *
+      * @private
+      * @param {string} type - The unique name to search for
+      * @memberof VoucherCreateComponent
+      */
+    public selectVoucherType(type: string): void {
+        this.selectedVoucherType = type?.toLowerCase();
+        const req = {
+            row: this.rowData,
+            type: this.selectedVoucherType,
+            list: this.transactionOptions
+        }
+        this.voucherType = this.vouchersUtilityService.parseVoucherType(req.type);
+        this.getVoucherType();
+        this.invoiceForm.get("type").patchValue(this.voucherType);
+        this.aiOcrService.ocrListToCreate$.next(req);
     }
 }
