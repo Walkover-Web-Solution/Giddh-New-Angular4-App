@@ -7,18 +7,18 @@
 >
     <div class="giddh-all-items-wrapper">
         <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-        <div class="container-fluid">
+        <div class="container-fluid pb-5">
             <div class="search-any-item">
                 <div class="input-group flex-nowrap">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="addon-wrapping">
-                            <i class="icon-search"></i>
+                        <span class="input-group-text d-inline-flex align-items-center only-left-radius" id="addon-wrapping">
+                            <i class="icon-search theme-foreground-color"></i>
                         </span>
                     </div>
                     <text-field
                         class="width-inherit"
                         [type]="'text'"
-                        [cssClass]="'form-control'"
+                        [cssClass]="'form-control only-right-radius'"
                         [placeholder]="commonLocaleData?.app_search"
                         [attr.aria-label]="commonLocaleData?.app_search"
                         aria-describedby="addon-wrapping"
@@ -57,7 +57,7 @@
                                         <mat-card-title>
                                             <p><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</p>
                                         </mat-card-title>
-                                        <mat-card-content>
+                                        <mat-card-content class="p-0">
                                             <p class="font-size-12">{{ subItem?.description }}</p>
                                         </mat-card-content>
                                     </mat-card>
@@ -70,7 +70,7 @@
                                         <mat-card-title>
                                             <p><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</p>
                                         </mat-card-title>
-                                        <mat-card-content>
+                                        <mat-card-content class="p-0">
                                             <p class="font-size-12">{{ subItem?.description }}</p>
                                         </mat-card-content>
                                     </mat-card>
@@ -98,7 +98,7 @@
                     <mat-card-title>
                         <p><i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}</p>
                     </mat-card-title>
-                    <mat-card-content>
+                    <mat-card-content class="p-0">
                         <p>{{ item?.description }}</p>
                     </mat-card-content>
                 </mat-card>

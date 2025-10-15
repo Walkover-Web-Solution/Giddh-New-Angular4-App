@@ -26,10 +26,3 @@ footer#footer.sticky-footer {
     margin-bottom: 0 !important;
 }
 */
-#content-wrapper {
-    /* padding-bottom: 80px; */
-    padding-left: 60px;
-}
-.menu_open {
-    padding-left: 240px !important;
-}

@@ -41,11 +41,11 @@
 }
 
 // Border radius
-.only-right-radius {
-    @include border-radius(5px 0 0 5px);
-}
 .only-left-radius {
-    @include border-radius(0 5px 5px 0);
+    @include border-radius(var(--mat-border-radius-4), 0, 0, var(--mat-border-radius-4));
+}
+.only-right-radius {
+    @include border-radius(0, var(--mat-border-radius-4), var(--mat-border-radius-4), 0);
 }
 
 // ===== COLORS =====

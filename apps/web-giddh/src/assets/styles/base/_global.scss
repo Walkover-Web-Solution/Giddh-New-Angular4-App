@@ -25,6 +25,19 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+// Content wrapper
+#content-wrapper {
+    /* padding-bottom: 80px; */
+    // padding-top: 60px;
+    // height: calc(100vh - 60px);
+    // overflow-y: scroll;
+    padding-left: 60px;
+    padding-bottom: 15px;
+    // min-height: 100vh;
+    // transition: all 0.3s ease;
+}
+
 .company-list {
     li {
         p {
@@ -2225,15 +2238,6 @@ aside-create-group {
 
     .toggle-switch {
         right: 0;
-    }
-}
-
-#content-wrapper {
-    .account-wrapper {
-        .from-or-to-acc[type="text"],
-        .form-control.debit-credit[type="text"] {
-            border: 1px solid var(--border-color) !important;
-        }
     }
 }
 
@@ -5265,12 +5269,6 @@ table input[type="number"] {
     text-align: center;
 }
 
-/* UNUSED GLOBAL CLASS: pagination - Auto-commented by script
-.pagination {
-    justify-content: center;
-}
-*/
-
 .ledger-panel label {
     font-weight: 400;
 }
@@ -5906,15 +5904,29 @@ textarea {
     transition: all 0.3s ease;
 }
 
+// .nav-left-bar {
+//     position: fixed;
+//     top: var(--top-sidebar);
+//     bottom: 0;
+//     min-height: calc(100vh - var(--header-height));
+//     // background-color: var(--color-white);
+//     width: 60px;
+//     left: 0;
+//     z-index: 991;
+//     box-shadow: 1px 0px 4px var(--color-shadow-light) !important;
+// }
 .nav-left-bar {
     position: fixed;
-    top: 0;
+    top: var(--top-sidebar);
     left: 0;
+    bottom: 0;
+    min-height: calc(100vh - var(--header-height));
     width: 60px;
-    height: 100vh;
-    background-color: var(--color-white);
+    // height: 100vh;
+    // background-color: var(--color-white);
     // border-right: 1px solid var(--border-color);
-    z-index: 999;
+     box-shadow: 1px 0px 4px var(--color-shadow-light) !important;
+    // z-index: 999;
     transition: all 0.3s ease;
     
     &.width-60 {
@@ -5927,6 +5939,9 @@ textarea {
 }
 
 // Menu states
+.menu_open {
+    padding-left: 240px !important;
+}
 .menu_open {
     .nav-left-bar {
         width: 240px;
@@ -5955,7 +5970,19 @@ textarea {
         padding-left: 240px !important;
     }
 }
-
+// Plan wrapper
+.plan-wrapper {
+    padding-left: 60px;
+    
+    &.menu_open {
+        padding-left: 240px !important;
+    }
+}
+.warning-msg-row {
+    &.menu_open {
+    margin-left: 240px;
+}
+}
 // Header styles
 .header {
     background-color: var(--color-white);
@@ -5975,14 +6002,6 @@ textarea {
     &.open {
         padding-left: 15px !important;
     }
-}
-
-// Content wrapper
-#content-wrapper {
-    padding-left: 60px;
-    // padding-top: 60px;
-    min-height: 100vh;
-    transition: all 0.3s ease;
 }
 
 // Breadcrumbs
@@ -6030,15 +6049,6 @@ hamburger-menu {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-    }
-}
-
-// Plan wrapper
-.plan-wrapper {
-    padding-left: 60px;
-    
-    &.menu_open {
-        padding-left: 240px !important;
     }
 }
 
@@ -8821,83 +8831,39 @@ ul {
 }
 
 /*notofication css end*/
+
+// Setting sidebar and data styles
 .setting-data,
-.setting-sidebar-open .warning-msg-row {
-    padding-left: 15px !important;
-}
-
-.setting-sidebar-open .menu_open .setting-data,
-.setting-sidebar-open .menu_open .warning-msg-row {
-    padding-left: 15px !important;
-}
-
-.date-field {
-    flex-direction: column;
-}
-
-.mobile-sidebar-open:after {
-    position: absolute;
-    content: "";
-    background-color: var(--color-medium-gray);
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    z-index: 9;
-}
-
-span#HW_badge_cont:nth-child(3) {
-    display: none !important;
-}
-
-.giddh-datepicker {
-    cursor: pointer !important;
-}
-
-.on-setting-page .nav-left-bar.open,
-.on-user-page .nav-left-bar.open on-user-page {
-    left: 0 !important;
-    display: block !important;
-}
-
-.setting-sidebar-open .nav-left-bar,
-.on-user-page .nav-left-bar,
-.on-setting-page .nav-left-bar {
-    display: block;
-}
-
-.menu_open aside-setting.setting-sidebar {
-    right: 0 !important;
-}
-
-.setting-sidebar-open #content-wrapper {
-    padding-right: 0;
-    padding-left: 60px !important;
-}
-
-.setting-sidebar-open .desktop-header {
-    padding-left: 0;
-}
-
-.setting-sidebar-open .desktop-header.menu_open {
-    padding-right: 240px !important;
-}
-
-.gst-sidebar-open .menu_open {
-    padding-left: 300px !important;
-}
-
-.desktop-header.menu_open {
-    padding-left: 60px !important;
-}
-
 .setting-sidebar-open {
-    &.on-setting-page {
-        #content-wrapper {
-            padding-left: 60px;
+    .warning-msg-row {
+        padding-left: 15px !important;
+    }
+
+    &.menu_open {
+        .setting-data,
+        .warning-msg-row {
+            padding-left: 15px !important;
         }
     }
 
+    .nav-left-bar {
+        display: block;
+    }
+
+    #content-wrapper {
+        padding-right: 0;
+        padding-left: 60px !important;
+    }
+
+    .desktop-header {
+        padding-left: 0;
+
+        &.menu_open {
+            padding-right: 240px !important;
+        }
+    }
+
+    &.on-setting-page,
     &.on-user-page {
         #content-wrapper {
             padding-left: 60px;
@@ -8905,13 +8871,78 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
-.dropdown-toggle::after {
-    display: none;
+.setting-data {
+    padding-left: 15px !important;
 }
 
-.page-count .pagination {
-    justify-content: center;
-    margin-top: 15px;
+// Date field styles
+.date-field {
+    flex-direction: column;
+}
+
+// Mobile sidebar overlay
+.mobile-sidebar-open {
+    &::after {
+        position: absolute;
+        content: "";
+        background-color: var(--color-medium-gray);
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 9;
+    }
+}
+
+// Hide specific badge element
+span#HW_badge_cont {
+    &:nth-child(3) {
+        display: none !important;
+    }
+}
+
+// Datepicker cursor
+.giddh-datepicker {
+    cursor: pointer !important;
+}
+
+// Navigation bar states
+.on-setting-page,
+.on-user-page {
+    .nav-left-bar {
+        display: block;
+
+        &.open {
+            left: 0 !important;
+            display: block !important;
+        }
+    }
+}
+
+// Menu open states
+.menu_open {
+    aside-setting.setting-sidebar {
+        right: 0 !important;
+    }
+}
+
+.desktop-header {
+    &.menu_open {
+        padding-left: 60px !important;
+    }
+}
+
+.gst-sidebar-open {
+    .menu_open {
+        padding-left: 300px !important;
+    }
+}
+
+// Dropdown toggle
+.dropdown-toggle {
+    &::after {
+        display: none;
+    }
 }
 
 .dashboard-container {

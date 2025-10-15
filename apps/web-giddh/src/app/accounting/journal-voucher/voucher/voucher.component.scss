@@ -26,7 +26,7 @@
 .hilighted {
     color: var(--text-primary-color) !important;
     background-color: var(--color-border-light) !important;
-    &>a {
+    & > a {
         color: var(--text-primary-color) !important;
     }
 }
@@ -133,3 +133,10 @@
 // .modal-dialog {
 //     width: 298px !important;
 // }
+
+::ng-deep .account-wrapper {
+    .from-or-to-acc[type="text"],
+    .form-control.debit-credit[type="text"] {
+        border: 1px solid var(--border-color) !important;
+    }
+}

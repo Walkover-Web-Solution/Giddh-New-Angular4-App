@@ -1013,97 +1013,107 @@
 }
 
 /**
- * Cross-browser border-radius mixin with vendor prefixes
- * Apply border-radius with all vendor prefixes for maximum compatibility
+ * Cross-browser border-radius mixin with vendor prefixes and individual corner control
+ * Applies border-radius with all vendor prefixes for maximum compatibility across browsers.
+ * Supports 1-4 parameters for flexible corner radius control with special handling for 'unset' values.
  * 
- * @param {String|Number} $value - The border-radius value (px, %, rem, unset, inherit)
+ * @param {String|Number} $a - Top-left corner radius or uniform radius for all corners
+ * @param {String|Number} $b - Top-right corner radius (defaults to $a if not provided)
+ * @param {String|Number} $c - Bottom-right corner radius (defaults to $a if not provided)  
+ * @param {String|Number} $d - Bottom-left corner radius (defaults to $a if not provided)
+ * 
+ * @example
+ *   @include border-radius(5px);                    // All corners: 5px
+ *   @include border-radius(5px, 10px);              // Top-left/bottom-right: 5px, top-right/bottom-left: 10px
+ *   @include border-radius(5px, 10px, 15px, 20px);  // Individual corner control
+ *   @include border-radius(unset);                  // Reset all border-radius values
  */
-@mixin border-radius($value) {
-    @if $value == unset {
+@mixin border-radius($a, $b: $a, $c: $a, $d: $a) {
+    @if $a == unset {
         -webkit-border-radius: -webkit-initial !important;
         -moz-border-radius: -moz-initial !important;
         -ms-border-radius: initial !important;
         border-radius: unset !important;
     } @else {
-        -webkit-border-radius: #{$value} !important;
-        -moz-border-radius: #{$value} !important;
-        -ms-border-radius: #{$value} !important;
-        border-radius: #{$value} !important;
+        -webkit-border-radius: #{$a} #{$b} #{$c} #{$d} !important;
+        -moz-border-radius: #{$a} #{$b} #{$c} #{$d} !important;
+        -ms-border-radius: #{$a} #{$b} #{$c} #{$d} !important;
+        border-radius: #{$a} #{$b} #{$c} #{$d} !important;
     }
 }
 
-/**
- * Optimized border-radius mixin with individual corner control
- * Supports 1, 2, and 4 value patterns with cross-browser support
- * 
- * Usage:
- * @include border-radius(10px)                    // All corners
- * @include border-radius(10px, 5px)              // tl & br, tr & bl  
- * @include border-radius(10px, 5px, 0, 15px)     // Individual corners
- * @include border-radius(var(--radius-1), var(--radius-2)) // CSS variables
- * 
- * @param {Length} $a - Top-left radius (or all corners if only value)
- * @param {Length} $b - Top-right radius (or bottom-left for 2 values)
- * @param {Length} $c - Bottom-right radius (optional)
- * @param {Length} $d - Bottom-left radius (optional)
- */
-@mixin border-radius($a, $b: null, $c: null, $d: null) {
-    // Initialize variables
-    $tl: null;
-    $tr: null; 
-    $br: null;
-    $bl: null;
+// /**
+//  * Optimized border-radius mixin with individual corner control
+//  * Supports 1, 2, and 4 value patterns with cross-browser support
+//  * 
+//  * Usage:
+//  * @include border-radius(10px)                    // All corners
+//  * @include border-radius(10px, 5px)              // tl & br, tr & bl  
+//  * @include border-radius(10px, 5px, 0, 15px)     // Individual corners
+//  * @include border-radius(var(--radius-1), var(--radius-2)) // CSS variables
+//  * 
+//  * @param {Length} $a - Top-left radius (or all corners if only value)
+//  * @param {Length} $b - Top-right radius (or bottom-left for 2 values)
+//  * @param {Length} $c - Bottom-right radius (optional)
+//  * @param {Length} $d - Bottom-left radius (optional)
+//  */
+// @mixin border-radius($a, $b: null, $c: null, $d: null) {
+//     // Initialize variables
+//     $tl: null;
+//     $tr: null; 
+//     $br: null;
+//     $bl: null;
     
-    // Determine the pattern based on null checks
-    @if $d != null {
-        // 4 values: $a (tl), $b (tr), $c (br), $d (bl)
-        $tl: $a;
-        $tr: $b;
-        $br: $c;
-        $bl: $d;
-    } @else if $c != null {
-        @error "border-radius() requires 1, 2, or 4 arguments (received: 3)";
-    } @else if $b != null {
-        // 2 values: $a (tl & br), $b (tr & bl)
-        $tl: $a;
-        $tr: $b;
-        $br: $a;
-        $bl: $b;
-    } @else {
-        // 1 value: all corners
-        $tl: $a;
-        $tr: $a;
-        $br: $a;
-        $bl: $a;
-    }
+//     // Determine the pattern based on null checks
+//     @if $d != null {
+//         // 4 values: $a (tl), $b (tr), $c (br), $d (bl)
+//         $tl: $a;
+//         $tr: $b;
+//         $br: $c;
+//         $bl: $d;
+//     } @else if $c != null {
+//         @error "border-radius() requires 1, 2, or 4 arguments (received: 3)";
+//     } @else if $b != null {
+//         // 2 values: $a (tl & br), $b (tr & bl)
+//         $tl: $a;
+//         $tr: $b;
+//         $br: $a;
+//         $bl: $b;
+//     } @else {
+//         // 1 value: all corners
+//         $tl: $a;
+//         $tr: $a;
+//         $br: $a;
+//         $bl: $a;
+//     }
 
-    // Handle CSS-wide keywords for all corners
-    @if $a == unset or $a == inherit or $a == initial {
-        -webkit-border-radius: #{$a} !important;
-        -moz-border-radius: #{$a} !important;
-        border-radius: #{$a} !important;
-    } @else {
-        // Individual corner properties with vendor prefixes
+//     // Handle CSS-wide keywords for all corners
+//     @if $a == unset or $a == inherit or $a == initial {
+//         -webkit-border-radius: #{$a} !important;
+//         -moz-border-radius: #{$a} !important;
+//         border-radius: #{$a} !important;
+//     } @else {
+//         // Individual corner properties with vendor prefixes
 
-        // Webkit (Safari, Chrome)
-        -webkit-border-top-left-radius: #{$tl} !important;
-        -webkit-border-top-right-radius: #{$tr} !important;
-        -webkit-border-bottom-right-radius: #{$br} !important;
-        -webkit-border-bottom-left-radius: #{$bl} !important;
+//         // Webkit (Safari, Chrome)
+//         -webkit-border-top-left-radius: #{$tl} !important;
+//         -webkit-border-top-right-radius: #{$tr} !important;
+//         -webkit-border-bottom-right-radius: #{$br} !important;
+//         -webkit-border-bottom-left-radius: #{$bl} !important;
 
-        // Mozilla (Firefox)
-        -moz-border-radius-topleft: #{$tl} !important;
-        -moz-border-radius-topright: #{$tr} !important;
-        -moz-border-radius-bottomright: #{$br} !important;
-        -moz-border-radius-bottomleft: #{$bl} !important;
+//         // Mozilla (Firefox)
+//         -moz-border-radius-topleft: #{$tl} !important;
+//         -moz-border-radius-topright: #{$tr} !important;
+//         -moz-border-radius-bottomright: #{$br} !important;
+//         -moz-border-radius-bottomleft: #{$bl} !important;
 
-        // Standard properties
-        border-top-left-radius: #{$tl} !important;
-        border-top-right-radius: #{$tr} !important;
-        border-bottom-right-radius: #{$br} !important;
-        border-bottom-left-radius: #{$bl} !important;
-    }
-}
+//         // Standard properties
+//         border-top-left-radius: #{$tl} !important;
+//         border-top-right-radius: #{$tr} !important;
+//         border-bottom-right-radius: #{$br} !important;
+//         border-bottom-left-radius: #{$bl} !important;
+//     }
+// }
 
 /**
  * Border radius variables and utilities mixin

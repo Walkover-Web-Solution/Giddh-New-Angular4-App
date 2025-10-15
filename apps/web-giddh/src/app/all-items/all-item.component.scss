@@ -13,6 +13,7 @@
                 height: 50px;
                 position: relative;
                 top: 0px;
+                left: 1px;
             }
         }
     }
@@ -37,7 +38,7 @@
                     min-height: 90px;
                     justify-content: center;
                     transition: all 140ms ease-in;
-                    h4 {
+                    p {
                         font-size: var(--font-size-15);
                         margin-bottom: 10px;
                         display: flex;
@@ -46,24 +47,21 @@
                         i {
                             font-size: 22px;
 
-                            /* & UNUSED COMPONENT CLASS: unit-mapping-icon - Auto-commented by script
-.unit-mapping-icon {
+                            .unit-mapping-icon {
                                 background-image: url("../../assets/images/unit-mapping.svg");
                                 width: 24px;
                                 height: 24px;
                             }
-*/
                         }
                     }
-                    // .mat-mdc-card-content{
-                    //     &:last-child{
-                    //         padding: 0 !important;
-                    //     }
-                    // }
+                    .mat-mdc-card-content {
+                        &:last-child {
+                            padding: 0 !important;
+                        }
+                    }
                     &:hover,
                     &.active {
                         background-color: var(--bg-primary-color) !important;
-                        h4,
                         p {
                             color: var(--color-white);
                         }
@@ -96,7 +94,7 @@
         margin-right: 20px;
     }
 
-    h4 {
+    p {
         font-size: var(--font-size-15);
         margin-bottom: 5px;
         display: flex;
@@ -123,7 +121,6 @@
     &.active {
         background-color: var(--bg-primary-color) !important;
 
-        h4,
         p {
             color: var(--color-white);
         }
