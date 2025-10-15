@@ -3,7 +3,8 @@
     top: -4px;
 }
 .left-expense {
-    width: 400px;
+    width: 30%;
+    max-width: 400px;
     box-shadow: 3px 3px 6px var(--color-shadow-light);
     background: var(--color-white);
     position: relative;
@@ -11,7 +12,7 @@
     max-height: calc(100vh - 135px);
 }
 .main-expense-details {
-    width: 90%;
+    flex: 1;
     overflow-y: auto;
     padding-top: 10px;
     max-height: calc(100vh - 135px);
@@ -40,15 +41,4 @@
     align-items: center;
     justify-content: center;
     color: var(--color-dark-gray);
-}
-@media only screen and (max-width: 767px) {
-    .left-expense {
-        width: 100%;
-    }
-    .main-edit-expense {
-        display: block;
-    }
-    .main-expense-details {
-        width: 100%;
-    }
 }
