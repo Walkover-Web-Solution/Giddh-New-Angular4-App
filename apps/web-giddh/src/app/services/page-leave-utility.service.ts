@@ -34,7 +34,8 @@ export class PageLeaveUtilityService {
             },
             panelClass: 'page-leave-confirmation-modal',
             backdropClass: ['page-leave-confirmation-modal-backdrop', 'cdk-overlay-dark-backdrop'],
-            width: '585px'
+            width: '585px',
+            disableClose: false
         });
 
         this.addBrowserConfirmationDialog(saveGlobalUnsavedChange);
@@ -87,6 +88,38 @@ export class PageLeaveUtilityService {
             window.onbeforeunload = () => 'true';
         }
 
+    }
+
+    /**
+     * Opens confirmation dialog without automatic cleanup
+     * Used when external code needs to handle cleanup manually
+     *
+     * @returns {*}
+     * @memberof PageLeaveUtilityService
+     */
+    public openDialogWithoutAutoCleanup(saveGlobalUnsavedChange: boolean = true): any {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            data: {
+                title: this.localeService.translate("app_unsaved_changes.title"),
+                body: this.localeService.translate("app_unsaved_changes.content"),
+                ok: this.localeService.translate("app_unsaved_changes.yes"),
+                cancel: this.localeService.translate("app_unsaved_changes.no"),
+                permanentlyDeleteMessage: ' '
+            },
+            panelClass: 'page-leave-confirmation-modal',
+            backdropClass: ['page-leave-confirmation-modal-backdrop', 'cdk-overlay-dark-backdrop'],
+            width: '585px',
+            disableClose: false
+        });
+
+        this.addBrowserConfirmationDialog(saveGlobalUnsavedChange);
+
+        dialogRef.afterOpened().subscribe(() => {
+            document.querySelector("body")?.classList?.add("page-leave-confirmation-modal-wrapper");
+        });
+
+        // No afterClosed subscription - let the calling code handle everything
+        return dialogRef;
     }
 
     /**

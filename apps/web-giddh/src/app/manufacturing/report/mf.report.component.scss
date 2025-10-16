@@ -56,8 +56,8 @@
 }
 .no-btn.clear-filter {
     text-decoration: underline;
-    font-family: var(--font-semibold);
-    color: var(--color-abbey);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-dark-gray);
     padding: 6px 0;
     outline: none !important;
     &:focus {
@@ -66,26 +66,26 @@
 }
 .manufacture-table {
     .bd-rl {
-        border-left: 1px solid var(--color-iron) !important;
+        border-left: 1px solid var(--color-silver) !important;
     }
     .bd-rr {
-        border-right: 1px solid var(--color-iron) !important;
+        border-right: 1px solid var(--color-silver) !important;
     }
     td.raw-material {
-        background-color: var(--color-wild-sand);
+        background-color: var(--color-light-gray);
         line-height: 2;
-        color: var(--color-abbey);
+        color: var(--color-dark-gray);
     }
     tr {
         &:hover {
             td.raw-material {
-                background-color: var(--color-iron);
+                background-color: var(--color-silver);
             }
         }
     }
 }
 .regular-font {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
 }
 .material-head {
     min-width: 20% !important;
@@ -101,7 +101,7 @@
     th {
         border: none !important;
         padding: 0;
-        color: var(--color-giddh-blue) !important;
+        color: var(--color-blue-primary) !important;
         background: none !important;
     }
 }
@@ -117,10 +117,10 @@
     }
 }
 .regular-font {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
 }
 .row-gray-background th {
-    background-color: var(--color-primary-mf-report-row-gray-th-background);
+    background-color: var(--color-border-light);
 }
 .mf-report-head {
     margin-top: 15px;
@@ -233,7 +233,7 @@
         display: flex;
         width: 100%;
         padding: 10px 15px 0 !important;
-        background-color: var(--color-wild-sand);
+        background-color: var(--color-light-gray);
         line-height: 1.8;
         .data-title-td {
             width: 50%;

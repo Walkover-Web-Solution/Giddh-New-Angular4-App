@@ -7,7 +7,7 @@ import { ActionTypeEnum } from '../utility/sales-person.constant';
 import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
 import { SalesPersonComponentStore } from '../utility/sales-person.store';
 import { filter, ReplaySubject, takeUntil } from 'rxjs';
-import { IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
 
 @Component({
     selector: 'archive',
@@ -87,7 +87,7 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
      * @memberof ArchiveSalesPersonComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
     }
 
     /**

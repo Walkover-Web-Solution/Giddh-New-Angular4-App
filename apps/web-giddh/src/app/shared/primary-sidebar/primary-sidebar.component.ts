@@ -306,9 +306,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.previousUrl = this.currentUrl; // store old before updating
                 this.currentUrl = this.getCleanCurrentUrl(); // always clean
-                const queryParamsIndex = this.router.url?.indexOf('?');
-                const baseUrl = queryParamsIndex === -1 ? this.router.url :
-                this.router.url.slice(0, queryParamsIndex);
+                // Use the clean currentUrl for baseUrl instead of parsing router.url again
+                const baseUrl = this.currentUrl;
                 this.isActiveRoute = baseUrl;
                 this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
                     if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
@@ -481,8 +480,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         setTimeout(() => {
             if (item && item.type === 'MENU') {
                 if (item.additional && item.additional.tab) {
-                    if (item.uniqueName.includes('?')) {
-                        item.uniqueName = item.uniqueName?.split('?')[0];
+                    if (item.uniqueName.includes('?') || item.uniqueName.includes('&')) {
+                        // Clean URL by removing query parameters (both ? and & cases)
+                        item.uniqueName = item.uniqueName?.split('?')[0]?.split('&')[0];
                     }
                     this.router.navigate([item.uniqueName], {
                         queryParams: {
@@ -496,8 +496,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 // direct account scenario
                 let url = `ledger/${item.uniqueName}`;
+                // Get the redirect URL and clean it if it contains query parameters
+                let redirectUrl = this.previousUrl || this.currentUrl || '/';
+                // If redirectUrl contains query parameters, extract only the base path (handle both ? and & cases)
+                if (redirectUrl.includes('?') || redirectUrl.includes('&')) {
+                    redirectUrl = redirectUrl.split('?')[0]?.split('&')[0];
+                }
                 this.router.navigate([url], {
-                    queryParams: { redirectUrl: encodeURIComponent(this.previousUrl) }
+                    queryParams: { redirectUrl: encodeURIComponent(redirectUrl) }
                 });
             }
             // save data to db

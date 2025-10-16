@@ -57,6 +57,7 @@ export interface CurrentGroupAndAccountState {
     isMergeAccountSuccess?: boolean;
     isUnmergeAccountSuccess?: boolean;
     hasUnsavedChanges?: boolean;
+    lastDeletedAccountUniqueName: string;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -106,7 +107,8 @@ const initialState: CurrentGroupAndAccountState = {
     activeTab: 0,
     isMergeAccountSuccess: false,
     isUnmergeAccountSuccess: false,
-    hasUnsavedChanges: false
+    hasUnsavedChanges: false,
+    lastDeletedAccountUniqueName: null
 };
 
 export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
@@ -415,7 +417,8 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                     activeAccount: null,
                     activeGroup: { uniqueName: d.request?.groupUniqueName },
                     isDeleteAccSuccess: true,
-                    isDeleteAccInProcess: false
+                    isDeleteAccInProcess: false,
+                    lastDeletedAccountUniqueName: d.request?.accountUniqueName
                 });
             }
             return state;

@@ -1,25 +1,25 @@
 .welcome-container {
     .border-btm {
         font-size: var(--font-size-16);
-        font-family: var(--font-semibold);
-        border-bottom: 1px solid var(--color-common-secondary-border);
+        font-weight: var(--font-weight-semibold);
+        border-bottom: 1px solid var(--color-silver);
         padding: 7px 0;
         margin-bottom: 10px;
     }
 
     .manage-invoice {
         a {
-            background: var(--color-common-primary-background-for-all-components);
-            box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
+            background: var(--color-white);
+            box-shadow: 1px 1px 3px var(--color-shadow-light);
             padding: 9px 15px;
-            color: var(--color-blue);
+            color: var(--color-blue-primary);
             font-size: var(--font-size-15);
             display: block;
             width: 356px;
             i {
                 margin-right: 20px;
                 font-size: 23px;
-                color: var(--color-abbey);
+                color: var(--color-dark-gray);
             }
         }
     }
@@ -33,9 +33,9 @@
             &.text-dark {
                 text-decoration: underline;
                 font-size: var(--font-size-16);
-                color: var(--color-onboard-contact-info-text) !important;
+                color: var(--color-dark-gray) !important;
                 &:hover {
-                    color: var(--color-onboard-contact-info-text) !important;
+                    color: var(--color-dark-gray) !important;
                 }
             }
         }

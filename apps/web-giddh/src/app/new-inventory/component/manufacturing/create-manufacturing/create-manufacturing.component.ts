@@ -128,6 +128,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     private isOtherExpenseExpanded: boolean;
     /** Stores the list of stock variants */
     public stockVariants: any[] = [];
+    /** True if stock is cleared */
+    public forceClear: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1041,7 +1043,15 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public resetForm(): void {
-        this.manufacturingObject = new CreateManufacturing();
+        // Preserve specific fields before resetting
+        const prevDetails = this.manufacturingObject?.manufacturingDetails?.[0];
+        const preserveFields = {
+            stocks: prevDetails?.stocks,
+            stocksPageNumber: prevDetails?.stocksPageNumber,
+            stocksTotalPages: prevDetails?.stocksTotalPages
+        };
+        
+        this.manufacturingObject = new CreateManufacturing(preserveFields);
         this.initializeOtherExpenseObj();
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);
         this.increaseExpenseAmount = true;
@@ -1052,7 +1062,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.preventStocksApiCall = false;
         this.preventByProductStocksApiCall = false;
         this.errorFields = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false };
-
+        this.forceClear = !this.forceClear;
         this.calculateTotals();
         this.changeDetectionRef.detectChanges();
     }

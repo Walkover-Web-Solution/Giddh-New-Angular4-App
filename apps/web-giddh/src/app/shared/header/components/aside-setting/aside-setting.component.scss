@@ -7,13 +7,13 @@
     max-width: 240px;
     width: 100%;
     z-index: 990;
-    box-shadow: -1px 0 5px var(--color-sidebar-primary-box-shadow);
+    box-shadow: -1px 0 5px var(--color-shadow-light);
     &:after {
         position: absolute;
         content: "";
         width: 12px;
         height: 12px;
-        background-color: var(--color-primary-aside-host-after-background);
+        background-color: var(--color-light-gray);
         top: -6px;
         right: 178px;
         @media screen and (max-width: 1024px) {
@@ -66,7 +66,7 @@
 }
 .aside-pane {
     padding: 0;
-    background-color: var(--color-body-background);
+    background-color: var(--color-white);
     .aside-help-header {
         display: flex;
         justify-content: space-between;
@@ -83,7 +83,7 @@
 }
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+    box-shadow: 0px 3px 6px var(--color-shadow-light);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -102,7 +102,7 @@
     left: auto;
     right: 0;
     z-index: 990;
-    box-shadow: -2px -2px 15px var(--color-primary-common-box-shadow) !important;
+    box-shadow: -2px -2px 15px var(--color-shadow-light) !important;
     &:after {
         display: none;
     }
@@ -124,7 +124,7 @@
                 width: 15px;
             }
             a {
-                color: var(--color-primary-aside-pane-back-to-main-slider);
+                color: var(--color-blue-primary);
                 span {
                     display: flex;
                     align-items: center;
@@ -154,7 +154,7 @@
 ::ng-deep {
     .back-to-main-slider {
         .ng-star-inserted {
-            color: var(--color-giddh-blue);
+            color: var(--color-blue-primary);
         }
     }
 }

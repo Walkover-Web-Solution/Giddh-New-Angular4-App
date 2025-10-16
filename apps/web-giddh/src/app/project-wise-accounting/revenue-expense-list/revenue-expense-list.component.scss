@@ -39,7 +39,7 @@
             &:has(:not(.pl-sticky-group)),
             .pl-sticky-group,
             .account {
-                background-color: var(--color-success-enable-bg-light);
+                background-color: var(--color-success-light);
                 color: var(--color-black);
 
                 .mat-mdc-checkbox {
@@ -56,7 +56,7 @@
     }
 
     .uncheck-all-icon {
-        filter: var(--color-image-filter-tertiary);
+        filter: invert(0);
         width: 20px;
         height: 20px;
     }
