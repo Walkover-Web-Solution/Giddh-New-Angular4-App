@@ -1,61 +1,59 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
 import { filter, ReplaySubject, takeUntil } from 'rxjs';
-import { NavigationStart, Router } from '@angular/router';
 import { BreadCrumbService } from '../../services/bread-crum.service';
 
 @Component({
-    selector: 'bread-crumb',
-    standalone: true,
-    imports: [CommonModule, MatIconModule, RouterModule],
-    templateUrl: './bread-crumb.component.html'
+  selector: 'bread-crumb',
+  standalone: true,
+  imports: [CommonModule, MatIconModule, RouterModule],
+  templateUrl: './bread-crumb.component.html'
 })
-export class BreadCrumbComponent {
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+export class BreadCrumbComponent implements OnInit, OnDestroy {
+  private destroyed$ = new ReplaySubject<boolean>(1);
 
-    constructor(
-        private router: Router,
-        public breadCrumbService: BreadCrumbService
-    ) {
-    }
+  constructor(
+    public breadCrumbService: BreadCrumbService,
+    private router: Router
+  ) {}
 
-    /**
-     * Optimized method to check if any breadcrumb path URL is included in the given URL
-     * @param url - The URL to check against breadcrumb paths
-     * @returns boolean indicating if any breadcrumb path is found in the URL
-     */
-    private checkBreadCrumbPath(url: string): boolean {
-        return this.breadCrumbService?.getBreadCrumbPath()?.some(path => path?.url && url.includes(path.url)) ?? false;
-    }
+  ngOnInit(): void {
+    // Restore on reload or return
+    this.breadCrumbService.getBreadCrumbPath();
 
-    /**
-     * Initializes the component and sets up navigation event listeners
-     */
-    public ngOnInit(): void {
-        this.router.events.pipe(
-            filter(event => (event instanceof NavigationStart && !this.checkBreadCrumbPath(event.url))),
-            takeUntil(this.destroyed$)).subscribe(() => {
-                this.breadCrumbService.setBreadCrumbPath([]);
-            });
-    }
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe((event: any) => {
+        const url: string = event.urlAfterRedirects || event.url || '';
+        const currentPath = url.split('?')[0];
+        const isKnown = this.breadCrumbService.hasPath(currentPath);
 
-    /**
-     * Navigates to the specified URL with optional query parameters
-     * @param index - The index of the breadcrumb path to navigate to
-     */
-    public navigateTo(index?: number): void {
-        let currentPath = this.breadCrumbService.getBreadCrumbPath();
-        this.breadCrumbService.setBreadCrumbPath(currentPath.slice(0, index + 1));
-        this.router.navigate([currentPath[index].url], { queryParams: currentPath[index].queryParams });
-    }
+        // Only clear if this route doesn't exist in breadcrumb
+        if (!isKnown) {
+          this.breadCrumbService.clear();
+        }
+      });
+  }
 
-    /**
-     * Cleanup resources on component destroy
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
+  navigateTo(index: number): void {
+    const pathList = this.breadCrumbService.getBreadCrumbPath();
+    const target = pathList[index];
+    this.breadCrumbService.setBreadCrumbPath(pathList.slice(0, index + 1));
+    this.router.navigate([target.url], { queryParams: target.queryParams });
+  }
+
+  trackByUrl(_: number, item: { url: string }): string {
+    return item.url;
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
 }
+

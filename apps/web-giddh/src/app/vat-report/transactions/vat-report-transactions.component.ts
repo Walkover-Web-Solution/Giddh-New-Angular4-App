@@ -17,6 +17,7 @@ import { GeneralService } from '../../services/general.service';
 import { ReceiptService } from '../../services/receipt.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { BreadCrumbService } from '../../services/bread-crum.service';
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -69,7 +70,8 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         private invoiceService: InvoiceService,
         private generalService: GeneralService,
         private receiptService: ReceiptService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        public breadCrumbService: BreadCrumbService
     ) {
     }
 
@@ -85,6 +87,16 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             this.vatReportTransactionsRequest.from = params['from'];
             this.vatReportTransactionsRequest.to = params['to'];
             this.vatReportTransactionsRequest.taxNumber = params['taxNumber'];
+            this.breadCrumbService.setCurrentPathOnBreadCrumbPath({
+                url: '/pages/vat-report',
+                currentPageName: 'VAT-Report',
+                queryParams: {}
+            });
+            this.breadCrumbService.setCurrentPathOnBreadCrumbPath({
+                url: `/pages/vat-report/transactions/section/${params['section']}`,
+                currentPageName: params['currentPageName'],
+                queryParams: { from: this.vatReportTransactionsRequest.from, to: this.vatReportTransactionsRequest.to, taxNumber: this.vatReportTransactionsRequest.taxNumber }
+            });
 
             this.getVatReportTransactions(true);
         });
@@ -155,7 +167,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public onSelectInvoice(invoice: any): void {
-        const uniqueName =  invoice.voucherUniqueName;
+        const uniqueName = invoice.voucherUniqueName;
         if (invoice.voucherNumber) {
             this.selectedInvoice = invoice;
             this.selectedInvoice.uniqueName = uniqueName;
@@ -200,7 +212,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse
      * @memberof VatReportTransactionsComponent
      */
-        public onDownloadOrSendMailEvent(userResponse: any): void {
+    public onDownloadOrSendMailEvent(userResponse: any): void {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {

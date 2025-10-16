@@ -1,43 +1,59 @@
 import { Injectable } from "@angular/core";
 
 export interface BreadCrumbPath {
-    url: string;
-    queryParams: any;
-    currentPageName: string;
+  url: string;
+  queryParams?: any;
+  currentPageName: string;
 }
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class BreadCrumbService {
-    /**
-     * Stores the breadcrumb path for navigation
-     */
-    public breadCrumbPath: BreadCrumbPath[] = [];
+  private readonly storageKey = 'breadCrumbPath';
+  public breadCrumbPath: BreadCrumbPath[] = [];
 
-    /**
-     * Sets the current path on the breadcrumb path
-     * @param path - The path to set
-     */
-    public setCurrentPathOnBreadCrumbPath(path: BreadCrumbPath) {
-        this.breadCrumbPath.push(path);
-        localStorage.setItem('breadCrumbPath', JSON.stringify(this.breadCrumbPath));
+  constructor() {
+    this.loadFromStorage();
+  }
+
+  private loadFromStorage(): void {
+    const stored = localStorage.getItem(this.storageKey);
+    this.breadCrumbPath = stored ? JSON.parse(stored) : [];
+  }
+
+  private saveToStorage(): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.breadCrumbPath));
+  }
+
+  public hasPath(url: string): boolean {
+    return this.breadCrumbPath.some(p => p.url === url);
+  }
+
+  public setCurrentPathOnBreadCrumbPath(path: BreadCrumbPath): void {
+    const existingIndex = this.breadCrumbPath.findIndex(p => p.url === path.url);
+
+    if (existingIndex !== -1) {
+      this.breadCrumbPath = this.breadCrumbPath.slice(0, existingIndex + 1);
+    } else {
+      this.breadCrumbPath.push(path);
     }
 
-    /**
-     * Sets the breadcrumb path
-     * @param path - The path to set
-     */
-    public setBreadCrumbPath(path: BreadCrumbPath[]) {
-        localStorage.setItem('breadCrumbPath', JSON.stringify(path));
-        this.breadCrumbPath = path;
-    }
+    this.saveToStorage();
+  }
 
-    /**
-     * Gets the breadcrumb path
-     * @returns The breadcrumb path
-     */
-    public getBreadCrumbPath(): BreadCrumbPath[] {
-        return JSON.parse(localStorage.getItem('breadCrumbPath')) || [];
-    }
+  public setBreadCrumbPath(path: BreadCrumbPath[]): void {
+    this.breadCrumbPath = path;
+    this.saveToStorage();
+  }
+
+  public getBreadCrumbPath(): BreadCrumbPath[] {
+    return this.breadCrumbPath;
+  }
+
+  public clear(): void {
+    this.breadCrumbPath = [];
+    localStorage.removeItem(this.storageKey);
+  }
 }
+
