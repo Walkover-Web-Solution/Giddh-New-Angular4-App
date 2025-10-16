@@ -6,11 +6,8 @@ import { AiOcrComponent } from './ai-ocr.component';
     imports: [
         RouterModule.forChild([
             {
-                path: '',
-                redirectTo: 'ai-ocr',
-                pathMatch: 'full'
-            },
-            { path: ':type', component: AiOcrComponent },
+                path: '', component: AiOcrComponent
+            }
         ])
     ],
     exports: [RouterModule]
