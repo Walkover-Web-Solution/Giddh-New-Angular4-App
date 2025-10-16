@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
@@ -9,7 +9,7 @@ import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
-import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
+import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
@@ -30,6 +30,7 @@ import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store"
 import { PreviewVariantImageComponent } from "../preview-variant-image/preview-variant-image.component";
 import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 
 @Component({
     selector: "stock-create-edit",
@@ -37,7 +38,7 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
     styleUrls: ["./stock-create-edit.component.scss"],
     providers: [InventoryComponentStore, VoucherComponentStore]
 })
-export class StockCreateEditComponent implements OnInit, OnDestroy {
+export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Instance of stock create/edit form */
     @ViewChild('stockCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
     /** Instance of recipe create/update component */
@@ -266,6 +267,23 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public uploadAttachmentInProgress$: Observable<boolean> = this.componentStore.uploadAttachmentInProgress$;
     /** Preview attachment in progress Observable */
     public downloadAttachmentInProgress$: Observable<boolean> = this.componentStore.downloadAttachmentInProgress$;
+    /** Returns true if form has actual unsaved changes else false */
+    public get showPageLeaveConfirmation(): boolean {
+        if (!this.stockCreateEditForm || !this.stockCreateEditForm.form || !this.initialFormValues || this.skipPageLeaveConfirmation) {
+            return false;
+        }
+
+        // Use lodash isEqual for deep comparison of form values
+        const currentValues = this.stockCreateEditForm.form.value;
+        return !isEqual(currentValues, this.initialFormValues);
+    }
+    /** Holds initial form values for comparison */
+    private initialFormValues: any = null;
+    /** Flag to temporarily disable page leave confirmation after successful operations */
+    private skipPageLeaveConfirmation: boolean = false;
+    /** Unregister functions for GeneralService callbacks */
+    private unregisterUnsavedChangesCallback: () => void;
+    private unregisterMarkFormsAsPristineCallback: () => void;
 
     constructor(
         private inventoryService: InventoryService,
@@ -285,7 +303,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private manufacturingService: ManufacturingService,
         private componentStore: InventoryComponentStore,
         private commonService: CommonService,
-        private voucherComponentStore: VoucherComponentStore
+        private voucherComponentStore: VoucherComponentStore,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
     }
 
@@ -295,6 +314,21 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public ngOnInit(): void {
+        // Only register with GeneralService if this is a standalone component (not embedded in InventoryMasterComponent)
+        // Check if we're in a routed context vs embedded context
+        if (!this.addStock) {
+            // This is a standalone routed component, register with GeneralService
+            this.unregisterUnsavedChangesCallback = this.generalService.registerUnsavedChangesCallback(() => this.showPageLeaveConfirmation);
+            this.unregisterMarkFormsAsPristineCallback = this.generalService.registerMarkFormsAsPristineCallback(() => {
+                if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
+                    this.stockCreateEditForm.form.markAsPristine();
+                    this.captureInitialFormValues();
+                }
+            });
+        }
+        // If addStock is true, this component is embedded in InventoryMasterComponent
+        // and the parent will handle the page leave confirmation via ViewChild
+
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         /** added parent class to body after entering new-inventory page */
@@ -374,6 +408,37 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     this.handleAttachmentDeletion(response);
                 }
             });
+
+    }
+
+    /**
+     * Hook for after view initialization - ensures ViewChild elements are available
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public ngAfterViewInit(): void {
+        // Capture initial form values after view is initialized
+        setTimeout(() => {
+            this.captureInitialFormValues();
+        }, 500);
+
+        // Set up form value change listener after view is initialized
+        setTimeout(() => {
+            if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
+                this.stockCreateEditForm.form.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(formValues => {
+                    // Check if all important form fields are blank/empty
+                    const isFormBlank = this.isStockFormCompletelyBlank(formValues);
+
+                    if (isFormBlank) {
+                        // Update initial values to current blank state to prevent popup
+                        setTimeout(() => {
+                            this.captureInitialFormValues();
+                        }, 100);
+                    }
+                });
+                this.changeDetection.detectChanges();
+            }
+        }, 1000);
     }
 
     /**
@@ -1074,6 +1139,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 };
                 this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
+                        this.clearPageLeaveConfirmation();
                         this.stockGroupUniqueName = response?.body?.uniqueName;
                         this.saveStock(openEditAfterSave);
                     } else {
@@ -1100,6 +1166,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.resetForm(this.stockCreateEditForm);
+                this.clearPageLeaveConfirmation();
                 if (!openEditAfterSave) {
                     if (!this.stockGroups?.length) {
                         this.getStockGroups();
@@ -1115,6 +1182,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                 } else {
                     if (this.addStock) {
+                        this.clearPageLeaveConfirmation();
                         this.queryParams = { stockUniqueName: response.body?.uniqueName };
                         this.getStockDetails(() => {
                             this.activeTabIndex = 2;
@@ -1354,6 +1422,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.getStockUnits();
                 this.getStockLinkedUnits();
                 this.prefillUnits();
+
+                // Capture initial form values for comparison after stock details are loaded
+                setTimeout(() => {
+                    this.captureInitialFormValues();
+                }, 100);
+
                 this.changeDetection.detectChanges();
 
                 if (callback) {
@@ -1425,6 +1499,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.inventoryService.updateStockV2(request, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
+                this.clearPageLeaveConfirmation();
                 this.toaster.showSnackBar("success", this.localeData?.stock_update_succesfully);
                 if (this.createRecipe && this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
@@ -1823,6 +1898,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.stockForm.hsnNumber = "";
             this.stockForm.sacNumber = "";
             this.stockForm.variants[0].skuCode = "";
+
+            // Capture initial form values for comparison after form is fully reset
+            setTimeout(() => {
+                this.captureInitialFormValues();
+            }, 100);
         });
     }
 
@@ -1851,6 +1931,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.inventoryService.deleteStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
+                        this.clearPageLeaveConfirmation();
                         this.toaster.showSnackBar("success", this.localeData?.stock_delete_succesfully);
                         if (this.addStock) {
                             this.closeAsideEvent.emit();
@@ -1875,6 +1956,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.inventoryService.MoveStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             this.toggleLoader(false);
             if (response?.status === "success") {
+                this.clearPageLeaveConfirmation();
                 this.defaultStockGroupUniqueName = cloneDeep(this.stockGroupUniqueName);
                 this.toaster.showSnackBar("success", response?.body);
                 this.changeDetection.detectChanges();
@@ -2085,6 +2167,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public ngOnDestroy(): void {
+        // Unregister callbacks from GeneralService
+        if (this.unregisterUnsavedChangesCallback) {
+            this.unregisterUnsavedChangesCallback();
+        }
+        if (this.unregisterMarkFormsAsPristineCallback) {
+            this.unregisterMarkFormsAsPristineCallback();
+        }
+
         this.destroyed$.next(true);
         this.destroyed$.complete();
         /** remove parent class from body after exiting new-inventory page */
@@ -2290,7 +2380,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deleteAttachment(index: number): void {
-        if (index >=0) {
+        if (index >= 0) {
             this.variantIndex = index;
             const variant = this.stockForm.variants[index];
             const attachmentDeleteConfig = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
@@ -2411,5 +2501,46 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         variant.attachmentUniqueName = null;
         variant.attachmentName = null;
         variant.isUploading = false;
+    }
+
+    /**
+     * Captures the current form values as initial values for comparison
+     *
+     * @public
+     * @memberof StockCreateEditComponent
+     */
+    public captureInitialFormValues(): void {
+        if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
+            this.initialFormValues = cloneDeep(this.stockCreateEditForm.form.value);
+        }
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Clears page leave confirmation by setting skip flag
+     *
+     * @private
+     * @memberof StockCreateEditComponent
+     */
+    private clearPageLeaveConfirmation(): void {
+        this.skipPageLeaveConfirmation = true;
+        // Reset the flag after a short delay to allow normal functionality to resume
+        setTimeout(() => {
+            this.skipPageLeaveConfirmation = false;
+        }, 1000);
+    }
+
+    /**
+     * Checks if the stock form is completely blank (all important fields are empty)
+     *
+     * @private
+     * @param {any} formValues
+     * @returns {boolean}
+     * @memberof StockCreateEditComponent
+     */
+    private isStockFormCompletelyBlank(formValues: any): boolean {
+        if (!formValues) return true;
+        this.changeDetection.detectChanges();
+        return this.stockCreateEditForm.form.pristine;
     }
 }

@@ -19,7 +19,7 @@
 
     .filter-wrapper {
         display: flex;
-        background-color: var(--color-sidebar-company-background);
+        background-color: var(--color-blue-light);
         padding-bottom: 4px;
         padding-top: 4px;
         margin-bottom: 0px;
@@ -34,7 +34,7 @@
         margin-left: 10px !important;
         margin-right: 10px !important;
         font-size: 16px;
-        color: var(--color-table-tertiary-content) !important;
+        color: var(--color-black) !important;
         margin: auto;
     }
 
@@ -46,12 +46,12 @@
         border: none;
         height: 44px;
         cursor: pointer;
-        background-color: var(--color-sidebar-company-background);
+        background-color: var(--color-blue-light);
         font-size: var(--font-size-24);
         padding-left: 0px !important;
         padding-right: 0px !important;
         min-width: 44px !important;
-        color: var(--color-table-tertiary-content) !important;
+        color: var(--color-black) !important;
         padding-top: 0 !important;
         border-radius: 0 !important;
         padding-top: 4px !important;
@@ -67,7 +67,7 @@
     }
 
     .clear-filter {
-        color: var(--color-giddh-blue);
+        color: var(--color-blue-primary);
         cursor: pointer;
     }
 
@@ -151,12 +151,12 @@
         .compare-json {
             text-decoration: underline;
             text-decoration: underline;
-            color: var(--color-blue);
+            color: var(--color-blue-primary);
             z-index: 99;
             padding: 13px 20px;
 
             &:hover {
-                color: var(--color-blue);
+                color: var(--color-blue-primary);
             }
         }
 

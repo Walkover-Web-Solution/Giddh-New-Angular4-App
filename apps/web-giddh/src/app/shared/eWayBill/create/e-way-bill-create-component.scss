@@ -21,31 +21,31 @@
 
         input:checked+& {
             background-color: var(--color-white);
-            box-shadow: 2px 2px 5px var(--color-primary-common-box-shadow);
+            box-shadow: 2px 2px 5px var(--color-shadow-light);
         }
     }
 }
 
 .bg-gray {
-    background: var(--color-wild-sand);
+    background: var(--color-light-gray);
 }
 
 .table-modal {
-    border: 1px solid var(--color-iron) !important;
+    border: 1px solid var(--color-silver) !important;
 
     th {
-        border-right: 1px solid var(--color-iron) !important;
+        border-right: 1px solid var(--color-silver) !important;
     }
     
     td {
         border-top: 0px solid !important;
-        border-right: 1px solid var(--color-iron);
-        border-bottom: 1px solid var(--color-iron) !important;
+        border-right: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--color-silver) !important;
 
         button {
             background: none;
             border: 0px;
-            color: var(--color-dark-fog);
+            color: var(--color-border-light);
             font-size: var(--font-size-15);
             padding: 2px;
             margin-right: 3px;

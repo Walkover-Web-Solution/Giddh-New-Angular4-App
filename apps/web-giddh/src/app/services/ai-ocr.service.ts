@@ -39,6 +39,8 @@ export class AiOcrService {
     public mainPage$: BehaviorSubject<boolean> = new BehaviorSubject(false);
     /** Holds the main page OCR data, updated with the latest data. */
     public mainPageOcrData$: BehaviorSubject<any> = new BehaviorSubject(null);
+    /** Indicates whether the OCR data retrieval process is active. */
+    public ocrListToCreate$: BehaviorSubject<any> = new BehaviorSubject(null);
 
     constructor(
         private errorHandler: GiddhErrorHandler,
@@ -55,8 +57,13 @@ export class AiOcrService {
      * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
      * @memberof AiOcrService
      */
-    public getAllOcrDocuments(query: any, model: any): Observable<BaseResponse<any, any>> {
+    public getAllOcrDocuments(query: any, model: any, ocrType: string): Observable<BaseResponse<any, any>> {
         const branchUniqueName = query?.branchUniqueName ? query?.branchUniqueName : this.generalService.currentBranchUniqueName ?? "";
+        Object.keys(model).forEach(key => {
+            if (typeof model[key] === "string") {
+                model[key] = model[key].trim();
+            }
+        });
         return this.http
             .post(
                 this.config.apiUrl +
@@ -67,7 +74,8 @@ export class AiOcrService {
                     ?.replace(":sort", encodeURIComponent(query?.sort ?? ""))
                     ?.replace(":sortBy", encodeURIComponent(query?.sortBy ?? ""))
                     ?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
-                    ?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName)),
+                    ?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))
+                    ?.replace(":ocrType", encodeURIComponent(ocrType)),
                 model
             )
             .pipe(
@@ -115,7 +123,7 @@ export class AiOcrService {
      * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
      * @memberof AiOcrService
      */
-    public importOcrDocument(payload: any): Observable<BaseResponse<any, any>> {
+    public importOcrDocument(payload: any, ocrType: string): Observable<BaseResponse<any, any>> {
         const branchUniqueName = this.generalService.currentBranchUniqueName ?? "";
         return this.http
             .post(
@@ -123,7 +131,7 @@ export class AiOcrService {
                 AI_OCR_API.IMPORT?.replace(":branchUniqueName", encodeURIComponent(branchUniqueName))?.replace(
                     ":companyUniqueName",
                     encodeURIComponent(this.generalService.companyUniqueName)
-                ),
+                )?.replace(":ocrType", encodeURIComponent(ocrType)),
                 payload
             )
             .pipe(
@@ -143,7 +151,7 @@ export class AiOcrService {
      * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
      * @memberof AiOcrService
      */
-    public getCompletedCount(): Observable<BaseResponse<any, any>> {
+    public getCompletedCount(ocrType: string): Observable<BaseResponse<any, any>> {
         const branchUniqueName = this.generalService.currentBranchUniqueName ?? "";
         return this.http
             .get(
@@ -151,7 +159,7 @@ export class AiOcrService {
                 AI_OCR_API.COMPLETED_COUNT?.replace(
                     ":branchUniqueName",
                     encodeURIComponent(branchUniqueName)
-                )?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
+                )?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))?.replace(":ocrType", encodeURIComponent(ocrType))
             )
             .pipe(
                 map((res) => {
@@ -180,6 +188,8 @@ export class AiOcrService {
                     ?.replace(":companyUniqueName", encodeURIComponent(this.generalService.companyUniqueName))
                     ?.replace(":currentToken", encodeURIComponent(req.type === "skip" ? req.token : ""))
                     ?.replace(":nextToken", encodeURIComponent(req.type === "save" ? req.token : ""))
+                    ?.replace(":voucherType", encodeURIComponent((req.type && req.type !== "skip" && req.type !== "save") ? req.type : ""))
+                    ?.replace(":requestId", encodeURIComponent(req.row?.requestId ? req.row?.requestId : ""))
             )
             .pipe(
                 map((res) => {

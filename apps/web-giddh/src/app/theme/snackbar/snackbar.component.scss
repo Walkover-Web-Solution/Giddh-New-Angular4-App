@@ -12,7 +12,7 @@
         bottom: 0;
         height: 4px;
         opacity: 0.4;
-        background-color: var(--color-nero);
+        background-color: var(--color-black);
         width: 100%;
     }
 
@@ -22,7 +22,7 @@
         top: -2px;
         float: right;
         font-size: 24px;
-        color: var(--color-toast-primary-text);
+        color: var(--color-white);
         opacity: 1;
         font-weight: normal;
 
@@ -35,7 +35,7 @@
         content: "";
         width: 26px;
         height: 26px;
-        background-color: var(--color-primary-toast-cross-background);
+        background-color: var(--color-blue-light);
         top: 50%;
         transform: translateY(-42%);
         right: -5px;

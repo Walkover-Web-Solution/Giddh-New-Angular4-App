@@ -1,5 +1,5 @@
 .company-list {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     list-style-type: none;
 }
 :host {
@@ -22,7 +22,7 @@
     border: 0;
     border-radius: 0;
     background: 0 0;
-    color: var(--color-popup-list-head-text);
+    color: var(--color-white);
 }
 
 :host .container-fluid {
@@ -42,18 +42,18 @@
     flex-wrap: wrap;
 
     span {
-        border: 1px solid var(--color-wild-sand);
+        border: 1px solid var(--color-light-gray);
         padding: 5px 8px;
         margin: 10px 10px 12px 0px;
-        background-color: var(--color-wild-sand);
+        background-color: var(--color-light-gray);
     }
 }
 .input-group {
     width: 100%;
 }
 .aside-pane-form {
-    background-color: var(--color-common-primary-background-for-all-components);
-    box-shadow: 0px 3px 6px var(--color-right-side-popup-box-shadow);
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-silver);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -63,12 +63,12 @@
 }
 .activily-list {
     list-style-type: none;
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     font-size: var(--font-size-15);
 
     li {
         padding-bottom: 25px;
-        border-left: 1px dashed var(--color-abbey);
+        border-left: 1px dashed var(--color-dark-gray);
         padding-left: 12px;
         position: relative;
         line-height: 10px;
@@ -81,7 +81,7 @@
             position: absolute;
             left: -5px;
             top: 0px;
-            border: 1px solid var(--color-abbey);
+            border: 1px solid var(--color-dark-gray);
             border-radius: 90px;
         }
         &:last-child {

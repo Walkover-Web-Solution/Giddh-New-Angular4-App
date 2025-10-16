@@ -79,7 +79,11 @@ export class CreateManufacturingClass {
     stocksTotalPages: number;
     stocksQ: any;
 
-    constructor() {
+    constructor(preserveFields?: {
+        stocks?: any[];
+        stocksPageNumber?: number;
+        stocksTotalPages?: number;
+    }) {
         this.manufacturingQuantity = 1;
         this.manufacturingMultipleOf = 1;
         this.date = '';
@@ -89,16 +93,20 @@ export class CreateManufacturingClass {
         this.increaseAssetValue = true;
         this.variant = new ManufacturingVariant();
         this.variants = [new ManufacturingVariant()];
-        this.stocksPageNumber = 1;
-        this.stocksTotalPages = 1;
-        this.stocksQ = "";
+        this.stocks = preserveFields?.stocks || [];
+        this.stocksPageNumber = preserveFields?.stocksPageNumber || 1;
+        this.stocksTotalPages = preserveFields?.stocksTotalPages || 1;
     }
 }
 
 export class CreateManufacturing {
     manufacturingDetails: CreateManufacturingClass[];
 
-    constructor() {
-        this.manufacturingDetails = [new CreateManufacturingClass()];
+    constructor(preserveFields?: {
+        stocks?: any[];
+        stocksPageNumber?: number;
+        stocksTotalPages?: number;
+    }) {
+        this.manufacturingDetails = [new CreateManufacturingClass(preserveFields)];
     }
 }

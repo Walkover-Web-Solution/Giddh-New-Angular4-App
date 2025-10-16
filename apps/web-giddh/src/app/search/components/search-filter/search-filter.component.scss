@@ -12,7 +12,7 @@
     right: 14px;
     font-size: 8px;
     position: absolute;
-    color: var(--color-primary-icon);
+    color: var(--color-black);
 }
 
 .query-list {
@@ -20,7 +20,7 @@
         position: absolute;
         top: 2px;
         right: -48px;
-        background: var(--color-dark-fog);
+        background: var(--color-border-light);
         border-radius: 100%;
         padding: 7px 7px;
         text-transform: uppercase;
@@ -32,7 +32,7 @@
             position: absolute;
             height: 63px;
             width: 2px;
-            background: var(--color-dark-fog);
+            background: var(--color-border-light);
             top: 29px;
             left: 19px;
         }
@@ -44,7 +44,7 @@
                 position: absolute;
                 height: 2px;
                 width: 30px;
-                background: var(--color-dark-fog);
+                background: var(--color-border-light);
                 top: 90px;
                 left: -10px;
             }

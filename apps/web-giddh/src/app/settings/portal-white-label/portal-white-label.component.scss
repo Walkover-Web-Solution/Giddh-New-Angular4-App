@@ -24,13 +24,13 @@
             }
 
             .verified {
-                color: var(--color-success-enable);
-                background: var(--color-success-enable-bg-light);
+                color: var(--color-green);
+                background: var(--color-success-light);
             }
 
             .unverified {
-                color: var(--color-danger);
-                background: var(--color-danger-bg-light);
+                color: var(--color-red);
+                background: var(--color-danger-light);
             }
         }
     }
@@ -41,5 +41,5 @@
 }
 
 .fill-status {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }

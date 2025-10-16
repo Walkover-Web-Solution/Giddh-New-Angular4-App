@@ -71,11 +71,8 @@ export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestro
     public entryClicked(acc: any): void {
         if (!acc?.uniqueName) return;
 
-        // Base return URL
-        const returnUrl = `ledger/${acc.uniqueName}/${this.from}/${this.to}`;
-        const encodedRedirectUrl = encodeURIComponent(this.currentUrl);
-
-        let url = `${location.origin}${location.pathname}?returnUrl=${returnUrl}&redirectUrl=${encodedRedirectUrl}`;
+        // Construct direct ledger URL with redirectUrl parameter
+        let url = `${location.origin}/pages/ledger/${acc.uniqueName}/${this.from}/${this.to}?redirectUrl=${encodeURIComponent(this.currentUrl)}`;
 
         if (isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;

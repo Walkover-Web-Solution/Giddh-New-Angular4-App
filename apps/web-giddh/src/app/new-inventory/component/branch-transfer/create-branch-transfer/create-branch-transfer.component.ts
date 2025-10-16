@@ -176,6 +176,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public universalFrom: any;
     /** This will hold universal date  */
     public universalTo: any;
+    /** This will use for force clear */
+    public forceClear: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -897,6 +899,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dateOfSupply);
         this.assignCurrentCompany();
         this.calculateOverallTotal();
+        this.getBranches();
         this.activeIndx = null
         this.stockUnits[0] = [];
     }
@@ -1174,7 +1177,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         sourcesWarehouseFormGroup.get('name')?.setValue(res.body.name);
                         if (res.body.addresses && res.body.addresses.length) {
                             const defaultAddress = res.body.addresses.find(address => address.isDefault);
-                            sourcesWarehouseFormGroup.get('address')?.setValue(defaultAddress ? `${defaultAddress.address}${defaultAddress?.pincode ? '\n' + 'PIN: ' + defaultAddress?.pincode : ''}` : '');
+                            sourcesWarehouseFormGroup.get('address')?.setValue(defaultAddress ? `${defaultAddress?.address ?? ''}${defaultAddress?.pincode ? '\n' + 'PIN: ' + defaultAddress?.pincode : ''}` : '');
                             sourcesWarehouseFormGroup.get('taxNumber')?.setValue(defaultAddress ? defaultAddress.taxNumber : '');
                         } else {
                             sourcesWarehouseFormGroup.get('taxNumber')?.setValue('');
@@ -1221,7 +1224,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         destinationsWarehouseFormGroup.get('name')?.setValue(res.body.name);
                         if (res.body.addresses && res.body.addresses.length) {
                             const defaultAddress = res.body.addresses.find(address => address.isDefault);
-                            destinationsWarehouseFormGroup.get('address')?.setValue(defaultAddress ? `${defaultAddress.address}${defaultAddress?.pincode ? '\n' + 'PIN: ' + defaultAddress?.pincode : ''}` : '');
+                            destinationsWarehouseFormGroup.get('address')?.setValue(defaultAddress ? `${defaultAddress?.address ?? ''}${defaultAddress?.pincode ? '\n' + 'PIN: ' + defaultAddress?.pincode : ''}` : '');
                             destinationsWarehouseFormGroup.get('taxNumber')?.setValue(defaultAddress ? defaultAddress.taxNumber : '');
                         } else {
                             destinationsWarehouseFormGroup.get('taxNumber')?.setValue('');
@@ -1478,6 +1481,22 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public onSelectTransportMode(event: any): void {
         this.branchTransferCreateEditForm.get('transporterDetails.transportMode').setValue(event?.value);
+    }
+
+    /**
+     * This will be use for reset sender name
+     *
+     * @memberof CreateBranchTransferComponent
+     */
+    public resetSenderAndRecieverName(): void {
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const sourceGroup = sourcesArray?.at(0) as UntypedFormGroup;
+        sourceGroup.reset();
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        const destinationGroup = destinationsArray?.at(0) as UntypedFormGroup;
+        destinationGroup.reset();
+        this.getBranches();
+        this.forceClear = !this.forceClear;
     }
 
     /**

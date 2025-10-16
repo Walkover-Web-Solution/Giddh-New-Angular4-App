@@ -18,6 +18,7 @@ import { AppComponent } from './app.component';
 import { IS_ELECTRON_WA } from './app.constant';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
+import { DynamicThemeService } from './shared/services/dynamic-theme.service';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { ExceptionLogService } from './services/exception-log.service';
 import { GiddhHttpInterceptor } from './services/http.interceptor';
@@ -102,11 +103,17 @@ if (whiteLabelConfig) {
 
 // GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
 export function getServiceConfig(): any {
+    // Apply dynamic theme if white label configuration exists
+    if (whiteLabelConfig?.body?.giddhWhiteLabel?.theme) {
+        const dynamicThemeService = new DynamicThemeService();
+        dynamicThemeService.applyThemeFromWhiteLabel(whiteLabelConfig);
+    }
+    
     return {
         apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
         ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
         appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
         AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
         PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
@@ -175,7 +182,6 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
             multi: true,
             deps: [HttpClient]
         },
-
         {
             provide: ServiceConfig,
             useFactory: getServiceConfig
