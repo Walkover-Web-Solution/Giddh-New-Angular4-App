@@ -1,19 +1,17 @@
-<nav *ngIf="breadCrumbService.getBreadCrumbPath()?.length > 0">
+<nav *ngIf="breadCrumbService.breadCrumbPath?.length > 0">
     <ol class="breadcrumb">
-        <li 
-            *ngFor="let crumb of breadCrumbService.getBreadCrumbPath(); let last = last let index = index"
+        <li
+            *ngFor="let crumb of breadCrumbService.breadCrumbPath; let last = last; let index = index; trackBy: trackByUrl"
             [ngClass]="{ 'active text-underline': !last }"
         >
-            <a 
-                *ngIf="!last && crumb.url" 
+            <a
+                *ngIf="!last && crumb.url"
                 (click)="navigateTo(index)"
                 href="javascript:;"
             >
                 {{ crumb.currentPageName }}
             </a>
-            <span 
-                *ngIf="last"
-            >
+            <span *ngIf="last">
                 {{ crumb.currentPageName }}
             </span>
         </li>

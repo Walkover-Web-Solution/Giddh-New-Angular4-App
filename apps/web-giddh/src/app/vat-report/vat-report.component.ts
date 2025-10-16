@@ -84,6 +84,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit() {
+        this.breadCrumbService.setCurrentPathOnBreadCrumbPath({
+            url: '/pages/vat-report',
+            currentPageName: 'VAT-Report',
+            queryParams: {}
+        });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && this.activeCompany?.uniqueName !== activeCompany.uniqueName) {
                 this.activeCompany = activeCompany;
@@ -201,11 +206,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
     * @memberof VatReportComponent
     */
     public viewVatReportTransactions(section: string, description: string) {
-        this.breadCrumbService.setBreadCrumbPath([
-            { url: '/pages/vat-report', queryParams: { }, currentPageName: 'VAT-Report' },
-            { url: `/pages/vat-report/transactions/section/${section}`, queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber }, currentPageName: description }
-        ]);
-        this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
+        this.breadCrumbService.setCurrentPathOnBreadCrumbPath({
+            url: `/pages/vat-report/transactions/section/${section}`,
+            currentPageName: description,
+            queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber }
+        });
+        this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber, previousPageName: 'VAT-Report', currentPageName: description } });
     }
 
     /**
