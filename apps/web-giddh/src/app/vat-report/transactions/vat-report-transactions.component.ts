@@ -39,8 +39,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         taxNumber: '',
         page: 1,
         count: PAGINATION_LIMIT,
-        section: '',
-        country: '',
+        section: ''
     };
     public isLoading: boolean = false;
     public selectedInvoice: any;
@@ -126,7 +125,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public getVatReportTransactions(resetPage: boolean): void {
         if (this.activeCompany && this.vatReportTransactionsRequest.section && !this.isLoading) {
             this.isLoading = true;
-            this.vatReportTransactionsRequest.country = this.activeCompany.countryV2?.alpha2CountryCode;
 
             if (resetPage) {
                 this.vatReportTransactionsRequest.page = 1;
