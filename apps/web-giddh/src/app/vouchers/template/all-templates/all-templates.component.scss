@@ -1,7 +1,7 @@
 * {
     border: 0;
     box-sizing: content-box;
-    color: var(--color-nero);
+    color: var(--color-black);
     font-style: inherit;
     font-weight: inherit;
     list-style: none;
@@ -53,8 +53,8 @@ p {
 #default {
     overflow: auto;
     /* font-size: 93%; */
-    background: var(--color-white-tertiary);
-    border: 1px solid var(--color-common-secondary-border);
+    background: var(--color-white);
+    border: 1px solid var(--color-silver);
     padding: 0;
 }
 
@@ -73,7 +73,7 @@ p {
 
 #default header {
     margin: 0;
-    background: var(--color-primary-invoice-preview-background);
+    background: var(--color-white);
     padding: 10px;
 }
 
@@ -108,7 +108,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: var(--color-nero);
+    color: var(--color-black);
 }
 
 .hidden-label {
@@ -211,7 +211,7 @@ header img {
 }
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-silver);
 }
 /* tcs */
 .tcs hr {
@@ -229,7 +229,7 @@ header img {
 .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid var(--color-common-secondary-border);
+    border: 1px solid var(--color-silver);
     vertical-align: top;
     text-align: right;
 }
@@ -268,13 +268,13 @@ header img {
 #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid var(--color-table-primary-content-bar-border);
+    border-top: 1px solid var(--color-silver);
     line-height: 1.2rem;
     vertical-align: top;
 }
 
 #default table.item td p {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
 }
 
 #default table.balance {
@@ -299,7 +299,7 @@ header img {
 }
 
 #default aside h1 {
-    border-color: var(--color-common-secondary-border);
+    border-color: var(--color-silver);
     border-bottom-style: solid;
 }
 
@@ -309,7 +309,7 @@ header img {
     border-top: 1px solid;
     padding: 16px 0px 10px 0;
     margin: 8px 0 0;
-    background: var(--color-primary-invoice-preview-background);
+    background: var(--color-white);
 }
 
 #default aside {
@@ -325,7 +325,7 @@ header img {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid var(--color-common-secondary-border);
+    border-bottom: 1px solid var(--color-silver);
     margin: 3px 0;
 }
 
@@ -354,7 +354,7 @@ header img {
     content: attr(title);
     width: auto;
     position: relative;
-    background: var(--color-primary-invoice-preview-background);
+    background: var(--color-white);
     margin: 0 auto;
     padding: 6px 16px;
     right: 0;
@@ -382,7 +382,7 @@ header img {
     position: absolute;
     top: 0;
     bottom: 0;
-    background: var(--color-blue);
+    background: var(--color-blue-primary);
     left: 0;
     right: 0;
     width: 100%;
@@ -437,7 +437,7 @@ strong {
     right: 0;
     pointer-events: none;
     background: rgba(204, 204, 204, 0.5);
-    border: 1px dashed var(--color-common-secondary-border);
+    border: 1px dashed var(--color-silver);
 }
 
 .edit-template {
@@ -447,7 +447,7 @@ strong {
     padding: 4px;
     height: 15px;
     z-index: 1;
-    background: var(--color-primary-invoice-preview-background);
+    background: var(--color-white);
     width: 20px;
 }
 
@@ -473,15 +473,15 @@ strong {
     width: 60%;
     height: 1px;
     margin: 0px 0 auto auto;
-    border-bottom: 1px solid var(--color-common-secondary-border);
+    border-bottom: 1px solid var(--color-silver);
 }
 
 .green-row {
-    border-bottom: solid 1px var(--color-teal);
+    border-bottom: solid 1px var(--color-green);
     padding: 6px 16px;
 }
 .tax-table p {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
 }
 
 .tax-table tfoot th {
@@ -500,7 +500,7 @@ strong {
 .tax-table tbody tr td,
 .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid var(--color-table-primary-header-bar-border);
+    border-right: 1px solid var(--color-silver);
 }
 
 .tax-table thead tr th:last-child,
@@ -513,14 +513,14 @@ table.tax-table.item {
     padding-top: 0px !important;
 }
 .tax-table.item tfoot tr th {
-    border-bottom: 1px solid var(--color-table-primary-header-bar-border);
+    border-bottom: 1px solid var(--color-silver);
 }
 .tax-table tbody tr td {
     border-top: 0px solid;
 }
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid var(--color-table-primary-content-bar-border);
+    border-bottom: 1px solid var(--color-silver);
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;

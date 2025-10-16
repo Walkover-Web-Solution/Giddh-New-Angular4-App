@@ -12,7 +12,7 @@
     .stocks-list-head {
         width: 100%;
         overflow: hidden;
-        border-bottom: 1px solid var(--color-common-primary-border);
+        border-bottom: 1px solid var(--color-silver);
     }
 
     .stock-balance-top-bar {
@@ -29,12 +29,12 @@
                 height: 40px;
             }
             .new-stock-btn {
-                color: var(--color-secondary-button-text);
-                background: var(--color-secondary-button-background);
+                color: var(--color-white);
+                background: var(--color-blue-primary);
                 padding: 0px 15px 0px 10px;
 
                 &:hover {
-                    background-color: var(--color-secondary-button-background-hover);
+                    background-color: var(--color-blue-primary);
                 }
             }
 
@@ -43,7 +43,7 @@
                     height: 15px;
                     width: auto;
                     position: absolute;
-                    filter: var(--color-image-filter);
+                    filter: invert(0);
                 }
             }
 
@@ -63,9 +63,9 @@
             .export-btn {
                 padding: 0px 8px;
                 margin-right: 10px;
-                color: var(--color-blue);
-                border: 1px solid var(--color-blue);
-                background-color: var(--color-primary-inventory-stock-dropdown-button-background);
+                color: var(--color-blue-primary);
+                border: 1px solid var(--color-blue-primary);
+                background-color: var(--color-white);
                 img {
                     height: 18px;
                     width: auto;
@@ -77,11 +77,11 @@
                 padding: 0px 7px;
                 top: 0px;
                 left: 0px;
-                border: 1px solid var(--color-primary-button-border);
-                background-color: var(--color-primary-inventory-stock-dropdown-button-background);
+                border: 1px solid var(--color-silver);
+                background-color: var(--color-white);
 
                 img {
-                    filter: var(--color-image-filter);
+                    filter: invert(0);
                 }
             }
         }
@@ -93,20 +93,20 @@
         float: left !important;
         white-space: nowrap;
         box-shadow: none !important;
-        border-bottom: 1px solid var(--color-common-primary-border);
+        border-bottom: 1px solid var(--color-silver);
         width: min-content;
         display: grid;
         grid-template-columns: 240px auto;
 
         &:hover {
-            background-color: var(--color-primary-common-without-opacity-list-hover);
+            background-color: var(--color-light-gray);
             .grid-title-left {
-                background-color: var(--color-primary-common-without-opacity-list-hover);
+                background-color: var(--color-light-gray);
             }
             .warehouse-list-wrapper {
                 .warehouse-list {
                     &:nth-child(odd) {
-                        background-color: var(--color-primary-common-with-opacity-list-hover);
+                        background-color: var(--color-blue-light);
                     }
                 }
             }
@@ -114,7 +114,7 @@
                 .warehouse-expanded-box-wrapper {
                     .warehouse-expanded-box {
                         &:nth-child(odd) {
-                            background-color: var(--color-primary-common-with-opacity-list-hover) !important;
+                            background-color: var(--color-blue-light) !important;
                         }
                     }
                 }
@@ -133,7 +133,7 @@
                 left: 1px;
                 min-height: 56px;
                 &:nth-child(odd) {
-                    background-color: var(--color-common-primary-background-color);
+                    background-color: var(--color-light-gray);
                 }
 
                 .stock-list-body {
@@ -163,13 +163,13 @@
                                 left: 20px;
                                 position: relative;
                                 top: 3px;
-                                color: var(--color-common-primary-text) !important;
+                                color: var(--color-black) !important;
                             }
                         }
                     }
 
                     .proper-spacing-list {
-                        color: var(--color-primary-inventory-stock-balance-text);
+                        color: var(--color-dark-gray);
                         display: flex;
                         width: 350px;
                         justify-content: center;
@@ -220,14 +220,14 @@
             z-index: 1;
             position: sticky;
             padding-top: 0;
-            box-shadow: 1px 0px 0px var(--color-primary-common-box-shadow);
+            box-shadow: 1px 0px 0px var(--color-shadow-light);
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding: 7px;
             word-break: break-word;
             white-space: normal;
-            background-color: var(--color-common-primary-background-for-all-components);
+            background-color: var(--color-white);
         }
         .grid-title-left-top {
             padding-top: 0.8% !important;
@@ -239,7 +239,7 @@
             height: 100%;
         }
         .grid-title-list {
-            color: var(--color-nero) !important;
+            color: var(--color-black) !important;
             line-height: 26px;
             min-width: 140px;
             font-weight: 700;
@@ -258,11 +258,11 @@
             z-index: 1;
             top: 10px;
             left: 6px;
-            filter: var(--color-image-filter);
+            filter: invert(0);
         }
         .list-head {
             display: flex;
-            border-bottom: 1px solid var(--color-common-primary-border);
+            border-bottom: 1px solid var(--color-silver);
             height: 62px;
             width: fit-content;
             align-items: center;
@@ -270,15 +270,15 @@
                 position: sticky;
                 left: 0;
                 min-width: 240px;
-                box-shadow: 1px 0px 0px var(--color-primary-common-box-shadow);
+                box-shadow: 1px 0px 0px var(--color-shadow-light);
                 overflow: hidden;
                 z-index: 2;
-                background-color: var(--color-discount-search-bar-background);
+                background-color: var(--color-white);
                 mat-form-field {
                     top: 11px;
                     input::placeholder {
                         font-size: var(--font-size-15);
-                        color: var(--color-primary-search-bar-placeholder);
+                        color: var(--color-blue-primary);
                     }
                 }
             }
@@ -290,8 +290,8 @@
                 .unique-name {
                     border-radius: 5px;
                     padding: 8px 10px;
-                    color: var(--color-giddh-blue);
-                    background-color: var(--color-sidebar-primary-search-bar-background) !important;
+                    color: var(--color-blue-primary);
+                    background-color: var(--color-light-gray) !important;
                 }
             }
             .group-list-head {
@@ -306,10 +306,10 @@
             .wrapper-warehouse {
                 .warehouse-list-head {
                     &:nth-child(odd) {
-                        background-color: var(--color-common-primary-background-color);
+                        background-color: var(--color-light-gray);
                     }
                     &:nth-child(even) {
-                        background-color: var(--color-common-primary-background-for-all-components);
+                        background-color: var(--color-white);
                     }
                 }
             }
@@ -321,18 +321,18 @@
                 .grid-title-left {
                     .inner-name {
                         font-size: var(--font-size-15);
-                        color: var(--color-common-primary-text);
+                        color: var(--color-black);
                     }
                     .stock-details {
                         font-size: var(--font-size-12);
-                        color: var(--color-common-secondary-text);
+                        color: var(--color-dark-gray);
                         .stock-ob {
                             .dot {
                                 position: relative;
                                 font-size: var(--font-size-16);
                                 height: 3px;
                                 bottom: 1px;
-                                filter: var(--color-image-filter-senary);
+                                filter: brightness(0.67);
                                 border-radius: 50%;
                             }
                             .first-dot {
@@ -413,7 +413,7 @@
                                     height: 11px;
                                     right: 5px;
                                     top: 13px;
-                                    filter: var(--color-image-filter);
+                                    filter: invert(0);
                                 }
                             }
                         }
@@ -428,7 +428,7 @@
                         .quantity-input {
                             &:focus,
                             &:active {
-                                background-color: var(--color-common-primary-background-for-all-components);
+                                background-color: var(--color-white);
                             }
                         }
 
@@ -437,7 +437,7 @@
                             padding: 0px 5px;
                             border-radius: 5px;
                             margin-right: 55px;
-                            background-color: var(--color-primary-input-bar-background-focus);
+                            background-color: var(--color-blue-light);
                             position: relative;
                             right: 5px;
                             border: 0;
@@ -447,7 +447,7 @@
                             margin-right: 41px;
                             padding: 0px 5px;
                             border-radius: 5px;
-                            background-color: var(--color-primary-input-bar-background-focus);
+                            background-color: var(--color-blue-light);
                             position: relative;
                             right: 4px;
                             border: 0;
@@ -466,7 +466,7 @@
                             height: 100%;
                             width: 392px;
                             &:nth-child(odd) {
-                                background-color: var(--color-solitude-light);
+                                background-color: var(--color-blue-light);
                             }
                         }
                         .editable-input {
@@ -475,7 +475,7 @@
                                 height: 11px;
                                 right: 15px;
                                 top: 13px;
-                                filter: var(--color-image-filter);
+                                filter: invert(0);
                             }
                         }
                     }
@@ -496,7 +496,7 @@
     }
 }
 .create-warehouse-btn {
-    background-color: var(--color-primary-inventory-stock-dropdown-button-background);
+    background-color: var(--color-white);
 }
 .select-all {
     margin: 5px 17px;
@@ -520,7 +520,7 @@
     width: 392px;
 
     .warehouse-list-head-num {
-        color: var(--color-giddh-blue);
+        color: var(--color-blue-primary);
         font-weight: 600;
         font-size: var(--font-size-15);
     }
@@ -537,7 +537,7 @@
             position: relative;
             padding-right: 7px;
             margin-left: 133px;
-            color: var(--color-primary-inventory-stock-balance-text);
+            color: var(--color-dark-gray);
 
             .sort-img {
                 position: absolute;
@@ -571,7 +571,7 @@
 .stock-list-box {
     .stock-list-unexpanded {
         .stock-list-box-heading {
-            color: var(--color-primary-inventory-stock-balance-text);
+            color: var(--color-dark-gray);
         }
     }
 }
@@ -591,23 +591,23 @@
     .icon-sort-asc {
         line-height: 20px;
         width: 15px;
-        color: var(--color-table-icon-sort-asc);
+        color: var(--color-dark-gray);
         .active-text-color {
-            color: var(--color-blue);
+            color: var(--color-blue-primary);
         }
     }
 }
 .white-color {
-    background-color: var(--color-common-primary-background-for-all-components) !important;
+    background-color: var(--color-white) !important;
 }
 .gray-color {
-    background-color: var(--color-common-primary-background-color) !important;
+    background-color: var(--color-light-gray) !important;
 }
 .expanded-stock-table-with-opacity {
-    background-color: var(--color-primary-common-without-opacity-list-hover);
+    background-color: var(--color-light-gray);
 }
 .expanded-stock-table-without-opacity {
-    background-color: var(--color-primary-common-without-opacity-list-hover) !important;
+    background-color: var(--color-light-gray) !important;
 }
 
 @media (max-width: 1180px) {
@@ -626,14 +626,14 @@
 
 .input-group {
     .input-group-addon {
-        border-left: 1px solid var(--color-iron) !important;
+        border-left: 1px solid var(--color-silver) !important;
     }
 
     input {
-        border-left: 1px solid var(--color-iron) !important;
+        border-left: 1px solid var(--color-silver) !important;
 
         &:focus {
-            border-left: 1px solid var(--color-blue) !important;
+            border-left: 1px solid var(--color-blue-primary) !important;
         }
     }
 }

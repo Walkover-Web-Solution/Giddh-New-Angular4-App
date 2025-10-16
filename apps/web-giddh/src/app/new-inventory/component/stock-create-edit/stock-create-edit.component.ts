@@ -30,6 +30,7 @@ import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store"
 import { PreviewVariantImageComponent } from "../preview-variant-image/preview-variant-image.component";
 import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
+import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 
 @Component({
     selector: "stock-create-edit",
@@ -302,7 +303,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         private manufacturingService: ManufacturingService,
         private componentStore: InventoryComponentStore,
         private commonService: CommonService,
-        private voucherComponentStore: VoucherComponentStore
+        private voucherComponentStore: VoucherComponentStore,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
     }
 

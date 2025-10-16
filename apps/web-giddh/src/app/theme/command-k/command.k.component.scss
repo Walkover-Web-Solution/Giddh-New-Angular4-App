@@ -4,7 +4,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: var(--color-popup-background);
+        background-color: var(--color-white);
         flex-wrap: wrap !important;
         width: 100% !important;
         max-width: 580px;
@@ -15,7 +15,7 @@
             font-weight: normal;
             line-height: initial;
             width: 95%;
-            background-color: var(--color-popup-background);
+            background-color: var(--color-white);
         }
         .icon-search-icon {
             position: absolute;
@@ -23,7 +23,7 @@
             right: 0;
             width: 4.2rem;
             text-align: center;
-            color: var(--color-abbey);
+            color: var(--color-dark-gray);
         }
     }
     .vR {
@@ -55,7 +55,7 @@
 }
 
 .universal-data-list-wrapper {
-    background-color: var(--color-popup-background);
+    background-color: var(--color-white);
     overflow: auto;
     display: none;
     box-sizing: border-box;
@@ -67,8 +67,8 @@
     &.isFlying {
         position: absolute;
         z-index: 10;
-        box-shadow: 0 2px 3px 0 var(--color-primary-common-box-shadow);
-        border: 1px solid var(--color-common-secondary-border);
+        box-shadow: 0 2px 3px 0 var(--color-shadow-light);
+        border: 1px solid var(--color-silver);
         border-radius: 2px;
     }
     &:not(.isFlying),
@@ -113,7 +113,7 @@
                 width: 100%;
             }
             .item-icon {
-                color: var(--color-gray);
+                color: var(--color-medium-gray);
                 font-size: 14px;
                 .icon-account {
                     font-size: 11px;
@@ -125,7 +125,7 @@
             .item-details {
                 position: relative;
                 font-size: var(--font-size-15);
-                color: var(--color-popup-secondary-list-head-text);
+                color: var(--color-black);
                 text-transform: capitalize;
                 width: 100%;
                 padding: 2px 0 2px 25px;
@@ -141,11 +141,11 @@
                 }
                 small {
                     font-size: var(--font-size-12);
-                    color: var(--color-abbey);
+                    color: var(--color-dark-gray);
                     display: block;
                 }
                 .command-hover-text {
-                    color: var(--color-common-primary-text);
+                    color: var(--color-black);
                     right: 0;
                     text-transform: initial;
                     width: 25%;
@@ -165,18 +165,18 @@
             }
             // hover effect
             &.selected {
-                background-color: var(--color-primary-header-background);
+                background-color: var(--color-blue-primary);
                 .item-details {
-                    color: var(--color-popup-list-input-text-hover);
+                    color: var(--color-white);
                     small {
-                        color: var(--color-popup-list-input-text-hover);
+                        color: var(--color-white);
                     }
                     .command-hover-text {
                         color: var(--color-white);
                     }
                 }
                 .item-icon {
-                    color: var(--color-popup-list-input-text-hover);
+                    color: var(--color-white);
                 }
             }
         }
@@ -193,13 +193,13 @@
     padding: 10px;
     font-size: 20px;
     cursor: pointer;
-    color: var(--color-popup-list-input-text);
+    color: var(--color-black);
 }
 
 ::ng-deep {
     .jumper-results {
         .block {
-            color: var(--color-popup-list-input-text);
+            color: var(--color-black);
         }
     }
 }

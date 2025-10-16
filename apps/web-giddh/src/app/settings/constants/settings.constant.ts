@@ -34,6 +34,8 @@ export interface OrganizationProfile {
     alias?: string;
     parent?: any;
     country?: Country;
+    baseCurrencySymbol?: string;
+    baseCurrency?: string;
     businessTypes?: Array<any>;
     businessType?: string;
     nameAlias?: string;

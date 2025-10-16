@@ -4,7 +4,7 @@
 
 body.unresponsive {
     padding: 0;
-    background: var(--color-primary-login-signup-body-unresponsive-background);
+    background: var(--color-black);
 }
 
 .intro.login {
@@ -84,19 +84,19 @@ body.unresponsive {
 }
 
 .twitter {
-    background: var(--color-primary-login-signup-twitter-background);
+    background: var(--color-blue-primary);
 }
 
 .google {
-    background: var(--color-primary-login-signup-google-background);
+    background: var(--color-red);
 }
 
 .linkedin {
-    background: var(--color-primary-login-signup-linkedin-background);
+    background: var(--color-blue-primary);
 }
 
 .mobile {
-    background: var(--color-primary-login-signup-mobile-background);
+    background: var(--color-black);
 }
 
 .btn-login {
@@ -107,7 +107,7 @@ body.unresponsive {
     vertical-align: middle;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    box-shadow: 0 0 1px var(--color-primary-common-box-shadow);
+    box-shadow: 0 0 1px var(--color-shadow-light);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -moz-osx-font-smoothing: grayscale;
@@ -125,24 +125,24 @@ body.unresponsive {
     transform: scale(1.1);
 }
 .btn-blue {
-    color: var(--color-senary-button-text) !important;
-    border-color: var(--color-senary-button-background);
-    background: var(--color-senary-button-background);
+    color: var(--color-white) !important;
+    border-color: var(--color-blue-primary);
+    background: var(--color-blue-primary);
 }
 
 .btn-blue:hover {
-    color: var(--color-senary-button-text) !important;
-    border-color: var(--color-senary-button-background-hover);
-    background: var(--color-senary-button-background-hover);
+    color: var(--color-white) !important;
+    border-color: var(--color-blue-primary);
+    background: var(--color-blue-primary);
 }
 /*giddh loader*/
 
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
     background: var(--color-black) none repeat scroll 0 0;
-    border: 7px solid var(--color-danger);
+    border: 7px solid var(--color-red);
     border-radius: 50%;
-    box-shadow: 0 -10px 0 14px var(--color-primary-common-box-shadow) inset;
+    box-shadow: 0 -10px 0 14px var(--color-shadow-light) inset;
     box-sizing: border-box;
     height: 60px;
     width: 60px;
@@ -172,15 +172,15 @@ body.unresponsive {
 }
 
 .btn-login.btn-default {
-    color: var(--color-nero);
+    color: var(--color-black);
     background-color: var(--color-white);
-    border-color: var(--color-iron);
+    border-color: var(--color-silver);
 }
 
 .btn-login.btn-default:hover {
-    color: var(--color-nero) !important;
+    color: var(--color-black) !important;
     background-color: var(--color-white);
-    border-color: var(--color-iron);
+    border-color: var(--color-silver);
     box-shadow: none;
 }
 
@@ -207,7 +207,7 @@ button.close {
 }
 
 .email {
-    background: var(--color-blue);
+    background: var(--color-blue-primary);
 }
 
 /************* end login page *************/
@@ -218,7 +218,7 @@ button.close {
 :host ::ng-deep .form-control {
     height: 41px;
     font-size: var(--font-size-15);
-    color: var(--color-primary-login-signup-input-box) !important;
+    color: var(--color-black) !important;
 }
 
 :host ::ng-deep .clear {
@@ -232,7 +232,7 @@ button.close {
 }
 
 strong {
-    font-family: var(--font-bold);
+    font-weight: var(--font-weight-bold);
 }
 
 .logo {
@@ -246,7 +246,7 @@ h1 {
 .slide-content {
     padding: 0 100px;
     color: var(--color-white);
-    background: var(--color-primary-login-signup-slide-content-background);
+    background: var(--color-black);
     justify-content: space-evenly;
     text-align: left;
     flex-direction: column;
@@ -254,7 +254,7 @@ h1 {
 }
 
 .login-box h1 {
-    color: var(--color-primary-login-signup-login-box-h1);
+    color: var(--color-black);
     font-weight: 500;
 }
 
@@ -265,7 +265,7 @@ h1 {
 }
 
 small {
-    color: var(--color-nero);
+    color: var(--color-black);
 }
 
 /* social-login */
@@ -300,14 +300,14 @@ small {
 /* social icon */
 
 .linkedin-ico a {
-    color: var(--color-primary-login-signup-linkedin-icon);
-    border-color: var(--color-primary-login-signup-linkedin-icon);
+    color: var(--color-blue-primary);
+    border-color: var(--color-blue-primary);
 }
 
 .google-ico a {
-    background: var(--color-primary-login-with-google-box-background);
-    border-color: var(--color-primary-login-with-google-box-background) !important;
-    color: var(--color-tertiary-login-box-body-text);
+    background: var(--color-blue-primary);
+    border-color: var(--color-blue-primary) !important;
+    color: var(--color-white);
     padding-left: 40px !important;
 }
 
@@ -318,7 +318,7 @@ small {
     left: 0;
     line-height: 38px;
     vertical-align: middle;
-    background-color: var(--color-white-secondary);
+    background-color: var(--color-light-gray);
 }
 
 .ico-google img {
@@ -328,13 +328,13 @@ small {
 
 .login-option,
 .login-option a {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
     margin-top: 55px;
     font-weight: 500;
 }
 
 .login-option a {
-    border-bottom: 2px dotted var(--color-blue);
+    border-bottom: 2px dotted var(--color-blue-primary);
 }
 
 .slide-content h1 {
@@ -378,7 +378,7 @@ small {
     align-self: flex-start;
     position: relative;
     width: 100%;
-    background: var(--color-solitude-light);
+    background: var(--color-blue-light);
     margin: 0 -15px;
 }
 
@@ -402,7 +402,7 @@ small {
 }
 
 .hash-tag {
-    color: var(--color-danger);
+    color: var(--color-red);
 }
 
 .blockquote-ico {
@@ -420,7 +420,7 @@ small {
     position: relative;
 }
 .login-left {
-    background-color: var(--color-primary-login-page-background);
+    background-color: var(--color-blue-primary);
     position: absolute;
     left: 0;
     height: 100vh;
@@ -451,7 +451,7 @@ small {
     overflow: hidden;
 }
 .logo-login {
-    background-color: var(--color-primary-login-box-header-background);
+    background-color: var(--color-blue-primary);
     height: 98px;
     display: flex;
     align-items: center;
@@ -461,17 +461,17 @@ small {
 .accounting-space {
     padding: 30px;
     border-radius: 0;
-    background-color: var(--color-primary-login-box-body-background) !important;
-    border: 2px solid var(--color-primary-login-signup-body-border);
+    background-color: var(--color-white) !important;
+    border: 2px solid var(--color-white);
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
 }
 .accounting-space h4 {
-    color: var(--color-primary-login-box-body-text);
+    color: var(--color-blue-primary);
     font-size: var(--font-size-16);
 }
 .btn-outline-primary {
-    background-color: var(--color-blue);
+    background-color: var(--color-blue-primary);
     border-radius: 3px;
     min-width: 160px;
     border-radius: 5px;
@@ -481,29 +481,29 @@ small {
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: var(--color-blue);
+    background-color: var(--color-blue-primary);
     box-shadow: none;
     outline: none;
 }
 .login-with {
-    color: var(--color-primary-login-box-body-text);
+    color: var(--color-blue-primary);
     font-size: var(--font-size-15);
     margin-top: 10px;
     a {
-        color: var(--color-primary-login-box-body-text);
+        color: var(--color-blue-primary);
         text-decoration: none;
     }
 }
 .btn-secondary {
     border-radius: 5px;
-    color: var(--color-senary-button-text);
-    background-color: var(--color-secondary-button-background);
-    border: 1px solid var(--color-secondary-button-background);
+    color: var(--color-white);
+    background-color: var(--color-blue-primary);
+    border: 1px solid var(--color-blue-primary);
 }
 .btn-secondary:hover {
-    color: var(--color-senary-button-text) !important;
-    background-color: var(--color-secondary-button-background-hover);
-    border-color: var(--color-secondary-button-background-hover);
+    color: var(--color-white) !important;
+    background-color: var(--color-blue-primary);
+    border-color: var(--color-blue-primary);
 }
 .forgotStep {
     display: none;

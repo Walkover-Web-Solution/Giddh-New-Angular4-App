@@ -1,24 +1,24 @@
 p.bank-name {
     font-size: var(--font-size-15);
-    color: var(--color-common-senary-text);
+    color: var(--color-blue-primary);
     margin-bottom: 5px;
 }
 
 p.bank-balance {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     font-size: var(--font-size-15);
     display: flex;
     justify-content: space-between;
 }
 
 .single-bank-detail {
-    border-bottom: 1px solid var(--color-common-primary-border);
+    border-bottom: 1px solid var(--color-silver);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
 
 a.connect-bank {
-    color: var(--color-common-primary-text);
+    color: var(--color-black);
     font-size: var(--font-size-15);
     text-decoration: underline;
     padding-top: 5px;
@@ -40,7 +40,7 @@ a.connect-bank {
 }
 
 p {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
 }
 
 .banks-scrollbar-wrapper {
@@ -57,7 +57,7 @@ p {
 }
 
 .dashboard-filter {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     .icon-collapse-icon {
         margin-left: 8px;
         font-size: var(--font-size-15);

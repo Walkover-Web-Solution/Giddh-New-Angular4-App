@@ -23,7 +23,7 @@
     .form-group {
         .input-group {
             .input-group-addon {
-                border-left: 1px solid var(--color-iron) !important;
+                border-left: 1px solid var(--color-silver) !important;
             }
             input {
                 border-left: none !important;
@@ -73,7 +73,7 @@
     height: 1px;
     margin: 0.5rem 0;
     overflow: hidden;
-    background-color: var(--color-dark-fog);
+    background-color: var(--color-border-light);
 }
 
 ::ng-deep .dropdown-item {
@@ -82,7 +82,7 @@
     padding: 3px 7px;
     clear: both;
     font-weight: normal;
-    color: var(--color-nero);
+    color: var(--color-black);
     text-align: inherit;
     white-space: nowrap;
     background: none;
@@ -92,35 +92,35 @@
 
 ::ng-deep .dropdown-item:focus,
 .dropdown-item:hover {
-    color: var(--color-nero);
+    color: var(--color-black);
     text-decoration: none;
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
 }
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    background: var(--color-wild-sand);
+    background: var(--color-light-gray);
 }
 
 ::ng-deep .dropdown-item.disabled,
 .dropdown-item:disabled {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     cursor: not-allowed;
     background-color: transparent;
 }
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    background: var(--color-wild-sand);
+    background: var(--color-light-gray);
 }
 
 .has-error {
-    border: 1px solid var(--color-danger);
+    border: 1px solid var(--color-red);
 }
 
 #createCompForm p {
     font-size: var(--font-size-15);
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -150,7 +150,7 @@
     width: 100%;
 }
 .add-company-detail {
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
 }
 
 .phone-code-caret {

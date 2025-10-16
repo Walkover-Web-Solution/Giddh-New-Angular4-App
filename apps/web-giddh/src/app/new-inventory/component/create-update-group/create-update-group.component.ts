@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil, distinctUntilChanged } from "rxjs/operators";
@@ -16,6 +16,7 @@ import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-
 import { Location } from '@angular/common';
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 import { InventoryComponentStore } from "../inventory.store";
+import { GeneralService } from "../../../services/general.service";
 import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 import { ServiceConfig } from "../../../services/service.config";
 import { IOption } from "../../../app.constant";
@@ -106,7 +107,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private location: Location,
         @Inject(ServiceConfig) private serviceConfig,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private componentStore: InventoryComponentStore
+        private componentStore: InventoryComponentStore,
+        private router: Router,
+        private generalService: GeneralService
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
     }

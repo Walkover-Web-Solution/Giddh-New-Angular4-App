@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { Observable, ReplaySubject, takeUntil } from "rxjs";
+import { delay, Observable, ReplaySubject, takeUntil, Subject } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import * as dayjs from "dayjs";
@@ -10,6 +10,7 @@ import { AiOcrService } from "../services/ai-ocr.service";
 import { GeneralService } from "../services/general.service";
 import { OrganizationType } from "../models/user-login-state";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
+import { ActivatedRoute } from "@angular/router";
 dayjs.extend(duration);
 
 export enum OcrAction {
@@ -47,6 +48,10 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public isCompany: boolean = true;
     /** Subject to manage the unsubscription logic for observables to prevent memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Subject to manage the route scope */
+    private routeScope$: Subject<void> = new Subject<void>();
+    /** Interval ID for completed count */
+    private completedIntervalId: any;
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** Holds local JSON data */
@@ -127,6 +132,10 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public initialUploadFile: boolean = false;
     /** This will use for main page upload file */
     public mainPageUploadFile: boolean = false;
+    /** This will use for ocr type */
+    public ocrType: string = "";
+    /** This will use for row data */
+    public rowData: any;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -134,18 +143,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private aiOcrService: AiOcrService,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
+        private route: ActivatedRoute
     ) {
-        this.aiOcrService.getOcrData$.next(null);
-        this.aiOcrService.ocrList$.next(null);
-        this.aiOcrService.aiOcrDetails$.next(null);
-        this.aiOcrService.uploadDataSuccess$.next(null);
-        this.aiOcrService.saveAndNext$.next(null);
-        this.aiOcrService.skipAndNext$.next(null);
-        this.aiOcrService.dateRangeEmit$.next(null);
-        this.aiOcrService.sendListData$.next(null);
-        this.aiOcrService.resetData$.next(null);
-        this.aiOcrService.selectBranch$.next(null);
-        this.selectedToggle = OcrAction.List;
     }
 
     /**
@@ -154,189 +153,236 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @memberof AiOcrComponent
      */
     public ngOnInit(): void {
-        this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.route.params.pipe(delay(100), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.isConsolidatedBranch = response.isBranchConsolidated;
-                this.changeDetection.detectChanges();
-            }
-        });
-        this.aiOcrStore.branches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
-                this.changeDetection.detectChanges();
-            }
-        });
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
-
-        this.ocrMainList$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (!res) {
-                return;
-            }
-            this.aiOcrService.mainPageOcrData$.next(res);
-            // Update initial upload state
-            if (this.initialUploadFile) {
-                this.initialUpload = false;
-            }
-            // Update list data
-            this.listCount = res.totalItems || 0;
-            this.ocrMainList = res;
-            // Trigger change detection once after all updates
-            this.changeDetection.detectChanges();
-            // Get completed count only if we have items
-            if (this.listCount > 0) {
-                this.aiOcrStore.getCompletedCount(null);
-            }
-        });
-
-        this.ocrExtractDocuments$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            this.ocrCurrentToken = res?.token ? res.token : "";
-            this.aiOcrService.saveAndNext$.next(null);
-            this.aiOcrService.skipAndNext$.next(null);
-            if (res?.token) {
-                this.selectedToggle = OcrAction.Create;
-                this.aiOcrService.getOcrData$.next(true);
-                this.aiOcrService.aiOcrDetails$.next(res);
-                setTimeout(() => {
-                    this.innerLoading = false;
-                }, 200);
-            } else {
-                this.aiOcrService.getOcrData$.next(false);
+                this.aiOcrService.getOcrData$.next(null);
+                this.aiOcrService.ocrList$.next(null);
                 this.aiOcrService.aiOcrDetails$.next(null);
-                this.innerLoading = false;
-            }
-            this.changeDetection.detectChanges();
-        });
-
-        // Call getCompletedCount every 5 seconds
-        setInterval(() => {
-            if (this.listCount > 0 || this.initialUploadFile) {
-                this.aiOcrStore.getCompletedCount(null);
-            }
-        }, 5000);
-
-        this.ocrMainListInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((inProgress: boolean) => {
-            this.aiOcrService.ocrList$.next(this.ocrList);
-            this.isLoading = inProgress;
-            this.selectedToggle = OcrAction.List;
-            this.changeDetection.detectChanges();
-        });
-
-        // Update countVariable when the completed count is retrieved
-        this.ocrCompletedCount$.pipe(takeUntil(this.destroyed$)).subscribe((count: number) => {
-            if (count != null) {
-                this.countVariable = count;
-                this.buttonDisabled = this.countVariable === 0 ? true : false;
-                this.changeDetection.detectChanges();
-            }
-        });
-
-        // Disable or enable the button toggle based on the progress status
-        this.ocrCompletedCountInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((inProgress: boolean) => {
-            this.buttonDisabled = inProgress;
-            this.changeDetection.detectChanges();
-        });
-
-        if (this.selectedToggle === OcrAction.List) {
-            this.aiOcrStore.branches$.pipe(takeUntil(this.destroyed$)).subscribe(branchList => {
-                if (branchList) {
-                    this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
-                    if (!this.isCompany) {
-                        this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+                this.aiOcrService.uploadDataSuccess$.next(null);
+                this.aiOcrService.saveAndNext$.next(null);
+                this.aiOcrService.skipAndNext$.next(null);
+                this.aiOcrService.dateRangeEmit$.next(null);
+                this.aiOcrService.sendListData$.next(null);
+                this.aiOcrService.resetData$.next(null);
+                this.aiOcrService.selectBranch$.next(null);
+                this.selectedToggle = OcrAction.List;
+                this.aiOcrStore.reset();
+                this.ledgerComponentStore.reset();
+                // End previous route scope and clear any existing interval before starting new scope
+                this.routeScope$.next();
+                this.routeScope$.complete();
+                this.routeScope$ = new Subject<void>();
+                if (this.completedIntervalId) {
+                    clearInterval(this.completedIntervalId);
+                    this.completedIntervalId = null;
+                }
+                // Reset local state on route change to avoid stale UI/state
+                this.ocrType = "";
+                this.initialUpload = true;
+                this.mainPageUploadFile = false;
+                this.initialUploadFile = false;
+                this.listCount = 0;
+                this.countVariable = 0;
+                this.ocrType = response.type;
+                
+                this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
+                    if (response) {
+                        this.isConsolidatedBranch = response.isBranchConsolidated;
+                        this.changeDetection.detectChanges();
                     }
-                    this.branches = [];
-                    branchList.forEach((branch) => {
-                        this.branches.push({
-                            label: branch?.name,
-                            value: branch?.uniqueName
-                        });
-                    });
-                }
-            });
+                });
+                this.aiOcrStore.branches$.pipe(takeUntil(this.routeScope$)).subscribe(response => {
+                    if (response) {
+                        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+                        this.changeDetection.detectChanges();
+                    }
+                });
+                this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
 
-            this.aiOcrService.sendListData$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response) {
-                    this.getListData(response);
-                }
-            });
-
-            this.aiOcrStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
-                    this.activeCompany = response;
-                }
-            });
-
-            /** Universal date observer */
-            this.aiOcrStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((dateObj) => {
-                if (dateObj) {
-                    if (this.countVariable > 0) {
+                this.ocrMainList$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
+                    if (!res) {
+                        return;
+                    }
+                    this.aiOcrService.mainPageOcrData$.next(res);
+                    // Update initial upload state
+                    if (this.initialUploadFile) {
                         this.initialUpload = false;
                     }
-                    this.universalDate = _.cloneDeep(dateObj);
-                    this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                    this.selectedDateRangeUi =
-                        dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +
-                        " - " +
-                        dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                    this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-                    this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
-                    this.getAllOcrDocuments(false);
+                    // Update list data
+                    this.listCount = res.totalItems || 0;
+                    this.ocrMainList = res;
+                    // Get completed count only if we have items
+                    if (this.listCount > 0) {
+                        this.aiOcrStore.getCompletedCount(this.ocrType);
+                    }
+                    // Trigger change detection once after all updates
+                    this.changeDetection.detectChanges();
+                });
+
+                this.ocrExtractDocuments$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
+                    this.ocrCurrentToken = res?.token ? res.token : "";
+                    this.aiOcrService.saveAndNext$.next(null);
+                    this.aiOcrService.skipAndNext$.next(null);
+                    if (res?.token) {
+                        this.selectedToggle = OcrAction.Create;
+                        this.aiOcrService.getOcrData$.next(true);
+                        this.aiOcrService.aiOcrDetails$.next(res);
+                        setTimeout(() => {
+                            this.innerLoading = false;
+                        }, 200);
+                    } else {
+                        this.aiOcrService.getOcrData$.next(false);
+                        this.aiOcrService.aiOcrDetails$.next(null);
+                        this.innerLoading = false;
+                    }
+                    this.changeDetection.detectChanges();
+                });
+
+                // Call getCompletedCount every 5 seconds
+                this.completedIntervalId = setInterval(() => {
+                    if (this.listCount > 0 || this.initialUploadFile) {
+                        this.aiOcrStore.getCompletedCount(this.ocrType);
+                    }
+                }, 5000);
+
+                this.ocrMainListInProgress$.pipe(takeUntil(this.routeScope$)).subscribe((inProgress: boolean) => {
+                    this.aiOcrService.ocrList$.next(this.ocrList);
+                    this.isLoading = inProgress;
+                    this.selectedToggle = OcrAction.List;
+                    this.changeDetection.detectChanges();
+                });
+
+                // Update countVariable when the completed count is retrieved
+                this.ocrCompletedCount$.pipe(takeUntil(this.routeScope$)).subscribe((count: number) => {
+                    if (count != null) {
+                        this.countVariable = count;
+                        this.buttonDisabled = this.countVariable === 0 ? true : false;
+                        this.changeDetection.detectChanges();
+                    }
+                });
+
+                // Disable or enable the button toggle based on the progress status
+                this.ocrCompletedCountInProgress$.pipe(takeUntil(this.routeScope$)).subscribe((inProgress: boolean) => {
+                    this.buttonDisabled = inProgress;
+                    this.changeDetection.detectChanges();
+                });
+
+                if (this.selectedToggle === OcrAction.List) {
+                    this.aiOcrStore.branches$.pipe(takeUntil(this.routeScope$)).subscribe(branchList => {
+                        if (branchList) {
+                            this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
+                            if (!this.isCompany) {
+                                this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+                            }
+                            this.branches = [];
+                            branchList.forEach((branch) => {
+                                this.branches.push({
+                                    label: branch?.name,
+                                    value: branch?.uniqueName
+                                });
+                            });
+                        }
+                    });
+
+                    this.aiOcrService.sendListData$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
+                        if (response) {
+                            this.getListData(response);
+                        }
+                    });
+
+                    this.aiOcrStore.activeCompany$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
+                        if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
+                            this.activeCompany = response;
+                        }
+                    });
+
+                    /** Universal date observer */
+                    this.aiOcrStore.universalDate$.pipe(takeUntil(this.routeScope$)).subscribe((dateObj) => {
+                        if (dateObj) {
+                            if (this.countVariable > 0) {
+                                this.initialUpload = false;
+                            }
+                            this.universalDate = _.cloneDeep(dateObj);
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi =
+                                dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +
+                                " - " +
+                                dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+                            this.getAllOcrDocuments(false);
+                            this.changeDetection.detectChanges();
+
+                        }
+                    });
                 }
-            });
-        }
 
-        this.ocrUploadSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (!res) {
-                return;
-            }
-            this.signedUrlResponse = res;
-            // Update initial upload state
-            if (this.initialUploadFile) {
-                this.initialUpload = false;
-            }
-            this.ledgerComponentStore.uploadVoucher({
-                url: res.signedUrl,
-                file: this.file
-            });
-        });
+                this.ocrUploadSuccess$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
+                    if (!res) {
+                        return;
+                    }
+                    this.signedUrlResponse = res;
+                    // Update initial upload state
+                    if (this.initialUploadFile) {
+                        this.initialUpload = false;
+                    }
+                    this.ledgerComponentStore.uploadVoucher({
+                        url: res.signedUrl,
+                        file: this.file
+                    });
+                });
 
-        this.ledgerComponentStore.uploadVoucherSuccess$
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((voucherResponse) => {
-                if (voucherResponse) {
-                    this.aiOcrStore.importOcrDocument(this.signedUrlResponse);
-                }
-            });
+                this.ledgerComponentStore.uploadVoucherSuccess$
+                    .pipe(takeUntil(this.routeScope$))
+                    .subscribe((voucherResponse) => {
+                        if (voucherResponse) {
+                            this.aiOcrStore.importOcrDocument({
+                                signedUrlResponse: this.signedUrlResponse,
+                                ocrType: this.ocrType
+                            });
+                        }
+                    });
 
-        this.ocrImportSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                if (this.mainPageUploadFile) {
-                    this.getAllOcrDocuments(false);
-                } else {
-                    this.aiOcrService.uploadDataSuccess$.next(true);
-                }
-            }
-        });
+                this.ocrImportSuccess$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
+                    if (res && res.requestId) {
+                        if (this.mainPageUploadFile) {
+                            this.getAllOcrDocuments(false);
+                        } else {
+                            this.aiOcrService.uploadDataSuccess$.next(true);
+                        }
+                    }
+                });
 
-        this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response?.type === OcrAction.Save && response !== null) {
-                this.aiOcrService.saveAndNextSuccess$.next(null);
-                this.aiOcrService.skipAndNext$.next(null);
-                this.innerLoading = true;
-                this.aiOcrStore.getExtractDocuments(response ?? "");
-                this.aiOcrStore.getCompletedCount(null);
-                this.changeDetection.detectChanges();
-            }
-        });
+                this.aiOcrService.saveAndNextSuccess$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
+                    if (response?.type === OcrAction.Save && response !== null) {
+                        this.aiOcrService.saveAndNextSuccess$.next(null);
+                        this.aiOcrService.skipAndNext$.next(null);
+                        this.innerLoading = true;
+                        this.aiOcrStore.getExtractDocuments(response ?? "");
+                        this.aiOcrStore.getCompletedCount(this.ocrType);
+                        this.changeDetection.detectChanges();
+                    }
+                });
 
-        this.aiOcrService.skipAndNext$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response?.type === OcrAction.Skip && response !== null) {
-                this.aiOcrService.saveAndNextSuccess$.next(null);
-                this.aiOcrService.skipAndNext$.next(null);
-                this.innerLoading = true;
-                this.aiOcrStore.getExtractDocuments({ type: OcrAction.Skip, token: response.token });
+                this.aiOcrService.skipAndNext$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
+                    if (response?.type === OcrAction.Skip && response !== null) {
+                        this.aiOcrService.saveAndNextSuccess$.next(null);
+                        this.aiOcrService.skipAndNext$.next(null);
+                        this.innerLoading = true;
+                        this.aiOcrStore.getExtractDocuments({ type: OcrAction.Skip, token: response.token });
+                        this.changeDetection.detectChanges();
+                    }
+                });
+
+                this.aiOcrService.ocrListToCreate$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
+                    if (response) {
+                        this.rowData = response;
+                        this.buttonDisabled = false;
+                        this.onToggleChange(OcrAction.Create);
+                    }
+                });
             }
-            this.changeDetection.detectChanges();
         });
     }
 
@@ -358,6 +404,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         let request = {
             pagination: this.ocrDocumentsRequestParams,
             model: reqObj,
+            ocrType: this.ocrType
         };
         this.aiOcrService.mainPage$.next(true);
         this.aiOcrStore.getAllMainPageOcrData(request);
@@ -388,7 +435,12 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             return;
         }
         if (value === OcrAction.Create && !this.buttonDisabled) {
-            this.aiOcrStore.getExtractDocuments("");
+            if (this.rowData) {
+                this.selectedToggle = OcrAction.Create;
+                this.aiOcrStore.getExtractDocuments(this.rowData);
+            } else {
+                this.aiOcrStore.getExtractDocuments("");
+            }
         } else if (value === OcrAction.List) {
             this.selectedToggle = value;
         }
@@ -500,7 +552,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public resetData(): void {
         this.showClearFilter = false;
         /** Universal date observer */
-        this.aiOcrStore.universalDate$.subscribe((dateObj) => {
+        this.aiOcrStore.universalDate$.pipe(takeUntil(this.routeScope$)).subscribe((dateObj) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -551,6 +603,20 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         this.aiOcrService.uploadDataSuccess$.next(null);
         this.aiOcrService.saveAndNext$.next(null);
         this.aiOcrService.skipAndNext$.next(null);
+        this.aiOcrService.dateRangeEmit$.next(null);
+        this.aiOcrService.sendListData$.next(null);
+        this.aiOcrService.resetData$.next(null);
+        this.aiOcrService.selectBranch$.next(null);
+        if (this.completedIntervalId) {
+            clearInterval(this.completedIntervalId);
+            this.completedIntervalId = null;
+        }
+        if (this.broadcast) {
+            try { this.broadcast.close?.(); } catch { }
+            this.broadcast = null;
+        }
+        this.routeScope$.next();
+        this.routeScope$.complete();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

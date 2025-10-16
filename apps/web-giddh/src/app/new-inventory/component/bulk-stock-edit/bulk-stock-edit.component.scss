@@ -27,7 +27,7 @@
                 background: var(--color-white);
                 thead {
                     th {
-                        color: var(--color-giddh-blue);
+                        color: var(--color-blue-primary);
                         border-width: 2px;
                         vertical-align: baseline;
                         h3 {
@@ -42,12 +42,12 @@
                 th {
                     padding: 0;
                     min-width: 216px;
-                    color: var(--color-common-primary-text);
+                    color: var(--color-black);
                     .border-line {
                         border: 2px solid transparent;
-                        &.active {
-                            // border-color: var(--color-giddh-blue);
-                        }
+                        // &.active {
+                        //     border-color: var(--color-blue-primary);
+                        // }
                         .custom-padding {
                             padding: 6px 10px;
                         }
@@ -55,7 +55,7 @@
                     //========= PLEASE UN COMMENT BELOW CODE TO SHOW LINE ON HOVER ON THE TABLE CELL =============
                     // &:hover{
                     //     .border-line{
-                    //         border-color: var(--color-giddh-blue);
+                    //         border-color: var(--color-blue-primary);
                     //     }
                     // }
                     &.min-width-140 {

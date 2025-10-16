@@ -3,7 +3,7 @@
 }
 
 a {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
     text-decoration: none;
 }
 
@@ -11,7 +11,7 @@ svg.icon.icon-lg {
     height: 18px;
     width: 12px;
     filter: invert(0);
-    color: var(--color-primary-checkbox-and-expansion-panel-arrow);
+    color: var(--color-black);
     position: relative;
     top: -1px;
 }
@@ -29,7 +29,7 @@ svg.icon.icon-lg {
 .tax-engine .gstr3b-sel {
     display: inline-block;
     padding: 4px 4px 4px 8px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
     border-radius: 2px;
     background: var(--color-white);
 }
@@ -50,7 +50,7 @@ svg.icon.icon-sm {
 }
 
 .text-primary {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 
 .caret {
@@ -59,7 +59,7 @@ svg.icon.icon-sm {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid var(--color-nero);
+    border-top: 4px solid var(--color-black);
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -115,7 +115,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
     border-radius: 25px;
     overflow: hidden;
     padding: 0;
@@ -140,11 +140,11 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active {
-    background-color: var(--color-blue);
+    background-color: var(--color-blue-primary);
 }
 
 .tax-engine .gstr3b-header .sel-tab li:before {
-    border-left: 23px solid var(--color-iron);
+    border-left: 23px solid var(--color-silver);
     top: 42%;
     margin-top: -22px;
     margin-left: 1px;
@@ -152,7 +152,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active:after {
-    border-left: 23px solid var(--color-blue);
+    border-left: 23px solid var(--color-blue-primary);
 }
 
 .tax-engine .gstr3b-header .sel-tab li:after {
@@ -182,12 +182,12 @@ svg.icon.icon-xxlg {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active a {
-    color: var(--color-primary-gstr3-page-main-button);
+    color: var(--color-white);
 }
 
 .tax-engine .gstr3b-header .sel-tab li a {
     padding: 0 10px;
-    color: var(--color-nero);
+    color: var(--color-black);
 }
 
 svg.icon.icon-xxlg {
@@ -218,7 +218,7 @@ svg.icon.icon-xxlg {
 .tax-engine .summary-content {
     max-width: 1085px;
     margin: 0 auto 30px;
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
 }
 
 .tax-engine .summary-content .gstr-3b-user {
@@ -244,14 +244,14 @@ address {
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
-    border: 1px solid var(--color-table-primary-header-bar-border) !important;
+    border: 1px solid var(--color-silver) !important;
     padding: 6px;
     font-size: var(--font-size-15);
 }
 
 .btn-link:focus,
 .btn-link:hover {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
     background-color: transparent;
     text-decoration: none;
 }
@@ -263,20 +263,20 @@ table {
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
     font-size: var(--font-size-15);
-    border: 1px solid var(--color-table-primary-content-bar-border) !important;
+    border: 1px solid var(--color-silver) !important;
     padding: 6px;
 }
 
 .gstr3-subheading,
 .vat-summary thead > tr {
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
 }
 
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: var(--color-abbey);
-    background-color: var(--color-table-body-secondary-background);
+    color: var(--color-dark-gray);
+    background-color: var(--color-light-gray);
 }
 
 .dropdown-menu {
@@ -317,7 +317,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: var(--font-regular);
+    font-family: var(--font-family);
     font-weight: 500;
     line-height: 1.1;
 }
@@ -335,7 +335,7 @@ h6 {
 }
 
 .modal-content {
-    box-shadow: 0 5px 15px var(--color-primary-common-box-shadow);
+    box-shadow: 0 5px 15px var(--color-shadow-light);
 }
 
 .modal-header {
@@ -344,13 +344,13 @@ h6 {
 
 .modal-header {
     padding: 20px;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-silver);
     min-height: 21.43px;
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
 }
 
 .highlight-info {
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-light-gray);
 }
 
 .alert {
@@ -385,8 +385,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
     color: var(--color-white);
-    background-color: var(--color-gst-primary-doc-actions);
-    border-color: var(--color-gst-primary-doc-actions);
+    background-color: var(--color-red);
+    border-color: var(--color-red);
 }
 
 .btn,
@@ -433,7 +433,7 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 }
 
 .tax-engine .gstr3-points .point {
-    background-color: var(--color-blue);
+    background-color: var(--color-blue-primary);
     color: var(--color-white);
     width: 22px;
     height: 22px;
@@ -459,19 +459,19 @@ tax-engine .caret-right {
 }
 
 .tax-engine .gstr3-points a .caret-right {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
 }
 
 .gstr3-filing-procedure > div {
     width: 900px;
     margin: 30px auto 0;
-    box-shadow: 1px 1px 11px var(--color-primary-common-box-shadow);
+    box-shadow: 1px 1px 11px var(--color-shadow-light);
     border-radius: 3px;
     padding: 20px 50px 10px;
 }
 
 .tax-engine .gstr3-points {
-    border-left: 1px dashed var(--color-iron);
+    border-left: 1px dashed var(--color-silver);
     padding-left: 41px;
 }
 
@@ -483,22 +483,22 @@ dropdown-menu-right {
 
 .successful-file-detail h3,
 .gst-return-date h3 {
-    color: var(--color-nero) !important;
+    color: var(--color-black) !important;
     font-size: var(--font-size-24) !important;
     margin: 20px 0 7px !important;
 }
 
 .btn-2 {
     background: var(--color-white);
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
     border: 0px;
     border-radius: 4px;
-    border: 1px solid var(--color-blue);
+    border: 1px solid var(--color-blue-primary);
 }
 
 .btn-2:hover {
     color: var(--color-white);
-    background: var(--color-blue);
+    background: var(--color-blue-primary);
 }
 
 .file-your-return {
@@ -540,8 +540,8 @@ ul#dropdown-menu {
 }
 
 .bg-thead-dark {
-    background: var(--color-table-body-secondary-background);
-    color: var(--color-nero);
+    background: var(--color-light-gray);
+    color: var(--color-black);
 }
 
 .pointer-none {
