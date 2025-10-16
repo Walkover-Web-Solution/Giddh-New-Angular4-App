@@ -654,7 +654,7 @@
     .hover-target {
         visibility: hidden;
     }
-    &:hover {
+    &.hover-trigger--active, &:hover {
         .hover-target {
             visibility: visible;
         }

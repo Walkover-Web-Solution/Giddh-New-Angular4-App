@@ -439,7 +439,8 @@ table.stock-table {
             }
 
             &.variant-image {
-                width: clamp(165px, 165px, 165px);
+                max-width: 165px;
+                min-width: 165px;
             }
 
             &.sales-purchase-info {
@@ -497,13 +498,6 @@ table.stock-table {
                 max-width: 130px;
                 min-width: 130px;
             }
-
-            /*& UNUSED COMPONENT CLASS: is-rate-inclusive - Auto-commented by script
-.is-rate-inclusive {
-                max-width: 165px;
-                min-width: 165px;
-            }
-*/
         }
     }
 

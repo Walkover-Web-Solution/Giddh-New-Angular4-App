@@ -22,6 +22,12 @@
     //     }
     // }
 
+    .mat-mdc-header-cell.text-right {
+    .mat-sort-header-container {
+        justify-content: flex-end !important;
+    }
+}
+
     .mat-mdc-header-row {
         .mat-mdc-header-cell {
             // background-color: var(--color-white) !important;

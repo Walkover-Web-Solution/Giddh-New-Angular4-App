@@ -178,6 +178,7 @@ ul{
             &.select-today {
                 button {
                     color: var(--color-light-gray);
+                    height: 32px;
                 }
                 &:hover{
                     button {
@@ -448,12 +449,14 @@ ul{
 
             input {
                 color: var(--color-black) !important;
+                font-size: inherit !important;
             }
         }
 
         #add-manage {
             color: var(--color-black) !important;
             padding: 4.8px 8px;
+            height: 32px;
             background-color: var(--color-white);
             display: flex;
             justify-content: center;

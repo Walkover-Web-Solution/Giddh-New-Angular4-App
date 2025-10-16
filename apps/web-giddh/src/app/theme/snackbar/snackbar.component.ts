@@ -43,20 +43,20 @@ export class SnackBarComponent implements OnInit {
      * @memberof SnackBarComponent
      */
     public createTimeout(): void {
-        this.showProgressBar = true;
-        this.interval = setInterval(() => {
-            this.snackProgressBarWidthPercentage--;
-            if(this.snackProgressBarWidthPercentage === 0) {
-                clearInterval(this.interval);
-            }
-            this.changeDetection.detectChanges();
-        }, 30);
+        // this.showProgressBar = true;
+        // this.interval = setInterval(() => {
+        //     this.snackProgressBarWidthPercentage--;
+        //     if(this.snackProgressBarWidthPercentage === 0) {
+        //         clearInterval(this.interval);
+        //     }
+        //     this.changeDetection.detectChanges();
+        // }, 30);
 
-        this.timeout = setTimeout(() => {
-            this.dismiss();
-        }, 3000);
+        // this.timeout = setTimeout(() => {
+        //     this.dismiss();
+        // }, 3000);
 
-        this.changeDetection.detectChanges();
+        // this.changeDetection.detectChanges();
     }
 
     /**

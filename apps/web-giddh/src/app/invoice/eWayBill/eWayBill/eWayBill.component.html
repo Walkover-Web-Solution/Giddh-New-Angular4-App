@@ -203,20 +203,28 @@
                         <label>{{ commonLocaleData?.app_transportation_mode }}</label>
                         <mat-radio-group name="transMode" [(ngModel)]="updateEwayVehicleform.transMode" class="d-flex flex-wrap">
                             <mat-radio-button color="primary" value="1" class="mr-3 mb-2">
-                                <img src="assets/icon/4.svg" alt="road img" class="mr-1" />
-                                {{ commonLocaleData?.app_road }}
+                                <div class="d-inline-flex column-gap-05">
+                                    <img src="assets/icon/4.svg" /> 
+                                    <span>{{ commonLocaleData?.app_road }}</span>
+                                </div>
                             </mat-radio-button>
                             <mat-radio-button color="primary" value="2" class="mr-3 mb-2">
-                                <img src="assets/icon/3.svg" alt="rail img" class="mr-1" />
-                                {{ commonLocaleData?.app_rail }}
+                                <div class="d-inline-flex column-gap-05">
+                                    <img src="assets/icon/3.svg" /> 
+                                    <span>{{ commonLocaleData?.app_rail }}</span>
+                                </div>
                             </mat-radio-button>
                             <mat-radio-button color="primary" value="3" class="mr-3 mb-2">
-                                <img src="assets/icon/1.svg" alt="air img" class="mr-1" />
-                                {{ commonLocaleData?.app_air }}
+                                <div class="d-inline-flex column-gap-05">
+                                    <img src="assets/icon/1.svg" /> 
+                                    <span>{{ commonLocaleData?.app_air }}</span>
+                                </div>
                             </mat-radio-button>
                             <mat-radio-button color="primary" value="4" class="mb-2">
-                                <img src="assets/icon/2.svg" alt="ship img" class="mr-1" />
-                                {{ commonLocaleData?.app_ship }}
+                                <div class="d-inline-flex column-gap-05">
+                                    <img src="assets/icon/2.svg" /> 
+                                    <span>{{ commonLocaleData?.app_ship }}</span>
+                                </div>
                             </mat-radio-button>
                         </mat-radio-group>
                     </div>

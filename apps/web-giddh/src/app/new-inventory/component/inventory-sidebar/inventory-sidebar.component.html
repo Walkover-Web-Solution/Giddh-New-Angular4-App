@@ -26,17 +26,15 @@
                         [ngClass]="{
                             'd-none': node.onlyBranchMode && (isCompany || isConsolidatedBranch),
                             'active': !node?.link && node.hiddenLink.includes(currentUrl),
-                            'mr-t1': (node.name == localeData?.sidebar?.warehouse_balance)
                         }"
                     >
                         <span
                             class="w-100 d-inline-flex"
-                            [ngClass]="{ 'align-items-start': (node.name == localeData?.sidebar?.warehouse_balance),
-                                         'align-items-center': !(node.name == localeData?.sidebar?.warehouse_balance)}"
+                            [ngClass]="node.name == localeData?.sidebar?.warehouse_balance ? 'align-items-start' : 'align-items-center'"
                             *ngIf="!(node.onlyBranchMode && (isCompany || isConsolidatedBranch))"
                             (click)="openAsidePaneDialog(node)"
                         >
-                            <img src="{{ imgPath }}{{ node.icons }}" [ngClass]="{ 'mt-1': (node.name == localeData?.sidebar?.warehouse_balance)}" class="sidebar-menu-icons" alt="icon" />
+                            <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="icon" />
                             <p>{{ node.name }}</p>
                         </span>
                     </mat-tree-node>

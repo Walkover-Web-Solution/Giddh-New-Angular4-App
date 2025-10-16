@@ -30,8 +30,8 @@ body {
 #content-wrapper {
     /* padding-bottom: 80px; */
     // padding-top: 60px;
-    // height: calc(100vh - 60px);
-    // overflow-y: scroll;
+    height: calc(100vh - var(--header-height));
+    overflow-y: scroll;
     padding-left: 60px;
     padding-bottom: 15px;
     // min-height: 100vh;
@@ -2795,6 +2795,7 @@ ul.sub-list {
         border: 1px solid var(--border-color);
         color: inherit !important;
         background: none !important;
+        font-size: inherit !important;
         // height: 33px;
         // border: 0px;
         // padding: 3px !important;
@@ -3728,7 +3729,7 @@ select.form-control {
 form label {
     padding-bottom: 0;
     font-size: var(--font-size-15);
-    line-height: 2.3;
+    // line-height: 2.3;
     margin-bottom: 0 !important;
 }
 
@@ -4917,12 +4918,13 @@ input[type="checkbox"][disabled]:after {
 
 .table-container {
     .account {
-        background: var(--theme-primary-light);
+        background: var(--color-light-gray);
         overflow: visible;
         min-height: 38px;
 
         .pl-sticky-group {
-            background: var(--theme-primary-light);
+            background: var(--color-light-gray);
+            color: var(--color-black);
         }
     }
 }
@@ -4931,7 +4933,7 @@ input[type="checkbox"][disabled]:after {
     position: sticky;
     left: 0;
     z-index: 9;
-    // background: var(--color-white);
+    background: var(--theme-background-color);
     max-width: 300px !important;
     min-width: 300px !important;
     padding-block: 10px !important;
@@ -5926,6 +5928,7 @@ textarea {
     // background-color: var(--color-white);
     // border-right: 1px solid var(--border-color);
      box-shadow: 1px 0px 4px var(--color-shadow-light) !important;
+     z-index: 990 !important;
     // z-index: 999;
     transition: all 0.3s ease;
     
@@ -6504,7 +6507,9 @@ hamburger-menu {
 
 // Serial number column
 .serial-no-column {
-    min-width: 30px !important;
+    min-width: 40px !important;
+    width: 60px !important;
+    max-width: 60px !important;
 }
 
 // Main table responsive styles
@@ -9509,7 +9514,7 @@ giddh-datepicker {
 
 .subscription-page .plan-wrapper,
 .subscription-page #content-wrapper {
-    padding-left: 23px !important;
+    padding-left: 0px !important;
 }
 
 .subscription-page .hamburger-menu {
@@ -9669,30 +9674,26 @@ giddh-datepicker {
     }
 }
 
-.unit-mapping-page {
-    .grid-box {
-        /* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
-        .mat-grid-tile-content {
-            justify-content: space-around;
-        }
-        */
-    }
+// .unit-mapping-page {
+//     .grid-box {
+//         .mat-grid-tile-content {
+//             justify-content: space-around;
+//         }
+//     }
 
-    .unit-mapping-grid-list {
-        .grid-box-content {
-            .map-unit-value {
-                /* UNUSED GLOBAL CLASS: map-unit-select-field - Auto-commented by script
-                .map-unit-select-field {
-                    input {
-                        width: 160px;
-                        min-width: 160px;
-                    }
-                }
-                */
-            }
-        }
-    }
-}
+//     .unit-mapping-grid-list {
+//         .grid-box-content {
+//             .map-unit-value {
+//                 .map-unit-select-field {
+//                     input {
+//                         width: 160px;
+//                         min-width: 160px;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
 
 body.update-scroll-hidden {
     overflow-y: hidden;
@@ -9892,10 +9893,6 @@ body.update-scroll-hidden {
         padding-bottom: 2px !important;
     }
     */
-}
-
-.serial-no-column {
-    min-width: 30px !important;
 }
 
 .custom-cdk-overlay-wrapper {

@@ -35,3 +35,24 @@
     padding-left: 30px;
     padding-top: 20px;
 }
+
+::ng-deep .unit-mapping-page {
+    .grid-box {
+        .mat-grid-tile-content {
+            justify-content: space-around;
+        }
+    }
+
+    .unit-mapping-grid-list {
+        .grid-box-content {
+            .map-unit-value {
+                .map-unit-select-field {
+                    input {
+                        width: 160px;
+                        min-width: 160px;
+                    }
+                }
+            }
+        }
+    }
+}

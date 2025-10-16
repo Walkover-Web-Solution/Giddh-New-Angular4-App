@@ -133,7 +133,7 @@
                             <button
                                 mat-stroked-button
                                 *ngIf="voucherApiVersion === 2"
-                                class="mat-icon-sm-btn"
+                                class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
                                 (click)="editCopyVoucher('edit')"
@@ -142,7 +142,7 @@
                             </button>
                             <button
                                 mat-stroked-button
-                                class="mat-icon-sm-btn"
+                                class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_send_email"
                                 [matTooltipPosition]="'above'"
                                 (click)="openEmailSendDialog()"
@@ -151,7 +151,7 @@
                             </button>
                             <button
                                 mat-stroked-button
-                                class="mat-icon-sm-btn"
+                                class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_print"
                                 [matTooltipPosition]="'above'"
                                 (click)="printInvoice()"
@@ -163,7 +163,7 @@
                                     defaultThermalTemplate?.templateType === 'thermal_template' && !invoiceType.isPurchaseOrder
                                 "
                                 mat-stroked-button
-                                class="mat-icon-sm-btn"
+                                class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_print_thermal"
                                 [matTooltipPosition]="'above'"
                                 (click)="printThermal()"
@@ -172,7 +172,7 @@
                             </button>
                             <button
                                 mat-stroked-button
-                                class="mat-icon-sm-btn"
+                                class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_download_pdf"
                                 [matTooltipPosition]="'above'"
                                 (click)="downloadPdf()"
@@ -182,7 +182,7 @@
                             <button
                                 *ngIf="(!isCompany && !isConsolidatedBranch && voucherApiVersion === 2)"
                                 mat-stroked-button
-                                class="mat-icon-sm-btn"
+                                class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_delete"
                                 [matTooltipPosition]="'above'"
                                 (click)="deleteVoucherDialog()"

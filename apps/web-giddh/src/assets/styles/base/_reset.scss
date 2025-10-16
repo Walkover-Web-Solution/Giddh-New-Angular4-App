@@ -18,6 +18,7 @@ body {
 
     ::-webkit-scrollbar {
         width: 8px;
+        height: 8px;
         background-color: var(--theme-background-color);
     }
 
@@ -55,7 +56,7 @@ table {
     tr {
         th,
         td {
-            text-align: left;
+            text-align: inherit;
             vertical-align: middle;
         }
     }

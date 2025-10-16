@@ -26,10 +26,10 @@
                 }
 
                 .variants-wrapper {
-                    margin-left: 15px;
+                    margin-left: 14px;
 
                     .list-item {
-                        padding-left: 32px !important;
+                        padding-left: 0 !important;
                         max-width: 86%;
                     }
                 }
@@ -39,11 +39,9 @@
                 }
 
                 .mat-expansion-panel-header {
-                    /*& UNUSED COMPONENT CLASS: mat-expanded - Auto-commented by script
-.mat-expanded {
+                    &.mat-expanded {
                         height: unset;
                     }
-*/
                 }
             }
         }
@@ -92,7 +90,14 @@
                     padding-top: 4px;
                 }
             }
-
         }
     }
 }
+
+// :host ::ng-deep .bulk-entry-list {
+//     .mat-expansion-panel {
+//         .mat-expansion-panel-header {
+//             padding: 0 25px !important;
+//         }
+//     }
+// }

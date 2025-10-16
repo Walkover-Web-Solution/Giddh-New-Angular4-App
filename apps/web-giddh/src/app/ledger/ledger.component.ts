@@ -3407,8 +3407,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
             height: '790px',
+            maxHeight: '90vh',
             role: 'alertdialog',
-            ariaLabel: 'template'
+            ariaLabel: 'template',
+            autoFocus: false
         });
 
         dialogRef.afterClosed().subscribe(response => {

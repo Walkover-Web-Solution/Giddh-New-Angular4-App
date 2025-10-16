@@ -5,6 +5,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
+<section class="aside-dialog-wrapper">
     <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
         <p>{{ commonLocaleData?.app_custom_email_template }}</p>
         <button mat-icon-button cdkFocusInitial (click)="handleDialogClose()" aria-label="close icon" class="p-0">
@@ -12,7 +13,7 @@
         </button>
     </div>
 
-    <mat-dialog-content class="dialog-body d-flex flex-column template-froala-wrapper max-height-65vh">
+    <mat-dialog-content class="dialog-body d-flex flex-column template-froala-wrapper">
         <form [formGroup]="isTrigger ? customTriggerForm : emailForm" class="d-flex flex-column flex-grow-1">
             <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mb-4" *ngIf="isTrigger">
                 <!-- Trigger Name -->
@@ -465,7 +466,7 @@
                 </p>
             </div>
         </form>
-        <div mat-dialog-actions class="justify-content-start">
+        <div>
             <button
                 aria-label="save"
                 mat-raised-button
@@ -487,4 +488,5 @@
             </button>
         </div>
     </mat-dialog-content>
+</section>
 </ng-container>
