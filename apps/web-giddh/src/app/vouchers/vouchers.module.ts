@@ -91,7 +91,6 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { TributeMentionModule } from "../shared/helpers/directives/tributeMention/tributeMention.module";
 import { AllTemplatesComponent } from "./template/all-templates/all-templates.component";
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
-import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
 
 @NgModule({
     declarations: [
@@ -187,8 +186,7 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile
         SubscriptionUpgradeButtonModule,
         SelectTableColumnModule,
         MatButtonToggleModule,
-        TributeMentionModule,
-        MobileNumberInputComponent
+        TributeMentionModule
     ],
     exports: [
         VoucherCreateComponent,

@@ -5,7 +5,16 @@
         <mat-card class="container-lg">
             <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
                 <mat-card-content>
-
+                    <div class="w200 mr-b15" *ngIf="rowData">
+                        <reactive-dropdown-field 
+                            [label]="commonLocaleData?.app_select_voucher"
+                            [options]="transactionOptions"
+                            (selectedOption)="selectVoucherType($event?.value);"
+                            (onClear)="selectVoucherType('');"
+                            [labelValue]="selectedVoucherType"
+                            [placeholder]="commonLocaleData?.app_select_voucher">
+                        </reactive-dropdown-field>
+                    </div>
                     <div class="vouchers-title d-flex align-items-center" [ngClass]="{'pd-b1': ocrDataEnabled}">
                         <div class="d-flex align-items-center">
                             <h1 [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}"
@@ -406,16 +415,6 @@
                                                         *ngIf="invoiceForm.controls['account'].get('mobileNumber')?.value && (invoiceForm.controls['account'].get('mobileNumber')?.touched) && !intlClass?.isRequiredValidNumber">{{
                                                         localeData?.invalid_mobile }}</mat-error>
                                                 </div>
-                                                 <mobile-number-input
-                                                    class="mr-t15"
-                                                    formControlName="mobileNumber"
-                                                    [label]="commonLocaleData?.app_mobile_number"
-                                                    [required]="false"
-                                                    [defaultCountry]="'+91'"
-                                                    [useImageFlags]="false"
-                                                    (countryChanged)="onCountryChanged($event)"
-                                                    (mobileChanged)="onMobileChanged($event)">
-                                                </mobile-number-input>
                                             </div>
                                         </ng-container>
                                     </ng-container>

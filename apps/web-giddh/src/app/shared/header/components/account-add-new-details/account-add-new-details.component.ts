@@ -391,14 +391,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 const users = this.addAccountForm.get('portalDomain') as FormArray;
                 let mobileNo = '';
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
-                    // if (response?.mobileNo && this.intl) {
-                    //     mobileNo = this.intl['init-contact-add']?.getNumber();
-                    // }
+                    if (response?.mobileNo && this.intl) {
+                        mobileNo = this.intl['init-contact-add']?.getNumber();
+                    }
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
                         user?.get('name').setValue(response?.attentionTo);
                         user?.get('email').setValue(response?.email);
-                        user?.get('contactNo').setValue(response?.mobileNo);
+                        user?.get('contactNo').setValue(mobileNo);
                         user?.get('default').setValue(true);
                     } else {
                         let setValue = false;
@@ -985,10 +985,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.isHsnSacEnabledAcc || this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-        // if (this.intl) {
-        //     let mobileNo = this.intl['init-contact-add']?.getNumber();
-        //     accountRequest['mobileNo'] = mobileNo;
-        // }
+        if (this.intl) {
+            let mobileNo = this.intl['init-contact-add']?.getNumber();
+            accountRequest['mobileNo'] = mobileNo;
+        }
 
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
