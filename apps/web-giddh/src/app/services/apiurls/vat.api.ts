@@ -7,7 +7,6 @@ export const VAT_API = {
     DOWNLOAD_ZW_REPORT: 'company/:companyUniqueName/zw/vat-report-download-v2?from=:from&to=:to&taxNumber=:taxNumber&currencyCode=:currencyCode&fileType=base64',
     DOWNLOAD_KENYA_REPORT: 'company/:companyUniqueName/kenya/v2/vat-report-download?from=:from&to=:to&taxNumber=:taxNumber&fileType=base64',
     VIEW_TRANSACTIONS_REPORT: 'v2/company/:companyUniqueName/vat-report-detailed?from=:from&to=:to&taxNumber=:taxNumber&section=:section&page=:page&count=:count',
-    VIEW_UK_TRANSACTIONS_REPORT: 'company/:companyUniqueName/uk/vat-report-detailed?from=:from&to=:to&taxNumber=:taxNumber&section=:section&page=:page&count=:count',
     VIEW_ZW_TRANSACTIONS_REPORT: 'company/:companyUniqueName/zw/vat-report-detailed?from=:from&to=:to&taxNumber=:taxNumber&section=:section&currencyCode=:currencyCode&page=:page&count=:count',
     DOWNLOAD_ZW_TRANSACTIONS_REPORT: 'company/:companyUniqueName/zw/vat-report-detailed-download-v2?from=:from&to=:to&taxNumber=:taxNumber&section=:section&currencyCode=:currencyCode&page=:page&count=:count',
     CHECK_HMRC_AUTHORIZATION: 'company/:companyUniqueName/authorize',

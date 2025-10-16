@@ -31,7 +31,6 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { NewConfirmationModalModule } from "../theme/new-confirmation-modal/confirmation-modal.module";
 import { MatInputModule } from "@angular/material/input";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { BreadCrumbComponent } from "../shared/bread-crumb/bread-crumb.component";
 
 @NgModule({
     declarations: [
@@ -68,8 +67,7 @@ import { BreadCrumbComponent } from "../shared/bread-crumb/bread-crumb.component
         GiddhPageLoaderModule,
         NewConfirmationModalModule,
         MatInputModule,
-        MatPaginatorModule,
-        BreadCrumbComponent
+        MatPaginatorModule
     ],
     exports: [
         VatReportRoutingModule,
