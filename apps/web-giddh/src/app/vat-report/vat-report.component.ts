@@ -11,7 +11,6 @@ import { VatService } from "../services/vat.service";
 import { saveAs } from "file-saver";
 import { SettingsFinancialYearService } from '../services/settings.financial-year.service';
 import { RestrictedModules } from '../app.constant';
-import { BreadCrumbService } from '../services/bread-crum.service';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -79,7 +78,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private cdRef: ChangeDetectorRef,
         private route: Router,
-        private breadCrumbService: BreadCrumbService,
         public settingsFinancialYearService: SettingsFinancialYearService
     ) { }
 
@@ -197,14 +195,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
     * This will redirect to vat report detail page
     *
     * @param {*} section
-    * @param {*} description
     * @memberof VatReportComponent
     */
-    public viewVatReportTransactions(section: string, description: string) {
-        this.breadCrumbService.setBreadCrumbPath([
-            { url: '/pages/vat-report', queryParams: { }, currentPageName: 'VAT-Report' },
-            { url: `/pages/vat-report/transactions/section/${section}`, queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber }, currentPageName: description }
-        ]);
+    public viewVatReportTransactions(section) {
         this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
     }
 
