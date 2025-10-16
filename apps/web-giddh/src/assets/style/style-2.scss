@@ -13917,25 +13917,4 @@ button {
             background-color: var(--color-transparent);
         }
     }
-<<<<<<< HEAD
-}
-
-.mobile-number-container {
-    mat-select {
-        width: auto;
-        // border: 1px dashed blue;
-        padding: 0 !important;
-        .mat-mdc-select-arrow {
-            svg {
-                width: 14px;
-                height: 14px;
-            }
-        }
-    }
-    input, input.mat-mdc-text-field-wrapper {
-        border: 1px dashed red !important;
-        height: inherit !important;
-    }
-=======
->>>>>>> parent of 063486ea88 (docs: add mobile number input component with integration guide and documentation)
 }
