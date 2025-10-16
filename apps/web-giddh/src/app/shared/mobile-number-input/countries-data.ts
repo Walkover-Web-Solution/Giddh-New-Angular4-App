@@ -1154,7 +1154,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+91',
         flag: '🇮🇳',
         flagImage: 'assets/images/flags/in.png',
-        nativeName: 'भारत',
+        nativeName: '+91',
         pattern: /^[6-9]\d{9}$/,
         placeholder: 'Enter 10-digit mobile number',
         minLength: 10,

@@ -456,17 +456,7 @@
                             </input-field>
                         </div>
                         <div class="col-sm-6 mobile-number mobile-number-wrapper voucher-preview-edit">
-                             <mobile-number-input
-                                formControlName="mobileNo"
-                                [label]="commonLocaleData?.app_mobile_number"
-                                [placeholder]="localeData?.mobile_no_placeholder"
-                                [required]="false"
-                                [defaultCountry]="'+91'"
-                                [useImageFlags]="false"
-                                (change)="openConfirmLeaveDialog()"
-                            >
-                            </mobile-number-input>
-                            <!-- <div class="form-group">
+                            <div class="form-group">
                                 <div class="d-flex">
                                     <input-field
                                         [name]="'accountDetails.mobileNumber'"
@@ -485,7 +475,7 @@
                                 </div>
                                 <span id="init-contact-add-valid-msg" class="d-none"></span>
                                 <span id="init-contact-add-error-msg" class="d-none"></span>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -565,19 +555,7 @@
                             </span>
                         </div>
                         <div class="w-30 pl-2 mobile-number mobile-number-wrapper voucher-preview-edit" [ngClass]="{'load-bar-wrap': isActivePortalMobileNumber === i}" (click)="isActivePortalMobileNumber = i">
-                           <mobile-number-input
-                                [id]="'mobile-input-' + i"
-                                [name]="'contactNo_' + i"
-                                formControlName="contactNo"
-                                [label]="commonLocaleData?.app_mobile_number"
-                                [placeholder]="localeData?.mobile_no_placeholder"
-                                [required]="false"
-                                [defaultCountry]="'+91'"
-                                [useImageFlags]="false"
-                                (change)="openConfirmLeaveDialog()"
-                            >
-                            </mobile-number-input>
-                            <!-- <input-field
+                            <input-field
                                 [name]="'contactNo_' + i"
                                 [type]="'tel'"
                                 #initContactAdd2
@@ -591,7 +569,7 @@
                                 [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
                             ></input-field>
                             <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
-                            <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span> -->
+                            <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span>
                         </div>
                         <div class="pl-2 mr-t05">
                             <button
