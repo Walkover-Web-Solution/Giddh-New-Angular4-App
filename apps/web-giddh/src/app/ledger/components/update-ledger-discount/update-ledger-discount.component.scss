@@ -1,18 +1,18 @@
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-silver);
     display: inline-block;
     width: 81px;
     margin-right: 13px;
 }
 
 .create-new {
-    border-top: 1px solid var(--color-common-secondary-border);
+    border-top: 1px solid var(--color-silver);
 }
 
 .or-line::after {
     content: "";
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-silver);
     display: inline-block;
     width: 81px;
     margin-left: 13px;
@@ -21,7 +21,7 @@
 .or-line {
     display: flex;
     align-items: center;
-    color: var(--color-iron);
+    color: var(--color-silver);
     margin-bottom: 10px;
 }
 .discount-item {

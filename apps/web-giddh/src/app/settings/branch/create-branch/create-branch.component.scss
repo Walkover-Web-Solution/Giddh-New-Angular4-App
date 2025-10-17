@@ -1,12 +1,12 @@
 .create-branch-page {
     .create-branch-under {
-        border-bottom: 1px solid var(--color-common-secondary-border);
+        border-bottom: 1px solid var(--color-silver);
         .branch-under-company {
             .heading {
                 font-size: var(--font-size-15);
             }
             p {
-                color: var(--color-nero);
+                color: var(--color-black);
             }
             .branch-company-name {
                 .label-wrapper {
@@ -17,11 +17,11 @@
                         width: 24px;
                     }
                     label {
-                        color: var(--color-abbey);
+                        color: var(--color-dark-gray);
                         min-width: 200px;
                     }
                     span {
-                        color: var(--color-abbey);
+                        color: var(--color-dark-gray);
                         display: block;
                     }
                 }
@@ -47,7 +47,7 @@
             font-size: var(--font-size-15);
             display: flex;
             align-items: center;
-            color: var(--color-nero);
+            color: var(--color-black);
             margin-bottom: 15px;
             label {
                 min-width: 200px;
@@ -66,17 +66,17 @@
                         margin-left: 6px;
                         flex: 1;
                         .item {
-                            font-family: var(--font-semibold);
+                            font-weight: var(--font-weight-semibold);
                         }
                     }
                     .default-entity {
                         align-items: center;
                         display: flex;
                         &:hover:after {
-                            color: var(--color-blue);
+                            color: var(--color-blue-primary);
                         }
                         .icon-favorite-selected {
-                            color: var(--color-blue);
+                            color: var(--color-blue-primary);
                         }
                     }
                 }
@@ -94,7 +94,7 @@
                         padding: 5px;
                         cursor: pointer;
                         &.icon-plus {
-                            color: var(--color-teal);
+                            color: var(--color-green);
                         }
                     }
                 }
@@ -162,7 +162,7 @@
 
 .bg-grey-on-hover {
     &:hover {
-        background: var(--color-dark-fog) !important;
+        background: var(--color-border-light) !important;
     }
 }
 /* create warehouse css end */

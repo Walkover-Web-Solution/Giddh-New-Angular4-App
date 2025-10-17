@@ -117,7 +117,7 @@
                         color="primary"
                         class="mr-0"
                         (click)="createBranch()"
-                        *ngIf="activeCompany.uniqueName && companyBranches.uniqueName && activeCompany.uniqueName === companyBranches.uniqueName && !currentBranchUniqueName"
+                        *ngIf="activeCompany?.uniqueName && companyBranches?.uniqueName && activeCompany.uniqueName === companyBranches.uniqueName && !currentBranchUniqueName"
                     >
                         <i class="icon-plus font-12"></i>
                         <span>{{ localeData?.create_branch }}</span>

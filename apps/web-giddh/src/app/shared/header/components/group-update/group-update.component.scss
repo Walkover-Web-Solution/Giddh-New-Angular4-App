@@ -20,7 +20,7 @@
 }
 
 .move-group-form .list-item {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-silver);
 }
 .form-box .btn {
     width: 95px;
@@ -28,12 +28,12 @@
 .manage-group-account-form {
     .form-group {
         .ladda-button[type="submit"] {
-            border-color: var(--color-secondary-button-background) !important;
-            background-color: var(--color-secondary-button-background) !important;
+            border-color: var(--color-blue-primary) !important;
+            background-color: var(--color-blue-primary) !important;
             color: var(--color-white) !important;
             &:hover {
-                border-color: var(--color-secondary-button-background-hover) !important;
-                background-color: var(--color-secondary-button-background-hover) !important;
+                border-color: var(--color-blue-primary) !important;
+                background-color: var(--color-blue-primary) !important;
             }
         }
     }

@@ -1,0 +1,27 @@
+.branch-tree-wrapper {
+    background-color: none;
+    border-radius: 2px;
+
+    .tree-content {
+        background-color: var(--color-white);
+        border: 1px solid var(--color-medium-gray);
+
+        .tree-inner-content {
+            background-color: var(--color-blue-primary);
+            height: 10px;
+            border-radius: 1px
+        }
+
+        .tree-container {
+            .tree-name {
+                color: var(--color-blue-primary);
+                font-weight: bold
+            }
+
+            .tree-alias {
+                color: var(--color-medium-gray);
+                margin-top: 4px
+            }
+        }
+    }
+}

@@ -99,6 +99,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public totalCreditAmount: number = 0;
     public totalDebitAmount: number = 0;
+    /** Flag to track if initial calculation has been done */
+    private isInitialCalculationDone: boolean = false;
+    /** Previous total debit value to track changes */
+    private previousTotalDebit: number = 0;
+    /** Previous total credit value to track changes */
+    private previousTotalCredit: number = 0;
     public showConfirmationBox: boolean = false;
     public dayjs = dayjs;
     public accountSearch: string;
@@ -277,7 +283,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public loadMoreInProgress: boolean = false;
     /** Holds voucher api version */
     public voucherApiVersion: number;
-  
+
     constructor(
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
@@ -380,7 +386,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event && event?.getDataLength() - event?.getRenderedRange().end < 20 && !this.loadMoreInProgress) {
                 this.loadMoreInProgress = true;
-               this.handleScrollEnd();
+                this.handleScrollEnd();
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -440,6 +446,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     description: ''
                 });
                 this.dateField?.nativeElement?.focus();
+                this.isInitialCalculationDone = false;
+                this.previousTotalDebit = 0;
+                this.previousTotalCredit = 0;
                 this.salesEntry.emit(false);
             }
         });
@@ -1466,12 +1475,134 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
                 totalDebit += Number(control.get('amount').value) ?? 0;
             }
-            });
+        });
 
         totalCredit = this.generalService.roundOffValueByCompanyDecimalPlace(totalCredit);
         totalDebit = this.generalService.roundOffValueByCompanyDecimalPlace(totalDebit);
+        // Count the number of 'by' and 'to' entries (excluding discount applied entries)
+        let byEntryCount = 0;
+        let toEntryCount = 0;
 
+        (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
+            if (!control.get('isDiscountApplied')?.value) {
+                if (control.get('type').value.toLowerCase() === 'to') {
+                    toEntryCount++;
+                } else {
+                    byEntryCount++;
+                }
+            }
+        });
+        const voucherTypeControl = this.journalVoucherForm.get('voucherType');
+
+        // Apply the business logic only if there's exactly one 'by' and one 'to' entry
+        if (byEntryCount === 1 && toEntryCount === 1) {
+            if (!this.isInitialCalculationDone) {
+                // First time calculation - if both have values, don't change anything
+                if (totalCredit > 0 && totalDebit > 0) {
+                    this.isInitialCalculationDone = true;
+                    if (voucherTypeControl.value === VOUCHERS.RECEIPT) {
+                        this.previousTotalCredit = totalCredit;
+                    } else {
+                        this.previousTotalDebit = totalDebit;
+                    }
+                }
+            } else {
+                if (voucherTypeControl.value === VOUCHERS.RECEIPT) {
+                    // After first time - if totalCredit has changed, set totalDebit to same value as totalCredit
+                    if (totalCredit !== this.previousTotalCredit && totalCredit >= 0) {
+                        totalDebit = totalCredit;
+                        this.previousTotalCredit = totalCredit;
+
+                        // Update the form controls for 'by' (debit) entries to match the new totalDebit
+                        this.updateDebitControlsToMatchTotal(totalDebit);
+                    }
+                } else {
+                    // After first time - if totalDebit has changed, set totalCredit to same value as totalDebit
+                    if (totalDebit !== this.previousTotalDebit && totalDebit >= 0) {
+                        totalCredit = totalDebit;
+                        this.previousTotalDebit = totalDebit;
+
+                        // Update the form controls for 'to' (credit) entries to match the new totalCredit
+                        this.updateCreditControlsToMatchTotal(totalCredit);
+                    }
+                }
+            }
+        }
         return { totalCredit, totalDebit };
+    }
+
+    /**
+     * Updates the debit (BY) form controls to match the new total debit amount
+     * Distributes the total debit amount proportionally among all 'by' entries
+     *
+     * @private
+     * @param {number} newTotalDebit
+     * @memberof AccountAsVoucherComponent
+     */
+    private updateDebitControlsToMatchTotal(newTotalDebit: number): void {
+        const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        const debitControls: FormGroup[] = [];
+
+        // Find all debit (BY) controls that are not discount applied
+        transactionsFormArray.controls.forEach((control: FormGroup) => {
+            if (control.get('type').value.toLowerCase() === 'by' && !control.get('isDiscountApplied')?.value) {
+                debitControls.push(control);
+            }
+        });
+
+        if (debitControls.length > 0) {
+            // Distribute the new total debit amount equally among all debit entries
+            const amountPerEntry = this.generalService.roundOffValueByCompanyDecimalPlace(newTotalDebit / debitControls.length);
+
+            debitControls.forEach((control, index) => {
+                // For the last entry, adjust for any rounding differences
+                if (index === debitControls.length - 1) {
+                    const remainingAmount = newTotalDebit - (amountPerEntry * (debitControls.length - 1));
+                    control.get('amount').patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(remainingAmount));
+                    control.get('total').patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(remainingAmount));
+                } else {
+                    control.get('amount').patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(amountPerEntry));
+                    control.get('total').patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(amountPerEntry));
+                }
+            });
+        }
+    }
+
+    /**
+     * Updates the credit (TO) form controls to match the new total credit amount
+     * Distributes the total credit amount proportionally among all 'to' entries
+     *
+     * @private
+     * @param {number} newTotalCredit
+     * @memberof AccountAsVoucherComponent
+     */
+    private updateCreditControlsToMatchTotal(newTotalCredit: number): void {
+        const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        const creditControls: FormGroup[] = [];
+
+        // Find all credit (TO) controls that are not discount applied
+        transactionsFormArray.controls.forEach((control: FormGroup) => {
+            if (control.get('type').value.toLowerCase() === 'to' && !control.get('isDiscountApplied')?.value) {
+                creditControls.push(control);
+            }
+        });
+
+        if (creditControls.length > 0) {
+            // Distribute the new total credit amount equally among all credit entries
+            const amountPerEntry = this.generalService.roundOffValueByCompanyDecimalPlace(newTotalCredit / creditControls.length);
+
+            creditControls.forEach((control, index) => {
+                // For the last entry, adjust for any rounding differences
+                if (index === creditControls.length - 1) {
+                    const remainingAmount = newTotalCredit - (amountPerEntry * (creditControls.length - 1));
+                    control.get('amount').patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(remainingAmount));
+                    control.get('total').patchValue(this.generalService.roundOffValueByCompanyDecimalPlace(remainingAmount));
+                } else {
+                    control.get('amount').patchValue(amountPerEntry);
+                    control.get('total').patchValue(amountPerEntry);
+                }
+            });
+        }
     }
 
     /**

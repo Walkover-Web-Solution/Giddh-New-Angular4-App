@@ -1,14 +1,14 @@
 #branch-transfer-create {
     background-color: var(--color-white);
-    color: var(--color-nero);
+    color: var(--color-black);
 
     .branch-transfer-header {
         padding: 10px 15px;
-        border-bottom: 1px solid var(--color-common-secondary-border);
+        border-bottom: 1px solid var(--color-silver);
         font-size: var(--font-size-16);
 
         h2 {
-            color: var(--color-giddh-blue);
+            color: var(--color-blue-primary);
             font-weight: 600;
         }
     }
@@ -17,7 +17,7 @@
         &-radio-btns {
             font-size: var(--font-size-15);
             padding: 15px;
-            border-bottom: 1px solid var(--color-common-secondary-border);
+            border-bottom: 1px solid var(--color-silver);
         }
 
         &-multiple-wrapper {
@@ -40,16 +40,16 @@
                 width: 100%;
 
                 th{
-                    color: var(--color-datepicker-date) !important;
+                    color: var(--color-blue-primary) !important;
                 }
                 th,
                 td {
                     padding: 10px 15px;
                     font-size: var(--font-size-15);
                     text-align: right;
-                    border: 1px solid var(--color-iron);
+                    border: 1px solid var(--color-silver);
                     vertical-align: top !important;
-                    color: var(--color-table-primary-content);
+                    color: var(--color-black);
                     font-weight: 400;
 
                     &:first-child {
@@ -62,21 +62,21 @@
                 }
 
                 thead {
-                    border-bottom: 1px solid var(--color-iron);
+                    border-bottom: 1px solid var(--color-silver);
                 }
 
                 tbody {
                     tr {
                         &:hover {
                             td {
-                                background: var(--color-table-row-hover-primary-background);
+                                background: var(--color-blue-light);
                                 transition: 200ms ease;
                             }
                         }
 
                         td {
                             .placeholder-color {
-                                color: var(--color-table-primary-content-bar-border);
+                                color: var(--color-silver);
                             }
 
                             .show-code-position {
@@ -91,8 +91,8 @@
                                 left: 26px;
 
                                 .delete-icon {
-                                    color: var(--color-gray);
-                                    border: 1px solid var(--color-common-secondary-border);
+                                    color: var(--color-medium-gray);
+                                    border: 1px solid var(--color-silver);
                                     border-radius: 50%;
                                     text-align: center;
                                     width: 20px;

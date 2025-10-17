@@ -1,6 +1,6 @@
 .buy-plan-wrapper {
     .invalid-input {
-        border: 1px solid var(--color-red-border) !important;
+        border: 1px solid var(--color-red) !important;
     }
 
     .dropdown-wrapper {
@@ -44,13 +44,13 @@
 
         h2,
         p {
-            color: var(--color-common-primary-text);
+            color: var(--color-black);
             white-space: break-spaces;
         }
 
         p {
             s {
-                color: var(--color-gray);
+                color: var(--color-medium-gray);
             }
 
             @media screen and (max-width: 1299px) {
@@ -78,7 +78,7 @@
 
                 h2,
                 p {
-                    color: var(--color-giddh-blue);
+                    color: var(--color-blue-primary);
                 }
             }
         }
@@ -89,17 +89,17 @@
     }
 
     .icon-tick {
-        color: var(--color-nonary-button-background);
+        color: var(--color-green);
     }
 
     .grid-title-list {
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-common-primary-border);
+        border-bottom: 1px solid var(--color-silver);
         min-width: 230px;
         font-weight: 500;
         font-size: var(--font-size-15);
-        border-left: 1px solid var(--color-iron);
+        border-left: 1px solid var(--color-silver);
     }
 
     .plan-table {
@@ -108,7 +108,7 @@
         overflow: hidden;
         white-space: nowrap;
         box-shadow: none !important;
-        border: 1px solid var(--color-iron);
+        border: 1px solid var(--color-silver);
         border-radius: 4px;
     }
 
@@ -132,7 +132,7 @@
             min-width: 260px;
             left: 0px;
             z-index: 9;
-            border-bottom: 1px solid var(--color-common-primary-border);
+            border-bottom: 1px solid var(--color-silver);
             position: sticky;
             background-color: var(--color-white);
             padding-top: 0px;
@@ -148,9 +148,9 @@
     }
 
     .active-plan {
-        border-top: 2px solid var(--color-primary-common);
-        border-left: 2px solid var(--color-primary-common);
-        border-right: 2px solid var(--color-primary-common);
+        border-top: 2px solid var(--color-blue-primary);
+        border-left: 2px solid var(--color-blue-primary);
+        border-right: 2px solid var(--color-blue-primary);
     }
 
     .selected-plan-button {
@@ -161,7 +161,7 @@
     }
 
     .selected-plan {
-        background-color: var(--color-primary-common);
+        background-color: var(--color-blue-primary);
 
         span {
             color: var(--color-white);
@@ -169,12 +169,12 @@
     }
 
     .active-plan-td {
-        border-left: 2px solid var(--color-primary-header-background) !important;
-        border-right: 2px solid var(--color-primary-header-background) !important;
+        border-left: 2px solid var(--color-blue-primary) !important;
+        border-right: 2px solid var(--color-blue-primary) !important;
     }
 
     .active-plan-td-bottom {
-        border-bottom: 2px solid var(--color-primary-header-background) !important;
+        border-bottom: 2px solid var(--color-blue-primary) !important;
     }
 
     .summary-wrapper {
@@ -238,28 +238,28 @@
 .plan-table-wrapper {
     max-width: 100%;
     overflow: auto;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
     border-radius: 4px;
 
     .plan-table {
         width: 800px;
 
         .mat-mdc-header-cell {
-            border-right: 1px solid var(--color-iron) !important;
-            background-color: var(--color-body-background) !important;
+            border-right: 1px solid var(--color-silver) !important;
+            background-color: var(--color-white) !important;
             z-index: 2 !important;
             padding: 0px !important;
             border-bottom-width: 2px;
         }
 
         .mat-mdc-table-sticky-border-elem-left {
-            border-right: 1px solid var(--color-iron);
+            border-right: 1px solid var(--color-silver);
         }
 
         td {
             &.mat-mdc-cell {
-                border-right: 1px solid var(--color-iron);
-                background-color: var(--color-body-background) !important;
+                border-right: 1px solid var(--color-silver);
+                background-color: var(--color-white) !important;
                 white-space: nowrap !important;
                 min-width: 230px;
 
