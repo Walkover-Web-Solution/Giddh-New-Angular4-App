@@ -497,6 +497,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public selectedVoucherType: string = "";
     /** This will use for row data */
     public rowData: any = null;
+    /** This will use for force clear reactive dropdown */
+    public forceClear: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -5316,8 +5318,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isCashInvoice) {
             this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
         }
+        this.forceClear = true;
 
         setTimeout(() => {
+             this.forceClear = false;
             this.openAccountDropdown = openAccountDropdown;
         }, 200);
     }
