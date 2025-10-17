@@ -83,7 +83,7 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="trn_number">
-                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.trn_number }}</th>
+                        <th mat-header-cell *matHeaderCellDef>{{ vatReportTransactionsRequest.country === 'GB' ? localeData?.vat_amount : localeData?.trn_number }}</th>
                         <td mat-cell *matCellDef="let element">{{ element.trnNumber ? element.trnNumber : "-" }}</td>
                     </ng-container>
                     <ng-container matColumnDef="place_supply">
