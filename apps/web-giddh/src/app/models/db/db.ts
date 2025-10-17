@@ -82,7 +82,7 @@ class AppDatabase extends Dexie {
     public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen, isCompany: boolean): Promise<any> {
         return this.companies.get(key).then((res: CompAidataModel) => {
             if (!res) {
-                return;
+                return Promise.reject('Company data not found in database. Please ensure company is initialized first.');
             }
             let arr: IUlist[] = res?.aidata[entity];
             let isFound = false;
