@@ -419,6 +419,16 @@
                                                         *ngIf="invoiceForm.controls['account'].get('mobileNumber')?.value && (invoiceForm.controls['account'].get('mobileNumber')?.touched) && !intlClass?.isRequiredValidNumber">{{
                                                         localeData?.invalid_mobile }}</mat-error>
                                                 </div>
+                                                 <mobile-number-input
+                                                    class="mr-t15"
+                                                    formControlName="mobileNumber"
+                                                    [label]="commonLocaleData?.app_mobile_number"
+                                                    [required]="false"
+                                                    [defaultCountry]="'+91'"
+                                                    [useImageFlags]="false"
+                                                    (countryChanged)="onCountryChanged($event)"
+                                                    (mobileChanged)="onMobileChanged($event)">
+                                                </mobile-number-input>
                                             </div>
                                         </ng-container>
                                     </ng-container>

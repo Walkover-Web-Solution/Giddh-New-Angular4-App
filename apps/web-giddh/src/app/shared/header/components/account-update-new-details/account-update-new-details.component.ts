@@ -392,10 +392,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             const index = this.portalIndex;
             let change = mappings.at(index);
-            let mobileNo = '';
-            if (this.intl) {
-                mobileNo = this.intl['init-contact-portal_' + (index)]?.getNumber();
-            }
+            // let mobileNo = '';
+            // if (this.intl) {
+            //     mobileNo = this.intl['init-contact-portal_' + (index)]?.getNumber();
+            // }
             let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
             if (defaultUser) {
                 defaultUser.get('default').patchValue(false);
@@ -417,7 +417,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
                 }
-                change.get('contactNo')?.setValue(mobileNo);
+                // change.get('contactNo')?.setValue(mobileNo);
                 let lastOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
                 mappings.controls.forEach((control, i) => {
@@ -444,21 +444,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         this.addAccountForm.valueChanges.pipe(
             debounceTime(700),
-            distinctUntilChanged((prev, curr) => (prev?.attentionTo === curr?.attentionTo) && (prev?.mobileNo === curr?.mobileNo) && (prev?.email === curr?.email)),
+            distinctUntilChanged(isEqual),
             takeUntil(this.destroyed$))
             .subscribe((response) => {
                 const users = this.addAccountForm.get('portalDomain') as FormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
-                    let mobileNo = '';
-                    if (response?.mobileNo && this.intl) {
-                        mobileNo = this.intl['init-contact-update']?.getNumber();
-                    }
+                    // let mobileNo = '';
+                    // if (response?.mobileNo && this.intl) {
+                    //     mobileNo = this.intl['init-contact-update']?.getNumber();
+                    // }
                     if (user) {
                         if (!this.isPortalDefault) {
                             user?.get('name').setValue(response?.attentionTo);
                             user?.get('email').setValue(response?.email);
-                            user?.get('contactNo').setValue(mobileNo);
+                            user?.get('contactNo').setValue(response?.mobileNo);
                             user?.get('default').setValue(true);
                         }
                     } else {
@@ -470,13 +470,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
-                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true });
+                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true });
                                 setValue = true;
                                 return;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true };
+                            let data = { name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true };
                             this.addNewPortalUser(data);
                         }
                     }
@@ -1172,12 +1172,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency, { onlySelf: true });
             accountRequest.currency = this.selectedCurrency;
         }
-        if (this.intl) {
-            let mobileNo = this.intl['init-contact-update']?.getNumber();
-            if (mobileNo) {
-                accountRequest['mobileNo'] = mobileNo;
-            }
-        }
+        // if (this.intl) {
+        //     let mobileNo = this.intl['init-contact-update']?.getNumber();
+        //     if (mobileNo) {
+        //         accountRequest['mobileNo'] = mobileNo;
+        //     }
+        // }
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
