@@ -19,7 +19,7 @@ import { createSelector } from 'reselect';
 import * as dayjs from 'dayjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { clone, cloneDeep, slice, find } from '../../lodash-optimized';
+import { clone, cloneDeep, find } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
@@ -124,7 +124,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
     public userAvatar: string;
-    public accountItemsFromIndexDB: any[] = DEFAULT_AC;
     public selectedPage: any = '';
     public selectedLedgerName: string;
     public companyList: CompanyResponse[] = [];
@@ -708,18 +707,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        if (this.activeCompanyForDb?.uniqueName) {
-            this._dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').subscribe(accountList => {
-                if (accountList?.length) {
-                    if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                        this.accountItemsFromIndexDB = accountList.slice(0, 7);
-                    } else {
-                        this.accountItemsFromIndexDB = accountList.slice(0, 5);
-                    }
-                }
-            });
-        }
-
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('header', response?.value).subscribe(response => {
@@ -1057,28 +1044,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.analyzeMenus(null, name, additional);
     }
 
-    public findListFromDb(dbResult: ICompAidata) {
-        if (!this.activeCompanyForDb) {
-            return;
-        }
-        if (!this.activeCompanyForDb?.uniqueName) {
-            return;
-        }
-        if (dbResult) {
-            // slice menus
-            if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
-            } else {
-                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
-            }
-        } else {
-            // slice default menus and account on small screen
-            if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
-                this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
-            }
-        }
-    }
-
     public showManageGroupsModal(search: any = "") {
         this.toggleHelpSupportPane(false);
         this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(search));
@@ -1380,12 +1345,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
                 branches = response || [];
             });
-            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
-                this.currentOrganizationType === OrganizationType.Company && branches?.length > 1).then((res) => {
-                    this.findListFromDb(res);
-                }, (err: any) => {
-                    console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
-                });
         }
     }
 

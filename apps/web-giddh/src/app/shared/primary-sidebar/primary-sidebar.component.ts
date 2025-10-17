@@ -11,7 +11,6 @@ import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponse, AccountResponseV2, AddAccountRequest } from '../../models/api-models/Account';
 import { CompAidataModel } from '../../models/db';
-import { DEFAULT_AC } from '../../models/default-menus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { OrganizationType } from '../../models/user-login-state';
 import { DbService } from '../../services/db.service';
@@ -59,7 +58,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** True, if ledger account is selected */
     public isLedgerAccSelected: boolean = false;
     /** Holds the navigated accounts */
-    public accountItemsFromIndexDB: any[] = DEFAULT_AC;
+    public accountItemsFromIndexDB: any[] = [];
     /** Company name initials (upto 2 characters) */
     public companyInitials: any = '';
     /** Stores the total company list */
@@ -258,9 +257,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                             } else {
                                 this.accountItemsFromIndexDB = accountList.slice(0, 5);
                             }
-                        } else {
-                            this.accountItemsFromIndexDB = DEFAULT_AC;
-                        }
+                        } 
+                        // Remove default accounts feature i.e DEFAULT_AC
+                        // else {
+                        //     this.accountItemsFromIndexDB = DEFAULT_AC;
+                        // }
                         this.changeDetectorRef.detectChanges();
                     });
                 }
@@ -435,7 +436,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.activeCompanyForDb.aidata = {
                 menus: [],
                 groups: [],
-                accounts: DEFAULT_AC
+                accounts: []
+                // accounts: DEFAULT_AC
             };
             this.dbService.insertFreshData(this.activeCompanyForDb);
             // slice default menus and account on small screen
