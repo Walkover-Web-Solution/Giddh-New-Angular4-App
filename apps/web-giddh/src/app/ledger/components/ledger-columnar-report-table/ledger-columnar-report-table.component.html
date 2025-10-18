@@ -202,6 +202,7 @@
                     (page)="handlePageEvent($event)"
                     aria-label="Select page of columnar report"
                 ></mat-paginator>
+                <section class="mr-b8"></section>
             </div>
             <div class="no-data" *ngIf="reportResponse && reportResponse?.totalItems === 0">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
