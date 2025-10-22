@@ -727,13 +727,13 @@ button.btn.btn-filter {
         background-color: var(--bg-primary-color);
     }
 }
-// .select-all-checkbox-wrapper {
-//     align-items: center;
-//     // margin-left: 25px;
-//     // .mat-mdc-checkbox {
-//     //     left: 20px;
-//     // }
-// }
+.select-all-checkbox-wrapper {
+    align-items: center;
+    margin-left: 10px;
+    .mat-mdc-checkbox {
+        left: 20px;
+    }
+}
 .mat-chip-wrapper {
     border: unset;
     margin-top: 20px;

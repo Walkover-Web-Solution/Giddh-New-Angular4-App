@@ -498,14 +498,15 @@
                                 #searchCustomerContainer
                                 (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                             >
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center select-all-checkbox-wrapper">
                                     <mat-checkbox
                                         color="primary"
+                                        class="position-absolute"
                                         *ngIf="selectedCheckedContacts?.length || showSelectAll"
                                         [(ngModel)]="allSelectionModel"
                                         (ngModelChange)="toggleAllSelection(allSelectionModel)"
                                     ></mat-checkbox>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center mr-l1">
                                         <div>
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -534,7 +535,7 @@
                                 [attr.data-title]="localeData?.customer"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column"
+                                class="hover-trigger name-column pd-l1"
                                 [ngClass]="{'hover-trigger--active': selectedCheckedContacts.length}"
                             >
                                 <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
@@ -903,14 +904,15 @@
                                 #searchCustomerContainer
                                 (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                             >
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center select-all-checkbox-wrapper">
                                     <mat-checkbox
                                         color="primary"
+                                        class="position-absolute"
                                         *ngIf="selectedCheckedContacts?.length || showSelectAll"
                                         [(ngModel)]="allSelectionModel"
                                         (ngModelChange)="toggleAllSelection(allSelectionModel)"
                                     ></mat-checkbox>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center mr-l1">
                                         <div>
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -940,7 +942,7 @@
                                 [attr.data-title]="commonLocaleData?.app_vendor_name"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column"
+                                class="hover-trigger name-column pd-l1"
                                 [ngClass]="{'hover-trigger--active': selectedCheckedContacts.length}"
                             >
                                 <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
