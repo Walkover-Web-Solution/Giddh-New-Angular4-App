@@ -88,8 +88,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const path = window.location.pathname || '';
             const search = window.location.search || '';
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
-            // Generate returnUrl for any non-root, non-login-like path
-            if (!isLoginLike && path && path !== '/') {
+            // Generate returnUrl for any non-login-like path (including root path)
+            if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
                 if (PRODUCTION_ENV && !isElectron && !isLocalHost) {
                     const currentUrl = path + search;
@@ -100,7 +100,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                         returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
                     }
                     const regionLogin = this._generalService.getGiddhRegionUrl() + '/login';
-                    const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
+                    const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
                     window.location.href = target;
                 } else {
                     const currentUrl = path + search;
@@ -110,7 +110,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     } else {
                         returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
                     }
-                    if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify') {
+                    if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
                         try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) {}
                         this.router.navigate(['/login'], { queryParams: { returnUrl } });
                     } else {
