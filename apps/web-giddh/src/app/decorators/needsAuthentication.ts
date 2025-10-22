@@ -1,6 +1,6 @@
 import { map, take, takeUntil, tap } from 'rxjs/operators';
 import { AppState } from '../store';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable, NgZone } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { userLoginStateEnum } from '../models/user-login-state';
@@ -12,7 +12,7 @@ export class NeedsAuthentication  {
     constructor(public router: Router, private store: Store<AppState>, private zone: NgZone) {
     }
 
-    public canActivate() {
+    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return this.store.pipe(select(p => p.session.userLoginState), map(p => {
             if (p === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
@@ -31,7 +31,20 @@ export class NeedsAuthentication  {
                 });
             }
             if (p === userLoginStateEnum.notLoggedIn) {
-                this.router.navigate(['/login']);
+                const currentUrl = state?.url || this.router.url || (window.location.pathname + window.location.search);
+                let returnUrl = '';
+                if (currentUrl?.includes('/pages/')) {
+                    returnUrl = currentUrl.split('/pages/')[1];
+                } else if (currentUrl?.startsWith('/')) {
+                    returnUrl = currentUrl.substring(1);
+                } else {
+                    returnUrl = currentUrl;
+                }
+                if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify') {
+                    this.router.navigate(['/login'], { queryParams: { returnUrl } });
+                } else {
+                    this.router.navigate(['/login']);
+                }
             }
             return p === userLoginStateEnum.userLoggedIn;
         }));
