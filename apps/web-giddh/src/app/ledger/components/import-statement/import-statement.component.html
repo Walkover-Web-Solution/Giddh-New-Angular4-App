@@ -132,7 +132,7 @@
                     [matTooltip]="inputData?.commonLocaleData?.app_upload"
                     matTooltipPosition="above"
                     [disabled]="!postRequest.file"
-                    (click)="selectStatement === importStatementType.Voucher ? uploadFile() : importStatement()"
+                    (click)="selectStatement === importStatementType.Voucher ? uploadFile('voucher') : uploadFile('banktransactions')"
                 >
                     {{ inputData?.commonLocaleData?.app_upload }}
                 </button>
