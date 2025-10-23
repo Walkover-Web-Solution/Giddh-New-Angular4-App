@@ -128,7 +128,8 @@
                          <button
                             mat-stroked-button
                             class="btn-stroked-icon"
-                            (click)="emitExpand(true)"
+                            (click)="emitExpand(!expandAll)"
+                            type="button"
                             [matTooltip]="expandAll ? commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all"
                             matTooltipPosition="above"
                          >
