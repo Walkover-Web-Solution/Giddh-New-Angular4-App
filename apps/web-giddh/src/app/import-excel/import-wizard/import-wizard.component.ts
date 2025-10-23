@@ -9,7 +9,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { CommonActions } from '../../actions/common.actions';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
-import { VoucherImportType, VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { ImportStatementType, VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
     selector: 'import-wizard',
@@ -119,14 +119,19 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(voucherResponse => {
-            if (voucherResponse) {
+        this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const type = this.getImportType();
                 const requestObject = {
                     accountUniqueName: this.voucherResponse.accountUniqueName ?? "",
                     subType: "VOUCHER",
-                    type: this.voucherResponse.accountUniqueName ? VoucherImportType.AccountWiseImport : VoucherImportType.VoucherWiseImport,
+                    type: type,
                     isHeaderProvided: this.voucherResponse.isHeaderProvided,
                     voucherType: this.voucherResponse.selectVoucher ?? ""
+                }
+                if (this.entity === ImportStatementType.Entries || this.entity === ImportStatementType.Master || this.entity === ImportStatementType.Stock) {
+                    requestObject.subType = '';
+                    requestObject.voucherType = '';
                 }
                 this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
             }
@@ -166,47 +171,18 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public onFileUpload(data: any) {
-        if ([VoucherType.AccountWise, VoucherType.VoucherWise].includes(this.entity as VoucherType)) {
+    /**
+     * Handles file upload for voucher import
+     *
+     * @param {any} data
+     * @memberof ImportWizardComponent
+     */
+    public onFileUpload(data: any): void {
+        if ([VoucherType.AccountWise, VoucherType.VoucherWise, ImportStatementType.Stock, ImportStatementType.BankTransactions, ImportStatementType.Entries, ImportStatementType.Master].includes(this.entity as VoucherType || ImportStatementType.Stock || ImportStatementType.BankTransactions || ImportStatementType.Entries || ImportStatementType.Master)) {
             this.voucherResponse = data;
             this.ledgerComponentStore.getSignedUrl(this.voucherResponse.file.name);
             return;
         }
-        this.isUploadInProgress = true;
-        this.currentBranch = data.branchUniqueName;
-        this.excelState.requestState = ImportExcelRequestStates.UploadFileInProgress;
-
-        const importType = this.getImportType();
-
-        this.importExcelService.uploadFile(importType, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isUploadInProgress = false;
-            if (response?.status === "success" && response.body) {
-                this.excelState.requestState = ImportExcelRequestStates.UploadFileSuccess;
-                this.excelState.importExcelData = { ...response.body, isHeaderProvided: data.isHeaderProvided };
-
-                this.mappedData = {
-                    ...this.excelState.importExcelData,
-                    data: {
-                        items: this.excelState.importExcelData?.data?.items.map(p => {
-                            p.row = p.row.map((pr, index) => {
-                                pr.columnNumber = index?.toString();
-                                return pr;
-                            });
-                            return p;
-                        }),
-                        numRows: 0,
-                        totalRows: 0
-                    }
-                };
-
-                this.dataChanged(this.excelState);
-            } else {
-                this.excelState.requestState = ImportExcelRequestStates.UploadFileError;
-                this.excelState.importExcelData = null;
-                this.dataChanged(this.excelState);
-                this.toaster.errorToast(response?.message);
-            }
-        });
     }
 
     public onContinueUpload(e) {
