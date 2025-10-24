@@ -324,7 +324,7 @@
                 </form>
             </section>
             <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(adjustInventoryInProgress$ | async)">
-                <p>{{ commonLocaleData?.app_no_data_found }}</p>
+                <no-data [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
             </div>
             <div
                 *ngIf="adjustInventoryListRequest.totalItems > pageSizeOptions[0] && showData && !(adjustInventoryInProgress$ | async)"
