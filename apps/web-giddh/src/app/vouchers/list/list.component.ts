@@ -492,13 +492,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 const templateType =
                     this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
                         : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
-
-                if (this.urlVoucherType === VoucherTypeEnum.purchase) {
-                    this.fetchTemplates(VoucherTypeEnum.purchase_bill);
-                    this.fetchAllCreatedTemplates(VoucherTypeEnum.purchase_bill);
-                } else {
-                    this.fetchTemplates(templateType);
-                    this.fetchAllCreatedTemplates(templateType);
+                if (this.activeModule === 'templates') {
+                    if (this.urlVoucherType === VoucherTypeEnum.purchase) {
+                        this.fetchTemplates(VoucherTypeEnum.purchase_bill);
+                        this.fetchAllCreatedTemplates(VoucherTypeEnum.purchase_bill);
+                    } else {
+                        this.fetchTemplates(templateType);
+                        this.fetchAllCreatedTemplates(templateType);
+                    }
                 }
                 setTimeout(() => {
                     if (this.urlVoucherType === VoucherTypeEnum.purchase) {
@@ -2441,12 +2442,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public getLedgersOfInvoice(): void {
-        this.fetchLedgers();
-
         if (this.isLedgerDataEmpty()) {
             this.decrementPageIfNeeded();
-            this.fetchLedgers();
         }
+        this.fetchLedgers();
 
         this.selectedPendingVouchers = [];
     }

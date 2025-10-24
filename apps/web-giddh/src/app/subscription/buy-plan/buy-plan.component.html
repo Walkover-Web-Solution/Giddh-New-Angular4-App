@@ -1099,7 +1099,7 @@
                                 aria-label="next"
                                 color="primary"
                                 class="w-100"
-                                (click)="nextStepForm(); setFinalAmount()"
+                                (click)="nextStepForm()"
                                 *ngIf="selectedStep === 0"
                             >
                                 {{ localeData?.continue_billing_account }}
@@ -1109,7 +1109,7 @@
                                 aria-label="next-step"
                                 color="primary"
                                 class="w-100"
-                                (click)="nextStepForm(); setFinalAmount()"
+                                (click)="nextStepForm()"
                                 *ngIf="selectedStep === 1"
                             >
                                 {{ localeData?.continue_review }}
