@@ -15,6 +15,12 @@ export class NeedsAuthentication  {
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         return this.store.pipe(select(p => p.session.userLoginState), map(p => {
             if (p === userLoginStateEnum.newUserLoggedIn) {
+                // Check if we're already on a subscription page to prevent infinite loop
+                const currentUrl = state?.url || this.router.url || (window.location.pathname + window.location.search);
+                if (currentUrl?.includes('/user-details/subscription')) {
+                    return true; // Already on subscription page, allow access
+                }
+                
                 this.zone.run(() => {
                     this.store.pipe(
                         select(state => state.session.user),
@@ -29,6 +35,7 @@ export class NeedsAuthentication  {
                         })
                     ).subscribe();
                 });
+                return false; // Block current navigation, redirect will happen
             }
             if (p === userLoginStateEnum.notLoggedIn) {
                 const currentUrl = state?.url || this.router.url || (window.location.pathname + window.location.search);
@@ -45,6 +52,7 @@ export class NeedsAuthentication  {
                 } else {
                     this.router.navigate(['/login']);
                 }
+                return false;
             }
             return p === userLoginStateEnum.userLoggedIn;
         }));
