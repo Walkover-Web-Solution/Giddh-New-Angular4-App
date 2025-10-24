@@ -4,7 +4,8 @@ import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS,
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AdjustInventoryListComponentStore } from './utility/adjust-inventory-list.store';
-import { debounceTime, distinctUntilChanged, ReplaySubject, take, takeUntil } from 'rxjs';
+import { ReplaySubject, combineLatest } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { AdjustInventoryListResponse, InventorytAdjustReportQueryRequest } from '../../../models/api-models/Inventory';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -132,15 +133,22 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.initForm();
 
-        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params?.type) {
-                this.inventoryType = params?.type.toLowerCase();
-                this.getAllAdjustReports(true);
+        // Combine both route params and universal date observables to prevent duplicate API calls
+        combineLatest([this.route.params, this.componentStore.universalDate$]).pipe(
+            debounceTime(500),
+            takeUntil(this.destroyed$)
+        ).subscribe(([params, dateObj]) => {
+            // Skip initial emission with both null values
+            if (!params && !dateObj) {
+                return;
             }
-        });
 
-        /** Universal date */
-        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            // Handle route params change
+            if (params?.type) {
+                this.inventoryType = params.type.toLowerCase();
+            }
+
+            // Handle universal date change
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -149,8 +157,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.adjustInventoryListRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.adjustInventoryListRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.getAllAdjustReports(false);
             }
+            this.getAllAdjustReports(false);
         });
 
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
@@ -471,12 +479,12 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @param {boolean} isOpen - Whether to open or close the datepicker
      * @memberof AdjustInventoryListComponent
      */
-       public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (isOpen) {            
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
-         } else {
+        } else {
             this.universalDatepickerTrigger?.closeMenu();
-         }
+        }
     }
 
     /**

@@ -764,7 +764,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
-        observableCombineLatest([this.universalDate$, this.route.params, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+        observableCombineLatest([this.universalDate$, this.route.params, this.todaySelected$]).pipe(debounceTime(500), takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
 
             if (!Array.isArray(resp[0])) {
                 return;
@@ -1200,7 +1200,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 } else {
                     this.getTransactionData();
                 }
-                this.getTransactionData();
                 this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
             }
         });
@@ -2002,7 +2001,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(date[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(date[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
-        this.getTransactionData();
         this.getLedgerStatementViewGridColumnsValue();
     }
 
