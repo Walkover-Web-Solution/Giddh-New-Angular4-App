@@ -13,7 +13,7 @@
     }
 }
 
-.invoice-preview-wrapper {
+:host ::ng-deep .invoice-preview-wrapper {
     height: calc(100vh - 150px);
 
     .preview-list {
@@ -24,6 +24,13 @@
             &:hover,
             &.active {
                 background-color: var(--color-light-gray);
+
+                .text-primary {
+                    color: var(--theme-primary-color) !important;
+                }
+                 .text-default {
+                    color: var(--color-black) !important;
+                }
             }
         }
     }
@@ -33,9 +40,9 @@
         overflow-y: auto;
 
         .back-button {
-            right:5px;
-            top:5px;
-            z-index:99 !important;
+            right: 5px;
+            top: 5px;
+            z-index: 99 !important;
         }
 
         .account-details-wrapper {

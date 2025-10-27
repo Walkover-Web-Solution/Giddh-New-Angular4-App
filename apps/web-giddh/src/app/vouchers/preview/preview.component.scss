@@ -9,7 +9,7 @@
     }
 }
 
-.invoice-preview-wrapper {
+:host ::ng-deep .invoice-preview-wrapper {
     display: flex;
     height: calc(100vh - (var(--header-height) + 30px));
 
@@ -23,6 +23,13 @@
             &:hover,
             &.active {
                 background-color: var(--color-light-gray);
+
+                .text-primary {
+                    color: var(--theme-primary-color) !important;
+                }
+                 .text-default {
+                    color: var(--color-black) !important;
+                }
             }
         }
     }
@@ -79,7 +86,7 @@ min-width: 36px;
                 li {
                     &:not(:last-child) {
                         &::after {
-                            content: '';
+                            content: "";
                             position: absolute;
                             top: 20px;
                             left: -10px;

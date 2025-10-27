@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete()">
     <hamburger-menu class="position-absolute"></hamburger-menu>
     <div class="vouchers bg-light-gray">
-        <mat-card class="container-lg mb-5 mt-4">
+        <mat-card class="container-lg mt-4">
             <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
                 <mat-card-content>
                     <div class="w200 mr-b15" *ngIf="rowData">
@@ -1987,6 +1987,7 @@
                 </mat-card-content>
             </form>
         </mat-card>
+        <section class="mr-b8"></section>
     </div>
 </ng-container>
 
