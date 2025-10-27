@@ -714,7 +714,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public ngAfterViewInit(): void {
-        this.stepperIcon._getIndicatorType = () => 'number';
+        // Use setTimeout to ensure stepper is fully initialized
+        setTimeout(() => {
+            if (this.stepperIcon) {
+                this.stepperIcon._getIndicatorType = () => 'number';
+                // Force change detection to update the stepper
+                this.changeDetection.detectChanges();
+            }
+        }, 0);
     }
 
     /**
