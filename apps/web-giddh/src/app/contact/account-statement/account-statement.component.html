@@ -371,9 +371,9 @@
                                 <giddh-page-loader class="spinner-container position-absolute"></giddh-page-loader>
                             </div>
                             <div class="no-data" *ngIf="!isLoading && !accountListData?.length">
-                                <p class="font-size-16">
+                                <h2>
                                     {{ localeData?.no_account_statements_found }}
-                                </p>
+                                </h2>
                             </div>
                         </div>
                         <mat-paginator

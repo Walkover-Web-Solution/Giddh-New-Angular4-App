@@ -525,12 +525,12 @@
                 class="no-data"
                 *ngIf="(stockReport && stockReport.count < 1 && !stockReportInProcess) || stockNotFoundMessage"
             >
-                <p [class.stock-not-found]="stockNotFoundMessage">
+                <h2 [class.stock-not-found]="stockNotFoundMessage">
                     {{ stockNotFoundMessage ? stockNotFoundMessage : "No entries found within given criteria." }}
-                </p>
-                <p class="p-0" [class.stock-not-found]="stockNotFoundMessage">
+                </h2>
+                <h2 class="p-0" [class.stock-not-found]="stockNotFoundMessage">
                     {{ stockNotFoundMessage ? stockNotFoundMessage : "Do search with some other dates" }}
-                </p>
+                </h2>
             </div>
         </div>
     </section>

@@ -872,7 +872,7 @@
     </section>
     <section class="no-logs" *ngIf="(auditLogs$ | async)?.length < 1">
         <div class="no-data">
-            <p>{{ localeData?.no_results_found }}</p>
+            <h2>{{ localeData?.no_results_found }}</h2>
             <p>{{ localeData?.no_results_note }}</p>
         </div>
     </section>

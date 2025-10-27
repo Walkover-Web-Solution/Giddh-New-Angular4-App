@@ -45,7 +45,7 @@
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="no-data" *ngIf="!warehouses?.length && !showLoader">
-                <p>{{ localeData?.no_warehouse_found }}</p>
+                <h2>{{ localeData?.no_warehouse_found }}</h2>
             </div>
             <div *ngIf="!showLoader" class="row warehouse-box">
                 <div

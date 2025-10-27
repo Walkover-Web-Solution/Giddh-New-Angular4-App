@@ -3662,7 +3662,7 @@ select.form-control {
     display: block;
     font-size: var(--font-size-15);
     font-weight: 500;
-    // color: var(--color-black);
+    color: var(--theme-foreground-color);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;

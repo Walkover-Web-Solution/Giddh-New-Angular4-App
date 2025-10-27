@@ -26,6 +26,6 @@
         *ngIf="!(showLoader | async) && !(reportDataList$ | async)"
         class="no-data"
     >
-        <p>{{ localeData?.no_data_found }}</p>
+        <h2>{{ localeData?.no_data_found }}</h2>
     </div>
 </ng-container>

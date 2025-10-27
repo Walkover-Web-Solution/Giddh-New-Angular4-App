@@ -58,7 +58,7 @@
                         </div>
                         <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mr-t2">
                             <div class="no-data">
-                                <p>{{ localeData?.no_branch_found }}</p>
+                                <h2>{{ localeData?.no_branch_found }}</h2>
                             </div>
                         </div>
                         <div *ngIf="showLoader" class="spinner2">

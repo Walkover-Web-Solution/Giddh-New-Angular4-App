@@ -19,7 +19,7 @@
 .mdc-radio--disabled, .mdc-radio--disabled+label,
 .mdc-switch--disabled, .mdc-switch--disabled+label,
 .mat-sort-header-disabled .mat-sort-header-container 
-.form-control:disabled, .form-control:read-only {
+.form-control:disabled {
     @include cursor(not-allowed);
     @include pointer-events(auto);
 }

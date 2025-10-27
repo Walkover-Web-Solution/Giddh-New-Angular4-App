@@ -127,8 +127,8 @@
                         <!-- No Data Found Message -->
                         <ng-template #noData>
                             <div class="no-data">
-                                <p *ngIf="!getFormControl('taxNumber')?.value">{{ localeData?.no_sales_tax_available }}</p>
-                                <p *ngIf="getFormControl('taxNumber')?.value">{{ commonLocaleData?.app_no_result_found }}</p>
+                                <h2 *ngIf="!getFormControl('taxNumber')?.value">{{ localeData?.no_sales_tax_available }}</h2>
+                                <h2 *ngIf="getFormControl('taxNumber')?.value">{{ commonLocaleData?.app_no_result_found }}</h2>
                             </div>
                         </ng-template>
 

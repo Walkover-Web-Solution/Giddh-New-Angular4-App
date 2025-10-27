@@ -474,9 +474,9 @@
                                 *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
                                 class="no-data no-report"
                             >
-                                <p>
+                                <h2>
                                     {{ isKenyaCompany ? localeData?.no_vat_available : localeData?.no_trn_available }}
-                                </p>
+                                </h2>
                             </div>
                         </ng-container>
                         <!-- uk-vrn-report -->
@@ -576,7 +576,7 @@
                                 *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
                                 class="no-data no-report"
                             >
-                                <p>{{ localeData?.no_vrn_available }}</p>
+                                <h2>{{ localeData?.no_vrn_available }}</h2>
                             </div>
                         </ng-container>
                         <ng-container *ngIf="isZimbabweCompany && !isLoading">
@@ -911,7 +911,7 @@
                                 *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
                                 class="no-data no-report"
                             >
-                                <p>{{ localeData?.no_vat_available }}</p>
+                                <h2>{{ localeData?.no_vat_available }}</h2>
                             </div>
                         </ng-container>
                         <div *ngIf="isLoading">

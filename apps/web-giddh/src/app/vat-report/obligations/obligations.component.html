@@ -123,11 +123,11 @@
                                 </restricted-module-message>
                             </div>
                             <div class="no-data"  *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
-                                <p>{{ commonLocaleData?.app_no_data_found }}</p>
+                                <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
                             </div>
                         </div>
                         <div class="no-data" *ngIf="hasTaxNumber === false">
-                            <p>{{ localeData?.no_vrn_available }}</p>
+                            <h2>{{ localeData?.no_vrn_available }}</h2>
                         </div>
                     </section>
                 </div>

@@ -12,7 +12,7 @@
             </div>
             <div class="mr-t15 import-data-table" *ngIf="!isLoading">
                 <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">
-                    <p>{{ localeData?.import_status_unavailable }}</p>
+                    <h2>{{ localeData?.import_status_unavailable }}</h2>
                 </div>
                 <div class="row import-data-row">
                     <div class="col-lg-6 col-md-12 mr-b15" *ngFor="let item of importStatusResponse?.results">

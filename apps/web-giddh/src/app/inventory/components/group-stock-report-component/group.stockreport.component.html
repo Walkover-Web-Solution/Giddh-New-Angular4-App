@@ -631,12 +631,12 @@
                     groupNotFoundMessage
                 "
             >
-                <p [class.group-not-found]="groupNotFoundMessage">
+                <h2 [class.group-not-found]="groupNotFoundMessage">
                     {{ groupNotFoundMessage ? groupNotFoundMessage : "No entries found within given criteria." }}
-                </p>
-                <p class="p-0" [class.group-not-found]="groupNotFoundMessage">
+                </h2>
+                <h2 class="p-0" [class.group-not-found]="groupNotFoundMessage">
                     {{ groupNotFoundMessage ? groupNotFoundMessage : "Do search with some other dates" }}
-                </p>
+                </h2>
             </div>
         </div>
 

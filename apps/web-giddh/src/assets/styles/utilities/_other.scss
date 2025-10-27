@@ -673,3 +673,22 @@
 [hidden].d-inline-flex {
     display: none !important;
 }
+
+.dropdown-bg {
+    background-color: var(--color-white);
+    width: 20px;
+    height: 20px;
+    z-index: 8;
+    right: 5px;
+    top: 10px;
+
+    .arrow-dropdown {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid var(--color-black) !important;
+        top: 8px;
+        right: 4px;
+    }
+}

@@ -584,8 +584,8 @@
             </div>
         </div>
         <div class="no-data-inventory" *ngIf="!isLoading && !dataSource?.length">
-            <p>{{ localeData?.reports?.no_entries_found_1 }}</p>
-            <p>{{ localeData?.reports?.no_entries_found_2 }}</p>
+            <h2>{{ localeData?.reports?.no_entries_found_1 }}</h2>
+            <h2>{{ localeData?.reports?.no_entries_found_2 }}</h2>
         </div>
         <div class="no-data" *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
