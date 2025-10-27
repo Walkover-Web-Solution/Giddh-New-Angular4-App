@@ -65,6 +65,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             currencyName: '',
             currencyCode: ''
         },
+        baseCurrencySymbol: '',
+        baseCurrency: '',
         businessTypes: [],
         businessType: '',
         nameAlias: '',
@@ -343,6 +345,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                             currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                         },
+                        baseCurrencySymbol: response.baseCurrencySymbol,
+                        baseCurrency: response.baseCurrency,
                         companyName: response.name,
                         balanceDecimalPlaces: response.balanceDecimalPlaces,
                         balanceDisplayFormat: response.balanceDisplayFormat,
@@ -1171,6 +1175,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     currencyCode: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.code : '',
                     currencyName: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.symbol : ''
                 },
+                baseCurrencySymbol: profileObj.baseCurrencySymbol,
+                baseCurrency: profileObj.baseCurrency,
                 businessType: profileObj.businessType,
                 balanceDecimalPlaces: profileObj.balanceDecimalPlaces,
                 balanceDisplayFormat: profileObj.balanceDisplayFormat,

@@ -35,6 +35,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
             currencyName: '',
             currencyCode: ''
         },
+        baseCurrencySymbol: '',
+        baseCurrency: '',
         businessTypes: [],
         businessType: '',
         nameAlias: '',
@@ -187,6 +189,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
                 currencyName: [profileData?.country?.currencyName ?? ''],
                 currencyCode: [profileData?.country?.currencyCode ?? '']
             }),
+            baseCurrencySymbol: [profileData?.baseCurrencySymbol ?? ''],
+            baseCurrency: [profileData?.baseCurrency ?? ''],
             businessTypes: [profileData?.businessTypes ?? []],
             businessType: [profileData?.businessType ?? ''],
             nameAlias: [profileData?.nameAlias ?? ''],

@@ -40,9 +40,9 @@
         margin: auto;
     }
 
-    .button-wrapper {
-        margin-bottom: 5px !important;
-    }
+    // .button-wrapper {
+    //     margin-bottom: 5px !important;
+    // }
 
     .add-button {
         border: none;
@@ -59,7 +59,6 @@
         padding-top: 4px !important;
         margin: auto;
         margin-left: 3px;
-        margin-top: 5px;
         margin-right: 0 !important;
         padding-bottom: 4px;
     }
@@ -83,11 +82,8 @@
 
     .activity-filter-wrap {
         align-items: center;
-        padding-bottom: 9px;
-        padding-top: 9px;
         display: flex;
         flex-wrap: wrap;
-        padding-left: 9px;
     }
 
     /* UNUSED COMPONENT CLASS: filter-button - Auto-commented by script

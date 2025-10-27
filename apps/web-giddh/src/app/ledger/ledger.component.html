@@ -163,7 +163,7 @@
                                         class="cursor-pointer mr-l1 clear-filter-btn"
                                         *ngIf="(searchText || isAdvanceSearchImplemented) && isTabletScreen && (ledgerView == ledgerViewEnum.StatementView)"
                                         href="javascript:;"
-                                        (click)="resetAdvanceSearch()"
+                                        (click)="resetAdvanceSearch(); getTransactionData()"
                                         [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                         [matTooltipPosition]="'above'"
                                     >
@@ -225,7 +225,7 @@
                                     id="clear-filter"
                                     *ngIf="isAdvanceSearchImplemented && !isTabletScreen"
                                     href="javascript:;"
-                                    (click)="resetAdvanceSearch()"
+                                    (click)="resetAdvanceSearch(); getTransactionData()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                     [matTooltipPosition]="'above'"
                                 >

@@ -5,7 +5,16 @@
         <mat-card class="container-lg mb-5 mt-4">
             <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
                 <mat-card-content>
-
+                    <div class="w200 mr-b15" *ngIf="rowData">
+                        <reactive-dropdown-field 
+                            [label]="commonLocaleData?.app_select_voucher"
+                            [options]="transactionOptions"
+                            (selectedOption)="selectVoucherType($event?.value);"
+                            (onClear)="selectVoucherType('');"
+                            [labelValue]="selectedVoucherType"
+                            [placeholder]="commonLocaleData?.app_select_voucher">
+                        </reactive-dropdown-field>
+                    </div>
                     <div class="vouchers-title d-flex align-items-center" [ngClass]="{'pd-b1': ocrDataEnabled}">
                         <div class="d-flex align-items-center">
                             <p [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}"
@@ -259,7 +268,9 @@
                                                             account?.countryName }}</span>
                                                     </div>
                                                     <div class="state-field w-50 border-bottom" formGroupName="state">
-                                                        <reactive-dropdown-field [cssClass]="'border-none w-100'"
+                                                        <reactive-dropdown-field 
+                                                            [cssClass]="'border-0 w-100'"
+                                                            [forceClear]="forceClear"
                                                             formControlName="code" [name]="'billingStateCode'"
                                                             [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                             [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -347,7 +358,9 @@
                                                             account?.countryName }}</span>
                                                     </div>
                                                     <div class="state-field w-50 border-bottom" formGroupName="state">
-                                                        <reactive-dropdown-field [cssClass]="'border-none w-100'"
+                                                        <reactive-dropdown-field 
+                                                            [cssClass]="'border-0 w-100'"
+                                                            [forceClear]="forceClear"
                                                             formControlName="code" [name]="'shippingStateCode'"
                                                             [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                             [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -518,7 +531,9 @@
                                                     <span>{{ company?.countryName }}</span>
                                                 </div>
                                                 <div class="state-field w-50 border-bottom" formGroupName="state">
-                                                    <reactive-dropdown-field [cssClass]="'border-none w-100'"
+                                                    <reactive-dropdown-field 
+                                                        [cssClass]="'border-0 w-100'"
+                                                        [forceClear]="forceClear"
                                                         formControlName="code" [name]="'companyBillingStateCode'"
                                                         [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                         [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -599,7 +614,9 @@
                                                     <span>{{ company?.countryName }}</span>
                                                 </div>
                                                 <div class="state-field w-50 border-bottom" formGroupName="state">
-                                                    <reactive-dropdown-field [cssClass]="'border-none w-100'"
+                                                    <reactive-dropdown-field 
+                                                        [cssClass]="'border-0 w-100'"
+                                                        [forceClear]="forceClear"
                                                         formControlName="code" [name]="'companyShippingStateCode'"
                                                         [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                         [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"

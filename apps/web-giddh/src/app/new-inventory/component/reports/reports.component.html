@@ -22,12 +22,12 @@
                 [stockReportRequestExport]="stockReportRequestExport"
                 [advanceSearchModalResponse]="advanceSearchModalResponse"
                 [pullUniversalDate]="pullUniversalDate"
-                (filters)="getSelectedFilters($event)"
+                (filters)="filtersSubject$.next($event)"
                 (resetFilters)="resetFilter()"
                 [searchPage]="reportType"
                 (isLoading)="isLoading = $event"
                 (selectedColumns)="getCustomiseHeaderColumns($event)"
-                (selectedDynamicColumns)="getCustomiseDynamicHeaderColumns($event)"
+                (selectedDynamicColumns)="dynamicColumnsSubject$.next($event)"
             ></report-filters>
         </div>
         <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">
@@ -722,6 +722,7 @@
                             [hidePageSize]="false"
                             (page)="handlePageEvent($event)"
                         ></mat-paginator>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </div>

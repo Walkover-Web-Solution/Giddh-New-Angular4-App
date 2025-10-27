@@ -490,6 +490,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isMainVoucher: boolean = false;
     /** Holds OCR voucher type */
     public ocrVoucherType: string = '';
+    /** This will use for ocr type */
+    public ocrType: string = "";
+    /** This will use for transaction options */
+    public transactionOptions: Array<{ label: string; value: string }> = [];
+    /** This will use for ocr voucher type */
+    public selectedVoucherType: string = "";
+    /** This will use for row data */
+    public rowData: any = null;
+    /** This will use for force clear reactive dropdown */
+    public forceClear: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -747,6 +757,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
             });
+
+        this.aiOcrService.ocrListToCreate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.transactionOptions = response.list;
+                this.selectedVoucherType = this.titleCasePipe.transform(response.type);
+                this.rowData = response.row;
+            }
+        });
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -1680,7 +1698,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
         }
-
         this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
         let voucherType = this.currentVoucherFormDetails;
         if (response && voucherType) {
@@ -3302,7 +3319,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFormGroup
             .get("otherTax.amount")
             .patchValue(giddhRoundOff((taxableValue * tax?.taxDetail[0]?.taxValue) / 100, this.highPrecisionRate));
-            
+
         entryFormGroup.get("otherTax.calculationMethod").patchValue(calculationMethod);
         this.calculateReceiptPaymentAmount(entryFormGroup, isUpdate);
         this.changeDetection.detectChanges();
@@ -5303,8 +5320,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isCashInvoice) {
             this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
         }
+        this.forceClear = true;
 
         setTimeout(() => {
+             this.forceClear = false;
             this.openAccountDropdown = openAccountDropdown;
         }, 200);
     }
@@ -6212,7 +6231,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             let baseRate: number;
             if (response.stock.variant?.unitRates?.length) {
-                baseRate = this.getRateByUnit(transactionFormGroup.get("stock.stockUnit.uniqueName")?.value,response.stock.variant?.unitRates);
+                baseRate = this.getRateByUnit(transactionFormGroup.get("stock.stockUnit.uniqueName")?.value, response.stock.variant?.unitRates);
             } else {
                 baseRate = response.stock.rate;
             }
@@ -6341,15 +6360,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.checkIfEntriesHasStock();
     }
 
-     /**
-     * Get rate by unit
-     *
-     * @param {string} stockUnitUniqueName
-     * @param {any[]} unitRates
-     * @returns {number}
-     * @memberof VoucherCreateComponent
-     */
-     private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
+    /**
+    * Get rate by unit
+    *
+    * @param {string} stockUnitUniqueName
+    * @param {any[]} unitRates
+    * @returns {number}
+    * @memberof VoucherCreateComponent
+    */
+    private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
         return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
     }
 
@@ -6931,5 +6950,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private isSalesPersonExists(uniqueName: string, salesPersonList: IOption[]): boolean {
         if (!uniqueName || !salesPersonList?.length) return false;
         return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
+    }
+
+    /**
+      * Select voucher type
+      *
+      * @private
+      * @param {string} type - The unique name to search for
+      * @memberof VoucherCreateComponent
+      */
+    public selectVoucherType(type: string): void {
+        this.selectedVoucherType = type?.toLowerCase();
+        const req = {
+            row: this.rowData,
+            type: this.selectedVoucherType,
+            list: this.transactionOptions
+        }
+        this.voucherType = this.vouchersUtilityService.parseVoucherType(req.type);
+        this.getVoucherType();
+        this.invoiceForm.get("type").patchValue(this.voucherType);
+        this.aiOcrService.ocrListToCreate$.next(req);
     }
 }

@@ -3,7 +3,7 @@
 </div>
 <div class="journal-voucher" *ngIf="!isLoading">
     <form autocomplete="off" novalidate [formGroup]="journalVoucherForm">
-        <div class="bg-wrap">
+        <div class="mat-app-background">
             <div class="d-flex justify-content-between align-items-center w-100 pd-t2">
                 <div class="text-left mr-b1" (clickOutside)="showFromDatePicker = false">
                     <span class="voucher-heading font-size-16">{{
@@ -323,7 +323,7 @@
             {{ localeData?.ledger_accounts_list }}
         </p>
         <p class="pd-1 border-bottom text-primary" *ngIf="selectedField === 'stock'">{{ localeData?.stock_items_list }}</p>
-        <div class="h-100 bg-wrap">
+        <div class="h-100 mat-app-background">
             <ul *ngIf="inputForList?.length === 0" class="grp-list group-list-no-found users-last-list">
                 <li>
                     <a href="javascript:void(0)"> {{ commonLocaleData?.app_no_result_found }}</a>
@@ -371,7 +371,7 @@
             <h3 class="text-primary">{{ localeData?.discount_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeDiscountSidebar()"></i>
         </div>
-        <div [style.width]="width" class="h-100 bg-wrap">
+        <div [style.width]="width" class="h-100 mat-app-background">
             <div #dd class="menu box-shadow-none border-left-none" *ngIf="showDiscountSidebar" class="h-100">
                 <div class="h-100">
                     <ul
@@ -426,7 +426,7 @@
             <h3 class="text-primary">{{ localeData?.tax_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeTaxSidebar()"></i>
         </div>
-        <div [style.width]="width" class="h-100 bg-wrap">
+        <div [style.width]="width" class="h-100 mat-app-background">
             <div #dd class="menu box-shadow-none border-left-none" *ngIf="showTaxSidebar" class="h-100">
                 <div class="h-100">
                     <ul
