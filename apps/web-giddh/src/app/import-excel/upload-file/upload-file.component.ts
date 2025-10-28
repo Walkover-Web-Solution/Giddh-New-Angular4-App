@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -55,7 +55,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Default result count for account searches */
-    public defaultCount: number = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
+    public defaultCount: number = API_BULK_FETCH_LIMIT;
     /** Stores account unique name */
     public accountUniqueName: string;
     /** Stores the search results for accounts */

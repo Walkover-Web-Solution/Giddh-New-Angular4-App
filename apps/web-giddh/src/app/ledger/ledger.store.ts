@@ -81,6 +81,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
         );
     });
 
+
     /**
      * Upload voucher
      *

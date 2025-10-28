@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { debounceTime, filter, Observable, ReplaySubject, skip, take, takeUntil, tap } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../../shared/helpers/defaultDateFormat';
-import { ASIDE_PANE_CONFIG, DATE_REGEX, IOption } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, DATE_REGEX, IOption } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
@@ -478,6 +478,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200, archive: '' } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
     }
 }

@@ -5,7 +5,6 @@
         <mat-card class="container-lg">
             <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
                 <mat-card-content>
-
                     <div class="vouchers-title d-flex align-items-center" [ngClass]="{'pd-b1': ocrDataEnabled}">
                         <div class="d-flex align-items-center">
                             <h1 [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}"
@@ -862,6 +861,7 @@
                                                                             : localeData?.select_account }}</div>
                                                                     </ng-container>
                                                                     <reactive-dropdown-field
+                                                                        #accountDropdown
                                                                         (click)="setUserManuallyClicked()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
                                                                         (keydown.enter)="$event.preventDefault()"

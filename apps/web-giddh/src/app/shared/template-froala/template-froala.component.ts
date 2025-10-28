@@ -453,11 +453,12 @@ export class TemplateFroalaComponent implements OnInit {
             this.froalaEditor.events.on(
                 'keydown',
                 (e) => {
-                    if (e.which == FroalaEditor.KEYCODE.ENTER && this.froalaTribute?.isActive) {
+                    console.log("Triggered : ", e);         
+                    if ((e.which == FroalaEditor.KEYCODE.ENTER || e.which == FroalaEditor.KEYCODE.BACKSPACE) && this.froalaTribute?.isActive) {
+                        console.log("Run : ", e);  
                         return false;
                     }
-                },
-                true
+                }
             );
         }
     }
@@ -520,13 +521,13 @@ export class TemplateFroalaComponent implements OnInit {
         this.froalaTribute = new Tribute({
             trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
-            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}</span>`
+            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}</span>`
         });
 
         this.subjectTribute = new Tribute({
             trigger: this.froalaEditorTextTrigger,
             values: tributeSuggestions,
-            selectTemplate: (item) => `${this.emailSuggestionPrefix}${item.original.value}${this.emailSuggestionSuffix}`
+            selectTemplate: (item) => `${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}`
         });
         
         if (this.froalaEditor) {

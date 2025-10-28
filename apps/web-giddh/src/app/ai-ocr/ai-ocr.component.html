@@ -68,7 +68,7 @@
                         <mat-button-toggle
                             [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0 || voucherApiVersion === 1"
                             value="create"
-                            (click)="onToggleChange(ocrAction.Create)"
+                             (click)="onToggleChange(ocrAction.Create)"
                             [checked]="selectedToggle === ocrAction.Create"
                         >
                             <div matBadge="{{ countVariable }}" matBadgeOverlap="true">
@@ -168,6 +168,7 @@
                 <ng-container [ngSwitch]="selectedToggle">
                     <ng-container *ngSwitchCase="ocrAction.Create">
                         <giddh-page-loader *ngIf="innerLoading"></giddh-page-loader>
+
                         <ng-container *ngIf="!innerLoading">
                             <ng-container *ngIf="ocrCurrentToken; else noDataFound">
                                 <ai-ocr-create></ai-ocr-create>

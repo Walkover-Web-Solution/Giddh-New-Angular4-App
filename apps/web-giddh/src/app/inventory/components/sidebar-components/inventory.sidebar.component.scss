@@ -3,7 +3,7 @@
     display: none;
 }
 .parent-group > ul > li ul li div {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
 }
 .btn-group.show {
     display: inline-block !important;
@@ -12,7 +12,7 @@
     margin-left: 8px;
     margin-top: -3px;
     background: none;
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     padding: 6px;
     margin-right: 0px !important;
     width: 23px;
@@ -21,11 +21,11 @@
     box-shadow: none;
 }
 .dropdown-menu > li > a:hover {
-    background: var(--color-dark-fog);
+    background: var(--color-border-light);
     cursor: pointer;
 }
 .dropdown-menu > li > a {
-    color: var(--color-blue);
+    color: var(--color-blue-primary);
 }
 span.caret {
     display: none;

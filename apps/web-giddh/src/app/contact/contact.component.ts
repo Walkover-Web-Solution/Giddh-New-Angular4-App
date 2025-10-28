@@ -112,6 +112,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("accountAsideMenuTemplate", { static: true }) public accountAsideMenuTemplate: TemplateRef<any>;
     /** Template reference for aside menu payment modal */
     @ViewChild("paymentAsideMenuTemplate", { static: true }) public paymentAsideMenuTemplate: TemplateRef<any>;
+    /** Template reference for success payment dialog */
+    @ViewChild('successTemplate', { static: true }) public successTemplate: TemplateRef<any>;
+    /** Payment successful message */
+    public paymentSuccessfulMessage: string = '';
     /** Reference for account aside menu dialog */
     public accountAsideMenuDialogRef: MatDialogRef<any>;
     /** Reference for payment aside menu dialog */
@@ -1310,14 +1314,15 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public closeBulkPaymentModel(event: any): void {
         //  if bulk paymemt success then clear all selected contacts lists
-        if (event) {
-            this.clearSelectedContacts(false);
-        }
-        this.isBulkPaymentShow = false;
-        this.selectedAccForPayment = null;
-
         if (this.bulkPaymentModalRef) {
             this.dialog.closeAll();
+            if (event.isPaySuccess) {
+                this.clearSelectedContacts(false);
+                this.paymentSuccessfulMessage = event.paymentSuccessfulMessage;
+                this.dialog.open(this.successTemplate, { panelClass: 'mat-dialog-md' });
+            }
+            this.isBulkPaymentShow = false;
+            this.selectedAccForPayment = null;
         }
     }
 

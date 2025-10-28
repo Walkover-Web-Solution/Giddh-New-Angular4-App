@@ -24,7 +24,7 @@ import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -504,16 +504,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
             if (!this.isSalesPersonExists(this.addAccountForm.get('salesPersonUniqueName').value, salesPersonList)) {
-                let salesPersonName = "";
                 let salesPersonUniqueName = null;
                 if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
                     const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
                     if (salesPerson) {
-                        salesPersonName = salesPerson.label
                         salesPersonUniqueName = salesPerson.value
                     }
                 }
-                this.addAccountForm.get('salesPersonName').patchValue(salesPersonName);
                 this.addAccountForm.get('salesPersonUniqueName').patchValue(salesPersonUniqueName);
             }
         });
@@ -524,13 +521,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         const interval = setInterval(() => {
             const element = document.getElementById('init-contact-add');
             const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-            
+
             if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-add');
                 clearInterval(interval);
             }
         }, 500); // Reduced interval for faster detection
-        
+
         // Add fallback timeout to prevent infinite loop
         setTimeout(() => {
             clearInterval(interval);
@@ -690,7 +687,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public reInitializeMobileField(fieldId: string): void {
         const element = document.getElementById(fieldId);
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-        
+
         if (element && intlTelInput && !this.intl[fieldId]) {
             this.onlyPhoneNumber(fieldId);
         }
@@ -727,13 +724,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         const interval = setInterval(() => {
             const element = document.getElementById('init-contact-portal_' + lastIndex);
             const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-            
+
             if (element && intlTelInput) {
                 this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
                 clearInterval(interval);
             }
         }, 200); // Faster checking for dynamic elements
-        
+
         // Add fallback timeout
         setTimeout(() => {
             clearInterval(interval);
@@ -2024,7 +2021,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public getSalesPersonList(): void {
-        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: 200 } });
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
     }
 
     /**

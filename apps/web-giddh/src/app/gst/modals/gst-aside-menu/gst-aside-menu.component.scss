@@ -37,15 +37,15 @@
     max-width: 760px;
     width: 100%;
     padding: 0;
-    background: var(--color-wild-sand);
+    background: var(--color-light-gray);
 }
 .aside-pane-form {
-    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+    box-shadow: 0px 3px 6px var(--color-shadow-light);
     height: calc(100vh - 65px);
     scroll-behavior: smooth;
 }
 .auth-state {
-    border-bottom: 1px solid var(--color-nero);
+    border-bottom: 1px solid var(--color-black);
 }
 
 @media (max-width: 768px) {

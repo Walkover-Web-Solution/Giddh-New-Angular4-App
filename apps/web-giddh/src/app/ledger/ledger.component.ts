@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, 
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, API_BULK_FETCH_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, TCS_TDS_TAXES_TYPES, PAGE_SIZE_OPTIONS, ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -203,14 +203,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
         page: 0,
-        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+        count: API_BULK_FETCH_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details (required only for passing
      * default search pagination details to Update ledger component) */
     public defaultResultsPaginationData = {
         page: 0,
-        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+        count: API_BULK_FETCH_LIMIT,
         query: '',
     };
     /** No results found label for dynamic search */
@@ -644,8 +644,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.enableAutopaid = false;
         }
 
-        if (!this.generalService.checkIfCssExists("./assets/css/ledgerfont/ledgerfont.css")) {
-            this.generalService.addLinkTag("./assets/css/ledgerfont/ledgerfont.css");
+        if (!this.generalService.checkIfCssExists("./assets/style/ledgerfont/ledgerfont.css")) {
+            this.generalService.addLinkTag("./assets/style/ledgerfont/ledgerfont.css");
         }
         document.querySelector('body').classList.add('ledger-body');
 
@@ -2144,11 +2144,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 page,
                 withStocks,
                 stockAccountUniqueName: encodeURIComponent(accountUniqueName) || undefined,
-                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT
+                count: API_BULK_FETCH_LIMIT
             }
             if (this.isAccountSearchData) {
                 this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (!data?.body?.results?.length || (data?.body?.results?.length && ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT !== data?.body?.count)) {
+                    if (!data?.body?.results?.length || (data?.body?.results?.length && API_BULK_FETCH_LIMIT !== data?.body?.count)) {
                         this.isAccountSearchData = false;
                     }
                     if (data && data.body && data.body.results) {

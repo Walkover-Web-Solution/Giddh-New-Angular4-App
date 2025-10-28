@@ -12,6 +12,7 @@ export default class AppUpdaterV1 {
         autoUpdater.autoDownload = false;
         autoUpdater.on('update-available', () => {
             if (updater) {
+                // Manual check from menu - show confirmation dialog
                 dialog.showMessageBox({
                     type: 'info',
                     title: 'Found Updates',
@@ -27,9 +28,10 @@ export default class AppUpdaterV1 {
                         updater = null;
                     }
                 });
-
+            } else {
+                // Automatic check - download silently without confirmation
+                autoUpdater.downloadUpdate();
             }
-            autoUpdater.downloadUpdate();
         });
         autoUpdater.on('update-not-available', () => {
             if (updater) {
@@ -43,6 +45,7 @@ export default class AppUpdaterV1 {
         });
 
         autoUpdater.on('update-downloaded', (event: UpdateDownloadedEvent) => {
+            this.isUpdateDownloaded = true;
             const dialogOpts: MessageBoxOptions = {
                 type: 'info',
                 buttons: ['Restart', 'Later'],
@@ -52,12 +55,32 @@ export default class AppUpdaterV1 {
             }
             dialog.showMessageBox(dialogOpts).then((returnValue) => {
                 if (returnValue.response === 0) {
+                    // User clicked "Restart"
                     autoUpdater.quitAndInstall();
+                } else if (returnValue.response === 1) {
+                    // User clicked "Later" - do nothing, keep the update downloaded
+                    console.log('User chose to install update later');
                 }
+                // Note: If dialog is closed without clicking any button, returnValue.response will be undefined
+                // In that case, we also do nothing and keep the update downloaded
+            }).catch((error) => {
+                console.error('Error showing update dialog:', error);
             });
         });
 
         autoUpdater.checkForUpdatesAndNotify();
+    }
+
+    /**
+     * Manually install the downloaded update
+     * This can be called if user previously chose "Later" and now wants to install
+     */
+    public installUpdate(): void {
+        if (this.isUpdateDownloaded) {
+            autoUpdater.quitAndInstall();
+        } else {
+            console.warn('No update available to install');
+        }
     }
 }
 

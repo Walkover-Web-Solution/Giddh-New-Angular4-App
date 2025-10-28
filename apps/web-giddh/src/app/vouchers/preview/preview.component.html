@@ -29,8 +29,10 @@
                             [matMenuTriggerFor]="newInvoice"
                             class="invoice-btn width-150"
                         >
-                            <span>{{ localeData?.new_invoice }}</span>
-                            <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            <div class="d-inline-flex align-items-center flex-no-wrap">
+                                <span class="nowrap">{{ localeData?.new_invoice }}</span>
+                                <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            </div>
                         </button>
                         <mat-menu #newInvoice="matMenu" class="width-150">
                             <button mat-menu-item [routerLink]="['/pages/vouchers/cash/create']">
@@ -218,7 +220,7 @@
                             </ng-container>
                             <button
                                 mat-menu-item
-                                (click)="actionVoucher('cancel')"
+                                (click)="openCancelVoucherDialog('cancel')"
                                 *ngIf="[voucherTypeEnum.sales, voucherTypeEnum.purchaseOrder, voucherTypeEnum.creditNote, voucherTypeEnum.debitNote].includes(voucherType)"
                             >
                                 {{ commonLocaleData?.app_payment_status?.cancel }}

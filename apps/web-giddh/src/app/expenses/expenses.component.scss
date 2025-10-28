@@ -3,15 +3,16 @@
     top: -4px;
 }
 .left-expense {
-    width: 400px;
-    box-shadow: 3px 3px 6px var(--color-primary-common-box-shadow);
+    width: 30%;
+    max-width: 400px;
+    box-shadow: 3px 3px 6px var(--color-shadow-light);
     background: var(--color-white);
     position: relative;
     overflow-y: auto;
     max-height: calc(100vh - 135px);
 }
 .main-expense-details {
-    width: 90%;
+    flex: 1;
     overflow-y: auto;
     padding-top: 10px;
     max-height: calc(100vh - 135px);
@@ -25,7 +26,7 @@
 .input-calender > span {
     background: none;
     border-radius: 0px;
-    border-left: 1px solid var(--color-iron) !important;
+    border-left: 1px solid var(--color-silver) !important;
 }
 .input-group-addon {
     display: flex;
@@ -34,21 +35,10 @@
     line-height: 1;
     text-align: center;
     background-color: var(--color-white) !important;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
     border-radius: 0;
     border-right: 0;
     align-items: center;
     justify-content: center;
-    color: var(--color-abbey);
-}
-@media only screen and (max-width: 767px) {
-    .left-expense {
-        width: 100%;
-    }
-    .main-edit-expense {
-        display: block;
-    }
-    .main-expense-details {
-        width: 100%;
-    }
+    color: var(--color-dark-gray);
 }
