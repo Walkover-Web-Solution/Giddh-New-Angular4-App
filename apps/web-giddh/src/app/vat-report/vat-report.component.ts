@@ -11,7 +11,6 @@ import { VatService } from "../services/vat.service";
 import { saveAs } from "file-saver";
 import { SettingsFinancialYearService } from '../services/settings.financial-year.service';
 import { RestrictedModules } from '../app.constant';
-import { BreadCrumbService } from '../services/bread-crum.service';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -79,16 +78,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private cdRef: ChangeDetectorRef,
         private route: Router,
-        private breadCrumbService: BreadCrumbService,
         public settingsFinancialYearService: SettingsFinancialYearService
     ) { }
 
     public ngOnInit() {
-        this.breadCrumbService.setCurrentPathOnBreadCrumbPath({
-            url: '/pages/vat-report',
-            currentPageName: 'VAT-Report',
-            queryParams: {}
-        });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && this.activeCompany?.uniqueName !== activeCompany.uniqueName) {
                 this.activeCompany = activeCompany;
@@ -202,16 +195,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
     * This will redirect to vat report detail page
     *
     * @param {*} section
-    * @param {*} description
     * @memberof VatReportComponent
     */
-    public viewVatReportTransactions(section: string, description: string) {
-        this.breadCrumbService.setCurrentPathOnBreadCrumbPath({
-            url: `/pages/vat-report/transactions/section/${section}`,
-            currentPageName: description,
-            queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber }
-        });
-        this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber, previousPageName: 'VAT-Report', currentPageName: description } });
+    public viewVatReportTransactions(section: string) {
+       this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
     }
 
     /**

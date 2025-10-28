@@ -18,7 +18,16 @@
         </div>
         <div class="container-fluid">
             <div class="pd-t15 d-flex justify-content-end align-items-center">
-                <bread-crumb class="mr-auto" *ngIf="vatReportTransactions.results?.length"></bread-crumb>
+                <div class="mr-auto" *ngIf="vatReportTransactions.results?.length">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="javascript:;" class="text-underline" (click)="navigateToPreviousPage()">VAT-Report</a>
+                        </li>
+                        <li>
+                            <span>{{vatReportTransactions.results[0].description}}</span>
+                        </li>
+                    </ol>
+                </div>
                 <button mat-stroked-button (click)="navigateToPreviousPage()">
                     <i class="fa fa-angle-left font-16 mr-1"></i>
                     <span>{{ commonLocaleData?.app_back }}</span>
