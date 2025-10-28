@@ -102,12 +102,12 @@ export class VatService {
      * @memberof VatService
      */
     public getVatReportTransactions(companyUniqueName: string, request: VatReportTransactionsRequest): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + VAT_API.VIEW_TRANSACTIONS_REPORT;
+        let url = this.config.apiUrl + (request.country === 'GB' ? VAT_API.VIEW_UK_TRANSACTIONS_REPORT : VAT_API.VIEW_TRANSACTIONS_REPORT);
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
-        url = url?.replace(':section', request.section);
+        url = url?.replace(':section', request.country === 'GB' ? `SECTION_${request.section}` : request.section);
         url = url?.replace(':page', request.page);
         url = url?.replace(':count', request.count);
         return this.http.get(url).pipe(

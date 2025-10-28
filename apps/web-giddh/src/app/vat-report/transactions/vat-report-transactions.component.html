@@ -17,14 +17,21 @@
             ></tax-sidebar>
         </div>
         <div class="container-fluid">
-            <div class="clearfix pd-t15">
+            <div class="pd-t15 d-flex justify-content-end align-items-center">
+                <div class="mr-auto" *ngIf="vatReportTransactions.results?.length">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="javascript:;" class="text-underline" (click)="navigateToPreviousPage()">VAT-Report</a>
+                        </li>
+                        <li>
+                            <span>{{vatReportTransactions.results[0].description}}</span>
+                        </li>
+                    </ol>
+                </div>
                 <button mat-stroked-button (click)="navigateToPreviousPage()">
                     <i class="fa fa-angle-left font-16 mr-1"></i>
                     <span>{{ commonLocaleData?.app_back }}</span>
                 </button>
-                <span *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">{{
-                    vatReportTransactions.results[0].description
-                }}</span>
             </div>
 
             <div class="invoice-preview table-responsive">
@@ -76,7 +83,7 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="trn_number">
-                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.trn_number }}</th>
+                        <th mat-header-cell *matHeaderCellDef>{{ vatReportTransactionsRequest.country === 'GB' ? localeData?.vat_number : localeData?.trn_number }}</th>
                         <td mat-cell *matCellDef="let element">{{ element.trnNumber ? element.trnNumber : "-" }}</td>
                     </ng-container>
                     <ng-container matColumnDef="place_supply">
