@@ -149,7 +149,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
                 localStorage.setItem('isMobileSiteGiddh', 'true');
             }
-            this.dbServices.clearAllData();
         } else {
             localStorage.setItem('isMobileSiteGiddh', 'false');
         }

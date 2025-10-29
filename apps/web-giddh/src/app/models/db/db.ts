@@ -86,7 +86,7 @@ class AppDatabase extends Dexie {
             }
             let arr: IUlist[] = res?.aidata[entity];
             let isFound = false;
-            const limit = isCompany ? 17 : 7;
+            const limit = 5;
 
             if (entity === 'menus') {
                 // if any fromInvalidState remove it and replace it with new menu
@@ -193,7 +193,7 @@ class AppDatabase extends Dexie {
                 arr = orderBy(arr, ['time'], ['desc']);
             }
 
-            res.aidata[entity] = this.getSlicedResult(entity, arr, isCompany);
+            res.aidata[entity] = this.getSlicedResult(arr, limit);
 
             // do entry in db and return all data
             return this.companies.put(res).then(() => {
@@ -228,7 +228,7 @@ class AppDatabase extends Dexie {
             });
             // order by name
             arr = orderBy(arr, ['time'], ['desc']);
-            res.aidata[entity] = this.getSlicedResult(entity, arr, isCompany);
+            res.aidata[entity] = this.getSlicedResult(arr);
             // do entry in db and return all data
             return this.companies.put(res).then(() => {
                 return this.companies.get(key);
@@ -238,16 +238,8 @@ class AppDatabase extends Dexie {
         });
     }
 
-    private getSlicedResult(entity: string, arr: IUlist[], isCompany: boolean): any[] {
-        let endCount: number = 0;
-        if (entity === 'menus') {
-            endCount = isCompany ? 17 : 15;
-        } else if (entity === 'groups') {
-            endCount = 40;
-        } else if (entity === 'accounts') {
-            endCount = 45;
-        }
-        return arr.slice(0, endCount);
+    private getSlicedResult(arr: IUlist[], limit: number = 5): any[] {
+        return arr.slice(0, limit);
     }
 
     private smallScreenHandler(index, isCompany: boolean) {
