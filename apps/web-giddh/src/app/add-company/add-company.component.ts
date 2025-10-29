@@ -715,7 +715,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public ngAfterViewInit(): void {
         // Use setTimeout to ensure stepper is fully initialized
-        setTimeout(() => {
+        this.getStepperIcon();
+    }
+
+    /**
+     * This will use for get stepper icon
+     *
+     * @memberof AddCompanyComponent
+     */
+    public getStepperIcon(): void {
+         setTimeout(() => {
             if (this.stepperIcon) {
                 this.stepperIcon._getIndicatorType = () => 'number';
                 // Force change detection to update the stepper
@@ -1119,6 +1128,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
+
+        this.getStepperIcon();
 
         this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
         this.selectedStep++;
