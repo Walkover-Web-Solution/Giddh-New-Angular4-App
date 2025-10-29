@@ -1,7 +1,7 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <ng-container *ngIf="showLabel">
         <div [ngClass]="{ 'readonly-field': readonly || disabled, 'dropdown-without-label': !showMatLabel}">
-            <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }" (click)="!readonly ? isDropdownOpen && false ? handleDropdownPanelOperation('close') : handleDropdownPanelOperation('open') : handleDropdownPanelOperation('close')">
+            <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }" (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()">
                 <mat-label *ngIf="showMatLabel">{{ label ? label : placeholder }}</mat-label>
                 <input type="text" [ngClass]="cssClass" class="select-field-input" [placeholder]="placeholder" matInput
                     [readonly]="readonly" [disabled]="disabled" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
@@ -13,7 +13,7 @@
                         closeOnFocusOut &&
                         $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
                         $event?.relatedTarget?.nodeName !== 'A'
-                            ? handleDropdownPanelOperation('close')
+                            ? trigger.closePanel()
                             : null
                     " [value]="controlLabelValue ?? ''" />
                 <mat-autocomplete (opened)="panelOpened()" (optionSelected)="optionSelected($event)" optionsScroll class="py-0"
@@ -65,12 +65,12 @@
             [readonly]="readonly" [disabled]="disabled" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
             [required]="required" [attr.aria-expanded]="readonly ? false : true"
             (input)="searchFormControl.next($event.target.value)"
-            (click)="!readonly ? isDropdownOpen && false ? handleDropdownPanelOperation('close') : handleDropdownPanelOperation('open') : handleDropdownPanelOperation('close')" #trigger="matAutocompleteTrigger"
+            (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()" #trigger="matAutocompleteTrigger"
             #selectField matAutocompletePosition="auto" (focusout)="
                 closeOnFocusOut &&
                 $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
                 $event?.relatedTarget?.nodeName !== 'A'
-                    ? handleDropdownPanelOperation('close')
+                    ? trigger.closePanel()
                     : null
             " [value]="controlLabelValue ?? ''" />
         <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll
