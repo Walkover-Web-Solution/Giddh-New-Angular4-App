@@ -181,7 +181,7 @@
                 white-space: nowrap;
                 position: relative;
                 a {
-                    // color: var(--color-dark-gray);
+                    color: var(--theme-foreground-color);
                     line-height: 16px;
                     &.show-more {
                         color: var(--text-primary-color);

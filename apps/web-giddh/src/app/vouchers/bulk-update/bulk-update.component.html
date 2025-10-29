@@ -29,7 +29,7 @@
             <!-- notes-click -->
             <mat-form-field
                 appearance="outline"
-                class="w-100 mr-b15"
+                class="initial-height w-100 mr-b15"
                 *ngIf="bulkUpdateForm.get('selectedField')?.value === 'notes'"
             >
                 <textarea
@@ -97,7 +97,7 @@
         <!-- signature-slogan-click -->
         <mat-form-field
             appearance="outline"
-            class="w-100 mr-b15"
+            class="initial-height w-100 mr-b15"
             *ngIf="
                 bulkUpdateForm.get('selectedField')?.value === 'signature' &&
                 bulkUpdateForm.get('signatureOption')?.value === 'slogan'

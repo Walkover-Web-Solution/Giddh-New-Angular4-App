@@ -49,7 +49,7 @@
                 novalidate
                 autocomplete="off"
             >
-                <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="giddh-table w-100">
+                <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="w-100">
                     <ng-container matColumnDef="companyName">
                         <th
                             mat-header-cell
@@ -338,9 +338,9 @@
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div class="search-table">
-        <div [hidden]="show">
+        <div [hidden]="show" class="d-flex align-items-center column-gap-1">
             <span> {{ title }}</span>
-            <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
+            <i class="icon-search cursor-pointer" (click)="toggleSearch(fieldName)"></i>
         </div>
         <div class="input-container" [hidden]="!show">
             <text-field

@@ -7,11 +7,9 @@
             transition: all 300ms ease;
             mat-card-header {
                 min-height: 120px;
-                /* > UNUSED COMPONENT CLASS: mat-mdc-card-header-text - Auto-commented by script
-.mat-mdc-card-header-text {
+                .mat-mdc-card-header-text {
                     width: 100%;
                 }
-*/
             }
             &:hover {
                 background-color: var(--bg-primary-color) !important;

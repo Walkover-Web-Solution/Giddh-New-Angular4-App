@@ -91,7 +91,7 @@
                             class="address-dropdown form-group mb-0"
                             [ngClass]="{ 'custom-mat-form-field': !branchForm?.get('address')?.value?.length }"
                         >
-                            <mat-form-field appearance="outline" class="w-100" (click)="trigger.open()">
+                            <mat-form-field appearance="outline" class="initial-height w-100" (click)="trigger.open()">
                                 <mat-label>{{ localeData?.addresses }}</mat-label>
                                 <mat-chip-grid #chipGrid class="d-flex flex-wrap column-gap-05 row-gap-1">
                                     <ng-container *ngFor="let chipItem of branchForm?.get('address')?.value">
