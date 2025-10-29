@@ -209,7 +209,7 @@
                             [ngClass]="{'vouchers-form-disable' : !invoiceForm.controls['account'].get('customerName')?.value }">
                             <div class="vouchers-small-container">
                                 <!-- Row 1 -->
-                                <div class="row">
+                                <div class="row mt-3">
                                     <ng-container formGroupName="account">
                                         <!-- Billing Address -->
                                         <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
@@ -269,7 +269,7 @@
                                                     </div>
                                                     <div class="state-field w-50 border-bottom" formGroupName="state">
                                                         <reactive-dropdown-field 
-                                                            [cssClass]="'border-0 w-100'"
+                                                            [cssClass]="'border-none w-100'"
                                                             [forceClear]="forceClear"
                                                             formControlName="code" [name]="'billingStateCode'"
                                                             [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -359,7 +359,7 @@
                                                     </div>
                                                     <div class="state-field w-50 border-bottom" formGroupName="state">
                                                         <reactive-dropdown-field 
-                                                            [cssClass]="'border-0 w-100'"
+                                                            [cssClass]="'border-none w-100'"
                                                             [forceClear]="forceClear"
                                                             formControlName="code" [name]="'shippingStateCode'"
                                                             [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -480,7 +480,7 @@
                                 <div class="row pd-b1"
                                     *ngIf="invoiceType.isPurchaseOrder || (invoiceType.isPurchaseInvoice && !invoiceType.isCashInvoice)"
                                     formGroupName="company">
-                                    <div class="col-12 mr-t15">
+                                    <div class="col-12 mr-t15 mr-b15">
                                         <span class="billing-deliver-label">{{ localeData?.deliver_to }}</span>
                                     </div>
 
@@ -532,7 +532,7 @@
                                                 </div>
                                                 <div class="state-field w-50 border-bottom" formGroupName="state">
                                                     <reactive-dropdown-field 
-                                                        [cssClass]="'border-0 w-100'"
+                                                        [cssClass]="'border-none w-100'"
                                                         [forceClear]="forceClear"
                                                         formControlName="code" [name]="'companyBillingStateCode'"
                                                         [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -615,7 +615,7 @@
                                                 </div>
                                                 <div class="state-field w-50 border-bottom" formGroupName="state">
                                                     <reactive-dropdown-field 
-                                                        [cssClass]="'border-0 w-100'"
+                                                        [cssClass]="'border-none w-100'"
                                                         [forceClear]="forceClear"
                                                         formControlName="code" [name]="'companyShippingStateCode'"
                                                         [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"

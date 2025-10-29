@@ -27,12 +27,10 @@
         .left-side {
             border-right: 1px solid var(--border-color);
             width: 35%;
-            padding: 10px 10px 10px 13px;
             position: relative;
             .left-side-subhead {
                 font-size: var(--font-size-12);
-                margin-top: 10px;
-                margin-left: 35px;
+                margin-left: 30px;
             }
             .invoice-head {
                 display: flex;

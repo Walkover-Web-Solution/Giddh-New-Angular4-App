@@ -1,9 +1,8 @@
 <div class="container-fluid" *ngIf="!isPettyCashRejectedReportLoading">
-    <div class="table-responsive overflow-visible">
+    <div class="table-responsive overflow-visible" *ngIf="pettyCashRejectedReportResponse?.totalItems > 0">
         <table
             mat-table
-            [@.disabled]="true"
-            class="w-100 on-mobile-view"
+            class="w-100"
             [dataSource]="rejectedItems"
             matSort
             (matSortChange)="sortChange($event)"
@@ -152,21 +151,18 @@
             <tr mat-header-row *matHeaderRowDef="rejectedTableColumns; sticky: true"></tr>
             <tr mat-row *matRowDef="let rejected; columns: rejectedTableColumns"></tr>
         </table>
+        <mat-paginator
+            *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashRejectedReportLoading"
+            [length]="pettyCashRejectedReportResponse?.totalItems"
+            [pageSize]="pettycashRequest.count"
+            [pageIndex]="pettycashRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
     </div>
 </div>
-
-<mat-paginator
-    *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashRejectedReportLoading"
-    [length]="pettyCashRejectedReportResponse?.totalItems"
-    [pageSize]="pettycashRequest.count"
-    [pageIndex]="pettycashRequest.page - 1"
-    [pageSizeOptions]="pageSizeOptions"
-    [showFirstLastButtons]="true"
-    [hidePageSize]="false"
-    (page)="handlePageEvent($event)"
-></mat-paginator>
-<section class="mr-b8"></section>
-
 <div *ngIf="isPettyCashRejectedReportLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
@@ -174,6 +170,8 @@
 <div class="no-data" *ngIf="!pettyCashRejectedReportResponse?.totalItems && !isPettyCashRejectedReportLoading">
     <no-data></no-data>
 </div>
+
+<section class="mr-b8"></section>
 
 <ng-template #deleteEntryModal>
     <confirm-modal

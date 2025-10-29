@@ -27,10 +27,10 @@
                 background: var(--color-white);
                 thead {
                     th {
-                        color: var(--text-primary-color);
+                        // color: var(--text-primary-color);
                         border-width: 2px;
                         vertical-align: baseline;
-                        h3 {
+                        p {
                             padding: 0 10px;
                             line-height: 38.5px;
                             position: relative;
@@ -45,9 +45,9 @@
                     color: var(--color-black);
                     .border-line {
                         border: 2px solid transparent;
-                        &.active {
-                            border-color: var(--theme-primary-color);
-                        }
+                        // &.active {
+                        //     border-color: var(--theme-primary-color);
+                        // }
                         .custom-padding {
                             padding: 6px 10px;
                         }

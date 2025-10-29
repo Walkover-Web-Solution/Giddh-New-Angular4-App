@@ -13,12 +13,12 @@ body {
         .mat-chip-list-wrapper {
             flex-wrap: wrap !important;
         }
-        .select-entity-height {
-            input {
-                height: var(--custom-mat-form-field-height);
-                border-radius: 0.5rem;
-            }
-        }
+        // .select-entity-height {
+        //     input {
+        //         height: var(--custom-mat-form-field-height);
+        //         border-radius: 0.5rem;
+        //     }
+        // }
         .width-query-types {
             .mat-mdc-form-field {
                 width: 152px;

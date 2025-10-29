@@ -38,15 +38,16 @@
         </div>
     </div>
     <div class="form-group reject-textarea">
-        <mat-form-field appearance="fill" class="w-100">
-            <label for="rejectReason">{{ localeData?.reason_label }}</label> <sup>*</sup>
+        <mat-form-field appearance="outline" class="initial-height w-100" floatLabel="always">
+            <mat-label>{{ localeData?.reason_label }}</mat-label>
             <textarea
                 matInput
                 name="rejectReason"
-                id="rejectReason"
                 [formControl]="rejectReason"
                 class="textarea form-control mat-field-border mt-2"
                 [placeholder]="localeData?.reason_placeholder"
+                required
+                rows="3"
             ></textarea>
         </mat-form-field>
     </div>

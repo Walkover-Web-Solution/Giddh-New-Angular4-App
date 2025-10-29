@@ -14,20 +14,6 @@ textarea/* UNUSED COMPONENT CLASS: receipient-email - Auto-commented by script
 }
 */
 
-.export-border {
-    &::after {
-        content: "";
-        display: block;
-        position: absolute;
-        width: 1px;
-        height: 55%;
-        background-color: var(--color-medium-gray);
-        top: 46%;
-        right: 50px;
-        transform: translateY(-50%);
-    }
-}
-
 .export-ledger-right {
     &::after {
         right: 25px !important;
@@ -50,5 +36,19 @@ textarea/* UNUSED COMPONENT CLASS: receipient-email - Auto-commented by script
                 }
             }
         }
+    }
+}
+
+.export-border {
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 100%;
+        background-color: var(--theme-foreground-color);
+        top: 46%;
+        right: 50px;
+        transform: translateY(-50%);
     }
 }

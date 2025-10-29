@@ -20,7 +20,7 @@
             >
                 <mat-tab [label]="localeData?.flat_view">
                     <ng-container *ngIf="selectedTabIndex === 0">
-                        <div class="clear-both pt-4">
+                        <div class="clear-both pd-15 pb-0">
                             <div class="date-advance-search row">
                                 <div class="col-sm-12 mr-b15 d-flex justify-content-between">
                                     <form class="form-inline input-group-date-range-picker position-relative d-flex flex-row mr-0">
@@ -65,7 +65,7 @@
                             <div class="cube1"></div>
                             <div class="cube2"></div>
                         </div>
-                        <div *ngIf="(branches$ | async)?.length > 0 && !showLoader">
+                        <div *ngIf="(branches$ | async)?.length > 0 && !showLoader" class="pd-15">
                             <div class="branch-card-view" *ngIf="branchViewType === 'card'">
                                 <div class="row">
                                     <div class="col-12" *ngFor="let branch of branches$ | async">

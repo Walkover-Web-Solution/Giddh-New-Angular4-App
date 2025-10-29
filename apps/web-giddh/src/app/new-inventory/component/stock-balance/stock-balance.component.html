@@ -31,6 +31,7 @@
                         [(ngModel)]="selectedWarehouse"
                         class="stock-mat-salect"
                         [placeholder]="localeData?.warehouse_opening_balance?.select_warehouse"
+                        color="primary"
                     >
                         <mat-option class="balance-options">
                             <ngx-mat-select-search
@@ -72,7 +73,7 @@
         </div>
         <div class="searching-stocks mat-app-background">
             <div class="list-head">
-                <div class="custom-material-search-bar stock-searchbar">
+                <div class="custom-material-search-bar stock-searchbar d-flex align-items-center">
                     <img src="{{ imgPath }}search-new.svg" class="search-icon" alt="search icon" />
                     <text-field
                         [placeholder]="commonLocaleData?.app_stock"

@@ -25,7 +25,7 @@
             </div>
         </div>
         <mat-dialog-content class="max-height-65vh">
-            <div class="modal-body clear-both ledger-advance-search-field" id="export-body" *ngIf="advanceSearchForm">
+            <div class="modal-body p-0 clear-both ledger-advance-search-field" id="export-body" *ngIf="advanceSearchForm">
                 <form [formGroup]="advanceSearchForm">
                     <div class="clear-both">
                         <div class="row mb-2 ml-0 mr-0">
@@ -33,26 +33,24 @@
                                 <label>{{ commonLocaleData?.app_date_range }}</label>
                             </div>
                             <div class="col-sm-7">
-                                <div class="input-group"
-                                    [matMenuTriggerFor]="universalDatepicker"
-                                    #universalDatepickerTrigger="matMenuTrigger"
-                                    role="button"
-                                    tabindex="0"
-                                    role="button"
-                                    aria-haspopup="true"
-                                    aria-controls="universalDatepicker"
-                                >
-                                    <mat-form-field appearance="fill" class="w-100 custom-input-field">
+                                  <div class="custom-datepicker-wrapper w-100">
+                                    <div 
+                                        class="custom-datepicker w-100" 
+                                        [matMenuTriggerFor]="universalDatepicker"
+                                        #universalDatepickerTrigger="matMenuTrigger"
+                                        role="button"
+                                        aria-haspopup="true"
+                                        aria-controls="universalDatepicker"
+                                    >
                                         <input
                                             matInput
                                             type="text"
+                                            name="selectedDateRange"
                                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                            required
-                                            [placeholder]="commonLocaleData?.app_select_range"
-                                            class="form-control mat-field-border date-field border-radius-4"
+                                            class="giddh-datepicker date-range-picker"
                                             readonly
                                         />
-                                    </mat-form-field>
+                                    </div>
                                 </div>
                                 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
                                     <ng-template matMenuContent>

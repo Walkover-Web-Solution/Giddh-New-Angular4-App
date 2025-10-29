@@ -9,7 +9,7 @@
     <div class="d-inline-block">
         <button
             *ngIf="importStep === importStepEnum.Second"
-            mat-stroked-button
+            mat-raised-button
             [matTooltip]="inputData?.commonLocaleData?.app_back"
             matTooltipPosition="above"
             (click)="importStep = importStepEnum.First"

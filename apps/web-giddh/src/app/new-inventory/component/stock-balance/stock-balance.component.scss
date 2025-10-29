@@ -107,7 +107,6 @@
         float: left !important;
         white-space: nowrap;
         box-shadow: none !important;
-        border-bottom: 1px solid var(--border-color);
         width: min-content;
         display: grid;
         grid-template-columns: 240px auto;
@@ -277,8 +276,9 @@
         .search-icon {
             position: absolute;
             z-index: 1;
-            top: 10px;
+            top: 50%;
             left: 6px;
+            transform: translateY(-50%);
             filter: invert(0);
         }
         .list-head {
@@ -295,6 +295,8 @@
                 overflow: hidden;
                 z-index: 2;
                 background-color: var(--theme-background-color);
+                height: 100%;
+                
                 mat-form-field {
                     top: 11px;
                     input::placeholder {
@@ -370,6 +372,8 @@
                 .stock-list-unexpanded {
                     height: auto;
                     width: fit-content;
+                    border-bottom: 1px solid var(--border-color);
+                    
                     .unique-name-wrap {
                         word-wrap: break-word;
                         width: 97px;
@@ -602,8 +606,20 @@
         }
     }
 }
-.warehouse-list {
+.warehouse-list, .warehouse-list-head {
     display: flex;
+    border-bottom: 1px solid var(--border-color);
+
+    .stock-list-unexpanded {
+        border-bottom: none !important;
+    }
+
+    &:nth-child(odd) {
+        background-color: var(--theme-primary-light);
+    }
+    &:nth-child(even) {
+        background-color: var(--theme-background-color);
+    }
 }
 .stock-list-box {
     .stock-list-unexpanded {

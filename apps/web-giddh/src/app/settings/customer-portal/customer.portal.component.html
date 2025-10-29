@@ -8,7 +8,7 @@
         <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
             <mat-tab [label]="localeData?.portal_information" *ngIf="voucherApiVersion === 2">
                 <div class=" pd-15 clear-both mb-2 pd-t05">
-                    <form novalidate name="profileForm" [formGroup]="profileForm">
+                    <form novalidate name="profileForm" [formGroup]="profileForm" class="container-fluid">
                         <div class="row pd-b1 mt-3">
                             <div class="pl-0 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
                                 <input-field
@@ -63,7 +63,7 @@
                     <p class="font-size-16 font-weight-semibold mb-3">{{ localeData?.collection?.razorpay_form_heading }}</p>
                     <form #razorPayform="ngForm" novalidate>
                         <div class="row">
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                            <div class="col-lg-4 col-md-6 col-xs-12">
                                 <input-field
                                     [type]="'text'"
                                     [label]="localeData?.collection?.key_id_label"
@@ -73,7 +73,7 @@
                                     [required]="true"
                                 ></input-field>
                             </div>
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                            <div class="col-lg-4 col-md-6 col-xs-12">
                                 <input-field
                                     [type]="'password'"
                                     [label]="localeData?.collection?.secret_key_label"
@@ -84,9 +84,9 @@
                                 ></input-field>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                <div class="input-group align-items-center column-gap-1 flex-nowrap">
+                        <div class="row mt-3">
+                            <div class="col-lg-4 col-md-6 col-xs-12">
+                                <div class="d-flex align-items-center column-gap-1 flex-nowrap">
                                     <reactive-dropdown-field
                                         class="linked-account"
                                         [name]="'account'"
@@ -104,15 +104,16 @@
                                         "
                                     >
                                     </reactive-dropdown-field>
-                                    <div
-                                        class="input-group-addon cursor-pointer"
+                                    <button 
+                                        mat-stroked-button 
+                                        class="btn-stroked-icon"
                                         *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name"
-                                    >
-                                        <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
-                                    </div>
+                                        (click)="unlinkAccountFromRazorPay()">
+                                         <i class="icon-trash"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
+                            <div class="col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
                                 <mat-slide-toggle
                                     [(ngModel)]="razorPayObj.autoCapturePayment"
                                     name="autoCapturePayment"
@@ -125,8 +126,8 @@
                                 }}</label>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-12 form-group">
+                        <div class="row mt-3">
+                            <div class="col-sm-12">
                                 <div class="d-flex column-gap-1">
                                     <button
                                         mat-raised-button
@@ -161,8 +162,8 @@
                         </div>
                     </form>
                 </div>
-                <mat-divider class="w-100"></mat-divider>
-                <div class=" pd-15 clear-both mb-2">
+                <mat-divider class="w-100 my-3"></mat-divider>
+                <div class="pd-15 clear-both mb-2">
                     <p class="font-size-16 font-weight-semibold mb-3">{{ localeData?.collection?.paypal_form_heading }}</p>
                     <form #paypalForm="ngForm" novalidate>
                         <div class="row">
@@ -273,7 +274,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                <div class="input-group align-items-center column-gap-1 flex-nowrap">
+                                <div class="d-flex align-items-center column-gap-1 flex-nowrap">
                                     <reactive-dropdown-field
                                         class="linked-account"
                                         [label]="localeData?.collection?.link_account_label"

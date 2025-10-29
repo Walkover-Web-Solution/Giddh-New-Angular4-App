@@ -1,9 +1,8 @@
 <div class="container-fluid" *ngIf="!isPettyCashPendingReportLoading && !isRowExpand">
-    <div class="table-responsive overflow-visible">
+    <div class="table-responsive overflow-visible" *ngIf="pettyCashPendingReportResponse?.totalItems > 0">
         <table
             mat-table
-            [@.disabled]="true"
-            class="w-100 on-mobile-view"
+            class="w-100"
             [dataSource]="expensesItems"
             matSort
             (matSortChange)="sortChange($event)"
@@ -164,20 +163,18 @@
                 (click)="editExpense(expenses)"
             ></tr>
         </table>
+        <mat-paginator
+            *ngIf="pettyCashPendingReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashPendingReportLoading"
+            [length]="pettyCashPendingReportResponse?.totalItems"
+            [pageSize]="pettycashRequest.count"
+            [pageIndex]="pettycashRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
     </div>
 </div>
-<mat-paginator
-    *ngIf="pettyCashPendingReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashPendingReportLoading"
-    [length]="pettyCashPendingReportResponse?.totalItems"
-    [pageSize]="pettycashRequest.count"
-    [pageIndex]="pettycashRequest.page - 1"
-    [pageSizeOptions]="pageSizeOptions"
-    [showFirstLastButtons]="true"
-    [hidePageSize]="false"
-    (page)="handlePageEvent($event)"
-></mat-paginator>
-<section class="mr-b8"></section>
-
 <div *ngIf="isPettyCashPendingReportLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
@@ -185,6 +182,7 @@
 <div class="no-data" *ngIf="pettyCashPendingReportResponse?.totalItems === 0">
     <no-data></no-data>
 </div>
+<section class="mr-b8"></section>
 
 <ng-template #approveConfirm>
     <petty-cash-approve-confirm-dialog

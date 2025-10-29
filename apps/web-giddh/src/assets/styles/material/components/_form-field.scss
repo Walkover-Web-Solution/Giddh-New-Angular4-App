@@ -23,11 +23,20 @@ mat-form-field {
                 &.mdc-text-field--outlined {
                     .mdc-notched-outline--upgraded {
                         .mdc-floating-label--float-above {
-                            --mat-mdc-form-field-label-transform: translateY(-27.75px) scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
+                            --mat-mdc-form-field-label-transform: translateY(-27.75px)
+                                scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+mat-paginator {
+    mat-form-field {
+        &.mat-mdc-form-field {
+            width: 84px !important; // Default width of paginator dropdown
         }
     }
 }

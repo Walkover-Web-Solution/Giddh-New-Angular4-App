@@ -171,3 +171,10 @@ $listOfNotApplyBelowCodeSelectors: "app-invoice-generate"; // Add more selectors
 //         }
 //     }
 // }
+
+
+[mat-sort-header].cdk-program-focused {
+    .mat-sort-header-container {
+        border-bottom: none !important;
+    }
+}

@@ -23,7 +23,7 @@
         padding-bottom: 4px;
         padding-top: 4px;
         margin-bottom: 0px;
-        margin-top: 5px;
+        // margin-top: 5px;
     }
 
     /* UNUSED COMPONENT CLASS: entry-datepicker - Auto-commented by script
@@ -46,13 +46,13 @@
 
     .add-button {
         border: none;
-        height: 44px;
+        height: -webkit-fill-available;
         cursor: pointer;
         background-color: var(--theme-primary-light);
         font-size: var(--font-size-24);
         padding-left: 0px !important;
         padding-right: 0px !important;
-        min-width: 44px !important;
+        min-width: 55px !important;
         color: var(--color-black) !important;
         padding-top: 0 !important;
         border-radius: var(--mat-border-radius-0) !important;
@@ -81,7 +81,7 @@
 */
 
     .activity-filter-wrap {
-        align-items: center;
+        align-items: stretch;
         display: flex;
         flex-wrap: wrap;
     }
