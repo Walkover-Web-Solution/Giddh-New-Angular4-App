@@ -530,9 +530,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
+    /** 
+     * This will use for update form data
      * 
-     * @param {*} event 
+     * @param {*} requestBody 
+     * @param {*} selectTableRowIndex 
      * @memberof BulkStockEditComponent
      */
     public updateForm(requestBody: any, selectTableRowIndex: number): void {
