@@ -1,7 +1,7 @@
 .mat-mdc-menu-content {
     display: contents;
     .mat-mdc-menu-item {
-        color: var(--color-black);
+        color: var(--theme-foreground-color);
 
         &.active {
             padding-right: 30px;

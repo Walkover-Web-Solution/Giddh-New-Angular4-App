@@ -4916,12 +4916,13 @@ input[type="checkbox"][disabled]:after {
 
 .table-container {
     .account {
-        background: var(--color-light-gray);
+        background: var(--theme-primary-light);
+        color: var(--color-black);
         overflow: visible;
         min-height: 38px;
 
         .pl-sticky-group {
-            background: var(--color-light-gray);
+            background: var(--theme-primary-light);
             color: var(--color-black);
         }
     }

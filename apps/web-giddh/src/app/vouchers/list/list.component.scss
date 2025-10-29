@@ -101,9 +101,12 @@ table {
 // account-detail
 .account-detail-wrapper {
     max-width: 250px;
+    margin-block: 6px;
 
     .account-header {
         background-color: var(--color-border-light);
+        border-top-right-radius: var(--mat-border-radius-4);
+        border-top-left-radius: var(--mat-border-radius-4);
     }
 }
 

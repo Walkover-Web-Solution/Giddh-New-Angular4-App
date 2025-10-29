@@ -274,7 +274,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="add-address-default">
-                                    <p>{{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
+                                    <p class="text-black">{{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
                                     <div class="remove-radio-btn">
                                         <span class="pd-r1" *ngIf="!firstItem">
                                             <button
@@ -282,7 +282,10 @@
                                                 (click)="removeGstDetailsForm(i)"
                                                 class="bg-white"
                                             >
-                                                <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
+                                                <span class="text-red d-inline-flex align-items-center column-gap-1">
+                                                    <i class="icon-cross"></i>
+                                                    <span>{{ commonLocaleData?.app_remove }}</span>
+                                                </span>
                                             </button>
                                         </span>
                                         <span

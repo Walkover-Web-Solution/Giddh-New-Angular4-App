@@ -47,6 +47,12 @@
 .only-right-radius {
     @include border-radius(0, var(--mat-border-radius-4), var(--mat-border-radius-4), 0);
 }
+.only-top-radius {
+    @include border-radius(var(--mat-border-radius-4), var(--mat-border-radius-4), 0, 0);
+}
+.only-bottom-radius {
+    @include border-radius(0, 0, var(--mat-border-radius-4), var(--mat-border-radius-4));
+}
 
 // ===== COLORS =====
 // Primary colors

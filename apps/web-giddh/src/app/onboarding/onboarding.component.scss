@@ -1,3 +1,5 @@
+// @use "../../assets/styles/abstracts/_mixins" as *;
+
 .welcome-container {
     .border-btm {
         font-size: var(--font-size-16);
@@ -9,12 +11,13 @@
 
     .manage-invoice {
         a {
-            background: var(--color-white);
+            background: var(--theme-primary-light);
+            color: var(--theme-foreground-color);
             box-shadow: 1px 1px 3px var(--color-shadow-light);
             padding: 9px 15px;
-            color: var(--text-primary-color);
             font-size: var(--font-size-15);
-            display: block;
+            display: flex;
+            align-items: center;
             width: 356px;
             i {
                 margin-right: 20px;
@@ -45,9 +48,9 @@
             }
         }
     }
-    .onboarding-video{
+    .onboarding-video {
         overflow: hidden;
-        iframe{
+        iframe {
             max-width: 760px;
             min-height: 430px;
         }

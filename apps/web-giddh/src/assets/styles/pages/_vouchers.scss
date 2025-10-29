@@ -91,9 +91,9 @@
     .vouchers-add-new {
         position: sticky;
         bottom: 0;
-        color: var(--text-primary-color);
-        z-index: 1;
+        color: var(--color-black) !important;
         background: var(--color-white) !important;
+        z-index: 1;
         min-height: 0 !important;
         padding-top: 10px;
         padding-bottom: 5px;

@@ -27,7 +27,7 @@
                 .text-primary {
                     color: var(--theme-primary-color) !important;
                 }
-                 .text-default {
+                .text-default {
                     color: var(--color-black) !important;
                 }
             }
@@ -39,22 +39,19 @@
         overflow-y: auto;
 
         .preview-header {
-            background-color: var(--color-light-gray);
+            background-color: var(--theme-primary-light);
             .action-btn {
                 column-gap: 6px;
 
                 button {
                     &.mdc-button {
-                        /* UNUSED COMPONENT CLASS: mdc-button - Auto-commented by script
-min-width: 36px;
+                        min-width: 36px;
                         width: 36px;
                         height: 36px;
 
-                        /* UNUSED COMPONENT CLASS: mdc-button__label - Auto-commented by script
-.mdc-button__label {
+                        .mdc-button__label {
                             line-height: 14px;
                         }
-*/
                     }
                 }
             }
