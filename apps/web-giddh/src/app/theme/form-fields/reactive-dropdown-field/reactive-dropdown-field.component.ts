@@ -114,7 +114,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private onTouched: () => void = () => { };
     /** Next observable */
     private next$: Subject<any> = new Subject();
-    public isDropdownOpen: boolean = false;
 
     constructor(
         private changeDetection: ChangeDetectorRef
@@ -236,10 +235,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.isDestroyed && this.trigger) {
             try {
                 if (operation === 'open') {
-                    this.isDropdownOpen = true;
                     this.trigger.openPanel();
                 } else {
-                    this.isDropdownOpen = false;
                     this.trigger.closePanel();
                 }
             } catch (error) {
@@ -335,7 +332,6 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.setLabelValue(event?.option?.value);
         this.onTouched();
         this.selectedOption.emit(event?.option?.value);
-        this.isDropdownOpen = false;
     }
 
     /**
@@ -442,13 +438,11 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         setTimeout(() => {
             if (this.allowCustomDropdownValue && !this.searchFormControl?.value && !this.controlLabelValue) {
                 this.selectedOption.emit({ label: '', value: '' });
-                this.isDropdownOpen = false;
             }
 
             if (this.allowCustomDropdownValue && this.searchFormControl?.value && typeof this.searchFormControl?.value !== "object") {
                 this.value = this.searchFormControl?.value;
                 this.selectedOption.emit({ label: this.value, value: this.value });
-                this.isDropdownOpen = false;
             }
         }, 200);
     }
