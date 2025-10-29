@@ -525,7 +525,7 @@
                                                 let i = index
                                             "
                                         >
-                                            <tr [formGroupName]="i">
+                                            <tr [formGroupName]="i" (clickOutside)="selectTableRowIndex == i && hideTableInput()" (click)="selectTableRowIndex != i && showTableInput($event, i); hideTableHeadInput()">    
                                                 <!-- Variant Name -->
                                                 <td
                                                     *ngIf="tableHeaderShowHide.variantName"
@@ -535,7 +535,7 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             formControlName="variantName"
-                                                            [readonly]="true"
+                                                            [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('variantName').value"
                                                             matTooltipPosition="above"
                                                         >
@@ -567,7 +567,7 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             formControlName="stockName"
-                                                            [readonly]="true"
+                                                            [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('stockName').value"
                                                             matTooltipPosition="above"
                                                         >
@@ -598,6 +598,7 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
                                                             formControlName="stockGroupName"
                                                             [readonly]="true"
@@ -605,6 +606,15 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex == i"
+                                                            formControlName="stockGroupUniqueName"
+                                                            [options]="stockUnitGroupList"
+                                                            (selectedOption)="row.get('stockGroupName').setValue($event.label); row.get('stockGroupUniqueName').setValue($event.value)"
+                                                            [required]="true"
+                                                            [showLabel]="false"
+                                                        >
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!--  Stock Group Unique Name -->
@@ -659,7 +669,7 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             formControlName="hsnNo"
-                                                            [readonly]="true"
+                                                            [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('hsnNo').value"
                                                             matTooltipPosition="above"
                                                         >
@@ -676,7 +686,7 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             formControlName="sacNo"
-                                                            [readonly]="true"
+                                                            [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('sacNo').value"
                                                             matTooltipPosition="above"
                                                         >
@@ -692,7 +702,7 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             formControlName="skuCode"
-                                                            [readonly]="true"
+                                                            [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('skuCode').value"
                                                             matTooltipPosition="above"
                                                         >
@@ -709,6 +719,7 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
                                                             formControlName="purchaseAccountName"
                                                             [readonly]="true"
@@ -716,6 +727,14 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex == i"
+                                                            formControlName="purchaseAccountUniqueName"
+                                                            [options]="purchaseAccountList"
+                                                            [showLabel]="false"
+                                                            (selectedOption)="row.get('purchaseAccountName').setValue($event.label); row.get('purchaseAccountUniqueName').setValue($event.value)"
+                                                        >
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!--  Purchases Account UN -->
@@ -749,7 +768,7 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             formControlName="purchaseRate"
-                                                            [readonly]="true"
+                                                            [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('purchaseRate').value"
                                                             matTooltipPosition="above"
                                                         >
@@ -766,6 +785,7 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
                                                             formControlName="purchaseUnits"
                                                             [readonly]="true"
@@ -773,6 +793,14 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex == i"
+                                                            formControlName="purchaseUnits"
+                                                            [options]="stockMainUnits"
+                                                            [labelValue]="row.get('purchaseUnits').value"
+                                                            [showLabel]="false"
+                                                        >
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!--  Sales Account Name -->
@@ -785,6 +813,7 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
                                                             formControlName="salesAccountName"
                                                             [readonly]="true"
@@ -792,6 +821,14 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex == i"
+                                                            formControlName="salesAccountUniqueName"
+                                                            [options]="salesAccountList"
+                                                            [showLabel]="false"
+                                                            (selectedOption)="row.get('salesAccountName').setValue($event.label); row.get('salesAccountUniqueName').setValue($event.value)"
+                                                        >
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!--  Sales Account UN -->
@@ -825,7 +862,7 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             formControlName="salesRate"
-                                                            [readonly]="true"
+                                                            [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('salesRate').value"
                                                             matTooltipPosition="above"
                                                         >
@@ -842,6 +879,7 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
                                                             formControlName="salesUnits"
                                                             [readonly]="true"
@@ -849,6 +887,15 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex == i"
+                                                            formControlName="salesUnits"
+                                                            [options]="stockMainUnits"
+                                                            [labelValue]="row.get('salesUnits').value"
+                                                            (selectOption)="row.get('salesUnits').setValue($event.value)"
+                                                            [showLabel]="false"
+                                                        >
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Units (Menu)-->
@@ -861,6 +908,7 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
                                                             formControlName="fixedAssetUnits"
                                                             [readonly]="true"
@@ -868,6 +916,13 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex == i"
+                                                            formControlName="fixedAssetUnits"
+                                                            [options]="stockMainUnits"
+                                                            [showLabel]="false"
+                                                        >
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Rate -->
@@ -882,7 +937,7 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             formControlName="fixedAssetRate"
-                                                            [readonly]="true"
+                                                            [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('fixedAssetRate').value"
                                                             matTooltipPosition="above"
                                                         >
@@ -899,6 +954,7 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
                                                             formControlName="fixedAssetAccountName"
                                                             [readonly]="true"
@@ -906,6 +962,14 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex == i"
+                                                            formControlName="fixedAssetAccountName"
+                                                            [options]="fixedAssetAccountList"
+                                                            [showLabel]="false"
+                                                            (selectedOption)="row.get('fixedAssetAccountName').setValue($event.label); row.get('fixedAssetAccountUniqueName').setValue($event.value)"
+                                                        >
+                                                        </reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!-- Fixed Assets Account UN -->
@@ -943,11 +1007,27 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            {{
-                                                                row.get("archive").value
-                                                                    ? commonLocaleData?.app_yes
-                                                                    : commonLocaleData?.app_no
-                                                            }}
+                                                            <span *ngIf="selectTableRowIndex !== i">
+                                                                {{
+                                                                    row.get("archive").value
+                                                                        ? commonLocaleData?.app_yes
+                                                                        : commonLocaleData?.app_no
+                                                                }}
+                                                            </span>
+                                                            <ng-container *ngIf="selectTableRowIndex == i">
+                                                                <div [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">{{
+                                                                    row.get("archive").value
+                                                                        ? commonLocaleData?.app_yes
+                                                                        : commonLocaleData?.app_no
+                                                                }}</div>
+                                                                <mat-menu #menu="matMenu">
+                                                                    <button mat-menu-item (click)="$event.stopPropagation(); row.get('archive').patchValue(!row.get('archive').value); menuTrigger.closeMenu()">{{
+                                                                        row.get("archive").value
+                                                                            ? commonLocaleData?.app_no
+                                                                            : commonLocaleData?.app_yes
+                                                                    }}</button>
+                                                                </mat-menu>
+                                                            </ng-container>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -959,6 +1039,7 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
                                                             formControlName="taxes"
                                                             [readonly]="true"
@@ -966,6 +1047,13 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex === i"
+                                                            formControlName="taxes"
+                                                            [options]="taxes"
+                                                            [showLabel]="false"
+                                                        >
+                                                        </reactive-dropdown-field>
                                                         <!-- <mat-select
                                                             class="vertical-margin"
                                                             name="taxes"
@@ -1008,11 +1096,29 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            {{
-                                                                row.get("salesTaxInclusive").value
-                                                                    ? localeData?.inclusive
-                                                                    : localeData?.exclusive
-                                                            }}
+                                                            <span
+                                                                *ngIf="selectTableRowIndex !== i"
+                                                            >
+                                                                {{
+                                                                    row.get("salesTaxInclusive").value
+                                                                        ? localeData?.inclusive
+                                                                        : localeData?.exclusive
+                                                                }}
+                                                            </span>
+                                                            <ng-container *ngIf="selectTableRowIndex == i">
+                                                                <div [matMenuTriggerFor]="salesTaxInclusiveMenu" #salesTaxInclusiveMenuTrigger="matMenuTrigger">{{
+                                                                    row.get("salesTaxInclusive").value
+                                                                        ? localeData?.inclusive
+                                                                        : localeData?.exclusive
+                                                                }}</div>
+                                                                <mat-menu #salesTaxInclusiveMenu="matMenu">
+                                                                    <button mat-menu-item (click)="$event.stopPropagation(); row.get('salesTaxInclusive').patchValue(!row.get('salesTaxInclusive').value); salesTaxInclusiveMenuTrigger.closeMenu()">{{
+                                                                        row.get("salesTaxInclusive").value
+                                                                            ? localeData?.exclusive
+                                                                            : localeData?.inclusive
+                                                                    }}</button>
+                                                                </mat-menu>
+                                                            </ng-container>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -1034,11 +1140,27 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            {{
-                                                                row.get("purchaseTaxInclusive").value
-                                                                    ? localeData?.inclusive
-                                                                    : localeData?.exclusive
-                                                            }}
+                                                            <span *ngIf="selectTableRowIndex !== i">
+                                                                {{
+                                                                    row.get("purchaseTaxInclusive").value
+                                                                        ? localeData?.inclusive
+                                                                        : localeData?.exclusive
+                                                                }}
+                                                            </span>
+                                                            <ng-container *ngIf="selectTableRowIndex == i">
+                                                                <div [matMenuTriggerFor]="purchaseTaxInclusiveMenu" #purchaseTaxInclusiveMenuTrigger="matMenuTrigger">{{
+                                                                    row.get("purchaseTaxInclusive").value
+                                                                        ? localeData?.inclusive
+                                                                        : localeData?.exclusive
+                                                                }}</div>
+                                                                <mat-menu #purchaseTaxInclusiveMenu="matMenu">
+                                                                    <button mat-menu-item (click)="$event.stopPropagation(); row.get('purchaseTaxInclusive').patchValue(!row.get('purchaseTaxInclusive').value); purchaseTaxInclusiveMenuTrigger.closeMenu()">{{
+                                                                        row.get("purchaseTaxInclusive").value
+                                                                            ? localeData?.exclusive
+                                                                            : localeData?.inclusive
+                                                                    }}</button>
+                                                                </mat-menu>
+                                                            </ng-container>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -1060,11 +1182,27 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            {{
-                                                                row.get("fixedAssetTaxInclusive").value
-                                                                    ? localeData?.inclusive
-                                                                    : localeData?.exclusive
+                                                            <span *ngIf="selectTableRowIndex !== i">
+                                                                {{
+                                                                    row.get("fixedAssetTaxInclusive").value
+                                                                        ? localeData?.inclusive
+                                                                        : localeData?.exclusive
                                                             }}
+                                                            </span>
+                                                            <ng-container *ngIf="selectTableRowIndex == i">
+                                                                <div [matMenuTriggerFor]="fixedAssetTaxInclusiveMenu" #fixedAssetTaxInclusiveMenuTrigger="matMenuTrigger">{{
+                                                                    row.get("fixedAssetTaxInclusive").value
+                                                                        ? localeData?.inclusive
+                                                                        : localeData?.exclusive
+                                                                }}</div>
+                                                                <mat-menu #fixedAssetTaxInclusiveMenu="matMenu">
+                                                                    <button mat-menu-item (click)="$event.stopPropagation(); row.get('fixedAssetTaxInclusive').patchValue(!row.get('fixedAssetTaxInclusive').value); fixedAssetTaxInclusiveMenuTrigger.closeMenu()">{{
+                                                                        row.get("fixedAssetTaxInclusive").value
+                                                                            ? localeData?.exclusive
+                                                                            : localeData?.inclusive
+                                                                    }}</button>
+                                                                </mat-menu>
+                                                            </ng-container>
                                                         </div>
                                                     </div>
                                                 </td>

@@ -1,15 +1,20 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, ReplaySubject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, debounceTime, distinctUntilChanged, filter, take, takeUntil } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { InventoryModuleName } from '../../inventory.enum';
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { InventoryComponentStore } from '../inventory.store';
+import { SalesService } from '../../../services/sales.service';
+import { InventoryService } from '../../../services/inventory.service';
+import { CompanyActions } from '../../../actions/company.actions';
+import { isEqual } from '../../../lodash-optimized';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 
 @Component({
     selector: 'bulk-stock',
@@ -158,6 +163,20 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public tableHeaderDynamicColumns: any[] = [];
     /** True if Api called once time */
     public isApiCalled: boolean = false;
+    /** This will use for select table row index */
+    public selectTableRowIndex: number = -1;
+    /** This will use for sales account list */
+    public salesAccountList: any[] = [];
+    /** This will use for purchase account list */
+    public purchaseAccountList: any[] = [];
+    /** This will use for stock unit group list */
+    public stockUnitGroupList: any[] = [];
+    /** This will use for fixed asset account list */
+    public fixedAssetAccountList: any[] = [];
+    /** This will use for taxes list */
+    public taxes: any[] = [];
+    /** This will use for stock main units list */
+    public stockMainUnits: any[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -166,7 +185,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         private inventoryAction: InventoryAction,
         private dailog: MatDialog,
         private cdr: ChangeDetectorRef,
-        private inventoryStore: InventoryComponentStore
+        private inventoryStore: InventoryComponentStore,
+        private salesService: SalesService,
+        private inventoryService: InventoryService,
+        private companyAction: CompanyActions
     ) {
         this.initBulkStockForm();
         this.getCustomFields();
@@ -206,13 +228,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.noDataFound = res.totalItems === 0;
                 this.totalInventoryCount = res?.totalItems;
                 res.results.forEach((row: any, index: number) => {
-                    this.dropdownValues[index] = [];
-                    this.dropdownValues[index].salesUnits = row.salesUnits;
-                    this.dropdownValues[index].purchaseUnits = row.purchaseUnits;
-                    this.dropdownValues[index].fixedAssetUnits = row.fixedAssetUnits;
+                    this.dropdownValues[index] = row;
+                    this.dropdownValues[index].purchaseUnits = [{code: row?.purchaseUnits?.[0]?.code ?? null, uniqueName: row?.purchaseUnits?.[0]?.uniqueName ?? null}];
+                    this.dropdownValues[index].salesUnits = [{code: row?.salesUnits?.[0]?.code ?? null, uniqueName: row?.salesUnits?.[0]?.uniqueName ?? null}];
+                    this.dropdownValues[index].fixedAssetUnits = [{code: row?.fixedAssetUnits?.[0]?.code ?? null, uniqueName: row?.fixedAssetUnits?.[0]?.uniqueName ?? null}];
                     this.addRow(row);
                 });
-            } 
+            }
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -224,10 +246,188 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             }
         });
 
-        // this.getStockGroups();
-        // this.getTaxes();
+        this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data.body?.results?.length > 0) {
+                this.salesAccountList = data.body.results.map((item: any) => {
+                    return {
+                        label: item.name,
+                        value: item.uniqueName,
+                        additional: item
+                    }
+                });
+                this.cdr.detectChanges();
+            }
+        });
+        this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data.body?.results?.length > 0) {
+                this.purchaseAccountList = data.body.results.map((item: any) => {
+                    return {
+                        label: item.name,
+                        value: item.uniqueName,
+                        additional: item
+                    }
+                });
+                this.cdr.detectChanges();
+            }
+        });
+
+        this.salesService.getAccountsWithCurrency('fixedassets').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if(data.body?.results?.length > 0) {
+                this.fixedAssetAccountList = data.body.results.map((item: any) => {
+                    return {
+                        label: item.name,
+                        value: item.uniqueName,
+                        additional: item
+                    }
+                });
+                this.cdr.detectChanges();
+            }
+        });
+
+        this.getTaxes();
+        this.getStockGroups();
+
+        this.bulkStockEditForm.valueChanges.pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((searchedText: any) => {
+            if (searchedText && this.selectTableRowIndex !== -1) {
+                this.valueChangesOnUpdate(this.selectTableRowIndex);
+            }
+        });
     }
 
+    /**
+     * This will use for get stock groups
+     * 
+     * @memberof BulkStockEditComponent
+     */
+    public getStockGroups(): void {
+        this.inventoryService.GetGroupsWithStocksFlatten(this.inventoryType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.stockUnitGroupList = [];
+                this.arrangeStockGroups(response.body?.results, this.stockUnitGroupList);
+            }
+        });
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * This will use for arrange stock groups
+     *
+     * @private
+     * @param {IGroupsWithStocksHierarchyMinItem[]} groups
+     * @param {IOption[]} [parents=[]]
+     * @memberof BulkStockEditComponent
+     */
+    private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
+        groups.map(group => {
+            if (group) {
+                let newOption: IOption = { label: '', value: '', additional: {} };
+                newOption.label = group?.name;
+                newOption.value = group?.uniqueName;
+                newOption.additional = group;
+                parents.push(newOption);
+                if (group?.childStockGroups?.length > 0) {
+                    this.arrangeStockGroups(group?.childStockGroups, parents);
+                }
+            }
+        });
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * This will use for value changes on update
+     * 
+     * @param {number} selectTableRowIndex
+     * @memberof BulkStockEditComponent
+     */
+    public valueChangesOnUpdate(selectTableRowIndex: number) {
+        const requestBody = {
+            stockUniqueName: this.bulkStockData.value[selectTableRowIndex].stockUniqueName,
+            variantUniqueName: this.bulkStockData.value[selectTableRowIndex].variantUniqueName
+        }
+        const fieldsToRemove = ['fixedAssetUnits', 'purchaseUnits', 'salesUnits'];
+        Object.keys(this.bulkStockData.value[selectTableRowIndex]).forEach(key => {
+            if (fieldsToRemove.includes(key)) {
+                if (!isEqual(this.bulkStockData.value[selectTableRowIndex][key], this.dropdownValues[selectTableRowIndex][key][0]?.code)) {
+                    requestBody[key] = this.bulkStockData.value[selectTableRowIndex][key] ? [{uniqueName: this.bulkStockData.value[selectTableRowIndex][key]}] : [];
+                }
+            } else if (key === 'taxes') {
+                requestBody[key] = this.bulkStockData.value[selectTableRowIndex][key] && this.bulkStockData.value[selectTableRowIndex][key] !== this.dropdownValues[selectTableRowIndex][key][0] ? [this.bulkStockData.value[selectTableRowIndex][key]] : [];
+            } else {
+                if (!isEqual(this.bulkStockData.value[selectTableRowIndex][key], this.dropdownValues[selectTableRowIndex][key])) {
+                    requestBody[key] = this.bulkStockData.value[selectTableRowIndex][key];
+                    this.dropdownValues[selectTableRowIndex][key] = this.bulkStockData.value[selectTableRowIndex][key];
+                }
+            }
+        });
+        this.updateForm(requestBody, selectTableRowIndex);
+    }
+
+    /**
+     * This will use for hide table input
+     * 
+     * @memberof BulkStockEditComponent
+     */
+    public hideTableInput(): void {
+        this.selectTableRowIndex = -1;
+    }
+
+    /**
+     * This will use for show table input
+     * 
+     * @param {any} $event
+     * @param {number} index
+     * @memberof BulkStockEditComponent
+     */
+    public showTableInput($event: any, index: number): void {
+        $event.stopPropagation();
+        this.selectTableRowIndex = index;
+        this.getStockUnits(index);
+    }
+
+    /**
+     * This will use for get taxes
+     * 
+     * @memberof BulkStockEditComponent
+     */
+    public getTaxes(): void {
+        this.store.dispatch(this.companyAction.getTax());
+        this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.length > 0) {
+                this.taxes = response.map((item: any) => {
+                    return {
+                        label: item.name,
+                        value: item.uniqueName,
+                        additional: item
+                    }
+                }) || [];
+            }
+            this.cdr.detectChanges();
+        });
+    }
+
+    /**
+     * This will use for get stock units
+     * 
+     * @param {number} index
+     * @memberof BulkStockEditComponent
+     */
+    public getStockUnits(index: number): void {
+        let groups = ["maingroup"];
+        if (this.bulkStockData.value[index].unitGroupUniqueName) {
+            groups = [this.bulkStockData.value[index].unitGroupUniqueName];
+        }
+
+        this.stockMainUnits = [];
+
+        this.inventoryService.getStockMappedUnit(groups).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                response.body?.forEach((unit: any) => {
+                    this.stockMainUnits.push({ label: unit?.stockUnitX?.code, value: unit?.stockUnitX?.code });
+                });
+            }
+        });
+        this.cdr.detectChanges();
+    }
 
     /**
      * This will use for init Bulk stock formgroup
@@ -261,12 +461,14 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             stockUnitName: [controlValue.stockUnitName, Validators.required],
 
             purchaseUnits: [(controlValue.purchaseUnits?.length && controlValue.purchaseUnits[0] !== null ? controlValue.purchaseUnits[0]?.code : ""), Validators.required],
+            purchaseUnitsUniqueName: [(controlValue.purchaseUnits?.length && controlValue.purchaseUnits[0] !== null ? controlValue.purchaseUnits[0]?.uniqueName : ""), Validators.required],
             purchaseAccountName: [controlValue.purchaseAccountName, Validators.required],
             purchaseAccountUniqueName: [controlValue.purchaseAccountUniqueName, Validators.required],
             purchaseRate: [controlValue.purchaseRate, Validators.required],
             purchaseTaxInclusive: [controlValue.purchaseTaxInclusive, Validators.required],
 
             salesUnits: [(controlValue.salesUnits?.length && controlValue.salesUnits[0] !== null ? controlValue.salesUnits[0]?.code : ""), Validators.required],
+            salesUnitsUniqueName: [(controlValue.salesUnits?.length && controlValue.salesUnits[0] !== null ? controlValue.salesUnits[0]?.uniqueName : ""), Validators.required],
             salesAccountName: [controlValue.salesAccountName, Validators.required],
             salesAccountUniqueName: [controlValue.salesAccountUniqueName, Validators.required],
             salesRate: [controlValue.salesRate, Validators.required],
@@ -275,6 +477,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             fixedAssetTaxInclusive: [controlValue.fixedAssetTaxInclusive, Validators.required],
             fixedAssetRate: [controlValue.fixedAssetRate, Validators.required],
             fixedAssetUnits: [(controlValue.fixedAssetUnits?.length && controlValue.fixedAssetUnits[0] !== null ? controlValue.fixedAssetUnits[0]?.code : ""), Validators.required],
+            fixedAssetUnitsUniqueName: [(controlValue.fixedAssetUnits?.length && controlValue.fixedAssetUnits[0] !== null ? controlValue.fixedAssetUnits[0]?.uniqueName : ""), Validators.required],
             fixedAssetAccountName: [controlValue.fixedAssetAccountName, Validators.required],
             fixedAssetAccountUniqueName: [controlValue.fixedAssetAccountUniqueName, Validators.required],
 
@@ -282,7 +485,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             sacNo: [controlValue.sacNo, Validators.required],
             skuCode: [controlValue.skuCode, Validators.required],
             archive: [controlValue.archive, Validators.required],
-            taxes: [controlValue.taxes, Validators.required],
+            taxes: [controlValue.taxes?.[0], Validators.required],
             customFields: [controlValue.customFields]
         })
     }
@@ -325,6 +528,27 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             this.translationLoaded = true;
             this.cdr.detectChanges();
         }
+    }
+
+    /**
+     * 
+     * @param {*} event 
+     * @memberof BulkStockEditComponent
+     */
+    public updateForm(requestBody: any, selectTableRowIndex: number): void {
+        Object.keys(requestBody).forEach(field => {
+            if (requestBody[field] === null || requestBody[field] === undefined ) {
+                delete requestBody[field];
+            }
+        });
+        this.inventoryStore.updateInventoryVariant(requestBody);
+        this.inventoryStore.updateInventoryVariantSuccess$.pipe(filter(Boolean), take(1)).subscribe((response) => {
+            if (response) {
+                Object.keys(response).forEach(key => {
+                    this.dropdownValues[selectTableRowIndex][key] = response[key];
+                });
+            }
+        });
     }
 
     /**
