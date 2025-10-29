@@ -863,7 +863,7 @@ no-data,
 .thead-background1 {
     th {
         background: var(--color-dark-gray);
-        color: var(--color-white);
+        color: var(--color-black);
     }
 
     th,
@@ -2864,7 +2864,7 @@ header .navbar {
 
 .thead-background1 th {
     background: var(--color-white);
-    color: var(--color-dark-gray);
+    color: var(--color-black);
     padding: 11px !important;
     font-weight: 400;
 }
@@ -5276,7 +5276,7 @@ table input[type="number"] {
 
 .thead-background1 th {
     background: var(--color-light-gray);
-    color: var(--color-dark-gray);
+    color: var(--color-black);
     border-right: 1px solid var(--border-color);
     padding: 11px !important;
     font-weight: 400;
@@ -6824,7 +6824,7 @@ hamburger-menu {
                 td {
                     border: 1px solid var(--border-color) !important;
                     padding: 10px 30px 10px 10px !important;
-                    background-color: var(--color-white) !important;
+                    // background-color: var(--color-white) !important;
                 }
             }
         }
@@ -7441,7 +7441,7 @@ hamburger-menu {
     line-height: 1.42857143;
     vertical-align: top;
     border-top: none;
-    color: var(--color-black);
+    color: var(--theme-foreground-color);
 }
 
 .tax-engine .details .details-info,
@@ -8031,7 +8031,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 }
 
 .total-sales-tabs .nav-tabs li a {
-    color: var(--color-black);
+    // color: var(--color-black);
     font-size: var(--font-size-15);
     padding: 0 5px;
     position: relative;

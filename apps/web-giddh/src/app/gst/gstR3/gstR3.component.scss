@@ -13,7 +13,6 @@ svg.icon.icon-lg {
     height: 18px;
     width: 12px;
     filter: invert(0);
-    color: var(--color-black);
     position: relative;
     top: -1px;
 }
@@ -232,9 +231,9 @@ svg.icon.icon-xxlg {
     width: 25px;
 }
 
-.column.content-column.gst-filing-container.navs-list {
-    background: var(--color-white);
-}
+// .column.content-column.gst-filing-container.navs-list {
+//     background: var(--color-white);
+// }
 
 // .tax-engine .gstr3b-header .sel-tab li {
 //     list-style: none;

@@ -1,5 +1,5 @@
 @mixin highlight-color($bgColor, $color) {
-    background-color: $bgColor !important;
+    // background-color: $bgColor !important;
     color: $color !important;
 }
 .primary-sidebar {
@@ -440,18 +440,18 @@
                         }
                     }
                 }
-                &:after {
-                    position: absolute;
-                    content: "";
-                    background-color: var(--color-white);
-                    width: 100%;
-                    height: 100%;
-                    left: 40px;
-                    z-index: 999;
-                    top: 0;
-                    box-shadow: 0 0 6px var(--color-shadow-light);
-                    filter: blur(7px);
-                }
+                // &:after {
+                //     position: absolute;
+                //     content: "";
+                //     background-color: var(--color-white);
+                //     width: 100%;
+                //     height: 100%;
+                //     left: 40px;
+                //     z-index: 999;
+                //     top: 0;
+                //     box-shadow: 0 0 6px var(--color-shadow-light);
+                //     filter: blur(7px);
+                // }
             }
             .toogle-sidebar {
                 i {

@@ -108,7 +108,7 @@ span.icon-collapse-icon:hover {
 }
 */
 .total-sales-header {
-    background-color: var(--color-white);
+    background-color: var(--theme-background-color);
     border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
     padding: 15px 15px 20px;
@@ -220,7 +220,7 @@ span.icon-collapse-icon:hover {
     min-height: 60px;
 }
 .single-sale-data .small-heading {
-    color: var(--color-black);
+    // color: var(--color-black);
     font-size: var(--font-size-15);
 }
 .single-sale-data h3 {
@@ -245,7 +245,7 @@ span.date-wise-sale {
     border-right: none;
 }
 .total-sales-tabs a {
-    color: var(--color-black);
+    // color: var(--color-black);
     cursor: pointer;
     padding-right: 3px;
     padding-left: 3px;

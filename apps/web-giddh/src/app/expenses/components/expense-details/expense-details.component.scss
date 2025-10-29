@@ -118,9 +118,9 @@ span {
     visibility: hidden;
 }
 .petty-cash {
-    background: var(--color-white);
+    background: var(--theme-background-color);
     .bg-color{
-        background-color: var(--color-white) !important;
+        background-color: var(--theme-background-color) !important;
     }
 }
 
