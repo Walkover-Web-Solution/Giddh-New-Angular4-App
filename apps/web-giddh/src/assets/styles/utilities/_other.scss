@@ -1,3 +1,5 @@
+@use "../abstracts/mixins" as *;
+
 // Border styles
 .border {
     border: 1px solid var(--border-color) !important;
@@ -117,8 +119,15 @@
 .dark-grey-bg {
     background: var(--color-dark-gray) !important;
 }
-.bg-grey {
-    background-color: var(--color-light-gray) !important;
+@include theme(default) {
+    .bg-grey {
+        background-color: var(--color-light-gray) !important;
+    }
+}
+@include theme(dark) {
+    .bg-grey {
+        background-color: var(--theme-primary-light) !important;
+    }
 }
 .bg-transparent {
     background: var(--color-transparent) !important;
@@ -564,6 +573,9 @@
 
 .max-height-65vh {
     max-height: 65vh !important;
+}
+.full-viewport-height {
+    height: calc(100vh - var(--header-height));
 }
 
 // ===== DISPLAY & FLEXBOX =====

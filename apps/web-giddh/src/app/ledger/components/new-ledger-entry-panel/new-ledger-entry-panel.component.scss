@@ -1,8 +1,8 @@
 .ledger-panel {
-    background-color: var(--color-white);
+    background-color: var(--theme-background-color);
     overflow: visible;
     .more-details {
-        background-color: var(--color-white);
+        // background-color: var(--theme-background-color);
         padding: 0 15px 15px;
         .cheque {
             table {

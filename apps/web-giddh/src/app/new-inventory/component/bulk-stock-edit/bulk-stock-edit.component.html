@@ -1098,10 +1098,8 @@
                                     </tbody>
                                 </table>
                             </form>
-                        </div>
-
-                        <div *ngIf="pagination?.totalItems > pageSizeOptions[0] && !isLoading">
                             <mat-paginator
+                                *ngIf="pagination?.totalItems > pageSizeOptions[0] && !isLoading"
                                 [length]="pagination?.totalItems"
                                 [pageSize]="pageCount"
                                 [pageIndex]="pagination.currentPage - 1"
@@ -1110,7 +1108,6 @@
                                 [hidePageSize]="false"
                                 (page)="handlePageEvent($event)"
                             ></mat-paginator>
-                            <section class="mr-b8"></section>
                         </div>
                     </ng-container>
                     <div *ngIf="!(!noDataFound || searchString) && !isLoading" class="no-data mb-5">
@@ -1122,6 +1119,7 @@
         <div *ngIf="noDataFound && !(advanceSearchData || searchString) && !isLoading" class="no-data mb-5">
             <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
         </div>
+        <section class="mr-b8"></section>
     </div>
 </ng-container>
 

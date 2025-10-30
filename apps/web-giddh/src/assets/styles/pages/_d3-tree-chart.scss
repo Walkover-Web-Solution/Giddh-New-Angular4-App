@@ -1,5 +1,5 @@
 .branch-tree-wrapper {
-    background-color: none;
+    background: none;
     border-radius: var(--mat-border-radius-0);
 
     .tree-content {
@@ -14,13 +14,13 @@
 
         .tree-container {
             .tree-name {
-                color: var(--text-primary-color);
-                font-weight: bold
+                color: var(--theme-primary-color);
+                font-weight: bold;
             }
 
             .tree-alias {
-                color: var(--color-medium-gray);
-                margin-top: 4px
+                color: var(--theme-foreground-color);
+                margin-top: 4px;
             }
         }
     }

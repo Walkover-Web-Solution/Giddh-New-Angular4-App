@@ -2,7 +2,7 @@
     <div class="row overflow-visible">
         <div
             *ngIf="organizationType === 'COMPANY'"
-            class="w-100 d-flex justify-content-between mb-4 mt-2 align-items-start address-list-top"
+            class="w-100 d-flex justify-content-between mb-4 align-items-start address-list-top"
         >
             <div class="search-container">
                 <div class="font-size-15">{{ localeData?.company_address_list }}</div>
@@ -32,7 +32,7 @@
         <!-- branch profile element start -->
         <div
             *ngIf="organizationType === 'BRANCH' || isConsolidatedBranch"
-            class="w-100 d-flex justify-content-between mb-4 mt-2 align-items-start address-list-top"
+            class="w-100 d-flex justify-content-between mb-4 align-items-start address-list-top"
         >
             <div class="font-size-15">{{ localeData?.address_list }}</div>
             <button

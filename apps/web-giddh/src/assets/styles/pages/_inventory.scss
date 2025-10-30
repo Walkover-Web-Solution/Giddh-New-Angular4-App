@@ -16,7 +16,7 @@
         min-height: 50px !important;
 
         .option-label {
-            color: var(--color-black);
+            color: var(--theme-foreground-color);
         }
 
         .option-value {
@@ -170,11 +170,11 @@ inventory-master {
             .inventory-sub-sideabar {
                 .item-list {
                     a {
-                        mat-list-item {
-                            .mdc-list-item__primary-text {
-                                color: var(--color-field-hover) !important;
-                            }
-                        }
+                        // mat-list-item {
+                        //     .mdc-list-item__primary-text {
+                        //         color: var(--color-field-hover) !important;
+                        //     }
+                        // }
 
                         &.isActive {
                             mat-list-item {

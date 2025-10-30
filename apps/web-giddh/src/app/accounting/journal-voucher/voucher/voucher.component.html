@@ -15,7 +15,7 @@
                     (clickOutside)="showFromDatePicker = false"
                 >
                     <span>{{ displayDay }},</span>
-                    <div class="entry-date-container">
+                    <div class="entry-date-container mat-form-field-clean">
                         <giddh-datepicker
                             [name]="'entryDate'"
                             [placeholder]="giddhDateFormat"
@@ -319,10 +319,10 @@
         </div>
     </form>
     <div class="sidebar-list form-control" [hidden]="!showLedgerAccountList">
-        <p class="pd-1 border-bottom text-primary" *ngIf="selectedField === 'account'">
+        <p class="pd-1 border-bottom text-black" *ngIf="selectedField === 'account'">
             {{ localeData?.ledger_accounts_list }}
         </p>
-        <p class="pd-1 border-bottom text-primary" *ngIf="selectedField === 'stock'">{{ localeData?.stock_items_list }}</p>
+        <p class="pd-1 border-bottom text-black" *ngIf="selectedField === 'stock'">{{ localeData?.stock_items_list }}</p>
         <div class="h-100 mat-app-background">
             <ul *ngIf="inputForList?.length === 0" class="grp-list group-list-no-found users-last-list">
                 <li>
@@ -367,7 +367,7 @@
         </div>
     </div>
     <div class="sidebar-list form-control" [hidden]="!showDiscountSidebar">
-        <div class="border-bottom d-flex justify-content-between align-items-center pd-05">
+        <div class="border-bottom d-flex justify-content-between align-items-center pd-05 mat-app-background">
             <h3 class="text-primary">{{ localeData?.discount_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeDiscountSidebar()"></i>
         </div>
@@ -422,7 +422,7 @@
         </div>
     </div>
     <div class="sidebar-list form-control" [hidden]="!showTaxSidebar">
-        <div class="border-bottom d-flex justify-content-between align-items-center pd-05">
+        <div class="border-bottom d-flex justify-content-between align-items-center pd-05 mat-app-background">
             <h3 class="text-primary">{{ localeData?.tax_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeTaxSidebar()"></i>
         </div>

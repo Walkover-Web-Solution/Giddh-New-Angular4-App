@@ -47,7 +47,7 @@
 .mat-calendar-table-header {
     th {
         padding: 10px 0 10px 0 !important;
-        color: var(--color-black);
+        color: var(--theme-foreground-color);
         &.mat-calendar-table-header-divider {
             padding: 0px !important;
         }

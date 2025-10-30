@@ -860,17 +860,17 @@ no-data,
     }
 }
 
-.thead-background1 {
-    th {
-        background: var(--color-dark-gray);
-        color: var(--color-black);
-    }
+// .thead-background1 {
+//     th {
+//         background: var(--color-dark-gray);
+//         color: var(--color-black);
+//     }
 
-    th,
-    td {
-        background: var(--color-border-light);
-    }
-}
+//     th,
+//     td {
+//         background: var(--color-border-light);
+//     }
+// }
 .compound-entry {
     td,
     td input,
@@ -880,7 +880,7 @@ no-data,
     }
 }
 .ledger-panel {
-    background: var(--color-light-gray);
+    background: var(--theme-background-color);
     border-radius: var(--mat-border-radius-0);
     position: relative;
     padding: 15px;
@@ -1538,7 +1538,7 @@ form {
 
         giddh-datepicker {
             .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-                background-color: transparent;
+                background-color: transparent !important;
             }
 
             .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
@@ -2168,9 +2168,9 @@ aside-create-group {
             .mdc-list-item__content {
                 padding: 0;
 
-                a {
-                    color: var(--color-black);
-                }
+                // a {
+                //     color: var(--color-black);
+                // }
             }
 
             &.mat-left {
@@ -2251,7 +2251,7 @@ aside-create-group {
         min-height: 65px !important;
 
         .option-label {
-            color: var(--color-black);
+           color: var(--theme-foreground-color);
         }
 
         .option-value {
@@ -2863,8 +2863,8 @@ header .navbar {
 }
 
 .thead-background1 th {
-    background: var(--color-white);
-    color: var(--color-black);
+    // background: var(--color-white);
+    // color: var(--color-black);
     padding: 11px !important;
     font-weight: 400;
 }
@@ -5275,8 +5275,8 @@ table input[type="number"] {
 }
 
 .thead-background1 th {
-    background: var(--color-light-gray);
-    color: var(--color-black);
+    // background: var(--color-light-gray);
+    // color: var(--color-black);
     border-right: 1px solid var(--border-color);
     padding: 11px !important;
     font-weight: 400;
@@ -6956,7 +6956,7 @@ hamburger-menu {
     width: 16px;
     height: 16px;
     fill: currentColor;
-    filter: invert(0);
+    // filter: invert(0);
 }
 
 .text-bottom {
@@ -6966,7 +6966,7 @@ hamburger-menu {
 .tax-engine .icon.icon-sm {
     height: 14px;
     width: 14px;
-    filter: invert(0);
+    // filter: invert(0);
 }
 
 .tax-engine .transactions-list .list-filter .list-style .gstr-icon {
@@ -6976,7 +6976,7 @@ hamburger-menu {
 .tax-engine .icon.gstr-icon {
     width: 42px;
     height: 42px;
-    filter: invert(0);
+    // filter: invert(0);
 }
 
 .tax-engine .transactions-list .list-filter .list-style .nav-top {
@@ -8462,7 +8462,7 @@ button.ladda-button .ladda-label {
         border-bottom: 1px solid var(--border-color);
 
         .option-label {
-            color: var(--color-black);
+            color: var(--theme-foreground-color);
         }
 
         .option-value {
@@ -8486,7 +8486,7 @@ button.ladda-button .ladda-label {
 
     .options-line {
         .option-label {
-            color: var(--color-black);
+            color: var(--theme-foreground-color);
         }
 
         .option-value {
@@ -10004,12 +10004,12 @@ import-wizard {
 
 // Ledger Create Panel text color
 .new-ledger-panel {
-    color: var(--color-black) !important;
+    // color: var(--color-black) !important;
 
-    label,
-    strong {
-        color: var(--color-black) !important;
-    }
+    // label,
+    // strong {
+    //     color: var(--color-black) !important;
+    // }
 
     /* UNUSED GLOBAL CLASS: mat-expansion-panel - Auto-commented by script
     .mat-expansion-panel {
@@ -10075,7 +10075,7 @@ import-wizard {
 .on-setting-page {
     .entity-details {
         .item {
-            color: var(--color-black);
+            color: var(--theme-foreground-color);
         }
 
         .item-unique {
@@ -11551,7 +11551,6 @@ body.prevent-body-scroll {
 
 
 .giddh-table {
-    background: var(--color-white);
     font-weight: var(--font-weight-semibold);
     border: 1px solid var(--color-silver);
     width: 100%;
@@ -11737,26 +11736,26 @@ body {
 }
 
 // Temp Code to fix Only CSS Version 2 bugs
-button {
-    &.mat-mdc-icon-button {
-        .mat-mdc-button-persistent-ripple {
-            display: none;
-        }
-    }
-}
-.mat-mdc-form-field {
-    .mat-mdc-form-field-focus-overlay {
-        display: none;
-    }
-    .mdc-line-ripple {
-        display: none;
-    }
-    .mdc-text-field--filled {
-        &:not(.mdc-text-field--disabled) {
-            background-color: var(--color-transparent);
-        }
-    }
-}
+// button {
+//     &.mat-mdc-icon-button {
+//         .mat-mdc-button-persistent-ripple {
+//             display: none;
+//         }
+//     }
+// }
+// .mat-mdc-form-field {
+//     .mat-mdc-form-field-focus-overlay {
+//         display: none;
+//     }
+//     .mdc-line-ripple {
+//         display: none;
+//     }
+//     .mdc-text-field--filled {
+//         &:not(.mdc-text-field--disabled) {
+//             background-color: var(--color-transparent) !important;
+//         }
+//     }
+// }
 
 .mobile-number-container {
     mat-select {

@@ -113,8 +113,9 @@
         [commonLocaleData]="commonLocaleData"
     >
     </columnar-report-table-component>
-    <ng-container *ngIf="columnarReportResponse?.totalItems > pageSizeOptions[0]">
+    <div class="pd-l15 pd-r15">
         <mat-paginator
+            *ngIf="columnarReportResponse?.totalItems > pageSizeOptions[0]"
             [length]="columnarReportResponse.totalItems"
             [pageSize]="getColumnarRequestModel.count"
             [pageIndex]="getColumnarRequestModel.page - 1"
@@ -123,9 +124,9 @@
             [hidePageSize]="false"
             (page)="handlePageEvent($event)">
         </mat-paginator>
-    </ng-container>
-    <section class="mr-b8"></section>
+    </div>
     <div *ngIf="isLoading && isShowColumnarReport">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
+    <section class="mr-b8"></section>
 </ng-container>
