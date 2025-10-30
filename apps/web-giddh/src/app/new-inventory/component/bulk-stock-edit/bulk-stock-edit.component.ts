@@ -7,7 +7,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { InventoryModuleName } from '../../inventory.enum';
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../app.constant';
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT_BULK_STOCK } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { InventoryComponentStore } from '../inventory.store';
 import { SalesService } from '../../../services/sales.service';
@@ -36,9 +36,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     /** Holds Pagination Info*/
     public pagination: any;
     /**Holds Page count in single page for Pagination */
-    private pageCount = PAGINATION_LIMIT;
-    /** Pagination limit */
-    public paginationLimit: number = PAGINATION_LIMIT;
+    public pageCount: number = PAGINATION_LIMIT_BULK_STOCK;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total Item(stock) get from API */
@@ -344,9 +342,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             stockUniqueName: this.bulkStockData.value[selectTableRowIndex].stockUniqueName,
             variantUniqueName: this.bulkStockData.value[selectTableRowIndex].variantUniqueName
         }
-        const fieldsToRemove = ['fixedAssetUnits', 'purchaseUnits', 'salesUnits'];
+        const unitFields = ['fixedAssetUnits', 'purchaseUnits', 'salesUnits'];
         Object.keys(this.bulkStockData.value[selectTableRowIndex]).forEach(key => {
-            if (fieldsToRemove.includes(key)) {
+            if (unitFields.includes(key)) {
                 if (!isEqual(this.bulkStockData.value[selectTableRowIndex][key], this.dropdownValues[selectTableRowIndex][key][0]?.code)) {
                     requestBody[key] = this.bulkStockData.value[selectTableRowIndex][key] ? [{uniqueName: this.bulkStockData.value[selectTableRowIndex][key]}] : [];
                 }
