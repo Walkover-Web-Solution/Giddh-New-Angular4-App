@@ -136,6 +136,10 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public ocrType: string = "";
     /** This will use for row data */
     public rowData: any;
+    /** This will use for voucher type */
+    public voucherType: string = "";
+    /** This will use for ai ocr details */
+    public aiOcrDetails: any;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -165,7 +169,10 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.aiOcrService.sendListData$.next(null);
                 this.aiOcrService.resetData$.next(null);
                 this.aiOcrService.selectBranch$.next(null);
-                this.selectedToggle = OcrAction.List;
+                this.aiOcrService.ocrListToCreate$.next(null);
+                this.aiOcrService.mainPageOcrData$.next(null);
+                this.aiOcrService.mainPage$.next(null);
+                this.aiOcrService.saveAndNextSuccess$.next(null);
                 this.aiOcrStore.reset();
                 this.ledgerComponentStore.reset();
                 // End previous route scope and clear any existing interval before starting new scope
@@ -184,7 +191,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.listCount = 0;
                 this.countVariable = 0;
                 this.ocrType = response.type;
-                
+
                 this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
                     if (response) {
                         this.isConsolidatedBranch = response.isBranchConsolidated;
@@ -376,10 +383,15 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 });
 
                 this.aiOcrService.ocrListToCreate$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
-                    if (response) {
+                    if (response && response.type && response.row) {
                         this.rowData = response;
-                        this.buttonDisabled = false;
-                        this.onToggleChange(OcrAction.Create);
+                        this.voucherType = null;
+                        this.onToggleChange(OcrAction.Create, false);
+                    } else if (response && response.type && response.row == null) {
+                        this.voucherType = response.type;
+                        this.rowData = null;
+                        this.aiOcrDetails = response.aiOcrDetails;
+                        this.onToggleChange(OcrAction.Create, false);
                     }
                 });
             }
@@ -428,18 +440,33 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     /**
      * Handles the toggle change event.
      * @param value - The toggle change value.
+     * @param onClickCreate - Indicates whether the toggle change was triggered by a click on create.
      * @memberof AiOcrComponent
      */
-    public onToggleChange(value: any): void {
+    public onToggleChange(value: any, onClickCreate?: boolean): void {
+        if (onClickCreate) {
+            this.voucherType = null;
+            this.rowData = null;
+        }
         if (this.shouldPreventChange(value)) {
             return;
         }
         if (value === OcrAction.Create && !this.buttonDisabled) {
+            this.selectedToggle = OcrAction.Create;
             if (this.rowData) {
-                this.selectedToggle = OcrAction.Create;
                 this.aiOcrStore.getExtractDocuments(this.rowData);
+            } else if (this.voucherType) {
+                const req = {
+                    type: this.voucherType,
+                    row: {
+                        requestId: this.aiOcrDetails?.token
+                    }
+                }
+                this.aiOcrService.ocrListToCreate$.next(null);
+                this.aiOcrStore.getExtractDocuments(req);
             } else {
-                this.aiOcrStore.getExtractDocuments("");
+                this.aiOcrService.ocrListToCreate$.next(null);
+                this.aiOcrStore.getExtractDocuments('');
             }
         } else if (value === OcrAction.List) {
             this.selectedToggle = value;
