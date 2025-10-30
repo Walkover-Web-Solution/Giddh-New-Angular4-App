@@ -5,7 +5,7 @@
         <mat-card class="container-lg">
             <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
                 <mat-card-content>
-                    <div class="w200 mr-b15" *ngIf="rowData">
+                    <div class="w200 mr-b15" *ngIf="ocrType">
                         <reactive-dropdown-field 
                             [label]="commonLocaleData?.app_select_voucher"
                             [options]="transactionOptions"
