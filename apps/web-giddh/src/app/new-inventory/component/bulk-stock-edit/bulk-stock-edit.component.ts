@@ -7,7 +7,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { InventoryModuleName } from '../../inventory.enum';
-import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT_BULK_STOCK } from '../../../app.constant';
+import { PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT_BULK_STOCK } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { InventoryComponentStore } from '../inventory.store';
 import { SalesService } from '../../../services/sales.service';
