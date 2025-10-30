@@ -15,27 +15,27 @@
                         <address class="address-block font-18" *ngIf="responseAccountList.accountName">
                             <h2 class="font-20">{{ responseAccountList.accountName }}</h2>
                             <ng-container *ngIf="responseAccountList.accountAddress">
-                                <p *ngIf="responseAccountList.accountAddress.email">
-                                    {{ responseAccountList.accountAddress.email }}
-                                </p>
                                 <p *ngIf="responseAccountList.accountAddress.address">
-                                    {{ responseAccountList.accountAddress.address }}
-                                </p>
-                                <p *ngIf="responseAccountList.accountAddress.taxNumber">
-                                    {{ responseAccountList.accountAddress.taxType }}:
-                                    {{ responseAccountList.accountAddress.taxNumber }}
-                                </p>
-                                <p *ngIf="responseAccountList.accountAddress.mobileNo">
-                                    {{ responseAccountList.accountAddress.mobileNo }}
-                                </p>
-                                <p *ngIf="responseAccountList.accountAddress.pinCode">
-                                    {{ responseAccountList.accountAddress.pinCode }}
+                                    {{ commonLocaleData?.app_address }} : {{ responseAccountList.accountAddress.address }}
                                 </p>
                                 <p *ngIf="responseAccountList.accountAddress.stateName">
                                     {{ responseAccountList.accountAddress.stateName }}
                                 </p>
                                 <p *ngIf="responseAccountList.accountAddress.countryName">
                                     {{ responseAccountList.accountAddress.countryName }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.pinCode">
+                                    {{ responseAccountList.accountAddress.pinCode }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.taxNumber">
+                                    {{ responseAccountList.accountAddress.taxType }} :
+                                    {{ responseAccountList.accountAddress.taxNumber }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.email">
+                                    {{ commonLocaleData?.app_email }} : {{ responseAccountList.accountAddress.email }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.mobileNo">
+                                    {{ commonLocaleData?.app_mobile_no }} : {{ responseAccountList.accountAddress.mobileNo }}
                                 </p>
                             </ng-container>
                         </address>
@@ -44,27 +44,27 @@
                         <address class="address-block font-18 text-right" *ngIf="responseAccountList.companyName">
                             <h2 class="font-20">{{ responseAccountList.companyName }}</h2>
                             <ng-container *ngIf="responseAccountList.companyGstAddress">
-                                <p *ngIf="responseAccountList.companyGstAddress.email">
-                                    {{ responseAccountList.companyGstAddress.email }}
-                                </p>
                                 <p *ngIf="responseAccountList.companyGstAddress.address">
-                                    {{ responseAccountList.companyGstAddress.address }}
-                                </p>
-                                <p *ngIf="responseAccountList.companyGstAddress.taxNumber">
-                                    {{ responseAccountList.companyGstAddress.taxType }}:
-                                    {{ responseAccountList.companyGstAddress.taxNumber }}
-                                </p>
-                                <p *ngIf="responseAccountList.companyGstAddress.mobileNo">
-                                    {{ responseAccountList.companyGstAddress.mobileNo }}
-                                </p>
-                                <p *ngIf="responseAccountList.companyGstAddress.pinCode">
-                                    {{ responseAccountList.companyGstAddress.pinCode }}
+                                    {{ commonLocaleData?.app_address }} : {{ responseAccountList.companyGstAddress.address }}
                                 </p>
                                 <p *ngIf="responseAccountList.companyGstAddress.stateName">
                                     {{ responseAccountList.companyGstAddress.stateName }}
                                 </p>
                                 <p *ngIf="responseAccountList.companyGstAddress.countryName">
                                     {{ responseAccountList.companyGstAddress.countryName }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.pinCode">
+                                    {{ responseAccountList.companyGstAddress.pinCode }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.taxNumber">
+                                    {{ responseAccountList.companyGstAddress.taxType }} :
+                                    {{ responseAccountList.companyGstAddress.taxNumber }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.email">
+                                    {{ commonLocaleData?.app_email }} : {{ responseAccountList.companyGstAddress.email }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.mobileNo">
+                                    {{ commonLocaleData?.app_mobile_no }} : {{ responseAccountList.companyGstAddress.mobileNo }}
                                 </p>
                             </ng-container>
                         </address>
