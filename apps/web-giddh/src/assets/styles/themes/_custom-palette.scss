@@ -115,6 +115,6 @@ $giddh-accent: mat.define-palette($custom-accent-palette, 900);    // #198754
 $giddh-warn: mat.define-palette($custom-warn-palette, 900);        // #dc3545
 
 // Dark theme variants - using lighter shades for better contrast on dark backgrounds
-$giddh-primary-dark: mat.define-palette($custom-primary-palette, 600);  // #9fa8da (lighter indigo)
-$giddh-accent-dark: mat.define-palette($custom-accent-palette, 600);    // #a5d6a7 (lighter green)
-$giddh-warn-dark: mat.define-palette($custom-warn-palette, 600);        // #ef9a9a (lighter red)
+$giddh-primary-dark: mat.define-palette($custom-primary-palette, 400);  // #9fa8da (lighter indigo)
+$giddh-accent-dark: mat.define-palette($custom-accent-palette, 400);    // #a5d6a7 (lighter green)
+$giddh-warn-dark: mat.define-palette($custom-warn-palette, 400);        // #ef9a9a (lighter red)

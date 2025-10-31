@@ -34,7 +34,6 @@
                             </ng-container>
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
                             <div
-                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstNotFoundOnPortalData$ | async)?.data?.totalItems > pageSizeOptions[0]
@@ -79,7 +78,6 @@
                             </ng-container>
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
                             <div
-                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstNotFoundOnGiddhData$ | async)?.data?.totalItems > pageSizeOptions[0]
@@ -125,7 +123,6 @@
                             </ng-container>
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
                             <div
-                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstPartiallyMatchedData$ | async)?.data?.totalItems > pageSizeOptions[0]
@@ -174,7 +171,6 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstMatchedData$ | async)?.data?.totalItems > pageSizeOptions[0]
@@ -204,7 +200,7 @@
 <ng-template #commonTableTemplate let-list let-type="type">
     <ng-container *ngIf="list?.count">
         <table
-            class="table table-fixed reconciliations-table table-hover table-responsive"
+            class="table table-fixed reconciliations-table table-hover table-responsive mb-0"
             *ngIf="list?.count"
         >
             <thead>
