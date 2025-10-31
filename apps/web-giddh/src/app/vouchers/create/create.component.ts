@@ -734,14 +734,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.ocrType = params.type;
                         this.transactionOptions = this.ocrType === 'income'
                             ? [
-                                { label: this.commonLocaleData?.app_invoice, value: VoucherTypeEnum.sales },
-                                { label: this.commonLocaleData?.app_voucher_types?.credit_note, value: VoucherTypeEnum.creditNote },
-                                { label: this.commonLocaleData?.app_voucher_types?.receipt, value: VoucherTypeEnum.receipt }
+                                { label: this.commonLocaleData?.app_create_invoice, value: VoucherTypeEnum.invoice },
+                                { label: this.commonLocaleData?.app_create_credit_note, value: VoucherTypeEnum.creditNote },
+                                { label: this.commonLocaleData?.app_create_receipt, value: VoucherTypeEnum.receipt }
                             ]
                             : [
-                                { label: this.commonLocaleData?.app_bill, value: VoucherTypeEnum.purchase },
-                                { label: this.commonLocaleData?.app_voucher_types?.debit_note, value: VoucherTypeEnum.debitNote },
-                                { label: this.commonLocaleData?.app_voucher_types?.payment, value: VoucherTypeEnum.payment }
+                                { label: this.commonLocaleData?.app_create_bill, value: VoucherTypeEnum.bill },
+                                { label: this.commonLocaleData?.app_create_debit_note, value: VoucherTypeEnum.debitNote },
+                                { label: this.commonLocaleData?.app_create_payment, value: VoucherTypeEnum.payment }
                             ];
                         this.aiOcrService.getOcrData$
                             .pipe(skip(1), takeUntil(this.destroyed$))
@@ -757,7 +757,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             if (voucherDetails && voucherDetails.type) {
                                 this.aiOcrDetails = voucherDetails;
                                 if (!this.rowData) {
-                                    this.selectedVoucherType = voucherDetails.type;
+                                    this.selectedVoucherType = voucherDetails.type?.toLowerCase() === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : voucherDetails.type?.toLowerCase() === VoucherTypeEnum.purchase ? VoucherTypeEnum.bill : voucherDetails.type;
                                     this.voucherType = voucherDetails.type;
                                     this.getVoucherType();
                                     this.invoiceForm.get("type").patchValue(this.voucherType);
@@ -777,11 +777,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.aiOcrService.ocrListToCreate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.type && response.row) {
-                this.selectedVoucherType = this.titleCasePipe.transform(response.type);
+                this.selectedVoucherType = response.type?.toLowerCase() === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : response.type?.toLowerCase() === VoucherTypeEnum.purchase ? VoucherTypeEnum.bill : response.type;
                 this.rowData = response.row;
             } else if (response && response.type && response.row == null) {
                 this.rowData = null;
-                this.selectedVoucherType = this.titleCasePipe.transform(response.type);
+                this.selectedVoucherType = response.type?.toLowerCase() === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : response.type?.toLowerCase() === VoucherTypeEnum.purchase ? VoucherTypeEnum.bill : response.type;
             }
         });
 
@@ -6933,9 +6933,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
       */
     public selectVoucherType(type: string): void {
         this.selectedVoucherType = type?.toLowerCase();
+        
+        // Optimize type mapping using object lookup instead of if-else chain
+        const typeMapping = { 'bill': 'purchase', 'invoice': 'sales' };
+        const mappedType = typeMapping[this.selectedVoucherType] || this.selectedVoucherType;
+        
         const req = {
             row: this.rowData,
-            type: this.selectedVoucherType,
+            type: mappedType,
             list: this.transactionOptions,
             aiOcrDetails : this.aiOcrDetails
         }
