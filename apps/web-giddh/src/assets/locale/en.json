@@ -403,6 +403,7 @@
     "app_create_payment": "Create Payment",
     "app_create_receipt": "Create Receipt",
     "app_create_purchase_bill": "Create Purchase Bill",
+    "app_create_bill": "Create Bill",
     "app_invoices": "Invoices",
     "app_credit_notes": "Credit Notes",
     "app_debit_notes": "Debit Notes",
