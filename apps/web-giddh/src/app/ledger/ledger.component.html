@@ -1835,7 +1835,7 @@
                                                     [selectedPrefixForCurrency]="selectedPrefixForCurrency"
                                                     [selectedSuffixForCurrency]="selectedSuffixForCurrency"
                                                     [isLedgerAccountAllowsMultiCurrency]="
-                                                        isLedgerAccountAllowsMultiCurrency
+                                                        isLedgerAccountAllowsMultiCurrency || particularMultiCurrency
                                                     "
                                                     [inputMaskFormat]="inputMaskFormat"
                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
@@ -2235,7 +2235,7 @@
                                                     [selectedSuffixForCurrency]="selectedSuffixForCurrency"
                                                     [inputMaskFormat]="inputMaskFormat"
                                                     [isLedgerAccountAllowsMultiCurrency]="
-                                                        isLedgerAccountAllowsMultiCurrency
+                                                        isLedgerAccountAllowsMultiCurrency || particularMultiCurrency
                                                     "
                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                     (changeTransactionType)="toggleTransactionType($event)"
@@ -3457,7 +3457,7 @@
                                 [selectedSuffixForCurrency]="selectedSuffixForCurrency"
                                 [inputMaskFormat]="inputMaskFormat"
                                 [isLedgerAccountAllowsMultiCurrency]="
-                                    isLedgerAccountAllowsMultiCurrency
+                                    isLedgerAccountAllowsMultiCurrency || particularMultiCurrency
                                 "
                                 (closeOtherDialogMenu)="handleCloseOtherDialogMenu($event)"
                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
