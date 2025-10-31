@@ -741,14 +741,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.ocrType = params.type;
                         this.transactionOptions = this.ocrType === 'income'
                             ? [
-                                { label: this.commonLocaleData?.app_create_invoice, value: VoucherTypeEnum.invoice },
-                                { label: this.commonLocaleData?.app_create_credit_note, value: VoucherTypeEnum.creditNote },
-                                { label: this.commonLocaleData?.app_create_receipt, value: VoucherTypeEnum.receipt }
+                                { label: this.commonLocaleData?.app_invoice, value: VoucherTypeEnum.invoice },
+                                { label: this.commonLocaleData?.app_voucher_types?.credit_note, value: VoucherTypeEnum.creditNote },
+                                { label: this.commonLocaleData?.app_voucher_types?.receipt, value: VoucherTypeEnum.receipt }
                             ]
                             : [
-                                { label: this.commonLocaleData?.app_create_bill, value: VoucherTypeEnum.bill },
-                                { label: this.commonLocaleData?.app_create_debit_note, value: VoucherTypeEnum.debitNote },
-                                { label: this.commonLocaleData?.app_create_payment, value: VoucherTypeEnum.payment }
+                                { label: this.commonLocaleData?.app_bill, value: VoucherTypeEnum.bill },
+                                { label: this.commonLocaleData?.app_voucher_types?.debit_note, value: VoucherTypeEnum.debitNote },
+                                { label: this.commonLocaleData?.app_voucher_types?.payment, value: VoucherTypeEnum.payment }
                             ];
                         this.aiOcrService.getOcrData$
                             .pipe(skip(1), takeUntil(this.destroyed$))
@@ -6985,8 +6985,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
       * @param {string} type - The unique name to search for
       * @memberof VoucherCreateComponent
       */
-    public selectVoucherType(type: string): void {
-        this.selectedVoucherType = type?.toLowerCase();
+    public selectVoucherType(value: string): void {
+        this.selectedVoucherType = value?.toLowerCase();
         
         // Optimize type mapping using object lookup instead of if-else chain
         const typeMapping = { 'bill': 'purchase', 'invoice': 'sales' };
