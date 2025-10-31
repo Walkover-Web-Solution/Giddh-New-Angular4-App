@@ -757,8 +757,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             if (voucherDetails && voucherDetails.type) {
                                 this.aiOcrDetails = voucherDetails;
                                 if (!this.rowData) {
-                                    this.selectedVoucherType = this.ocrType === 'income' ? this.commonLocaleData?.app_voucher_types?.sales : this.commonLocaleData?.app_voucher_types?.purchase;
-                                    this.voucherType = this.ocrType === 'income' ? VoucherTypeEnum.sales : VoucherTypeEnum.purchase;
+                                    this.selectedVoucherType = voucherDetails.type;
+                                    this.voucherType = voucherDetails.type;
                                     this.getVoucherType();
                                     this.invoiceForm.get("type").patchValue(this.voucherType);
                                     this.changeDetection.detectChanges();
@@ -1000,9 +1000,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.aiOcrToken = aiOcrDetails?.token;
                     this.company.countryName = "";
                     this.openAccountDropdown = false;
-                    this.urlVoucherType = this.ocrType === 'income' ? VoucherTypeEnum.sales : VoucherTypeEnum.purchase;
+                    this.urlVoucherType = aiOcrDetails.type;
                     this.voucherType = this.vouchersUtilityService.parseVoucherType(this.urlVoucherType);
-                    this.ocrVoucherType = this.ocrType === 'income' ? VoucherTypeEnum.sales : VoucherTypeEnum.purchase;
+                    this.ocrVoucherType = aiOcrDetails.type;
                     this.aiOcrService.saveAndNext$.next(null);
                     this.aiOcrService.skipAndNext$.next(null);
 
