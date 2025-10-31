@@ -36,7 +36,7 @@
 
                 <reactive-dropdown-field 
                     *ngIf="showCategoryOption"
-                    [ngClass]="{ 'error-box': showEntryAgainstRequired }"
+                    [showError]="showEntryAgainstRequired"
                     class="text-left multi-select entry-against"
                     [cssClass]="'border-none'" 
                     [(ngModel)]="entryAgainstObject.model"

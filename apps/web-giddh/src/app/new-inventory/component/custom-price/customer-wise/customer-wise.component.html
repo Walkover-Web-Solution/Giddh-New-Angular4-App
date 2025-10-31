@@ -295,9 +295,9 @@
                                     <section class="mr-b8"></section>
                                 </div>
                             </ng-container>
-                            <div class="text-center mt-5 text-light font-size-24"
+                            <div class="no-data"
                                 *ngIf="!currentUserStocks?.length && !currentUser?.uniqueName && !isStockLoading ">
-                                <span class="font">{{ commonLocaleData?.app_no_data_found }}</span>
+                                <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
                             </div>
                             <div *ngIf="isStockLoading">
                                 <giddh-page-loader></giddh-page-loader>

@@ -73,7 +73,7 @@
                             <div class="col-8">
                                 <div class="d-inline-block mr-2">
                                     <reactive-dropdown-field
-                                        [ngClass]="{ 'error-box': showEntryAgainstRequired }"
+                                        [showError]="showEntryAgainstRequired"
                                         class="text-left multi-select entry-against"
                                         [name]="'depositAccountUniqueName'"
                                         [options]="entryAgainstObject.dropDownOption"

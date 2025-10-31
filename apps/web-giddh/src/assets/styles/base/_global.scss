@@ -2041,13 +2041,13 @@ aside-create-group {
         .inventory-sub-sideabar {
             .item-list {
                 a {
-                    &.group-name {
-                        .mdc-list-item__content {
-                            .mdc-list-item__primary-text {
-                                color: var(--color-medium-gray);
-                            }
-                        }
-                    }
+                    // &.group-name {
+                    //     .mdc-list-item__content {
+                    //         .mdc-list-item__primary-text {
+                    //             color: var(--color-medium-gray);
+                    //         }
+                    //     }
+                    // }
 
                     &.isActive {
                         background-color: var(--bg-primary-color);
@@ -2720,7 +2720,7 @@ ul.sub-list {
 .price-input {
     border: 1px solid var(--border-color) !important;
     font-size: var(--font-size-15) !important;
-    background: var(--color-white) !important;
+    // background: var(--color-white) !important;
     padding: 1px 2px !important;
     display: inline-block;
     max-width: 90px !important;
