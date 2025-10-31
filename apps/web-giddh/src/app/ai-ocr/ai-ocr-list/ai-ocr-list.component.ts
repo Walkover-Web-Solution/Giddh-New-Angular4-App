@@ -134,7 +134,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                         { label: this.commonLocaleData?.app_create_receipt, value: VoucherTypeEnum.receipt }
                     ]
                     : [
-                        { label: this.commonLocaleData?.app_create_purchase_bill, value: VoucherTypeEnum.purchase },
+                        { label: this.commonLocaleData?.app_create_bill, value: VoucherTypeEnum.purchase },
                         { label: this.commonLocaleData?.app_create_debit_note, value: VoucherTypeEnum.debitNote },
                         { label: this.commonLocaleData?.app_create_payment, value: VoucherTypeEnum.payment }
                     ];
