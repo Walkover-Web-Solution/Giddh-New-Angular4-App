@@ -153,12 +153,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     if (res) {
                         this.aiOcrService.mainPageOcrData$.next(null);
                         this.getAllOcrDocuments(false);
-                        this.ocrList$.pipe(
-                            takeUntil(this.destroyed$),
-                        ).subscribe((data) => {
-                            this.store.dispatch(this.generalActions.openSideMenu(true));
-                            this.updateDataSource(data);
-                        });
+                        this.ocrDataUpdate();
                     }
                 });
 
@@ -169,12 +164,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     distinctUntilChanged()
                 ).subscribe((value) => {
                     if (value) {
-                        this.ocrList$.pipe(
-                            takeUntil(this.destroyed$),
-                        ).subscribe((data) => {
-                            this.store.dispatch(this.generalActions.openSideMenu(true));
-                            this.updateDataSource(data);
-                        });
+                        this.ocrDataUpdate();
                     }
                 });
 
@@ -540,6 +530,23 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentsRequestParams.from = event.from;
         this.ocrDocumentsRequestParams.to = event.to;
         this.getAllOcrDocuments(true);
+        this.ocrDataUpdate();
+    }
+
+    /**
+     * This will be used to update the data source.
+     *
+     * @memberof AiOcrListComponent
+     */
+    public ocrDataUpdate(): void {
+        setTimeout(() => {
+            this.ocrList$.pipe(
+                takeUntil(this.routeScope$),
+            ).subscribe((data) => {
+                this.store.dispatch(this.generalActions.openSideMenu(true));
+                this.updateDataSource(data);
+            });
+        }, 100);
     }
 
     /**
