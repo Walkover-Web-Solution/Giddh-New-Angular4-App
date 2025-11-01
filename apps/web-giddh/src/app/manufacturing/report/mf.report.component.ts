@@ -149,7 +149,6 @@ constructor(
         this.isInventoryPage = this.router.url.includes('/pages/inventory');
         this.initializeSearchReqObj();
         // Refresh the stock list
-        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
         this.store.pipe(select(p => p.inventory.manufacturingStockList), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o) {
