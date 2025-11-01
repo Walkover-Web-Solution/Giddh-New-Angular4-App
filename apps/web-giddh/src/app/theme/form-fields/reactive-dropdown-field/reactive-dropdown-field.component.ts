@@ -86,6 +86,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showClearIcon: boolean = false;
     /** Use custom label value */
     @Input() public useCustomLabelValue: boolean = false;
+    /** Hide selected options from dropdown list */
+    @Input() public hideSelectedOptions: boolean = true;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -177,7 +179,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private filterOptions(search: string): any {
         let filteredOptions = [];
         this.options?.forEach(option => {
-            if (typeof search !== "string" || (typeof option?.label === "string" && option.label.toLowerCase().indexOf(search.toLowerCase()) > -1)) {
+            const matchesSearch = typeof search !== "string" || (typeof option?.label === "string" && option.label.toLowerCase().indexOf(search.toLowerCase()) > -1);
+            const isNotSelected = !this.hideSelectedOptions || !isEqual(option?.value, this.value);
+            
+            if (matchesSearch && isNotSelected) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
@@ -188,6 +193,22 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * Refreshes filtered options based on current settings
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private refreshFilteredOptions(): void {
+        if (!this.enableDynamicSearch) {
+            this.fieldFilteredOptions$ = this.filterOptions("");
+        } else {
+            this.fieldFilteredOptions$ = of(this.options?.filter(option => 
+                !this.hideSelectedOptions || !isEqual(option?.value, this.value)
+            ) || []);
+        }
+    }
+
+    /**
      * Lifecycle hook for input changes
      *
      * @param {SimpleChanges} changes
@@ -195,7 +216,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
-            this.fieldFilteredOptions$ = of(this.options);
+            this.refreshFilteredOptions();
             // Always try to set label value when options change, regardless of previous value
             if (changes?.options) {
                 // Use setTimeout to ensure the value is properly set before trying to find the label
@@ -210,7 +231,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.clearDropdownValue();
             this.fieldFilteredOptions$ = of([]);
             setTimeout(() => {
-                this.fieldFilteredOptions$ = of(this.options);
+                this.refreshFilteredOptions();
             }, 100);
         }
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
@@ -225,6 +246,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (changes?.labelValue?.currentValue === null) {
             this.labelValue = "";
             this.controlLabelValue = "";
+        }
+
+        if (changes?.hideSelectedOptions) {
+            this.refreshFilteredOptions();
         }
     }
 
@@ -307,9 +332,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
-     * Write value to the component (ControlValueAccessor implementation)
+     * Writes value to the component
      *
-     * @param {*} value
+     * @param {*} value - The value to write
      * @param {boolean} [setLabelValue=true] - Whether to set the label value
      * @memberof ReactiveDropdownFieldComponent
      */
@@ -323,6 +348,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.setLabelValue(null);
         }
         this.onChange(value);
+        
+        // Refresh filtered options to hide/show options based on new value
+        if (this.hideSelectedOptions) {
+            setTimeout(() => {
+                this.refreshFilteredOptions();
+            }, 0);
+        }
     }
 
     /**
@@ -336,6 +368,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.setLabelValue(event?.option?.value);
         this.onTouched();
         this.selectedOption.emit(event?.option?.value);
+        
+        // Refresh filtered options to hide the newly selected option
+        if (this.hideSelectedOptions) {
+            setTimeout(() => {
+                this.refreshFilteredOptions();
+            }, 0);
+        }
     }
 
     /**
@@ -419,7 +458,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public panelOpened(): void {
         if (!this.enableDynamicSearch) {
-            this.fieldFilteredOptions$ = this.filterOptions("");
+            this.refreshFilteredOptions();
         }
     }
 
@@ -431,6 +470,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public clearDropdownValue(value: any = { label: "", value: "" }): void {
         this.onClear.emit(value);
+        
+        // Refresh filtered options to show previously hidden options
+        if (this.hideSelectedOptions) {
+            setTimeout(() => {
+                this.refreshFilteredOptions();
+            }, 0);
+        }
     }
 
     /**
