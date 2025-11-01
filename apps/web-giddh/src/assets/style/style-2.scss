@@ -13936,3 +13936,14 @@ button {
         height: inherit !important;
     }
 }
+
+.fake-chatbot {
+    position: fixed;
+    bottom: 18px !important;
+    right: 18px !important;
+    width: 58px;
+    height: 58px;
+    z-index: 9999;
+    background: #ffa01b;
+    border-radius: 50%;
+}
