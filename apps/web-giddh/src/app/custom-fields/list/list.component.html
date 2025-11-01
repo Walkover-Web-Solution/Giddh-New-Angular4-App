@@ -22,17 +22,15 @@
             </a>
             <div class="form-group d-flex flex-fill" *ngIf="translationsLoaded">
                 <div class="form-group ml-3 filter-container">
-                    <mat-select
-                        class="form-control"
-                        name="modules"
+                    <reactive-dropdown-field
+                        [options]="fieldModules"
                         [placeholder]="localeData?.modules_placeholder"
-                        (selectionChange)="customFieldsRequest.moduleUniqueName = $event?.value; getCustomFields()"
-                        [(value)]="customFieldsRequest.moduleUniqueName"
+                        [name]="'modules'"
+                        [(ngModel)]="customFieldsRequest.moduleUniqueName"
+                        (selectedOption)="customFieldsRequest.moduleUniqueName = $event?.value; getCustomFields()"
+                        [cssClass]="'form-control'"
                     >
-                        <mat-option *ngFor="let module of fieldModules" [value]="module?.uniqueName"
-                            >{{ module.name }}
-                        </mat-option>
-                    </mat-select>
+                    </reactive-dropdown-field>
                 </div>
             </div>
             <watch-video [cssClass]="'text-primary'" [moduleName]="'CUSTOM_FIELD'"></watch-video>
@@ -88,18 +86,17 @@
                     <no-data [secondaryMessage]="' '"></no-data>
                 </div>
             </div>
-          
+
             <mat-paginator
-                *ngIf="
-                    customFieldsList?.results?.length && customFieldsList?.totalItems > pageSizeOptions[0]
-                "
+                *ngIf="customFieldsList?.results?.length && customFieldsList?.totalItems > pageSizeOptions[0]"
                 [length]="customFieldsList?.totalItems"
                 [pageSize]="customFieldsRequest.count"
                 [pageIndex]="customFieldsRequest.page - 1"
                 [pageSizeOptions]="pageSizeOptions"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
-                (page)="handlePageEvent($event)">
+                (page)="handlePageEvent($event)"
+            >
             </mat-paginator>
             <section class="mb-custom-80"></section>
         </div>
