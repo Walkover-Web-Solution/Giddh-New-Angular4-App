@@ -4,6 +4,7 @@
         [file]="'create-company'"
         (localeData)="localeData = $event"
         (commonLocaleData)="commonLocaleData = $event"
+        (translationComplete)="translationComplete($event)"
     >
         <hamburger-menu *ngIf="companiesList?.length"></hamburger-menu>
         <div *ngIf="isLoading">
@@ -485,24 +486,15 @@
                                             </span>
                                         </div>
                                         <div class="col-6 currency-space">
-                                            <mat-form-field
-                                                id="roles_{{ i }}"
-                                                appearance="outline"
-                                                [ngClass]="{ 'error-border': isFormSubmitted && isUserSuperAdmin }"
-                                            >
-                                                <mat-label>{{ localeData?.roles }}</mat-label>
-                                                <mat-select
-                                                    formControlName="roleUniqueName"
-                                                    (selectionChange)="selectRole($event, i); permissionRoleIndex = i"
-                                                >
-                                                    <mat-option
-                                                        *ngFor="let option of permissionRoles"
-                                                        [value]="option.value"
-                                                    >
-                                                        {{ option?.label }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
+                                            <reactive-dropdown-field
+                                                [options]="permissionRoles"
+                                                [label]="localeData?.roles"
+                                                [placeholder]="localeData?.roles"
+                                                formControlName="roleUniqueName"
+                                                [appearance]="'outline'"
+                                                [showError]="isFormSubmitted && isUserSuperAdmin"
+                                                (selectedOption)="selectRole($event, i); permissionRoleIndex = i">
+                                            </reactive-dropdown-field>
                                         </div>
                                         <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0 remove-user">
                                             <div class="inc-dec">

@@ -34,6 +34,8 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public isLoading: boolean = true;
     /** Voucher API Version */
     public voucherApiVersion: number;
+    /** Discount type options for dropdown */
+    public discountTypeOptions: any[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public discountInfo: any,
@@ -193,6 +195,31 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation completion
+     *
+     * @param {*} event
+     * @memberof CreateDiscountComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.initDiscountTypeOptions();
+        }
+    }
+
+    /**
+     * Initializes discount type options for dropdown
+     *
+     * @private
+     * @memberof CreateDiscountComponent
+     */
+    private initDiscountTypeOptions(): void {
+        this.discountTypeOptions = [
+            { label: this.localeData?.discount_types?.as_per_value, value: 'FIX_AMOUNT' },
+            { label: this.localeData?.discount_types?.as_per_percent, value: 'PERCENTAGE' }
+        ];
     }
 
     /**
