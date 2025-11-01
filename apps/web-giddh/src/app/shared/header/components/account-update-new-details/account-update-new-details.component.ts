@@ -227,8 +227,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public availableFieldTypes: any = FieldTypes;
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
-    /** This will hold mobile number field input  */
-    public intl: { [key: string]: any } = {};
     /** True if last duplicate email in portal  users */
     public lastDuplicateEmailIndex: number | null = null;
     /** True if last duplicate email in portal  users */
@@ -420,16 +418,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 // change.get('contactNo')?.setValue(mobileNo);
                 let lastOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
-                mappings.controls.forEach((control, i) => {
-                    if (lastOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
-                        lastOccurrenceIndex = index;
-                        change.get('email').setErrors({ duplicate: true });
-                    }
-                });
+                if (currentEmail !== "") {
+                    mappings.controls.forEach((control, i) => {
+                        if (lastOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
+                            lastOccurrenceIndex = index;
+                            change.get('email').setErrors({ duplicate: true });
+                        }
+                    });
+                }
                 this.portalIndex = undefined;
 
                 this.lastDuplicateEmailIndex = lastOccurrenceIndex;
-                if (this.lastDuplicateEmailIndex === -1 && !this.isMobileNumberInvalid) {
+                if (this.lastDuplicateEmailIndex === -1) {
                     this._accountService.createPortalUser([change.value], this.activeAccountName).pipe(take(1)).subscribe(data => {
                         if (data?.status === 'success') {
                             this._toaster.successToast(this.localeData?.portal_updated_successfully, 'Success');
@@ -545,29 +545,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
-        // Increase timeout and add more robust checking
-        const interval = setInterval(() => {
-            const element = document.getElementById('init-contact-update');
-            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-
-            if (element && intlTelInput) {
-                this.onlyPhoneNumber('init-contact-update');
-                clearInterval(interval);
-            }
-        }, 500); // Reduced interval for faster detection
-
-        // Add fallback timeout to prevent infinite loop
-        setTimeout(() => {
-            clearInterval(interval);
-            // Try one more time after a longer delay
-            setTimeout(() => {
-                const element = document.getElementById('init-contact-update');
-                if (element && !this.intl['init-contact-update']) {
-                    this.onlyPhoneNumber('init-contact-update');
-                }
-            }, 1000);
-        }, 10000); // Clear after 10 seconds max
-
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
@@ -867,10 +844,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public reInitializeMobileField(fieldId: string): void {
         const element = document.getElementById(fieldId);
-        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-
-        if (element && intlTelInput && !this.intl[fieldId]) {
-            this.onlyPhoneNumber(fieldId);
+        if (element) {
+            // Removed intl library references
         }
     }
 
@@ -886,7 +861,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (user?.contactNo && mobileStartWithPlus) {
             mobileNo = user?.contactNo ?? '';
         } else {
-            mobileNo = user?.contactNo ? ('+' + user?.contactNo) : '';
+            mobileNo = user?.contactNo ? `+${user?.contactNo}` : '';
         }
         let mappings = this.addAccountForm.get('portalDomain') as FormArray;
         let mappingForm = this._fb.group({
@@ -909,27 +884,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             });
         }
         const lastIndex = mappings.controls.length - 1;
-        const interval = setInterval(() => {
-            const element = document.getElementById('init-contact-portal_' + lastIndex);
-            const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']?.['electron'];
-
-            if (element && intlTelInput) {
-                this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
-                clearInterval(interval);
-            }
-        }, 200); // Faster checking for dynamic elements
-
-        // Add fallback timeout
-        setTimeout(() => {
-            clearInterval(interval);
-            // Try one more time after a longer delay
-            setTimeout(() => {
-                const element = document.getElementById('init-contact-portal_' + lastIndex);
-                if (element && !this.intl['init-contact-portal_' + lastIndex]) {
-                    this.onlyPhoneNumber('init-contact-portal_' + lastIndex);
-                }
-            }, 500);
-        }, 5000); // Clear after 5 seconds max
+        // Removed interval and fallback timeout
     }
 
     /**
@@ -2261,10 +2216,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         .pipe(debounceTime(50))
                         .subscribe(_ => {
                             if (results[0]?.mobileNo) {
-                                let updatedNumber = '+' + results[0]?.mobileNo;
-                                if (this.intl) {
-                                    this.intl['init-contact-update']?.setNumber(updatedNumber);
-                                }
+                                this.addAccountForm.get('mobileNo')?.setValue(results[0].mobileNo);
                             }
                         });
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
