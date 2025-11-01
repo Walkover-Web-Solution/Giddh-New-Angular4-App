@@ -836,18 +836,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    /**
-     * Reinitialize mobile number field if flag is not showing
-     *
-     * @param {string} fieldId
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public reInitializeMobileField(fieldId: string): void {
-        const element = document.getElementById(fieldId);
-        if (element) {
-            // Removed intl library references
-        }
-    }
 
     /**
      * This will be use for add new portal user
@@ -2378,100 +2366,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         document.querySelector('body')?.classList?.remove('master-page');
     }
 
-    /**
-   *This will use for  fetch mobile number
-  *
-  * @memberof AccountUpdateNewDetailsComponent
-  */
-    public onlyPhoneNumber(id: string): void {
-        let input = document.getElementById(id);
-        const errorMsg = document.querySelector(`#${id}-error-msg`);
-        const validMsg = document.querySelector(`#${id}-valid-msg`);
-        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
-        if (intlTelInput && input) {
-            this.intl[id] = intlTelInput(input, {
-                nationalMode: true,
-                utilsScript: MOBILE_NUMBER_UTIL_URL,
-                autoHideDialCode: false,
-                separateDialCode: false,
-                initialCountry: 'auto',
-                geoIpLookup: (success, failure) => {
-                    let countryCode = 'in';
-                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
-                    fetchIPApi.subscribe(
-                        (res) => {
-                            if (res?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
-                                fetchCountryByIpApi.subscribe(
-                                    (fetchCountryByIpApiRes) => {
-                                        if (fetchCountryByIpApiRes?.countryCode) {
-                                            return success(fetchCountryByIpApiRes.countryCode);
-                                        } else {
-                                            return success(countryCode);
-                                        }
-                                    },
-                                    (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.ipAddress}`);
-
-                                        fetchCountryByIpInfoApi.subscribe(
-                                            (fetchCountryByIpInfoApiRes) => {
-                                                if (fetchCountryByIpInfoApiRes?.country) {
-                                                    return success(fetchCountryByIpInfoApiRes.country);
-                                                } else {
-                                                    return success(countryCode);
-                                                }
-                                            },
-                                            (fetchCountryByIpInfoApiErr) => {
-                                                return success(countryCode);
-                                            }
-                                        );
-                                    }
-                                );
-                            } else {
-                                return success(countryCode);
-                            }
-                        },
-                        (err) => {
-                            return success(countryCode);
-                        }
-                    );
-                },
-            });
-            let reset = () => {
-                input?.classList?.remove("error");
-                if (errorMsg && validMsg) {
-                    errorMsg.innerHTML = "";
-                    errorMsg.classList.add("d-none");
-                    validMsg.classList.add("d-none");
-                }
-            };
-            input.addEventListener('blur', () => {
-                let phoneNumber = this.intl?.[id]?.getNumber();
-                reset();
-                if (input) {
-                    if (phoneNumber?.length) {
-                        if (this.intl?.[id]?.isValidNumber()) {
-                            validMsg?.classList?.remove("d-none");
-                            this.isMobileNumberInvalid = false;
-                        } else {
-                            input?.classList?.add("error");
-                            this.isMobileNumberInvalid = true;
-                            let errorCode = this.intl?.[id]?.getValidationError();
-                            if (errorMsg && errorMap[errorCode]) {
-                                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                                errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("d-none");
-                            }
-                        }
-                    } else {
-                        this.isMobileNumberInvalid = false;
-                    }
-                }
-            });
-        }
-        this.changeDetectorRef.detectChanges();
-    }
 
     /**
     * Get company branches
