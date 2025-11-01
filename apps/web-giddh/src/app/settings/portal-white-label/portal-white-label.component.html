@@ -1,7 +1,7 @@
 <div class="portal mt-5 pt-3 pb-3">
     <div class="portal-header">
         <div class="d-flex align-items-center">
-            <div class="dropdown-wrapper mr-r2" *ngIf="domainList?.length">
+            <div class="dropdown-wrapper mr-4" *ngIf="domainList?.length">
                 <reactive-dropdown-field
                     [options]="domainList"
                     [label]="localeData?.select_domain"
@@ -14,7 +14,7 @@
                     <ng-template #optionTemplate let-option="option">
                         <span class="w-100 float-left">
                             <i
-                                class="fa fa-circle mr-r05"
+                                class="fa fa-circle mr-1"
                                 [ngClass]="{
                                     'color-success': option.additional?.status === 'VERIFIED',
                                     'color-orange': option.additional?.status === 'PENDING',
