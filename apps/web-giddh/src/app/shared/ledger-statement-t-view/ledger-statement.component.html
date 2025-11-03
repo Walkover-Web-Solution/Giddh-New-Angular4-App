@@ -451,7 +451,7 @@
                                                 [matTooltipPosition]="'right'"
                                             >
                                                 {{ localeData?.to_balance_cf }}:
-                                                <span class="digit-text-primary">
+                                                <span>
                                                     <div class="d-inline-flex">
                                                         <amount-field
                                                             [amount]="ledgerTxnBalance?.closingBalance?.amount"
@@ -501,7 +501,7 @@
                                             >
                                                 <!-- By -->
                                                 {{ localeData?.by_balance_cf }}:
-                                                <span class="digit-text-primary d-inline-flex">
+                                                <span class="d-inline-flex">
                                                     <amount-field
                                                         [amount]="ledgerTxnBalance?.closingBalance?.amount"
                                                         [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -557,7 +557,7 @@
                                 <div class="ledger-state-box">
                                     <p>
                                         {{ localeData?.total_transactions }}
-                                        <span class="digit-text-primary d-inline-flex">
+                                        <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="
                                                     (lc.transactionData$ | async)?.debitTransactionsCount +
@@ -571,7 +571,7 @@
                                     </p>
                                     <span class="mr-r2 grey-text-color"
                                         >{{ commonLocaleData?.app_debit }}
-                                        <span class="digit-text-primary d-inline-flex">
+                                        <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="(lc.transactionData$ | async)?.debitTransactionsCount"
                                                 [currencySymbol]="false"
@@ -582,7 +582,7 @@
                                     ><br />
                                     <span class="mr-r2 grey-text-color"
                                         >{{ commonLocaleData?.app_credit }}
-                                        <span class="digit-text-primary d-inline-flex">
+                                        <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="(lc.transactionData$ | async)?.creditTransactionsCount"
                                                 [currencySymbol]="false"
@@ -596,7 +596,7 @@
                             <div class="col-3 stat-block">
                                 <div class="ledger-state-box">
                                     <p>{{ localeData?.opening_balance }}</p>
-                                    <p class="digit-text-primary d-flex">
+                                    <p class="d-flex">
                                         <amount-field
                                             [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                             [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -614,7 +614,7 @@
                                     </p>
 
                                     <p
-                                        class="digit-text-primary font-size-12 sub-total d-inline-flex"
+                                        class="font-size-12 sub-total d-inline-flex"
                                         *ngIf="isLedgerAccountAllowsMultiCurrency"
                                     >
                                         <amount-field
@@ -642,7 +642,7 @@
                                             class="d-flex flex-column justify-content-between"
                                             *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal"
                                         >
-                                            <p class="digit-text-primary d-flex">
+                                            <p class="d-flex">
                                                 <amount-field
                                                     [amount]="
                                                         ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal
@@ -662,7 +662,7 @@
                                                 </ng-container>
                                             </p>
                                             <p
-                                                class="digit-text-primary sub-total font-size-12 d-flex"
+                                                class="sub-total font-size-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -692,7 +692,7 @@
                                             class="d-flex flex-column justify-content-between"
                                             *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal"
                                         >
-                                            <p class="digit-text-primary d-inline-flex">
+                                            <p class="d-inline-flex">
                                                 <amount-field
                                                     [amount]="
                                                         ledgerTxnBalance?.debitTotal - ledgerTxnBalance?.creditTotal
@@ -712,7 +712,7 @@
                                                 </ng-container>
                                             </p>
                                             <p
-                                                class="digit-text-primary sub-total font-size-12 d-flex"
+                                                class="sub-total font-size-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -741,7 +741,7 @@
                                     <div class="d-flex debit-credit-amount">
                                         <p class="mr-t05 grey-text-color d-flex flex-column mr-r2">
                                             {{ commonLocaleData?.app_debit }}
-                                            <span class="digit-text-primary mt-1 d-inline-flex">
+                                            <span class="mt-1 d-inline-flex">
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.debitTotal"
                                                     [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -750,7 +750,7 @@
                                                 </amount-field>
                                             </span>
                                             <span
-                                                class="digit-text-primary font-size-12 sub-total d-inline-flex"
+                                                class="font-size-12 sub-total d-inline-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -763,7 +763,7 @@
                                         </p>
                                         <p class="mr-t05 grey-text-color d-flex flex-column">
                                             {{ commonLocaleData?.app_credit }}
-                                            <span class="digit-text-primary d-flex mt-1">
+                                            <span class="d-flex mt-1">
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.creditTotal"
                                                     [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -772,7 +772,7 @@
                                                 </amount-field>
                                             </span>
                                             <span
-                                                class="digit-text-primary font-size-12 sub-total d-flex"
+                                                class="font-size-12 sub-total d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -790,7 +790,7 @@
                                 <div class="ledger-state-box">
                                     <p>{{ localeData?.closing_balance }}</p>
                                     <div class="d-flex flex-column justify-content-between">
-                                        <p class="digit-text-primary d-inline-flex">
+                                        <p class="d-inline-flex">
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
@@ -816,7 +816,7 @@
                                             </span>
                                         </p>
                                         <p
-                                            class="digit-text-primary font-size-12 d-flex"
+                                            class="font-size-12 d-flex"
                                             *ngIf="isLedgerAccountAllowsMultiCurrency"
                                         >
                                             <span
