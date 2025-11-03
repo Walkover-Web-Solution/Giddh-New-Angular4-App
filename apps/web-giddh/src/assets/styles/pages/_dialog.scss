@@ -33,6 +33,7 @@
 .dialog-body {
     width: 100%;
     height: calc(100% - 60px);
+    color: var(--theme-foreground-color);
 
     &.max-height-80vh {
         &.mat-mdc-dialog-content {
