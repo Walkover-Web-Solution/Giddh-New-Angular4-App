@@ -14,7 +14,6 @@
         }
         .voucher-heading {
             font-size: var(--font-size-24);
-            color: var(--text-primary-color);
         }
     }
 
@@ -75,7 +74,7 @@
             .billing-deliver-label {
                 font-size: var(--font-size-16);
                 font-weight: 600;
-                color: var(--text-primary-color);
+                // color: var(--text-primary-color);
             }
 
             .vouchers-address-form {
@@ -143,7 +142,7 @@
                         }
 
                         th {
-                            color: var(--text-primary-color);
+                            // color: var(--text-primary-color);
 
                             &:not(:first-child, :nth-child(2)) {
                                 padding-right: 14px !important;
@@ -284,6 +283,9 @@
 
 .option-value, .option-value-stock {
     color: var(--color-medium-gray);
+}
+.option-label {
+    color: var(--theme-foreground-color);
 }
 
 .single-toggle-button {

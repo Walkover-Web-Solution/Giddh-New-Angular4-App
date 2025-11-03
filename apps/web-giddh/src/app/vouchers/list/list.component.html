@@ -4724,7 +4724,7 @@
                                                     </mat-slide-toggle>
                                                     {{ localeData?.send_email_gmail }}
                                                     <span class="ml-5 integrated-email" *ngIf="!isGmailIntegrated">
-                                                        <a [href]="gmailAuthCodeUrl$ | async">{{
+                                                        <a [href]="gmailAuthCodeUrl$ | async" class="text-underline">{{
                                                             localeData?.integrate_gmail
                                                         }}</a>
                                                     </span>

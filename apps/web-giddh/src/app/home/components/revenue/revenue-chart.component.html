@@ -228,18 +228,18 @@
                         </div>
                         <div class="pull-right revenue-tabs">
                             <div class="total-sales-tabs">
-                                <a
+                                <span
                                     [ngClass]="{ 'active-graph': graphParams.interval == 'daily' }"
                                     (click)="updateChartFrequency('daily')"
-                                    >{{ localeData?.daily }}</a
-                                >|<a
+                                    >{{ localeData?.daily }}</span
+                                >|<span
                                     [ngClass]="{ 'active-graph': graphParams.interval == 'weekly' }"
                                     (click)="updateChartFrequency('weekly')"
-                                    >{{ localeData?.weekly }}</a
-                                >|<a
+                                    >{{ localeData?.weekly }}</span
+                                >|<span
                                     [ngClass]="{ 'active-graph': graphParams.interval == 'monthly' }"
                                     (click)="updateChartFrequency('monthly')"
-                                    >{{ localeData?.monthly }}</a
+                                    >{{ localeData?.monthly }}</span
                                 >
                             </div>
                         </div>

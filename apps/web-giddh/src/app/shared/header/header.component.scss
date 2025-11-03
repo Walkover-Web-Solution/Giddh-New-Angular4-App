@@ -101,6 +101,10 @@
         i {
             color: var(--text-primary-color);
             font-size: var(--font-size-16);
+
+            &.icon-info {
+                color: var(--theme-foreground-color);
+            }
         }
     }
 

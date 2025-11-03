@@ -301,7 +301,7 @@
                     top: 11px;
                     input::placeholder {
                         font-size: var(--font-size-15);
-                        color: var(--text-primary-color);
+                        // color: var(--text-primary-color);
                     }
                 }
             }
@@ -313,7 +313,7 @@
                 .unique-name {
                     border-radius: var(--mat-border-radius-4);
                     padding: 8px 10px;
-                    color: var(--text-primary-color);
+                    // color: var(--text-primary-color);
                     // background-color: var(--color-light-gray) !important;
                 }
             }
@@ -553,7 +553,7 @@
     width: 392px;
 
     .warehouse-list-head-num {
-        color: var(--text-primary-color);
+        // color: var(--text-primary-color);
         font-weight: 600;
         font-size: var(--font-size-15);
     }

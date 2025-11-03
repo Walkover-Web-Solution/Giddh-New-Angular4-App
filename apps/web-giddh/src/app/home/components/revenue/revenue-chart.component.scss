@@ -167,7 +167,7 @@ span.icon-collapse-icon:hover {
     display: inline;
     text-align: right;
     font-size: 24px;
-    color: var(--text-primary-color);
+    // color: var(--text-primary-color);
 }
 .date-range-input.disabled {
     opacity: 0.5;
@@ -181,7 +181,7 @@ span.icon-collapse-icon:hover {
     font-size: var(--font-size-16);
 }
 .active-date {
-    color: var(--text-primary-color);
+    // color: var(--text-primary-color);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -195,7 +195,6 @@ span.icon-collapse-icon:hover {
     margin-right: 5px;
 }
 .in-active-date {
-    color: var(--text-primary-color);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -229,7 +228,6 @@ span.icon-collapse-icon:hover {
     margin-top: 6px;
 }
 span.date-wise-sale {
-    color: var(--text-primary-color);
     font-size: var(--font-size-16);
 }
 
@@ -250,7 +248,7 @@ span.date-wise-sale {
     padding-right: 3px;
     padding-left: 3px;
 }
-.total-sales-tabs a.active-graph {
+.total-sales-tabs span.active-graph {
     font-weight: var(--font-weight-semibold);
 }
 input:read-only {

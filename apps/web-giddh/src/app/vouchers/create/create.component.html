@@ -163,23 +163,23 @@
                                         localeData?.edit_customer : localeData?.edit_vendor }}</span>
                                     <ng-container
                                         *ngIf="!invoiceType.isCashInvoice && (invoiceType.isSalesInvoice || invoiceType.isCreditNote || invoiceType.isReceiptInvoice)">
-                                        <img src="{{ imgPath }}new/search_customer.svg" height="70" class="mb-3"
+                                        <img src="{{ imgPath }}new/search_customer.svg" height="70" class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
                                     <ng-container
                                         *ngIf="!invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPurchaseOrder || invoiceType.isPaymentInvoice)">
-                                        <img src="{{ imgPath }}new/search-vendor.svg" height="70" class="mb-3"
+                                        <img src="{{ imgPath }}new/search-vendor.svg" height="70" class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
                                     <ng-container
                                         *ngIf="invoiceType.isCashInvoice && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote">
                                         <img src="{{ imgPath }}new/search-customer-cash-invoice.svg" height="70"
-                                            class="mb-3"
+                                            class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
                                     <ng-container
                                         *ngIf="invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isDebitNote)">
-                                        <img src="{{ imgPath }}search-vendor-cash-invoice.svg" height="70" class="mb-3"
+                                        <img src="{{ imgPath }}search-vendor-cash-invoice.svg" height="70" class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
                                 </div>
