@@ -400,6 +400,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     };
     /** Holds Update Account Dialog Ref */
     public updateAccountDialogRef: MatDialogRef<any>;
+    /** True if particular currency differs from account currency, even when account and company currencies are same. */
+    public particularMultiCurrency: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1617,6 +1619,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
             }));
         }
+        this.cdRf.detectChanges();
     }
 
     public toggleTransactionType(event: any) {
@@ -3507,6 +3510,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         tax.isDisabled = false;
                     });
                 }
+
+                if (this.profileObj?.baseCurrency === this.lc.activeAccount?.currency) {
+                    if (this.lc.activeAccount?.currency !== data.body?.currency.code) {
+                        this.particularMultiCurrency = true;
+                        this.baseCurrencyDetails = { code: this.lc.activeAccount?.currency, symbol: this.lc.activeAccount?.currencySymbol };
+                        this.foreignCurrencyDetails = { code: data.body?.currency.code, symbol: data.body?.currency.symbol };
+                        this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                        this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                        this.getCurrencyRate();
+                    } else {
+                        this.particularMultiCurrency = false;
+                        this.baseCurrencyDetails = { code: this.profileObj?.baseCurrency, symbol: this.profileObj?.baseCurrencySymbol };
+                        this.foreignCurrencyDetails = this.baseCurrencyDetails;
+                        this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                        this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                    }
+                    this.cdRf.detectChanges();
+                }
+
                 txn.selectedAccount = {
                     ...event.additional,
                     label: event.label,

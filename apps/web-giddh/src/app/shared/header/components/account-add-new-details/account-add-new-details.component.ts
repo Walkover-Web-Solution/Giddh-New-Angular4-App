@@ -343,15 +343,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             const index = this.portalIndex;
             let change = mappings.at(index);
-            let mobileNo = '';
-            if (this.intl) {
-                mobileNo = this.intl['init-contact-portal_' + (index)]?.getNumber();
-            }
             let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
             if (defaultUser) {
                 this.addAccountForm.patchValue({
                     attentionTo: defaultUser.get('name').value,
-                    contactNo: mobileNo,
+                    contactNo: defaultUser.get('contactNo').value,
                     email: defaultUser.get('email').value
                 });
             }
@@ -368,15 +364,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
                 }
-                change.get('contactNo')?.setValue(mobileNo);
                 let lastOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
-                mappings.controls.forEach((control, i) => {
-                    if (lastOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
-                        lastOccurrenceIndex = index;
-                        change.get('email').setErrors({ duplicate: true });
-                    }
-                });
+                if (currentEmail !== "") {
+                    mappings.controls.forEach((control, i) => {
+                        if (lastOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
+                            lastOccurrenceIndex = index;
+                            change.get('email').setErrors({ duplicate: true });
+                        }
+                    });
+                }
                 this.portalIndex = undefined;
 
                 this.lastDuplicateEmailIndex = lastOccurrenceIndex;
@@ -1003,8 +1000,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
         }
-        accountRequest['portalDomain'] = accountRequest['portalDomain'].filter(portalDomain => portalDomain.default !== true);
-        accountRequest['portalDomain'].forEach(portalDomain => {
+        accountRequest['portalDomain'] = accountRequest['portalDomain']?.filter(portalDomain => portalDomain.default !== true) || [];
+        accountRequest['portalDomain']?.forEach(portalDomain => {
             delete portalDomain.default;
             delete portalDomain.uniqueName;
         });

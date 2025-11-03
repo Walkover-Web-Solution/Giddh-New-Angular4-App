@@ -117,5 +117,6 @@ export const INVENTORY_API = {
         GET: 'company/:companyUniqueName/inventory-adjustment/:referenceNo', // GET call
         CREATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment?voucherVersion=2&branchUniqueName=:branchUniqueName', // POST call
         UPDATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment/:refNo?voucherVersion=2&branchUniqueName=:branchUniqueName'
-    }
+    },
+    INVENTORY_VARIANT_UPDATE: 'v2/company/:companyUniqueName/stock/:stockUniqueName/variant/:variantUniqueName'
 };
