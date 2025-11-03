@@ -810,7 +810,7 @@
                                     class="upload-div pd-r1"
                                     [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
                                 >
-                                    <label for="invoiceFile" class="cursor-pointer font-size-15">
+                                    <label for="invoiceFile" class="align-items-center cursor-pointer d-inline-flex font-size-15">
                                         <i class="icon-file" *ngIf="!isFileUploading && blankLedger?.attachedFile?.length"></i>
                                         <i class="fa fa-spinner rotate" *ngIf="isFileUploading"></i>
                                         <img 
@@ -822,7 +822,9 @@
                                             alt="file" 
                                         />
                                         <ng-container *ngIf="!blankLedger?.attachedFile?.length">
-                                            {{ localeData?.attach_file }}
+                                            <span>
+                                                {{ localeData?.attach_file }}
+                                            </span>
                                         </ng-container>
                                         </label
                                     >

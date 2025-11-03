@@ -1,6 +1,9 @@
 .mdc-dialog {
     .mdc-dialog__content {
         padding: 15px !important;
+    }
+    .mdc-dialog__content ,
+    .mat-mdc-dialog-actions{
         background-color: var(--theme-background-color);
     }
     .mat-mdc-dialog-content {

@@ -1426,7 +1426,7 @@
  * @param {String} $theme - Theme name (default or dark)
  */
 @mixin theme($theme) {
-    body.#{$theme}-theme {
+    .#{$theme}-theme {
         @content;
     }
 }

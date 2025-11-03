@@ -78,22 +78,10 @@ body {
     > h2 {
         font-size: var(--font-size-12) !important;
         color: var(--color-dark-gray);
-        @include theme(default) {
-            color: var(--color-dark-gray);
-        }
-        @include theme(dark) {
-            color: var(--color-white);
-        }
 
         .number-total {
             font-size: var(--font-size-16) !important;
             font-weight: var(--font-weight-medium) !important;
-            // @include theme(default) {
-            //     color: var(--color-black);
-            // }
-            // @include theme(dark) {
-            //     color: var(--color-white);
-            // }
         }
     }
 
@@ -102,45 +90,52 @@ body {
     }
 }
 
-.opening-box {
-    background: var(--color-green-light);
-
-    h5 {
-        .number-total {
-            @include theme(default) {
-                color: var(--color-black);
-            }
-            @include theme(dark) {
-                color: var(--color-white);
-            }
+@include theme(default) {
+    .total-details-box {
+        > p,
+        > h2 {
+            color: var(--color-dark-gray);
         }
     }
+}
+@include theme(dark) {
+    .total-details-box {
+        > p,
+        > h2 {
+            color: var(--color-white);
+        }
+    }
+}
+
+.opening-box {
+    background: var(--color-green-light);
 }
 
 .sales-purchase {
     background: var(--color-orange-light);
+}
 
-    h5 {
-        .number-total {
-            @include theme(default) {
+.payment-receipt {
+    background: var(--color-border-light);
+}
+@include theme(default) {
+    .payment-receipt,
+    .sales-purchase,
+    .opening-box {
+        h5 {
+            .number-total {
                 color: var(--color-black);
-            }
-            @include theme(dark) {
-                color: var(--color-white);
             }
         }
     }
 }
 
-.payment-receipt {
-    background: var(--color-border-light);
-
-    h5 {
-        .number-total {
-            @include theme(default) {
-                color: var(--color-black);
-            }
-            @include theme(dark) {
+@include theme(dark) {
+    .payment-receipt,
+    .sales-purchase,
+    .opening-box {
+        h5 {
+            .number-total {
                 color: var(--color-white);
             }
         }
@@ -149,7 +144,10 @@ body {
 
 .closing-box {
     background: var(--color-light-gray);
-    @include theme(dark) {
+}
+
+@include theme(dark) {
+    .closing-box {
         color: var(--color-black);
     }
 }
@@ -3763,10 +3761,15 @@ label {
     min-height: 0;
     width: 255px;
     z-index: 99;
-    @include theme(default) {
+}
+
+@include theme(default) {
+    .col-wrapper:nth-child(1) {
         background: var(--color-light-gray);
     }
-    @include theme(dark) {
+}
+@include theme(dark) {
+    .col-wrapper:nth-child(1) {
         background-color: var(--theme-primary-light);
     }
 }
@@ -3972,10 +3975,14 @@ label {
     padding: 4px 0;
     width: 100%;
     z-index: 9;
-    @include theme(default) {
+}
+ @include theme(default) {
+    .new-btn {
         background-color: var(--color-light-gray);
     }
-    @include theme(dark) {
+}
+@include theme(dark) {
+    .new-btn {
         background-color: var(--theme-primary-light);
     }
 }
@@ -5215,7 +5222,7 @@ table input[type="number"] {
     // background: var(--color-white);
     color: var(--color-dark-gray);
     font-size: var(--font-size-16);
-    margin: 100px 0;
+    // margin: 100px 0;
 }
 
 .ledger-stat h3 {
@@ -6358,7 +6365,7 @@ hamburger-menu {
 
 // Base table styles
 .table {
-    // width: 100%;
+    width: 100%;
     margin-bottom: 20px;
     // color: var(--color-black);
     background-color: transparent;

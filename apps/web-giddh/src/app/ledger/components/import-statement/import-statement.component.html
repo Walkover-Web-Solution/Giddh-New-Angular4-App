@@ -62,14 +62,14 @@
                 </label>
                 <span  class="path-name align-self-center">{{ selectedFile }}</span>
             </div>
-            <div class="pd-b2 clear-both password-label d-flex" *ngIf="getRequest.entity === fileType.PDF && selectStatement === importStatementType.BankStatement">
+            <div class="pd-b2 clear-both password-label d-flex mat-form-field-clean" *ngIf="getRequest.entity === fileType.PDF && selectStatement === importStatementType.BankStatement">
                 <mat-label class="import-field-label align-bottom">{{ inputData?.commonLocaleData?.app_password }}</mat-label>
                 <mat-form-field appearance="fill" class="w-100 custom-input-field">
                     <input
                         matInput
                         type="password"
                         name="password"
-                        class="form-control mat-field-border"
+                        class="form-control mat-field-border border-bottom"
                         [(ngModel)]="postRequest.password"
                     />
                 </mat-form-field>
