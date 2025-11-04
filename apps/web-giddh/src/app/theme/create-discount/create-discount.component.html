@@ -3,7 +3,6 @@
     [file]="'settings/discount'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
 >
     <div class="aside-dialog-wrapper">
         <div class="dialog-header">
@@ -19,12 +18,13 @@
                     <div class="row row-gap15 mt-2">
                         <div class="col-6">
                             <span class="custom-mat-form-field">
-                                <reactive-dropdown-field
-                                    [options]="discountTypeOptions"
-                                    [label]="localeData?.discount_type"
-                                    [appearance]="'outline'"
-                                    formControlName="type">
-                                </reactive-dropdown-field>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>{{ localeData?.discount_type }}</mat-label>
+                                    <mat-select formControlName="type">
+                                        <mat-option [value]="'FIX_AMOUNT'">{{ localeData?.discount_types?.as_per_value }}</mat-option>
+                                        <mat-option [value]="'PERCENTAGE'">{{ localeData?.discount_types?.as_per_percent }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
                             </span>
                         </div>
                         <div class="col-6">

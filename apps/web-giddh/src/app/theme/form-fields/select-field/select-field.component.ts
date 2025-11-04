@@ -5,7 +5,6 @@ import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { IOption } from "../../../app.constant";
-import { isEqual } from "../../../lodash-optimized";
 
 @Component({
     selector: "select-field",
@@ -62,8 +61,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     @Input() public scrollableElementId = '';
     /** True if we need to show dropdown icon */
     @Input() public showDropdownIcon: boolean = false;
-    /** Hide selected options from dropdown list */
-    @Input() public hideSelectedOptions: boolean = true;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -110,13 +107,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                         this.selectedValue = "";
                         this.searchFormControl.setValue({ label: "" });
                         this.onClear.emit({ label: "", value: "" });
-                        
-                        // Refresh filtered options to show previously hidden options
-                        if (this.hideSelectedOptions) {
-                            setTimeout(() => {
-                                this.refreshFilteredOptions();
-                            }, 0);
-                        }
                     } else {
                         this.dynamicSearchedQuery.emit(search);
                     }
@@ -131,13 +121,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                         this.selectedValue = "";
                         this.searchFormControl.setValue({ label: "" });
                         this.onClear.emit({ label: "", value: "" });
-                        
-                        // Refresh filtered options to show previously hidden options
-                        if (this.hideSelectedOptions) {
-                            setTimeout(() => {
-                                this.refreshFilteredOptions();
-                            }, 0);
-                        }
                     } else {
                         this.filterOptions(search);
                     }
@@ -156,29 +139,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-            
-            // Find the corresponding value from options based on the label
-            if (this.options && this.options.length > 0) {
-                const matchingOption = this.options.find(option => 
-                    option.label === changes?.defaultValue.currentValue
-                );
-                if (matchingOption) {
-                    this.selectedValue = matchingOption.value;
-                } else {
-                    // If no matching option found, use the label as fallback
-                    this.selectedValue = changes?.defaultValue.currentValue;
-                }
-                
-                // Refresh filtered options to hide the default value if hideSelectedOptions is enabled
-                if (this.hideSelectedOptions) {
-                    setTimeout(() => {
-                        this.refreshFilteredOptions();
-                    }, 0);
-                }
-            } else {
-                // If no options available yet, store the label temporarily
-                this.selectedValue = changes?.defaultValue.currentValue;
-                
+            if (!this.options || this.options?.length === 0) {
                 if (this.enableDynamicSearch) {
                     this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
                 } else {
@@ -187,19 +148,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             }
         }
         if (changes?.options) {
-            // If we have a defaultValue but selectedValue is still a label, try to find the correct value
-            if (this.defaultValue && this.selectedValue === this.defaultValue) {
-                const matchingOption = changes.options.currentValue?.find(option => 
-                    option.label === this.defaultValue
-                );
-                if (matchingOption) {
-                    this.selectedValue = matchingOption.value;
-                }
-            }
-            this.refreshFilteredOptions();
-        }
-        if (changes?.hideSelectedOptions) {
-            this.refreshFilteredOptions();
+            this.fieldFilteredOptions = changes.options.currentValue?.filter(item => item.label !== "" || item.value !== "");
         }
     }
 
@@ -231,10 +180,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     private filterOptions(search: string): void {
         let filteredOptions: IOption[] = [];
         this.options?.forEach(option => {
-            const matchesSearch = typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1;
-            const isNotSelected = !this.hideSelectedOptions || !isEqual(option?.value, this.selectedValue);
-            
-            if (matchesSearch && isNotSelected) {
+            if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
@@ -242,23 +188,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         this.fieldFilteredOptions = filteredOptions;
         this.cdr.detectChanges();
 
-    }
-
-    /**
-     * Refreshes filtered options based on current settings
-     *
-     * @private
-     * @memberof SelectFieldComponent
-     */
-    private refreshFilteredOptions(): void {
-        if (!this.enableDynamicSearch) {
-            this.filterOptions("");
-        } else {
-            this.fieldFilteredOptions = this.options?.filter(option => 
-                !this.hideSelectedOptions || !isEqual(option?.value, this.selectedValue)
-            ) || [];
-            this.cdr.detectChanges();
-        }
     }
 
     /**
@@ -281,15 +210,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     public optionSelected(event: any): void {
         if (event?.option?.value?.label) {
-            this.selectedValue = event?.option?.value?.value;
+            this.selectedValue = event?.option?.value?.label;
             this.selectedOption.emit(event?.option?.value);
-            
-            // Refresh filtered options to hide the newly selected option
-            if (this.hideSelectedOptions) {
-                setTimeout(() => {
-                    this.refreshFilteredOptions();
-                }, 0);
-            }
         }
     }
 
@@ -336,11 +258,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             if (!this.searchFormControl?.value && !this.defaultValue) {
                 this.selectedValue = "";
                 this.selectedOption.emit({ label: '', value: '' });
-                
-                // Refresh filtered options to show previously hidden options
-                if (this.hideSelectedOptions) {
-                    this.refreshFilteredOptions();
-                }
             }
         }, 200);
     }
