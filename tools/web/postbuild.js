@@ -80,6 +80,7 @@ const phpScript = `<?php
                 }
             }
         }
+
         http_response_code(200);
         echo $instanceInfo;
         exit;
@@ -94,11 +95,18 @@ const phpScript = `<?php
 
     $headers = [
         "Origin: $baseUrl"
-    ];
+	];
 
+    $targetUrl = getenv("GIDDH_WHITE_LABEL_URL");
+
+    $parsedUrl = parse_url($fullUrl);
+    parse_str($parsedUrl['query'] ?? '', $queryParams);
+    if (!empty($queryParams['region']) && in_array(strtolower($queryParams['region']), ['uk', 'gb', 'UK', 'GB'])) {
+            $targetUrl = getenv("GIDDH_GB_WHITE_LABEL_URL");
+    }
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_URL, getenv("GIDDH_WHITE_LABEL_URL"));
+    curl_setopt($ch, CURLOPT_URL, $targetUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     curl_close($ch);
