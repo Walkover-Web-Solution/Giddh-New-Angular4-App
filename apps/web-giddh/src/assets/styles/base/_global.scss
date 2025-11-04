@@ -3637,10 +3637,10 @@ select.form-control {
     // background-color: var(--color-white);
 }
 
-.grp-list .master-list,
-.new-btn-ul .new-btn {
+// .grp-list .master-list,
+// .new-btn-ul .new-btn {
     // list-style: none;
-}
+// }
 
 .grp-list .master-list a,
 .new-btn-ul .new-btn a {
@@ -3664,7 +3664,7 @@ select.form-control {
             display: block;
             font-size: var(--font-size-15);
             font-weight: 500;
-            color: var(--color-medium-gray);
+            color: var(--theme-foreground-color);
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;

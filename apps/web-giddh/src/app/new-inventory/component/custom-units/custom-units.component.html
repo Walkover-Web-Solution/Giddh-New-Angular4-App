@@ -37,7 +37,7 @@
                                                 selectedUnitGroupIndex = i; selectedGroup = group; getUnitMappings()
                                             "
                                         >
-                                            <a href="javascript:void(0);">{{ group?.name }}</a>
+                                            <span>{{ group?.name }}</span>
                                         </mat-list-item>
                                     </ng-container>
                                 </cdk-virtual-scroll-viewport>
@@ -60,7 +60,7 @@
                             </ng-container>
                             <ng-container *ngIf="unitMappings?.length">
                                 <mat-list role="list" class="list-head pd-l15">
-                                    <mat-list-item role="listitem" class="items">
+                                    <mat-list-item role="listitem" class="items px-0">
                                         <strong>{{ commonLocaleData?.app_name }}</strong>
                                     </mat-list-item>
                                     <mat-list-item role="listitem" class="items map-item pd-r2">
@@ -84,19 +84,19 @@
                                             }"
                                         >
                                             <mat-list-item role="listitem" class="items mat-left" matTooltipPosition="left" [matTooltip]="mapping?.stockUnitX?.name + '('+ mapping?.stockUnitX?.code +')'">
-                                                <a href="javascript:void(0);"
+                                                <span
                                                     >{{ mapping?.stockUnitX?.name }} ({{
                                                         mapping?.stockUnitX?.code
-                                                    }})</a
+                                                    }})</span
                                                 >
                                             </mat-list-item>
                                             <mat-list-item role="listitem" class="items map-item mat-gap" matTooltipPosition="right" [matTooltip]="mapping?.stockUnitY?.code ? mapping?.quantity + ' ' + mapping?.stockUnitY?.name : null ">
-                                                <a href="javascript:void(0);"
+                                                <span
                                                     >{{ mapping?.quantity }} {{ mapping?.stockUnitY?.name }}
                                                     <span *ngIf="mapping?.stockUnitY?.code"
                                                         >({{ mapping?.stockUnitY?.code }})</span
-                                                    ><span *ngIf="!mapping?.stockUnitY?.code">-</span></a
-                                                >
+                                                    ><span *ngIf="!mapping?.stockUnitY?.code">-</span>
+                                                </span>
                                             </mat-list-item>
                                         </mat-list>
                                     </ng-container>
