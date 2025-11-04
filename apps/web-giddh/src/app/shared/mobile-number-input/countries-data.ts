@@ -1,26 +1,18 @@
-    /** Interface for country data */
+    /** Interface for country data - simplified for use with Google libphonenumber */
 export interface Country {
     /** Country name in English */
-        name: string;
+    name: string;
     /** ISO 3166-1 alpha-2 country code */
-        code: string;
+    code: string;
     /** International dialing code */
-        dialCode: string;
+    dialCode: string;
     /** Unicode flag emoji */
-        flag: string;
+    flag: string;
     /** Path to flag image */
     flagImage?: string;
     /** Country name in native language */
-        nativeName: string;
-    /** Regex pattern for mobile number validation */
-        pattern: RegExp;
-    /** Placeholder text for input field */
-        placeholder: string;
-    /** Minimum number length */
-        minLength: number;
-    /** Maximum number length */
-        maxLength: number;
-    }
+    nativeName: string;
+}
     /** Comprehensive list of all countries with their telephone data */
 export const COUNTRIES_DATA: Country[] = [
     {
@@ -29,11 +21,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1',
         flag: '🇺🇸',
         flagImage: 'assets/images/flags/us.png',
-        nativeName: 'United States',
-        pattern: /^[2-9]\d{2}[2-9]\d{6}$/,
-        placeholder: 'Enter 10-digit phone number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: 'United States'
     },
     {
         name: 'United Kingdom',
@@ -41,11 +29,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+44',
         flag: '🇬🇧',
         flagImage: 'assets/images/flags/gb.png',
-        nativeName: '+44',
-        pattern: /^([1-9]\d{8,9})$/,
-        placeholder: 'Enter UK phone number',
-        minLength: 9,
-        maxLength: 10
+        nativeName: '+44'
     },
     // A
     {
@@ -54,23 +38,15 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+93',
         flag: '🇦🇫',
         flagImage: 'assets/images/flags/af.png',
-        nativeName: 'افغانستان',
-        pattern: /^7\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: 'افغانستان'
     },
     {
         name: 'Albania',
         code: 'AL',
         dialCode: '+355',
         flag: '🇦🇱',
-        flagImage: 'assets/images/flags/af.png',
-        nativeName: '+355',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        flagImage: 'assets/images/flags/al.png',
+        nativeName: '+355'
     },
     {
         name: 'Algeria',
@@ -78,11 +54,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+213',
         flag: '🇩🇿',
         flagImage: 'assets/images/flags/dz.png',
-        nativeName: '+213',
-        pattern: /^[567]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+213'
     },
     {
         name: 'American Samoa',
@@ -90,11 +62,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1684',
         flag: '🇦🇸',
         flagImage: 'assets/images/flags/as.png',
-        nativeName: '+1684',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1684'
     },
     {
         name: 'Andorra',
@@ -102,11 +70,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+376',
         flag: '🇦🇩',
         flagImage: 'assets/images/flags/ad.png',
-        nativeName: '+376',
-        pattern: /^[36]\d{5}$/,
-        placeholder: 'Enter 6-digit mobile number',
-        minLength: 6,
-        maxLength: 6
+        nativeName: '+376'
     },
     {
         name: 'Angola',
@@ -114,11 +78,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+244',
         flag: '🇦🇴',
         flagImage: 'assets/images/flags/ao.png',
-        nativeName: '+244',
-        pattern: /^9\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+244'
     },
     {
         name: 'Anguilla',
@@ -126,11 +86,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1264',
         flag: '🇦🇮',
         flagImage: 'assets/images/flags/ai.png',
-        nativeName: '+1264',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1264'
     },
     {
         name: 'Antigua and Barbuda',
@@ -138,11 +94,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1268',
         flag: '🇦🇬',
         flagImage: 'assets/images/flags/ag.png',
-        nativeName: '+1268',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1268'
     },
     {
         name: 'Argentina',
@@ -150,11 +102,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+54',
         flag: '🇦🇷',
         flagImage: 'assets/images/flags/ar.png',
-        nativeName: '+54',
-        pattern: /^9\d{8,10}$/,
-        placeholder: 'Enter 9-11 digit mobile number',
-        minLength: 9,
-        maxLength: 11
+        nativeName: '+54'
     },
     {
         name: 'Armenia',
@@ -162,11 +110,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+374',
         flag: '🇦🇲',
         flagImage: 'assets/images/flags/am.png',
-        nativeName: '+374',
-        pattern: /^[479]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+374'
     },
     {
         name: 'Aruba',
@@ -174,11 +118,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+297',
         flag: '🇦🇼',
         flagImage: 'assets/images/flags/aw.png',
-        nativeName: '+297',
-        pattern: /^[569]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+297'
     },
     {
         name: 'Australia',
@@ -186,11 +126,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+61',
         flag: '🇦🇺',
         flagImage: 'assets/images/flags/au.png',
-        nativeName: '+61',
-        pattern: /^[2-478]\d{8}$/,
-        placeholder: 'Enter 9-digit phone number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+61'
     },
     {
         name: 'Austria',
@@ -198,11 +134,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+43',
         flag: '🇦🇹',
         flagImage: 'assets/images/flags/at.png',
-        nativeName: '+43',
-        pattern: /^6\d{8,12}$/,
-        placeholder: 'Enter 9-13 digit mobile number',
-        minLength: 9,
-        maxLength: 13
+        nativeName: '+43'
     },
     {
         name: 'Azerbaijan',
@@ -210,11 +142,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+994',
         flag: '🇦🇿',
         flagImage: 'assets/images/flags/az.png',
-        nativeName: '+994',
-        pattern: /^[4567]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+994'
     },
     // B
     {
@@ -223,11 +151,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1242',
         flag: '🇧🇸',
         flagImage: 'assets/images/flags/bs.png',
-        nativeName: '+1242',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1242'
     },
     {
         name: 'Bahrain',
@@ -235,11 +159,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+973',
         flag: '🇧🇭',
         flagImage: 'assets/images/flags/bh.png',
-        nativeName: '+973',
-        pattern: /^[3679]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+973'
     },
     {
         name: 'Bangladesh',
@@ -247,11 +167,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+880',
         flag: '🇧🇩',
         flagImage: 'assets/images/flags/bd.png',
-        nativeName: '+880',
-        pattern: /^1[3-9]\d{8}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+880'
     },
     {
         name: 'Barbados',
@@ -259,11 +175,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1246',
         flag: '🇧🇧',
         flagImage: 'assets/images/flags/bb.png',
-        nativeName: '+1246',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1246'
     },
     {
         name: 'Belarus',
@@ -271,11 +183,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+375',
         flag: '🇧🇾',
         flagImage: 'assets/images/flags/by.png',
-        nativeName: '+375',
-        pattern: /^[2-4]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+375'
     },
     {
         name: 'Belgium',
@@ -283,11 +191,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+32',
         flag: '🇧🇪',
         flagImage: 'assets/images/flags/be.png',
-        nativeName: '+32',
-        pattern: /^4\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+32'
     },
     {
         name: 'Belize',
@@ -295,11 +199,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+501',
         flag: '🇧🇿',
         flagImage: 'assets/images/flags/bz.png',
-        nativeName: '+501',
-        pattern: /^6\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+501'
     },
     {
         name: 'Benin',
@@ -307,11 +207,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+229',
         flag: '🇧🇯',
         flagImage: 'assets/images/flags/bj.png',
-        nativeName: '+229',
-        pattern: /^[679]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+229'
     },
     {
         name: 'Bermuda',
@@ -319,11 +215,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1441',
         flag: '🇧🇲',
         flagImage: 'assets/images/flags/bm.png',
-        nativeName: '+1441',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1441'
     },
     {
         name: 'Bhutan',
@@ -331,11 +223,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+975',
         flag: '🇧🇹',
         flagImage: 'assets/images/flags/bt.png',
-        nativeName: '+975',
-        pattern: /^[17]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+975'
     },
     {
         name: 'Bolivia',
@@ -343,11 +231,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+591',
         flag: '🇧🇴',
         flagImage: 'assets/images/flags/bo.png',
-        nativeName: '+591',
-        pattern: /^[67]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+591'
     },
     {
         name: 'Bosnia and Herzegovina',
@@ -355,11 +239,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+387',
         flag: '🇧🇦',
         flagImage: 'assets/images/flags/ba.png',
-        nativeName: '+387',
-        pattern: /^6\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+387'
     },
     {
         name: 'Botswana',
@@ -367,11 +247,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+267',
         flag: '🇧🇼',
         flagImage: 'assets/images/flags/bw.png',
-        nativeName: '+267',
-        pattern: /^7\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+267'
     },
     {
         name: 'Brazil',
@@ -379,11 +255,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+55',
         flag: '🇧🇷',
         flagImage: 'assets/images/flags/br.png',
-        nativeName: '+55',
-        pattern: /^([1-9]\d{8,10})$/,
-        placeholder: 'Enter Brazilian phone number',
-        minLength: 9,
-        maxLength: 11
+        nativeName: '+55'
     },
     {
         name: 'British Virgin Islands',
@@ -391,11 +263,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1284',
         flag: '🇻🇬',
         flagImage: 'assets/images/flags/vg.png',
-        nativeName: 'British Virgin Islands',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: 'British Virgin Islands'
     },
     {
         name: 'Brunei',
@@ -403,11 +271,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+673',
         flag: '🇧🇳',
         flagImage: 'assets/images/flags/bn.png',
-        nativeName: '+673',
-        pattern: /^[78]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+673'
     },
     {
         name: 'Bulgaria',
@@ -415,11 +279,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+359',
         flag: '🇧🇬',
         flagImage: 'assets/images/flags/bg.png',
-        nativeName: '+359',
-        pattern: /^[89]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+359'
     },
     {
         name: 'Burkina Faso',
@@ -427,11 +287,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+226',
         flag: '🇧🇫',
         flagImage: 'assets/images/flags/bf.png',
-        nativeName: '+226',
-        pattern: /^[67]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+226'
     },
     {
         name: 'Burundi',
@@ -439,11 +295,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+257',
         flag: '🇧🇮',
         flagImage: 'assets/images/flags/bi.png',
-        nativeName: '+257',
-        pattern: /^[267]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+257'
     },
     // C
     {
@@ -452,11 +304,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+855',
         flag: '🇰🇭',
         flagImage: 'assets/images/flags/kh.png',
-        nativeName: '+855',
-        pattern: /^[1-9]\d{7,8}$/,
-        placeholder: 'Enter 8-9 digit mobile number',
-        minLength: 8,
-        maxLength: 9
+        nativeName: '+855'
     },
     {
         name: 'Cameroon',
@@ -464,11 +312,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+237',
         flag: '🇨🇲',
         flagImage: 'assets/images/flags/cm.png',
-        nativeName: '+237',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+237'
     },
     {
         name: 'Canada',
@@ -476,11 +320,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1',
         flag: '🇨🇦',
         flagImage: 'assets/images/flags/ca.png',
-        nativeName: 'Canada',
-        pattern: /^[2-9]\d{2}[2-9]\d{6}$/,
-        placeholder: 'Enter 10-digit phone number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: 'Canada'
     },
     {
         name: 'Cape Verde',
@@ -488,11 +328,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+238',
         flag: '🇨🇻',
         flagImage: 'assets/images/flags/cv.png',
-        nativeName: '+238',
-        pattern: /^[59]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+238'
     },
     {
         name: 'Cayman Islands',
@@ -500,11 +336,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1345',
         flag: '🇰🇾',
         flagImage: 'assets/images/flags/ky.png',
-        nativeName: '+1345',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1345'
     },
     {
         name: 'Central African Republic',
@@ -512,11 +344,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+236',
         flag: '🇨🇫',
         flagImage: 'assets/images/flags/cf.png',
-        nativeName: '+236',
-        pattern: /^7\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+236'
     },
     {
         name: 'Chad',
@@ -524,11 +352,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+235',
         flag: '🇹🇩',
         flagImage: 'assets/images/flags/td.png',
-        nativeName: '+235',
-        pattern: /^[679]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+235'
     },
     {
         name: 'Chile',
@@ -536,11 +360,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+56',
         flag: '🇨🇱',
         flagImage: 'assets/images/flags/cl.png',
-        nativeName: '+56',
-        pattern: /^9\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+56'
     },
     {
         name: 'China',
@@ -548,11 +368,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+86',
         flag: '🇨🇳',
         flagImage: 'assets/images/flags/cn.png',
-        nativeName: '+86',
-        pattern: /^1[3-9]\d{9}$/,
-        placeholder: 'Enter 11-digit mobile number',
-        minLength: 11,
-        maxLength: 11
+        nativeName: '+86'
     },
     {
         name: 'Colombia',
@@ -560,11 +376,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+57',
         flag: '🇨🇴',
         flagImage: 'assets/images/flags/co.png',
-        nativeName: '+57',
-        pattern: /^3\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+57'
     },
     {
         name: 'Comoros',
@@ -572,11 +384,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+269',
         flag: '🇰🇲',
         flagImage: 'assets/images/flags/km.png',
-        nativeName: '+269',
-        pattern: /^[379]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+269'
     },
     {
         name: 'Congo',
@@ -584,11 +392,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+242',
         flag: '🇨🇬',
         flagImage: 'assets/images/flags/cg.png',
-        nativeName: '+242',
-        pattern: /^0[467]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+242'
     },
     {
         name: 'Democratic Republic of the Congo',
@@ -596,11 +400,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+243',
         flag: '🇨🇩',
         flagImage: 'assets/images/flags/cd.png',
-        nativeName: '+243',
-        pattern: /^[89]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+243'
     },
     {
         name: 'Cook Islands',
@@ -608,11 +408,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+682',
         flag: '🇨🇰',
         flagImage: 'assets/images/flags/ck.png',
-        nativeName: '+682',
-        pattern: /^\d{5}$/,
-        placeholder: 'Enter 5-digit mobile number',
-        minLength: 5,
-        maxLength: 5
+        nativeName: '+682'
     },
     {
         name: 'Costa Rica',
@@ -620,11 +416,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+506',
         flag: '🇨🇷',
         flagImage: 'assets/images/flags/cr.png',
-        nativeName: '+506',
-        pattern: /^[678]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+506'
     },
     {
         name: 'Croatia',
@@ -632,11 +424,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+385',
         flag: '🇭🇷',
         flagImage: 'assets/images/flags/hr.png',
-        nativeName: '+385',
-        pattern: /^9\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+385'
     },
     {
         name: 'Cuba',
@@ -644,11 +432,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+53',
         flag: '🇨🇺',
         flagImage: 'assets/images/flags/cu.png',
-        nativeName: '+53',
-        pattern: /^5\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+53'
     },
     {
         name: 'Cyprus',
@@ -656,11 +440,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+357',
         flag: '🇨🇾',
         flagImage: 'assets/images/flags/cy.png',
-        nativeName: '+357',
-        pattern: /^9\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+357'
     },
     {
         name: 'Czech Republic',
@@ -668,11 +448,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+420',
         flag: '🇨🇿',
         flagImage: 'assets/images/flags/cz.png',
-        nativeName: '+420',
-        pattern: /^[67]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+420'
     },
     // D
     {
@@ -681,11 +457,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+45',
         flag: '🇩🇰',
         flagImage: 'assets/images/flags/dk.png',
-        nativeName: '+45',
-        pattern: /^[2-9]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+45'
     },
     {
         name: 'Djibouti',
@@ -693,11 +465,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+253',
         flag: '🇩🇯',
         flagImage: 'assets/images/flags/dj.png',
-        nativeName: '+253',
-        pattern: /^77\d{6}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+253'
     },
     {
         name: 'Dominica',
@@ -705,11 +473,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1767',
         flag: '🇩🇲',
         flagImage: 'assets/images/flags/dm.png',
-        nativeName: '+1767',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1767'
     },
     {
         name: 'Dominican Republic',
@@ -717,11 +481,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1809',
         flag: '🇩🇴',
         flagImage: 'assets/images/flags/do.png',
-        nativeName: '+1',
-        pattern: /^\d{10}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+1'
     },
     // E
     {
@@ -730,11 +490,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+593',
         flag: '🇪🇨',
         flagImage: 'assets/images/flags/ec.png',
-        nativeName: '+593',
-        pattern: /^9\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+593'
     },
     {
         name: 'Egypt',
@@ -742,11 +498,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+20',
         flag: '🇪🇬',
         flagImage: 'assets/images/flags/eg.png',
-        nativeName: '+20',
-        pattern: /^1[0125]\d{8}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+20'
     },
     {
         name: 'El Salvador',
@@ -754,11 +506,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+503',
         flag: '🇸🇻',
         flagImage: 'assets/images/flags/sv.png',
-        nativeName: '+503',
-        pattern: /^[67]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+503'
     },
     {
         name: 'Equatorial Guinea',
@@ -766,11 +514,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+240',
         flag: '🇬🇶',
         flagImage: 'assets/images/flags/gq.png',
-        nativeName: '+240',
-        pattern: /^[26]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+240'
     },
     {
         name: 'Eritrea',
@@ -778,11 +522,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+291',
         flag: '🇪🇷',
         flagImage: 'assets/images/flags/er.png',
-        nativeName: '+291',
-        pattern: /^[17]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+291'
     },
     {
         name: 'Estonia',
@@ -790,11 +530,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+372',
         flag: '🇪🇪',
         flagImage: 'assets/images/flags/ee.png',
-        nativeName: '+372',
-        pattern: /^5\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+372'
     },
     {
         name: 'Ethiopia',
@@ -802,11 +538,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+251',
         flag: '🇪🇹',
         flagImage: 'assets/images/flags/et.png',
-        nativeName: '+251',
-        pattern: /^9\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+251'
     },
     // F
     {
@@ -815,11 +547,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+500',
         flag: '🇫🇰',
         flagImage: 'assets/images/flags/fk.png',
-        nativeName: 'Falkland Islands',
-        pattern: /^\d{5}$/,
-        placeholder: 'Enter 5-digit mobile number',
-        minLength: 5,
-        maxLength: 5
+        nativeName: 'Falkland Islands'
     },
     {
         name: 'Faroe Islands',
@@ -827,11 +555,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+298',
         flag: '🇫🇴',
         flagImage: 'assets/images/flags/fo.png',
-        nativeName: '+298',
-        pattern: /^\d{6}$/,
-        placeholder: 'Enter 6-digit mobile number',
-        minLength: 6,
-        maxLength: 6
+        nativeName: '+298'
     },
     {
         name: 'Fiji',
@@ -839,11 +563,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+679',
         flag: '🇫🇯',
         flagImage: 'assets/images/flags/fj.png',
-        nativeName: '+679',
-        pattern: /^[79]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+679'
     },
     {
         name: 'Finland',
@@ -851,11 +571,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+358',
         flag: '🇫🇮',
         flagImage: 'assets/images/flags/fi.png',
-        nativeName: '+358',
-        pattern: /^4\d{8,9}$/,
-        placeholder: 'Enter 9-10 digit mobile number',
-        minLength: 9,
-        maxLength: 10
+        nativeName: '+358'
     },
     {
         name: 'France',
@@ -863,11 +579,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+33',
         flag: '🇫🇷',
         flagImage: 'assets/images/flags/fr.png',
-        nativeName: '+33',
-        pattern: /^[67]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+33'
     },
     {
         name: 'French Guiana',
@@ -875,11 +587,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+594',
         flag: '🇬🇫',
         flagImage: 'assets/images/flags/gf.png',
-        nativeName: '+594',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+594'
     },
     {
         name: 'French Polynesia',
@@ -887,11 +595,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+689',
         flag: '🇵🇫',
         flagImage: 'assets/images/flags/pf.png',
-        nativeName: '+689',
-        pattern: /^8\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+689'
     },
     // G
     {
@@ -900,11 +604,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+241',
         flag: '🇬🇦',
         flagImage: 'assets/images/flags/ga.png',
-        nativeName: '+241',
-        pattern: /^0[67]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+241'
     },
     {
         name: 'Gambia',
@@ -912,11 +612,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+220',
         flag: '🇬🇲',
         flagImage: 'assets/images/flags/gm.png',
-        nativeName: '+220',
-        pattern: /^[379]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+220'
     },
     {
         name: 'Georgia',
@@ -924,11 +620,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+995',
         flag: '🇬🇪',
         flagImage: 'assets/images/flags/ge.png',
-        nativeName: '+995',
-        pattern: /^5\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+995'
     },
     {
         name: 'Germany',
@@ -936,11 +628,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+49',
         flag: '🇩🇪',
         flagImage: 'assets/images/flags/de.png',
-        nativeName: '+49',
-        pattern: /^1[5-7]\d{8,9}$/,
-        placeholder: 'Enter 10-11 digit mobile number',
-        minLength: 10,
-        maxLength: 11
+        nativeName: '+49'
     },
     {
         name: 'Ghana',
@@ -948,11 +636,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+233',
         flag: '🇬🇭',
         flagImage: 'assets/images/flags/gh.png',
-        nativeName: '+233',
-        pattern: /^[25]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+233'
     },
     {
         name: 'Gibraltar',
@@ -960,11 +644,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+350',
         flag: '🇬🇮',
         flagImage: 'assets/images/flags/gi.png',
-        nativeName: '+350',
-        pattern: /^[56]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+350'
     },
     {
         name: 'Greece',
@@ -972,11 +652,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+30',
         flag: '🇬🇷',
         flagImage: 'assets/images/flags/gr.png',
-        nativeName: '+30',
-        pattern: /^69\d{8}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+30'
     },
     {
         name: 'Greenland',
@@ -984,11 +660,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+299',
         flag: '🇬🇱',
         flagImage: 'assets/images/flags/gl.png',
-        nativeName: '+299',
-        pattern: /^\d{6}$/,
-        placeholder: 'Enter 6-digit mobile number',
-        minLength: 6,
-        maxLength: 6
+        nativeName: '+299'
     },
     {
         name: 'Grenada',
@@ -996,11 +668,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1473',
         flag: '🇬🇩',
         flagImage: 'assets/images/flags/gd.png',
-        nativeName: '+1473',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1473'
     },
     {
         name: 'Guadeloupe',
@@ -1008,11 +676,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+590',
         flag: '🇬🇵',
         flagImage: 'assets/images/flags/gp.png',
-        nativeName: '+590',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+590'
     },
     {
         name: 'Guam',
@@ -1020,11 +684,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1671',
         flag: '🇬🇺',
         flagImage: 'assets/images/flags/gu.png',
-        nativeName: 'Guam',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: 'Guam'
     },
     {
         name: 'Guatemala',
@@ -1032,11 +692,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+502',
         flag: '🇬🇹',
         flagImage: 'assets/images/flags/gt.png',
-        nativeName: '+502',
-        pattern: /^[45]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+502'
     },
     {
         name: 'Guernsey',
@@ -1044,11 +700,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+44',
         flag: '🇬🇬',
         flagImage: 'assets/images/flags/gg.png',
-        nativeName: '+44',
-        pattern: /^7\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+44'
     },
     {
         name: 'Guinea',
@@ -1056,11 +708,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+224',
         flag: '🇬🇳',
         flagImage: 'assets/images/flags/gn.png',
-        nativeName: '+224',
-        pattern: /^6\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+224'
     },
     {
         name: 'Guinea-Bissau',
@@ -1068,11 +716,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+245',
         flag: '🇬🇼',
         flagImage: 'assets/images/flags/gw.png',
-        nativeName: '+245',
-        pattern: /^[67]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+245'
     },
     {
         name: 'Guyana',
@@ -1080,11 +724,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+592',
         flag: '🇬🇾',
         flagImage: 'assets/images/flags/gy.png',
-        nativeName: '+592',
-        pattern: /^6\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+592'
     },
     // H
     {
@@ -1093,11 +733,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+509',
         flag: '🇭🇹',
         flagImage: 'assets/images/flags/ht.png',
-        nativeName: '+509',
-        pattern: /^[34]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+509'
     },
     {
         name: 'Honduras',
@@ -1105,11 +741,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+504',
         flag: '🇭🇳',
         flagImage: 'assets/images/flags/hn.png',
-        nativeName: '+504',
-        pattern: /^[389]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+504'
     },
     {
         name: 'Hong Kong',
@@ -1117,11 +749,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+852',
         flag: '🇭🇰',
         flagImage: 'assets/images/flags/hk.png',
-        nativeName: '+852',
-        pattern: /^[5-9]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+852'
     },
     {
         name: 'Hungary',
@@ -1129,11 +757,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+36',
         flag: '🇭🇺',
         flagImage: 'assets/images/flags/hu.png',
-        nativeName: '+36',
-        pattern: /^[1-9]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+36'
     },
     // I
     {
@@ -1142,11 +766,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+354',
         flag: '🇮🇸',
         flagImage: 'assets/images/flags/is.png',
-        nativeName: '+354',
-        pattern: /^[6-9]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+354'
     },
     {
         name: 'India',
@@ -1154,11 +774,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+91',
         flag: '🇮🇳',
         flagImage: 'assets/images/flags/in.png',
-        nativeName: 'भारत',
-        pattern: /^[6-9]\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: 'भारत'
     },
     {
         name: 'Indonesia',
@@ -1166,11 +782,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+62',
         flag: '🇮🇩',
         flagImage: 'assets/images/flags/id.png',
-        nativeName: '+62',
-        pattern: /^8\d{9,11}$/,
-        placeholder: 'Enter 10-12 digit mobile number',
-        minLength: 10,
-        maxLength: 12
+        nativeName: '+62'
     },
     {
         name: 'Iran',
@@ -1178,11 +790,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+98',
         flag: '🇮🇷',
         flagImage: 'assets/images/flags/ir.png',
-        nativeName: '+98',
-        pattern: /^9\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+98'
     },
     {
         name: 'Iraq',
@@ -1190,11 +798,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+964',
         flag: '🇮🇶',
         flagImage: 'assets/images/flags/iq.png',
-        nativeName: '+964',
-        pattern: /^7[5-9]\d{8}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+964'
     },
     {
         name: 'Ireland',
@@ -1202,11 +806,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+353',
         flag: '🇮🇪',
         flagImage: 'assets/images/flags/ie.png',
-        nativeName: '+353',
-        pattern: /^8[356789]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+353'
     },
     {
         name: 'Isle of Man',
@@ -1214,11 +814,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+44',
         flag: '🇮🇲',
         flagImage: 'assets/images/flags/im.png',
-        nativeName: '+44',
-        pattern: /^7\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+44'
     },
     {
         name: 'Israel',
@@ -1226,11 +822,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+972',
         flag: '🇮🇱',
         flagImage: 'assets/images/flags/il.png',
-        nativeName: '+972',
-        pattern: /^5[0-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+972'
     },
     {
         name: 'Italy',
@@ -1238,11 +830,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+39',
         flag: '🇮🇹',
         flagImage: 'assets/images/flags/it.png',
-        nativeName: '+39',
-        pattern: /^3\d{8,9}$/,
-        placeholder: 'Enter 9-10 digit mobile number',
-        minLength: 9,
-        maxLength: 10
+        nativeName: '+39'
     },
     {
         name: 'Ivory Coast',
@@ -1250,11 +838,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+225',
         flag: '🇨🇮',
         flagImage: 'assets/images/flags/ci.png',
-        nativeName: 'Côte d\'Ivoire',
-        pattern: /^[0-9]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: 'Côte d\'Ivoire'
     },
     // J
     {
@@ -1263,11 +847,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1876',
         flag: '🇯🇲',
         flagImage: 'assets/images/flags/jm.png',
-        nativeName: '+1876',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1876'
     },
     {
         name: 'Japan',
@@ -1275,11 +855,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+81',
         flag: '🇯🇵',
         flagImage: 'assets/images/flags/jp.png',
-        nativeName: '+81',
-        pattern: /^[789]0\d{8}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+81'
     },
     {
         name: 'Jersey',
@@ -1287,11 +863,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+44',
         flag: '🇯🇪',
         flagImage: 'assets/images/flags/je.png',
-        nativeName: '+44',
-        pattern: /^7\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+44'
     },
     {
         name: 'Jordan',
@@ -1299,11 +871,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+962',
         flag: '🇯🇴',
         flagImage: 'assets/images/flags/jo.png',
-        nativeName: '+962',
-        pattern: /^7[789]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+962'
     },
     // K
     {
@@ -1312,11 +880,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+7',
         flag: '🇰🇿',
         flagImage: 'assets/images/flags/kz.png',
-        nativeName: '+7',
-        pattern: /^7\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+7'
     },
     {
         name: 'Kenya',
@@ -1324,11 +888,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+254',
         flag: '🇰🇪',
         flagImage: 'assets/images/flags/ke.png',
-        nativeName: '+254',
-        pattern: /^7\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+254'
     },
     {
         name: 'Kiribati',
@@ -1336,23 +896,15 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+686',
         flag: '🇰🇮',
         flagImage: 'assets/images/flags/ki.png',
-        nativeName: '+686',
-        pattern: /^\d{5}$/,
-        placeholder: 'Enter 5-digit mobile number',
-        minLength: 5,
-        maxLength: 5
+        nativeName: '+686'
     },
     {
         name: 'Kosovo',
         code: 'XK',
         dialCode: '+383',
         flag: '🇽🇰',
-        flagImage: 'assets/images/flags/xk.png',
-        nativeName: '+383',
-        pattern: /^4[3-9]\d{6}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        flagImage: '', // No flag image available for Kosovo (XK)
+        nativeName: '+383'
     },
     {
         name: 'Kuwait',
@@ -1360,11 +912,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+965',
         flag: '🇰🇼',
         flagImage: 'assets/images/flags/kw.png',
-        nativeName: '+965',
-        pattern: /^[569]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+965'
     },
     {
         name: 'Kyrgyzstan',
@@ -1372,11 +920,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+996',
         flag: '🇰🇬',
         flagImage: 'assets/images/flags/kg.png',
-        nativeName: '+996',
-        pattern: /^[57]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+996'
     },
     // L
     {
@@ -1385,11 +929,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+856',
         flag: '🇱🇦',
         flagImage: 'assets/images/flags/la.png',
-        nativeName: '+856',
-        pattern: /^20\d{8}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+856'
     },
     {
         name: 'Latvia',
@@ -1397,11 +937,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+371',
         flag: '🇱🇻',
         flagImage: 'assets/images/flags/lv.png',
-        nativeName: '+371',
-        pattern: /^2\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+371'
     },
     {
         name: 'Lebanon',
@@ -1409,11 +945,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+961',
         flag: '🇱🇧',
         flagImage: 'assets/images/flags/lb.png',
-        nativeName: '+961',
-        pattern: /^[37]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+961'
     },
     {
         name: 'Lesotho',
@@ -1421,11 +953,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+266',
         flag: '🇱🇸',
         flagImage: 'assets/images/flags/ls.png',
-        nativeName: '+266',
-        pattern: /^[56]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+266'
     },
     {
         name: 'Liberia',
@@ -1433,11 +961,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+231',
         flag: '🇱🇷',
         flagImage: 'assets/images/flags/lr.png',
-        nativeName: '+231',
-        pattern: /^[4-9]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+231'
     },
     {
         name: 'Libya',
@@ -1445,11 +969,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+218',
         flag: '🇱🇾',
         flagImage: 'assets/images/flags/ly.png',
-        nativeName: '+218',
-        pattern: /^9[1-6]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+218'
     },
     {
         name: 'Liechtenstein',
@@ -1457,11 +977,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+423',
         flag: '🇱🇮',
         flagImage: 'assets/images/flags/li.png',
-        nativeName: '+423',
-        pattern: /^[67]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+423'
     },
     {
         name: 'Lithuania',
@@ -1469,11 +985,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+370',
         flag: '🇱🇹',
         flagImage: 'assets/images/flags/lt.png',
-        nativeName: '+370',
-        pattern: /^6\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+370'
     },
     {
         name: 'Luxembourg',
@@ -1481,11 +993,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+352',
         flag: '🇱🇺',
         flagImage: 'assets/images/flags/lu.png',
-        nativeName: '+352',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+352'
     },
     // M
     {
@@ -1494,11 +1002,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+853',
         flag: '🇲🇴',
         flagImage: 'assets/images/flags/mo.png',
-        nativeName: '+853',
-        pattern: /^6\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+853'
     },
     {
         name: 'Madagascar',
@@ -1506,11 +1010,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+261',
         flag: '🇲🇬',
         flagImage: 'assets/images/flags/mg.png',
-        nativeName: '+261',
-        pattern: /^3[234]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+261'
     },
     {
         name: 'Malawi',
@@ -1518,11 +1018,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+265',
         flag: '🇲🇼',
         flagImage: 'assets/images/flags/mw.png',
-        nativeName: '+265',
-        pattern: /^[89]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+265'
     },
     {
         name: 'Malaysia',
@@ -1530,11 +1026,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+60',
         flag: '🇲🇾',
         flagImage: 'assets/images/flags/my.png',
-        nativeName: '+60',
-        pattern: /^1[0-9]\d{7,8}$/,
-        placeholder: 'Enter 9-10 digit mobile number',
-        minLength: 9,
-        maxLength: 10
+        nativeName: '+60'
     },
     {
         name: 'Maldives',
@@ -1542,11 +1034,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+960',
         flag: '🇲🇻',
         flagImage: 'assets/images/flags/mv.png',
-        nativeName: '+960',
-        pattern: /^[79]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+960'
     },
     {
         name: 'Mali',
@@ -1554,11 +1042,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+223',
         flag: '🇲🇱',
         flagImage: 'assets/images/flags/ml.png',
-        nativeName: '+223',
-        pattern: /^[679]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+223'
     },
     {
         name: 'Malta',
@@ -1566,11 +1050,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+356',
         flag: '🇲🇹',
         flagImage: 'assets/images/flags/mt.png',
-        nativeName: '+356',
-        pattern: /^[79]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+356'
     },
     {
         name: 'Marshall Islands',
@@ -1578,11 +1058,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+692',
         flag: '🇲🇭',
         flagImage: 'assets/images/flags/mh.png',
-        nativeName: '+692',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+692'
     },
     {
         name: 'Martinique',
@@ -1590,11 +1066,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+596',
         flag: '🇲🇶',
         flagImage: 'assets/images/flags/mq.png',
-        nativeName: '+596',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+596'
     },
     {
         name: 'Mauritania',
@@ -1602,11 +1074,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+222',
         flag: '🇲🇷',
         flagImage: 'assets/images/flags/mr.png',
-        nativeName: '+222',
-        pattern: /^[2-4]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+222'
     },
     {
         name: 'Mauritius',
@@ -1614,11 +1082,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+230',
         flag: '🇲🇺',
         flagImage: 'assets/images/flags/mu.png',
-        nativeName: '+230',
-        pattern: /^5\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+230'
     },
     {
         name: 'Mayotte',
@@ -1626,11 +1090,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+262',
         flag: '🇾🇹',
         flagImage: 'assets/images/flags/yt.png',
-        nativeName: '+262',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+262'
     },
     {
         name: 'Mexico',
@@ -1638,11 +1098,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+52',
         flag: '🇲🇽',
         flagImage: 'assets/images/flags/mx.png',
-        nativeName: '+52',
-        pattern: /^1\d{10}$/,
-        placeholder: 'Enter 11-digit mobile number',
-        minLength: 11,
-        maxLength: 11
+        nativeName: '+52'
     },
     {
         name: 'Micronesia',
@@ -1650,11 +1106,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+691',
         flag: '🇫🇲',
         flagImage: 'assets/images/flags/fm.png',
-        nativeName: '+691',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+691'
     },
     {
         name: 'Moldova',
@@ -1662,11 +1114,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+373',
         flag: '🇲🇩',
         flagImage: 'assets/images/flags/md.png',
-        nativeName: '+373',
-        pattern: /^[67]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+373'
     },
     {
         name: 'Monaco',
@@ -1674,11 +1122,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+377',
         flag: '🇲🇨',
         flagImage: 'assets/images/flags/mc.png',
-        nativeName: '+377',
-        pattern: /^[46]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+377'
     },
     {
         name: 'Mongolia',
@@ -1686,11 +1130,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+976',
         flag: '🇲🇳',
         flagImage: 'assets/images/flags/mn.png',
-        nativeName: '+976',
-        pattern: /^[89]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+976'
     },
     {
         name: 'Montenegro',
@@ -1698,11 +1138,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+382',
         flag: '🇲🇪',
         flagImage: 'assets/images/flags/me.png',
-        nativeName: '+382',
-        pattern: /^6\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+382'
     },
     {
         name: 'Montserrat',
@@ -1710,11 +1146,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: 'MS',
         flag: '🇲🇸',
         flagImage: 'assets/images/flags/ms.png',
-        nativeName: '+1664',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1664'
     },
     {
         name: 'Morocco',
@@ -1722,11 +1154,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+212',
         flag: '🇲🇦',
         flagImage: 'assets/images/flags/ma.png',
-        nativeName: '+212',
-        pattern: /^[67]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+212'
     },
     {
         name: 'Mozambique',
@@ -1734,11 +1162,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+258',
         flag: '🇲🇿',
         flagImage: 'assets/images/flags/mz.png',
-        nativeName: '+258',
-        pattern: /^8[2-7]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+258'
     },
     {
         name: 'Myanmar',
@@ -1746,11 +1170,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+95',
         flag: '🇲🇲',
         flagImage: 'assets/images/flags/mm.png',
-        nativeName: '+95',
-        pattern: /^9\d{8,9}$/,
-        placeholder: 'Enter 9-10 digit mobile number',
-        minLength: 9,
-        maxLength: 10
+        nativeName: '+95'
     },
     // N
     {
@@ -1759,11 +1179,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+264',
         flag: '🇳🇦',
         flagImage: 'assets/images/flags/na.png',
-        nativeName: '+264',
-        pattern: /^8[125]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+264'
     },
     {
         name: 'Nauru',
@@ -1771,11 +1187,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+674',
         flag: '🇳🇷',
         flagImage: 'assets/images/flags/nr.png',
-        nativeName: '+674',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+674'
     },
     {
         name: 'Nepal',
@@ -1783,11 +1195,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+977',
         flag: '🇳🇵',
         flagImage: 'assets/images/flags/np.png',
-        nativeName: '+977',
-        pattern: /^98\d{8}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+977'
     },
     {
         name: 'Netherlands',
@@ -1795,11 +1203,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+31',
         flag: '🇳🇱',
         flagImage: 'assets/images/flags/nl.png',
-        nativeName: '+31',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+31'
     },
     {
         name: 'New Caledonia',
@@ -1807,11 +1211,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+687',
         flag: '🇳🇨',
         flagImage: 'assets/images/flags/nc.png',
-        nativeName: '+687',
-        pattern: /^\d{6}$/,
-        placeholder: 'Enter 6-digit mobile number',
-        minLength: 6,
-        maxLength: 6
+        nativeName: '+687'
     },
     {
         name: 'New Zealand',
@@ -1819,11 +1219,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+64',
         flag: '🇳🇿',
         flagImage: 'assets/images/flags/nz.png',
-        nativeName: '+64',
-        pattern: /^2[0-9]\d{7,8}$/,
-        placeholder: 'Enter 9-10 digit mobile number',
-        minLength: 9,
-        maxLength: 10
+        nativeName: '+64'
     },
     {
         name: 'Nicaragua',
@@ -1831,11 +1227,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+505',
         flag: '🇳🇮',
         flagImage: 'assets/images/flags/ni.png',
-        nativeName: '+505',
-        pattern: /^[58]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+505'
     },
     {
         name: 'Niger',
@@ -1843,11 +1235,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+227',
         flag: '🇳🇪',
         flagImage: 'assets/images/flags/ne.png',
-        nativeName: '+227',
-        pattern: /^[89]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+227'
     },
     {
         name: 'Nigeria',
@@ -1855,11 +1243,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+234',
         flag: '🇳🇬',
         flagImage: 'assets/images/flags/ng.png',
-        nativeName: '+234',
-        pattern: /^[789]\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+234'
     },
     {
         name: 'Niue',
@@ -1867,11 +1251,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+683',
         flag: '🇳🇺',
         flagImage: 'assets/images/flags/nu.png',
-        nativeName: '+683',
-        pattern: /^\d{4}$/,
-        placeholder: 'Enter 4-digit mobile number',
-        minLength: 4,
-        maxLength: 4
+        nativeName: '+683'
     },
     {
         name: 'Norfolk Island',
@@ -1879,11 +1259,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+672',
         flag: '🇳🇫',
         flagImage: 'assets/images/flags/nf.png',
-        nativeName: '+672',
-        pattern: /^\d{6}$/,
-        placeholder: 'Enter 6-digit mobile number',
-        minLength: 6,
-        maxLength: 6
+        nativeName: '+672'
     },
     {
         name: 'North Korea',
@@ -1891,11 +1267,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+850',
         flag: '🇰🇵',
         flagImage: 'assets/images/flags/kp.png',
-        nativeName: '+850',
-        pattern: /^19\d{8}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+850'
     },
     {
         name: 'North Macedonia',
@@ -1903,11 +1275,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: 'MK',
         flag: '🇲🇰',
         flagImage: 'assets/images/flags/mk.png',
-        nativeName: '+389',
-        pattern: /^7[0-9]\d{6}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+389'
     },
     {
         name: 'Northern Mariana Islands',
@@ -1915,11 +1283,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: 'MP',
         flag: '🇲🇵',
         flagImage: 'assets/images/flags/mp.png',
-        nativeName: '+1670',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1670'
     },
     {
         name: 'Norway',
@@ -1927,11 +1291,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+47',
         flag: '🇳🇴',
         flagImage: 'assets/images/flags/no.png',
-        nativeName: '+47',
-        pattern: /^[49]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+47'
     },
     // O
     {
@@ -1940,11 +1300,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+968',
         flag: '🇴🇲',
         flagImage: 'assets/images/flags/om.png',
-        nativeName: '+968',
-        pattern: /^[79]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+968'
     },
     // P
     {
@@ -1953,11 +1309,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+92',
         flag: '🇵🇰',
         flagImage: 'assets/images/flags/pk.png',
-        nativeName: '+92',
-        pattern: /^3\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+92'
     },
     {
         name: 'Palau',
@@ -1965,11 +1317,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+680',
         flag: '🇵🇼',
         flagImage: 'assets/images/flags/pw.png',
-        nativeName: '+680',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+680'
     },
     {
         name: 'Palestine',
@@ -1977,11 +1325,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+970',
         flag: '🇵🇸',
         flagImage: 'assets/images/flags/ps.png',
-        nativeName: '+970',
-        pattern: /^5[69]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+970'
     },
     {
         name: 'Panama',
@@ -1989,11 +1333,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+507',
         flag: '🇵🇦',
         flagImage: 'assets/images/flags/pa.png',
-        nativeName: '+507',
-        pattern: /^[67]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+507'
     },
     {
         name: 'Papua New Guinea',
@@ -2001,11 +1341,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+675',
         flag: '🇵🇬',
         flagImage: 'assets/images/flags/pg.png',
-        nativeName: '+675',
-        pattern: /^[789]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+675'
     },
     {
         name: 'Paraguay',
@@ -2013,11 +1349,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+595',
         flag: '🇵🇾',
         flagImage: 'assets/images/flags/py.png',
-        nativeName: '+595',
-        pattern: /^9[6789]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+595'
     },
     {
         name: 'Peru',
@@ -2025,11 +1357,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+51',
         flag: '🇵🇪',
         flagImage: 'assets/images/flags/pe.png',
-        nativeName: '+51',
-        pattern: /^9\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+51'
     },
     {
         name: 'Philippines',
@@ -2037,11 +1365,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+63',
         flag: '🇵🇭',
         flagImage: 'assets/images/flags/ph.png',
-        nativeName: '+63',
-        pattern: /^9\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+63'
     },
     {
         name: 'Pitcairn',
@@ -2049,11 +1373,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+64',
         flag: '🇵🇳',
         flagImage: 'assets/images/flags/pn.png',
-        nativeName: '+64',
-        pattern: /^\d{9}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+64'
     },
     {
         name: 'Poland',
@@ -2061,11 +1381,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+48',
         flag: '🇵🇱',
         flagImage: 'assets/images/flags/pl.png',
-        nativeName: '+48',
-        pattern: /^[5-9]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+48'
     },
     {
         name: 'Portugal',
@@ -2073,11 +1389,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+351',
         flag: '🇵🇹',
         flagImage: 'assets/images/flags/pt.png',
-        nativeName: '+351',
-        pattern: /^9[1236]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+351'
     },
     {
         name: 'Puerto Rico',
@@ -2085,11 +1397,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: 'PR',
         flag: '🇵🇷',
         flagImage: 'assets/images/flags/pr.png',
-        nativeName: '+1',
-        pattern: /^\d{10}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+1'
     },
     // Q
     {
@@ -2098,11 +1406,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+974',
         flag: '🇶🇦',
         flagImage: 'assets/images/flags/qa.png',
-        nativeName: '+974',
-        pattern: /^[3567]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+974'
     },
     // R
     {
@@ -2111,11 +1415,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+262',
         flag: '🇷🇪',
         flagImage: 'assets/images/flags/re.png',
-        nativeName: '+262',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+262'
     },
     {
         name: 'Romania',
@@ -2123,11 +1423,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+40',
         flag: '🇷🇴',
         flagImage: 'assets/images/flags/ro.png',
-        nativeName: '+40',
-        pattern: /^7\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+40'
     },
     {
         name: 'Russia',
@@ -2135,11 +1431,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+7',
         flag: '🇷🇺',
         flagImage: 'assets/images/flags/ru.png',
-        nativeName: '+7',
-        pattern: /^9\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+7'
     },
     {
         name: 'Rwanda',
@@ -2147,11 +1439,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+250',
         flag: '🇷🇼',
         flagImage: 'assets/images/flags/rw.png',
-        nativeName: '+250',
-        pattern: /^7[238]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+250'
     },
     // S
     {
@@ -2160,11 +1448,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+290',
         flag: '🇸🇭',
         flagImage: 'assets/images/flags/sh.png',
-        nativeName: '+290',
-        pattern: /^\d{4}$/,
-        placeholder: 'Enter 4-digit mobile number',
-        minLength: 4,
-        maxLength: 4
+        nativeName: '+290'
     },
     {
         name: 'Saint Kitts and Nevis',
@@ -2172,11 +1456,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1869',
         flag: '🇰🇳',
         flagImage: 'assets/images/flags/kn.png',
-        nativeName: '+1869',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1869'
     },
     {
         name: 'Saint Lucia',
@@ -2184,11 +1464,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1758',
         flag: '🇱🇨',
         flagImage: 'assets/images/flags/lc.png',
-        nativeName: '+1758',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1758'
     },
     {
         name: 'Saint Pierre and Miquelon',
@@ -2196,11 +1472,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+508',
         flag: '🇵🇲',
         flagImage: 'assets/images/flags/pm.png',
-        nativeName: '+508',
-        pattern: /^\d{6}$/,
-        placeholder: 'Enter 6-digit mobile number',
-        minLength: 6,
-        maxLength: 6
+        nativeName: '+508'
     },
     {
         name: 'Saint Vincent and the Grenadines',
@@ -2208,11 +1480,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1784',
         flag: '🇻🇨',
         flagImage: 'assets/images/flags/vc.png',
-        nativeName: '+1784',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1784'
     },
     {
         name: 'Samoa',
@@ -2220,11 +1488,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+685',
         flag: '🇼🇸',
         flagImage: 'assets/images/flags/ws.png',
-        nativeName: '+685',
-        pattern: /^[27]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+685'
     },
     {
         name: 'San Marino',
@@ -2232,11 +1496,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+378',
         flag: '🇸🇲',
         flagImage: 'assets/images/flags/sm.png',
-        nativeName: '+378',
-        pattern: /^6\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+378'
     },
     {
         name: 'São Tomé and Príncipe',
@@ -2244,11 +1504,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+239',
         flag: '🇸🇹',
         flagImage: 'assets/images/flags/st.png',
-        nativeName: '+239',
-        pattern: /^9\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+239'
     },
     {
         name: 'Saudi Arabia',
@@ -2256,11 +1512,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+966',
         flag: '🇸🇦',
         flagImage: 'assets/images/flags/sa.png',
-        nativeName: '+966',
-        pattern: /^5\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+966'
     },
     {
         name: 'Senegal',
@@ -2268,11 +1520,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+221',
         flag: '🇸🇳',
         flagImage: 'assets/images/flags/sn.png',
-        nativeName: '+221',
-        pattern: /^7[0678]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+221'
     },
     {
         name: 'Serbia',
@@ -2280,11 +1528,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+381',
         flag: '🇷🇸',
         flagImage: 'assets/images/flags/rs.png',
-        nativeName: '+381',
-        pattern: /^6\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+381'
     },
     {
         name: 'Seychelles',
@@ -2292,11 +1536,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+248',
         flag: '🇸🇨',
         flagImage: 'assets/images/flags/sc.png',
-        nativeName: '+248',
-        pattern: /^2[5-7]\d{5}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+248'
     },
     {
         name: 'Sierra Leone',
@@ -2304,11 +1544,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+232',
         flag: '🇸🇱',
         flagImage: 'assets/images/flags/sl.png',
-        nativeName: '+232',
-        pattern: /^[2-9]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+232'
     },
     {
         name: 'Singapore',
@@ -2316,11 +1552,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+65',
         flag: '🇸🇬',
         flagImage: 'assets/images/flags/sg.png',
-        nativeName: '+65',
-        pattern: /^[89]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+65'
     },
     {
         name: 'Sint Maarten',
@@ -2328,11 +1560,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1721',
         flag: '🇸🇽',
         flagImage: 'assets/images/flags/sx.png',
-        nativeName: '+1721',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1721'
     },
     {
         name: 'Slovakia',
@@ -2340,11 +1568,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+421',
         flag: '🇸🇰',
         flagImage: 'assets/images/flags/sk.png',
-        nativeName: '+421',
-        pattern: /^9\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+421'
     },
     {
         name: 'Slovenia',
@@ -2352,11 +1576,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+386',
         flag: '🇸🇮',
         flagImage: 'assets/images/flags/si.png',
-        nativeName: '+386',
-        pattern: /^[3-7]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+386'
     },
     {
         name: 'Solomon Islands',
@@ -2364,11 +1584,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+677',
         flag: '🇸🇧',
         flagImage: 'assets/images/flags/sb.png',
-        nativeName: '+677',
-        pattern: /^[7-9]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+677'
     },
     {
         name: 'Somalia',
@@ -2376,11 +1592,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+252',
         flag: '🇸🇴',
         flagImage: 'assets/images/flags/so.png',
-        nativeName: '+252',
-        pattern: /^[67]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+252'
     },
     {
         name: 'South Africa',
@@ -2388,11 +1600,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+27',
         flag: '🇿🇦',
         flagImage: 'assets/images/flags/za.png',
-        nativeName: '+27',
-        pattern: /^[6-8]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+27'
     },
     {
         name: 'South Korea',
@@ -2400,11 +1608,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+82',
         flag: '🇰🇷',
         flagImage: 'assets/images/flags/kr.png',
-        nativeName: '+82',
-        pattern: /^1[0-9]\d{7,8}$/,
-        placeholder: 'Enter Korean phone number',
-        minLength: 9,
-        maxLength: 10
+        nativeName: '+82'
     },
     {
         name: 'South Sudan',
@@ -2412,11 +1616,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+211',
         flag: '🇸🇸',
         flagImage: 'assets/images/flags/ss.png',
-        nativeName: '+211',
-        pattern: /^9\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+211'
     },
     {
         name: 'Spain',
@@ -2424,11 +1624,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+34',
         flag: '🇪🇸',
         flagImage: 'assets/images/flags/es.png',
-        nativeName: '+34',
-        pattern: /^[67]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+34'
     },
     {
         name: 'Sri Lanka',
@@ -2436,11 +1632,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+94',
         flag: '🇱🇰',
         flagImage: 'assets/images/flags/lk.png',
-        nativeName: '+94',
-        pattern: /^7[0-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+94'
     },
     {
         name: 'Sudan',
@@ -2448,11 +1640,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+249',
         flag: '🇸🇩',
         flagImage: 'assets/images/flags/sd.png',
-        nativeName: '+249',
-        pattern: /^9[0-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+249'
     },
     {
         name: 'Suriname',
@@ -2460,11 +1648,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+597',
         flag: '🇸🇷',
         flagImage: 'assets/images/flags/sr.png',
-        nativeName: '+597',
-        pattern: /^[67]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+597'
     },
     {
         name: 'Svalbard and Jan Mayen',
@@ -2472,11 +1656,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+47',
         flag: '🇸🇯',
         flagImage: 'assets/images/flags/sj.png',
-        nativeName: '+47',
-        pattern: /^[49]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+47'
     },
     {
         name: 'Swaziland',
@@ -2484,11 +1664,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+268',
         flag: '🇸🇿',
         flagImage: 'assets/images/flags/sz.png',
-        nativeName: '+268',
-        pattern: /^[67]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+268'
     },
     {
         name: 'Sweden',
@@ -2496,11 +1672,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+46',
         flag: '🇸🇪',
         flagImage: 'assets/images/flags/se.png',
-        nativeName: '+46',
-        pattern: /^7[0-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+46'
     },
     {
         name: 'Switzerland',
@@ -2508,11 +1680,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+41',
         flag: '🇨🇭',
         flagImage: 'assets/images/flags/ch.png',
-        nativeName: '+41',
-        pattern: /^7[5-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+41'
     },
     {
         name: 'Syria',
@@ -2520,11 +1688,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+963',
         flag: '🇸🇾',
         flagImage: 'assets/images/flags/sy.png',
-        nativeName: '+963',
-        pattern: /^9[3-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+963'
     },
     // T
     {
@@ -2533,11 +1697,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+886',
         flag: '🇹🇼',
         flagImage: 'assets/images/flags/tw.png',
-        nativeName: '+886',
-        pattern: /^9\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+886'
     },
     {
         name: 'Tajikistan',
@@ -2545,11 +1705,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+992',
         flag: '🇹🇯',
         flagImage: 'assets/images/flags/tj.png',
-        nativeName: '+992',
-        pattern: /^[39]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+992'
     },
     {
         name: 'Tanzania',
@@ -2557,11 +1713,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+255',
         flag: '🇹🇿',
         flagImage: 'assets/images/flags/tz.png',
-        nativeName: '+255',
-        pattern: /^[67]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+255'
     },
     {
         name: 'Thailand',
@@ -2569,11 +1721,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+66',
         flag: '🇹🇭',
         flagImage: 'assets/images/flags/th.png',
-        nativeName: '+66',
-        pattern: /^[689]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+66'
     },
     {
         name: 'Timor-Leste',
@@ -2581,11 +1729,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+670',
         flag: '🇹🇱',
         flagImage: 'assets/images/flags/tl.png',
-        nativeName: '+670',
-        pattern: /^7[7-9]\d{6}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+670'
     },
     {
         name: 'Togo',
@@ -2593,11 +1737,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+228',
         flag: '🇹🇬',
         flagImage: 'assets/images/flags/tg.png',
-        nativeName: '+228',
-        pattern: /^9[0-9]\d{6}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+228'
     },
     {
         name: 'Tokelau',
@@ -2605,11 +1745,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+690',
         flag: '🇹🇰',
         flagImage: 'assets/images/flags/tk.png',
-        nativeName: '+690',
-        pattern: /^\d{4}$/,
-        placeholder: 'Enter 4-digit mobile number',
-        minLength: 4,
-        maxLength: 4
+        nativeName: '+690'
     },
     {
         name: 'Tonga',
@@ -2617,11 +1753,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+676',
         flag: '🇹🇴',
         flagImage: 'assets/images/flags/to.png',
-        nativeName: '+676',
-        pattern: /^[78]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+676'
     },
     {
         name: 'Trinidad and Tobago',
@@ -2629,11 +1761,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1868',
         flag: '🇹🇹',
         flagImage: 'assets/images/flags/tt.png',
-        nativeName: '+1868',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1868'
     },
     {
         name: 'Tunisia',
@@ -2641,11 +1769,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+216',
         flag: '🇹🇳',
         flagImage: 'assets/images/flags/tn.png',
-        nativeName: '+216',
-        pattern: /^[2459]\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+216'
     },
     {
         name: 'Turkey',
@@ -2653,11 +1777,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+90',
         flag: '🇹🇷',
         flagImage: 'assets/images/flags/tr.png',
-        nativeName: '+90',
-        pattern: /^5\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+90'
     },
     {
         name: 'Turkmenistan',
@@ -2665,11 +1785,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+993',
         flag: '🇹🇲',
         flagImage: 'assets/images/flags/tm.png',
-        nativeName: '+993',
-        pattern: /^6\d{7}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+993'
     },
     {
         name: 'Turks and Caicos Islands',
@@ -2677,11 +1793,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: 'TC',
         flag: '🇹🇨',
         flagImage: 'assets/images/flags/tc.png',
-        nativeName: '+1649',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1649'
     },
     {
         name: 'Tuvalu',
@@ -2689,11 +1801,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+688',
         flag: '🇹🇻',
         flagImage: 'assets/images/flags/tv.png',
-        nativeName: '+688',
-        pattern: /^\d{6}$/,
-        placeholder: 'Enter 6-digit mobile number',
-        minLength: 6,
-        maxLength: 6
+        nativeName: '+688'
     },
     // U
     {
@@ -2702,11 +1810,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+256',
         flag: '🇺🇬',
         flagImage: 'assets/images/flags/ug.png',
-        nativeName: '+256',
-        pattern: /^7[0-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+256'
     },
     {
         name: 'Ukraine',
@@ -2714,11 +1818,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+380',
         flag: '🇺🇦',
         flagImage: 'assets/images/flags/ua.png',
-        nativeName: '+380',
-        pattern: /^[3-9]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+380'
     },
     {
         name: 'United Arab Emirates',
@@ -2726,35 +1826,31 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+971',
         flag: '🇦🇪',
         flagImage: 'assets/images/flags/ae.png',
-        nativeName: '+971',
-        pattern: /^5[0-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+971'
     },
     // { // Move this in top
-    //     name: 'United Kingdom',
-    //     code: 'GB',
-    //     dialCode: '+44',
-    //     flag: '🇬🇧',
-    //     flagImage: 'assets/images/flags/gb.png',
-    //     nativeName: '+44',
-    //     pattern: /^7\d{9}$/,
-    //     placeholder: 'Enter 10-digit mobile number',
-    //     minLength: 10,
-    //     maxLength: 10
+    //     name: 'United Kingdom'
+    //     code: 'GB'
+    //     dialCode: '+44'
+    //     flag: '🇬🇧'
+    //     flagImage: 'assets/images/flags/gb.png'
+    //     nativeName: '+44'
+    //
+    //
+    //
+    //
     // },
     // { // Move this in top
-    //     name: 'United States',
-    //     code: 'US',
-    //     dialCode: '+1',
-    //     flag: '🇺🇸',
-    //     flagImage: 'assets/images/flags/us.png',
-    //     nativeName: '+1',
-    //     pattern: /^\d{10}$/,
-    //     placeholder: 'Enter 10-digit mobile number',
-    //     minLength: 10,
-    //     maxLength: 10
+    //     name: 'United States'
+    //     code: 'US'
+    //     dialCode: '+1'
+    //     flag: '🇺🇸'
+    //     flagImage: 'assets/images/flags/us.png'
+    //     nativeName: '+1'
+    //
+    //
+    //
+    //
     // },
     {
         name: 'Uruguay',
@@ -2762,11 +1858,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+598',
         flag: '🇺🇾',
         flagImage: 'assets/images/flags/uy.png',
-        nativeName: '+598',
-        pattern: /^9[1-9]\d{6}$/,
-        placeholder: 'Enter 8-digit mobile number',
-        minLength: 8,
-        maxLength: 8
+        nativeName: '+598'
     },
     {
         name: 'US Virgin Islands',
@@ -2774,11 +1866,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: 'VI',
         flag: '🇻🇮',
         flagImage: 'assets/images/flags/vi.png',
-        nativeName: '+1340',
-        pattern: /^\d{7}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+1340'
     },
     {
         name: 'Uzbekistan',
@@ -2786,11 +1874,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+998',
         flag: '🇺🇿',
         flagImage: 'assets/images/flags/uz.png',
-        nativeName: '+998',
-        pattern: /^9[0-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+998'
     },
     // V
     {
@@ -2799,11 +1883,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+678',
         flag: '🇻🇺',
         flagImage: 'assets/images/flags/vu.png',
-        nativeName: '+678',
-        pattern: /^[57]\d{6}$/,
-        placeholder: 'Enter 7-digit mobile number',
-        minLength: 7,
-        maxLength: 7
+        nativeName: '+678'
     },
     {
         name: 'Vatican City',
@@ -2811,11 +1891,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+39',
         flag: '🇻🇦',
         flagImage: 'assets/images/flags/va.png',
-        nativeName: '+39',
-        pattern: /^3\d{8,9}$/,
-        placeholder: 'Enter 9-10 digit mobile number',
-        minLength: 9,
-        maxLength: 10
+        nativeName: '+39'
     },
     {
         name: 'Venezuela',
@@ -2823,11 +1899,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+58',
         flag: '🇻🇪',
         flagImage: 'assets/images/flags/ve.png',
-        nativeName: '+58',
-        pattern: /^4\d{9}$/,
-        placeholder: 'Enter 10-digit mobile number',
-        minLength: 10,
-        maxLength: 10
+        nativeName: '+58'
     },
     {
         name: 'Vietnam',
@@ -2835,11 +1907,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+84',
         flag: '🇻🇳',
         flagImage: 'assets/images/flags/vn.png',
-        nativeName: '+84',
-        pattern: /^[35789]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+84'
     },
     // W
     {
@@ -2848,11 +1916,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+681',
         flag: '🇼🇫',
         flagImage: 'assets/images/flags/wf.png',
-        nativeName: '+681',
-        pattern: /^\d{6}$/,
-        placeholder: 'Enter 6-digit mobile number',
-        minLength: 6,
-        maxLength: 6
+        nativeName: '+681'
     },
     {
         name: 'Western Sahara',
@@ -2860,11 +1924,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+212',
         flag: '🇪🇭',
         flagImage: 'assets/images/flags/eh.png',
-        nativeName: '+212',
-        pattern: /^[67]\d{8}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+212'
     },
     // Y
     {
@@ -2873,11 +1933,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+967',
         flag: '🇾🇪',
         flagImage: 'assets/images/flags/ye.png',
-        nativeName: '+967',
-        pattern: /^7[0137]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+967'
     },
     // Z
     {
@@ -2886,11 +1942,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+260',
         flag: '🇿🇲',
         flagImage: 'assets/images/flags/zm.png',
-        nativeName: '+260',
-        pattern: /^9[567]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
+        nativeName: '+260'
     },
     {
         name: 'Zimbabwe',
@@ -2898,10 +1950,6 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+263',
         flag: '🇿🇼',
         flagImage: 'assets/images/flags/zw.png',
-        nativeName: '+263',
-        pattern: /^7[1-9]\d{7}$/,
-        placeholder: 'Enter 9-digit mobile number',
-        minLength: 9,
-        maxLength: 9
-    },
+        nativeName: '+263'
+    }
 ];

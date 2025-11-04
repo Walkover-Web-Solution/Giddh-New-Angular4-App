@@ -43,8 +43,14 @@
                     padding: 0;
                     min-width: 216px;
                     // color: var(--color-black);
+                    height: 36px;
                     .border-line {
                         border: 2px solid transparent;
+                        height: inherit;
+                        >*{
+                            height: inherit;
+                            width: inherit;
+                        }
                         // &.active {
                         //     border-color: var(--theme-primary-color);
                         // }

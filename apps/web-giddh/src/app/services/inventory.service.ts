@@ -1920,4 +1920,25 @@ export class InventoryService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
     }
+
+    /**
+     * This will be use for update inventory variant
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public updateInventoryVariant(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.patch(this.config.apiUrl + INVENTORY_API.INVENTORY_VARIANT_UPDATE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName))
+            ?.replace(':variantUniqueName', encodeURIComponent(model.variantUniqueName))
+            , model).pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = { model };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
+    }
+
 }

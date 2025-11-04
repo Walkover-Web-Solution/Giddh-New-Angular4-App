@@ -3497,7 +3497,7 @@
                     aria-label="clear"
                     *ngIf="!queryParams?.stockUniqueName"
                     mat-stroked-button
-                    (click)="resetForm(stockCreateEditForm)"
+                    (click)="resetForm(stockCreateEditForm); getVariantCustomFields()"
                 >
                     {{ commonLocaleData?.app_clear }}
                 </button>

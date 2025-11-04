@@ -466,7 +466,7 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [required]="false"
                                 [defaultCountry]="'+91'"
-                                [useImageFlags]="false"
+                                [useImageFlags]="true"
                                 (change)="openConfirmLeaveDialog()"
                             >
                             </mobile-number-input>
@@ -577,7 +577,8 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [required]="false"
                                 [defaultCountry]="'+91'"
-                                [useImageFlags]="false"
+                                [useImageFlags]="true"
+                                (input)="portalIndex = i"
                                 (change)="openConfirmLeaveDialog()"
                             >
                             </mobile-number-input>

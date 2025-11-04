@@ -1,0 +1,15 @@
+{
+    "mobile_number": "Mobile Number",
+    "select_country": "Select Country",
+    "enter_mobile_number": "Enter mobile number",
+    "mobile_number_required": "Mobile number is required",
+    "invalid_mobile_number": "Please enter valid mobile number for {{country}}",
+    "invalid_length": "Invalid mobile number length for {{country}}",
+    "wrong_country": "This number belongs to a different country",
+    "invalid_number": "This is not a valid phone number",
+    "not_mobile": "This is not a mobile phone number",
+    "obviously_invalid": "This number appears to be invalid (repeated or sequential digits)",
+    "impossible_number": "This number is not possible for {{country}}",
+    "parse_error": "Unable to parse this phone number",
+    "invalid_format": "Invalid phone number format"
+}

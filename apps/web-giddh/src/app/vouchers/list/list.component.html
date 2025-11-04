@@ -2211,7 +2211,7 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
                                                     >
-                                                        <p>{{ element?.customerName | titlecase }}</p>
+                                                        <h3>{{ element.account?.customerName || element?.account?.name | titlecase }}</h3>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
                                                             <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                                         </a>
