@@ -74,7 +74,6 @@ export class SettingsUtilityService {
                 address: address.address,
                 name: address.name,
                 uniqueName: address?.uniqueName,
-                isDefault: address?.isDefault,
                 county: address?.county,
                 linkedEntities: this.getLinkedEntities(address)
             });

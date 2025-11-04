@@ -505,7 +505,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 currentContactList.push(item);
             });
 
-
             if (this.isSearching && !this.isRefreshingAfterDelete) {
                 // Handle page number is more than total pages in query params
                 if (this.totalPages < this.advanceFilters.page) {

@@ -684,7 +684,8 @@ export const KeyCodesEnum = {
     ARROW_DOWN: 'ArrowDown',
     ARROW_UP: 'ArrowUp',
     ARROW_RIGHT: 'ArrowRight',
-    ARROW_LEFT: 'ArrowLeft' 
+    ARROW_LEFT: 'ArrowLeft',
+    TAB: 'Tab'
 };
 
 /** List of all the HTTP methods */

@@ -662,6 +662,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.aiOcrService.aiOcrDetails$.next(null);
                         this.aiOcrService.saveAndNext$.next(null);
                         this.aiOcrService.skipAndNext$.next(null);
+                        this.selectedVoucherType = "";
+                        this.ocrType = "";
+                        this.transactionOptions = [];
                         this.queryParams = cloneDeep(response[1]);
 
                         if (this.queryParams?.redirect) {
@@ -735,6 +738,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     } else {
                         this.isMainVoucher = false;
+                        this.ocrType = params.type;
+                        this.transactionOptions = this.ocrType === 'income'
+                            ? [
+                                { label: this.commonLocaleData?.app_invoice, value: VoucherTypeEnum.invoice },
+                                { label: this.commonLocaleData?.app_voucher_types?.credit_note, value: VoucherTypeEnum.creditNote },
+                                { label: this.commonLocaleData?.app_voucher_types?.receipt, value: VoucherTypeEnum.receipt }
+                            ]
+                            : [
+                                { label: this.commonLocaleData?.app_bill, value: VoucherTypeEnum.bill },
+                                { label: this.commonLocaleData?.app_voucher_types?.debit_note, value: VoucherTypeEnum.debitNote },
+                                { label: this.commonLocaleData?.app_voucher_types?.payment, value: VoucherTypeEnum.payment }
+                            ];
                         this.aiOcrService.getOcrData$
                             .pipe(skip(1), takeUntil(this.destroyed$))
                             .subscribe((response) => {
@@ -746,7 +761,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             });
 
                         this.aiOcrService.aiOcrDetails$.pipe(takeUntil(this.destroyed$)).subscribe((voucherDetails) => {
-                            this.aiOcrDetails = voucherDetails;
+                            if (voucherDetails && voucherDetails.type) {
+                                this.aiOcrDetails = voucherDetails;
+                                if (!this.rowData) {
+                                    this.selectedVoucherType = voucherDetails.type?.toLowerCase() === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : voucherDetails.type?.toLowerCase() === VoucherTypeEnum.purchase ? VoucherTypeEnum.bill : voucherDetails.type;
+                                    this.voucherType = voucherDetails.type;
+                                    this.getVoucherType();
+                                    this.invoiceForm.get("type").patchValue(this.voucherType);
+                                    this.changeDetection.detectChanges();
+                                }
+                            }
                         });
 
                         this.aiOcrService.saveAndNext$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -759,10 +783,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
 
         this.aiOcrService.ocrListToCreate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.transactionOptions = response.list;
-                this.selectedVoucherType = this.titleCasePipe.transform(response.type);
+            if (response && response.type && response.row) {
+                this.selectedVoucherType = response.type?.toLowerCase() === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : response.type?.toLowerCase() === VoucherTypeEnum.purchase ? VoucherTypeEnum.bill : response.type;
                 this.rowData = response.row;
+            } else if (response && response.type && response.row == null) {
+                this.rowData = null;
+                this.selectedVoucherType = response.type?.toLowerCase() === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : response.type?.toLowerCase() === VoucherTypeEnum.purchase ? VoucherTypeEnum.bill : response.type;
             }
         });
 
@@ -982,7 +1008,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.company.countryName = "";
                     this.openAccountDropdown = false;
                     this.urlVoucherType = aiOcrDetails.type;
-                    this.voucherType = this.vouchersUtilityService.parseVoucherType(aiOcrDetails.type);
+                    this.voucherType = this.vouchersUtilityService.parseVoucherType(this.urlVoucherType);
                     this.ocrVoucherType = aiOcrDetails.type;
                     this.aiOcrService.saveAndNext$.next(null);
                     this.aiOcrService.skipAndNext$.next(null);
@@ -6959,12 +6985,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
       * @param {string} type - The unique name to search for
       * @memberof VoucherCreateComponent
       */
-    public selectVoucherType(type: string): void {
-        this.selectedVoucherType = type?.toLowerCase();
+    public selectVoucherType(value: string): void {
+        this.selectedVoucherType = value?.toLowerCase();
+        
+        // Optimize type mapping using object lookup instead of if-else chain
+        const typeMapping = { 'bill': 'purchase', 'invoice': 'sales' };
+        const mappedType = typeMapping[this.selectedVoucherType] || this.selectedVoucherType;
+        
         const req = {
             row: this.rowData,
-            type: this.selectedVoucherType,
-            list: this.transactionOptions
+            type: mappedType,
+            list: this.transactionOptions,
+            aiOcrDetails : this.aiOcrDetails
         }
         this.voucherType = this.vouchersUtilityService.parseVoucherType(req.type);
         this.getVoucherType();
