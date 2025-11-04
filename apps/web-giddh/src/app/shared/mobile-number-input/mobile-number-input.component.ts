@@ -177,8 +177,8 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     /** Whether the field is disabled */
     @Input() public disabled: boolean = false;
     
-    /** Default country code */
-    @Input() public defaultCountry: string = '+91';
+    /** Default fallback country code (India) */
+    private readonly DEFAULT_COUNTRY_CODE: string = '+91';
     
     /** Placeholder text for the mobile input field */
     @Input() public placeholder: string;
@@ -237,9 +237,18 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      */
     public ngOnInit(): void {
         this.loadTranslations();
-        this.detectUserCountry();
         this.setupFormControls();
-        // this.countries = this.countries.sort((a, b) => a.dialCode.localeCompare(b.dialCode));
+        this.detectUserCountry();
+    }
+    
+    /**
+     * Debug method to clear geolocation cache
+     * 
+     * @public
+     * @memberof MobileNumberInputComponent
+     */
+    public clearGeolocationCache(): void {
+        this.geolocationService.clearCache();
     }
 
     /**
@@ -363,15 +372,37 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
      * @memberof MobileNumberInputComponent
      */
     private detectUserCountry(): void {
-        this.geolocationService.getUserLocation()
+        // Don't override if country was already set programmatically
+        if (this.countrySetProgrammatically) {
+            return;
+        }
+        
+        this.performCountryDetection();
+    }
+
+    /**
+     * Detects user's country for writeValue method (cache-first approach)
+     *
+     * @private
+     * @memberof MobileNumberInputComponent
+     */
+    private detectUserCountryForWriteValue(): void {
+        this.performCountryDetection();
+    }
+
+    /**
+     * Performs the actual country detection logic (cache-first approach)
+     * Only executes when mobile number field is empty
+     *
+     * @private
+     * @memberof MobileNumberInputComponent
+     */
+    private performCountryDetection(): void {
+        this.geolocationService.getCountryData()
             .pipe(takeUntil(this.destroyed$))
             .subscribe(location => {
-                // Don't override if country was already set programmatically
-                if (this.countrySetProgrammatically) {
-                    return;
-                }
-                
-                if (location && location.countryCode) {
+                // Only perform country detection if mobile number field is empty
+                if (location && location.countryCode && !this.mobileControl.value) {
                     const dialCode = this.geolocationService.mapCountryCodeToDialCode(location.countryCode);
                     if (dialCode) {
                         const detectedCountry = this.countries.find(country => country.dialCode === dialCode);
@@ -379,24 +410,21 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                             this.selectedCountry = detectedCountry;
                             this.countryControl.setValue(detectedCountry, { emitEvent: false });
                             this.updateValidators();
-                            // console.log(`Auto-detected country: ${detectedCountry.name} (${detectedCountry.dialCode})`);
                             return;
                         }
                     }
                 }
-                // Fallback to default country if detection fails
-                this.initializeDefaultCountry();
             });
     }
 
     /**
-     * Initializes the default country selection
+     * Initializes the default country selection to India (+91)
      *
      * @private
      * @memberof MobileNumberInputComponent
      */
     private initializeDefaultCountry(): void {
-        const defaultCountry = this.countries.find(country => country.dialCode === this.defaultCountry);
+        const defaultCountry = this.countries.find(country => country.dialCode === this.DEFAULT_COUNTRY_CODE);
         if (defaultCountry) {
             this.selectedCountry = defaultCountry;
             this.countryControl.setValue(defaultCountry);
@@ -764,8 +792,54 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             return;
         }
         
+        // Sort countries by dial code length (longest first) to match more specific codes first
+        // This ensures +1340 (US Virgin Islands) is matched before +1 (US)
+        const sortedCountries = [...this.countries].sort((a, b) => b.dialCode.length - a.dialCode.length);
+        
+        // First, try to find an exact match with longer dial codes
+        for (const country of sortedCountries) {
+            if (value.startsWith(country.dialCode) && value.length >= country.dialCode.length) {
+                // For longer dial codes (like +1340), we need exact match
+                if (country.dialCode.length > 2) {
+                    // Only select if we have the complete dial code
+                    if (value.length >= country.dialCode.length) {
+                        if (this.selectedCountry?.dialCode !== country.dialCode) {
+                            this.selectedCountry = country;
+                            this.countryControl.setValue(country, { emitEvent: false });
+                            this.countrySetProgrammatically = true;
+                            
+                            // Extract mobile number without dial code
+                            const mobileNumber = value.substring(country.dialCode.length);
+                            this.mobileControl.setValue(mobileNumber, { emitEvent: false });
+                            
+                            this.updateValidators();
+                            this.countryChanged.emit(country);
+                        }
+                        return; // Found exact match, stop here
+                    }
+                }
+            }
+        }
+        
+        // If no longer dial code matched, handle shorter ones (like +1 for NANP)
         // Special handling for NANP (+1) - detect US vs Canada by area code
         if (value.startsWith('+1')) {
+            // Check if this could be a longer dial code (like +1340)
+            // Don't auto-select +1 if the user might be typing a longer code
+            const potentialLongerCodes = sortedCountries.filter(c => 
+                c.dialCode.startsWith('+1') && c.dialCode.length > 2
+            );
+            
+            // Check if the current input could match any longer dial codes
+            const couldBeLongerCode = potentialLongerCodes.some(c => 
+                c.dialCode.startsWith(value) || value.startsWith(c.dialCode.substring(0, value.length))
+            );
+            
+            if (couldBeLongerCode && value.length < 6) {
+                // Don't auto-select yet, user might be typing a longer dial code
+                return;
+            }
+            
             if (value.length >= 5) { // Need at least +1XX for area code detection
                 const detectedCountry = this.detectNANPCountry(value);
                 if (detectedCountry && this.selectedCountry?.code !== detectedCountry.code) {
@@ -781,11 +855,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                     
                     this.updateValidators();
                     this.countryChanged.emit(detectedCountry);
-                    
-                    // console.log(`Auto-detected NANP country: ${detectedCountry.name} (${detectedCountry.dialCode}) from input: ${value}`);
                 }
-            } else if (value.length >= 2) {
-                // Just detect US as default for +1 without extracting mobile number yet
+            } else if (value.length >= 6) {
+                // Only default to US if we're sure it's not a longer dial code
                 const usCountry = this.countries.find(c => c.code === 'US');
                 if (usCountry && this.selectedCountry?.code !== usCountry.code) {
                     this.selectedCountry = usCountry;
@@ -793,15 +865,12 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                     this.countrySetProgrammatically = true;
                     this.updateValidators();
                     this.countryChanged.emit(usCountry);
-                    console.log(`Pre-selected US for +1, waiting for area code...`);
                 }
             }
             return;
         }
         
-        // Sort countries by dial code length (longest first) to match more specific codes first
-        const sortedCountries = [...this.countries].sort((a, b) => b.dialCode.length - a.dialCode.length);
-        
+        // Handle other dial codes (non-NANP)
         for (const country of sortedCountries) {
             if (value.startsWith(country.dialCode) && value.length >= country.dialCode.length) {
                 if (this.selectedCountry?.dialCode !== country.dialCode) {
@@ -815,8 +884,6 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                     
                     this.updateValidators();
                     this.countryChanged.emit(country);
-                    
-                    // console.log(`Auto-detected country: ${country.name} (${country.dialCode}) from input: ${value}`);
                 }
                 break;
             }
@@ -972,8 +1039,8 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             this.mobileControl.setValue('', { emitEvent: false });
             // Reset the programmatic flag when value is cleared
             this.countrySetProgrammatically = false;
-            // Reset to default country when value is cleared
-            this.initializeDefaultCountry();
+            // Try to detect country from cache first, then fallback to default
+            this.detectUserCountryForWriteValue();
         }
     }
 
@@ -991,22 +1058,8 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             return false;
         }
         
-        // Check if it starts with common country codes
-        const commonCountryCodes = [
-            '1',    // NANP (US/Canada) - 11 digits total
-            '44',   // UK - 12-13 digits total
-            '49',   // Germany - 11-12 digits total
-            '33',   // France - 11-12 digits total
-            '39',   // Italy - 11-12 digits total
-            '91',   // India - 12-13 digits total
-            '86',   // China - 13 digits total
-            '81',   // Japan - 11-12 digits total
-            '82',   // South Korea - 11-12 digits total
-            '55',   // Brazil - 13 digits total
-            '7',    // Russia/Kazakhstan - 11 digits total
-            '61',   // Australia - 11 digits total
-            '27',   // South Africa - 11 digits total
-        ];
+        // Check if it starts with any valid country codes using optimized method
+        const commonCountryCodes = this.getSortedDialCodes(true);
         
         return commonCountryCodes.some(code => value.startsWith(code));
     }
@@ -1053,6 +1106,20 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     }
 
     /**
+     * Gets dial codes sorted by length (longest first) for better matching
+     * 
+     * @param {boolean} removePrefix - Whether to remove '+' prefix from dial codes
+     * @returns {string[]} Sorted dial codes
+     * @private
+     * @memberof MobileNumberInputComponent
+     */
+    private getSortedDialCodes(removePrefix: boolean = false): string[] {
+        return COUNTRIES_DATA
+            .map(country => removePrefix ? country.dialCode.replace('+', '') : country.dialCode)
+            .sort((a, b) => b.length - a.length);
+    }
+
+    /**
      * Finds a country by matching dial code from the beginning of a phone number
      * 
      * @param {string} phoneNumber - Phone number starting with +
@@ -1065,12 +1132,12 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             return null;
         }
         
-        // Sort countries by dial code length (longest first) to match more specific codes first
-        const sortedCountries = [...this.countries].sort((a, b) => b.dialCode.length - a.dialCode.length);
+        // Use optimized sorted dial codes for matching
+        const sortedDialCodes = this.getSortedDialCodes();
         
-        for (const country of sortedCountries) {
-            if (phoneNumber.startsWith(country.dialCode)) {
-                return country;
+        for (const dialCode of sortedDialCodes) {
+            if (phoneNumber.startsWith(dialCode)) {
+                return this.countries.find(country => country.dialCode === dialCode) || null;
             }
         }
         
