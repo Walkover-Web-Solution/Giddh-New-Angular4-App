@@ -92,7 +92,11 @@ export class ImportStatementComponent implements OnDestroy {
                 if (this.entity === ImportStatementType.BankTransactions) {
                     requestObject.subType = '';
                 }
-                this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
+                if (this.getRequest.entity === this.fileType.PDF) {
+                    this.importStatement();
+                } else {
+                    this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
+                }
             }
         });
 
@@ -104,6 +108,38 @@ export class ImportStatementComponent implements OnDestroy {
                 this.router.navigate(['pages', 'import', this.entity === ImportStatementType.BankTransactions ? ImportStatementType.BankTransactions : VoucherType.AccountWise]);
             }
         });
+    }
+
+    /**
+ * This will call the api to upload file
+ *
+ * @memberof ImportStatementComponent
+ */
+    public importStatement(): void {
+        this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
+        this.getRequest.accountUniqueName = this.inputData?.accountUniqueName;
+        if (this.getRequest.entity === this.fileType.PDF) {
+            this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success') {
+                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+                    this.dialogRef.close(true);
+                } else {
+                    this.toaster.showSnackBar("error", response?.message, response?.code);
+                }
+            });
+        } else {
+            this.postRequest.accountUniqueName = this.getRequest.accountUniqueName;
+            this.importExcelService.uploadFile("BANK_TRANSACTIONS_IMPORT", this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success" && response.body) {
+                    this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
+                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+                    this.dialogRef.close(true);
+                    this.router.navigate(['/pages/import/banktransactions']);
+                } else {
+                    this.toaster.showSnackBar("error", response?.message, response?.code);
+                }
+            });
+        }
     }
 
     /**

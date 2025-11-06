@@ -240,7 +240,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
      */
     private getImportType(): string {
         let importType = "";
-
         switch (this.entity) {
             case "master":
                 importType = "MASTER_IMPORT";
@@ -257,6 +256,14 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             case "banktransactions":
                 importType = "BANK_TRANSACTIONS_IMPORT";
                 break;
+
+            case "account-wise":
+                importType = "ACCOUNT_WISE_VOUCHER_IMPORT";
+                break;
+
+            case "voucher-wise":
+                importType = "VOUCHER_WISE_VOUCHER_IMPORT";
+                break;   
         }
 
         return importType;
