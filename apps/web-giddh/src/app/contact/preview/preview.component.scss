@@ -12,6 +12,13 @@
     }
 }
 
+::ng-deep .dark-theme .single-invoice-detail {
+    &:hover,
+    &.active {
+        background-color: var(--theme-primary-light) !important;
+    }
+}
+
 :host ::ng-deep .invoice-preview-wrapper {
     // height: calc(100vh - 150px);
 
@@ -24,11 +31,8 @@
             &.active {
                 background-color: var(--color-light-gray);
 
-                .text-primary {
+                .title-text {
                     color: var(--theme-primary-color) !important;
-                }
-                 .text-default {
-                    color: var(--color-black) !important;
                 }
             }
         }

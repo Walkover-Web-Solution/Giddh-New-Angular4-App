@@ -829,7 +829,7 @@
                             >
                                 <ng-container *ngIf="updateCommentIdx != idx">
                                     {{ account.comment }}
-                                    <span [class.text-default]="!account.comment" *ngIf="!account.comment">{{
+                                    <span [class.theme-foreground-color]="!account.comment" *ngIf="!account.comment">{{
                                         localeData?.add_comment
                                     }}</span>
                                 </ng-container>
@@ -1515,7 +1515,7 @@
                 (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)
             "
         >
-            <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center">
+            <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1">
                 <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="data not found" />
             </div>
             <h2 class="text-light">{{ commonLocaleData?.app_no_data_found }}</h2>
@@ -1592,15 +1592,8 @@
         let-formControl="formControl"
     >
         <div class="search-table">
-            <div class="d-flex align-items-center column-gap1" [hidden]="show">
-                <button
-                    mat-icon-button
-                    aria-label="search"
-                    (click)="toggleSearch(fieldName)"
-                    class="customer-vendor-name-search-icon"
-                >
-                    <span class="icon-search"></span>
-                </button>
+            <div class="d-flex align-items-center column-gap-05" [hidden]="show">
+            <span class="icon-search icon-font-size-16 cursor-pointer"  aria-label="search" (click)="toggleSearch(fieldName)"></span>
                 <span> {{ title }}</span>
             </div>
             <text-field

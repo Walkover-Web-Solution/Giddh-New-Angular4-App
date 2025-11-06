@@ -2348,7 +2348,7 @@ aside-create-group {
 }
 
 .white-box {
-    background: var(--color-white);
+    background: var(--table-background-color);
     padding: 20px;
     margin: 15px auto;
     box-shadow: 0px 3px 6px var(--color-shadow-light);
@@ -5256,7 +5256,7 @@ table input[type="number"] {
     border-bottom: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
-    color: var(--color-dark-gray);
+    // color: var(--color-dark-gray);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -5265,7 +5265,7 @@ table input[type="number"] {
     border-bottom: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
-    color: var(--color-dark-gray);
+    // color: var(--color-dark-gray);
     text-overflow: ellipsis;
     white-space: nowrap;
     position: relative;
@@ -11625,7 +11625,7 @@ body.prevent-body-scroll {
 }
 
 .giddh-table {
-    font-weight: var(--font-weight-semibold);
+    // font-weight: var(--font-weight-semibold);
     border: 1px solid var(--color-silver);
     width: 100%;
     max-width: 100%;
@@ -11644,13 +11644,13 @@ body.prevent-body-scroll {
         // font-weight: var(--font-weight-semibold);
     }
     thead > tr > th {
-        border-top: none;
-        white-space: nowrap;
+        // border-top: none;
+        // white-space: nowrap;
         // color: var(--color-blue-primary) !important;
         position: sticky !important;
         top: 0;
         z-index: 1;
-        border-bottom: 1px solid var(--color-silver) !important;
+        // border-bottom: 1px solid var(--color-silver) !important;
         // background-color: var(--color-white);
         .d-flex {
             align-items: center;

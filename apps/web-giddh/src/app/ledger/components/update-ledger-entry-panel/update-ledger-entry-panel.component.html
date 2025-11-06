@@ -39,7 +39,7 @@
                     class="w-100"
                     [id]="'update-ledger-select-account'"
                     *ngIf="openDropDown"
-                    [cssClass]="'text-left d-inline-block cursor-pointer w-100 pd-l15'"
+                    [cssClass]="'form-control bg-white text-black text-left d-inline-block cursor-pointer w-100 pd-l15'"
                     [placeholder]="commonLocaleData?.app_select_account"
                     [isPaginationEnabled]="true"
                     (scrollEnd)="handleScrollEnd()"
@@ -96,7 +96,7 @@
         </div>
         <!-- endregion -->
         <!-- region main body -->
-        <mat-dialog-content>
+        <mat-dialog-content class="dialog-body">
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
                     <h2>{{ localeData?.no_transaction_found_message }}</h2>
@@ -1860,7 +1860,7 @@
                                             isAdjustReceiptSelected)
                                     "
                                 >
-                                    <p class="bold">
+                                    <p class="font-weight-semibold">
                                         {{ localeData?.adjusted_amount_full }}
                                         <a
                                             href="javascript:void(0)"

@@ -17,7 +17,7 @@
             />
             <div class="initial-screen position-absolute text-center">
                 <div class="mb-2" [ngClass]="{ 'mb-5': !isCompany && !isConsolidatedBranch }">
-                    <img src="assets/images/ai-ocr.png" cl alt="upload image" width="350px" height="auto" />
+                    <img src="assets/images/ai-ocr.png" alt="upload image" width="350px" height="auto" />
                 </div>
                 <button
                     mat-raised-button
@@ -28,7 +28,7 @@
                     {{ localeData?.upload_button }}
                 </button>
                 <div
-                    class="mr-t1 d-flex justify-content-center align-items-center flex-column row-gap15"
+                    class="mr-t1 d-flex justify-content-center align-items-center flex-column row-gap-15"
                     *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
                 >
                     <span class="font-size-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>

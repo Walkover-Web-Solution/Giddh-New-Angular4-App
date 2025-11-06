@@ -85,7 +85,7 @@
                                 </input-field>
                                 <div class="d-flex">
                                     <div
-                                        class="input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                        class="input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="openingBalanceTypeChanged('DEBIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
@@ -99,7 +99,7 @@
                                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                     </div>
                                     <div
-                                        class="only-right-radius input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                        class="only-right-radius input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="openingBalanceTypeChanged('CREDIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
@@ -166,7 +166,7 @@
                             </input-field>
                             <div class="d-flex">
                                 <div
-                                    class="input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                    class="input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
@@ -177,7 +177,7 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="only-right-radius input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                    class="only-right-radius input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
@@ -277,7 +277,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="add-address-default">
-                                    <p>{{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
+                                    <p class="text-black">{{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
                                     <div class="inputRadio">
                                         <span
                                             [matTooltip]="localeData?.address_tooltip"
@@ -764,7 +764,7 @@
                                 </input-field>
                                 <div class="d-flex">
                                     <div
-                                        class="input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                        class="input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="closingBalanceTypeChanged('DEBIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
@@ -776,7 +776,7 @@
                                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                     </div>
                                     <div
-                                        class="input-group-addon only-right-radius d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                        class="input-group-addon only-right-radius d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="closingBalanceTypeChanged('CREDIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':

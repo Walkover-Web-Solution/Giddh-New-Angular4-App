@@ -169,9 +169,9 @@ table.ledger-footer-1 td[class*="col-"] {
 .ledger-main .form-control {
     border: 0;
 }
-.thead-background1 th {
-    border-left: 0;
-}
+// .thead-background1 th {
+//     border-left: 0;
+// }
 .ledg-head {
     .single-search-box {
         position: relative;
@@ -816,7 +816,7 @@ input#ledger-search {
     }
 }
 
-::ng-deep {
+// ::ng-deep {
     // .ledg-head .mat-grid-tile-content {
     //     color: var(--color-black);
     // }
@@ -824,7 +824,7 @@ input#ledger-search {
     // .ledg-head .ledger-row .mat-input-element {
     //     color: var(--color-black) !important;
     // }
-}
+// }
 
 .icon-button-width {
     width: 36px;

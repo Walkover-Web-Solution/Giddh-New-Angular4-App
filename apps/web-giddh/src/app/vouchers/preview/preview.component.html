@@ -86,7 +86,7 @@
                                                     }}
                                                 </span>
                                                 <span class="font-size-12 light-gray"> | {{ item?.voucherDate }} </span>
-                                                <p class="text-default pd-r3 text-wrap">
+                                                <p class="theme-foreground-color pd-r3 text-wrap">
                                                     {{
                                                         item?.account?.customerName ||
                                                             item?.account?.name ||
@@ -95,7 +95,7 @@
                                                 </p>
                                             </div>
                                             <div>
-                                                <span class="text-default">
+                                                <span class="theme-foreground-color">
                                                     <amount-field
                                                         [amount]="item?.grandTotal?.amountForAccount"
                                                         [currencySymbol]="item?.account?.currency?.symbol"
@@ -328,7 +328,7 @@
                        !imagePreviewSource"
                        class="mr-t2 d-block text-center"
                        [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
-                       [primaryMessageClass]="'bold'"
+                       [primaryMessageClass]="'font-weight-semibold'"
                        [secondaryMessage]="' '"
                    ></no-data>
             </section>

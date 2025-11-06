@@ -13,7 +13,7 @@
     justify-content: flex-end;
     margin: 0 15px;
     border: 1px solid var(--border-color);
-    background: var(--color-light-gray);
+    // background: var(--color-light-gray);
     cursor: pointer;
     transition: all 0.3s ease;
     color: initial;
@@ -46,7 +46,7 @@
     display: block;
     padding: 30px 40px;
     width: 100%;
-    background-color: var(--color-white);
+    // background-color: var(--color-white);
 }
     .text-link-2 {
         color: var(--theme-primary-color) !important;

@@ -15,7 +15,7 @@
                 [selectedIndex]="selectedStep"
                 (selectionChange)="onSelectedTab($event)"
                 [disableRipple]="firstStepForm.invalid"
-                class="bg-transparent text-default"
+                class="bg-transparent theme-foreground-color"
             >
                 <mat-step [stepControl]="firstStepForm">
                     <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
