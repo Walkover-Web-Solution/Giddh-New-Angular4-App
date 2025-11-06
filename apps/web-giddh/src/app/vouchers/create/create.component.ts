@@ -1075,8 +1075,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             ?.get("mobileNumber")
                             .patchValue(voucherDetails.account?.mobileNumber ?? "");
                         this.account.mobileNumber = voucherDetails.account?.mobileNumber ?? "";
-                        this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
-                        this.checkMobileNumber();
+                        // Disabled old mobile input initialization as we're using mobile-number-input component
+                        // this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+                        // this.checkMobileNumber();
                     }
 
                     if (voucherDetails?.purchaseOrderDetails?.length && !this.isCopyMode) {
@@ -1708,7 +1709,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ngAfterViewInit(): void {
-        this.initIntl();
+        // Removed initIntl() call as we're now using mobile-number-input component
+        // this.initIntl();
     }
 
     /**
@@ -2644,9 +2646,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"]?.get("email").setValue(accountData?.email);
             this.invoiceForm.controls["account"]?.get("mobileNumber").setValue(accountData?.mobileNo ?? "");
             this.account.mobileNumber = accountData?.mobileNo ?? "";
-            this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+            // Disabled old mobile input initialization as we're using mobile-number-input component
+            // this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
             this.updateDueDate();
-            this.checkMobileNumber();
+            // this.checkMobileNumber();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
@@ -4005,6 +4008,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public initIntl(inputValue?: string): void {
+        return;
         let times = 0;
         const parentDom = document.querySelector("create");
         const input = document.getElementById("init-contact");
@@ -4907,6 +4911,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
                                 type: OcrAction.Save,
+                                ocrType: this.ocrType
                             });
                             this.resetVoucherForm();
 
@@ -4980,6 +4985,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
                                 type: OcrAction.Save,
+                                ocrType: this.ocrType
                             });
                             if (callback) {
                                 this.resetVoucherForm(false);
@@ -5112,6 +5118,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
                                 type: OcrAction.Save,
+                                ocrType: this.ocrType
                             });
                             const isCashSalesPurchaseInvoice =
                                 this.invoiceType.isCashInvoice &&
