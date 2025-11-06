@@ -27,15 +27,16 @@
                                     localeData?.sales_as_receipt_voucher }}
                                 </span>
                             </mat-slide-toggle>
-                               <button 
-                             class="h-auto p-0"
-                             mat-icon-button
-                             [matTooltip]="commonLocaleData?.app_filter"
-                             [matTooltipPosition]="'above'"
-                             [matMenuTriggerFor]="menu"
-                         >
-                            <i class="icon-arrow-down font-15"></i>
-                         </button>
+                            <button 
+                                class="h-auto p-0"
+                                mat-icon-button
+                                [matTooltip]="commonLocaleData?.app_filter"
+                                [matTooltipPosition]="'above'"
+                                [matMenuTriggerFor]="menu"
+                                *ngIf="ocrDataEnabled"
+                            >
+                                <i class="icon-arrow-down font-15"></i>
+                            </button>
                          <mat-menu #menu="matMenu">
                              <ng-container *ngFor="let option of transactionOptions">
                                  <button 

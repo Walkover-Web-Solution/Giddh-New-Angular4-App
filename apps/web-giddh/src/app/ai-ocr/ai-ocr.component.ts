@@ -378,7 +378,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         this.aiOcrService.saveAndNextSuccess$.next(null);
                         this.aiOcrService.skipAndNext$.next(null);
                         this.innerLoading = true;
-                        this.aiOcrStore.getExtractDocuments({ type: OcrAction.Skip, token: response.token });
+                        this.aiOcrStore.getExtractDocuments({ type: OcrAction.Skip, token: response.token, ocrType: this.ocrType });
                         this.changeDetection.detectChanges();
                     }
                 });
@@ -433,7 +433,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             this.aiOcrService.saveAndNext$.next(true);
         } else {
             this.innerLoading = true;
-            this.aiOcrStore.getExtractDocuments({ type: OcrAction.Skip, token: this.ocrCurrentToken });
+            this.aiOcrStore.getExtractDocuments({ type: OcrAction.Skip, token: this.ocrCurrentToken, ocrType: this.ocrType });
         }
         this.changeDetection.detectChanges();
     }
@@ -461,13 +461,14 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     type: this.voucherType,
                     row: {
                         requestId: this.aiOcrDetails?.token
-                    }
+                    },
+                    ocrType: this.ocrType
                 }
                 this.aiOcrService.ocrListToCreate$.next(null);
                 this.aiOcrStore.getExtractDocuments(req);
             } else {
                 this.aiOcrService.ocrListToCreate$.next(null);
-                this.aiOcrStore.getExtractDocuments('');
+                this.aiOcrStore.getExtractDocuments({ocrType: this.ocrType});
             }
         } else if (value === OcrAction.List) {
             this.selectedToggle = value;
