@@ -99,6 +99,10 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public allBranches: any[] = [];
     /** Hold branches */
     public branches: any[] = [];
+    /** Hide selected options from dropdown list */
+    public hideSelectedOptions: boolean = true;
+    /** Filtered addresses to show in dropdown */
+    public filteredAddresses: any[] = [];
 
     constructor(
         private commonService: CommonService,
@@ -208,6 +212,13 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             if (query === '') {
                 this.addresses = this.addressesConstantList;
             }
+            // Update filtered addresses after search
+            this.updateFilteredAddresses();
+        });
+        
+        // Watch for form changes to update filtered addresses
+        this.branchForm.get('address')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.updateFilteredAddresses();
         });
     }
 
@@ -250,7 +261,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handles the address selecion operation
+     * Handles the address selecion operation - removes selected address from dropdown
      *
      * @param {*} option Address option selected
      * @memberof CreateBranchComponent
@@ -259,6 +270,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         if (option.isDefault) {
             option.isDefault = false;
         }
+        // Update filtered addresses to hide the selected item
+        this.updateFilteredAddresses();
     }
 
     /**
@@ -391,6 +404,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     label: response.body.name,
                     value: response.body?.uniqueName
                 })
+                // Update filtered addresses after adding new address
+                this.updateFilteredAddresses();
                 this.toastService.successToast(this.localeData?.address_created);
             } else {
                 this.toastService.errorToast(response?.message);
@@ -467,7 +482,35 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Loads all the addresses within a company
+     * Filters addresses to hide selected items from dropdown
+     *
+     * @private
+     * @returns {any[]}
+     * @memberof CreateBranchComponent
+     */
+    private getFilteredAddressesForHideSelected(): any[] {
+        if (!this.hideSelectedOptions || !this.addresses) {
+            return this.addresses || [];
+        }
+        
+        const selectedAddresses = this.branchForm.get('address')?.value || [];
+        return this.addresses.filter(address => {
+            return !selectedAddresses.some(selected => selected?.uniqueName === address?.uniqueName);
+        });
+    }
+
+    /**
+     * Updates filtered addresses list
+     *
+     * @private
+     * @memberof CreateBranchComponent
+     */
+    private updateFilteredAddresses(): void {
+        this.filteredAddresses = this.getFilteredAddressesForHideSelected();
+    }
+
+    /**
+     * Loads all the addresses within a company and filters out selected ones
      *
      * @private
      * @param {string} method Method to call the API ('GET' for fetching all the address and 'POST' for searching among address)
@@ -486,6 +529,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     }));
                 this.checkLinkEntity();
                 this.addressesConstantList = this.addresses;
+                // Update filtered addresses to hide selected ones
+                this.updateFilteredAddresses();
             }
         });
     }
@@ -531,8 +576,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Remove Item from Mat Chip and
-     * remove item form linkedEntity
+     * Handle Remove Item from Mat Chip and remove item form linkedEntity - adds removed address back to dropdown
      *
      * @param {*} element
      * @memberof CreateBranchComponent
@@ -546,6 +590,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             }
             return address;
         });
+        // Update filtered addresses to show the removed item back in dropdown
+        this.updateFilteredAddresses();
     }
 
     /**
