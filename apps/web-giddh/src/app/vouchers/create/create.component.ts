@@ -4911,6 +4911,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
                                 type: OcrAction.Save,
+                                ocrType: this.ocrType
                             });
                             this.resetVoucherForm();
 
@@ -4984,6 +4985,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
                                 type: OcrAction.Save,
+                                ocrType: this.ocrType
                             });
                             if (callback) {
                                 this.resetVoucherForm(false);
@@ -5116,6 +5118,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
                                 type: OcrAction.Save,
+                                ocrType: this.ocrType
                             });
                             const isCashSalesPurchaseInvoice =
                                 this.invoiceType.isCashInvoice &&
