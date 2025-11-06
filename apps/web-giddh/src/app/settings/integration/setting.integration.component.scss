@@ -1,92 +1,112 @@
 .integration {
     min-height: calc(100vh - 120px);
 
-    .initial-screen {
+    /* UNUSED COMPONENT CLASS: initial-screen - Auto-commented by script
+.initial-screen {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
     }
-}
-#inlnImg img {
-    max-height: 18px;
+*/
 }
 
+/* UNUSED COMPONENT CLASS: input-group-btn - Auto-commented by script
 .input-group-btn {
     font-size: 21px;
-    color: var(--color-blue-primary) !important;
+    color: var(--text-primary-color) !important;
     cursor: pointer;
     margin-right: 5px;
     padding-top: 5px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: font-16 - Auto-commented by script
 .font-16 {
     font-weight: bold;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: check-search - Auto-commented by script
 .check-search {
     position: absolute;
     right: 10px;
     top: 18px;
     width: 13px;
 }
+*/
 
-.disabled:after {
-    background: transparent;
-    content: "";
-    display: block;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    clear: both;
-    float: none;
-    overflow: hidden;
-    position: absolute;
-    z-index: 999;
-    cursor: not-allowed;
-}
+// .disabled:after {
+//     background: transparent;
+//     content: "";
+//     display: block;
+//     width: 100%;
+//     height: 100%;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     clear: both;
+//     float: none;
+//     overflow: hidden;
+//     position: absolute;
+//     z-index: 999;
+//     cursor: not-allowed;
+// }
 
-.disabled .list-item {
+/* .disabled UNUSED COMPONENT CLASS: list-item - Auto-commented by script
+.list-item {
     position: relative;
 }
+*/
 
 .disabled {
     position: relative;
 }
 
+/* UNUSED COMPONENT CLASS: disabled-list-item - Auto-commented by script
 .disabled-list-item {
     padding: 6px;
     height: 100%;
     background: var(--color-white);
     font-size: var(--font-size-15);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: tooltip-box - Auto-commented by script
 .tooltip-box {
     position: absolute;
     right: 0;
     top: 0;
 
-    .icon-info {
+    /* UNUSED COMPONENT CLASS: icon-info - Auto-commented by script
+.icon-info {
         color: var(--color-dark-gray);
     }
 }
+*/
 
+/* UNUSED COMPONENT CLASS: form - Auto-commented by script
 .form-control,
+/* UNUSED COMPONENT CLASS: linked-account - Auto-commented by script
 .linked-account {
     width: 100% !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
 .form-control {
     width: 100% !important;
 }
-.linked-account {
-    width: calc(100% - 42px);
-}
+*/
+// .linked-account {
+//     width: calc(100% - 42px);
+// }
+/* UNUSED COMPONENT CLASS: payment-text - Auto-commented by script
 .payment-text {
     color: var(--color-dark-gray);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: bank-logo - Auto-commented by script
 .bank-logo {
     img {
         max-width: 140px;
@@ -94,25 +114,35 @@
         width: 100%;
     }
 }
+*/
 
+/* UNUSED COMPONENT CLASS: mat-form-field - Auto-commented by script
 .mat-form-field {
     width: 38%;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: copied-url - Auto-commented by script
 .copied-url {
     padding-top: 3px;
     padding-left: 6px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: mat-form-field-wrapper - Auto-commented by script
 .mat-form-field-wrapper {
     padding-bottom: 0 !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: magic-link-container - Auto-commented by script
 .magic-link-container {
     margin-bottom: 0 !important;
     padding-left: 0 !important;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: doc-link - Auto-commented by script
 .doc-link {
     a {
         text-decoration: none;
@@ -127,77 +157,110 @@
         text-decoration: underline;
     }
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-tab-bottom-spacing - Auto-commented by script
 .mat-tab-bottom-spacing{
     padding-bottom: 140px;
 }
+*/
 ::ng-deep {
-    .mat-tab-label {
+    /* UNUSED COMPONENT CLASS: mat-tab-label - Auto-commented by script
+.mat-tab-label {
         height: 36px;
         min-width: 142px;
         padding: 0px 3px;
     }
+*/
 
-    .mat-tab-labels {
+    /* UNUSED COMPONENT CLASS: mat-tab-labels - Auto-commented by script
+.mat-tab-labels {
         height: 42px;
         background-color: none;
     }
+*/
 
-    .mat-tab-label-active {
+    /* UNUSED COMPONENT CLASS: mat-tab-label-active - Auto-commented by script
+.mat-tab-label-active {
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
     }
+*/
 
-    .setting-container {
+    /* UNUSED COMPONENT CLASS: setting-container - Auto-commented by script
+.setting-container {
         padding: 0px 0px 15px !important;
     }
+*/
 
-    th.mat-header-cell:first-of-type {
+/* UNUSED COMPONENT CLASS: mat-header-cell - Auto-commented by script
+    th
+.mat-header-cell:first-of-type {
         width: 18%;
     }
+*/
 
-    table .type-column {
+/* UNUSED COMPONENT CLASS: type-column - Auto-commented by script
+    table 
+.type-column {
         width: 10% !important;
     }
+*/
 
-    .mat-mdc-table tbody > tr > td:first-child {
+    /* UNUSED COMPONENT CLASS: mat-mdc-table - Auto-commented by script
+.mat-mdc-table tbody > tr > td:first-child {
         color: var(--color-black) !important;
     }
+*/
 
     th.mat-header-cell,
-    td.mat-mdc-cell {
+    /* td UNUSED COMPONENT CLASS: mat-mdc-cell - Auto-commented by script
+.mat-mdc-cell {
         white-space: normal !important;
     }
+*/
 
-    .content-text {
+    /* UNUSED COMPONENT CLASS: content-text - Auto-commented by script
+.content-text {
         font-size: var(--font-size-12) !important;
         width: 26%;
         text-transform: none;
     }
+*/
 
-    .number-container {
+    /* UNUSED COMPONENT CLASS: number-container - Auto-commented by script
+.number-container {
         width: 16%;
     }
+*/
 
-    .icon-container {
+    /* UNUSED COMPONENT CLASS: icon-container - Auto-commented by script
+.icon-container {
         width: 25%;
     }
+/* UNUSED COMPONENT CLASS: mat-mdc-row - Auto-commented by script
 
     .mat-mdc-table tbody .mat-mdc-row:hover td {
         background-color: #e7ebf6 !important;
     }
+*/
 
-    .mat-mdc-table tbody .mat-mdc-row:hover .mat-mdc-cell .visibility {
+/* UNUSED COMPONENT CLASS: visibility - Auto-commented by script
+    .mat-mdc-table tbody .mat-mdc-row:hover .mat-mdc-cell 
+.visibility {
         display: block !important;
     }
+*/
 
     .mat-mdc-table {
         tbody {
             .mat-mdc-row{
                 &:hover{
                     .mat-mdc-cell{
-                        .icon-visibility {
+                        /* UNUSED COMPONENT CLASS: icon-visibility - Auto-commented by script
+.icon-visibility {
                             visibility: visible !important;
                         }
+*/
                     }
                 }
             }
@@ -207,21 +270,26 @@
 
 /*responsive*/
 @media (max-width: 1359px) {
-    .xs-pd-l15 {
+    /* UNUSED COMPONENT CLASS: xs-pd-l15 - Auto-commented by script
+.xs-pd-l15 {
         padding-left: 15px !important;
     }
+*/
 
-    .hidden-1359 {
+    /* UNUSED COMPONENT CLASS: hidden-1359 - Auto-commented by script
+.hidden-1359 {
         display: none;
     }
+*/
 }
 
-@media (max-width: 1440px) {
-    .mat-form-field {
-        width: 78% !important;
-    }
-}
+// @media (max-width: 1440px) {
+//     .mat-form-field {
+//         width: 78% !important;
+//     }
+// }
 
+/* UNUSED COMPONENT CLASS: plus-cross-btn - Auto-commented by script
 .plus-cross-btn {
     i {
         padding: 5px 0;
@@ -229,175 +297,150 @@
         font-size: 20px;
     }
 }
+*/
 
 .edit-save-button {
-    .btn {
+    /* UNUSED COMPONENT CLASS: btn - Auto-commented by script
+.btn {
         width: 36px;
         height: 36px;
     }
+*/
 }
 
 @media (max-width: 1199px) {
-    .clearfix {
+    .clear-both {
         .form {
-            .input-field {
+            /* UNUSED COMPONENT CLASS: input-field - Auto-commented by script
+.input-field {
                 input {
                     width: 277px;
                 }
             }
+*/
         }
     }
 
-    .edit-save-button {
+    /* UNUSED COMPONENT CLASS: edit-save-button - Auto-commented by script
+.edit-save-button {
         display: flex;
         width: 100%;
         justify-content: flex-end;
         margin-right: 7px;
     }
+*/
 
-    .button-wrapper {
+    /* UNUSED COMPONENT CLASS: button-wrapper - Auto-commented by script
+.button-wrapper {
         margin-top: 0;
         margin-bottom: 30px;
     }
-}
-
-@media (max-width: 767px) {
-    #inlnImg {
-        margin-top: 0;
-    }
-
-    .mat-form-field {
-        width: 72% !important;
-    }
-
-    .empty-label label,
-    .empty-label br {
-        display: none;
-    }
-
-    #inlnImg label,
-    .inlnImg label {
-        margin: 0;
-        display: none;
-    }
-
-    .gmail-integration-message {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-
-        h4 {
-            align-self: self-start !important;
-            padding-bottom: 10px;
-            font-size: var(--font-size-15);
-        }
-
-        .btn-danger {
-            margin-left: 0 !important;
-        }
-    }
-
-    .plus-cross-btn {
-        label {
-            display: none;
-        }
-
-        i {
-            float: right;
-            margin-right: 15px;
-        }
-    }
-
-    .update-btn-wrapper {
-        label {
-            display: none;
-        }
-
-        .btn {
-            margin-right: 0;
-            margin-left: 15px;
-        }
-    }
+*/
 }
 
 @media (max-width: 1400px) and (min-width: 992px) {
-    .payment-col {
+    /* UNUSED COMPONENT CLASS: payment-col - Auto-commented by script
+.payment-col {
         flex: 0 0 33.333333% !important;
         max-width: 33.333333% !important;
     }
+*/
 
-    .payment-col1 {
+    /* UNUSED COMPONENT CLASS: payment-col1 - Auto-commented by script
+.payment-col1 {
         flex: 0 0 25% !important;
         max-width: 25% !important;
     }
+*/
 }
 
 @media (max-width: 1680px) and (min-width: 1401px) {
-    .amount-upto {
+    /* UNUSED COMPONENT CLASS: amount-upto - Auto-commented by script
+.amount-upto {
         flex: 0 0 20.666667% !important;
         max-width: 20.666667% !important;
     }
+*/
 }
 
+/* UNUSED COMPONENT CLASS: icici-button - Auto-commented by script
 .icici-button {
     border: 1px solid var(--color-orange);
     color: var(--color-orange);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: button-separator - Auto-commented by script
 .button-separator {
     color: var(--color-silver);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: account-wrapper - Auto-commented by script
 .account-wrapper {
     width: 65%;
-    border-bottom: 1px solid var(--color-blue-light);
+    border-bottom: 1px solid var(--theme-primary-light);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
+*/
 
 .account-wrapper:last-child {
     border: none !important;
 }
 
+/* UNUSED COMPONENT CLASS: account-info-background - Auto-commented by script
 .account-info-background {
     padding-top: 9px;
     padding-bottom: 9px;
     margin-top: 3px;
     margin-left: 1px;
-    background-color: var(--color-blue-light);
+    background-color: var(--theme-primary-light);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: view-only-field - Auto-commented by script
 .view-only-field {
     background-color: var(--color-white);
     padding: 8px;
-    border-radius: 5px;
-    color: var(--color-blue-primary);
+    border-radius: var(--mat-border-radius-4);
+    color: var(--text-primary-color);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: disabled-field - Auto-commented by script
 .disabled-field {
     padding: 8px;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     word-break: break-word;
     color: var(--color-black);
     background-color: var(--color-light-gray);
     border: 1px solid var(--color-light-gray);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: payment-updates - Auto-commented by script
 .payment-updates {
     width: 90%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: account-number - Auto-commented by script
 .account-number {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: limit-upto - Auto-commented by script
 .limit-upto {
     margin-left: 7px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: action-wrapper - Auto-commented by script
 .action-wrapper {
     position: relative;
     margin-top: 9px;
@@ -408,66 +451,93 @@
         color: var(--color-medium-gray);
     }
 }
+*/
 
+/* UNUSED COMPONENT CLASS: user-action-wrapper - Auto-commented by script
 .user-action-wrapper {
     a {
         color: var(--color-medium-gray);
     }
 }
+*/
 
+/* UNUSED COMPONENT CLASS: account-approval-status - Auto-commented by script
 .account-approval-status {
     margin-left: 13px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: field-label - Auto-commented by script
 .field-label {
     color: var(--color-dark-gray);
 }
+*/
 
-.account-approval-status.approved {
+/* UNUSED COMPONENT CLASS: approved - Auto-commented by script
+.account-approval-status
+.approved {
     color: var(--color-green);
 
     i::before {
         color: var(--color-green);
     }
 }
+*/
 
-.account-approval-status.pending-approval {
+/* UNUSED COMPONENT CLASS: pending-approval - Auto-commented by script
+.account-approval-status
+.pending-approval {
     color: var(--color-orange);
 
     i::before {
         color: var(--color-orange);
     }
 }
+*/
 
+/* UNUSED COMPONENT CLASS: connected-accounts - Auto-commented by script
 .connected-accounts {
     height: 100%;
 }
+*/
 
-.btn-light-blue {
-    color: var(--color-blue-primary);
-    background-color: var(--color-blue-light);
+/* UNUSED COMPONENT CLASS: btn-light-text-primary - Auto-commented by script
+.btn-light-text-primary {
+    color: var(--text-primary-color);
+    background-color: var(--theme-primary-light);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: modal - Auto-commented by script
 .modal {
-    .account-modal {
+    /* UNUSED COMPONENT CLASS: account-modal - Auto-commented by script
+.account-modal {
         width: 500px !important;
     }
 }
+*/
 
 .modal {
-    .user-modal {
+    /* UNUSED COMPONENT CLASS: user-modal - Auto-commented by script
+.user-modal {
         width: 400px !important;
     }
+*/
 }
 
+/* UNUSED COMPONENT CLASS: payor-duration - Auto-commented by script
 .payor-duration {
     margin-top: 2px;
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-autocapture-payment - Auto-commented by script
 .mat-autocapture-payment {
     margin-left: 10px;
     vertical-align: top;
     margin-top: -4px;
 }
+*/
+/* UNUSED COMPONENT CLASS: bank-menu - Auto-commented by script
 .bank-menu {
     top: -12px;
     padding: 0 !important;
@@ -475,62 +545,72 @@
     height: 18px;
     right: -32px;
 }
-@media (max-width: 1600px) and (min-width: 1200px) {
-    .account-wrapper {
-        width: 80% !important;
-    }
-}
+*/
+// @media (max-width: 1600px) and (min-width: 1200px) {
+//     .account-wrapper {
+//         width: 80% !important;
+//     }
+// }
 
-@media (max-width: 1199px) {
-    .account-wrapper {
-        width: 100% !important;
-    }
-}
+// @media (max-width: 1199px) {
+//     .account-wrapper {
+//         width: 100% !important;
+//     }
+// }
 
-@media (min-width: 768px) and (orientation: portrait) {
-    .clearfix {
-        .form {
-            .input-field {
-                input {
-                    width: 250px;
-                }
-            }
-        }
+// @media (min-width: 768px) and (orientation: portrait) {
+//     .clear-both {
+//         .form {
+//             .input-field {
+//                 input {
+//                     width: 250px;
+//                 }
+//             }
+//         }
 
-        .table-one {
-            table {
-                .activeTriggers-width {
-                    width: 0%;
-                }
+//         .table-one {
+//             table {
+//                 /* UNUSED COMPONENT CLASS: activeTriggers-width - Auto-commented by script
+// .activeTriggers-width {
+//                     width: 0%;
+//                 }
+// */
 
-                .type-width {
-                    width: 4%;
-                }
-            }
-        }
-    }
+//                 /* UNUSED COMPONENT CLASS: type-width - Auto-commented by script
+// .type-width {
+//                     width: 4%;
+//                 }
+// */
+//             }
+//         }
+//     }
 
-    ::ng-deep {
-        table .type-column {
-            width: 14% !important;
-        }
-    }
-}
+    // ::ng-deep {
+    //     table .type-column {
+    //         width: 14% !important;
+    //     }
+    // }
+// }
 
+/* UNUSED COMPONENT CLASS: account-dropdown - Auto-commented by script
 .account-dropdown {
     display: flex;
     align-items: center;
     column-gap: 10px;
-    .delete-account {
+    /* UNUSED COMPONENT CLASS: delete-account - Auto-commented by script
+.delete-account {
         padding: 11px;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100%;
-        border: 1px solid var(--color-silver);
-        border-radius: 5px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--mat-border-radius-4);
     }
 }
+*/
+/* UNUSED COMPONENT CLASS: link-color - Auto-commented by script
 .link-color {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
+*/

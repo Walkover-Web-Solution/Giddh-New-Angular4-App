@@ -24,7 +24,7 @@
             <div class="horizontal-scroll" id="horizontal-scroll">
                 <div class="inventory-sideabar border-grid">
                     <div class="inventory-sub-sideabar">
-                        <mat-list class="item-list border-grid pt-0 cp" *ngIf="!isSearching">
+                        <mat-list class="item-list border-grid pt-0 cursor-pointer" *ngIf="!isSearching">
                             <a
                                 href="javascript:;"
                                 class="create-head d-inline-block"
@@ -111,7 +111,7 @@
                 </div>
             </div>
             <div class="inventory-btnside">
-                <div class="d-flex justify-content-end mt-1 mr-1" *ngIf="!breadcrumbs?.length && showExportButton">
+                <div class="d-flex justify-content-end mt-1 mr-2" *ngIf="!breadcrumbs?.length && showExportButton">
                     <button mat-raised-button color="primary" (click)="exportInventoryMaster()">{{ commonLocaleData?.app_export }}</button>
                 </div>
                 <div class="no-data" *ngIf="isSearching && !masterColumnsData?.length">

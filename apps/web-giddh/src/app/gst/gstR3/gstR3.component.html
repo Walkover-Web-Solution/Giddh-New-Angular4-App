@@ -25,8 +25,8 @@
                 class="hidden-print gstr-summary-head gstr-summary-head d-flex w-100 justify-content-sm-between flex-sm-row flex-column"
             >
                 <div class="wrap-gst-date w-100 d-flex align-items-center justify-content-between">
-                    <div class="d-flex column-gap1 align-items-center">
-                        <span class="font-16">
+                    <div class="d-flex column-gap-1 align-items-center">
+                        <span class="font-size-16">
                             <a
                                 [routerLink]="['/gstfiling']"
                                 id="ember2007"
@@ -50,7 +50,7 @@
                             <giddh-datepicker
                                 [monthYearMode]="true"
                                 [startView]="'multi-year'"
-                                [cssClass]="'text-center w150'"
+                                [cssClass]="'text-center width-150'"
                                 [startAt]="startAt"
                                 [placeholder]="date?.value ?? '--'"
                                 [appearance]="'outline'"
@@ -60,7 +60,7 @@
                         </div>
                     </div>
 
-                    <div class="d-flex column-gap1 align-items-center">
+                    <div class="d-flex column-gap-1 align-items-center">
                         <span *ngIf="!isTabScreen">
                             <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR3"></ng-container>
                         </span>
@@ -73,7 +73,7 @@
                                     </button>
                                     <mat-menu #menu="matMenu">
                                         <div
-                                            class="d-flex flex-column row-gap15 px-3 py-2"
+                                            class="d-flex flex-column row-gap-15 px-3 py-2"
                                             role="menuitem"
                                             (click)="$event.stopPropagation()"
                                             (keydown)="$event.stopPropagation()"
@@ -187,12 +187,12 @@
                         </div>
                     </div>
                     <div class="summary-content">
-                        <h4>{{ localeData?.gstr3b?.outward_inward_supplies }}</h4>
+                        <p>{{ localeData?.gstr3b?.outward_inward_supplies }}</p>
                         <div class="table-responsive" tabindex="0">
                             <table
                                 mat-table
                                 [dataSource]="gstr3bTableData"
-                                class="table gstr-3b-report table-bordered w-100"
+                                class="table gstr-3b-report border w-100"
                             >
                                 <!-- Supply Nature Column -->
                                 <ng-container matColumnDef="supplyNature">
@@ -427,7 +427,7 @@
                         </div>
                     </div>
                     <div class="summary-content">
-                        <h4>{{ localeData?.gstr3b?.supplies_shown }}</h4>
+                        <p>{{ localeData?.gstr3b?.supplies_shown }}</p>
                         <div class="table-responsive">
                             <table mat-table [dataSource]="suppliesTableData" class="table gstr-3b-report w-100">
                                 <!-- Empty Column -->
@@ -539,7 +539,7 @@
                         </div>
                     </div>
                     <div class="summary-content">
-                        <h4>{{ localeData?.gstr3b?.eligible_itc }}</h4>
+                        <p>{{ localeData?.gstr3b?.eligible_itc }}</p>
                         <div class="table-responsive">
                             <table mat-table [dataSource]="itcTableData" class="table gstr-3b-report w-100">
                                 <!-- Details Column -->
@@ -553,7 +553,7 @@
                                         <ng-container [ngSwitch]="row.type">
                                             <!-- Header rows -->
                                             <ng-container *ngSwitchCase="'header'">
-                                                <span class="font-bold">{{ row.details }}</span>
+                                                <span class="font-weight-semibold">{{ row.details }}</span>
                                             </ng-container>
                                             <!-- Data rows -->
                                             <ng-container *ngSwitchCase="'data'">
@@ -699,14 +699,14 @@
                                     *matRowDef="let row; columns: itcDisplayedColumns"
                                     [ngClass]="{
                                         'cursor-pointer': row.type === 'data',
-                                        'font-bold': row.type === 'header'
+                                        'font-weight-semibold': row.type === 'header'
                                     }"
                                 ></tr>
                             </table>
                         </div>
                     </div>
                     <div class="summary-content">
-                        <h4>{{ localeData?.gstr3b?.exempt_values }}</h4>
+                        <p>{{ localeData?.gstr3b?.exempt_values }}</p>
                         <div class="table-responsive">
                             <table mat-table [dataSource]="exemptValuesTableData" class="table gstr-3b-report w-100">
                                 <!-- Supply Nature Column -->

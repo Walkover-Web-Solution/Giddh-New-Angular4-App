@@ -3,9 +3,12 @@
         overflow: inherit;
     }
 }
+/* UNUSED COMPONENT CLASS: aside-body - Auto-commented by script
 .aside-body {
-    padding: 15px;
-    .aside-pane-form {
+    /* UNUSED COMPONENT CLASS: aside-pane - Auto-commented by script
+padding: 15px;
+    /* UNUSED COMPONENT CLASS: aside-pane-form - Auto-commented by script
+.aside-pane-form {
         background-color: var(--color-white);
         box-shadow: 0 3px 6px var(--color-silver);
         padding: 0 15px;
@@ -15,20 +18,25 @@
         position: relative;
     }
 }
+*/
 
+/* UNUSED COMPONENT CLASS: tags-table - Auto-commented by script
 .tags-table {
     max-width: 900px;
     width: 100%;
 }
+*/
 
 .tags-table td:nth-child(3) {
     white-space: inherit !important;
 }
 
+/* UNUSED COMPONENT CLASS: create-tag - Auto-commented by script
 .create-tag {
     display: flex;
     justify-content: flex-end;
 }
+*/
 
 @media (max-width: 991px) {
     .tags-table {

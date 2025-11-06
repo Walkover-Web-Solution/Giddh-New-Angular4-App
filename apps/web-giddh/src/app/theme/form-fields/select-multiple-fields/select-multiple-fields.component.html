@@ -1,5 +1,5 @@
 <div [ngClass]="{'custom-input-field': !appearance }">
-    <mat-form-field [floatLabel]="!appearance ? 'never' : null" class="w-100" [appearance]="appearance" (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()">
+    <mat-form-field [floatLabel]="!appearance ? 'never' : null" class="w-100 initial-height" [appearance]="appearance" (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()">
     <mat-label *ngIf="showMatLabel">{{ label ? label : placeholder }}</mat-label>
     <mat-chip-grid #matChipList [required]="required">
         <mat-chip-row

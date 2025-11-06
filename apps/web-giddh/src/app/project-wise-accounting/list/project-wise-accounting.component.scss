@@ -1,15 +1,16 @@
 .project {
     max-width: var(--center-content-max-width);
 
-    .giddh-table {
-        border: 1px solid var(--color-silver) !important;
-    }
+    // .giddh-table {
+    //     border: 1px solid var(--border-color) !important;
+    // }
 }
 
 .min-height {
     min-height: calc(100vh - 145px);
 }
 
+/* UNUSED COMPONENT CLASS: custom-datepicker-wrapper - Auto-commented by script
 .custom-datepicker-wrapper {
     display: flex;
     text-align: center;
@@ -17,17 +18,21 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+*/
 
 .project-search-icon {
-    width: 15px;
+    /* UNUSED COMPONENT CLASS: mat-mdc-icon-button - Auto-commented by script
+width: 15px;
     height: 15px;
     padding: 0;
     align-items: center;
     justify-content: center;
     display: flex;
 
-    .mat-mdc-icon-button .mat-mdc-button-touch-target {
+    .mat-mdc-icon-button /* UNUSED COMPONENT CLASS: mat-mdc-button-touch-target - Auto-commented by script
+.mat-mdc-button-touch-target {
         width: 25px !important;
         height: 25px !important;
     }
+*/
 }

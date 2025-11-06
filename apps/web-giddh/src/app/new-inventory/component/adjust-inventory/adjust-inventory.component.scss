@@ -1,5 +1,7 @@
 .adjustment {
-    .breadcrumb-item+.breadcrumb-item {
+    /* UNUSED COMPONENT CLASS: breadcrumb-item - Auto-commented by script
+    .breadcrumb-item+
+.breadcrumb-item {
         &::before {
             content: "\ea01" !important;
             font-family: "icomoon" !important;
@@ -7,20 +9,23 @@
         }
 
     }
+*/
 
     .mat-expansion-panel {
         box-shadow: unset;
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
 
         .mat-expansion-panel-header {
             padding-top: 15px !important;
             padding-bottom: 15px !important;
             padding-left: 0 !important;
 
-            &.mat-expanded {
-                border-bottom: 1px solid var(--color-silver);
-                border-radius: 5px;
+            /*& UNUSED COMPONENT CLASS: mat-expanded - Auto-commented by script
+.mat-expanded {
+                border-bottom: 1px solid var(--border-color);
+                border-radius: var(--mat-border-radius-4);
             }
+*/
 
             table {
                 tr {
@@ -48,8 +53,10 @@
 
     }
 
-    .no-data-found {
+    /* UNUSED COMPONENT CLASS: no-data-found - Auto-commented by script
+.no-data-found {
         margin-top: 50px !important;
         margin-bottom: 50px !important;
     }
+*/
 }

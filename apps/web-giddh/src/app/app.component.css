@@ -1,13 +1,14 @@
-html,
+/* html,
 body {
     height: 100%;
-    /* background-color: var(--color-white); */
+    background-color: var(--color-white);
     color: var(--color-black);
-}
+} */
 
-a.active {
+/* a.active {
     background-color: gray;
 }
+/* UNUSED COMPONENT CLASS: sticky-footer - Auto-commented by script
 footer#footer.sticky-footer {
     padding-left: 230px;
     text-align: center;
@@ -19,23 +20,9 @@ footer#footer.sticky-footer {
     font-size: var(--font-size-15);
     border-top: 1px solid #ddd;
 }
+*/
+/* UNUSED COMPONENT CLASS: footer-content - Auto-commented by script
 .footer-content {
     margin-bottom: 0 !important;
 }
-#content-wrapper {
-    padding-bottom: 80px;
-    padding-left: 60px;
-}
-.menu_open {
-    padding-left: 240px !important;
-}
-@media (max-width: 1019px) {
-    .menu_open {
-        padding-left: 240px !important;
-    }
-}
-@media (max-width: 767px) {
-    #content-wrapper {
-        padding-left: 0 !important;
-    }
-}
+*/

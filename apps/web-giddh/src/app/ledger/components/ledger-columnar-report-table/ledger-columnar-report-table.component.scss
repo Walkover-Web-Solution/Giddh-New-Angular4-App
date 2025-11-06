@@ -1,21 +1,29 @@
+/* UNUSED COMPONENT CLASS: branch-transfer-report - Auto-commented by script
 .branch-transfer-report .basic > thead > tr > th {
-    border-top: 1px solid var(--color-silver) !important;
+    border-top: 1px solid var(--border-color) !important;
 }
+/* UNUSED COMPONENT CLASS: icon-pointer - Auto-commented by script
 
-.icon-pointer.active-text-color {
-    color: var(--color-blue-primary);
+.icon-pointer/* UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
+.active-text-color {
+    color: var(--text-primary-color);
 }
-.s-no-column-width{
+*/
+.s-no-column-width{ // -Create this for all columns which use in global
     min-width: 40px;
 }
 
+/* UNUSED COMPONENT CLASS: voucher-type-dropdown - Auto-commented by script
 .voucher-type-dropdown {
     display: inline-block;
-    .btn {
+    /* UNUSED COMPONENT CLASS: btn - Auto-commented by script
+.btn {
         padding: 0 8px;
         margin-right: 0px;
     }
 }
+*/
+/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -24,22 +32,25 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     color: var(--color-medium-gray);
     left: 0;
     font-size: var(--font-size-16);
 }
+*/
+/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
 .btn-filter {
     background: var(--color-border-light);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     display: inline-flex;
     justify-content: space-between;
     -webkit-box-align: center;
     align-items: center;
     padding: 6px 10px !important;
-    .icon-cross {
+    /* UNUSED COMPONENT CLASS: icon-cross - Auto-commented by script
+.icon-cross {
         margin-right: 5px;
     }
     &:focus {
@@ -51,6 +62,7 @@
         outline: none;
     }
 }
+*/
 @media only screen and (max-width: 767px) {
     .basic > thead > tr > th {
         min-width: initial;

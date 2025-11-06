@@ -30,7 +30,7 @@
                         #taxLabel
                     >
                         <mat-checkbox
-                            class="font-15"
+                            class="font-size-15"
                             color="primary"
                             [id]="'update-ledger-tax-checkbox-' + i"
                             [(ngModel)]="tax.isChecked"
@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="border-top pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
-            <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
+            <span class="text-primary">{{ commonLocaleData?.app_create_new }}</span>
         </div>
         <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
     </mat-menu>

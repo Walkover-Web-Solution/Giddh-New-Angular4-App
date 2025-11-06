@@ -2,10 +2,10 @@
     .download-table {
         width: 100%;
         .download-table-btn {
-            color: var(--color-dark-gray);
+            // color: var(--color-dark-gray);
             background-color: var(--color-transparent);
             box-shadow: none;
-            border-radius: 4px;
+            border-radius: var(--mat-border-radius-4);
             i {
                 font-size: 16px;
             }
@@ -21,17 +21,19 @@
         text-align: center;
         justify-content: center;
     }
-    .clear-filter {
-        color: var(--color-blue-primary);
-        cursor: pointer;
-    }
-    .btn-success {
+    // .clear-filter {
+    //     color: var(--text-primary-color);
+    //     cursor: pointer;
+    // }
+    /* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
+.btn-success {
         background-color: var(--color-green);
         color: var(--color-white);
         &:hover {
             background-color: var(--color-green) !important;
         }
     }
+*/
     .download-button-status {
         min-width: 160px;
         max-width: 160px;
@@ -41,14 +43,16 @@
         width: 160px;
         min-width: 160px;
     }
-    .btn-filter {
+    /* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
+.btn-filter {
         background: var(--color-border-light);
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         font-size: var(--font-size-15);
-        color: var(--color-blue-primary);
+        color: var(--text-primary-color);
         display: inline-flex;
         justify-content: space-between;
         align-items: center;
         padding: 4px 10px;
     }
+*/
 }

@@ -1,7 +1,7 @@
-<div class="bd-rr row view-forms m-0" id="middleBody" *ngIf="!(showNewForm$ | async)">
+<div class="border-right row view-forms m-0" id="middleBody" *ngIf="!(showNewForm$ | async)">
     <ng-container *ngIf="breadcrumbPath?.length > 0">
         <!--breadcrumbs-->
-        <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100 d-flex justify-content-space-between">
+        <div class="breadcrumbs container-fluid top-bar border-bottom row mr-0 ml-0 h-100 d-flex justify-content-between">
             <div class="col-lg-8 full-width">
                 <ol class="breadcrumb row">
                     <li *ngFor="let value of breadcrumbPath; let last = last" [ngClass]="{ 'active': last }">
@@ -32,7 +32,7 @@
                         {{ commonLocaleData?.app_share }}
                     </button>
                     <div
-                        class="primary-color text-right mr-r1 clearfix"
+                        class="text-primary text-right mr-r1 clear-both"
                         *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
                     >
                         {{ groupSharedWith }}
@@ -51,7 +51,7 @@
                     {{ commonLocaleData?.app_share }}
                 </button>
                 <div
-                    class="primary-color text-right mr-r1 clearfix"
+                    class="text-primary text-right mr-r1 clear-both"
                     *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length"
                 >
                     {{ accountSharedWith }}
@@ -156,7 +156,7 @@
         <button mat-raised-button color="primary" aria-label="create group" class="w125 mr-b2" (click)="showAddGroupForm()">
             {{ commonLocaleData?.app_create_group }}
         </button>
-        <span class="clearfix"></span>
+        <span class="clear-both"></span>
         <button
             mat-raised-button
             color="primary"

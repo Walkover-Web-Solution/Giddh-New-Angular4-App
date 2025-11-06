@@ -4,14 +4,14 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <section id="create-manufacturing" class="clearfix">
+    <section id="create-manufacturing" class="clear-both">
         <hamburger-menu></hamburger-menu>
         <div class="manufacturing-wrapper">
             <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoadingManufacturing"></giddh-page-loader>
             <form autocomplete="off" novalidate #manufacturingForm="ngForm" *ngIf="!isLoadingManufacturing">
                 <div class="row">
                     <ng-container *ngIf="isCompany || isConsolidatedBranch">
-                        <div class="font-16 branch-msg">{{ localeData?.info_message }}</div>
+                        <div class="font-size-16 branch-msg">{{ localeData?.info_message }}</div>
                     </ng-container>
                     <div class="form-fields w-100 d-flex">
                         <div>
@@ -74,12 +74,12 @@
                         ></watch-video>
                     </div>
                 </div>
-                <div class="row max-width-stock position-relative">
+                <div class="row max-width-stock position-relative ">
                     <div class="col-3">
                         <div class="row">
                             <div class="form-fields w-100">
                                 <div class="d-flex flex-column flex-wrap gap-between w-100">
-                                    <h1 class="section-head">{{ localeData?.finished_stock }}</h1>
+                                    <p class="section-head">{{ localeData?.finished_stock }}</p>
                                     <div>
                                         <reactive-dropdown-field
                                             [cssClass]="errorFields.finishedStockName ? ' required-field-error' : ''"
@@ -163,7 +163,7 @@
                                     </div>
 
                                     <div
-                                        class="d-flex generate-clear w-100 column-gap15"
+                                        class="d-flex generate-clear w-100 column-gap-15"
                                         *ngIf="!isCompany && !isConsolidatedBranch"
                                     >
                                         <button
@@ -421,7 +421,7 @@
                                                             <td class="table-amount">
                                                                 <i
                                                                     [ngClass]="{
-                                                                        'unvisible':
+                                                                        'visibility-hidden':
                                                                             activeLinkedStockIndex !== i ||
                                                                             manufacturingObject.manufacturingDetails[0]
                                                                                 .linkedStocks?.length <= 1
@@ -610,7 +610,7 @@
                                                             <td class="table-delete">
                                                                 <i
                                                                     [ngClass]="{
-                                                                        'unvisible': activeOtherExpenseIndex !== i
+                                                                        'visibility-hidden': activeOtherExpenseIndex !== i
                                                                     }"
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"
@@ -816,7 +816,7 @@
                                                             <td class="table-delete">
                                                                 <i
                                                                     [ngClass]="{
-                                                                        'unvisible':
+                                                                        'visibility-hidden':
                                                                             activeByProductLinkedStockIndex !== i
                                                                     }"
                                                                     class="icon-trash cursor-pointer"

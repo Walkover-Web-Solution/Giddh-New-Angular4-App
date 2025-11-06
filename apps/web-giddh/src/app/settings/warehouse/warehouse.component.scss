@@ -4,9 +4,11 @@
     justify-content: center;
     align-items: center;
     height: calc(100vh - 250px);
-    .spinner2 {
+    /* UNUSED COMPONENT CLASS: spinner2 - Auto-commented by script
+.spinner2 {
         text-align: center;
     }
+*/
 }
 .create-warehouse h2 {
     font-size: var(--font-size-16);
@@ -18,16 +20,16 @@
     margin-bottom: 10px;
 }
 .create-warehouse p span {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 .create-warehouse img {
     margin-bottom: 20px;
 }
 .warehouse-card {
-    background-color: var(--color-white);
+    // background-color: var(--theme-background-color);
     padding: 15px;
     margin-bottom: 15px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 .warehouse-options {
     text-align: right;
@@ -43,7 +45,7 @@
                 width: 8px;
                 height: 8px;
                 float: left;
-                border-radius: 5px;
+                border-radius: var(--mat-border-radius-4);
                 margin-top: 8px;
                 margin-right: 4px;
             }
@@ -55,7 +57,7 @@
                 width: 8px;
                 height: 8px;
                 float: left;
-                border-radius: 5px;
+                border-radius: var(--mat-border-radius-4);
                 margin-top: 8px;
                 margin-right: 4px;
             }
@@ -100,16 +102,18 @@
     float: left;
     width: 66%;
     word-break: break-all;
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
-span.set-as-default {
+/* span UNUSED COMPONENT CLASS: set-as-default - Auto-commented by script
+.set-as-default {
     background-color: var(--color-silver);
     padding: 5px 10px;
     font-size: var(--font-size-15);
-    border-radius: 13px;
+    border-radius: var(--mat-border-radius-12);
     margin-right: 10px;
     cursor: pointer;
 }
+*/
 .warehouse-details {
     font-size: var(--font-size-15);
 }
@@ -131,33 +135,38 @@ span.set-as-default {
     margin: 0 0 15px;
     display: flex;
     flex-direction: column;
-    .icon-favorite-selected {
-        color: var(--color-blue-primary);
+    /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
+.icon-favorite-selected {
+        color: var(--text-primary-color);
     }
+*/
 }
+/* UNUSED COMPONENT CLASS: gray-text - Auto-commented by script
 .gray-text {
     color: var(--color-dark-gray);
     font-size: var(--font-size-12);
 }
+*/
 .set-as-default i.icon-favorite-selected {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
+/* UNUSED COMPONENT CLASS: create-new-warehouse-btn - Auto-commented by script
 .create-new-warehouse-btn {
     justify-content: center;
     align-items: center;
     display: flex;
 }
+*/
 .warehouse-pagination {
     width: 100%;
     text-align: center;
-    .pagination .disabled a {
-        cursor: not-allowed;
-    }
 }
+/* UNUSED COMPONENT CLASS: dropdown-item - Auto-commented by script
 .dropdown-item.warehouse-options {
     justify-content: flex-start;
     text-align: left;
 }
+*/
 .search-warehouse-box {
     max-width: 200px;
     width: 100%;
@@ -176,7 +185,7 @@ span.set-as-default {
     }
     ul {
         padding: 0;
-        list-style: none;
+        // list-style: none;
         li {
             margin-bottom: 12px;
             color: var(--color-black);
@@ -198,7 +207,7 @@ button {
         line-height: 32px;
         height: 30px;
         &:hover {
-            color: var(--color-blue-primary);
+            color: var(--text-primary-color);
         }
     }
 }
@@ -239,22 +248,6 @@ button {
         .col-lg-4 {
             flex: 0 0 50% !important;
             max-width: 50% !important;
-        }
-    }
-}
-@media (max-width: 767px) {
-    .branch-vector {
-        img {
-            width: 150px;
-        }
-    }
-}
-@media (max-width: 575px) {
-    .warehouse-header {
-        flex-direction: column;
-        .search-warehouse-box {
-            max-width: 100%;
-            margin-bottom: 15px;
         }
     }
 }

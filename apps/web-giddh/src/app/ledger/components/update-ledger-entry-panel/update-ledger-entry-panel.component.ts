@@ -15,7 +15,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, ASIDE_PANE_CONFIG, IOption, BREAKPOINT_SCREEN_SIZE } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
@@ -370,9 +370,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private salesPersonStore: SalesPersonComponentStore
     ) {
         this.breakPointObservar.observe([
-            '(max-width: 991px)'
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isTabScreen = result.matches;
+            this.isTabScreen = result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
         });
         this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
 

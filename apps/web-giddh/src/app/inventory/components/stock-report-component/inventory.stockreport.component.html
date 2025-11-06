@@ -1,10 +1,10 @@
-<section class="h100">
+<section class="h-100">
     <form [formGroup]="entityAndInventoryTypeForm" class="form-inline mr-b1">
-        <div class="pr d-flex mb-2 inventory-branch-dropdown justify-content-between">
+        <div class="position-relative d-flex mb-2 inventory-branch-dropdown justify-content-between">
             <!-- enable branch selection after implimentation from api-->
             <div class="d-flex">
                 <div class="mr-r15 sh-select-dropdown">
-                    <div class="select-style middle">
+                    <div class="select-style vertical-align-middle ">
                         <reactive-dropdown-field
                             [placeholder]="'Select Branch'"
                             formControlName="selectedEntity"
@@ -19,9 +19,9 @@
 
         <div class="d-flex w-100 justify-content-between">
             <div class="d-flex wrap-head-report">
-                <h2 class="head-report" *ngIf="stockReport && stockReport.stockUnit">
+                <p class="head-report" *ngIf="stockReport && stockReport.stockUnit">
                     <span> {{ stockReport.stockName }}</span> (Stock)
-                </h2>
+                </p>
 
                 <div class="advance-icon cursor-pointer" (click)="onOpenAdvanceSearch()" matTooltip="Advance Search">
                     <span class="icon-advance-filter"></span>
@@ -37,7 +37,7 @@
                 <div class="btn-group">
                     <button
                         type="button"
-                        class="cp mr-r15 icon-btn icon-btn"
+                        class="cursor-pointer mr-r15 icon-btn icon-btn"
                         [matMenuTriggerFor]="downloadMenu"
                         matTooltip="Download"
                     >
@@ -114,7 +114,7 @@
                             "
                             colspan="4"
                             width="40%"
-                            class="text-center bd-rr bd-rb"
+                            class="text-center border-right border-bottom"
                         >
                             Transactions
                         </th>
@@ -126,13 +126,13 @@
                             "
                             colspan="1"
                             width="10%"
-                            class="bd-rl text-center"
+                            class="border-left text-center"
                         >
                             Closing Stock
                         </th>
                     </tr>
                     <tr
-                        class="bd-rt"
+                        class="border-top"
                         [hidden]="
                             !stockReport?.transactions?.length &&
                             !stockReportRequest?.accountName &&
@@ -185,17 +185,17 @@
                             </div>
                         </th>
 
-                        <th class="bd-rr bd-rb" width="14%">
+                        <th class="border-right border-bottom" width="14%">
                             <div
                                 class="btn-group btn-group-voucher-type"
                             >
                                 <button
                                     type="button"
                                     [matMenuTriggerFor]="voucherTypeMenu"
-                                    mat-raised-button color="primary" class="cp c-3"
+                                    mat-raised-button color="primary" class="cursor-pointer c-3"
                                 >
                                     Voucher Type
-                                    <i class="fa fa-ellipsis-v pull-right text-light-2" aria-hidden="true"></i>
+                                    <i class="fa fa-ellipsis-v pull-right text-light" aria-hidden="true"></i>
                                 </button>
                                 <mat-menu #voucherTypeMenu="matMenu" class="dropdown-menu-right voucher-type">
                                     <div *ngFor="let item of VOUCHER_TYPES" class="mat-menu-item">
@@ -226,7 +226,7 @@
                             </div>
                         </th>
 
-                        <th class="bd-rr">
+                        <th class="border-right">
                             <div class="d-flex">
                                 <div class="flex-fill text-right">Inwards</div>
                                 <div class="icon-pointer text-right">
@@ -272,7 +272,7 @@
                             </div>
                         </th>
 
-                        <th class="bd-rr">
+                        <th class="border-right">
                             <div class="d-flex">
                                 <div class="flex-fill text-right">Outwards</div>
                                 <div class="icon-pointer text-right">
@@ -318,7 +318,7 @@
                             </div>
                         </th>
 
-                        <th class="bd-rr">
+                        <th class="border-right">
                             <div class="d-flex">
                                 <div class="flex-fill text-right">Rate</div>
                                 <div class="icon-pointer text-right">
@@ -362,7 +362,7 @@
                             </div>
                         </th>
 
-                        <th class="bd-rr">
+                        <th class="border-right">
                             <div class="d-flex">
                                 <div class="flex-fill text-right">Value</div>
                                 <div class="icon-pointer text-right">
@@ -408,7 +408,7 @@
                             </div>
                         </th>
 
-                        <th class="bd-rr text-center">
+                        <th class="border-right text-center">
                             <div class="d-flex">
                                 <div class="flex-fill text-right">Qty</div>
                                 <div class="icon-pointer text-right">
@@ -457,11 +457,11 @@
                 </thead>
                 <tbody *ngIf="!stockReportInProcess && stockReport">
                     <tr *ngFor="let txn of stockReport.transactions">
-                        <td class="bd-rr" data-title="Date">{{ txn.entryDate }}</td>
-                        <td class="bd-rr {{ txn.voucherType }}" data-title="Voucher Type">{{ txn.voucherType }}</td>
-                        <td class="bd-rr" data-title="Account Name">{{ txn.account?.name }}</td>
+                        <td class="border-right" data-title="Date">{{ txn.entryDate }}</td>
+                        <td class="border-right {{ txn.voucherType }}" data-title="Voucher Type">{{ txn.voucherType }}</td>
+                        <td class="border-right" data-title="Account Name">{{ txn.account?.name }}</td>
                         <td data-title="Transactions -" class="td-mobile-head"></td>
-                        <td class="text-right bd-rr" data-title="Inwards">
+                        <td class="text-right border-right" data-title="Inwards">
                             <span *ngIf="txn.type == 'dr'">
                                 {{ txn.quantity | giddhCurrency }}
                             </span>
@@ -471,7 +471,7 @@
                             <span *ngIf="txn.type == 'cr'">-</span>
                         </td>
 
-                        <td class="text-right bd-rr" data-title="Outwards">
+                        <td class="text-right border-right" data-title="Outwards">
                             <span *ngIf="txn.type == 'cr'">
                                 {{ txn.quantity | giddhCurrency }}
                             </span>
@@ -481,16 +481,16 @@
                             <span *ngIf="txn.type == 'dr'">-</span>
                         </td>
 
-                        <td class="text-right bd-rr" data-title="Rate" [ngClass]="txn.type === 'cr' ? 'cr' : 'dr'">
+                        <td class="text-right border-right" data-title="Rate" [ngClass]="txn.type === 'cr' ? 'cr' : 'dr'">
                             {{ txn.rate | giddhCurrency }}
                         </td>
 
                         <td data-title="Closing Stock -" class="td-mobile-head"></td>
 
-                        <td class="text-right bd-rr" data-title="Value" [ngClass]="txn.type === 'cr' ? 'cr' : 'dr'">
+                        <td class="text-right border-right" data-title="Value" [ngClass]="txn.type === 'cr' ? 'cr' : 'dr'">
                             {{ txn.amount | giddhCurrency }}
                         </td>
-                        <td class="text-right bd-rr" data-title="Quantity">
+                        <td class="text-right border-right" data-title="Quantity">
                             {{ txn.closingQuantity | giddhCurrency
                             }}<span class="unit-badge">{{ stockReport.stockUnit }}</span>
                         </td>
@@ -525,12 +525,12 @@
                 class="no-data"
                 *ngIf="(stockReport && stockReport.count < 1 && !stockReportInProcess) || stockNotFoundMessage"
             >
-                <h1 [class.stock-not-found]="stockNotFoundMessage">
+                <h2 [class.stock-not-found]="stockNotFoundMessage">
                     {{ stockNotFoundMessage ? stockNotFoundMessage : "No entries found within given criteria." }}
-                </h1>
-                <h1 class="p-0" [class.stock-not-found]="stockNotFoundMessage">
+                </h2>
+                <h2 class="p-0" [class.stock-not-found]="stockNotFoundMessage">
                     {{ stockNotFoundMessage ? stockNotFoundMessage : "Do search with some other dates" }}
-                </h1>
+                </h2>
             </div>
         </div>
     </section>
@@ -543,55 +543,55 @@
                     <div class="col-sm-3 pr-0">
                         <div class="row">
                             <div class="col-6">
-                                <h4 class="text-light text-left">Profit/Loss</h4>
+                                <p class="text-light text-left">Profit/Loss</p>
                             </div>
                             <div class="col-12">
-                                <h4 class="text-purple text-left">
+                                <p class="text-primary text-left">
                                     &nbsp;{{ stockReport.profit | giddhCurrency }} ({{
                                         selectedDateRangeUi | replaceHyphens
                                     }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-2 pr-0">
                         <div class="row">
                             <div class="col-10 p-0">
-                                <h4 class="text-light">Transaction Count</h4>
+                                <p class="text-light">Transaction Count</p>
                             </div>
                             <div class="col-2 p-0">
-                                <h4 class="text-purple text-left">
+                                <p class="text-primary text-left">
                                     {{
                                         stockReport.inwardBalance.transactionCount +
                                             stockReport.outwardBalance.transactionCount | giddhCurrency
                                     }}
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-10 p-0">
-                                <h4>Inward</h4>
+                                <p>Inward</p>
                             </div>
                             <div class="col-2 p-0">
-                                <h4 class="text-left">
+                                <p class="text-left">
                                     &nbsp;<span *ngIf="stockReport.inwardBalance.transactionCount">{{
                                         stockReport.inwardBalance.transactionCount | giddhCurrency
                                     }}</span
                                     ><span *ngIf="!stockReport.inwardBalance.transactionCount">0</span>
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-10 p-0">
-                                <h4>Outward</h4>
+                                <p>Outward</p>
                             </div>
                             <div class="col-2 p-0">
-                                <h4 class="text-left">
+                                <p class="text-left">
                                     &nbsp;<span *ngIf="stockReport.outwardBalance.transactionCount">{{
                                         stockReport.outwardBalance.transactionCount | giddhCurrency
                                     }}</span
                                     ><span *ngIf="!stockReport.outwardBalance.transactionCount">0</span>
-                                </h4>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -599,42 +599,42 @@
                     <div class="col-sm-7">
                         <div class="flex-col">
                             <div class="cont">
-                                <h4 class="text-light">Opening</h4>
-                                <h2>{{ stockReport.openingBalance.amount | giddhCurrency }}</h2>
-                                <h4>
+                                <p class="text-light">Opening</p>
+                                <p>{{ stockReport.openingBalance.amount | giddhCurrency }}</p>
+                                <p>
                                     ({{ stockReport.openingBalance.quantity | giddhCurrency }}
                                     {{ stockReport.openingBalance.stockUnit }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="flex-col">
                             <div class="cont">
-                                <h4 class="text-light">Inward</h4>
-                                <h2>{{ stockReport.inwardBalance.amount | giddhCurrency }}</h2>
-                                <h4>
+                                <p class="text-light">Inward</p>
+                                <p>{{ stockReport.inwardBalance.amount | giddhCurrency }}</p>
+                                <p>
                                     ({{ stockReport.inwardBalance.quantity | giddhCurrency }}
                                     {{ stockReport.inwardBalance.stockUnit }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="flex-col">
                             <div class="cont">
-                                <h4 class="text-light">Outward</h4>
-                                <h2>{{ stockReport.outwardBalance.amount | giddhCurrency }}</h2>
-                                <h4>
+                                <p class="text-light">Outward</p>
+                                <p>{{ stockReport.outwardBalance.amount | giddhCurrency }}</p>
+                                <p>
                                     ({{ stockReport.outwardBalance.quantity | giddhCurrency }}
                                     {{ stockReport.outwardBalance.stockUnit }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                         <div class="flex-col">
                             <div class="cont">
-                                <h4 class="text-light">Closing Stock</h4>
-                                <h2 class="text-purple">{{ stockReport.closingBalance.amount | giddhCurrency }}</h2>
-                                <h4>
+                                <p class="text-light">Closing Stock</p>
+                                <p class="text-primary">{{ stockReport.closingBalance.amount | giddhCurrency }}</p>
+                                <p>
                                     ({{ stockReport.closingBalance.quantity | giddhCurrency }}
                                     {{ stockReport.closingBalance.stockUnit }})
-                                </h4>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -657,7 +657,7 @@
             <i class="icon-cross"></i>
         </button>
     </div>
-    <mat-dialog-content class="advance-search clearfix dialog-body" *ngIf="advanceSearchModalShow">
+    <mat-dialog-content class="advance-search theme-foreground-color clear-both dialog-body" *ngIf="advanceSearchModalShow">
         <form action="" [formGroup]="advanceSearchForm">
             <div class="row">
                 <div class="col-sm-4">Date Range</div>
@@ -705,7 +705,7 @@
             <div class="row mr-t2">
                 <div class="col-sm-4">Select Category</div>
                 <div class="col-sm-4">
-                    <div class="select-style middle">
+                    <div class="select-style vertical-align-middle ">
                         <reactive-dropdown-field
                             [options]="CategoryOptions"
                             (onClear)="clearShSelect('filterCategory')"
@@ -716,7 +716,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="select-style middle" *ngIf="stockReportRequest.param !== 'qty_closing'">
+                    <div class="select-style vertical-align-middle " *ngIf="stockReportRequest.param !== 'qty_closing'">
                         <reactive-dropdown-field
                             [options]="CategoryTypeOptions"
                             (onClear)="clearShSelect('filterCategoryType')"

@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="header-content-sticky aging-report-z-index">
+    <div class="header-content-sticky aging-report-z-index mr-b15">
         <div
             *ngIf="
                 (dueAmountReportData$ | async)?.results?.length ||
@@ -7,7 +7,7 @@
                 showClearFilter ||
                 isAdvanceSearchApplied
             "
-            class="top-bar aging-top-bar d-flex justify-content-between"
+            class="top-bar aging-top-bar d-flex align-items-center justify-content-between"
         >
             <div class="aging-form-inline">
                 <div class="btn-group pull-left on-desktop-view">
@@ -59,7 +59,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
+                <div class="cursor-pointer advance-clear-filter-icons d-flex float-right column-gap-1">
                     <button
                         mat-raised-button
                         color="primary"
@@ -136,21 +136,7 @@
     </div>
     <div class="contact-main aging-page overflow-visible" *ngIf="!isLoading">
         <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper overflow-visible">
-            <div *ngIf="!isMobileScreen" class="table-responsive overflow-visible">
-                <ng-container *ngTemplateOutlet="mainTable"></ng-container>
-            </div>
-            <div *ngIf="isMobileScreen && (dueAmountReportData$ | async)?.results?.length">
-                <div class="text-center top-aging-table-top pd-1">
-                    <p (click)="openAgingDropDown()">
-                        <strong>{{ localeData?.due_in_last_days }} </strong>
-                    </p>
-                    <aging-dropdown
-                        *ngIf="setDueRangeOpen$ | async"
-                        [options]="agingDropDownoptions"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                    ></aging-dropdown>
-                </div>
+            <div class="table-responsive overflow-visible">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
             <div
@@ -162,7 +148,7 @@
                     !isAdvanceSearchApplied
                 "
             >
-                <div class="align-item-center">
+                <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                     <button
                         mat-raised-button
@@ -210,21 +196,21 @@
 <!-- endregion -->
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-    <div class="icon-pointer cp">
+    <div class="icon-pointer cursor-pointer">
         <div
-            class="icon-sort-asc one text-light-2 d-block font-xxs"
+            class="icon-sort-asc one text-light d-block font-size-9"
             (click)="sort(col, 'asc')"
             *ngIf="key !== col"
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
         ></div>
         <div
-            class="icon-sort-asc text-light-2 d-block font-xxs"
+            class="icon-sort-asc text-light d-block font-size-9"
             (click)="sort(col, 'desc')"
             *ngIf="key === col && order === 'asc'"
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
         ></div>
         <div
-            class="icon-sort-asc text-light-2 d-block font-xxs"
+            class="icon-sort-asc text-light d-block font-size-9"
             *ngIf="key === col && order === 'desc'"
             (click)="sort(col, 'asc')"
             [ngClass]="{ 'active-text-color': key === col && order === 'desc' }"
@@ -332,7 +318,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
-                            class="font-italic"
+                            class="font-style-italic"
                             aria-label="days"
                         >
                             0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}
@@ -376,7 +362,7 @@
                             [matMenuTriggerFor]="agingDropdown"
                             mat-button
                             (click)="openAgingDropDown()"
-                            class="font-italic m-0"
+                            class="font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.fourth + 1 }}-{{
@@ -428,7 +414,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
-                            class="font-italic m-0"
+                            class="font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.fifth + 1 }}-{{
@@ -478,7 +464,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
-                            class="font-italic m-0"
+                            class="font-style-italic m-0"
                             aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
@@ -542,23 +528,18 @@
     <div *ngIf="getAgingReportRequestInProcess$ | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
+    <mat-paginator
+        *ngIf="(dueAmountReportData$ | async)?.totalItems > pageSizeOptions[0] && !(getAgingReportRequestInProcess$ | async)"
+        [length]="(dueAmountReportData$ | async)?.totalItems"
+        [pageSize]="dueAmountReportRequest.count"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="dueAmountReportRequest.page - 1"
+        [showFirstLastButtons]="true"
+        (page)="handlePageEvent($event)"
+        aria-label="Select page of aging report results">
+    </mat-paginator>
+    <section class="mr-b8"></section>
 
-    <div
-        *ngIf="(dueAmountReportData$ | async)?.totalItems > pageSizeOptions[0]"
-        class="mt-4"
-        [hidden]="getAgingReportRequestInProcess$ | async"
-    >
-        <mat-paginator
-            [length]="(dueAmountReportData$ | async)?.totalItems"
-            [pageSize]="dueAmountReportRequest.count"
-            [pageSizeOptions]="pageSizeOptions"
-            [pageIndex]="dueAmountReportRequest.page - 1"
-            [showFirstLastButtons]="true"
-            (page)="handlePageEvent($event)"
-            aria-label="Select page of aging report results">
-        </mat-paginator>
-        <section class="mr-b8"></section>
-    </div>
 </ng-template>
 <ng-template
     #searchTemplate
@@ -589,9 +570,9 @@
 
 <ng-template #unpaidInvoice>
     <div class="unpaid-invoice-aside-pane">
-        <div class="header d-flex justify-content-space-between align-items-center">
-            <h3>{{ localeData?.unpaid_invoices }}</h3>
-            <button mat-button class="rounded-circle" (click)="unpaidInvoiceDailogRef.close()" aria-label="cross icon">
+        <div class="header d-flex justify-content-between align-items-center">
+            <p>{{ localeData?.unpaid_invoices }}</p>
+            <button mat-button class="border-radius-circle" (click)="unpaidInvoiceDailogRef.close()" aria-label="cross icon">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -604,13 +585,13 @@
                             [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined"
                             [ngClass]="{ 'cursor-default': item?.voucherNumber === 'OPENING BALANCE' }"
                         >
-                            <div class="d-flex justify-content-space-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <p class="font-14">
-                                        <span class="color-primary">{{ item?.voucherNumber }}</span> |
+                                    <p class="font-size-14">
+                                        <span class="text-primary">{{ item?.voucherNumber }}</span> |
                                         <span class="light-gray">{{ item?.voucherDate }}</span>
                                     </p>
-                                    <p class="customer-name font-16">
+                                    <p class="customer-name font-size-16">
                                         {{ item?.account?.customerName || item?.account?.name }}
                                     </p>
                                 </div>
