@@ -92,11 +92,7 @@ export class ImportStatementComponent implements OnDestroy {
                 if (this.entity === ImportStatementType.BankTransactions) {
                     requestObject.subType = '';
                 }
-                if (this.getRequest.entity === this.fileType.PDF) {
-                    this.importStatement();
-                } else {
                     this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
-                }
             }
         });
 
