@@ -38,10 +38,10 @@
                                     {{ localeData?.change_up_to_template }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            <div class="template-view d-flex column-gap-1 px-3 pb-3">
+                            <div class="template-view d-flex column-gap1 px-3 pb-3">
                                 <ng-container *ngFor="let template of sampleTemplates">
                                     <div
-                                        class="template-view-design border position-relative cursor-pointer"
+                                        class="template-view-design bdr position-relative cursor-pointer"
                                         (click)="
                                             templateMode === templateModeEnum.Update
                                                 ? showMessage()
@@ -51,7 +51,7 @@
                                         <img
                                             src="{{ imgPath }}templates/{{ template?.templateType }}.png"
                                             alt="template"
-                                            class="view-img w-100 h-100 border-radius-4"
+                                            class="view-img w-100 h-100 border-radius-5"
                                         />
 
                                         <div
@@ -75,7 +75,7 @@
                                     {{ localeData?.make_logo_edit }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            <div class="d-flex align-items-center column-gap-15 px-3 pb-3">
+                            <div class="d-flex align-items-center column-gap15 px-3 pb-3">
                                 <div class="float-left ml-4">
                                     <span class="logo-preview">
                                         <label
@@ -97,7 +97,7 @@
                                         </label>
                                     </span>
                                     <span
-                                        class="start-upload-btn float-right mr-l2 position-relative "
+                                        class="start-upload-btn float-right mr-l2 position-relative"
                                         *ngIf="isFileUploadInProgress"
                                         ><b>{{ localeData?.uploading }}</b></span
                                     >
@@ -114,7 +114,7 @@
                                     <div class="pull-left mr-l1 mr-t1 choose-size">
                                         <div class="d-block">
                                             <p>{{ localeData?.size }}</p>
-                                            <div class="d-flex column-gap-1">
+                                            <div class="d-flex column-gap1">
                                                 <button
                                                     *ngFor="let size of imageSizes"
                                                     [disabled]="!customTemplate?.logoUniqueName"
@@ -224,7 +224,7 @@
                                     {{ localeData?.edit_print_setting }}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            <div class="px-3 pb-3 d-flex align-items-center column-gap-1 print-field">
+                            <div class="px-3 pb-3 d-flex align-items-center column-gap1 print-field">
                                 <div class="w125">
                                     <input-field
                                         [allowDecimalDigitsOnly]="true"
@@ -338,7 +338,7 @@
                                 </mat-expansion-panel-header>
                                 <div class="template-scroll">
                                     <div>
-                                        <div class="mr-t1 px-3 d-flex flex-column row-gap-05">
+                                        <div class="mr-t1 px-3 d-flex flex-column row-gap5">
                                             <!-- company name -->
                                             <div *ngIf="sectionSettings?.header.companyName">
                                                 <div class="d-flex">
@@ -374,6 +374,7 @@
                                                             <input-field
                                                                 type="text"
                                                                 name="headerCompanyName"
+                                                                cssClass="form-control"
                                                                 [label]="commonLocaleData?.app_company_name"
                                                                 [maxlength]="50"
                                                                 [(ngModel)]="
@@ -392,7 +393,7 @@
                                                             ></input-field>
                                                         </div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -658,6 +659,7 @@
                                                             <input-field
                                                                 type="text"
                                                                 maxlength="70"
+                                                                cssClass="form-control"
                                                                 name="gstComposition"
                                                                 [label]="
                                                                     localeData?.registered_under_composition_scheme
@@ -681,7 +683,7 @@
                                                             ></input-field>
                                                         </div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -715,12 +717,14 @@
                                                                 onChangeFieldVisibility()
                                                             "
                                                             class="d-block"
+                                                            cssClass="form-control"
                                                         >
                                                         </mat-checkbox>
                                                         <div class="w-100 ml-2">
                                                             <div>
                                                                 <input-field
                                                                     type="text"
+                                                                    cssClass="form-control"
                                                                     [maxlength]="
                                                                         customTemplate.templateType ===
                                                                         templateTypeEnum.ThermalTemplate
@@ -757,7 +761,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -797,6 +801,7 @@
                                                                 <input-field
                                                                     type="text"
                                                                     name="invoiceNo"
+                                                                    cssClass="form-control"
                                                                     [maxlength]="
                                                                         customTemplate.templateType ===
                                                                         templateTypeEnum.ThermalTemplate
@@ -832,7 +837,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -877,6 +882,7 @@
                                                                 <input-field
                                                                     type="text"
                                                                     maxlength="15"
+                                                                    cssClass="form-control"
                                                                     name="invoiceDate"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['header'].data[
@@ -893,7 +899,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -923,6 +929,7 @@
                                                             <div>
                                                                 <input-field
                                                                     type="text"
+                                                                    cssClass="form-control"
                                                                     maxlength="15"
                                                                     name="voucherNo"
                                                                     [(ngModel)]="
@@ -940,7 +947,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -978,6 +985,7 @@
                                                             <input-field
                                                                 type="text"
                                                                 name="dueDate1"
+                                                                cssClass="form-control"
                                                                 [label]="localeData?.due_date"
                                                                 maxlength="15"
                                                                 [(ngModel)]="
@@ -992,7 +1000,7 @@
                                                             ></input-field>
                                                         </div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -1010,7 +1018,7 @@
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.TallyTemplate"
                                             class="px-3 mr-t2"
                                         >
-                                            <p class="font-size-16 my-2">{{ localeData?.form }}</p>
+                                            <h4 class="font-16 my-2">{{ localeData?.form }}</h4>
 
                                             <!-- form name tax invoice -->
                                             <div class="d-flex">
@@ -1027,7 +1035,7 @@
                                                 >
                                                 </mat-checkbox>
                                                 <div class="w-100 ml-2">
-                                                    <div class="d-flex flex-column row-gap-1 mr-t1">
+                                                    <div class="d-flex flex-column row-gap1 mr-t1">
                                                         <span>{{ localeData?.document_title }}</span>
                                                         <!-- form name invoice -->
                                                         <div
@@ -1051,11 +1059,12 @@
                                                                             'formNameInvoice'
                                                                         ]?.display
                                                                     "
+                                                                    [cssClass]="'form-control'"
                                                                     maxlength="15"
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1071,6 +1080,7 @@
                                                             <div class="option-value-field">
                                                                 <input-field
                                                                     [type]="'text'"
+                                                                    [cssClass]="'form-control'"
                                                                     maxlength="15"
                                                                     name="taxTitle"
                                                                     [(ngModel)]="
@@ -1087,7 +1097,7 @@
                                                                 ></input-field>
                                                             </div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1102,8 +1112,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="px-3 d-flex flex-column row-gap-05 mr-t2">
-                                            <p class="font-size-16 my-2">{{ localeData?.customer_details }}</p>
+                                        <div class="px-3 d-flex flex-column row-gap5 mr-t2">
+                                            <h4 class="font-16 my-2">{{ localeData?.customer_details }}</h4>
                                             <!-- customer name -->
                                             <div *ngIf="sectionSettings?.header.customerName">
                                                 <mat-checkbox
@@ -1178,10 +1188,10 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="px-3 d-flex flex-column row-gap-05 mr-t2"
+                                            class="px-3 d-flex flex-column row-gap5 mr-t2"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
-                                            <p class="font-size-16 my-2">{{ localeData?.billing_details }}</p>
+                                            <h4 class="font-16 my-2">{{ localeData?.billing_details }}</h4>
                                             <!-- billing address -->
                                             <div *ngIf="sectionSettings?.header.billingAddress" class="mr-t2">
                                                 <div class="d-flex">
@@ -1219,6 +1229,7 @@
                                                                         ? 20
                                                                         : 18
                                                                 "
+                                                                cssClass="form-control"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['header'].data[
                                                                         'billingAddress'
@@ -1239,7 +1250,7 @@
                                                             "
                                                         >
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1305,6 +1316,7 @@
                                                                         ]?.label || ''
                                                                     "
                                                                     maxlength="15"
+                                                                    cssClass="form-control"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['header'].data[
                                                                             'billingGstin'
@@ -1329,7 +1341,7 @@
                                                             "
                                                         >
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1345,10 +1357,10 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="px-3 pb-3 mr-t2 d-flex flex-column row-gap-05"
+                                            class="px-3 pb-3 mr-t2 d-flex flex-column row-gap5"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
-                                            <p class="font-size-16 my-2">{{ localeData?.shipping_details }}</p>
+                                            <h4 class="font-16 my-2">{{ localeData?.shipping_details }}</h4>
                                             <!-- shipping address -->
                                             <div *ngIf="sectionSettings?.header.shippingAddress" class="mr-t2">
                                                 <div class="d-flex">
@@ -1375,6 +1387,7 @@
                                                                 "
                                                                 [type]="'text'"
                                                                 [name]="'shippAdd'"
+                                                                cssClass="form-control"
                                                                 name="shippingAddress"
                                                                 [maxlength]="
                                                                     customTemplate?.templateType ===
@@ -1397,7 +1410,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1457,6 +1470,7 @@
                                                                 "
                                                                 name="shippingGstin"
                                                                 maxlength="15"
+                                                                cssClass="form-control"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['header'].data[
                                                                         'shippingGstin'
@@ -1475,7 +1489,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -1504,7 +1518,7 @@
                                                         {{ localeData?.transport_details }}
                                                     </mat-panel-title>
                                                 </mat-expansion-panel-header>
-                                                <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap-05">
+                                                <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap5">
                                                     <!-- shipping date -->
                                                     <div *ngIf="sectionSettings?.header.shippingDate" class="mr-t1">
                                                         <div class="d-flex">
@@ -1537,11 +1551,12 @@
                                                                             ]?.display
                                                                         "
                                                                         maxlength="15"
+                                                                        [cssClass]="'form-control'"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-size-12">{{
+                                                                        <span class="light-gray font-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1586,11 +1601,12 @@
                                                                             ]?.display
                                                                         "
                                                                         maxlength="15"
+                                                                        [cssClass]="'form-control'"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-size-12">{{
+                                                                        <span class="light-gray font-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1642,12 +1658,13 @@
                                                                                 'trackingNumber'
                                                                             ]?.display
                                                                         "
+                                                                        [cssClass]="'form-control'"
                                                                         maxlength="15"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-size-12">{{
+                                                                        <span class="light-gray font-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1681,7 +1698,7 @@
                                                         {{ localeData?.bulk_update_fields.custom_fields }}
                                                     </mat-panel-title>
                                                 </mat-expansion-panel-header>
-                                                <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap-05">
+                                                <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap5">
                                                     <div *ngIf="sectionSettings?.header.customField1" class="mr-t1">
                                                         <div class="d-flex">
                                                             <mat-checkbox
@@ -1712,12 +1729,13 @@
                                                                                 'customField1'
                                                                             ]?.display
                                                                         "
+                                                                        [cssClass]="'form-control'"
                                                                         maxlength="15"
                                                                     ></input-field>
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-size-12">{{
+                                                                        <span class="light-gray font-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1751,6 +1769,7 @@
                                                                     <input-field
                                                                         [label]="localeData?.custom_field_2"
                                                                         [type]="'text'"
+                                                                        [cssClass]="'form-control'"
                                                                         maxlength="15"
                                                                         name="customField2"
                                                                         [(ngModel)]="
@@ -1768,7 +1787,7 @@
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-size-12">{{
+                                                                        <span class="light-gray font-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1802,6 +1821,7 @@
                                                                     <input-field
                                                                         [label]="localeData?.custom_field_3"
                                                                         [type]="'text'"
+                                                                        [cssClass]="'form-control'"
                                                                         maxlength="15"
                                                                         name="customField3"
                                                                         [(ngModel)]="
@@ -1819,7 +1839,7 @@
                                                                 </div>
                                                                 <div>
                                                                     <p class="mt-1">
-                                                                        <span class="light-gray font-size-12">{{
+                                                                        <span class="light-gray font-12">{{
                                                                             localeData?.characters_left
                                                                         }}</span>
                                                                         {{
@@ -1854,7 +1874,7 @@
                                 <div class="template-scroll px-3">
                                     <div
                                         *ngIf="customTemplate.sections['table']"
-                                        class="d-flex flex-column row-gap-05 mr-t1"
+                                        class="d-flex flex-column row-gap5 mr-t1"
                                     >
                                         <div
                                             *ngIf="
@@ -1876,6 +1896,7 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [label]="localeData?.s_no"
+                                                            [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="ss"
                                                             [(ngModel)]="
@@ -1889,7 +1910,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -1958,6 +1979,7 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [label]="commonLocaleData?.app_date"
+                                                            [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="dt1"
                                                             [(ngModel)]="
@@ -1976,7 +1998,7 @@
                                                         "
                                                     >
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2012,6 +2034,7 @@
                                                                 [type]="'text'"
                                                                 [label]="localeData?.item"
                                                                 [name]="'item'"
+                                                                [cssClass]="'form-control'"
                                                                 [maxlength]="
                                                                     customTemplate.templateType ===
                                                                     templateTypeEnum.TallyTemplate
@@ -2031,7 +2054,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -2057,6 +2080,7 @@
                                                             [type]="'text'"
                                                             [label]="localeData?.item"
                                                             [name]="'item'"
+                                                            [cssClass]="'form-control'"
                                                             [maxlength]="
                                                                 customTemplate.templateType ===
                                                                 templateTypeEnum.TallyTemplate
@@ -2075,7 +2099,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2134,6 +2158,7 @@
                                                             [type]="'text'"
                                                             [label]="localeData?.hsn_sac"
                                                             [name]="'hsnsac'"
+                                                            [cssClass]="'form-control'"
                                                             maxlength="8"
                                                             name="hsn1"
                                                             [(ngModel)]="
@@ -2147,7 +2172,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2186,6 +2211,7 @@
                                                                 [type]="'text'"
                                                                 [label]="commonLocaleData?.app_quantity"
                                                                 [name]="'quantity'"
+                                                                [cssClass]="'form-control'"
                                                                 [maxlength]="
                                                                     customTemplate.templateType ===
                                                                     templateTypeEnum.TallyTemplate
@@ -2206,7 +2232,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -2233,6 +2259,7 @@
                                                             [type]="'text'"
                                                             [label]="commonLocaleData?.app_quantity"
                                                             [name]="'quantity'"
+                                                            [cssClass]="'form-control'"
                                                             [maxlength]="
                                                                 customTemplate.templateType ===
                                                                 templateTypeEnum.TallyTemplate
@@ -2252,7 +2279,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2285,6 +2312,7 @@
                                                         <input-field
                                                             [label]="commonLocaleData?.app_description"
                                                             [type]="'text'"
+                                                            [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="dsc1"
                                                             [(ngModel)]="
@@ -2300,7 +2328,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2336,6 +2364,7 @@
                                                             <input-field
                                                                 [label]="localeData?.rate"
                                                                 [type]="'text'"
+                                                                [cssClass]="'form-control'"
                                                                 maxlength="10"
                                                                 name="rt1"
                                                                 [(ngModel)]="
@@ -2350,7 +2379,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -2373,6 +2402,7 @@
                                                         <input-field
                                                             [label]="localeData?.rate"
                                                             [type]="'text'"
+                                                            [cssClass]="'form-control'"
                                                             maxlength="10"
                                                             name="rt1"
                                                             [(ngModel)]="
@@ -2386,7 +2416,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2443,6 +2473,7 @@
                                                             [type]="'text'"
                                                             [label]="localeData?.discount_per_item"
                                                             maxlength="10"
+                                                            [cssClass]="'form-control'"
                                                             name="ds1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['discount'].label
@@ -2456,7 +2487,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2495,6 +2526,7 @@
                                                             [type]="'text'"
                                                             [label]="commonLocaleData?.app_taxable_value"
                                                             maxlength="14"
+                                                            [cssClass]="'form-control'"
                                                             name="tv1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['taxableValue']
@@ -2509,7 +2541,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2540,6 +2572,7 @@
                                                             [type]="'text'"
                                                             maxlength="10"
                                                             [label]="commonLocaleData?.app_tax"
+                                                            [cssClass]="'form-control'"
                                                             name="t1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['tax'].label
@@ -2552,7 +2585,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2594,6 +2627,7 @@
                                                                     ? 5
                                                                     : 6
                                                             "
+                                                            [cssClass]="'form-control'"
                                                             name="tot1"
                                                             [(ngModel)]="
                                                                 customTemplate.sections['table'].data['total'].label
@@ -2613,7 +2647,7 @@
                                                                     templateTypeEnum.ThermalTemplate
                                                             }"
                                                         >
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2655,6 +2689,7 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [label]="localeData?.previous_due"
+                                                            [cssClass]="'form-control'"
                                                             maxlength="14"
                                                             name="previousDue"
                                                             [(ngModel)]="
@@ -2670,7 +2705,7 @@
                                                     </div>
                                                     <div>
                                                         <p class="mt-1">
-                                                            <span class="light-gray font-size-12">{{
+                                                            <span class="light-gray font-12">{{
                                                                 localeData?.characters_left
                                                             }}</span>
                                                             {{
@@ -2768,6 +2803,7 @@
                                                             [label]="localeData?.show_bank_qr_code"
                                                             [type]="'text'"
                                                             [name]="'qrcode'"
+                                                            [cssClass]="'form-control'"
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [(ngModel)]="customTemplate.qrCodeId"
@@ -2811,7 +2847,7 @@
                                 </mat-expansion-panel-header>
                                 <div class="template-scroll px-3">
                                     <div>
-                                        <div class="d-flex flex-column row-gap-05">
+                                        <div class="d-flex flex-column row-gap5">
                                             <ng-container
                                                 *ngIf="
                                                     customTemplate?.templateType === templateTypeEnum.GstTemplateA &&
@@ -2838,6 +2874,7 @@
                                                                     [label]="localeData?.tcs"
                                                                     name="tcs"
                                                                     maxlength="10"
+                                                                    [cssClass]="'form-control'"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['footer'].data['tcs']
                                                                             .label
@@ -2851,7 +2888,7 @@
                                                             </div>
                                                             <div>
                                                                 <p class="mt-1">
-                                                                    <span class="light-gray font-size-12">{{
+                                                                    <span class="light-gray font-12">{{
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
@@ -2891,6 +2928,7 @@
                                                                     name="tdsLabel"
                                                                     maxlength="10"
                                                                     [label]="localeData?.tds"
+                                                                    [cssClass]="'form-control'"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['footer'].data['tds']
                                                                             .label
@@ -2904,7 +2942,7 @@
                                                             </div>
                                                             <div>
                                                                 <p class="mt-1">
-                                                                    <span class="light-gray font-size-12">{{
+                                                                    <span class="light-gray font-12">{{
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
@@ -2946,6 +2984,7 @@
                                                                     [label]="commonLocaleData?.app_total_due"
                                                                     maxlength="40"
                                                                     name="totalDue"
+                                                                    [cssClass]="'form-control'"
                                                                     [(ngModel)]="
                                                                         customTemplate.sections['footer'].data[
                                                                             'totalDue'
@@ -2961,7 +3000,7 @@
                                                             </div>
                                                             <div>
                                                                 <p class="mt-1">
-                                                                    <span class="light-gray font-size-12">{{
+                                                                    <span class="light-gray font-12">{{
                                                                         localeData?.characters_left
                                                                     }}</span>
                                                                     {{
@@ -3010,6 +3049,7 @@
                                                                 [label]="commonLocaleData?.app_company_name"
                                                                 [type]="'text'"
                                                                 [maxlength]="50"
+                                                                [cssClass]="'form-control'"
                                                                 name="footerCompanyName"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['footer'].data[
@@ -3033,7 +3073,7 @@
                                                             "
                                                         >
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3089,7 +3129,7 @@
                                                         <div>
                                                             <mat-form-field
                                                                 appearance="outline"
-                                                                class="initial-height w-100 address-text"
+                                                                class="w-100 address-text"
                                                             >
                                                                 <mat-label>{{ localeData?.company_address }}</mat-label>
                                                                 <textarea
@@ -3114,7 +3154,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3183,6 +3223,7 @@
                                                                 [label]="localeData?.total_quantity"
                                                                 name="totalQuantity"
                                                                 maxlength="13"
+                                                                [cssClass]="'form-control'"
                                                                 [placeholder]="localeData?.total_quantity"
                                                                 [disabled]="!sectionSettings?.table.quantity?.display"
                                                                 (keyup)="onChangeFieldVisibility()"
@@ -3195,7 +3236,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3234,6 +3275,7 @@
                                                                 [type]="'text'"
                                                                 [label]="localeData.discount"
                                                                 maxlength="10"
+                                                                [cssClass]="'form-control'"
                                                                 name="ds1"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['table'].data['discount']
@@ -3248,7 +3290,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3290,6 +3332,7 @@
                                                             ]?.label || ''"
                                                                 [type]="'text'"
                                                                 maxlength="14"
+                                                                [cssClass]="'form-control'"
                                                                 name="tv1"
                                                                 [(ngModel)]="
                                                                     customTemplate.sections['footer'].data[
@@ -3306,7 +3349,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3440,6 +3483,7 @@
                                                             [label]="localeData?.show_bank_qr_code"
                                                             [floatLabel]="'always'"
                                                             name="bankQrCode"
+                                                            [cssClass]="'form-control'"
                                                             [readonly]="!customTemplate.showBankQrCode"
                                                             [placeholder]="localeData?.enter_upi_id"
                                                             (ngModelChange)="onChangeFieldVisibility()"
@@ -3565,7 +3609,7 @@
                                                         <div>
                                                             <mat-form-field
                                                                 appearance="outline"
-                                                                class="initial-height w-100 address-text"
+                                                                class="w-100 address-text"
                                                             >
                                                                 <mat-label>{{ localeData?.note_1 }}</mat-label>
                                                                 <textarea
@@ -3617,7 +3661,7 @@
                                                             "
                                                         >
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3677,6 +3721,7 @@
                                                                 [type]="'text'"
                                                                 name="thanks"
                                                                 maxlength="30"
+                                                                [cssClass]="'form-control'"
                                                                 placeholder="{{ localeData?.thanks }}"
                                                                 [readonly]="!sectionSettings?.footer.thanks?.display"
                                                                 (keyup)="onChangeFieldVisibility()"
@@ -3688,7 +3733,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3745,6 +3790,7 @@
                                                                 [type]="'text'"
                                                                 name="textUnderSlogan"
                                                                 [label]="localeData?.text_under_image_signature"
+                                                                [cssClass]="'form-control'"
                                                                 [placeholder]="localeData?.text_under_slogan"
                                                                 [readonly]="
                                                                     !sectionSettings?.footer.textUnderSlogan?.display
@@ -3760,7 +3806,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="mt-1">
-                                                                <span class="light-gray font-size-12">{{
+                                                                <span class="light-gray font-12">{{
                                                                     localeData?.characters_left
                                                                 }}</span>
                                                                 {{
@@ -3780,7 +3826,7 @@
                                                 *ngIf="
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
-                                                class="clear-both mr-t1"
+                                                class="clearfix mr-t1"
                                             >
                                                 <mat-radio-group
                                                     [(ngModel)]="selectedSignatureType"
@@ -3789,7 +3835,7 @@
                                                     class="d-flex flex-wrap w-100"
                                                 >
                                                     <div class="d-flex w-100">
-                                                        <div class="clear-both" class="w-50">
+                                                        <div class="clearfix" class="w-50">
                                                             <div
                                                                 *ngIf="
                                                                     customTemplate?.templateType !==
@@ -3811,8 +3857,8 @@
                                                             >
                                                                 {{ localeData?.image_signature }}
                                                             </div>
-                                                            <div class="form-group mr-l3 clear-both d-flex column-gap-15">
-                                                                <span class="clear-both">
+                                                            <div class="form-group mr-l3 clearfix d-flex column-gap15">
+                                                                <span class="clearfix">
                                                                     <label
                                                                         class="upload-button text-center cursor-pointer"
                                                                         for="signatureImg-edit"
@@ -3870,7 +3916,7 @@
                                                             </div>
                                                         </div>
                                                         <div
-                                                            class="clear-both"
+                                                            class="clearfix"
                                                             class="col-lg-6 col-md-12"
                                                             *ngIf="
                                                                 customTemplate?.templateType !==
@@ -3882,7 +3928,7 @@
                                                                     {{ localeData?.slogan }}
                                                                 </mat-radio-button>
 
-                                                                <div class="form-group ml-3 clear-both">
+                                                                <div class="form-group ml-3 clearfix">
                                                                     <div>
                                                                         <div>
                                                                             <textarea

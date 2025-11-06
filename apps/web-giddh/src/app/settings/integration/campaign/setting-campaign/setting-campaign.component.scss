@@ -32,7 +32,6 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: auth-label - Auto-commented by script
 .auth-label {
     float: left;
     width: 100%;
@@ -41,13 +40,12 @@
     color: var(--color-black);
     font-size: var(--font-size-15) !important;
 }
-*/
 
 .msg91-container {
     position: relative;
     border: 1px solid var(--color-border-light);
-    background-color: var(--theme-primary-light) !important;
-    border-radius: var(--mat-border-radius-8);
+    background-color: var(--color-blue-light) !important;
+    border-radius: 7px;
     cursor: pointer;
     width: 241px;
     height: 96px;
@@ -131,12 +129,10 @@
             visibility: hidden;
         }
 
-        /* UNUSED COMPONENT CLASS: active-trigger-search - Auto-commented by script
-.active-trigger-search {
+        .active-trigger-search {
             position: relative;
             bottom: 2px;
         }
-*/
     }
 }
 
@@ -144,14 +140,12 @@
     border: 1px solid var(--color-red) !important;
     float: left;
     width: 100%;
-    border-radius: var(--mat-border-radius-4);
+    border-radius: 5px;
 }
 
-/* UNUSED COMPONENT CLASS: mandatory-label - Auto-commented by script
 .mandatory-label {
     color: var(--color-red);
 }
-*/
 
 .dropdown-heading {
     font-size: var(--font-size-15) !important;
@@ -186,8 +180,7 @@
         }
 
         .trigger-input {
-            /* UNUSED COMPONENT CLASS: trigger-input-label - Auto-commented by script
-.trigger-input-label {
+            .trigger-input-label {
                 font-size: var(--font-size-15);
                 float: left;
                 width: 100%;
@@ -198,7 +191,6 @@
                     color: var(--color-red);
                 }
             }
-*/
         }
 
         button {
@@ -231,23 +223,17 @@
             margin-top: 53px;
             width: 35%;
 
-            /* UNUSED COMPONENT CLASS: right-label - Auto-commented by script
-.right-label {
+            .right-label {
                 margin-left: 25px;
             }
-*/
 
-            /* UNUSED COMPONENT CLASS: bottom-label - Auto-commented by script
-.bottom-label {
+            .bottom-label {
                 margin-top: 12px;
             }
-*/
 
-            /* UNUSED COMPONENT CLASS: preview-button - Auto-commented by script
-.preview-button {
+            .preview-button {
                 margin-top: 25px;
             }
-*/
         }
 
         .dropdown-box-2 {

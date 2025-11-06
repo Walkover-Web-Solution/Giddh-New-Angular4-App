@@ -55,17 +55,17 @@
                 !activeCompanyGstNumber
         }"
     >
-        <div class="header-band filings-header clear-both">
+        <div class="header-band filings-header clearfix">
             <div class="header-info pull-left">
                 <ul class="list-inline list-middle">
                     <li>
-                        <span class="font-weight-regular"> {{ localeData?.gst_summary_for }} </span>
+                        <span class="normal"> {{ localeData?.gst_summary_for }} </span>
                     </li>
                     <li>
                         <giddh-datepicker
                             [monthYearMode]="true"
                             [startView]="'multi-year'"
-                            [cssClass]="'text-center width-150'"
+                            [cssClass]="'text-center w150'"
                             [startAt]="startAt"
                             [placeholder]="date?.value ?? '--'"
                             [appearance]="'outline'"
@@ -90,8 +90,8 @@
                     class="return-content pd-15 d-flex justify-content-between align-items-center flex-wrap"
                     [ngClass]="{ 'content-disabled': !isMonthSelected || !activeCompanyGstNumber }"
                 >
-                    <div class="d-flex justify-content-between align-items-center column-gap-1">
-                        <img src="{{ imgPath }}summary.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="summary img" />
+                    <div class="d-flex justify-content-between align-items-center column-gap1">
+                        <img src="{{ imgPath }}summary.svg" class="icon gstr-icon text-middle" alt="summary img" />
                         <b>{{ localeData?.gstr3b_summary }}</b>
                     </div>
                     <button
@@ -106,7 +106,7 @@
                 <!-- ============================ GSTR3B SUMMARY ================================== -->
                 <div class="seperate-border mr-t1"></div>
                 <!-- ============================ GSTR1 ================================== -->
-                <div class="mt-2 parent position-relative ">
+                <div class="mt-2 parent position-relative">
                     <div
                         class="return-content pd-15"
                         [ngClass]="{
@@ -115,9 +115,9 @@
                     >
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <img src="{{ imgPath }}cart.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="cart-img" />
+                                <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart-img" />
                                 <div class="mt-1">
-                                    <div class="font-size-16">
+                                    <div class="font-xlarge">
                                         <b class="text-middle"
                                             >{{ localeData?.gstr1_label }}
                                             <ng-container *ngIf="isMonthSelected">
@@ -148,13 +148,13 @@
 
                         <div class="content-graph" *ngIf="gstr1TransactionCounts">
                             <div class="sales-colm">
-                                <div class="text-muted text-uppercase font-size-12">
+                                <div class="text-muted text-uppercase font-xs">
                                     <b> {{ localeData?.all_transactions }} </b>
                                 </div>
                                 <div class="line"></div>
                                 <div class="count">
                                     <a (click)="navigateToOverview(GstReport.Gstr1)" href="javascript:void(0);" aria-label="transaction"
-                                        ><span class="font-size-24"
+                                        ><span class="font-xxxlarge"
                                             ><b> {{ gstr1TransactionCounts }} </b></span
                                         >
                                         <span>{{ commonLocaleData?.app_transactions }}</span></a
@@ -245,7 +245,7 @@
                 <!-- ============================ GSTR1 ================================== -->
                 <div class="seperate-border mr-t1"></div>
                 <!-- ============================ GSTR2 ================================== -->
-                <div class="mt-2 position-relative ">
+                <div class="mt-2 position-relative">
                     <div class="text-overdue ss" *ngIf="!isMonthSelected">
                         <i class="text-middle">{{ localeData?.month_report_download_note_gstr2 }}</i>
                     </div>
@@ -269,9 +269,9 @@
                     </button>
 
                     <div>
-                        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="bag img"  />
+                        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="bag img"  />
                         <div class="mt-1">
-                            <div class="font-size-16">
+                            <div class="font-xlarge">
                                 <b
                                     >{{ localeData?.gstr2_label }}
 
@@ -291,13 +291,13 @@
 
                     <div class="content-graph gstr2-push-disabled" *ngIf="gstr2TransactionCounts">
                         <div class="purchase-colm">
-                            <div class="text-muted text-uppercase font-size-12">
+                            <div class="text-muted text-uppercase font-xs">
                                 <b> {{ localeData?.all_transactions }} </b>
                             </div>
                             <div class="line"></div>
                             <div class="count">
                                 <a (click)="navigateToOverview(GstReport.Gstr2)"  href="javascript:void(0);"  aria-label="transaction"
-                                    ><span class="font-size-24"
+                                    ><span class="font-xxxlarge"
                                         ><b> {{ gstr2TransactionCounts }} </b></span
                                     >
                                     <span>&nbsp;{{ localeData?.app_transactions }}</span></a
@@ -306,14 +306,14 @@
                         </div>
 
                         <div class="purchase-colm">
-                            <div class="text-muted text-uppercase font-size-12">
+                            <div class="text-muted text-uppercase font-xs">
                                 <b>{{ localeData?.uncategorized }}</b>
                             </div>
                             <div class="line"></div>
                             <div class="count">
                                 <a
                                     href="javascript:void(0);"  aria-label="transaction"
-                                    ><span class="font-size-24"
+                                    ><span class="font-xxxlarge"
                                         ><b>{{ commonLocaleData?.app_numbers?.zero }}</b></span
                                     >
                                     <span>&nbsp;{{ localeData?.app_transactions }}</span></a
@@ -331,7 +331,7 @@
                                     d="M256.5 348.9c-17.7 0-32 14.1-32 31.6s14.3 31.6 32 31.6 32-14.2 32-31.6c.1-17.4-14.3-31.6-32-31.6zm-.8-246.2c-25.8 0-45.7 22.6-42.5 47.9 2.7 20.9 22.5 125.3 29.2 159.9 1.3 6.5 7 12.3 13.7 12.3h.3c6.5 0 12.1-5.7 13.3-12 6.5-34.1 26.5-138.9 29.1-160.2 3.3-25.6-17-47.9-43.1-47.9z"
                                 ></path>
                             </svg>
-                            <i class="text-vertical-align-middle p-0 mr-l05">{{ localeData?.gstr2_push_disabled }}</i>
+                            <i class="text-middle p-0 mr-l05">{{ localeData?.gstr2_push_disabled }}</i>
                         </div>
                     </div>
 
@@ -412,7 +412,7 @@
                             ></path>
                         </svg>
                         <div class="return-top text-middle">
-                            <div class="font-size-16">
+                            <div class="font-xlarge">
                                 <b>{{ localeData?.final_return_gstr3 }}</b>
                             </div>
                         </div>
@@ -442,7 +442,7 @@
                             ></path>
                         </svg>
                         <div class="return-top text-middle">
-                            <div class="font-size-16">
+                            <div class="font-xlarge">
                                 <b>{{ localeData?.tax_payments }}</b>
                             </div>
                             <p>{{ localeData?.record_tax_payments }}</p>

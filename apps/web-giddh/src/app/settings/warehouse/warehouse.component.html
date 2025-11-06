@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <ng-container *ngIf="warehouses">
-        <div class="warehouse-card-view pd-15">
+        <div class="warehouse-card-view mt-4">
             <div class="row">
                 <div class="mr-b15 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
                     <div class="d-flex align-items-center">
@@ -25,7 +25,7 @@
                             aria-label="cross icon"
                             [matTooltip]="localeData?.reset_search"
                         >
-                            <i aria-hidden="true" class="icon-cross d-inline-block font-size-12 mr-1"></i>
+                            <i aria-hidden="true" class="icon-cross d-inline-block font-12 mr-1"></i>
                             <span>{{ commonLocaleData?.app_clear_filter }}</span>
                         </button>
                     </div>
@@ -45,7 +45,7 @@
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="no-data" *ngIf="!warehouses?.length && !showLoader">
-                <h2>{{ localeData?.no_warehouse_found }}</h2>
+                <h1>{{ localeData?.no_warehouse_found }}</h1>
             </div>
             <div *ngIf="!showLoader" class="row warehouse-box">
                 <div
@@ -54,10 +54,10 @@
                 >
                     <div class="warehouse-card">
                         <div class="d-flex">
-                            <p>{{ warehouse.name }}</p>
+                            <h3>{{ warehouse.name }}</h3>
                             <div class="warehouse-options">
                                 <span
-                                    class="warehouse-status font-size-15"
+                                    class="warehouse-status font-15"
                                     [ngClass]="{
                                         'warehouse-archived': warehouse.isArchived,
                                         'warehouse-active': !warehouse.isArchived
@@ -71,7 +71,7 @@
                                 >
                                 <div class="btn-group" dropdown>
                                     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="vertical dots">
-                                        <span class="icon-dots-three-vertical mr-0 font-size-14 d-block"></span>
+                                        <span class="icon-dots-three-vertical mr-0 font-14 d-block"></span>
                                     </button>
                                     <mat-menu #menu="matMenu">
                                         <button mat-menu-item (click)="editWarehouse(warehouse)" *ngIf="voucherApiVersion === 2">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                         <div class="warehouse-details">
-                            <div class="clear-both about-warehouse">
+                            <div class="clearfix about-warehouse">
                                 <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
                                 <div class="parent-branch pd-t1 pd-b1">{{ localeData?.linked_address }}:</div>
                                 <div>
@@ -119,7 +119,7 @@
                                                     }
                                                 ]"
                                             >
-                                                <div class="tax-tooltip font-size-14 custom-cdk-overlay-wrapper" (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
+                                                <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper" (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
                                                 (mouseleave)="openAddressInfo(false)">
                                                     {{ address?.address }} {{ address?.stateCode }}
                                                     <p *ngIf="address?.taxType && address?.taxNumber">
@@ -145,7 +145,7 @@
                 </div>
             </div>
         </div>
-        <div class="warehouse-pagination">
+        <div class="warehouse-pagination mt-4">
             <mat-paginator
                 *ngIf="warehouses?.length && paginationConfig?.totalItems > pageSizeOptions[0]"
                 [length]="paginationConfig?.totalItems"

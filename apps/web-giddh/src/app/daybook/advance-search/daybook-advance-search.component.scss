@@ -1,13 +1,17 @@
 input {
     width: 100% !important;
 }
-/* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
 input.form-control.date-range-picker {
     text-align: left;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
 }
-*/
-/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
+.custom-datepicker {
+    i {
+        left: 15px;
+        top: 0;
+        color: var(--color-dark-gray);
+    }
+}
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -17,11 +21,8 @@ input.form-control.date-range-picker {
     align-items: center;
     cursor: pointer;
 }
-*/
-/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
 .modal-header {
     > .close {
         top: 10px !important;
     }
 }
-*/

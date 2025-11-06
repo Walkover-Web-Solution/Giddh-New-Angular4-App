@@ -9,8 +9,8 @@
 </div>
 <mat-dialog-content class="dialog-body">
     <div *ngIf="!isLoading">
-        <div id="my-frame" class="modal-body move-company-modal-body clear-both">
-            <p class="text-default mb-3" [innerHTML]="getMovePlanText()"></p>
+        <div id="my-frame" class="modal-body move-company-modal-body clearfix">
+            <p class="text-black mb-3" [innerHTML]="getMovePlanText()"></p>
             <div class="row mb-3">
                 <div class="col-md-12 move-wrapper">
                     <div>
@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="clear-both">
+            <div class="clearfix">
                 <button
                     mat-raised-button
                     color="primary"

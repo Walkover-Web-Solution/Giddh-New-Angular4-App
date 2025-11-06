@@ -19,7 +19,7 @@
                 <mat-autocomplete (opened)="panelOpened()" (optionSelected)="optionSelected($event)" optionsScroll class="py-0"
                     [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
                     [displayWith]="displayLabel" #auto="matAutocomplete">
-                    <span class="position-relative ">
+                    <span class="position-relative">
                         <ng-container *ngFor="let option of fieldFilteredOptions$ | async">
                             <mat-option [value]="option"
                                 [matTooltip]="option?.label" matTooltipPosition="right" (click)="$event.stopPropagation()" [disabled]="option?.additional?.disabled">

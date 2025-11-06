@@ -1,19 +1,19 @@
-.content-wrapper-statement {
-    position: relative;
-    z-index: 1;
-}
+    .content-wrapper-statement {
+        position: relative;
+        z-index: 1;
+    }
 .wrap-transaction-map {
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
     border-bottom: none !important;
 
     .ledger-book {
         box-shadow: none;
 
         .left-col-new {
-            border-right: 1px solid var(--border-color);
+            border-right: 1px solid var(--color-silver);
         }
 
-.checkbox-span {
+        .checkbox-span {
             height: 49px;
             min-height: 49px;
             display: flex;
@@ -36,7 +36,6 @@
                 }
             }
 
-            
             &.highlighted-transaction {
                 .mat-grid-tile {
                     background-color: var(--color-success-light) !important;
@@ -70,6 +69,7 @@
         }
 
         input,
+        sh-select,
         .form-control {
             min-height: 49px;
             height: 49px;
@@ -91,12 +91,12 @@
 
 #ledger-transaction-left-list .mat-grid-tile,
 #ledger-transaction-right-list .mat-grid-tile {
-    border-bottom: 1px solid var(--border-color) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
 }
 
 #ledger-transaction-right-list,
 #ledger-transaction-left-list {
-    border-bottom: 1px solid var(--border-color) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
 }
 
 .form-control,
@@ -104,10 +104,15 @@ input {
     color: var(--color-black);
 }
 
+.notfound-option {
+    display: flex;
+    justify-content: space-between;
+}
+
 .ledg-head .mat-grid-list .mat-grid-tile {
     padding: 8px 10px;
-    border-bottom: 1px solid var(--border-color) !important;
-    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--color-silver) !important;
+    border-right: 1px solid var(--color-silver);
     font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -131,7 +136,7 @@ input {
 
 .transaction-mapped-table .mat-grid-tile {
     padding: 10px !important;
-    border-bottom: 1px solid var(--border-color) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
 }
 
 table.ledger-footer-1 td[class*="col-"] {
@@ -139,24 +144,28 @@ table.ledger-footer-1 td[class*="col-"] {
     background-color: var(--color-white);
 }
 
-/* UNUSED COMPONENT CLASS: entry-popup - Auto-commented by script
+.ledg-head table td.pd-r25 {
+    padding-right: 25px !important;
+}
+
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--color-silver);
+    border-right: 1px solid var(--color-silver);
     font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-*/
+
+.ledg-head.entry-popup table td.pd-r25 {
+    padding-right: 25px !important;
+}
 
 .transaction-mapped-table {
-    /* UNUSED COMPONENT CLASS: top-head-table - Auto-commented by script
-.top-head-table {
+    .top-head-table {
         border-top: none;
     }
-*/
 
     thead {
         th {
@@ -164,17 +173,16 @@ table.ledger-footer-1 td[class*="col-"] {
         }
     }
 
-    /* UNUSED COMPONENT CLASS: transaction-mapped-head - Auto-commented by script
-.transaction-mapped-head {
+    .transaction-mapped-head {
         border-top: none !important;
     }
-*/
 
     .ledger-main {
         .ledger-row.row {
+
             td,
             th {
-                border-bottom: 1px solid var(--border-color) !important;
+                border-bottom: 1px solid var(--color-silver) !important;
                 border-top: none !important;
             }
 
@@ -192,12 +200,10 @@ table.ledger-footer-1 td[class*="col-"] {
     }
 
     tr {
-        /* td UNUSED COMPONENT CLASS: upper-td - Auto-commented by script
-.upper-td {
+        td.upper-td {
             padding: 0 !important;
             border: none !important;
         }
-*/
     }
 }
 
@@ -205,16 +211,13 @@ table.ledger-footer-1 td[class*="col-"] {
     border: 0 !important;
 }
 
-/* UNUSED COMPONENT CLASS: ledger-main - Auto-commented by script
 .ledger-main .form-control {
     border: 0;
 }
-/* UNUSED COMPONENT CLASS: thead-background1 - Auto-commented by script
 
 .thead-background1 th {
     border-left: 0;
 }
-*/
 
 .ledg-head {
     .single-search-box {
@@ -228,18 +231,16 @@ table.ledger-footer-1 td[class*="col-"] {
         }
 
         .mat-form-field {
-            /* UNUSED COMPONENT CLASS: mat-icon-button - Auto-commented by script
-.mat-icon-button {
+            .mat-icon-button {
                 top: -22px;
                 left: -34px;
             }
-*/
         }
     }
 }
 
 .ledger-head-top i.icon-search.position-absolute {
-    background-color: var(--bg-primary-color);
+    background-color: var(--color-blue-primary);
     color: var(--color-white);
     width: 32px;
     height: 36px;
@@ -249,12 +250,12 @@ table.ledger-footer-1 td[class*="col-"] {
     justify-content: center;
     align-items: center;
     right: 0 !important;
-    border-radius: var(--mat-border-radius-0);
+    border-radius: 2px;
 }
 
 .ledger-stat {
     padding: 10px 15px 0;
-    // background: var(--color-white);
+    background: var(--color-white);
     color: var(--color-dark-gray);
     font-size: var(--font-size-16);
     box-shadow: 0px 2px 6px var(--color-shadow-light);
@@ -267,13 +268,11 @@ table.ledger-footer-1 td[class*="col-"] {
     flex-wrap: wrap;
 }
 
-/* UNUSED COMPONENT CLASS: account_Name - Auto-commented by script
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
     font-weight: var(--font-weight-semibold);
     text-transform: capitalize;
 }
-*/
 
 .ledger-footer-1 {
     position: absolute;
@@ -290,7 +289,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .ledger-head .mat-grid-list .mat-grid-tile {
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
     padding-top: 5px !important;
     padding-bottom: 10px !important;
     border-right: none;
@@ -322,7 +321,7 @@ table.ledger-footer-1 td[class*="col-"] {
     left: 5% !important;
     right: 5%;
     bottom: 100px;
-    // background: var(--color-white);
+    background: var(--color-white);
     padding: 5px;
     font-size: var(--font-size-12);
     z-index: 0;
@@ -334,35 +333,40 @@ table.ledger-footer-1 td[class*="col-"] {
     width: 100%;
     text-align: center;
 }
-/* UNUSED COMPONENT CLASS: ledger-panel - Auto-commented by script
+
+.pagination>li>a:hover {
+    color: var(--color-red);
+}
+
 .ledger-panel label {
     font-weight: 400;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: upload-div - Auto-commented by script
 .upload-div {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
 }
-*/
 
 .upload-div label {
     padding: 6px;
 }
 
+.pd-r25 {
+    padding-right: 25px !important;
+}
+
 .thead-background1 th {
-    // background: var(--color-white);
-    // color: var(--color-black);
-    border-right: 1px solid var(--border-color);
+    background: var(--color-white);
+    color: var(--color-black);
+    border-right: 1px solid var(--color-silver);
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--color-silver);
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-15);
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--color-silver);
 }
 
 .ledger-main .form-control,
@@ -371,7 +375,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .ledger-book {
-    border: 0px solid var(--border-color);
+    border: 0px solid var(--color-silver);
     clear: both;
     position: relative;
     float: left;
@@ -381,14 +385,11 @@ table.ledger-footer-1 td[class*="col-"] {
     box-shadow: 0 0 6px var(--color-shadow-light);
 }
 
-/* UNUSED COMPONENT CLASS: Width600 - Auto-commented by script
 .Width600 {
     position: absolute;
     width: 600px;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: daterange-picker-ledger - Auto-commented by script
 .daterange-picker-ledger {
     border: 0;
     background-color: transparent !important;
@@ -400,16 +401,13 @@ table.ledger-footer-1 td[class*="col-"] {
     cursor: default;
     top: 1px;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: input-wrapper - Auto-commented by script
 .input-wrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
     height: 37px !important;
 }
-*/
 
 .input-wrapper:before {
     position: absolute;
@@ -424,12 +422,10 @@ table.ledger-footer-1 td[class*="col-"] {
     display: none;
 }
 
-/* UNUSED COMPONENT CLASS: C-flex-end - Auto-commented by script
 .C-flex-end {
     display: flex;
     justify-content: flex-end;
 }
-*/
 
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
@@ -440,11 +436,19 @@ input[type="date"]::-webkit-outer-spin-button {
     display: none;
 }
 
-/* UNUSED COMPONENT CLASS: focus-unset - Auto-commented by script
 .focus-unset.ledger-main .form-control:focus {
     border: unset !important;
 }
-*/
+
+sh-select:focus {
+    outline: 1px var(--color-red) solid;
+}
+
+.notfound-option.active {
+    background: var(--color-border-light) !important;
+    padding: 2px 5px !important;
+}
+
 .amount-total {
     font-size: var(--font-size-12);
     color: var(--color-medium-gray);
@@ -452,51 +456,43 @@ input[type="date"]::-webkit-outer-spin-button {
 }
 
 .ledger-book {
-    /* UNUSED COMPONENT CLASS: statement-view - Auto-commented by script
+
     .left-col-new,
     .right-col-new,
-    
-.statement-view {
+    .statement-view {
         background: var(--color-white);
         padding: 0 0px 350px;
     }
-*/
 }
 
-/* UNUSED COMPONENT CLASS: mat-grid-title - Auto-commented by script
 .left-col-new .mat-grid-list .mat-grid-title:last-child,
-.left-col-new .mat-grid-list
-.mat-grid-title:last-child {
+.left-col-new .mat-grid-list .mat-grid-title:last-child {
     border-right: 0px !important;
 }
-*/
 
 .left-col-new .mat-grid-list .mat-grid-title:first-child,
 .left-col-new .mat-grid-list .mat-grid-title:first-child {
-    border-left: 1px solid var(--border-color) !important;
+    border-left: 1px solid var(--color-silver) !important;
 }
 
-/* UNUSED COMPONENT CLASS: icomoon-ico - Auto-commented by script
-.ledg-head 
-.icomoon-ico {
+.ledg-head .icomoon-ico {
     color: var(--color-dark-gray);
     width: 36px;
     min-width: 36px;
     height: 36px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
     padding: 3px;
     display: flex;
     justify-content: center;
     border-top-width: 1px;
     background-color: var(--color-white);
-    border-radius: var(--mat-border-radius-4);
+    border-radius: 5px;
 }
-*/
 
 .advance-search-block input {
     background: var(--color-light-gray) !important;
     height: 28px;
-    border-color: var(--border-color) !important;
+    border-color: var(--color-light-gray) !important;
 }
 
 .advance-search-block input::placeholder {
@@ -518,52 +514,41 @@ input[type="date"]::-webkit-outer-spin-button {
         max-width: 80% !important;
     }
 
-    /* UNUSED COMPONENT CLASS: custom-tabs - Auto-commented by script
-.custom-tabs {
-        /* UNUSED COMPONENT CLASS: nav - Auto-commented by script
-.nav/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
-.nav-tabs {
+    .custom-tabs {
+        .nav.nav-tabs {
             position: static !important;
             background-color: var(--color-white) !important;
             padding: 0 5px !important;
         }
     }
-*/
 }
 
-/* UNUSED COMPONENT CLASS: icon-search - Auto-commented by script
-.advance-search-block 
-.icon-search {
+.advance-search-block .icon-search {
     right: 0;
     top: 0;
-    background-color: var(--bg-primary-color);
+    background-color: var(--color-blue-primary);
     padding: 6px 9px;
     color: var(--color-white);
 }
-/* UNUSED COMPONENT CLASS: width-100 - Auto-commented by script
 
-.left-col-new .width-100.h-table#blank-ledger-container /* UNUSED COMPONENT CLASS: no-left-border - Auto-commented by script
-.no-left-border {
+.left-col-new .width-100.h-table#blank-ledger-container .no-left-border {
     border-left: none !important;
 }
-*/
 
 .ledger-book .ledger-footer-1 .total-col .border-top {
-    border-top: 1px solid var(--border-color) !important;
+    border-top: 1px solid var(--color-silver) !important;
 }
 
-.ledger-book .ledger-footer-1 .total-col .border-top {
+.ledger-book .ledger-footer-1 .total-col .bd-rt {
     border: none;
 }
 
-/* UNUSED COMPONENT CLASS: advance-search-by-date - Auto-commented by script
 .advance-search-by-date {
     display: inline-flex;
     position: relative;
     min-width: 252px;
-    height: var(--custom-mat-form-field-height);
+    height: var(--mat-form-field-height);
 }
-*/
 
 .advance-search-by-date:before {
     position: absolute;
@@ -590,9 +575,13 @@ input[type="date"]::-webkit-outer-spin-button {
 }
 
 .ledger-stat h1 {
-    // color: var(--color-black);
+    color: var(--color-black);
     font-size: var(--font-size-15);
     margin-bottom: 10px;
+}
+
+.digit-blue {
+    color: var(--color-blue-primary);
 }
 
 .grey-text-color {
@@ -605,7 +594,7 @@ input[type="date"]::-webkit-outer-spin-button {
 }
 
 .stat-block {
-    border-right: 1px solid var(--border-color);
+    border-right: 1px solid var(--color-silver);
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -616,19 +605,18 @@ input[type="date"]::-webkit-outer-spin-button {
 }
 
 .stat-block:nth-child(2) {
-    border-bottom: 8px solid var(--theme-primary-color);
+    border-bottom: 8px solid var(--color-blue-primary);
 }
 
 .stat-block:nth-child(3) {
-    border-bottom: 8px solid var(--theme-primary-color);
+    border-bottom: 8px solid var(--color-blue-primary);
 }
 
 .stat-block:last-child {
     border-right: none;
-    border-bottom: 8px solid var(--theme-primary-light);
+    border-bottom: 8px solid var(--color-blue-light);
 }
 
-/* UNUSED COMPONENT CLASS: advance-search-filter - Auto-commented by script
 .advance-search-filter {
     justify-content: center;
     align-items: center;
@@ -638,40 +626,37 @@ input[type="date"]::-webkit-outer-spin-button {
         width: 18px;
     }
 }
-*/
 
 #clear-filter {
     margin-right: 8px;
 }
 
-/* UNUSED COMPONENT CLASS: advance-search-block - Auto-commented by script
-.ledg-head 
-.advance-search-block {
+.ledg-head .advance-search-block {
     height: 34px;
     vertical-align: middle;
     display: flex;
     align-items: center;
     margin-right: 10px;
 }
-*/
+
+.modal-ledger {
+    width: 100%;
+    max-width: 1350px;
+}
 
 .justify-content-between {
     justify-content: space-between;
 }
 
-/* UNUSED COMPONENT CLASS: search-ledger-field - Auto-commented by script
-.d-flex
-.search-ledger-field {
+.d-flex.search-ledger-field {
     align-items: center;
     margin-right: 0;
-    min-height: var(--custom-mat-form-field-height);
+    min-height: var(--mat-form-field-height);
 }
-*/
 
-/* UNUSED COMPONENT CLASS: clear-filter-btn - Auto-commented by script
 .clear-filter-btn {
-    border-radius: var(--mat-border-radius-4);
-    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    border: 1px solid var(--color-silver);
     color: var(--color-dark-gray);
     font-size: var(--font-size-15);
     background-color: var(--color-white);
@@ -682,19 +667,16 @@ input[type="date"]::-webkit-outer-spin-button {
     align-items: center;
     padding: 3px;
 }
-*/
 
 .clear-filter-btn i {
     font-size: var(--font-size-16);
 }
 
 .search-ledger-field {
-    /* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
-/* UNUSED COMPONENT CLASS: btn-danger - Auto-commented by script
-.btn-danger,
+
+    .btn-danger,
     .btn-success,
-    /* UNUSED COMPONENT CLASS: btn-warning - Auto-commented by script
-.btn-warning {
+    .btn-warning {
         font-size: var(--font-size-15);
         width: 36px !important;
         padding: 0px !important;
@@ -703,14 +685,12 @@ input[type="date"]::-webkit-outer-spin-button {
         min-width: 36px !important;
         margin-right: 8px !important;
     }
-*/
 }
 
 .transaction-in-short {
     margin-bottom: 80px;
 }
 
-/* UNUSED COMPONENT CLASS: ledger-account-label - Auto-commented by script
 .ledger-account-label {
     align-items: center;
     flex: auto;
@@ -719,7 +699,6 @@ input[type="date"]::-webkit-outer-spin-button {
         width: 100%;
     }
 }
-*/
 
 .ledger-main .ledger-row:hover {
     background-color: transparent;
@@ -741,17 +720,17 @@ input[type="date"]::-webkit-outer-spin-button {
     box-sizing: content-box !important;
     color: var(--color-black) !important;
     text-align: center;
-    border: 1px solid var(--border-color) !important;
+    border: 1px solid var(--color-silver) !important;
 
     &:focus {
-        border-color: var(--theme-primary-color);
+        border-color: var(--color-blue-primary);
     }
 }
 
 .ipad-view-datepicker {
-.date-range-picker {
-        border: 1px solid var(--border-color);
-        border-radius: var(--mat-border-radius-16);
+    .date-range-picker {
+        border: 1px solid var(--color-silver);
+        border-radius: 20px;
         width: 203px !important;
     }
 }
@@ -772,11 +751,9 @@ input[type="date"]::-webkit-outer-spin-button {
     padding: 1px 0 !important;
 }
 
-/* UNUSED COMPONENT CLASS: mat-raised-button - Auto-commented by script
 .mat-raised-button {
     min-width: 36px;
 }
-*/
 
 /*mobile ledger view css*/
 .mobile-ledger-view {
@@ -788,41 +765,35 @@ input[type="date"]::-webkit-outer-spin-button {
         tbody {
             background-color: var(--color-white);
 
-            /* UNUSED COMPONENT CLASS: transaction-date - Auto-commented by script
-.transaction-date {
+            .transaction-date {
                 font-size: var(--font-size-15);
                 font-weight: var(--font-weight-semibold);
             }
-*/
 
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
-                border-bottom: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--color-silver);
                 font-size: var(--font-size-15);
             }
 
             .second-row {
                 td {
                     &:first-child {
-                        border-right: 1px solid var(--border-color);
+                        border-right: 1px solid var(--color-silver);
                         width: 60%;
                     }
 
-                    /* span UNUSED COMPONENT CLASS: account-holder-checkbox - Auto-commented by script
-.account-holder-checkbox {
+                    span.account-holder-checkbox {
                         width: 20px;
                         margin-right: 3px;
                     }
-*/
 
-                    /* span UNUSED COMPONENT CLASS: account-holder-name - Auto-commented by script
-.account-holder-name {
+                    span.account-holder-name {
                         float: left;
                         width: 82%;
                         display: inline-flex;
                     }
-*/
                 }
             }
         }
@@ -835,7 +806,7 @@ input[type="date"]::-webkit-outer-spin-button {
     }
 
     .mat-grid-list {
-        border-top: 1px solid var(--border-color);
+        border-top: 1px solid var(--color-silver);
     }
 }
 
@@ -844,23 +815,18 @@ input[type="date"]::-webkit-outer-spin-button {
     flex-wrap: wrap;
 }
 
-/* UNUSED COMPONENT CLASS: ipad-view-datepicker - Auto-commented by script
-.input-wrapper
-.ipad-view-datepicker {
+.input-wrapper.ipad-view-datepicker {
     display: none !important;
 }
-*/
 
 .no-btn,
 .no-btn:active,
-/* UNUSED COMPONENT CLASS: no-btn - Auto-commented by script
 .no-btn:focus {
     background-color: transparent !important;
     border: none !important;
     outline: none !important;
     padding-left: 0;
 }
-*/
 
 .transaction-mapped-table {
     font-size: var(--font-size-15);
@@ -875,11 +841,11 @@ input[type="date"]::-webkit-outer-spin-button {
 
             &:first-child {
                 padding-right: 15px;
-                border-left: 1px solid var(--border-color);
+                border-left: 1px solid var(--color-silver);
             }
 
             &:last-child {
-                border-right: 1px solid var(--border-color);
+                border-right: 1px solid var(--color-silver);
             }
         }
     }
@@ -910,23 +876,18 @@ input[type="date"]::-webkit-outer-spin-button {
         }
     }
 
-    /* UNUSED COMPONENT CLASS: transaction-table-row - Auto-commented by script
-.transaction-table-row table td {
-        border-bottom: 1px solid var(--border-color);
+    .transaction-table-row table td {
+        border-bottom: 1px solid var(--color-silver);
     }
-*/
 
     .transaction-table-row table:last-child td {
         border-bottom: none;
     }
 }
 
-/* UNUSED COMPONENT CLASS: show - Auto-commented by script
-.ledger-book/* UNUSED COMPONENT CLASS: fade - Auto-commented by script
-.fade:not(.show) {
+.ledger-book.fade:not(.show) {
     opacity: 1 !important;
 }
-*/
 
 .multicurrency-amount {
     display: flex;
@@ -942,11 +903,9 @@ input[type="date"]::-webkit-outer-spin-button {
     padding-right: 0 !important;
 }
 
-/* UNUSED COMPONENT CLASS: list-item - Auto-commented by script
 .list-item {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--color-silver);
 }
-*/
 
 .ledger-row {
     .text-ellipsis {
@@ -955,81 +914,69 @@ input[type="date"]::-webkit-outer-spin-button {
     }
 }
 
-/* UNUSED COMPONENT CLASS: icon-upload - Auto-commented by script
 .icon-upload {
     font-size: 14px;
 }
-*/
 
 .icon-refresh,
-/* UNUSED COMPONENT CLASS: icon-plus - Auto-commented by script
 .icon-plus {
     font-size: var(--font-size-15);
 }
-*/
 
-/* UNUSED COMPONENT CLASS: icon-link - Auto-commented by script
 .icon-link {
     font-weight: 800;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: account-placeholder - Auto-commented by script
 .account-placeholder {
     font-size: var(--font-size-15);
     min-height: 49px;
     padding-top: 14px;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: account-placeholder-text - Auto-commented by script
 .account-placeholder-text {
     color: var(--color-black) !important;
 }
-*/
 
-/* a#reload-bank-transaction i UNUSED COMPONENT CLASS: icon-refresh - Auto-commented by script
-.icon-refresh {
+a#reload-bank-transaction i.icon-refresh {
     font-size: var(--font-size-16) !important;
 }
-*/
 
 input#ledger-search {
     padding-left: 27px !important;
     background-color: transparent !important;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
 
     &:focus {
-        border: 1px solid var(--border-color) !important;
+        border: 1px solid var(--color-silver) !important;
     }
 
-    // &::placeholder {
-    //     color: var(--color-dark-gray);
-    // }
+    &::placeholder {
+        color: var(--color-dark-gray);
+    }
 }
 
-/* UNUSED COMPONENT CLASS: select2-ledger - Auto-commented by script
-.mat-grid-tile
-.select2-ledger {
+.mat-grid-tile.select2-ledger {
     overflow: visible !important;
 }
-*/
 
 .no-right-border {
     border-right: none !important;
 }
 
-/* UNUSED COMPONENT CLASS: mat-checkbox - Auto-commented by script
 .mat-checkbox {
     margin-right: 8px;
 }
-*/
 
-.text-primary-heading {
-    color: var(--text-primary-color);
+.blue-heading {
+    color: var(--color-blue-primary);
 }
 
 /*responsive*/
+.modal-ledger {
+    width: 70%;
+    max-width: 100% !important;
+}
+
 .ledger-head {
     position: relative;
 }
@@ -1038,28 +985,23 @@ input#ledger-search {
     position: sticky;
     top: 0px;
     z-index: 1;
-    // background-color: var(--color-white);
-    border-bottom: 1px solid var(--border-color);
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-silver);
 }
 
-/* UNUSED COMPONENT CLASS: show-if-ledger-open - Auto-commented by script
 .show-if-ledger-open {
     height: 300px;
 }
-*/
 
 .linked-entities {
     width: 200px;
 
     .list-item {
-        /* UNUSED COMPONENT CLASS: entity-icon - Auto-commented by script
-.entity-icon {
+        .entity-icon {
             padding: 4px;
         }
-*/
 
-        /* UNUSED COMPONENT CLASS: entity-details - Auto-commented by script
-.entity-details {
+        .entity-details {
             margin-left: 6px;
             flex: 1;
             text-align: left;
@@ -1068,23 +1010,19 @@ input#ledger-search {
                 font-weight: var(--font-weight-semibold);
             }
         }
-*/
 
-        /* UNUSED COMPONENT CLASS: default-entity - Auto-commented by script
-.default-entity {
+        .default-entity {
             align-items: center;
             display: flex;
 
             &:hover:after {
-                color: var(--text-primary-color);
+                color: var(--color-blue-primary);
             }
 
-            /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
-.icon-favorite-selected {
-                color: var(--text-primary-color);
+            .icon-favorite-selected {
+                color: var(--color-blue-primary);
             }
         }
-*/
     }
 
     i {
@@ -1097,34 +1035,44 @@ input#ledger-search {
     .ledg-head .mat-grid-tile-content {
         color: var(--color-black);
     }
-    /* UNUSED COMPONENT CLASS: mat-input-element - Auto-commented by script
-    .ledg-head .ledger-row 
-.mat-input-element {
+
+    .ledg-head .ledger-row .mat-input-element {
         color: var(--color-black) !important;
     }
-*/
 }
 
-/* UNUSED COMPONENT CLASS: icon-button-width - Auto-commented by script
 .icon-button-width {
     width: 36px;
     min-width: 36px !important;
     height: 36px;
     padding: 3px !important;
 }
-*/
+
+@media only screen and (max-width: 1540px) {
+    .modal-ledger {
+        width: 85%;
+    }
+}
 
 @media only screen and (max-width: 1366px) {
-    /* UNUSED COMPONENT CLASS: linked-entities - Auto-commented by script
-.linked-entities {
+    .modal-ledger {
+        width: 100%;
+        margin: 0 auto;
+        padding: 15px;
+    }
+
+    .show-if-update-ledger-open {
+        height: 230px;
+    }
+
+    .linked-entities {
         max-width: 155px;
     }
-*/
 }
 
 @media screen and (max-width: 1280px) {
     .ledger-row {
-        .column-gap-05 {
+        .column-gap5 {
             column-gap: 0 !important;
         }
     }
@@ -1146,15 +1094,13 @@ input#ledger-search {
 }
 
 @media (max-width: 1190px) {
-    /* UNUSED COMPONENT CLASS: date-advance-search - Auto-commented by script
-.date-advance-search {
+    .date-advance-search {
 
         &:before,
         &:after {
             display: none;
         }
     }
-*/
 }
 
 @media only screen and (max-width: 1024px) {
@@ -1170,14 +1116,12 @@ input#ledger-search {
         margin-bottom: 0;
     }
 
-    /* UNUSED COMPONENT CLASS: date-range-options - Auto-commented by script
-.date-range-options {
+    .date-range-options {
         margin-bottom: 10px;
         text-align: left !important;
         z-index: 1;
         margin-left: 0;
     }
-*/
 
     .advance-search-by-date:before,
     .advance-search-by-date:after {
@@ -1219,14 +1163,11 @@ input#ledger-search {
         padding-left: 20px;
     }
 
-    /* UNUSED COMPONENT CLASS: select2-container - Auto-commented by script
     .ledg-head .mat-grid-list .mat-grid-title,
-    .ledg-head .mat-grid-list .mat-grid-title 
-.select2-container {
+    .ledg-head .mat-grid-list .mat-grid-title .select2-container {
         border-bottom: none;
         border-right: none;
     }
-*/
 
     .ledger-state-box {
         margin-bottom: 0;
@@ -1259,13 +1200,10 @@ input#ledger-search {
         padding-left: 80px !important;
     }
 
-    /* UNUSED COMPONENT CLASS: h-table - Auto-commented by script
-    .ledger-book 
-.h-table {
+    .ledger-book .h-table {
         display: block;
         clear: both;
     }
-*/
 
     .ledger-book .h-table tbody {
         display: block;
@@ -1293,25 +1231,18 @@ input#ledger-search {
         display: none;
     }
 
-    /* UNUSED COMPONENT CLASS: ledger-head-top - Auto-commented by script
-.ledger-head-top {
+    .ledger-head-top {
         flex-wrap: wrap;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: xs-mb-1 - Auto-commented by script
-.xs-mb-1 {
+    .xs-mb-1 {
         margin-bottom: 10px;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: ledger-btn - Auto-commented by script
-.ledger-btn /* UNUSED COMPONENT CLASS: btn - Auto-commented by script
-.btn {
+    .ledger-btn .btn {
         font-size: var(--font-size-12) !important;
         padding: 6px;
     }
-*/
 
     .ledger-btn button.btn {
         font-size: var(--font-size-12) !important;
@@ -1320,7 +1251,7 @@ input#ledger-search {
 
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child,
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child {
-        border-left: 0px solid var(--border-color) !important;
+        border-left: 0px solid var(--color-silver) !important;
     }
 
     .ledg-head.some.transactions-page {
@@ -1346,7 +1277,7 @@ input#ledger-search {
 
             input[type="search"] {
                 min-width: 150px;
-                border-radius: var(--mat-border-radius-16) !important;
+                border-radius: 20px !important;
             }
 
             .clear-filter-btn {
@@ -1361,7 +1292,7 @@ input#ledger-search {
                 i {
                     left: -3px;
                     top: 0;
-                    color: var(--text-primary-color);
+                    color: var(--color-blue-primary);
                 }
             }
         }
@@ -1374,19 +1305,17 @@ input#ledger-search {
     .search-ledger-field {
         margin-right: 0 !important;
 
-        /* UNUSED COMPONENT CLASS: ledger-datepicker - Auto-commented by script
-.ledger-datepicker {
+        .ledger-datepicker {
             width: 36px;
             height: 36px;
             background-color: var(--color-white);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--color-silver);
             text-align: center;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             //display: none;
         }
-*/
     }
 
     .ledger-ellipse {
@@ -1405,7 +1334,7 @@ input#ledger-search {
             left: auto !important;
             right: 15px !important;
             top: 30px !important;
-            border-radius: var(--mat-border-radius-8);
+            border-radius: 10px;
             border: none;
             padding: 15px 0;
 
@@ -1419,8 +1348,7 @@ input#ledger-search {
         }
     }
 
-    /* UNUSED COMPONENT CLASS: select-all-icons - Auto-commented by script
-.select-all-icons {
+    .select-all-icons {
         display: flex;
         align-items: center;
 
@@ -1429,21 +1357,16 @@ input#ledger-search {
             width: 36px;
         }
     }
-*/
 
     .search-ledger-wrapper {
         width: 100% !important;
 
         .single-search-box {
-            /* UNUSED COMPONENT CLASS: full-width-input - Auto-commented by script
-.full-width-input {
-                /* UNUSED COMPONENT CLASS: mat-form-field - Auto-commented by script
-.mat-form-field {
+            .full-width-input {
+                .mat-form-field {
                     width: 100%;
                 }
-
             }
-*/
         }
     }
 
@@ -1478,6 +1401,104 @@ input#ledger-search {
     justify-content: center !important;
 }
 
+@media (max-width: 767px) {
+    .linked-entities {
+        width: 100%;
+    }
+
+    .ledger-head {
+        .mat-grid-tile {
+            padding: 0 0 10px !important;
+        }
+    }
+
+    .ledger-ellipse {
+        top: calc(var(--top-distance) + 50px);
+        right: 10px;
+        position: fixed;
+
+        .btn {
+            background-color: transparent;
+            color: var(--color-white);
+            font-size: var(--font-size-16);
+        }
+    }
+
+    .search-ledger-field {
+        margin-top: 40px;
+
+        .ledger-datepicker {
+            display: flex;
+            margin-right: 8px;
+        }
+    }
+
+    .ledg-head {
+        .single-search-box {
+            position: relative;
+            width: calc(100% - 100px);
+
+            .default-width-input {
+                width: calc(100% - 100px);
+            }
+        }
+
+        .ipad-view-datepicker {
+            display: none;
+        }
+    }
+
+    .ledger-section {
+        padding-top: 0;
+
+        .transactions-page {
+            margin-top: 5px !important;
+        }
+    }
+}
+
+@media (max-width: 575px) {
+    .stat-block {
+        padding-left: 15px;
+    }
+
+    .ledger-btn .col-xs-6 {
+        width: 100% !important;
+        margin-bottom: 5px;
+    }
+
+    .balance-detail {
+        .text-right {
+            text-align: left !important;
+            margin-bottom: 8px;
+        }
+    }
+}
+
+@media (max-width: 360px) {
+    .search-ledger-field {
+        min-width: 200px;
+    }
+
+    .icomoon-ico {
+        margin-top: 7px;
+    }
+
+    .ledg-head {
+        .single-search-box {
+            .clear-filter-btn {
+                font-size: var(--font-size-12);
+            }
+        }
+    }
+
+    .ledg-head {
+        .single-search-box {
+            margin-right: 5px;
+        }
+    }
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
     .ledger-datepicker {
         img {
@@ -1486,20 +1507,16 @@ input#ledger-search {
     }
 }
 
-/* UNUSED COMPONENT CLASS: ledger-checkbox - Auto-commented by script
 .ledger-checkbox {
-    /* UNUSED COMPONENT CLASS: entry-date - Auto-commented by script
-.entry-date {
+    .entry-date {
         margin-left: 8px;
     }
 }
-*/
 
-/* UNUSED COMPONENT CLASS: bank-menu - Auto-commented by script
 .bank-menu {
     padding: 3px !important;
-    border: 1px solid var(--border-color);
-    border-radius: var(--mat-border-radius-4);
+    border: 1px solid var(--color-silver);
+    border-radius: 5px;
     width: 36px;
     height: 36px;
 
@@ -1507,9 +1524,4 @@ input#ledger-search {
         top: -13px;
         right: 10px;
     }
-}
-*/
-
-.h32 {
-    height: 32px;
 }

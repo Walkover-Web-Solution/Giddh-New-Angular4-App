@@ -13,26 +13,26 @@
         margin-left: auto;
 
         .domain-setting-card {
-            border-radius: var(--mat-border-radius-8) !important;
+            border-radius: 8px !important;
         }
 
-        // .mat-card {
-        //     transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
-        //     display: block;
-        //     position: relative;
-        //     padding: 16px;
-        //     border-radius: var(--mat-border-radius-4);
+        .mat-card {
+            transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+            display: block;
+            position: relative;
+            padding: 16px;
+            border-radius: 4px;
 
-        //     .mat-mdc-card-content {
-        //         padding: 0px !important;
-        //     }
+            .mat-mdc-card-content {
+                padding: 0px !important;
+            }
 
-        //     .mat-mdc-card-content {
-        //         &:last-child {
-        //             padding-bottom: 0px !important;
-        //         }
-        //     }
-        // }
+            .mat-mdc-card-content {
+                &:last-child {
+                    padding-bottom: 0px !important;
+                }
+            }
+        }
 
 
         .portal-body {
@@ -40,7 +40,7 @@
                 background: var(--color-transparent-backgrounds);
 
                 .status {
-                    border-radius: var(--mat-border-radius-16);
+                    border-radius: 16px;
                     padding: 6px 12px;
                 }
 

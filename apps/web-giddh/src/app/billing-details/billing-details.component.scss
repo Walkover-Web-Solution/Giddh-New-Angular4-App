@@ -19,15 +19,13 @@
                 line-height: 34px;
             }
         }
-        /* UNUSED COMPONENT CLASS: giddh-heading - Auto-commented by script
-.giddh-heading {
+        .giddh-heading {
             font-size: var(--font-size-32);
             font-weight: bold;
             float: left;
             width: 30%;
             text-align: center;
         }
-*/
     }
     .welcome-msg {
         margin-bottom: 5px;
@@ -66,22 +64,20 @@
         }
         .billing-wrapper {
             height: 100%;
-            border-right: 1px solid var(--border-color);
+            border-right: 1px solid var(--color-silver);
             .form-label {
                 height: 16px;
                 margin-bottom: 6px !important;
             }
-            .text-red-content {
+            .red-text-content {
                 display: none;
             }
-            /* UNUSED COMPONENT CLASS: mat-input-field - Auto-commented by script
-.mat-input-field {
+            .mat-input-field {
                 float: left;
                 width: 100%;
                 height: 37px;
                 border: 1px solid var(--color-border-light);
             }
-*/
         }
         .mat-input {
             float: left;
@@ -95,8 +91,8 @@
 
         .form-control {
             background: var(--color-white) !important;
-            border: 1px solid var(--border-color);
-            border-radius: var(--mat-border-radius-0) !important;
+            border: 1px solid var(--color-silver);
+            border-radius: 2px !important;
             padding: 6px !important;
         }
         .form-text-area {
@@ -108,6 +104,9 @@
             float: left;
             width: 100%;
             height: 39px;
+        }
+        .red-text {
+            color: var(--color-red) !important;
         }
         .billing-details form label {
             color: var(--color-medium-gray);
@@ -180,20 +179,16 @@
                 box-shadow: 1px 0px 4px var(--color-shadow-light);
                 padding: 16px;
             }
-            /* UNUSED COMPONENT CLASS: renewal-off - Auto-commented by script
-.renewal-off {
+            .renewal-off {
                 color: var(--color-dark-gray);
                 font-size: var(--font-size-12);
                 font-weight: 600;
                 padding-left: 4px;
             }
-*/
-            /* UNUSED COMPONENT CLASS: discount-off - Auto-commented by script
-.discount-off {
+            .discount-off {
                 color: var(--color-green);
                 font-weight: bold;
             }
-*/
             .features {
                 line-height: 1.7;
                 color: var(--color-dark-gray);
@@ -254,18 +249,14 @@
         color: var(--color-medium-gray);
         font-size: var(--font-size-15);
         padding-left: 5px;
-        /* UNUSED COMPONENT CLASS: renewal-subscription-extra - Auto-commented by script
-.renewal-subscription-extra {
+        .renewal-subscription-extra {
             height: 20px;
             float: left;
             width: 79%;
         }
-*/
-        /* UNUSED COMPONENT CLASS: renewal-subscription-content - Auto-commented by script
-.renewal-subscription-content {
+        .renewal-subscription-content {
             display: none;
         }
-*/
     }
 
     .display-line {
@@ -284,12 +275,10 @@
 @media screen and (min-width: 768px) and (orientation: portrait) {
     #main {
         .main-heading-billing {
-            /* UNUSED COMPONENT CLASS: back-button - Auto-commented by script
-.back-button {
+            .back-button {
                 width: 90px;
                 height: 40px;
             }
-*/
         }
     }
     .left-side {
@@ -395,6 +384,16 @@
     }
 }
 
+@media (max-width: 480px) and (orientation: portrait) {
+    #main {
+        .main-heading-billing {
+            .giddh-heading {
+                width: 100%;
+                margin-top: 22px;
+            }
+        }
+    }
+}
 @media screen and (min-width: 1280px) and (orientation: landscape) {
     .back-btnn {
         float: left;

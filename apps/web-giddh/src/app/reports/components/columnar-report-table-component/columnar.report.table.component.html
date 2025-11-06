@@ -4,15 +4,15 @@
             <table class="table basic giddh-table on-mobile-view">
                 <thead class="thead-background1" [hidden]="!columnarReportResponse?.accounts?.length">
                     <tr>
-                        <ng-container *ngFor="let item of columnsName; let inx = index">
-                            <th [ngClass]="{ 'serial-no-column': inx === 0, 'text-center' : !['#', localeData?.name_of_ledger, localeData?.parent_group].includes(item) }">{{ item }}</th>
+                        <ng-container *ngFor="let item of columnsName">
+                            <th>{{ item }}</th>
                         </ng-container>
                     </tr>
                 </thead>
                 <tbody *ngIf="columnarReportResponse.accounts">
                     <tr *ngFor="let item of columnarReportResponse.accounts; let inx = index">
                         <!-- S No -->
-                        <td data-title="#" class="serial-no-column">{{ inx + 1 }}</td>
+                        <td data-title="#">{{ inx + 1 }}</td>
                         <!--Ledger Name -->
                         <td [attr.data-title]="localeData?.name_of_ledger">{{ item.accountName }}</td>
                         <!--Parent  Name -->

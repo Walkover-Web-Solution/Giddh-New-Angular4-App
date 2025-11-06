@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <hamburger-menu></hamburger-menu>
-    <div class="position-relative w-100">
+    <div class="relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
         *ngIf="asideGstSidebarMenuState">
         <tax-sidebar 
@@ -13,7 +13,7 @@
     </div>
     <div class="obligations position-relative pd-15">
         <div class="container-fluid ml-0">
-            <div class="row align-items-center row-gap-15">
+            <div class="row align-items-center row-gap">
                 <div class="col flex-grow-0">
                     <div class="custom-datepicker" 
                          [matMenuTriggerFor]="universalDatepicker"
@@ -123,11 +123,11 @@
                                 </restricted-module-message>
                             </div>
                             <div class="no-data"  *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
-                                <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
+                                <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                             </div>
                         </div>
                         <div class="no-data" *ngIf="hasTaxNumber === false">
-                            <h2>{{ localeData?.no_vrn_available }}</h2>
+                            <h1>{{ localeData?.no_vrn_available }}</h1>
                         </div>
                     </section>
                 </div>

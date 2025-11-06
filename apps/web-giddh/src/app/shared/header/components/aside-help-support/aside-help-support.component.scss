@@ -25,6 +25,9 @@
         z-index: 1;
         transform: rotate(45deg);
     }
+    .aside-pane{
+        overflow: auto;
+    }
 }
 :host.in #close {
     display: block;
@@ -34,15 +37,12 @@
     z-index: 5;
     border: 0;
     cursor: pointer;
-    border-radius: var(--mat-border-radius-0);
+    border-radius: 0;
 }
-/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
-:host
-.container-fluid {
+:host .container-fluid {
     padding-left: 0;
     padding-right: 0;
 }
-*/
 
 :host .aside-pane {
     max-width: 760px;
@@ -53,25 +53,26 @@
     margin: 0 auto;
     max-width: 168px;
 }
-/* UNUSED COMPONENT CLASS: aside-header - Auto-commented by script
 .aside-header {
     padding: 20px 10px;
     background-color: var(--color-light-gray);
 }
-*/
 .aside-pane {
+    padding: 0;
+    background-color: var(--color-light-gray);
+    z-index: 9;
     .aside-help-header {
         display: flex;
         justify-content: space-between;
         padding: 18px 15px;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
         position: sticky;
         top: 0;
         background-color: inherit;
         h2 {
             font-weight: var(--font-weight-semibold) !important;
             font-size: var(--font-size-16) !important;
-            color: var(--text-primary-color) !important;
+            color: var(--color-blue-primary) !important;
             line-height: 20px !important;
             &::before{
                 display: none !important;
@@ -80,10 +81,11 @@
     }
     .help-aside-body {
         .faq-block {
-            border-bottom: 1px solid var(--border-color);
+            padding: 15px;
+            border-bottom: 1px solid var(--color-silver);
             a {
                 display: block;
-                color: var(--theme-foreground-color);
+                color: var(--color-black);
 
                 p {
                     font-size: var(--font-size-15);
@@ -95,16 +97,16 @@
             }
         }
         .feature-block {
-            padding: 15px 10px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 15px;
+            border-bottom: 1px solid var(--color-silver);
             ul {
-                // list-style: none;
+                list-style: none;
                 li {
                     font-size: var(--font-size-15);
                     font-weight: var(--font-weight-semibold);
                     margin-bottom: 10px;
                     a {
-                        color: var(--theme-foreground-color);
+                        color: var(--color-black);
                         display: flex;
                         padding: 5px 0;
                     }
@@ -112,10 +114,10 @@
             }
         }
         .download-block {
-            padding: 15px 10px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 15px;
+            border-bottom: 1px solid var(--color-silver);
             h3 {
-                color: var(--theme-foreground-color);
+                color: var(--color-black);
             }
             h4 {
                 padding-bottom: 5px;
@@ -123,13 +125,13 @@
                 font-weight: var(--font-weight-semibold);
             }
             ul {
-                // list-style: none;
+                list-style: none;
                 li {
                     float: left;
                     width: 50%;
                     padding-bottom: 10px;
                     a {
-                        color: var(--theme-foreground-color);
+                        color: var(--color-black);
                         padding-bottom: 15px;
                         font-size: var(--font-size-15);
                     }
@@ -155,24 +157,20 @@
             line-height: 1.5;
             p {
                 a,i  {
-                    color: var(--theme-foreground-color);
+                    color: var(--color-black);
                 }
             }
         }
     }
     mat-dialog-content {
         .mdc-list-item{
-            /* UNUSED COMPONENT CLASS: mdc-list-item - Auto-commented by script
-/*& UNUSED COMPONENT CLASS: mdc-list-item--with-one-line - Auto-commented by script
-.mdc-list-item--with-one-line{
+            &.mdc-list-item--with-one-line{
                 height: unset !important;
                 margin-bottom: 10px;
             }
-*/
         }
     }
 }
-/* UNUSED COMPONENT CLASS: aside-pane-form - Auto-commented by script
 .aside-pane-form {
     background-color: var(--color-white);
     box-shadow: 0px 3px 6px var(--color-shadow-light);
@@ -183,12 +181,9 @@
     position: relative;
     margin-top: 15px;
 }
-*/
-/* UNUSED COMPONENT CLASS: mat-mdc-dialog-content - Auto-commented by script
 .mat-mdc-dialog-content{
     max-height: 100vh !important;
 }
-*/
 @media (max-height: 900px) {
     .aside-pane {
         .help-aside-body {
@@ -197,5 +192,55 @@
                 font-size: var(--font-size-15);
             }
         }
+    }
+}
+@media (max-height: 755px) {
+    .aside-pane {
+        .help-aside-body {
+            padding-bottom: 25%;
+            .contact-block {
+                font-size: var(--font-size-16);
+            }
+        }
+    }
+}
+@media (max-width: 768px) {
+    :host {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
+}
+@media (max-width: 767px) {
+    :host {
+        position: fixed;
+        left: auto;
+        top: calc(var(--top-distance) + 90px);
+    }
+}
+@media (max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
+}
+@media (max-width: 375px) {
+    :host {
+        max-width: 250px;
+        top: 85px;
+    }
+    :host .aside-pane {
+        max-width: 250px;
+    }
+}
+@media (max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
     }
 }

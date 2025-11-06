@@ -1,6 +1,6 @@
 .create-branch-page {
     .create-branch-under {
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
         .branch-under-company {
             .heading {
                 font-size: var(--font-size-15);
@@ -39,11 +39,9 @@
         }
     }
     .branch-form {
-        /* UNUSED COMPONENT CLASS: mat-mdc-select-multiple - Auto-commented by script
-.mat-mdc-select-multiple {
+        .mat-mdc-select-multiple {
             display: none !important;
         }
-*/
 
         .branch-form-field {
             font-size: var(--font-size-15);
@@ -61,28 +59,24 @@
             }
             .address-dropdown {
                 .list-item {
-                    /* UNUSED COMPONENT CLASS: entity-icon - Auto-commented by script
-.entity-icon {
+                    .entity-icon {
                         padding: 4px;
                     }
-*/
-                    /* UNUSED COMPONENT CLASS: entity-details - Auto-commented by script
-.entity-details {
+                    .entity-details {
                         margin-left: 6px;
                         flex: 1;
                         .item {
                             font-weight: var(--font-weight-semibold);
                         }
                     }
-*/
                     .default-entity {
                         align-items: center;
                         display: flex;
                         &:hover:after {
-                            color: var(--text-primary-color);
+                            color: var(--color-blue-primary);
                         }
                         .icon-favorite-selected {
-                            color: var(--text-primary-color);
+                            color: var(--color-blue-primary);
                         }
                     }
                 }
@@ -99,11 +93,9 @@
                     i {
                         padding: 5px;
                         cursor: pointer;
-                        /*& UNUSED COMPONENT CLASS: icon-plus - Auto-commented by script
-.icon-plus {
+                        &.icon-plus {
                             color: var(--color-green);
                         }
-*/
                     }
                 }
             }
@@ -122,6 +114,47 @@
         .create-branch-under {
             .branch-image {
                 display: none;
+            }
+        }
+    }
+}
+@media (max-width: 767px) {
+    .create-branch-page {
+        .create-branch-under {
+            .branch-under-company {
+                p {
+                    margin-bottom: 10px;
+                }
+                .branch-company-name {
+                    .label-wrapper {
+                        flex-direction: column;
+                        label {
+                            min-width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+        .branch-form {
+            .branch-form-field {
+                flex-direction: column;
+                align-items: flex-start;
+                label {
+                    width: 100%;
+                    margin-bottom: 8px;
+                }
+                .checkbox-label {
+                    display: none;
+                }
+                input,
+                sh-select {
+                    width: 100%;
+                    max-width: 100%;
+                }
+                .sub-location-input {
+                    max-width: 100%;
+                    width: 100%;
+                }
             }
         }
     }

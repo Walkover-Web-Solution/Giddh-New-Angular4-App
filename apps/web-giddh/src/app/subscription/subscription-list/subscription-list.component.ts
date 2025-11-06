@@ -360,7 +360,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
-            if (searchedFieldName === 'companyName') {
+            if (searchedFieldName === 'Company') {
                 this.showName = false;
             } else if (searchedFieldName === 'Billing Account') {
                 this.showBillingAccount = false;

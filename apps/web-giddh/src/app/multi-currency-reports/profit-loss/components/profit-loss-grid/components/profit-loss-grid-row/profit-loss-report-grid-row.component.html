@@ -9,10 +9,10 @@
         [innerHTML]="groupDetail.groupName | highlight: search"
         [style.padding-left]="padding + 'px !important'"
     ></div>
-    <div class="col-8 border-left group pull-right" *ngIf="!groupDetail.level1">
+    <div class="col-8 bd-rl group pull-right" *ngIf="!groupDetail.level1">
         <div class="row">
             <span
-                class="col border-left text-right px-0 pd-r15"
+                class="col bd-rl text-right px-0 pd-r15"
                 [ngClass]="{
                     'invisible':
                         groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
@@ -45,7 +45,7 @@
             </span>
         </div>
     </div>
-    <div class="col-8 border-left group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
+    <div class="col-8 bd-rl group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
 </div>
 <cdk-virtual-scroll-viewport
     *ngIf="
@@ -83,7 +83,7 @@
                 [style.padding-left]="padding + 20 + 'px !important'"
                 [innerHTML]="account.name | lowercase | highlight: search"
             ></div>
-            <div class="col-8 border-left text-left pull-right">
+            <div class="col-8 bd-rl text-left pull-right">
                 <div class="row d-flex">
                     <span class="col text-right px-0 pd-r15">
                         <span

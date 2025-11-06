@@ -13,7 +13,7 @@
                 <a
                     mat-raised-button
                     color="primary"
-                    class="mr-0 min-width-160 d-flex align-items-center justify-content-center"
+                    class="mr-0 min160 d-flex align-items-center justify-content-center"
                     [href]="loginUrl"
                     target="_blank"
                 >
@@ -35,9 +35,9 @@
                     </button>
                 </div>
                 <mat-dialog-content class="dialog-body">
-                    <p class="font-size-15 mr-t05 mb-1">{{ localeData?.invited_to_become_subscriber }}</p>
-                    <p class="font-size-15 mr-t05">{{ localeData?.accepting_will_make_you_subscriber }}</p>
-                    <div class="d-flex justify-content-end column-gap-1 mt-3">
+                    <p class="font-15 mr-t05 mb-1">{{ localeData?.invited_to_become_subscriber }}</p>
+                    <p class="font-15 mr-t05">{{ localeData?.accepting_will_make_you_subscriber }}</p>
+                    <div class="d-flex justify-content-end column-gap1 mt-3">
                         <button aria-label="yes" mat-raised-button color="primary" (click)="onSubmit($event)">
                             {{ localeData?.accept_subscription }}
                         </button>
@@ -73,7 +73,7 @@
                             </input-field>
                         </div>
                     </form>
-                    <div class="d-flex justify-content-end column-gap-1 mt-3">
+                    <div class="d-flex justify-content-end column-gap1 mt-3">
                         <button aria-label="yes" mat-raised-button color="primary" (click)="onSubmit($event, true)">
                             {{ localeData?.submit }}
                         </button>

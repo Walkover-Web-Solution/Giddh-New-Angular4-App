@@ -191,18 +191,19 @@
                     <tr mat-row *matRowDef="let row; columns: tableHeadingColumns"></tr>
                 </table>
             </div>
-            <mat-paginator
-                *ngIf="reportResponse && reportResponse?.totalItems > pageSizeOptions[0]"
-                [length]="reportResponse.totalItems"
-                [pageSize]="columnarReportExportRequest.count"
-                [pageSizeOptions]="pageSizeOptions"
-                [pageIndex]="columnarReportExportRequest.page - 1"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)"
-                aria-label="Select page of columnar report"
-            ></mat-paginator>
-            <section class="mr-b8"></section>
+            <div class="mt-4" *ngIf="reportResponse && reportResponse?.totalItems > pageSizeOptions[0]">
+                <mat-paginator
+                    [length]="reportResponse.totalItems"
+                    [pageSize]="columnarReportExportRequest.count"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [pageIndex]="columnarReportExportRequest.page - 1"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)"
+                    aria-label="Select page of columnar report"
+                ></mat-paginator>
+                <section class="mr-b8"></section>
+            </div>
             <div class="no-data" *ngIf="reportResponse && reportResponse?.totalItems === 0">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>

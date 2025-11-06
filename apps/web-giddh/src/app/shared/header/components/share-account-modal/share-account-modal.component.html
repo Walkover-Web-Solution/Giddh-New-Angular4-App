@@ -7,7 +7,7 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <div class="pd-b3">
-            <p class="pd-b1">{{ localeData?.share_with }}</p>
+            <h3 class="pd-b1">{{ localeData?.share_with }}</h3>
             <!--share account from-->
             <form
                 [formGroup]="shareAccountForm"
@@ -86,7 +86,7 @@
                                     (click)="unShareAccount(val?.uniqueName, val?.entityUniqueName)"
                                     aria-label="delete icon"
                                 >
-                                    <i class="icon-trash text-red"></i>
+                                    <i class="icon-trash delete"></i>
                                 </button>
                             </div>
                         </div>

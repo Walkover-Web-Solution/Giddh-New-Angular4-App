@@ -10,7 +10,7 @@
     </div>
 
     <ng-container *ngIf="!isLoading && vatReport?.length">
-        <div *ngFor="let report of vatReport; let i = index" class=" pd-15 ">
+        <div *ngFor="let report of vatReport; let i = index" class="pd-15">
             <div class="white-box" *ngIf="i < 2">
                 <div class="d-flex justify-content-between align-items-center">
                     <p>
@@ -88,7 +88,7 @@
             </div>
         </div>
         <div *ngIf="!vatReport?.length" class="no-data no-report">
-            <h2>{{ localeData?.no_vrn_available }}</h2>
+            <h1>{{ localeData?.no_vrn_available }}</h1>
         </div>
     </ng-container>
 </mat-dialog-content>

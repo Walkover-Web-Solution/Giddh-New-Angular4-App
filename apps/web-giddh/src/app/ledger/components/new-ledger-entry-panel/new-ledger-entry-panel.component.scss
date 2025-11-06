@@ -1,8 +1,8 @@
 .ledger-panel {
-    background-color: var(--theme-background-color);
+    background-color: var(--color-white);
     overflow: visible;
     .more-details {
-        // background-color: var(--theme-background-color);
+        background-color: var(--color-white);
         padding: 0 15px 15px;
         .cheque {
             table {
@@ -110,12 +110,10 @@
     color: var(--color-black);
 }
 
-/* UNUSED COMPONENT CLASS: dropdown-menu-2 - Auto-commented by script
 .dropdown-menu-2 {
     max-height: 190px;
     overflow-y: scroll;
 }
-*/
 
 .amount-total {
     font-size: var(--font-size-12);
@@ -123,13 +121,11 @@
     padding-left: 5px;
 }
 
-/* UNUSED COMPONENT CLASS: width-70 - Auto-commented by script
 .width-70 {
     width: 70px;
     min-width: 70px;
     max-width: 70px;
 }
-*/
 
 .table-minus label {
     font-size: var(--font-size-32);
@@ -139,11 +135,9 @@
     display: flex;
     align-items: center;
 }
-/* UNUSED COMPONENT CLASS: checkbox-custom-label - Auto-commented by script
 .checkbox-custom-label strong {
     display: contents;
 }
-*/
 .rcm-entry {
     padding-left: 4px;
 }
@@ -151,13 +145,16 @@
     display: inline-block;
     margin-bottom: 12px;
 }
+.in-words.words-inline {
+    float: right;
+}
 .passport-no-width {
     width: 150px;
     font-size: var(--font-size-12);
 }
 .advance-receipt-edit {
     i {
-        color: var(--text-primary-color);
+        color: var(--color-blue-primary);
     }
 }
 .ledger-price {
@@ -166,18 +163,13 @@
 .disabled-item {
     pointer-events: none;
 }
-/* UNUSED COMPONENT CLASS: custom-component - Auto-commented by script
 .custom-component[disabled] {
     pointer-events: none;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: mat-expanded - Auto-commented by script
-.mat-expansion-panel-header
-.mat-expanded {
+.mat-expansion-panel-header.mat-expanded {
     background-color: var(--color-white) !important;
 }
-*/
 
 .icon-box {
     display: flex;
@@ -211,56 +203,42 @@
     .ledger-panel .btn {
         margin-bottom: 13px;
     }
-    /* UNUSED COMPONENT CLASS: xs-d-block - Auto-commented by script
-.xs-d-block {
+    .xs-d-block {
         display: block;
         float: none;
         width: 100%;
     }
-*/
-    /* UNUSED COMPONENT CLASS: qty-unit - Auto-commented by script
-.qty-unit {
+    .qty-unit {
         width: 90%;
     }
-*/
-    /* UNUSED COMPONENT CLASS: table-plus - Auto-commented by script
-.table-plus {
+    .table-plus {
         width: 10%;
         text-align: center;
     }
-*/
     .price {
         width: 40%;
     }
-    /* UNUSED COMPONENT CLASS: equal-2 - Auto-commented by script
-.equal-2,
-    /* UNUSED COMPONENT CLASS: table-minus - Auto-commented by script
-.table-minus {
+    .equal-2,
+    .table-minus {
         width: 10%;
         text-align: center;
     }
-*/
     .amount {
         width: 40%;
     }
-    /* UNUSED COMPONENT CLASS: total-amount-ledger - Auto-commented by script
-.total-amount-ledger {
+    .total-amount-ledger {
         width: 100%;
     }
-/* UNUSED COMPONENT CLASS: total-detail-table - Auto-commented by script
     .total-detail-table > tbody > tr {
         display: flex;
         flex-wrap: wrap;
     }
-*/
     .qty-unit table tr td.text-right {
         padding-right: 10px;
     }
-    /* UNUSED COMPONENT CLASS: xs-mb-1 - Auto-commented by script
-.xs-mb-1 {
+    .xs-mb-1 {
         margin-bottom: 1px;
     }
-*/
     .warehouse-field {
         display: flex;
         flex-direction: column-reverse;
@@ -270,7 +248,7 @@
     }
 }
 .sh-template {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--color-silver);
 }
 .min-width-auto {
     min-width: auto !important;
@@ -306,27 +284,18 @@ span {
     }
 }
 @media (max-width: 1075px) {
-    /* UNUSED COMPONENT CLASS: icon-box - Auto-commented by script
-.icon-box {
+    .icon-box {
         padding: 10px 0px 0 0px;
     }
-*/
 
     .more-details {
         .cheque-no-clear {
-            /* UNUSED COMPONENT CLASS: text-default - Auto-commented by script
-.text-default {
+            .default-color {
                 white-space: nowrap;
             }
-*/
             giddh-datepicker {
                 min-width: auto !important;
             }
         }
-    }
-}
-.map-txn-container {
-    table tr td {
-        width: 25%;
     }
 }

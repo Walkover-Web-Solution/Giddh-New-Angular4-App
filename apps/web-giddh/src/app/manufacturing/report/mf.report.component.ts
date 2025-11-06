@@ -8,7 +8,7 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { distinct, filter, take, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
-import { BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../models/user-login-state';
 import { StocksResponse } from '../../models/api-models/Inventory';
@@ -98,7 +98,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /* this wll store mobile screen size */
-    public isTabletScreen: boolean = true;
+    public isMobileScreen: boolean = true;
     /* Stores warehouses for a company */
     public warehouses: Array<any> = [];
     /* This will clear the select value in sh-select */
@@ -141,9 +141,9 @@ constructor(
         });
 
         this.breakPointObservar.observe([
-            BREAKPOINT_SCREEN_SIZE.TABLET
+            '(max-width: 991px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
+            this.isMobileScreen = result.matches;
         });
 
         this.isInventoryPage = this.router.url.includes('/pages/inventory');

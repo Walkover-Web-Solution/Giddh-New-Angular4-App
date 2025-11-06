@@ -14,3 +14,13 @@
         min-width: 120px;
     }
 }
+
+@media (max-width: 768px) {
+    .product-name-image {
+        flex-direction: column;
+
+        p {
+            margin-top: 5px;
+        }
+    }
+}

@@ -1,38 +1,32 @@
-/* p UNUSED COMPONENT CLASS: bank-name - Auto-commented by script
-.bank-name {
+p.bank-name {
     font-size: var(--font-size-15);
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
     margin-bottom: 5px;
 }
-*/
-/* p UNUSED COMPONENT CLASS: bank-balance - Auto-commented by script
-.bank-balance {
+p.bank-balance {
     color: var(--color-dark-gray);
     font-size: var(--font-size-15);
     display: flex;
     justify-content: space-between;
 }
-*/
-/* UNUSED COMPONENT CLASS: single-bank-detail - Auto-commented by script
 .single-bank-detail {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--color-silver);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
-*/
 .mat-table.basic td {
     padding-right: 0;
     padding-left: 0;
     border-top: none;
-    border-bottom: 1px solid var(--border-color) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
     padding-top: 20px;
     padding-bottom: 3px;
     font-size: var(--font-size-15);
-    // color: var(--color-black);
+    color: var(--color-black);
 }
 .table thead th {
     vertical-align: bottom;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--color-silver);
     border-top: none;
     padding-left: 0;
     font-weight: 500;
@@ -40,11 +34,11 @@
 .last-card {
     min-height: auto !important;
 }
-// table th {
-//     font-size: var(--font-size-15);
-//     color: var(--text-primary-color);
-//     // background-color: var(--color-white);
-// }
+table.basic th {
+    font-size: var(--font-size-15);
+    color: var(--color-blue-primary);
+    background-color: var(--color-white);
+}
 .cr-dr-body {
     padding: 15px;
 }
@@ -63,22 +57,38 @@ thead th {
     padding-bottom: 5px !important;
 }
 .no-entries {
-    border-top: 1px solid var(--border-color) !important;
-    border-bottom: 1px solid var(--border-color) !important;
+    border-top: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
     margin-top: 10px;
     padding: 20px 0 !important;
     text-align: center;
     color: var(--color-black) !important;
     font-size: var(--font-size-15);
     &:hover {
-        background-color: var(--theme-primary-light);
+        background-color: var(--color-blue-light);
     }
 }
 .dashboard-datepicker {
     min-width: 208px;
     border-radius: 30px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
 }
 .min-width-130 {
     min-width: 130px !important;
+}
+@media (max-width: 768px) {
+    .debtors-table {
+        margin-bottom: 30px;
+    }
+    table.basic td {
+        border-bottom: none !important;
+    }
+    table.on-mobile-view {
+        tbody td:before {
+            left: 10px;
+        }
+        tbody tr {
+            margin: 0 auto 22px;
+        }
+    }
 }

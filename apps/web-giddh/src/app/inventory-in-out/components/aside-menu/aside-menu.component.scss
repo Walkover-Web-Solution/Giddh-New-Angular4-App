@@ -1,4 +1,3 @@
-/* UNUSED COMPONENT CLASS: buttons-container - Auto-commented by script
 .buttons-container {
     display: flex;
     justify-content: center;
@@ -6,7 +5,6 @@
     align-items: center;
     height: 100vh;
 }
-*/
 
 .buttons-container > * {
     margin: 20px;
@@ -34,20 +32,17 @@
     top: var(--top-distance);
     z-index: 5;
     border: 0;
-    border-radius: var(--mat-border-radius-0);
+    border-radius: 0;
 }
 
-/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
-:host 
-.container-fluid {
+:host .container-fluid {
     padding-left: 0;
     padding-right: 0;
 }
-*/
 
 :host .aside-pane {
     max-width: 480px;
     width: 100%;
     padding: 0;
-    // background: var(--color-white);
+    background: var(--color-white);
 }

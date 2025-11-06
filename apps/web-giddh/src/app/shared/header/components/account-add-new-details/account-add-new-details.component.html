@@ -91,12 +91,12 @@
                             </input-field>
                             <div class="d-flex">
                                 <div
-                                    class="input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                    class="input-group-addon d-flex align-item-center"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
+                                        'cp': addAccountForm.get('openingBalance')?.value > 0
                                     }"
                                     *ngIf="
                                         addAccountForm.get('openingBalance')?.value > 0
@@ -105,12 +105,12 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon only-right-radius d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                    class="input-group-addon only-right-radius d-flex align-item-center"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cursor-pointer':
+                                        'cp':
                                             addAccountForm.get('openingBalance')?.value > 0 ||
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
@@ -123,7 +123,7 @@
                             </div>
                         </div>
                         <div *ngIf="company?.isActive" class="d-flex justify-content-end">
-                            <span (click)="openBulkAddDialog()" class="font-size-14 cursor-pointer text-primary">{{
+                            <span (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
                                 localeData?.bulk_add
                             }}</span>
                         </div>
@@ -138,7 +138,6 @@
                             formControlName="salesPersonUniqueName"
                             [name]="'sales-person'"
                             [label]="commonLocaleData?.app_sales_person"
-                            [labelValue]="addAccountForm.get('salesPersonName').value"
                             [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
                             [options]="salesPersonList$ | async"
                             [showCreateNew]="true"
@@ -167,12 +166,12 @@
                             </input-field>
                             <div class="d-flex">
                                 <div
-                                    class="input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                    class="input-group-addon d-flex align-item-center"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cursor-pointer':
+                                        'cp':
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
@@ -180,12 +179,12 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon only-right-radius d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                    class="input-group-addon only-right-radius d-flex align-item-center"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cursor-pointer':
+                                        'cp':
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
@@ -195,7 +194,7 @@
                             </div>
                         </div>
                         <div *ngIf="company?.isActive" class="d-flex justify-content-end">
-                            <span href="javascript:;" (click)="openBulkAddDialog()" class="font-size-14 cursor-pointer text-primary">{{
+                            <span href="javascript:;" (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
                                 localeData?.bulk_add
                             }}</span>
                         </div>
@@ -275,7 +274,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="add-address-default">
-                                    <p class="text-black">{{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
+                                    <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
                                     <div class="remove-radio-btn">
                                         <span class="pd-r1" *ngIf="!firstItem">
                                             <button
@@ -283,10 +282,7 @@
                                                 (click)="removeGstDetailsForm(i)"
                                                 class="bg-white"
                                             >
-                                                <span class="text-red d-inline-flex align-items-center column-gap-1">
-                                                    <i class="icon-cross"></i>
-                                                    <span>{{ commonLocaleData?.app_remove }}</span>
-                                                </span>
+                                                <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
                                             </button>
                                         </span>
                                         <span
@@ -407,7 +403,7 @@
                             </ng-container>
                         </div>
                         <div
-                            class="d-flex justify-content-between column-gap-15 pd-b2"
+                            class="d-flex justify-content-between column-gap15 pd-b2"
                             *ngIf="
                                 lastItem &&
                                 addAccountForm.get('addresses')['controls']?.length > 3 &&
@@ -609,7 +605,7 @@
                                 aria-label="delete icon" 
                                 (click)="removePortalUser(i)"
                             >
-                                <i class="icon-trash text-red"></i>
+                                <i class="icon-trash delete"></i>
                             </button>
                         </div>
                     </div>
@@ -770,24 +766,24 @@
                                 </input-field>
                                 <div class="d-flex">
                                     <div
-                                        class="input-group-addon d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                        class="input-group-addon d-flex align-item-center"
                                         (click)="closingBalanceTypeChanged('DEBIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
-                                            'cursor-pointer': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                            'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                         }"
                                         *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
                                     >
                                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                     </div>
                                     <div
-                                        class="input-group-addon only-right-radius d-flex d-flex flex-column justify-content-center vertical-align-middle align-items-center"
+                                        class="input-group-addon only-right-radius d-flex align-item-center"
                                         (click)="closingBalanceTypeChanged('CREDIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                                            'cursor-pointer': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                            'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                         }"
                                         *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
                                     >
@@ -855,7 +851,7 @@
                                         <div class="name-of-field">
                                             <label for="values"
                                                 >{{ item.fieldName }}
-                                                <span class="text-red" *ngIf="item.isMandatory">*</span>
+                                                <span class="red-text" *ngIf="item.isMandatory">*</span>
                                             </label>
                                             <input-field
                                                 *ngIf="

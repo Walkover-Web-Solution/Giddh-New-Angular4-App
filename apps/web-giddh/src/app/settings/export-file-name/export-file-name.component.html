@@ -2,14 +2,14 @@
   <div *ngIf="moduleExportSettingArray?.length" class="d-flex flex-row justify-content-between">
     <div class="col-lg-7 col-md-12">
       <div class="pd-t2">
-        <p>{{ localeData?.export_setting_description }}</p>
+        <h2>{{ localeData?.export_setting_description }}</h2>
       </div>
       <div class="settings-profile-tabs pd-t2" [formGroup]="exportModuleSettingForm">
         <ng-container formArrayName="moduleExportSetting">
           <ng-container *ngFor="let module of moduleExportSettingArray.controls; let i = index, let last = last">
             <div [formGroupName]="i" class="d-flex flex-column pd-b2">
               <div
-                  class="d-flex align-items-center column-gap-1"
+                  class="d-flex align-items-center column-gap1"
               >
                   <div class="width-setting-label mb-2">
                     <span class="text-capitalize">
@@ -33,7 +33,7 @@
                         [appTributeMentionValues]="module.get('supportedVariableList')?.value || []"
                       />
                     </mat-form-field>
-                    <div class="font-size-12 word-break pd-t05 pd-b05 text-light">
+                    <div class="font-12 word-break pd-t05 pd-b05 text-gray">
                       {{ module.get('suggestedFileFormat')?.value }}
                     </div>
                   </div>

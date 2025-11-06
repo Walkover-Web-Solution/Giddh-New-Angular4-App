@@ -15,14 +15,14 @@
     display: flex;
     align-items: flex-start;
     .browse-file-label {
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--color-silver);
         display: inline-block;
         padding: 1px 12px !important;
         cursor: pointer;
         width: 120px !important;
-        border-radius: var(--mat-border-radius-0);
+        border-radius: 2px;
         text-align: center;
-        background-color: var(--theme-primary-light);
+        background-color: var(--color-light-gray);
         margin-left: -34px;
     }
     input[type="file"] {
@@ -57,13 +57,13 @@
     >div {
         height: 230px;
         p {
-            color: var(--theme-foreground-color);
+            color: var(--color-black);
         }
     }
 
     &:hover {
         >div {
-            background-color: var(--theme-primary-light);
+            background-color: var(--color-light-gray);
         }
     }
 }

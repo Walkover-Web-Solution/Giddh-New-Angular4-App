@@ -13,7 +13,7 @@
             <form name="changeBillingForm" [formGroup]="changeBillingForm" autocomplete="off" novalidate>
                 <mat-card-content>
                     <div class="welcome-msg">
-                        <p class="strong font-size-16 my-3">
+                        <p class="strong font-16 my-3">
                             {{ localeData?.billing_heading_hello }} {{ billingDetails?.billingName }} !
                         </p>
                     </div>
@@ -83,7 +83,7 @@
                                     [placeholder]="commonLocaleData?.app_mobile_number"
                                     [attr.name]="'billingMobileNumber' + currentTimeStamp"
                                     [autocomplete]="'billingMobileNumber' + currentTimeStamp"
-                                    class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border bg-transparent"
+                                    class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                     [ngClass]="{
                                         'invalid-input':
                                             isFormSubmitted ||
@@ -169,7 +169,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <mat-form-field appearance="outline" class="initial-height w-100">
+                            <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
                                 <textarea
                                     [name]="'billingAddress' + currentTimeStamp"
@@ -182,7 +182,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="pt-2 d-flex column-gap-15">
+                        <div class="pt-2 d-flex column-gap15">
                             <button aria-label="submit" mat-raised-button color="primary" (click)="onSubmit()">
                                 {{ commonLocaleData?.app_submit }}
                             </button>

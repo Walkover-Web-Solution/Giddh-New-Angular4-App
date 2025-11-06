@@ -1,3 +1,4 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, Inject, TemplateRef, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
@@ -60,6 +61,8 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
     public translationLoaded: boolean = false;
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /** True if mobile screen */
+    public isMobileScreen: boolean = true;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holding data in SidebarNode Array */
@@ -107,6 +110,7 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
 
     constructor(
         private router: Router,
+        private breakPointObserver: BreakpointObserver,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private store: Store<AppState>,
@@ -116,6 +120,11 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
         private dialog: MatDialog,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
+        this.breakPointObserver.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     /**
@@ -218,6 +227,18 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
      */
     private proceedWithGoToPreviousPage(): void {
         this.location.back();
+    }
+
+    /**
+     * This will close the settings popup if clicked outside and is mobile screen
+     *
+     * @param {*} [event]
+     * @memberof InventorySidebarComponent
+     */
+    public closeAsidePaneIfMobile(event?: any): void {
+        if (this.isMobileScreen && event?.target?.className !== "icon-bar") {
+            this.closeAsideEvent.emit(event);
+        }
     }
 
     /**

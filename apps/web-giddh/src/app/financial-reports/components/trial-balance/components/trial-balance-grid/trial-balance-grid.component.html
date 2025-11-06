@@ -6,12 +6,12 @@
 >
     <!-- no data start -->
     <div class="no-data" *ngIf="noData">
-        <h2>{{ localeData?.no_data_found }}</h2>
+        <h1>{{ localeData?.no_data_found }}</h1>
         <img src="/assets/images/no-data.png" [alt]="localeData?.no_data_found" />
     </div>
     <!-- nodata end -->
     <div *ngIf="!noData" class="tb-wrapper">
-        <div class="clear-both">
+        <div class="clearfix">
             <!-- start main content -->
             <div class="mt-1 mr-b1 pull-right">
                 <div class="tbpl-list">
@@ -36,7 +36,7 @@
                 </div>
                 <!-- end of column -->
             </div>
-            <div class="table-container clear-both trial-balance">
+            <div class="table-container clearfix trial-balance">
                 <section class="tb-section">
                     <div class="row">
                         <div

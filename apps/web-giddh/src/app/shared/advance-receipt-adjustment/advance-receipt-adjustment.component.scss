@@ -5,7 +5,7 @@
 }
 p {
     a {
-        color: var(--text-primary-color);
+        color: var(--color-blue-primary);
     }
 }
 .inclusive-tax {
@@ -24,10 +24,8 @@ p {
 .icon-font-10 {
     font-size: 10px;
 }
-/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
 .modal-header{
     .close{
         color: var(--color-white);
     }
 }
-*/

@@ -16,8 +16,8 @@
 
     .mat-select-btn {
         background: var(--color-white) !important;
-        border: 1px solid var(--border-color) !important;
-        border-radius: var(--mat-border-radius-4) !important;
+        border: 1px solid var(--color-fields-border) !important;
+        border-radius: 4px !important;
         padding: 6px !important;
         outline: 0;
         color: var(--color-black) !important;
@@ -50,12 +50,10 @@
 }
 
 
-/* UNUSED COMPONENT CLASS: permission-row - Auto-commented by script
 .permission-row {
     margin-right: -5px;
     margin-left: -5px;
 }
-*/
 
 .ip-range {
     i {
@@ -86,17 +84,13 @@
     }
 
     .permission-form {
-        /* UNUSED COMPONENT CLASS: form-group - Auto-commented by script
-.form-group {
+        .form-group {
             margin-bottom: 15px;
         }
-*/
 
-        /* UNUSED COMPONENT CLASS: pr-0 - Auto-commented by script
-.pr-0 {
+        .pr-0 {
             padding-right: 15px !important;
         }
-*/
     }
 }
 

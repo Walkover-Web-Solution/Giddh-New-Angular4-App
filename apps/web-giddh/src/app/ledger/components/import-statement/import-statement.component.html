@@ -1,15 +1,15 @@
 <div class="dialog-header">
-    <p class="font-size-16">
+    <h3 class="font-16">
         {{
             importStep === importStepEnum.Second
                 ? selectStatement === importStatementType.BankStatement ? inputData?.localeData?.import_page_heading : inputData?.localeData?.import_voucher_heading
                 : inputData?.localeData?.select_statement
         }}
-    </p>
+    </h3>
     <div class="d-inline-block">
         <button
             *ngIf="importStep === importStepEnum.Second"
-            mat-raised-button
+            mat-stroked-button
             [matTooltip]="inputData?.commonLocaleData?.app_back"
             matTooltipPosition="above"
             (click)="importStep = importStepEnum.First"
@@ -25,9 +25,9 @@
     <div *ngIf="importStep === importStepEnum.First" class="row m-0">
         <div class="col-md-6 p-0">
             <div class="statement-card" (click)="selectStatementAccount(importStepEnum.Second, importStatementType.Voucher)">
-                <div class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center">
+                <div class="cursor-pointer d-flex justify-content-center flex-column align-item-center">
                     <i class="icon-import mr-r1 icon-font-48 opacity-5"></i>
-                    <p class="mr-t2 font-size-15 text-center">{{ inputData?.localeData?.import_voucher }}</p>
+                    <p class="mr-t2 font-15 text-center">{{ inputData?.localeData?.import_voucher }}</p>
                 </div>
             </div>
         </div>
@@ -36,9 +36,9 @@
                 class="statement-card"
                 (click)="selectStatementAccount(importStepEnum.Second, importStatementType.BankStatement)"
             >
-                <div class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center">
+                <div class="cursor-pointer d-flex justify-content-center flex-column align-item-center">
                     <i class="icon-balance-sheet-new mr-r1 icon-font-48 opacity-5"></i>
-                    <p class="mr-t2 font-size-15 text-center">{{ inputData?.localeData?.import_bank_statement }}</p>
+                    <p class="mr-t2 font-15 text-center">{{ inputData?.localeData?.import_bank_statement }}</p>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
     <!-- Step second -->
     <div *ngIf="importStep === importStepEnum.Second" class="pd-2">
         <form name="importStatementForm" novalidate autocomplete="off">
-            <div class="pd-b2 clear-both browse-file-btn">
+            <div class="pd-b2 clearfix browse-file-btn">
                 <mat-label class="import-field-label align-bottom file-upload-label"
                     >{{ inputData?.commonLocaleData?.app_file }} <sup>*</sup></mat-label
                 >
@@ -62,20 +62,20 @@
                 </label>
                 <span  class="path-name align-self-center">{{ selectedFile }}</span>
             </div>
-            <div class="pd-b2 clear-both password-label d-flex mat-form-field-clean" *ngIf="getRequest.entity === fileType.PDF && selectStatement === importStatementType.BankStatement">
+            <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === fileType.PDF && selectStatement === importStatementType.BankStatement">
                 <mat-label class="import-field-label align-bottom">{{ inputData?.commonLocaleData?.app_password }}</mat-label>
                 <mat-form-field appearance="fill" class="w-100 custom-input-field">
                     <input
                         matInput
                         type="password"
                         name="password"
-                        class="form-control mat-field-border border-bottom"
+                        class="form-control mat-field-border"
                         [(ngModel)]="postRequest.password"
                     />
                 </mat-form-field>
             </div>
             <div
-                class="pd-b2 clear-both"
+                class="pd-b2 clearfix"
                 *ngIf="[fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)"
             >
                 <label class="import-field-label align-bottom">{{
@@ -90,7 +90,7 @@
                     }}</span>
                 </mat-slide-toggle>
             </div>
-            <div class="pd-b2 clear-both"
+            <div class="pd-b2 clearfix"
                 *ngIf="selectStatement === importStatementType.BankStatement && [fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)"
                 >
                 <label class="import-field-label align-bottom">{{
@@ -113,14 +113,14 @@
                 <div>
                     <a
                         href="javascript:;"
-                        class="m-0 pd-t05 pd-b05 pd-r1 font-size-14 text-underline"
+                        class="m-0 pd-t05 pd-b05 pd-r1 font-14 text-underline"
                         (click)="downloadSampleFile(selectStatement)"
                     >
                         {{ inputData?.localeData?.download_sample_xls }}
                     </a>
                     <a
                         href="javascript:;"
-                        class="pd-t05 pd-b05 pd-r1 pd-l1 font-size-14 text-underline"
+                        class="pd-t05 pd-b05 pd-r1 pd-l1 font-14 text-underline"
                         (click)="downloadSampleFile(selectStatement, true)"
                     >
                         {{ inputData?.localeData?.download_sample_csv }}

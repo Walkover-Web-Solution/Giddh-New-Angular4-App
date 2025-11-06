@@ -192,7 +192,7 @@
 		"gstn_username": "जीएसटीएन उपयोगकर्ता नाम",
 		"filing_period": "फाइलिंग अवधि",
 		"gst_return_type": "जीएसटी रिटर्न प्रकार",
-		"type_submit": "टेक्स्ट बॉक्स में <strong>सबमिट करें</strong> टाइप करें<span class='text-red'>*</span>",
+		"type_submit": "टेक्स्ट बॉक्स में <strong>सबमिट करें</strong> टाइप करें<span class='text-danger'>*</span>",
 		"otp_required_error": "कृपया ओटीपी जोड़ें..",
 		"submit_gst_error": "कृपया टेक्स्ट बॉक्स में सबमिट करें दर्ज करें.."
 	},

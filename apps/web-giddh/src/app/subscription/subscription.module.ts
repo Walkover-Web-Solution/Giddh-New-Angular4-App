@@ -37,6 +37,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { SubscriptionListComponent } from './subscription-list/subscription-list.component';
 import { CompanyDetailsSidebarComponent } from './components/company-details-sidebar/company-details-sidebar.component';
 import { AllFeaturesComponent } from './components/all-features/all-features.component';
+import { AddOnsComponent } from './components/add-ons/add-ons.component';
 import { SubscriptionsPlansComponent } from './components/subscriptions-plans/subscriptions-plans.component';
 import { UserDetailsPipe } from './user-details.pipe';
 import { LaddaModule } from 'angular2-ladda';
@@ -54,6 +55,7 @@ import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-method-dialog.component';
+import { SubscriptionV1Component } from './components/subscription-v1/subscription-v1.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
 
 @NgModule({
@@ -107,15 +109,18 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
 
     ],
     exports: [SubscriptionListComponent,
+        SubscriptionV1Component,
         UserDetailsPipe,
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
-        SubscriptionComponent
+        SubscriptionComponent,
+        AddOnsComponent
     ],
     declarations: [
         SubscriptionComponent,
+        SubscriptionV1Component,
         SubscriptionListComponent,
         CompanyListDialogComponent,
         PaymentMethodDialogComponent,
@@ -130,6 +135,7 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
         CompanyDetailsSidebarComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
+        AddOnsComponent,
         UserDetailsPipe
     ],
     providers: [

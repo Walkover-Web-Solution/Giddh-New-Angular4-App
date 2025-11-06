@@ -8,7 +8,7 @@
         <hamburger-menu></hamburger-menu>
     </div>
     <div class="container-fluid mr-t15 adjust-inventory-list-page">
-        <div class="d-flex align-items-center column-gap-1 adjust-inventory-header">
+        <div class="d-flex align-items-center column-gap1 adjust-inventory-header">
             <div
                 *ngIf="
                     currentCompanyBranches?.length > 2 &&
@@ -39,7 +39,7 @@
                     type="text"
                     name="selectedDateRange"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                    class="giddh-datepicker date-range-picker text-center pd-l1 pd-r1"
+                    class="giddh-datepicker date-range-picker text-align-center pd-l1 pd-r1"
                     readonly
                 />
             </div>
@@ -55,7 +55,7 @@
                     adjustInventoryListForm?.controls['entity']?.value
                 "
                 mat-stroked-button
-                class="min-width-160 mx-auto"
+                class="min160 mx-auto"
                 color="primary"
                 (click)="clearFilter()"
             >
@@ -294,8 +294,8 @@
                             <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
                             <td mat-cell *matCellDef="let element">
                                 <button mat-button [matMenuTriggerFor]="beforeMenu" class="bg-transparent mr-0 px-0">
-                                    <span class="d-flex align-items-center justify-content-between">
-                                        <span class="text-light pr-2">{{ commonLocaleData?.app_select_action }}</span>
+                                    <span class="d-flex align-items-center justify-content-space-between">
+                                        <span class="text-light-2 pr-2">{{ commonLocaleData?.app_select_action }}</span>
                                         <span> <i class="icon-dots-three-vertical"></i></span>
                                     </span>
                                 </button>
@@ -324,7 +324,7 @@
                 </form>
             </section>
             <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(adjustInventoryInProgress$ | async)">
-                <no-data [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
+                <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
             </div>
             <div
                 *ngIf="adjustInventoryListRequest.totalItems > pageSizeOptions[0] && showData && !(adjustInventoryInProgress$ | async)"
@@ -337,6 +337,7 @@
                     [pageSizeOptions]="pageSizeOptions"
                     [hidePageSize]="false"
                     [pageIndex]="pageIndex"
+                    class="mt-15"
                 >
                 </mat-paginator>
                 <section class="mr-b8"></section>
@@ -350,7 +351,7 @@
             <span> {{ title }}</span>
             <i class="icon-search d-flex cursor-pointer align-items-center" (click)="toggleSearch(fieldName)"></i>
         </div>
-        <div class="input-container position-relative " [hidden]="!show">
+        <div class="input-container position-relative" [hidden]="!show">
             <text-field
                 [type]="'text'"
                 [placeholder]="getSearchFieldText(fieldName)"

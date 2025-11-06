@@ -2,12 +2,12 @@
     class="position-relative tax-control-cmp custom-mat-form-field"
 >
     <ng-container *ngIf="!showMatFormField">
-        <label class="font-size-12" *ngIf="showHeading"
+        <label class="font-12" *ngIf="showHeading"
             >{{ customHeading ? customHeading : commonLocaleData?.app_tax }}
             <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
         >
-        <a id="tax" class="clear-both">
-            <div class="multi-select adjust position-relative " id="tax-control-multi-select">
+        <a id="tax" class="clearfix">
+            <div class="multi-select adjust position-relative" id="tax-control-multi-select">
                 <input
                     (keydown.enter)="$event.preventDefault(); toggleTaxMenu(true)"
                     matInput
@@ -67,7 +67,7 @@
         <div (click)="$event.stopPropagation()" class="discount-wrapper pd-l1 pd-r1">
             <div class="tax-wrapper">
                 <div *ngIf="taxRenderData.length === 0">
-                    <p class="lead pd-05 font-size-14 text-center">{{ commonLocaleData?.app_no_tax_found }}</p>
+                    <p class="lead pd font-14 text-center">{{ commonLocaleData?.app_no_tax_found }}</p>
                 </div>
                 <p *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
                     <mat-checkbox
@@ -104,7 +104,7 @@
                 </p>
             </div>
             <div *ngIf="showCreateNew" class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
-                <span class="text-primary">{{ commonLocaleData?.app_create_new }}</span>
+                <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
             </div>
         </div>
     </mat-menu>

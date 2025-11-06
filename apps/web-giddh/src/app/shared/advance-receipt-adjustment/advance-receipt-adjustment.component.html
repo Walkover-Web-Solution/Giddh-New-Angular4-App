@@ -12,10 +12,10 @@
             <i class="icon-cross"></i>
         </button>
     </div>
-    <mat-dialog-content class="dialog-body font-size-15 adjustments-list">
+    <mat-dialog-content class="dialog-body font-15 adjustments-list">
         <div class="row h-100">
             <div class="col-md-12 d-flex flex-column">
-                <span class="text-default" *ngIf="isUpdateMode && isVoucherModule">
+                <span class="text-black" *ngIf="isUpdateMode && isVoucherModule">
                     {{ localeData?.adjusted_amount_error }}
                 </span>
                 <div class="row mb-2" *ngIf="isModal">
@@ -33,7 +33,7 @@
                             ></input-field>
                         </div>
                     </div>
-                    <div class="col-md-4 text-right font-size-15 pt-2">
+                    <div class="col-md-4 text-right font-15 pt-2">
                         <p>
                             {{
                                 adjustedVoucherType === "rcpt"
@@ -74,7 +74,7 @@
                                     ? commonLocaleData?.app_balance
                                     : commonLocaleData?.app_due
                             }}
-                            <span class="text-default">{{ localeData?.post_adj }}</span>
+                            <span class="text-black">{{ localeData?.post_adj }}</span>
                             <span class="nowrap"><i class="icon-font-10"></i> </span>
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field
@@ -238,7 +238,7 @@
                                         *ngIf="
                                             entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'
                                         "
-                                        class="text-default inclusive-tax"
+                                        class="text-black inclusive-tax"
                                         >({{ localeData?.inclusive_tax }})</span
                                     >
                                 </div>
@@ -253,7 +253,7 @@
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
                                     (click)="deleteAdjustVoucherRow(entryIdx)"
-                                    class="icon-font-22 text-default d-inline-block"
+                                    class="icon-font-22 text-black d-inline-block"
                                     ><i class="icon-trash"></i
                                 ></a>
                             </div>
@@ -261,13 +261,13 @@
                     </ng-container>
 
                     <p>
-                        <a href="javascript:void(0)" aria-label="new line" (click)="addNewBlankAdjustVoucherRow()" class="font-size-15"
-                            ><span class="font-size-15">+</span> {{ commonLocaleData?.app_add_new_line }}</a
+                        <a href="javascript:void(0)" aria-label="new line" (click)="addNewBlankAdjustVoucherRow()" class="font-15"
+                            ><span class="font-15">+</span> {{ commonLocaleData?.app_add_new_line }}</a
                         >
                     </p>
 
-                    <div class="clear-both flex-grow-1 d-flex flex-column">
-                        <span class="text-default" *ngIf="exceedDueAmount < 0">
+                    <div class="clearfix flex-grow-1 d-flex flex-column">
+                        <span class="text-black" *ngIf="exceedDueAmount < 0">
                             {{ localeData?.excess_amount }}:
                             <span class="d-inline-flex">
                                 <amount-field

@@ -22,8 +22,8 @@
             </div>
         </div>
 
-        <div class="clear-both" *ngIf="![receiptVoucherType, paymentVoucherType].includes(voucherType)">
-            <p class="font-size-15 mr-b05">{{ localeData?.invoice_copy }}</p>
+        <div class="clearfix" *ngIf="![receiptVoucherType, paymentVoucherType].includes(voucherType)">
+            <h3 class="font-15 mr-b05">{{ localeData?.invoice_copy }}</h3>
             <hr />
             <div class="checkbox">
                 <mat-checkbox

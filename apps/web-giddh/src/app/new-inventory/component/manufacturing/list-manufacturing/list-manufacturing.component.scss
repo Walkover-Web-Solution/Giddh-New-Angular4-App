@@ -14,7 +14,7 @@
         }
     }
     .list-table-wrapper {
-        border-top: 1px solid var(--border-color);
+        border-top: 1px solid var(--color-silver);
     }
 }
 
@@ -29,11 +29,9 @@
 }
 
 .advance-search-dialog {
-    /* UNUSED COMPONENT CLASS: color-white - Auto-commented by script
-.color-white {
+    .color-white {
         color: var(--color-white);
     }
-*/
 }
 .manufacturing-table {
     .content-table {

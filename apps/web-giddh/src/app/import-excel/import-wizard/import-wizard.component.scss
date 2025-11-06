@@ -18,8 +18,8 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid var(--border-color);
-            border-radius: var(--mat-border-radius-circle);
+            border: 2px solid var(--color-silver);
+            border-radius: 100%;
             transition: background-color 1s;
             background-color: var(--color-white);
             position: relative;
@@ -36,15 +36,13 @@
     color: var(--color-white);
 }
 
-/* UNUSED COMPONENT CLASS: steps-wizard - Auto-commented by script
 .steps-wizard:before {
     content: " ";
     position: absolute;
-    border-top: 2px solid var(--border-color);
+    border-top: 2px solid var(--color-silver);
     right: 0;
     left: 0;
     top: 40%;
     width: calc(100% - 172px);
     margin: 0 auto;
 }
-*/

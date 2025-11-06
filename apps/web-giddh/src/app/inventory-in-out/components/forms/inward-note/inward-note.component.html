@@ -1,8 +1,8 @@
 <div class="form-header">
     <div>
-        <p>
+        <h3>
             <span>Inward Note</span>
-            <span class="pull-right font-size-15"
+            <span class="pull-right font-15"
                 >Multiple
                 <a
                     href="javascript:void(0)"
@@ -18,11 +18,11 @@
                     >Products</a
                 >
             </span>
-        </p>
+        </h3>
     </div>
 </div>
-<div class="form-body clear-both margin-child-label">
-    <div class="clear-both">
+<div class="form-body white-bg clearfix margin-child-label">
+    <div class="clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-6 form-group">
@@ -76,18 +76,18 @@
 
             <div class="row">
                 <div class="col-4" *ngIf="mode === 'sender'">
-                    <label class="font-size-15">Sender <sup>*</sup></label>
+                    <label class="font-15">Sender <sup>*</sup></label>
                 </div>
                 <div class="col-4" *ngIf="mode === 'product'">
-                    <label class="font-size-15">Product Name <sup>*</sup></label>
+                    <label class="font-15">Product Name <sup>*</sup></label>
                 </div>
 
                 <div class="col-4">
-                    <label class="font-size-15">Unit<sup>*</sup></label>
+                    <label class="font-15">Unit<sup>*</sup></label>
                 </div>
 
                 <div class="col-4">
-                    <label class="font-size-15">Quantity <sup>*</sup></label>
+                    <label class="font-15">Quantity <sup>*</sup></label>
                 </div>
             </div>
 
@@ -141,10 +141,10 @@
                                     (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last"
                                 >
-                                    <i class="icon-plus text-green"></i>
+                                    <i class="icon-plus add-row"></i>
                                 </button>
                                 <button mat-stroked-button (click)="deleteTransactionItem(i)" *ngIf="!last">
-                                    <i class="icon-cross text-red"></i>
+                                    <i class="icon-cross delete"></i>
                                 </button>
                             </div>
                         </div>
@@ -169,17 +169,17 @@
 
                     <section class="col-12" *ngIf="form.value.isManufactured">
                         <div>
-                            <p class="section-head border-bottom">
+                            <h1 class="section-head bd-rb">
                                 <strong>{{ form.controls["stock"].value }} (Made with)</strong>
-                            </p>
+                            </h1>
 
                             <div formGroupName="manufacturingDetails">
                                 <div class="row pd-t05">
                                     <div class="col-4">
-                                        <label class="font-size-15">Output Qty <sup>*</sup></label>
+                                        <label class="font-15">Output Qty <sup>*</sup></label>
                                     </div>
                                     <div class="col-5">
-                                        <label class="font-size-15">Stock Unit <sup>*</sup></label>
+                                        <label class="font-15">Stock Unit <sup>*</sup></label>
                                     </div>
                                 </div>
 
@@ -280,10 +280,10 @@
                                                 *ngIf="l"
                                                 [disabled]="disableStockButton"
                                             >
-                                                <i class="icon-plus text-green"></i>
+                                                <i class="icon-plus add-row"></i>
                                             </button>
                                             <button mat-stroked-button (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
-                                                <i class="icon-cross text-red"></i>
+                                                <i class="icon-cross delete"></i>
                                             </button>
                                         </div>
                                     </div>

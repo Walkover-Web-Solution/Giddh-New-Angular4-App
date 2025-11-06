@@ -7,8 +7,8 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid">
         <div>
-            <div class="clear-both">
-                <div class="top-bar clear-both border-bottom">
+            <div class="clearfix">
+                <div class="top-bar clearfix bd-rb">
                     <search-sidebar
                         *ngIf="localeData?.page_heading"
                         [pageChangeEvent]="pageChangeEvent"

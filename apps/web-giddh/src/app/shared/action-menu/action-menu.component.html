@@ -4,33 +4,33 @@
   [matMenuTriggerFor]="menu"
   aria-label="actions"
 >
-  <span class="icon-dots-three-vertical font-size-20"></span>
+  <span class="icon-dots-three-vertical font-20"></span>
 </button>
 
 <mat-menu #menu="matMenu">
   <div class="account-detail-custom-header">
     <div class="d-flex p-0">
-      <div class="account-detail-padding flex-fill border-right-none">
-        <p class="account-detail-custom-title word-break font-size-15 mr-t05">
+      <div class="account-detail-padding flex-fill border-right-0">
+        <h3 class="account-detail-custom-title word-break font-15 mr-t05">
           <span (click)="performActions(4, account)">
             {{ account?.name }}
           </span>
-        </p>
+        </h3>
       </div>
       <a (click)="performActions(4, account)" class="cursor-pointer pl-1 pd-t05">
-        <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
+        <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
       </a>
     </div>
     <div class="custom-detail">
-      <p>{{ account?.mobileNo }}</p>
-      <p>{{ account?.email }}</p>
-      <p>{{ account?.gstIn }}</p>
+      <h4>{{ account?.mobileNo }}</h4>
+      <h4>{{ account?.email }}</h4>
+      <h4>{{ account?.gstIn }}</h4>
     </div>
   </div>
 
   <button
     mat-menu-item
-    *ngIf="showGotoLedger && !isTabletScreen"
+    *ngIf="showGotoLedger && !isMobileScreen"
     class="menu-table-item"
     (click)="performActions(1, account)"
     aria-label="ledger"

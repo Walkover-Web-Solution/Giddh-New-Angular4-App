@@ -7,19 +7,17 @@
             background-color: var(--color-transparent);
             tr {
                 &:hover {
-                    background-color: var(--theme-primary-light);
+                    background-color: var(--color-blue-light);
                 }
             }
         }
     }
 }
-/* UNUSED COMPONENT CLASS: month-selection - Auto-commented by script
 .month-selection {
     color: var(--color-black) !important;
     background: var(--color-light-gray) !important;
 
-    // &::placeholder {
-    //     color: var(--color-black) !important;
-    // }
+    &::placeholder {
+        color: var(--color-black) !important;
+    }
 }
-*/

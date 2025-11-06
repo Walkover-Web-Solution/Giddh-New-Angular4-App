@@ -18,34 +18,28 @@
     max-width: 500px;
 }
 
-/* UNUSED COMPONENT CLASS: upload-icon - Auto-commented by script
 .upload-icon {
     font-size: 62px;
     float: none;
     color: var(--color-border-light);
 }
-*/
 
-/* UNUSED COMPONENT CLASS: sample-file-btn - Auto-commented by script
 .sample-file-btn {
     z-index: 9;
     position: relative;
 }
-*/
 
 .dashed-border {
     border: 2px dashed var(--color-silver);
 }
 
-/* UNUSED COMPONENT CLASS: import-type - Auto-commented by script
 .import-type {
     display: flex;
     justify-content: center;
 }
-*/
 
 .import-type li {
-    // list-style: none;
+    list-style: none;
     width: 320px;
     height: 150px;
     text-align: center;
@@ -54,7 +48,7 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
     background: var(--color-light-gray);
     padding: 15px;
     cursor: pointer;
@@ -69,18 +63,14 @@
     transform: scale(1.01);
 }
 
-/* UNUSED COMPONENT CLASS: lead - Auto-commented by script
 .lead {
     font-size: var(--font-size-32);
     margin-bottom: 10px;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: has-error - Auto-commented by script
 .has-error .form-control {
     border-color: var(--color-red) !important;
 }
-*/
 
 #csvUploadInput {
     opacity: 0;
@@ -93,7 +83,6 @@
     z-index: 2;
 }
 
-/* UNUSED COMPONENT CLASS: custom-file-label - Auto-commented by script
 .custom-file-label {
     left: 0px;
     top: 0;
@@ -102,54 +91,46 @@
     background: var(--color-white);
     text-align: left;
     position: absolute;
-    border: 1px solid var(--border-color);
-    border-radius: var(--mat-border-radius-0) !important;
+    border: 1px solid var(--color-silver);
+    border-radius: 2px !important;
     padding: 6px 12px !important;
     outline: 0;
     color: var(--color-black);
     font-size: var(--font-size-15);
     width: calc(100% - 95px);
 }
-*/
 .select-file {
     color: var(--color-green);
 }
 .file-upload-panel {
     width: 100%;
     text-align: left;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
     padding: 8px;
-    border-radius: var(--mat-border-radius-4);
+    border-radius: 4px;
 }
 .linked-entities {
     .list-item {
-        /* UNUSED COMPONENT CLASS: entity-icon - Auto-commented by script
-.entity-icon {
+        .entity-icon {
             padding: 4px;
         }
-*/
-        /* UNUSED COMPONENT CLASS: entity-details - Auto-commented by script
-.entity-details {
+        .entity-details {
             margin-left: 6px;
             flex: 1;
             .item {
                 font-weight: var(--font-weight-semibold);
             }
         }
-*/
-        /* UNUSED COMPONENT CLASS: default-entity - Auto-commented by script
-.default-entity {
+        .default-entity {
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--text-primary-color);
+                color: var(--color-blue-primary);
             }
-            /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
-.icon-favorite-selected {
-                color: var(--text-primary-color);
+            .icon-favorite-selected {
+                color: var(--color-blue-primary);
             }
-}
-*/
+        }
     }
 }
 #is-header-provided {
@@ -163,5 +144,15 @@
             width: 27%;
             margin: 0 15px 30px;
         }
+    }
+}
+@media (max-width: 767px) {
+    .center-block .btn-sm {
+        float: none !important;
+        text-align: center !important;
+        display: block;
+        margin: 0 !important;
+        width: 100%;
+        padding: 4px 0;
     }
 }

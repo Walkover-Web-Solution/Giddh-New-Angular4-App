@@ -22,7 +22,7 @@
 		"taxes": "करों",
 		"bank": "बैंक"
 	},
-	"remove_branch": "क्या आप वाकई <strong>[COMPANY_NAME]</strong> को हटाना चाहते हैं?",
+	"remove_branch": "क्या आप वाकई <p class='remvBrnchName'><b>[COMPANY_NAME]</b> को हटाना चाहते हैं?</p>",
 	"branch_updated": "शाखा सफलतापूर्वक अपडेट की गई",
 	"create_branch_under": "के तहत शाखा बनाएं",
 	"country_currency": "देश और मुद्रा",

@@ -1,4 +1,3 @@
-/* UNUSED COMPONENT CLASS: new-inventory-page-header - Auto-commented by script
 .new-inventory-page-header {
     padding: 0 15px 15px;
     margin-bottom: 15px;
@@ -7,44 +6,37 @@
     border-bottom: 1px solid var(--color-medium-gray);
     align-items: center;
 
-    /* UNUSED COMPONENT CLASS: inventory-header-right - Auto-commented by script
-.inventory-header-right {
+    .inventory-header-right {
         display: flex;
     }
 }
-*/
 
-/* UNUSED COMPONENT CLASS: page-title-inventory - Auto-commented by script
 .page-title-inventory {
     font-weight: bold;
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
     font-size: var(--font-size-15);
 }
-*/
 
 .create-new-inventory-page {
     padding-top: 15px;
 
-    /* UNUSED COMPONENT CLASS: back-to-page - Auto-commented by script
-.back-to-page {
+    .back-to-page {
         position: absolute;
         right: 5px;
         top: 0;
         padding: 10px;
         z-index: 10;
-        color: var(--text-primary-color);
+        color: var(--color-blue-primary);
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: select-product-type - Auto-commented by script
-.select-product-type {
+    .select-product-type {
         .form-body {
             background-color: transparent;
         }
 
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
         margin-bottom: 15px;
         font-size: var(--font-size-15);
         padding-bottom: 5px;
@@ -53,12 +45,11 @@
             width: 86px;
         }
     }
-*/
 
     .sales-purchase-details {
-        // background-color: var(--color-white);
+        background-color: var(--color-white);
         padding: 0 15px;
-        border-radius: var(--mat-border-radius-8);
+        border-radius: 7px;
 
         .select-puchase-info {
             padding: 6px 0px;
@@ -69,7 +60,7 @@
             position: relative;
 
             .icon-button-add {
-                color: var(--text-primary-color);
+                color: var(--color-blue-primary);
                 position: absolute;
                 left: 18px;
                 top: 35px;
@@ -77,25 +68,22 @@
                 z-index: 1;
                 font-weight: 600;
                 width: auto;
-                border-radius: var(--mat-border-radius-4);
+                border-radius: 5px;
                 height: 21px;
                 display: flex;
                 align-items: center;
                 overflow: hidden;
                 font-family: var(--font-family) !important;
 
-                /* UNUSED COMPONENT CLASS: add-new-text-container - Auto-commented by script
-.add-new-text-container {
+                .add-new-text-container {
                     font-family: var(--font-family);
                     position: relative;
                     cursor: pointer;
                     font-size: var(--font-size-12);
                 }
-*/
             }
 
-            /* UNUSED COMPONENT CLASS: icon-button-remove - Auto-commented by script
-.icon-button-remove {
+            .icon-button-remove {
                 color: var(--color-medium-gray);
                 position: absolute;
                 right: -20px;
@@ -103,7 +91,6 @@
                 top: -5px;
                 z-index: 1;
             }
-*/
         }
 
         .sales-information {
@@ -119,21 +106,17 @@
                 top: 0;
             }
 
-            /* UNUSED COMPONENT CLASS: bg-transparent - Auto-commented by script
-.bg-transparent {
+            .bg-transparent {
                 background-color: var(--color-transparent) !important;
             }
-*/
         }
 
-        /* UNUSED COMPONENT CLASS: stock-check - Auto-commented by script
-.stock-check {
+        .stock-check {
             mat-checkbox {
                 display: flex;
                 justify-content: flex-end;
             }
         }
-*/
     }
 
     .stock-made-with {
@@ -168,29 +151,28 @@
         }
 
         i {
-            color: var(--text-primary-color);
+            color: var(--color-blue-primary);
         }
     }
 
     // Inventory
     .product-option {
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
     }
 
     .product-option-wrapper {
-        // background-color: var(--color-white);
+        background-color: var(--color-white);
         padding: 20px 15px;
-        border-radius: var(--mat-border-radius-8);
+        border-radius: 8px;
 
-        /* UNUSED COMPONENT CLASS: multi-select-input - Auto-commented by script
-.multi-select-input {
+        .multi-select-input {
             width: 85%;
             margin-right: 10px;
-            border-radius: var(--mat-border-radius-0);
+            border-radius: 2px;
             display: inline-block;
             position: relative;
             bottom: 2px;
-            border-color: var(--border-color);
+            border-color: var(--color-silver);
 
             .chip-close-btn {
                 color: var(--color-black);
@@ -201,12 +183,10 @@
                 color: var(--color-silver);
             }
 
-            /* UNUSED COMPONENT CLASS: s-chip - Auto-commented by script
-.s-chip {
+            .s-chip {
                 background-color: var(--color-light-gray) !important;
             }
         }
-*/
 
         .delete-btn-wrapper {
             width: 10%;
@@ -224,22 +204,20 @@
                 justify-content: center;
                 height: 32px;
                 width: 40px;
-                border-radius: var(--mat-border-radius-4);
+                border-radius: 5px;
                 color: var(--color-dark-gray);
-                border: 1px solid var(--border-color);
+                border: 1px solid var(--color-silver);
                 background-color: var(--color-transparent);
             }
         }
 
         .another-option-btn {
-            color: var(--text-primary-color) !important;
+            color: var(--color-blue-primary) !important;
         }
 
-        /* UNUSED COMPONENT CLASS: category-label - Auto-commented by script
-.category-label {
+        .category-label {
             display: block;
         }
-*/
 
         .color-field {
             align-items: baseline;
@@ -250,8 +228,7 @@
             column-gap: 40px;
             align-items: center;
 
-            /* UNUSED COMPONENT CLASS: mat-standard-chip - Auto-commented by script
-.mat-standard-chip {
+            .mat-standard-chip {
                 padding: 5px;
                 min-height: 25px;
                 min-width: 25px;
@@ -259,7 +236,6 @@
                 background-color: var(--color-border-light);
                 font-size: var(--font-size-12);
             }
-*/
 
             .dot-img {
                 img {
@@ -311,7 +287,7 @@
     .select-physical-product {
         .top-right-spacing {
             top: 5px;
-            right: 110px;
+            right: 95px;
         }
 
         .z-index-1 {
@@ -339,16 +315,13 @@
                     }
                 }
 
-                /* UNUSED COMPONENT CLASS: product-name-label - Auto-commented by script
-.product-name-label {
+                .product-name-label {
                     position: relative;
 
-                    /* UNUSED COMPONENT CLASS: product-name-star - Auto-commented by script
-.product-name-star {
+                    .product-name-star {
                         position: absolute;
                     }
                 }
-*/
             }
 
             .other-group {
@@ -368,11 +341,10 @@
     }
 
     .icon-plus {
-        color: var(--text-primary-color);
+        color: var(--color-blue-primary);
     }
 }
 
-/* UNUSED COMPONENT CLASS: add-image-button - Auto-commented by script
 .add-image-button {
     button {
         padding: 0;
@@ -389,13 +361,11 @@
         transform: scale(1.2);
     }
 }
-*/
 
 .inner-content-footer {
     padding: 0px 22px 15px;
 
-    /* UNUSED COMPONENT CLASS: create-inventory-btn - Auto-commented by script
-.create-inventory-btn {
+    .create-inventory-btn {
         width: 198px;
         height: 36px;
         color: var(--color-white);
@@ -405,14 +375,11 @@
             background-color: var(--color-green-light);
         }
     }
-*/
 
     .button-group {
-        /* UNUSED COMPONENT CLASS: btn-danger - Auto-commented by script
-.btn-danger {
+        .btn-danger {
             background-color: var(--color-white) !important;
         }
-*/
     }
 }
 
@@ -421,7 +388,7 @@ table.stock-table {
     margin-left: 2px;
 
     .table-heading-color {
-        color: var(--text-primary-color);
+        color: var(--color-blue-primary);
     }
 
     tr {
@@ -431,7 +398,7 @@ table.stock-table {
         th {
             padding: 7px 10px;
             display: inline-block;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--color-silver);
 
             &.archive {
                 max-width: 80px;
@@ -439,8 +406,7 @@ table.stock-table {
             }
 
             &.variant-image {
-                max-width: 165px;
-                min-width: 165px;
+                width: clamp(165px, 165px, 165px);
             }
 
             &.sales-purchase-info {
@@ -462,17 +428,13 @@ table.stock-table {
                 }
             }
 
-            /* UNUSED COMPONENT CLASS: icon-button-remove-sales - Auto-commented by script
-.icon-button-remove-sales {
+            .icon-button-remove-sales {
                 width: 20px !important;
             }
-*/
 
-            /* UNUSED COMPONENT CLASS: icon-button-add-sales - Auto-commented by script
-.icon-button-add-sales {
+            .icon-button-add-sales {
                 width: 40px !important;
             }
-*/
 
             &.variant-name-column {
                 max-width: 180px;
@@ -498,6 +460,11 @@ table.stock-table {
                 max-width: 130px;
                 min-width: 130px;
             }
+
+            &.is-rate-inclusive {
+                max-width: 165px;
+                min-width: 165px;
+            }
         }
     }
 
@@ -522,7 +489,7 @@ table.stock-table {
         border: 1px solid var(--color-border-medium);
     }
 
-    &.text-green {
+    &.text-success {
         .attachment-add-icon {
             border-color: var(--color-green);
         }
@@ -534,12 +501,12 @@ table.stock-table {
     }
 
     .attachment-placeholder {
-        color: var(--text-primary-color);
+        color: var(--color-blue-primary);
     }
 
     input {
         left: 0;
-        border-radius: var(--mat-border-radius-4);
+        border-radius: 5px;
         z-index: 1;
 
         //  This will hide "Default Choose file" button
@@ -561,8 +528,7 @@ table.stock-table {
     width: 100%;
     margin-bottom: 0;
 
-    /* UNUSED COMPONENT CLASS: delete-row - Auto-commented by script
-.delete-row {
+    .delete-row {
         position: absolute;
         right: -40px;
         width: 25px;
@@ -575,7 +541,6 @@ table.stock-table {
         color: var(--color-dark-gray);
         font-size: 17px;
     }
-*/
 
     .delete-tb-tr-icon {
         position: absolute;
@@ -598,7 +563,7 @@ table.stock-table {
 .bulk-create-table tbody {
     min-width: 160px;
     border-collapse: collapse;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
 }
 
 .combo-table th,
@@ -633,19 +598,17 @@ table.stock-table {
             }
         }
 
-        /* UNUSED COMPONENT CLASS: checkbox-custom-label - Auto-commented by script
-.checkbox-custom-label {
+        .checkbox-custom-label {
             padding-bottom: 0;
             width: 100%;
         }
-*/
 
         .search-field {
             display: flex;
             width: 200px;
             position: relative;
-            border: 1px solid var(--border-color);
-            border-radius: var(--mat-border-radius-4);
+            border: 1px solid var(--color-silver);
+            border-radius: 5px;
 
             .input-addon {
                 position: absolute;
@@ -665,7 +628,7 @@ table.stock-table {
         }
 
         .bulk-creation-filter-btn {
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--color-silver);
             margin-right: 13px;
             display: grid;
             place-content: center;
@@ -722,12 +685,10 @@ table.stock-table {
         max-width: 30%;
     }
 
-    /* UNUSED COMPONENT CLASS: col-sm-1 - Auto-commented by script
-.col-sm-1 {
+    .col-sm-1 {
         flex: 0 0 5.333333%;
         max-width: 5.333333%;
     }
-*/
 
     .to-span {
         position: relative;
@@ -735,12 +696,10 @@ table.stock-table {
     }
 
     .recipe-input-tab {
-        /* UNUSED COMPONENT CLASS: col-sm-3 - Auto-commented by script
-.col-sm-3 {
+        .col-sm-3 {
             flex: 0 0 27%;
             max-width: 27%;
         }
-*/
     }
 
     .add-new-final-product {
@@ -780,19 +739,15 @@ table.stock-table {
 }
 
 @media (max-width: 1199px) {
-    /* UNUSED COMPONENT CLASS: pl-5 - Auto-commented by script
-.pl-5 {
+    .pl-5 {
         padding-left: 15px !important;
     }
-*/
 
     .create-new-inventory-page {
         .sales-purchase-details {
-            /* UNUSED COMPONENT CLASS: mt-5 - Auto-commented by script
-.mt-5 {
+            .mt-5 {
                 margin-top: 0 !important;
             }
-*/
 
             .pl-5 {
                 padding-left: 15px !important;
@@ -828,7 +783,7 @@ table.stock-table {
 }
 
 .option-color {
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
     padding: 0 15px;
 
     .add-option {
@@ -836,16 +791,9 @@ table.stock-table {
     }
 }
 
-/* UNUSED COMPONENT CLASS: ng-valid - Auto-commented by script
-/* UNUSED COMPONENT CLASS: ng-pristine - Auto-commented by script
-/* UNUSED COMPONENT CLASS: mat-input-element - Auto-commented by script
-/* UNUSED COMPONENT CLASS: mat-form-field-autofill-control - Auto-commented by script
-/* UNUSED COMPONENT CLASS: cdk-text-field-autofill-monitored - Auto-commented by script
-.mat-input-element.mat-form-field-autofill-control.form-control.form-check.ng-pristine.ng-valid.cdk-text-field-autofill-monitored/* UNUSED COMPONENT CLASS: ng-touched - Auto-commented by script
-.ng-touched {
+.mat-input-element.mat-form-field-autofill-control.form-control.form-check.ng-pristine.ng-valid.cdk-text-field-autofill-monitored.ng-touched {
     border: none !important;
 }
-*/
 
 @media (min-width: 1200px) and (max-width: 1650px) {
     .col-xl-8 {
@@ -918,10 +866,144 @@ table.stock-table {
     }
 }
 
+@media (max-width: 768px) {
+    .bulk-create-table.on-mobile-view {
+        tr {
+            border: none !important;
+
+            td {
+                input {
+                    border: 1px solid var(--color-medium-gray) !important;
+                }
+            }
+        }
+
+        tbody {
+            border: none !important;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .create-new-inventory-page {
+        .select-physical-product {
+            p {
+                margin-right: 40px;
+            }
+        }
+
+        .right-img-div {
+            display: none;
+        }
+
+        .product-detail-content,
+        .service-detail-content,
+        .combo-detail-content {
+            .add-image {
+                button {
+                    padding: 0;
+                    margin: 0 !important;
+                    height: auto;
+                    border: 2px dashed var(--color-silver);
+                    overflow: hidden;
+                }
+
+                img {
+                    height: 87px;
+                    width: 87px;
+                    object-fit: contain;
+                    transform: scale(1.2);
+                }
+            }
+        }
+
+        .product-detail-content {
+            form {
+                .text-field-border {
+                    border: 1px solid var(--color-silver) !important;
+                }
+            }
+        }
+
+        .combo-detail-content {
+            min-height: auto;
+        }
+
+        .select-product-type {
+            padding-bottom: 10px;
+        }
+    }
+}
+
+@media (max-width: 575px) {
+    .create-new-inventory-page {
+        .select-physical-product {
+            .radio-btn-wrapper {
+                display: block;
+                width: 100%;
+
+                span {
+                    width: 43%;
+                    float: left;
+                    margin-right: 0 !important;
+                    margin-bottom: 6px;
+                }
+            }
+        }
+
+        .sales-purchase-details {
+
+            .purchase-information,
+            .sales-information {
+                .pl-0 {
+                    padding-left: 15px !important;
+                }
+            }
+        }
+
+        .show-on-mobile {
+            display: none;
+        }
+    }
+
+    .final-product-recipe {
+        .width-30-percent {
+            min-width: 100%;
+            padding-right: 15px;
+            max-width: 100%;
+        }
+
+        .variant-field {
+            .variant-name-field {
+                min-width: 100%;
+                padding-right: 0;
+                max-width: 100%;
+            }
+        }
+
+        .hide-label-on-mobile {
+            display: none !important;
+        }
+    }
+
+    .btn-position-left {
+        right: 16px !important;
+        top: 6px !important;
+    }
+
+    .product-option-wrapper {
+        .mat-edit-wrap {
+            .chip-svg-wrap {
+                min-width: 300px;
+            }
+        }
+    }
+}
+
 .tab-container-new {
     padding: 15px 0;
     margin-bottom: 15px;
-    border-radius: var(--mat-border-radius-8);
+    border-radius: 7px;
 
     .sales-purchase-width {
         max-width: 900px;
@@ -936,7 +1018,7 @@ table.stock-table {
 
         i {
             font-size: 9px;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--color-silver);
             border-radius: 50%;
             width: 18px;
             height: 18px;
@@ -953,7 +1035,7 @@ table.stock-table {
 
         i {
             font-size: 10px;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--color-silver);
             border-radius: 50%;
             width: 18px;
             height: 18px;
@@ -1004,13 +1086,13 @@ table.stock-table {
     align-items: center;
     justify-content: center;
     height: 32px;
-    border-radius: var(--mat-border-radius-4);
+    border-radius: 5px;
     color: var(--color-dark-gray);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
     background-color: var(--color-transparent);
     margin-left: 15px;
 }
 
 .add-new-text-container {
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
 }

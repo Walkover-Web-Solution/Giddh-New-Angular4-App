@@ -20,17 +20,17 @@
             <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'IMPORT_ENTRIES'"></watch-video>
         </span>
     </ng-container>
-    <div class="container-fluid clear-both">
+    <div class="container-fluid clearfix">
         <div class="top-bar" *ngIf="step <= 3">
-            <p class="section-title" *ngIf="step === 1"></p>
-            <p class="section-title" *ngIf="step === 2">{{ localeData?.map_fields }}</p>
-            <p class="section-title" *ngIf="step === 3">{{ localeData?.import_data }}</p>
+            <h2 class="section-title" *ngIf="step === 1"></h2>
+            <h2 class="section-title" *ngIf="step === 2">{{ localeData?.map_fields }}</h2>
+            <h2 class="section-title" *ngIf="step === 3">{{ localeData?.import_data }}</h2>
         </div>
     </div>
 
-    <div class="clear-both col-xs-12 col-sm-12" *ngIf="localeData?.page_heading">
+    <div class="clearfix col-xs-12 col-sm-12" *ngIf="localeData?.page_heading">
         <div class="col-xs-12 col-sm-12 p-0">       
-            <div class="clear-both">
+            <div class="clearfix">
                 <div [ngSwitch]="step">
                     <ng-container *ngSwitchCase="1">
                         <upload-file

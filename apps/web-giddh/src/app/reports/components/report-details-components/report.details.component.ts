@@ -16,6 +16,7 @@ import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '../../../app.constant';
@@ -65,6 +66,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** True, if company country supports other tax (TCS/TDS) */
@@ -136,11 +139,17 @@ constructor(
         private _toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
+        private breakPointObservar: BreakpointObserver,
         private changeDetectorRef: ChangeDetectorRef,
         private ledgerService: LedgerService,
         private dialog: MatDialog,
         private componentStore: ReportsComponentStore,
         private salesPersonStore: SalesPersonComponentStore) {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     ngOnInit() {

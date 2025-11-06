@@ -4,14 +4,12 @@
     padding: 4px 0;
     display: inline-block;
 }
-/* UNUSED COMPONENT CLASS: select-plan-block - Auto-commented by script
 .select-plan-block {
     padding-bottom: 40px;
     background-color: var(--color-white);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
     height: 97%;
 }
-*/
 .welcome-msg {
     position: relative;
     .scroll-right {
@@ -30,7 +28,6 @@
         margin-left: 16px;
     }
 }
-/* UNUSED COMPONENT CLASS: note-wrap - Auto-commented by script
 .note-wrap {
     position: fixed;
     bottom: 30px;
@@ -38,7 +35,6 @@
     color: var(--color-dark-gray);
     padding: 10px;
 }
-*/
 .plan-table-content {
     overflow-x: hidden !important;
     overflow-y: hidden !important;
@@ -77,20 +73,18 @@
         height: 110px !important;
     }
     .grid-title-left {
-        position: sticky;
+        width: 370px;
         left: 0px;
         z-index: 9;
+        border-bottom: 1px solid var(--color-silver);
+        position: sticky;
+        background-color: var(--color-white);
         padding-top: 0px;
-        width: 370px;
         line-height: 3;
-        border-bottom: 1px solid var(--border-color);
-        background-color: var(--theme-background-color);
     }
-    /* UNUSED COMPONENT CLASS: top-plan-div - Auto-commented by script
-.top-plan-div {
+    .top-plan-div {
         height: 142px;
     }
-*/
     .grid-list-div {
         display: inline-flex;
         float: left;
@@ -101,7 +95,7 @@
         height: 64px !important;
         .sub-plan-feature {
             text-decoration: underline;
-            color: var(--text-primary-color) !important;
+            color: var(--color-blue-primary) !important;
         }
     }
     .sub-plan-name {
@@ -129,14 +123,12 @@
         margin-top: 5px;
         margin-left: 5px;
     }
-    /* UNUSED COMPONENT CLASS: grid-title-list-left - Auto-commented by script
-.grid-title-list-left {
+    .grid-title-list-left {
         float: left;
         width: 200px;
         height: 70px;
         margin-top: 5px;
     }
-*/
     .grid-title-list-changes:nth-child(odd) {
         background-color: var(--color-border-light) !important;
         height: 70px;
@@ -145,13 +137,11 @@
         margin-top: 5px;
         margin-left: 5px;
     }
-    /* UNUSED COMPONENT CLASS: whole-plan-span - Auto-commented by script
-.whole-plan-span {
+    .whole-plan-span {
         float: left;
         width: 195px;
         height: 39px;
     }
-*/
     .list-grid-title {
         line-height: 3.5 !important;
     }
@@ -159,11 +149,11 @@
         line-height: 4.8 !important;
     }
     .grid-title-list:nth-child(even) {
-        background-color: var(--theme-primary-light);
-        // color: var(--color-black) !important;
+        background-color: var(--color-blue-light);
+        color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
         width: 205px;
         font-weight: 500;
         font-size: var(--font-size-15);
@@ -172,14 +162,14 @@
         margin-right: 0 !important;
     }
     .grid-list {
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
     }
     .grid-title-list:nth-child(odd) {
-        background-color: var(--theme-background-color);
-        // color: var(--color-black) !important;
+        background-color: var(--color-white);
+        color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
         width: 205px;
         font-weight: 500;
         font-size: var(--font-size-15);
@@ -190,21 +180,17 @@
         }
     }
 }
-/* UNUSED COMPONENT CLASS: height-auto - Auto-commented by script
 .height-auto {
     height: auto !important;
 }
-*/
 .payment-log-list > li {
     padding: 7px 0;
 }
-/* UNUSED COMPONENT CLASS: payment-log-list - Auto-commented by script
 .payment-log-list {
     list-style-type: none;
     font-size: var(--font-size-15);
     color: var(--color-dark-gray);
 }
-*/
 .payment-log-list {
     list-style-type: none;
     font-size: var(--font-size-15);
@@ -232,7 +218,6 @@
     border-radius: 90px;
     border: 1px solid var(--color-dark-gray);
 }
-/* UNUSED COMPONENT CLASS: account-aside-menu-state - Auto-commented by script
 .account-aside-menu-state {
     position: fixed;
     left: auto;
@@ -243,9 +228,11 @@
     width: 100%;
     z-index: 1045;
 }
-*/
+.aside-overlay {
+    z-index: 991;
+}
 .selected {
-    background-color: var(--theme-primary-light);
+    background-color: var(--color-blue-light);
 }
 .select-plan-head {
     text-align: center;
@@ -253,7 +240,7 @@
     font-size: var(--font-size-16);
     padding: 20px 15px;
     h2 {
-        color: var(--text-primary-color);
+        color: var(--color-blue-primary);
         font-weight: bold;
     }
 }
@@ -262,47 +249,39 @@
     height: 97%;
     justify-content: space-around;
     background-color: var(--color-white);
-    /* p UNUSED COMPONENT CLASS: total-price - Auto-commented by script
-.total-price {
+    p.total-price {
         margin: 0 -8px;
     }
-*/
-    /* .btn-green UNUSED COMPONENT CLASS: btn-round - Auto-commented by script
-.btn-round {
+    .btn-green.btn-round {
         padding: 6px 30px;
         display: block;
         margin-right: 0px;
     }
-*/
 }
-/* UNUSED COMPONENT CLASS: your-account - Auto-commented by script
 .your-account {
     margin: 30px 0px 10px 15px;
     position: relative;
 }
-*/
-/* UNUSED COMPONENT CLASS: inner-your-account - Auto-commented by script
 .inner-your-account {
     position: relative;
     z-index: 2;
     background: var(--color-white);
     padding: 30px 15px 15px 30px;
     box-shadow: 0px 3px 6px var(--color-shadow-light);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
     transition: 0.5s all ease;
 }
-*/
 .inner-your-account:hover,
 .inner-your-account.active {
     background: var(--color-border-light);
-    border-color: var(--theme-primary-color);
+    border-color: var(--color-blue-primary);
 }
 .your-account:after,
 .your-account:before {
     content: "";
     display: block;
     width: 100%;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
     height: 100%;
     position: absolute;
     z-index: 1;
@@ -331,7 +310,7 @@
 }
 .inner-your-account > h3 {
     font-size: var(--font-size-15);
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
     font-weight: bold;
     margin-bottom: 5px;
     .plans-head-top {
@@ -341,15 +320,12 @@
         }
     }
 }
-/* UNUSED COMPONENT CLASS: plan-footer - Auto-commented by script
 .plan-footer {
-    /* UNUSED COMPONENT CLASS: success-btn - Auto-commented by script
-.success-btn {
+    .success-btn {
         padding: 6px 60px;
         margin: 10px 0;
     }
 }
-*/
 .transactions-popup {
     width: 360px;
     background: var(--color-white);
@@ -364,8 +340,7 @@
     opacity: 0;
     visibility: hidden;
     transition: 0.5s all ease-in;
-    /* UNUSED COMPONENT CLASS: close - Auto-commented by script
-.close {
+    .close {
         color: var(--color-black);
         opacity: 1;
         font-size: 16px;
@@ -373,26 +348,20 @@
         right: 10px;
         top: 12px;
     }
-*/
 }
 .transactions-limit-box {
     &:hover {
-        /* UNUSED COMPONENT CLASS: transactions-popup - Auto-commented by script
-.transactions-popup {
+        .transactions-popup {
             display: block;
             opacity: 1;
             visibility: visible;
         }
-*/
     }
 }
-/* UNUSED COMPONENT CLASS: guarantee-img - Auto-commented by script
 .guarantee-img {
     width: 50px;
     filter: grayscale(100%);
 }
-*/
-/* UNUSED COMPONENT CLASS: price-cross - Auto-commented by script
 .price-cross {
     font-size: 24px !important;
     position: relative;
@@ -407,25 +376,18 @@
         transform: rotate(10deg);
     }
 }
-*/
-/* UNUSED COMPONENT CLASS: popular-icon - Auto-commented by script
 .popular-icon {
     position: absolute;
     top: -5px;
     right: -5px;
 }
-*/
-/* UNUSED COMPONENT CLASS: close-2 - Auto-commented by script
-.close
-.close-2 {
+.close.close-2 {
     opacity: 1;
     z-index: 1;
     top: 10px;
     position: absolute;
     right: 10px;
 }
-*/
-/* UNUSED COMPONENT CLASS: plan-disabled - Auto-commented by script
 .plan-disabled {
     opacity: 0.5;
     position: relative;
@@ -438,8 +400,6 @@
         z-index: 11;
     }
 }
-*/
-/* UNUSED COMPONENT CLASS: see-all-features - Auto-commented by script
 .see-all-features {
     display: flex;
     flex-wrap: wrap;
@@ -447,19 +407,15 @@
     width: 98%;
     margin-top: 10px;
 }
-*/
 .see-all-features .inner-your-account {
-    border-color: var(--theme-primary-color);
+    border-color: var(--color-blue-primary);
     margin-bottom: 20px;
 }
-/* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
 .btn-group .close {
     font-size: 16px;
     color: var(--color-dark-gray);
     opacity: 1;
 }
-*/
-/* UNUSED COMPONENT CLASS: inner-close - Auto-commented by script
 .inner-close {
     position: absolute;
     right: 10px;
@@ -467,17 +423,12 @@
     font-size: var(--font-size-15);
     color: var(--color-black);
 }
-*/
-/* UNUSED COMPONENT CLASS: btn-green - Auto-commented by script
 .btn-green:focus {
     color: var(--color-white);
 }
-*/
-/* UNUSED COMPONENT CLASS: plans-head-top - Auto-commented by script
 .plans-head-top {
     min-height: 50px;
 }
-*/
 .activation-key-wrapper {
     margin-top: 1%;
     float: left;
@@ -486,12 +437,10 @@
     .box {
         padding-top: 0 !important;
     }
-    /* UNUSED COMPONENT CLASS: text-light - Auto-commented by script
-.text-light {
+    .text-gray {
         font-size: var(--font-size-16);
         font-weight: 500;
     }
-*/
     .footer-plan {
         padding-top: 11px;
     }
@@ -502,14 +451,12 @@
     .redeem-plan {
         width: 50%;
     }
-    /* UNUSED COMPONENT CLASS: input-plan-div - Auto-commented by script
-.input-plan-div {
+    .input-plan-div {
         float: left;
         width: 100%;
         height: 50px;
         margin-top: 10px;
     }
-*/
     .redeem-content {
         float: left;
         width: 100%;
@@ -532,11 +479,9 @@
         height: 56px;
     }
 }
-/* UNUSED COMPONENT CLASS: all-plans - Auto-commented by script
 .all-plans {
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
 }
-*/
 .btn-cancel {
     background: var(--color-medium-gray);
     border-color: var(--color-medium-gray);
@@ -559,11 +504,9 @@
         &:after {
             display: none;
         }
-        /* UNUSED COMPONENT CLASS: plan-list - Auto-commented by script
-.plan-list {
+        .plan-list {
             min-height: 245px;
         }
-*/
     }
     .plans-box {
         p {
@@ -571,7 +514,6 @@
         }
     }
 }
-/* UNUSED COMPONENT CLASS: explore-other - Auto-commented by script
 .explore-other {
     text-decoration: underline;
     font-size: var(--font-size-16);
@@ -581,94 +523,68 @@
     width: 100%;
     cursor: pointer;
 }
-*/
-/* UNUSED COMPONENT CLASS: renewal-data - Auto-commented by script
 .renewal-data {
     padding-left: 4px;
     padding-right: 4px;
 }
-*/
-/* UNUSED COMPONENT CLASS: button-loading - Auto-commented by script
 .button-loading {
     float: left;
     width: 100%;
     margin-top: 9px;
 }
-*/
-/* UNUSED COMPONENT CLASS: renewal-card-title - Auto-commented by script
 .renewal-card-title {
     margin-bottom: -3px;
     padding-top: 10px;
     font-weight: bold;
 }
-*/
-/* UNUSED COMPONENT CLASS: features-loading - Auto-commented by script
 .features-loading {
     float: left;
     width: 100%;
     margin-top: 5px;
 }
-*/
-/* UNUSED COMPONENT CLASS: renewal-card-subtitle - Auto-commented by script
 .renewal-card-subtitle {
     color: var(--color-medium-gray);
     font-size: var(--font-size-15);
     font-weight: bold;
     margin-bottom: 0 !important;
 }
-*/
-/* UNUSED COMPONENT CLASS: renewal-card-subtitle-loading - Auto-commented by script
 .renewal-card-subtitle-loading {
     width: 56%;
 }
-*/
-/* UNUSED COMPONENT CLASS: renewal-card-title-loading - Auto-commented by script
 .renewal-card-title-loading {
     float: left;
     width: 100%;
     margin-top: 8px !important;
 }
-*/
-/* UNUSED COMPONENT CLASS: year - Auto-commented by script
 .year {
     font-size: var(--font-size-15);
     margin-left: -3px;
 }
-*/
-/* UNUSED COMPONENT CLASS: renewal-list - Auto-commented by script
 .renewal-list {
     padding-left: 14px;
     padding-top: 10px;
     margin-bottom: 10px;
 }
-*/
-/* UNUSED COMPONENT CLASS: renewal-card - Auto-commented by script
 .renewal-card {
     float: left;
     width: 100%;
     box-shadow: none !important;
 }
-*/
-/* UNUSED COMPONENT CLASS: renewal-off - Auto-commented by script
 .renewal-off {
     color: var(--color-medium-gray);
     font-size: var(--font-size-12);
     font-weight: 600;
     padding-left: 4px;
 }
-*/
-/* UNUSED COMPONENT CLASS: discount-off - Auto-commented by script
 .discount-off {
     color: var(--color-green);
     font-weight: bold;
 }
-*/
 .features {
     line-height: 1.7;
     color: var(--color-medium-gray);
     font-size: var(--font-size-16);
 }
-/* UNUSED COMPONENT CLASS: renewal-card-content - Auto-commented by script
 .renewal-card-content a {
     text-decoration: underline;
     font-size: var(--font-size-16);
@@ -676,14 +592,11 @@
     float: left;
     width: 100%;
 }
-*/
-/* UNUSED COMPONENT CLASS: pay-now - Auto-commented by script
 .pay-now {
     font-size: var(--font-size-16);
     height: 44px;
     width: 44%;
 }
-*/
 .success-btn {
     width: 100% !important;
 }
@@ -693,24 +606,20 @@
     float: left;
     width: 24%;
     .extra-addons-value {
-        color: var(--text-primary-color);
+        color: var(--color-blue-primary);
     }
 }
-/* UNUSED COMPONENT CLASS: plan-table-layout - Auto-commented by script
 .plan-table-layout {
     table-layout: fixed;
     overflow: auto !important;
     max-width: 100%;
     float: left;
 }
-*/
 
 ::ng-deep {
-    /* UNUSED COMPONENT CLASS: text-primary - Auto-commented by script
-.text-primary {
-        color: var(--text-primary-color) !important;
+    .color-primary {
+        color: var(--color-blue-primary) !important;
     }
-*/
 }
 
 @media (min-width: 1200px) {
@@ -739,11 +648,9 @@
     }
 }
 @media (min-width: 1367px) {
-    /* UNUSED COMPONENT CLASS: plans-box - Auto-commented by script
-.plans-box {
+    .plans-box {
         padding: 10px 30px 30px;
     }
-*/
 }
 @media only screen and (max-width: 1366px) {
     .your-account:after {
@@ -760,21 +667,17 @@
     .plan-list {
         list-style-type: none;
     }
-    /* UNUSED COMPONENT CLASS: select-plan-head - Auto-commented by script
-.select-plan-head {
+    .select-plan-head {
         padding: 10px 15px;
     }
-*/
     .plan-list {
         li {
             padding: 5px 0;
         }
     }
-    /* UNUSED COMPONENT CLASS: plan-msg - Auto-commented by script
-.plan-msg {
+    .plan-msg {
         margin-bottom: 10px;
     }
-*/
     .single-plan-for-company {
         .plans-box {
             display: flex;
@@ -803,19 +706,15 @@
     }
 }
 @media only screen and (max-width: 1199px) {
-    /* UNUSED COMPONENT CLASS: main-row-plans - Auto-commented by script
-.main-row-plans {
+    .main-row-plans {
         width: 100%;
         margin-bottom: 15px;
         display: block;
     }
-*/
-    /* UNUSED COMPONENT CLASS: col-sm-4 - Auto-commented by script
-.main-row-plans .col-sm-4 {
+    .main-row-plans .col-sm-4 {
         width: 50%;
         display: inline-block;
     }
-*/
     .main-row-plans::-webkit-scrollbar {
         height: 5px;
         width: 100%;
@@ -823,7 +722,7 @@
     .main-row-plans::-webkit-scrollbar-thumb {
         background-color: var(--color-silver);
         outline: 1px solid var(--color-dark-gray);
-        border-radius: var(--mat-border-radius-16);
+        border-radius: 20px;
     }
     .single-plan-for-company {
         .plans-box {
@@ -841,11 +740,9 @@
         height: 97%;
         margin-bottom: 15px;
         padding-bottom: 10px;
-        /* UNUSED COMPONENT CLASS: overall-plans - Auto-commented by script
-.overall-plans {
+        .overall-plans {
             margin-bottom: 20px;
         }
-*/
     }
     .plan-footer {
         .success-btn {
@@ -864,13 +761,31 @@
         padding: 25px 20px !important;
     }
 }
+@media (max-width: 768px) {
+    .plan-footer .success-btn {
+        padding: 8px 15px;
+    }
+    .welcome-msg {
+        float: left;
+        width: 100%;
+        .btn-cancel {
+            height: 37px;
+            width: 80px;
+
+            .back-left {
+                margin-top: 0% !important;
+            }
+        }
+    }
+    .renewal-data {
+        float: left;
+    }
+}
 @media screen and (min-width: 768px) and (orientation: portrait) {
-    .plan-/* td UNUSED COMPONENT CLASS: mat-cell - Auto-commented by script
-.mat-cell:nth-child(even) {
+    .plan-td.mat-cell:nth-child(even) {
         padding-left: 104px !important;
         padding-right: 106px !important;
     }
-*/
     .plan-td.mat-cell:nth-child(odd) {
         padding-left: 110px !important;
         padding-right: 119px !important;
@@ -883,12 +798,9 @@
         padding-left: 78px !important;
         padding-right: 68px !important;
     }
-    /* UNUSED COMPONENT CLASS: mat-column--b-Benefits--b- - Auto-commented by script
-    .plan-table 
-.mat-column--b-Benefits--b- {
+    .plan-table .mat-column--b-Benefits--b- {
         padding-left: 0 !important;
     }
-*/
     .extra-addons-content {
         width: 69% !important;
     }
@@ -965,11 +877,9 @@
     .renewal-data {
         float: left;
     }
-    /* UNUSED COMPONENT CLASS: plan-td-changes - Auto-commented by script
-.plan-td-changes {
+    .plan-td-changes {
         max-width: 365px !important;
     }
-*/
     .footer-plan-loading {
         flex: 0 0 100% !important;
         max-width: 100% !important;
@@ -1021,15 +931,229 @@
         width: 55% !important;
     }
 }
-
+@media (max-width: 480px) and (orientation: portrait) {
+    .grid-title-left {
+        width: 244px !important;
+    }
+    .mat-column--b-Benefits--b- {
+        display: none !important;
+    }
+    .plan-table-content {
+        margin-top: 13% !important;
+    }
+    .left-icon {
+        float: left;
+        display: block !important;
+        height: 41px;
+        width: 57px;
+    }
+    .right-icon {
+        float: right;
+        display: block !important;
+        height: 41px;
+        width: 57px;
+    }
+    .plan-td {
+        padding-left: 151px !important;
+        padding-right: 172px !important;
+    }
+    .plan-td-changes {
+        padding-left: 118px !important;
+        padding-right: 130px !important;
+    }
+    .plan-table {
+        height: 423px;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    .redeem-plan {
+        width: 76%;
+    }
+    .redeem-input {
+        width: 100% !important;
+        height: 30px;
+        margin-bottom: 13px;
+    }
+    .redeem-back {
+        width: 19% !important;
+    }
+    .redeem-button {
+        width: 100% !important;
+        height: 45px;
+    }
+    .extra-addons-content {
+        margin-top: 13px !important;
+        float: left;
+        width: 100% !important;
+    }
+    .activation-key {
+        margin-top: 8px;
+    }
+    .scroll-left {
+        margin-bottom: 10px;
+        margin-top: 10px;
+        display: block !important;
+    }
+    .scroll-right {
+        margin-bottom: 10px;
+        margin-top: 10px;
+        display: block !important;
+        .mat-raised-button {
+            margin-right: 0 !important;
+        }
+    }
+}
+@media (max-width: 767px) and (orientation: landscape) {
+    .left-icon {
+        float: left;
+        display: block !important;
+        height: 41px;
+        width: 57px;
+    }
+    .grid-title-left {
+        width: 326px !important;
+    }
+    .plan-table-content {
+        margin-top: 8% !important;
+    }
+    .right-icon {
+        float: right;
+        display: block !important;
+        height: 41px;
+        width: 57px;
+    }
+    .plan-td {
+        padding-left: 120px !important;
+        padding-right: 138px !important;
+    }
+    .plan-td-changes {
+        padding-left: 120px !important;
+        padding-right: 138px !important;
+    }
+    .plan-td-changes.mat-cell:nth-child(2n + 1) {
+        padding-left: 117px !important;
+        padding-right: 114px !important;
+    }
+    .plan-td-changes {
+        max-width: none !important;
+    }
+    .plan-table {
+        height: 458px !important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    .mat-column--b-Benefits--b- {
+        display: none !important;
+    }
+    .scroll-left {
+        margin-bottom: 10px;
+        margin-top: 10px;
+        display: block !important;
+    }
+    .scroll-right {
+        margin-bottom: 10px;
+        margin-top: 10px;
+        display: block !important;
+        .mat-raised-button {
+            margin-right: 0 !important;
+        }
+    }
+    .main-row-plans .col-sm-4:last-child {
+        margin-left: auto;
+    }
+    .plan-list {
+        margin-bottom: 10px;
+    }
+    .main-row-plans {
+        display: block;
+    }
+    .note-wrap {
+        position: relative;
+        bottom: 0px;
+    }
+    .xs-pr-0 {
+        padding-right: 0px !important;
+    }
+    .xs-pd-l15 {
+        padding-left: 15px !important;
+    }
+    .inner-your-account {
+        margin-bottom: 20px;
+    }
+    .see-all-features .col-sm-6.col-md-3 {
+        width: 100%;
+    }
+    .transactions-popup {
+        width: 220px;
+    }
+    .main-row-plans {
+        white-space: normal;
+        overflow-x: hidden;
+    }
+    .main-row-plans .col-sm-4 {
+        width: 100%;
+        display: block;
+        white-space: normal;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    .your-account {
+        margin: 90px 0px 30px 40px;
+    }
+    .plan-footer {
+        .success-btn {
+            padding: 8px 15px;
+            display: block;
+        }
+    }
+    .select-plan-head {
+        font-size: var(--font-size-16);
+        padding: 12px 15px;
+    }
+    .select-plan-block {
+        margin-bottom: 15px;
+        max-width: 400px;
+        margin: 0 auto 30px;
+        height: auto;
+        .overall-plans {
+            margin-bottom: 0;
+        }
+    }
+    .welcome-msg {
+        .plan-msg {
+            margin-bottom: 15px;
+        }
+        .btn-cancel {
+            float: left;
+        }
+    }
+    .plans-box {
+        padding: 10px 15px;
+        p.total-price {
+            margin: 0 0 15px;
+        }
+    }
+    .your-account {
+        margin: 0px;
+    }
+    .inner-your-account {
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+    .your-account:before,
+    .your-account:after {
+        display: none;
+    }
+    .activation-key-wrapper {
+        padding-left: 0px;
+    }
+}
 @media (min-width: 1281px) {
-    /* UNUSED COMPONENT CLASS: plan-td - Auto-commented by script
-.plan-td {
+    .plan-td {
         padding-left: 50px !important;
         padding-right: 50px !important;
         padding-bottom: 5px !important;
     }
-*/
     .plan-td-changes {
         padding-left: 65px !important;
         padding-right: 65px !important;
@@ -1045,13 +1169,30 @@
         }
     }
 }
-
+@media only screen and (max-width: 640px) {
+    .see-all-features .col-sm-6.col-md-3 {
+        width: 100%;
+    }
+}
+@media (max-width: 575px) {
+    .activation-key-wrapper {
+        .d-flex {
+            flex-direction: column;
+            input {
+                width: 100%;
+                display: block;
+            }
+            .activation-btn {
+                margin-left: 0 !important;
+                width: 100%;
+            }
+        }
+    }
+}
 @media screen and (min-width: 1280px) and (orientation: landscape) {
-    /* UNUSED COMPONENT CLASS: btn-cancel - Auto-commented by script
-.btn-cancel {
+    .btn-cancel {
         width: 82px !important;
     }
-*/
     .extra-addons-content {
         width: 31% !important;
     }

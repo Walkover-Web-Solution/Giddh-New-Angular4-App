@@ -46,17 +46,15 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: max-980 - Auto-commented by script
 .max-980 {
     max-width: 980px;
     margin: 0 auto;
 }
-*/
 
 .pl-table-grid {
     th {
         border: none !important;
-        border-bottom: 1px solid var(--border-color) !important;
+        border-bottom: 1px solid var(--color-silver) !important;
         padding: 13px 8px 14px 0 !important;
 
         &:first-child {

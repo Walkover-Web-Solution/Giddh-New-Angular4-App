@@ -1,6 +1,6 @@
-<section id="manufacture" class="clear-both">
+<section id="manufacture" class="clearfix">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
-    <div class="clear-both mr-r15 create-btn" *ngIf="isTabletScreen">
+    <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
         <div class="mr-r15" *ngIf="showClearFilter()">
             <label class="d-none">&nbsp;</label>
             <button mat-stroked-button type="button" (click)="clearFilters()">Clear Filter</button>
@@ -24,7 +24,7 @@
                         *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                     >
                         <div class="link-entity-dropdown">
-                            <label class="d-block pb-1 font-size-15">Entity</label>
+                            <label class="d-block pb-1 font-15">Entity</label>
                             <reactive-dropdown-field
                                 [options]="currentCompanyBranches"
                                 [(ngModel)]="currentBranch.uniqueName"
@@ -45,7 +45,7 @@
                                 : 'col-xl-3 col-lg-4'
                         "
                     >
-                        <label class="d-block font-size-15 pb-1">From - To</label>
+                        <label class="d-block font-15 pb-1">From - To</label>
                         <div 
                             class="custom-datepicker" 
                             [matMenuTriggerFor]="universalDatepicker"
@@ -92,7 +92,7 @@
                                 ? 'col-xl-6 col-lg-4'
                                 : 'col-xl-9 col-lg-8'
                         "
-                        *ngIf="!isTabletScreen"
+                        *ngIf="!isMobileScreen"
                     >
                         <div
                             class="d-flex"
@@ -125,7 +125,7 @@
     </div>
     <!-- form -->
     <div class="col-12 col-sm-12">
-        <div class="mf-stock-search-request-form clear-both">
+        <div class="mf-stock-search-request-form clearfix">
             <form
                 #mfStockSearchRequestForm="ngForm"
                 class="mt-0 col-12 pl-0 pr-0 mr-t15 mr-b05 manufacturing-form"
@@ -198,20 +198,20 @@
         </div>
     </div>
     <!-- search form end -->
-    <section *ngIf="isReportLoading$ | async" class="clear-both mr-t100 col-md-12">
+    <section *ngIf="isReportLoading$ | async" class="clearfix mr-t100 col-md-12">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </section>
     <div
         class="no-data mr-t100 col-12 col-sm-12"
         *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length === 0"
     >
-        <h2>No entries found within given criteria.</h2>
-        <h2>Do search with some other dates</h2>
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
     </div>
     <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length > 0">
         <div id="mfReportTbl">
             <div class="col-12 col-sm-12 table-responsive">
-                <table mat-table [dataSource]="reportData.results" class="table basic border giddh-table on-mobile-view manufacture-table">
+                <table mat-table [dataSource]="reportData.results" class="table basic table-bordered giddh-table on-mobile-view manufacture-table">
                     <!-- Date Column -->
                     <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef class="text-center">
@@ -313,17 +313,20 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="row-gray-background"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-                <mat-paginator
-                    *ngIf="reportData?.totalItems > pageSizeOptions[0]"
-                    [length]="reportData.totalItems"
-                    [pageSize]="mfStockSearchRequest.count"
-                    [pageIndex]="reportData.page - 1"
-                    [pageSizeOptions]="pageSizeOptions"
-                    [showFirstLastButtons]="true"
-                    [hidePageSize]="false"
-                    (page)="handlePageEvent($event)"
-                ></mat-paginator>
-                <section class="mr-b8"></section>
+                <div *ngIf="reportData?.totalItems > pageSizeOptions[0]" class="mt-4">
+                    <div class="text-center">
+                        <mat-paginator
+                            [length]="reportData.totalItems"
+                            [pageSize]="mfStockSearchRequest.count"
+                            [pageIndex]="reportData.page - 1"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                            (page)="handlePageEvent($event)"
+                        ></mat-paginator>
+                        <section class="mr-b8"></section>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

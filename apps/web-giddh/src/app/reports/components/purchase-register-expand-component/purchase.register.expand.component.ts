@@ -10,6 +10,7 @@ import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-register-export/sales-purchase-register-export.component';
@@ -53,6 +54,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
     /** Stores the voucher API version of current company */
@@ -99,6 +102,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private router: Router,
         private _cd: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver,
         private generalService: GeneralService,
         private dialog: MatDialog,
         private companyActions: CompanyActions
@@ -115,6 +119,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             select((p) => p.receipt.isGetPurchaseDetailsSuccess),
             takeUntil(this.destroyed$)
         );
+        this.breakPointObservar
+            .observe(["(max-width: 767px)"])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((result) => {
+                this.isMobileScreen = result.matches;
+            });
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), skip(1), takeUntil(this.destroyed$));
     }
 

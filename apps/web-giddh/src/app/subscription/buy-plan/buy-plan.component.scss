@@ -14,10 +14,10 @@
                 }
             }
             mat-select {
-                visibility: hidden;
-                width: 0;
-                height: 0;
-                transform: translateY(-10px);
+                 visibility: hidden;
+                 width: 0;
+                 height: 0;
+                 transform: translateY(-10px);
             }
         }
     }
@@ -44,7 +44,7 @@
 
         h2,
         p {
-            // color: var(--color-black);
+            color: var(--color-black);
             white-space: break-spaces;
         }
 
@@ -56,11 +56,9 @@
             @media screen and (max-width: 1299px) {
                 margin-bottom: 6px !important;
 
-                /* UNUSED COMPONENT CLASS: plan-price - Auto-commented by script
-.plan-price {
+                .plan-price {
                     font-size: var(--font-size-20) !important;
                 }
-*/
             }
         }
 
@@ -69,11 +67,9 @@
         }
     }
 
-    /* UNUSED COMPONENT CLASS: new-plan-wrapper - Auto-commented by script
-.new-plan-wrapper {
+    .new-plan-wrapper {
         min-width: 220px;
     }
-*/
 
     &.active {
         .new-plan-wrapper {
@@ -82,7 +78,7 @@
 
                 h2,
                 p {
-                    color: var(--text-primary-color);
+                    color: var(--color-blue-primary);
                 }
             }
         }
@@ -99,11 +95,11 @@
     .grid-title-list {
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
         min-width: 230px;
         font-weight: 500;
         font-size: var(--font-size-15);
-        border-left: 1px solid var(--border-color);
+        border-left: 1px solid var(--color-silver);
     }
 
     .plan-table {
@@ -112,8 +108,8 @@
         overflow: hidden;
         white-space: nowrap;
         box-shadow: none !important;
-        border: 1px solid var(--border-color);
-        border-radius: var(--mat-border-radius-4);
+        border: 1px solid var(--color-silver);
+        border-radius: 4px;
     }
 
     .plan-table {
@@ -136,9 +132,9 @@
             min-width: 260px;
             left: 0px;
             z-index: 9;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--color-silver);
             position: sticky;
-            background-color: var(--theme-background-color);
+            background-color: var(--color-white);
             padding-top: 0px;
             line-height: 3;
             padding: 5px 10px !important;
@@ -152,9 +148,9 @@
     }
 
     .active-plan {
-        border-top: 2px solid var(--theme-primary-color);
-        border-left: 2px solid var(--theme-primary-color);
-        border-right: 2px solid var(--theme-primary-color);
+        border-top: 2px solid var(--color-blue-primary);
+        border-left: 2px solid var(--color-blue-primary);
+        border-right: 2px solid var(--color-blue-primary);
     }
 
     .selected-plan-button {
@@ -165,7 +161,7 @@
     }
 
     .selected-plan {
-        background-color: var(--bg-primary-color);
+        background-color: var(--color-blue-primary);
 
         span {
             color: var(--color-white);
@@ -173,17 +169,18 @@
     }
 
     .active-plan-td {
-        border-left: 2px solid var(--theme-primary-color) !important;
-        border-right: 2px solid var(--theme-primary-color) !important;
+        border-left: 2px solid var(--color-blue-primary) !important;
+        border-right: 2px solid var(--color-blue-primary) !important;
     }
 
     .active-plan-td-bottom {
-        border-bottom: 2px solid var(--theme-primary-color) !important;
+        border-bottom: 2px solid var(--color-blue-primary) !important;
     }
 
     .summary-wrapper {
         width: 320px;
         flex-shrink: 0;
+
     }
 
     .plan-summary-heading {
@@ -196,9 +193,13 @@
     }
 
     .plan-summary {
+        width: fit-content;
+        margin: auto;
+        column-gap: 20px;
+
         .plan-width {
             min-width: 500px;
-            .plan-header {
+            .plan-header{
                 height: 50px;
 
                 @media screen and (max-width: 1299px) {
@@ -210,13 +211,11 @@
     }
 
     .new-plan {
-        /* UNUSED COMPONENT CLASS: mat-stepper-horizontal - Auto-commented by script
-.mat-stepper-horizontal {
+        .mat-stepper-horizontal {
             form {
                 column-gap: 20px;
             }
         }
-*/
     }
 
     .summary-wrapper {
@@ -239,31 +238,27 @@
 .plan-table-wrapper {
     max-width: 100%;
     overflow: auto;
-    border: 1px solid var(--border-color);
-    border-radius: var(--mat-border-radius-4);
+    border: 1px solid var(--color-silver);
+    border-radius: 4px;
 
     .plan-table {
         width: 800px;
 
-        /* UNUSED COMPONENT CLASS: mat-mdc-header-cell - Auto-commented by script
-.mat-mdc-header-cell {
-            border-right: 1px solid var(--border-color) !important;
+        .mat-mdc-header-cell {
+            border-right: 1px solid var(--color-silver) !important;
             background-color: var(--color-white) !important;
             z-index: 2 !important;
             padding: 0px !important;
             border-bottom-width: 2px;
         }
-*/
 
-        /* UNUSED COMPONENT CLASS: mat-mdc-table-sticky-border-elem-left - Auto-commented by script
-.mat-mdc-table-sticky-border-elem-left {
-            border-right: 1px solid var(--border-color);
+        .mat-mdc-table-sticky-border-elem-left {
+            border-right: 1px solid var(--color-silver);
         }
-*/
 
         td {
             &.mat-mdc-cell {
-                border-right: 1px solid var(--border-color);
+                border-right: 1px solid var(--color-silver);
                 background-color: var(--color-white) !important;
                 white-space: nowrap !important;
                 min-width: 230px;
@@ -276,11 +271,9 @@
 
         .mat-mdc-row {
             &:last-child {
-                /* UNUSED COMPONENT CLASS: mat-mdc-cell - Auto-commented by script
-.mat-mdc-cell {
+                .mat-mdc-cell {
                     border-bottom: 0px;
                 }
-*/
             }
         }
     }
@@ -289,5 +282,14 @@
 .custom-tab {
     .mat-button-toggle {
         min-width: 70px;
+    }
+}
+
+// responsive
+@media screen and (max-width: 1180px) {
+    .buy-plan-wrapper {
+        .plan-summary {
+            row-gap: 15px;
+        }
     }
 }

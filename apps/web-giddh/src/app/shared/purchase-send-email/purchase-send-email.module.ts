@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 import { PurchaseSendEmailModalComponent } from "./purchase-send-email.component";
 import { MatDialogModule } from "@angular/material/dialog";
-import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -15,8 +14,7 @@ import { MatButtonModule } from "@angular/material/button";
         TranslateDirectiveModule,
         ReactiveFormsModule,
         FormsModule,
-        MatDialogModule,
-        MatButtonModule
+        MatDialogModule
     ],
     exports: [
         PurchaseSendEmailModalComponent

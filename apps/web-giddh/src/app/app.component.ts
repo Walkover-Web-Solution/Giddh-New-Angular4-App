@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { BREAKPOINT_SCREEN_SIZE, Configuration, COUNTRY_REGION_MAP } from "./app.constant";
+import { Configuration, COUNTRY_REGION_MAP } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -195,14 +195,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._cdr.detectChanges();
         });
         this.breakpointObserver.observe([
-            BREAKPOINT_SCREEN_SIZE.TABLET
+            '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]);
+            this.changeOnMobileView(result.matches);
         });
         this.breakpointObserver.observe([
-            BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
+            '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result?.breakpoints[BREAKPOINT_SCREEN_SIZE.UNSUPPORTED]) {
+            if (result.matches) {
                 this.router.navigate(['/mobile-restricted']);
             }
         });
@@ -233,11 +233,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         setTimeout(() => {
-            this._generalService.addLinkTag("./assets/styles/vendors/font-awesome.css");
+            this._generalService.addLinkTag("./assets/style/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
-            this._generalService.addLinkTag("./assets/styles/vendors/toastr.css");
-            this._generalService.addLinkTag("./assets/styles/vendors/ladda-themeless.min.css");
-            this._generalService.addLinkTag("./assets/styles/vendors/lightbox.css");
+            this._generalService.addLinkTag("./assets/style/toastr.css");
+            this._generalService.addLinkTag("./assets/style/ladda-themeless.min.css");
+            this._generalService.addLinkTag("./assets/style/lightbox.css");
 
             /* RAZORPAY */
             if (window['Razorpay'] === undefined) {
@@ -261,7 +261,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             /* Xml */
         }, 1000);
 
-        this._generalService.addLinkTag("./assets/styles/vendors/code-mirror.css");
+        this._generalService.addLinkTag("./assets/style/code-mirror.css");
 
 
         // if (this._generalService.getUrlParameter("region") === "uk") {

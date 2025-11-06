@@ -1,26 +1,19 @@
-/* UNUSED COMPONENT CLASS: custom-select - Auto-commented by script
-.custom-select /* UNUSED COMPONENT CLASS: select-drop - Auto-commented by script
-.select-drop {
+.custom-select .select-drop {
     right: 9px;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: custom-select-field - Auto-commented by script
 .custom-select-field {
     -webkit-appearance: none;
     appearance: none;
     padding-right: 25px !important;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: icon-caret-down - Auto-commented by script
 .icon-caret-down {
     right: 14px;
     font-size: 8px;
     position: absolute;
     color: var(--color-black);
 }
-*/
 
 .query-list {
     .condition_tag {
@@ -28,7 +21,7 @@
         top: 2px;
         right: -48px;
         background: var(--color-border-light);
-        border-radius: var(--mat-border-radius-circle);
+        border-radius: 100%;
         padding: 7px 7px;
         text-transform: uppercase;
         font-size: var(--font-size-12);

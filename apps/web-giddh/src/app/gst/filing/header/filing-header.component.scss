@@ -1,46 +1,35 @@
 .icon-download {
     font-weight: 600;
 }
-/* UNUSED COMPONENT CLASS: error-button - Auto-commented by script
 .error-button {
     margin-right: 15px !important;
 }
-*/
-/* UNUSED COMPONENT CLASS: datepicker-header - Auto-commented by script
 .datepicker-header {
     display: contents;
 }
-/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu > li > a:hover {
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
     background: var(--color-border-light);
 }
-*/
-/* UNUSED COMPONENT CLASS: z-index-for-aside - Auto-commented by script
 .z-index-for-aside {
     z-index: 99999;
 }
-*/
-/* UNUSED COMPONENT CLASS: authenticate-btn - Auto-commented by script
 .authenticate-btn {
-    border: 1px solid var(--theme-primary-color);
+    border: 1px solid var(--color-blue-primary);
 }
-*/
 
 .list-inline {
     padding-left: 0;
-        // list-style: none;
+        list-style: none;
     > li {
         display: inline-block;
     }
 }
-/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
 .btn-wrapper-filling-header {
-.btn-primary {
-        border-color: var(--theme-primary-color);
+    .btn-primary {
+        border-color: var(--color-blue-primary);
     }
 }
-*/
 .head-font-weight {
     font-weight: 500 !important;
 }
@@ -53,13 +42,11 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: push-to-portal-modal - Auto-commented by script
 .push-to-portal-modal {
     max-width: 650px !important;
     margin: 56px auto !important;
     padding: 0 10px;
 }
-*/
 @media (max-width: 1050px) {
         .list-filter{
             min-height: 120px !important;
@@ -69,14 +56,12 @@
     .list-filter {
         height: auto;
     }
-    /* UNUSED COMPONENT CLASS: btn-wrapper-filling-header - Auto-commented by script
-.btn-wrapper-filling-header {
+    .btn-wrapper-filling-header {
         float: none;
         display: flex;
         padding-top: 12px;
         justify-content: flex-end;
     }
-*/
     .list-inline {
         > li {
             margin-bottom: 10px;
@@ -89,11 +74,28 @@
        width: 116px;
     }
 }
-/* UNUSED COMPONENT CLASS: return-sel - Auto-commented by script
 .return-sel {
     font-size: var(--font-size-15) !important;
 }
-*/
+@media screen and (max-width: 575px) {
+    .btn-wrapper-filling-header {
+        float: none;
+    }
+}
+@media screen and (max-width: 375px) {
+    .btn-wrapper-filling-header {
+        display: flex !important;
+        width: 100% !important;
+        flex-direction: column;
+        .btn-group {
+            display: flex !important;
+        }
+        .btn {
+            margin-right: 0;
+            margin-bottom: 8px;
+        }
+    }
+}
 .filling-header-message {
     font-weight: 400 !important;
 }

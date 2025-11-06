@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--color-silver);
     margin-top: 15px;
     padding-top: 20px !important;
     li {
@@ -15,12 +15,10 @@
         margin-bottom: 10px;
         border-bottom: none !important;
     }
-    /* UNUSED COMPONENT CLASS: custom-select - Auto-commented by script
-.custom-select {
+    .custom-select {
         width: 40%;
-        border: 1px solid var(--border-color) !important;
-        select/* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
-.form-control {
+        border: 1px solid var(--color-silver) !important;
+        select.form-control {
             padding: 7px !important;
             display: block;
             min-width: 200px;
@@ -28,26 +26,22 @@
             width: 100%;
             padding-right: 0px !important;
         }
-/* UNUSED COMPONENT CLASS: select-drop - Auto-commented by script
         .select-drop i {
             background: var(--color-white);
         }
-}
-*/
-    /* UNUSED COMPONENT CLASS: delete-icon - Auto-commented by script
-.delete-icon {
+    }
+    .delete-icon {
         font-size: var(--font-size-15);
         line-height: 1.5;
-        border-radius: var(--mat-border-radius-4);
+        border-radius: 3px;
         background: var(--color-border-light);
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--color-silver);
         width: 30px;
         height: 30px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
-*/
     .user-name-email {
         width: 40%;
         color: var(--color-black) !important;
@@ -70,30 +64,21 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: input-share-width - Auto-commented by script
 .input-share-width {
     width: 45%;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: input-group - Auto-commented by script
-/* UNUSED COMPONENT CLASS: input-group-btn - Auto-commented by script
 .input-group-btn {
     width: 53%;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: selected-permission - Auto-commented by script
 .selected-permission {
     width: 60% !important;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: btn-share - Auto-commented by script
 .btn-share {
     width: 36% !important;
 }
-*/
 
 .group-share-modal {
     .add-mailer {
@@ -103,6 +88,12 @@
                 max-width: 100%;
             }
         }
+    }
+}
+
+@media (min-width: 576px) {
+    #share-modal select {
+        max-width: 100%;
     }
 }
 

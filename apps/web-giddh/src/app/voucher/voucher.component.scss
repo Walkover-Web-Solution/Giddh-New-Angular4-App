@@ -17,6 +17,15 @@
         .vouchers-content {
             min-height: 80vh;
         }
+
+        @media screen and (max-width: 768px) {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+
+    .row-gap {
+        row-gap: 15px;
     }
 
     .row-gap-25 {
@@ -29,7 +38,7 @@
 
         h1 {
             font-size: var(--font-size-24);
-            color: var(--text-primary-color);
+            color: var(--color-blue-primary);
         }
     }
 
@@ -65,11 +74,11 @@
         }
 
         .vouchers-form-fields-detail {
-            color: var(--text-primary-color);
+            color: var(--color-blue-primary);
         }
 
         .vouchers-copy-sales {
-            color: var(--text-primary-color);
+            color: var(--color-blue-primary);
         }
     }
 
@@ -103,7 +112,7 @@
             .billing-deliver-label {
                 font-size: var(--font-size-16);
                 font-weight: 600;
-                color: var(--text-primary-color);
+                color: var(--color-blue-primary);
             }
 
             .vouchers-address-form {
@@ -115,8 +124,8 @@
                 grid-template-columns: 48% 48%;
                 gap: 15px;
                 padding: 15px;
-                border: 1px solid var(--border-color);
-                border-radius: var(--mat-border-radius-4);
+                border: 1px solid var(--color-fields-border);
+                border-radius: 4px;
                 line-height: 2;
 
                 &.without-gstin {
@@ -137,22 +146,22 @@
 
                 .country-field {
                     grid-area: country;
-                    border-bottom: 1px solid var(--border-color);
+                    border-bottom: 1px solid var(--color-fields-border);
                 }
 
                 .state-field {
                     grid-area: state;
-                    border-bottom: 1px solid var(--border-color);
+                    border-bottom: 1px solid var(--color-fields-border);
                 }
 
                 .gstin-field {
                     grid-area: gstin;
-                    border-bottom: 1px solid var(--border-color);
+                    border-bottom: 1px solid var(--color-fields-border);
                 }
 
                 .pin-code-field {
                     grid-area: pincode;
-                    border-bottom: 1px solid var(--border-color);
+                    border-bottom: 1px solid var(--color-fields-border);
                 }
 
                 &.form-disabled {
@@ -161,14 +170,24 @@
                     pointer-events: none;
                 }
             }
+
+            @media screen and (max-width: 768px) {
+                .row {
+                    .col-6 {
+                        padding-left: 10px !important;
+                        padding-right: 10px !important;
+                    }
+                }
+            }
+
         }
 
         .vouchers-large-container {
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--color-silver);
 
             #init-contact-wrapper {
                 input {
-                    height: var(--custom-mat-form-field-height);
+                    height: var(--mat-form-field-height);
                 }
             }
 
@@ -179,17 +198,15 @@
                         th,
                         td {
                             padding: 16px 8px;
-                            border: 1px solid var(--border-color);
+                            border: 1px solid var(--color-silver);
 
                             &:not(:first-child, :nth-child(2)) {
                                 text-align: right;
                             }
 
-                            /*& UNUSED COMPONENT CLASS: total-column - Auto-commented by script
-.total-column {
+                            &.total-column {
                                 min-width: 120px;
                             }
-*/
 
                             &.product-column {
                                 @media screen and (max-width: 1280px) {
@@ -203,7 +220,7 @@
                         }
 
                         th {
-                            // color: var(--text-primary-color);
+                            color: var(--color-blue-primary);
 
                             &:not(:first-child, :nth-child(2)) {
                                 padding-right: 14px !important;
@@ -229,6 +246,10 @@
                                 .wrap-other-tax {
                                     padding-right: 6px;
                                 }
+                            }
+
+                            .select-account-label {
+                                color: var(--color-black);
                             }
 
                             amount-field {
@@ -274,7 +295,7 @@
                 max-width: calc(100% - 36px);
 
                 .vouchers-attachment {
-                    height: var(--custom-mat-form-field-height);
+                    height: var(--mat-form-field-height);
 
                     .attachment-add-icon {
                         width: 36px;
@@ -285,7 +306,7 @@
                         border: 1px solid var(--color-border-medium);
                     }
 
-                    &.text-green {
+                    &.text-success {
                         .attachment-add-icon {
                             border-color: var(--color-green);
                             font-size: var(--font-size-12);
@@ -301,14 +322,14 @@
                     }
 
                     .attachment-placeholder {
-                        color: var(--text-primary-color);
+                        color: var(--color-blue-primary);
                     }
 
                     input {
                         width: 100%;
                         height: 100%;
                         left: 0;
-                        border-radius: var(--mat-border-radius-4);
+                        border-radius: 5px;
                         z-index: 1;
                         opacity: 0;
                         cursor: pointer;
@@ -339,14 +360,18 @@
             }
 
             .vouchers-actions {
-                border-top: 1px solid var(--border-color);
+                border-top: 1px solid var(--color-silver);
+
+                .vouchers-more-option-btn {
+                    min-width: unset;
+                }
             }
         }
     }
 }
 
 .option-label {
-    color: var(--theme-foreground-color);
+    color: var(--color-black);
 }
 
 .option-value {
@@ -360,17 +385,4 @@
 .product-name {
     display: block;
     word-break: break-word;
-}
-.aside-overlay {
-    position: fixed;
-    top: var(--top-distance);
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 991;
-    background: var(--color-black);
-    opacity: 0.5;
-    -webkit-transition: opacity 0.15s linear;
-    -o-transition: opacity 0.15s linear;
-    transition: opacity 0.15s linear;
 }

@@ -64,7 +64,7 @@
                     <div class="form-group input-upload">
                         <div class="input-file">
                             <label for="fileUpload" class="form-control text-ellipsis">
-                                <span class="text-green" *ngIf="selectedFile"> {{ selectedFile?.name }} </span>
+                                <span class="text-success" *ngIf="selectedFile"> {{ selectedFile?.name }} </span>
                                 <span *ngIf="!selectedFile"> {{localeData?.browse_file}} </span></label
                             >
                             <input

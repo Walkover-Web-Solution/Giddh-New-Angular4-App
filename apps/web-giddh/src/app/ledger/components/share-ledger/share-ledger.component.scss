@@ -1,13 +1,15 @@
-/* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
 .btn-success:disabled {
     color: var(--color-silver) !important;
 }
-*/
-/* UNUSED COMPONENT CLASS: mat-form-field - Auto-commented by script
 .mat-form-field {
     width: 80% !important;
 }
-*/
+
+@media (max-width: 599px) {
+    .mat-form-field {
+        width: 65% !important;
+    }
+}
 .share-link {
     margin-left: 5px;
 }

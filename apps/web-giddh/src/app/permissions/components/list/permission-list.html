@@ -5,8 +5,8 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="container-fluid clear-both" *ngIf="allRoles?.length > 0">
-        <div class="col-sm-12 mr-t2 mr-b2 d-flex justify-content-end column-gap-05">
+    <div class="container-fluid clearfix" *ngIf="allRoles?.length > 0">
+        <div class="col-sm-12 mr-t2 mr-b2 d-flex justify-content-end column-gap5">
             <button mat-raised-button color="primary" (click)="openPermissionDialog()">
                 {{localeData?.add_new_role}}
             </button>
@@ -19,12 +19,12 @@
                 {{commonLocaleData?.app_back}}
             </button>
         </div>
-        <div class="col-sm-12 mr-t15 p-0 role clear-both btn-show" *ngFor="let role of allRoles">
+        <div class="col-sm-12 mr-t15 p-0 role clearfix btn-show" *ngFor="let role of allRoles">
             <div class="row mr-0 ml-0">
-                <div class="col-md-3 col-sm-3 col-12 p-0 role-head cursor-pointer">
+                <div class="col-md-3 col-sm-3 col-12 p-0 role-head cp">
                     <span class="vertical-center">
                         <h1>{{role.name}}</h1>
-                        <div class="text-center mr-t2 on-hover d-flex column-gap-1">
+                        <div class="text-center mr-t2 on-hover d-flex column-gap1">
                             <button
                                 mat-stroked-button
                                 *ngIf="!role.isFixed"
