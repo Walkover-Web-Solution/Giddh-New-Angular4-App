@@ -64,7 +64,7 @@ body {
     }
 
     &.dark-theme { 
-        --text-primary-color: var(--color-white);
+        // --text-primary-color: var(--color-white);
         --color-dark-gray: var(--color-light-gray);
         --color-image-filter-quaternary: brightness(0) invert(1);
     }
