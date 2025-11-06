@@ -418,7 +418,7 @@
 
                                             <!-- Mobile Number -->
                                             <div class="col-6 mr-t15">
-                                                <div id="init-contact-wrapper" class="position-relative w-100">
+                                                <!-- <div id="init-contact-wrapper" class="position-relative w-100">
                                                     <input type="tel"
                                                         class="mat-form-field-border mat-form-field-height" #initContact
                                                         aria-autocomplete="none" autocomplete="off"
@@ -430,13 +430,11 @@
                                                     <mat-error
                                                         *ngIf="invoiceForm.controls['account'].get('mobileNumber')?.value && (invoiceForm.controls['account'].get('mobileNumber')?.touched) && !intlClass?.isRequiredValidNumber">{{
                                                         localeData?.invalid_mobile }}</mat-error>
-                                                </div>
-                                                 <mobile-number-input
-                                                    class="mr-t15"
+                                                </div> -->
+                                                <mobile-number-input
                                                     formControlName="mobileNumber"
                                                     [label]="commonLocaleData?.app_mobile_number"
                                                     [required]="false"
-                                                    [defaultCountry]="'+91'"
                                                     [useImageFlags]="true"
                                                     (countryChanged)="onCountryChanged($event)"
                                                     (mobileChanged)="onMobileChanged($event)">

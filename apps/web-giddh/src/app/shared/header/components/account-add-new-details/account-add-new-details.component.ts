@@ -183,6 +183,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public intl: { [key: string]: any } = {};
     /** True if last duplicate email in portal  users */
     public lastDuplicateEmailIndex: number = -1;
+    /** Index of last duplicate contact number in portal users */
+    public lastDuplicateContactIndex: number = -1;
     /** True if last duplicate email in portal  users */
     public portalIndex: number;
     /** Stores the voucher API version of company */
@@ -213,6 +215,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isActivePortalMobileNumber: number = -1;
     /** Holds active selected Tab Index */
     public selectedTabIndex: number = 0;
+    /** True if there are duplicate contact number errors */
+    public hasDuplicateContactErrors: boolean = false;
+    /** Tracks which tabs have been activated at least once */
+    public activatedTabs: Set<number> = new Set([0]);
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** Flag to determine if the parent group is "sundrydebtors". */
@@ -357,6 +363,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     return;
                 }
 
+                // Email validation
                 if (change.get('email').value) {
                     change.get('email')?.setValidators([Validators.required, Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
@@ -364,19 +371,53 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
                 }
-                let lastOccurrenceIndex = -1;
+                let lastEmailOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
+                let emailDuplicateFound = false;
                 if (currentEmail !== "") {
                     mappings.controls.forEach((control, i) => {
-                        if (lastOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
-                            lastOccurrenceIndex = index;
+                        if (lastEmailOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
+                            lastEmailOccurrenceIndex = index;
                             change.get('email').setErrors({ duplicate: true });
+                            emailDuplicateFound = true;
                         }
                     });
                 }
+                // Clear email duplicate error if no duplicates found
+                if (!emailDuplicateFound && change.get('email')?.errors?.['duplicate']) {
+                    const errors = { ...change.get('email')?.errors };
+                    delete errors['duplicate'];
+                    change.get('email').setErrors(Object.keys(errors).length ? errors : null);
+                }
+
+
+                // Contact number validation
+                let lastContactOccurrenceIndex = -1;
+                let currentContactNo = change.get('contactNo')?.value;
+                let contactDuplicateFound = false;
+                if (currentContactNo !== "" && currentContactNo) {
+                    mappings.controls.forEach((control, i) => {
+                        if (lastContactOccurrenceIndex === -1 && index !== i && control.get('contactNo')?.value === currentContactNo) {
+                            lastContactOccurrenceIndex = index;
+                            change.get('contactNo').setErrors({ duplicate: true });
+                            contactDuplicateFound = true;
+                        }
+                    });
+                }
+                // Clear contact duplicate error if no duplicates found
+                if (!contactDuplicateFound && change.get('contactNo')?.errors?.['duplicate']) {
+                    const errors = { ...change.get('contactNo')?.errors };
+                    delete errors['duplicate'];
+                    change.get('contactNo').setErrors(Object.keys(errors).length ? errors : null);
+                }
+
                 this.portalIndex = undefined;
 
-                this.lastDuplicateEmailIndex = lastOccurrenceIndex;
+                this.lastDuplicateEmailIndex = lastEmailOccurrenceIndex;
+                this.lastDuplicateContactIndex = lastContactOccurrenceIndex;
+                
+                // Update duplicate contact errors flag
+                this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
             }
         });
 
@@ -386,7 +427,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             takeUntil(this.destroyed$))
             .subscribe((response) => {
                 const users = this.addAccountForm.get('portalDomain') as FormArray;
-                let mobileNo = '';
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     // if (response?.mobileNo && this.intl) {
                     //     mobileNo = this.intl['init-contact-add']?.getNumber();
@@ -401,13 +441,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         let setValue = false;
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
-                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true });
+                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: response.mobileNo, default: true });
                                 setValue = true;
                                 return true;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true };
+                            let data = { name: response?.attentionTo, email: response?.email, contactNo: response.mobileNo, default: true };
                             this.addNewPortalUser(data);
                         }
                     }
@@ -889,8 +929,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
-        if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid) {
+        // Check for duplicate contact errors
+        this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
+        
+        if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
+            
+            // If duplicate contact errors exist, navigate to portal tab
+            if (this.hasDuplicateContactErrors) {
+                this.goToPortalTab();
+            }
             return;
         }
 
@@ -1416,14 +1464,69 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /**
      * Handles tab change
      *
-     * @param {any} event 
+     * @param {MatTabChangeEvent} event 
      * @memberof AccountAddNewDetailsComponent
      */
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
             this.selectedTabIndex = event.index;
             this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
+            
+            // Mark this tab as activated
+            this.activatedTabs.add(event.index);
         }
+    }
+
+    /**
+     * Checks if there are any duplicate contact number errors in portal domain
+     *
+     * @returns {boolean} True if duplicate contact errors exist
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public checkForDuplicateContactErrors(): boolean {
+        const portalDomain = this.addAccountForm.get('portalDomain') as FormArray;
+        if (!portalDomain) {
+            return false;
+        }
+
+        for (let i = 0; i < portalDomain.controls.length; i++) {
+            const control = portalDomain.at(i);
+            if (control.get('contactNo')?.hasError('duplicate')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Navigates to a specific tab by index
+     *
+     * @param {number} tabIndex - Index of the tab to navigate to
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public goToTab(tabIndex: number): void {
+        this.selectedTabIndex = tabIndex;
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
+     * Navigates to the portal tab (index 2) when duplicate contact errors exist
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public goToPortalTab(): void {
+        this.goToTab(2); // Portal tab is at index 2
+    }
+
+    /**
+     * Checks if a tab has been activated at least once
+     *
+     * @param {number} tabIndex - Index of the tab to check
+     * @returns {boolean} True if tab has been activated
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public isTabActivated(tabIndex: number): boolean {
+        return this.activatedTabs.has(tabIndex);
     }
 
     /**

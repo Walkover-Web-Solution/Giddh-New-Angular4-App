@@ -1143,7 +1143,7 @@ export const COUNTRIES_DATA: Country[] = [
     {
         name: 'Montserrat',
         code: 'MS',
-        dialCode: 'MS',
+        dialCode: '+1664',
         flag: '🇲🇸',
         flagImage: 'assets/images/flags/ms.png',
         nativeName: '+1664'
@@ -1272,7 +1272,7 @@ export const COUNTRIES_DATA: Country[] = [
     {
         name: 'North Macedonia',
         code: 'MK',
-        dialCode: 'MK',
+        dialCode: '+389',
         flag: '🇲🇰',
         flagImage: 'assets/images/flags/mk.png',
         nativeName: '+389'
@@ -1280,7 +1280,7 @@ export const COUNTRIES_DATA: Country[] = [
     {
         name: 'Northern Mariana Islands',
         code: 'MP',
-        dialCode: 'MP',
+        dialCode: '+1670',
         flag: '🇲🇵',
         flagImage: 'assets/images/flags/mp.png',
         nativeName: '+1670'
@@ -1394,7 +1394,7 @@ export const COUNTRIES_DATA: Country[] = [
     {
         name: 'Puerto Rico',
         code: 'PR',
-        dialCode: 'PR',
+        dialCode: '+1',
         flag: '🇵🇷',
         flagImage: 'assets/images/flags/pr.png',
         nativeName: '+1'
@@ -1790,7 +1790,7 @@ export const COUNTRIES_DATA: Country[] = [
     {
         name: 'Turks and Caicos Islands',
         code: 'TC',
-        dialCode: 'TC',
+        dialCode: '+1649',
         flag: '🇹🇨',
         flagImage: 'assets/images/flags/tc.png',
         nativeName: '+1649'
@@ -1863,7 +1863,7 @@ export const COUNTRIES_DATA: Country[] = [
     {
         name: 'US Virgin Islands',
         code: 'VI',
-        dialCode: 'VI',
+        dialCode: '+1340',
         flag: '🇻🇮',
         flagImage: 'assets/images/flags/vi.png',
         nativeName: '+1340'
