@@ -4,11 +4,9 @@
         font-weight: var(--font-weight-semibold);
     }
     .custom-field-list {
-        /* UNUSED COMPONENT CLASS: table-responsive - Auto-commented by script
-.table-responsive {
+        .table-responsive {
             max-height: 555px;
         }
-*/
     }
 }
 .icon-trash,
@@ -21,4 +19,30 @@
 }
 .filter-container {
     width: 160px;
+}
+@media (max-width: 767px) {
+    .giddh-table {
+        tr {
+            td {
+                white-space: normal !important;
+                word-break: inherit !important;
+                width: 100% !important;
+            }
+        }
+    }
+}
+@media (max-width: 575px) {
+    .custom-field-page {
+        .custom-field-header {
+            flex-direction: column;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+            h4 {
+                margin-bottom: 10px;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    }
 }

@@ -26,7 +26,7 @@
                         {{ localeData?.subscription?.benefits }}
                     </span>
                 </div>
-                <div class="grid-title-list font-size-15" *ngFor="let plan of inputData">
+                <div class="grid-title-list font-15" *ngFor="let plan of inputData">
                     <span class="sub-plan-name">{{ plan["name"] }}</span> <br />
                     <span class="sub-plan-amount"
                         >{{ plan["currency"]?.symbol }}{{ plan["amount"] }}/<span class="sub-plan-duration">{{
@@ -208,7 +208,7 @@
                 ></div>
             </div>
         </div>
-        <p [ngClass]="{ 'skeleton-common-class': showLoader }" class="extra-addons-content font-size-15">
+        <p [ngClass]="{ 'skeleton-common-class': showLoader }" class="extra-addons-content font-15">
             {{ localeData?.subscription?.extra_addons }}:<span *ngIf="!showLoader" class="extra-addons-value">
                 {{ localeData?.subscription?.per_transaction }}</span
             >
@@ -216,23 +216,23 @@
         <!-- Default Active Company End  -->
 
         <div class="activation-key-wrapper">
-            <div class=" pd-15 ">
+            <div class="box">
                 <div class="row">
                     <div
                         class="col-md-6 col-sm-12 col-xs-12 footer-plan"
                         [ngClass]="{ 'footer-plan-loading': showLoader }"
                     >
                         <div class="activation-key mr-b1">
-                            <p
+                            <h2
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-plan': showLoader }"
-                                class="font-size-24 font-weight-semibold mb-3 redeem-plan"
+                                class="font-24 bold mb-3 redeem-plan"
                             >
                                 {{ localeData?.subscription?.redeem }}
                                 {{ localeData?.subscription?.activation_key }}
-                            </p>
+                            </h2>
                             <p
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-details': showLoader }"
-                                class="font-size-15"
+                                class="font-15"
                             >
                                 {{ localeData?.subscription?.activation_key_note }}
                             </p>

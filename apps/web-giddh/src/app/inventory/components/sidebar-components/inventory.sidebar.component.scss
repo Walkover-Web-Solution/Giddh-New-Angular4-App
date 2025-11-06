@@ -5,11 +5,9 @@
 .parent-group > ul > li ul li div {
     color: var(--color-dark-gray);
 }
-.btn-grou/* p UNUSED COMPONENT CLASS: show - Auto-commented by script
-.show {
+.btn-group.show {
     display: inline-block !important;
 }
-*/
 .btn-group > .btn:first-child {
     margin-left: 8px;
     margin-top: -3px;
@@ -27,24 +25,19 @@
     cursor: pointer;
 }
 .dropdown-menu > li > a {
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
 }
-/* UNUSED COMPONENT CLASS: caret - Auto-commented by script
-span
-.caret {
+span.caret {
     display: none;
 }
-*/
 #inventory-sidebar {
     background: var(--color-white);
     width: 260px !important;
-    div.clear-both {
+    div.clearfix {
         height: 100vh;
     }
 }
-/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
-ul#dropdown-nested li 
-.dropdown-menu {
+ul#dropdown-nested li .dropdown-menu {
     display: block !important;
     right: auto;
     top: 0;
@@ -53,7 +46,6 @@ ul#dropdown-nested li
     opacity: 0;
     transition: 0.5s all ease;
 }
-*/
 ul#dropdown-nested li:hover .dropdown-menu {
     visibility: visible;
     opacity: 1;

@@ -4,7 +4,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: var(--theme-background-color);
+        background-color: var(--color-white);
         flex-wrap: wrap !important;
         width: 100% !important;
         max-width: 580px;
@@ -15,7 +15,7 @@
             font-weight: normal;
             line-height: initial;
             width: 95%;
-            background-color: var(--theme-background-color);;
+            background-color: var(--color-white);
         }
         .icon-search-icon {
             position: absolute;
@@ -46,18 +46,16 @@
                 text-overflow: ellipsis;
                 direction: ltr;
             }
-            /* UNUSED COMPONENT CLASS: vM - Auto-commented by script
-.vM {
+            .vM {
                 font-size: var(--font-size-24);
                 margin-left: 6px;
             }
-*/
         }
     }
 }
 
 .universal-data-list-wrapper {
-    background-color: var(--theme-background-color);
+    background-color: var(--color-white);
     overflow: auto;
     display: none;
     box-sizing: border-box;
@@ -66,40 +64,32 @@
     &.isVisible {
         display: block;
     }
-    /*& UNUSED COMPONENT CLASS: isFlying - Auto-commented by script
-.isFlying {
+    &.isFlying {
         position: absolute;
         z-index: 10;
         box-shadow: 0 2px 3px 0 var(--color-shadow-light);
-        border: 1px solid var(--border-color);
-        border-radius: var(--mat-border-radius-0);
+        border: 1px solid var(--color-silver);
+        border-radius: 2px;
     }
-*/
     &:not(.isFlying),
     &.wider {
         .universal-members-list {
             .item {
-                /* UNUSED COMPONENT CLASS: member-details - Auto-commented by script
-.member-details {
+                .member-details {
                     max-width: inherit;
                 }
-*/
             }
         }
     }
-    /*& UNUSED COMPONENT CLASS: isOpenFromBottom - Auto-commented by script
-.isOpenFromBottom {
+    &.isOpenFromBottom {
         bottom: 0;
     }
-*/
-    /* UNUSED COMPONENT CLASS: inner - Auto-commented by script
-.inner {
+    .inner {
         position: relative;
         overflow: auto;
     }
-*/
     ul {
-        // list-style: none;
+        list-style: none;
         margin: 0;
         padding: 0;
     }
@@ -135,7 +125,7 @@
             .item-details {
                 position: relative;
                 font-size: var(--font-size-15);
-                color: var(--theme-foreground-color);
+                color: var(--color-black);
                 text-transform: capitalize;
                 width: 100%;
                 padding: 2px 0 2px 25px;
@@ -155,7 +145,7 @@
                     display: block;
                 }
                 .command-hover-text {
-                    // color: var(--color-black);
+                    color: var(--color-black);
                     right: 0;
                     text-transform: initial;
                     width: 25%;
@@ -164,12 +154,10 @@
                     display: inline;
                     white-space: initial;
                 }
-                /* UNUSED COMPONENT CLASS: command-bread-crumb - Auto-commented by script
-.command-bread-crumb {
+                .command-bread-crumb {
                     max-width: 150px;
                     overflow: hidden;
                 }
-*/
                 p{
                     display: inline;
                     white-space: initial;
@@ -177,7 +165,7 @@
             }
             // hover effect
             &.selected {
-                background-color: var(--bg-primary-color);
+                background-color: var(--color-blue-primary);
                 .item-details {
                     color: var(--color-white);
                     small {
@@ -203,15 +191,47 @@
     right: 10px;
     top: 10px;
     padding: 10px;
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
-    // color: var(--color-black);
+    color: var(--color-black);
 }
 
-// ::ng-deep {
-//     .jumper-results {
-//         .block {
-//             color: var(--color-black);
-//         }
-//     }
-// }
+::ng-deep {
+    .jumper-results {
+        .block {
+            color: var(--color-black);
+        }
+    }
+}
+
+/*responsive*/
+@media (max-width: 767px) {
+    :host {
+        .search-wrapper {
+            padding: 1rem 2rem 1rem 3.9rem;
+            margin-bottom: 10px;
+            max-width: 100%;
+            .icon-search-icon {
+                left: -3px;
+            }
+        }
+    }
+    .close-navigation {
+        top: 6px;
+        font-size: 17px;
+    }
+    .universal-data-list-wrapper {
+        .universal-list-items {
+            .item {
+                .item-details {
+                    padding-left: 24px;
+                    line-height: 1.4;
+                    font-size: var(--font-size-12);
+                }
+            }
+        }
+    }
+    .item-icon {
+        margin-right: 15px;
+    }
+}

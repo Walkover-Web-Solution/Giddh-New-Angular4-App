@@ -2,11 +2,11 @@
     <div class="imported-file-design-box">
         <i class="fa fa-exclamation-circle mr-r3"></i>
         <div class="imported-file-design-content">
-            <div class="clear-both">
-                <p class="mt-0">{{ importedCountMessage }}</p>
-                <p>{{ failedReportMessage }}</p>
+            <div class="clearfix">
+                <h2 class="mt-0">{{ importedCountMessage }}</h2>
+                <h3>{{ failedReportMessage }}</h3>
             </div>
-            <div class="clear-both mt-4">
+            <div class="clearfix mt-4">
                 <button mat-raised-button color="primary" [routerLink]="['/pages/import/select-type']" type="button">
                     {{ commonLocaleData?.app_continue }}
                 </button>

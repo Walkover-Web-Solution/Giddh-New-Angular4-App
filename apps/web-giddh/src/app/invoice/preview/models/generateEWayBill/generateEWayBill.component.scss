@@ -8,7 +8,7 @@
         align-items: center;
         p {
             text-align: center;
-            // color: var(--color-black);
+            color: var(--color-black);
             font-size: var(--font-size-15);
             margin-top: 20px;
         }
@@ -16,15 +16,13 @@
 }
 
 .e-way-card:hover div {
-    background-color: var(--theme-primary-light);
+    background-color: var(--color-light-gray);
 }
 .e-way-card:hover .icon-link {
     .a {
         stroke-width: 0.75px;
     }
 }
-/* UNUSED COMPONENT CLASS: modal-455 - Auto-commented by script
 .modal-455 {
     width: 455px;
 }
-*/

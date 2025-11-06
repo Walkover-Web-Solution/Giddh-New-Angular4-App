@@ -23,6 +23,7 @@ import { AgingReportActions } from "../../actions/aging-report.actions";
 import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as dayjs from "dayjs";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
 import { GeneralService } from "../../services/general.service";
@@ -73,6 +74,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public filter: string = "";
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
+    public isMobileScreen: boolean = false;
     /** Page size options for mat-paginator */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     public isAdvanceSearchApplied: boolean = false;
@@ -144,6 +146,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private agingReportActions: AgingReportActions,
         private cdr: ChangeDetectorRef,
+        private breakpointObserver: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private router: Router,
@@ -221,6 +224,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             this.defaultLoad = false;
         });
 
+        this.breakpointObserver
+            .observe(["(max-width: 768px)"])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                this.getDueAmountreportData();
+            });
         this.store.pipe(
             select(appState => appState.session.activeCompany), takeUntil(this.destroyed$),
         ).subscribe(activeCompany => {

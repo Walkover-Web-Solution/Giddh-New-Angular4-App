@@ -87,7 +87,7 @@
 		"user": "उपयोगकर्ता",
 		"select_user": "उपयोगकर्ता का चयन करें",
 		"list_beneficiary": "सूची लाभार्थी",
-		"connection_request_message": "बधाई हो!! आपके खाते में एक अनुरोध भेज दिया गया है, <a class='text-decoration-underline pointer-event-none' href='https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD_FG.LOAD&ACTION.LOAD=Y&Authentication पर जाएं। =1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk' target='_blank'>ICICI बैंक पोर्टल</a> और इसे स्वीकार करें।",
+		"connection_request_message": "बधाई हो!! आपके खाते में एक अनुरोध भेज दिया गया है, <a class='btn-link' href='https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD_FG.LOAD&ACTION.LOAD=Y&Authentication पर जाएं। =1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk' target='_blank'>ICICI बैंक पोर्टल</a> और इसे स्वीकार करें।",
 		"note": "एक बार यह हो जाने के बाद आप अपने आईसीआईसीआई बैंक खाते/खातों को लिंक कर सकते हैं और सीधे GIDDH के माध्यम से भुगतान कर सकते हैं।",
 		"add_more": "अधिक आईडी जोड़ें",
 		"max_limit_alert": "आप अधिकतम बैंक सीमा 1 बैंक से अधिक का चयन नहीं कर सकते",

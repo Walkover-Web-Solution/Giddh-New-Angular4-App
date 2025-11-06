@@ -1,29 +1,33 @@
-/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
 .modal-header {
     display: flex;
     justify-content: space-between;
     padding: 16px !important;
 }
-*/
-// .modal-header .close {
-//     color: var(--color-white);
-//     opacity: 1;
-//     font-weight: 100;
-//     text-shadow: none;
-//     font-size: 30px;
-//     cursor: pointer;
-// }
+.modal-header .close {
+    color: var(--color-white);
+    opacity: 1;
+    font-weight: 100;
+    text-shadow: none;
+    font-size: 30px;
+    cursor: pointer;
+}
 .mat-switch {
     margin-left: 16px;
 }
 
+::ng-deep {
+    .advance-search {
+        .clearfix {
+            background-color: var(--color-white) !important;
+        }
+    }
+}
+
 @media (min-width: 1200px) {
-    /* UNUSED COMPONENT CLASS: container - Auto-commented by script
-.container {
+    .container {
         width: 100%;
         max-width: 1280px;
     }
-*/
 }
 @media only screen and (max-width: 1024px) {
     .container {
@@ -31,45 +35,32 @@
     }
 }
 @media only screen and (max-width: 767px) {
-    /* UNUSED COMPONENT CLASS: ledger-state-box - Auto-commented by script
-.ledger-state-box {
+    .ledger-state-box {
         margin-bottom: 20px;
     }
-*/
-    /* UNUSED COMPONENT CLASS: amount-total - Auto-commented by script
-.amount-total {
+    .amount-total {
         background: var(--color-border-light);
     }
-*/
-    /* UNUSED COMPONENT CLASS: page-count - Auto-commented by script
-.page-count {
+    .page-count {
         width: 100%;
         left: 0;
         bottom: 0;
         position: relative;
     }
-*/
-    /* UNUSED COMPONENT CLASS: ledger-stat - Auto-commented by script
-.ledger-stat {
+    .ledger-stat {
         margin: 0px 0 0;
     }
-*/
-    /* UNUSED COMPONENT CLASS: ledger-book - Auto-commented by script
-.ledger-book {
+    .ledger-book {
         margin-bottom: 100px;
     }
-/* UNUSED COMPONENT CLASS: ledger-head - Auto-commented by script
     .ledger-head thead tr th.active {
         display: block !important;
         width: 100%;
     }
-/* UNUSED COMPONENT CLASS: ledger-row - Auto-commented by script
-    /* UNUSED COMPONENT CLASS: h-table - Auto-commented by script
-.ledger-book .h-table tbody .ledger-row td {
+    .ledger-book .h-table tbody .ledger-row td {
         position: relative;
         padding-left: 80px !important;
     }
-*/
     .advance-search {
         p {
             line-height: 18px;

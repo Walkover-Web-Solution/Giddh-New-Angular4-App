@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="discount pd-15 clear-both section-center position-relative overflow-visible">
+    <div class="discount box clearfix section-center position-relative overflow-visible">
         <div *ngIf="isLoading" class="mt-5">
             <giddh-page-loader></giddh-page-loader>
         </div>
@@ -18,7 +18,7 @@
         <button *ngIf="discountList?.length && !isLoading && voucherApiVersion === 2" mat-raised-button color="primary" (click)="openCreateEditDiscountAsidePane()">+ {{ localeData?.tab_heading }}</button>
     
         <div class="mt-4 overflow-visible table-header-sticky" *ngIf="discountList?.length && !isLoading">
-            <table mat-table [dataSource]="discountList" class="border table basic mr-b05 on-mobile-view w-100">
+            <table mat-table [dataSource]="discountList" class="bdr table basic mr-b05 on-mobile-view w-100">
                 <ng-container matColumnDef="number">
                     <th mat-header-cell *matHeaderCellDef>#</th>
                     <td mat-cell *matCellDef="let element;let i = index">{{ i + 1 }}</td>

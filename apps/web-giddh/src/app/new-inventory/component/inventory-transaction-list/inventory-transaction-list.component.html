@@ -27,7 +27,6 @@
         ></report-filters>
         <div class="inventory-transaction-list" *ngIf="!isLoading">
             <div
-                class="mr-b15"
                 *ngIf="
                     isDataAvailable ||
                     stockReportRequest?.voucherTypes?.length ||
@@ -38,7 +37,7 @@
                     <div class="col-12">
                         <div class="top-content">
                             <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                                <div class="total-details-box mr-r05 count-box mat-app-background">
+                                <div class="total-details-box mr-r05 count-box">
                                     <h5>
                                         {{ localeData?.reports?.transaction_count }}
                                         <div class="mt-2">
@@ -358,7 +357,7 @@
                                 <th mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
                                     {{ localeData?.reports?.voucher_type }}
                                     <i
-                                        class="fa fa-ellipsis-v ml-1 text-light mt-1 cursor-pointer"
+                                        class="fa fa-ellipsis-v ml-1 text-light-2 mt-1 cursor-pointer"
                                         aria-hidden="true"
                                     ></i>
                                     <mat-menu
@@ -566,27 +565,29 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
-                    <mat-paginator
-                        *ngIf="
-                            stockReportRequest?.totalItems > pageSizeOptions[0] &&
-                            !isLoading &&
-                            displayedColumns?.length
-                        "
-                        [length]="stockReportRequest?.totalItems"
-                        [pageSize]="stockReportRequest?.count"
-                        [pageIndex]="stockReportRequest.page - 1"
-                        [pageSizeOptions]="pageSizeOptions"
-                        [showFirstLastButtons]="true"
-                        [hidePageSize]="false"
-                        (page)="handlePageEvent($event)"
-                    ></mat-paginator>
-                    <section class="mr-b8"></section>
+                    <div class="mt-4">
+                        <mat-paginator
+                            *ngIf="
+                                stockReportRequest?.totalItems > pageSizeOptions[0] &&
+                                !isLoading &&
+                                displayedColumns?.length
+                            "
+                            [length]="stockReportRequest?.totalItems"
+                            [pageSize]="stockReportRequest?.count"
+                            [pageIndex]="stockReportRequest.page - 1"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                            (page)="handlePageEvent($event)"
+                        ></mat-paginator>
+                        <section class="mr-b8"></section>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="no-data" *ngIf="!isLoading && !dataSource?.length">
-            <h2>{{ localeData?.reports?.no_entries_found_1 }}</h2>
-            <h3>{{ localeData?.reports?.no_entries_found_2 }}</h3>
+        <div class="no-data-inventory" *ngIf="!isLoading && !dataSource?.length">
+            <h1>{{ localeData?.reports?.no_entries_found_1 }}</h1>
+            <h1>{{ localeData?.reports?.no_entries_found_2 }}</h1>
         </div>
         <div class="no-data" *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
@@ -602,8 +603,8 @@
             <div class="search-table">
                 <div class="align-items-center d-flex" [hidden]="show">
                     <span>{{ title }}</span>
-                    <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="icon button" class="h-auto">
-                        <span class="icon-search font-size-15"></span>
+                    <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="icon button">
+                        <span class="icon-search"></span>
                     </button>
                 </div>
                 <div [hidden]="!show">

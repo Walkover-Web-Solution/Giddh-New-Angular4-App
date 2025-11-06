@@ -27,11 +27,9 @@
 }
 
 :host ::ng-deep {
-    /* UNUSED COMPONENT CLASS: tailed-checkbox - Auto-commented by script
-.tailed-checkbox {
+    .tailed-checkbox {
         display: none;
     }
-*/
 
     .show-tailed-checkbox {
         .tailed-checkbox {
@@ -47,12 +45,9 @@
                 .mat-mdc-checkbox {
                     .mdc-form-field {
                         .mdc-checkbox {
-                            /* UNUSED COMPONENT CLASS: mdc-checkbox - Auto-commented by script
-/* UNUSED COMPONENT CLASS: mdc-checkbox__background - Auto-commented by script
-.mdc-checkbox__background {
+                            .mdc-checkbox__background {
                                 border-color: inherit !important;
                             }
-*/
                         }
                     }
                 }
@@ -60,11 +55,9 @@
         }
     }
 
-    /* UNUSED COMPONENT CLASS: uncheck-all-icon - Auto-commented by script
-.uncheck-all-icon {
+    .uncheck-all-icon {
         filter: invert(0);
         width: 20px;
         height: 20px;
     }
-*/
 }

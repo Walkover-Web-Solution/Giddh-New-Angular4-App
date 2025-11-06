@@ -3,7 +3,7 @@
 </ng-container>
 <ng-container *ngIf="!isLoading">
     <section class="audit-log" *ngFor="let log of this.auditLogs$ | async; let parentIndex = index">
-        <p>
+        <h1>
             {{ log.operationType }}
             <ng-container *ngIf="log?.details?.voucherType && log?.operationType !== 'EDIT'">
                 <span> -{{ log?.details?.voucherType }}</span></ng-container
@@ -86,8 +86,8 @@
                     - {{ log?.details?.voucherAccount?.name }}({{ log?.details?.voucherAccount?.uniqueName }})</span
                 >
             </ng-template>
-        </p>
-        <div class="audit-log-detail mr-t05 clear-both">
+        </h1>
+        <div class="audit-log-detail mr-t05 clearfix">
             <label *ngIf="log?.operationType === 'EDIT'">{{ localeData?.updated }}</label>
             <!-- User info block start-->
             <div class="d-flex user-basic-detail">
@@ -388,7 +388,7 @@
 
         <!-- Old log block start -->
         <ng-container *ngIf="log?.operationType === 'EDIT' && log?.old">
-            <div class="audit-log-detail mr-t05 clear-both">
+            <div class="audit-log-detail mr-t05 clearfix">
                 <label *ngIf="log.operationType === 'EDIT'">{{ localeData?.old }}</label>
                 <!-- Old user info block start-->
                 <div class="d-flex user-basic-detail">
@@ -739,7 +739,7 @@
             class="mr-t05"
             *ngIf="log?.log != null && log?.log?.transactions != undefined && log?.log?.transactions?.length > 0"
         >
-            <table class="table border">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th class="col-xs-3 text-center">#</th>
@@ -771,7 +771,7 @@
             "
         >
             <label>{{ localeData?.updated }}</label>
-            <table class="table border">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th class="col-xs-3 text-center">#</th>
@@ -793,7 +793,7 @@
             </table>
             <br />
             <label>{{ localeData?.old }}</label>
-            <table class="table border">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th class="col-xs-3 text-center">#</th>
@@ -826,7 +826,7 @@
             "
         >
             <label>{{ localeData?.updated }}</label>
-            <table class="table border">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th class="col-xs-3 text-center">{{ localeData?.opening_balance_date }}</th>
@@ -848,7 +848,7 @@
             </table>
             <br />
             <label>{{ localeData?.old }}</label>
-            <table class="table border">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th class="col-xs-3 text-center">{{ localeData?.opening_balance_date }}</th>
@@ -872,7 +872,7 @@
     </section>
     <section class="no-logs" *ngIf="(auditLogs$ | async)?.length < 1">
         <div class="no-data">
-            <h2>{{ localeData?.no_results_found }}</h2>
+            <h1>{{ localeData?.no_results_found }}</h1>
             <p>{{ localeData?.no_results_note }}</p>
         </div>
     </section>

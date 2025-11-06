@@ -31,6 +31,8 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public auditLogFormVM: AuditLogsSidebarVM;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** This will store if device is mobile or not */
+    public isMobileScreen: boolean = false;
     /** dayjs object */
     public dayjs = dayjs;
     /** Selected range label */

@@ -1,27 +1,21 @@
-/* UNUSED COMPONENT CLASS: flex-container - Auto-commented by script
 .flex-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     flex-flow: row wrap;
 }
-*/
-/* UNUSED COMPONENT CLASS: check-image - Auto-commented by script
 .check-image img {
     max-height: 14px;
     cursor: pointer;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: flex-fill - Auto-commented by script
 .flex-fill {
     flex: 1 1 auto;
 }
-*/
 
-// .d-flex {
-//     display: flex;
-// }
+.d-flex {
+    display: flex;
+}
 
 /*td-in-searchbox_style*/
 .td-search-box.nowrap {
@@ -35,20 +29,16 @@
     padding-left: 8px;
 }
 
-/* UNUSED COMPONENT CLASS: td-search-box - Auto-commented by script
 .td-search-box {
     padding: 0px !important;
     position: relative;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: input-container - Auto-commented by script
 .td-search-box .input-container input {
     width: 100%;
     padding: 11px;
     padding-right: 40px;
 }
-*/
 
 .td-search-box .input-container i {
     position: absolute;
@@ -57,26 +47,21 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--border-color);
+    border-right: 1px solid var(--color-silver);
 }
 
-/* UNUSED COMPONENT CLASS: icon-pointer - Auto-commented by script
-/* .icon-pointer  UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
-.glyphicon {
+.icon-pointer .glyphicon {
     cursor: pointer;
 }
-*/
 
 .dropdown-menu > li > a:hover {
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
     background: var(--color-border-light);
 }
 
-/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu {
     margin-top: 0;
 }
-*/
 .download-arrow {
     .icon-download1 {
         visibility: hidden;
@@ -92,18 +77,13 @@
 label {
     font-size: var(--font-size-15);
 }
-/* UNUSED COMPONENT CLASS: width-125 - Auto-commented by script
 .width-125 {
     width: 125px;
 }
-*/
-/* UNUSED COMPONENT CLASS: eway-bill-date - Auto-commented by script
-.eway-bill-date /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
-.form-control {
+.eway-bill-date .form-control {
     background: var(--color-white) !important;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
 }
-*/
 .input-group {
     position: relative;
     span {
@@ -127,13 +107,11 @@ label {
         }
     }
 }
-/* UNUSED COMPONENT CLASS: list-icon-group - Auto-commented by script
 .list-icon-group {
     label {
         padding: 0 10px;
     }
 }
-*/
 .custom-tabs {
     .table-wrapper {
         height: calc(100vh - 295px);
@@ -148,15 +126,40 @@ label {
     padding-bottom: 20px;
     padding-top: 20px;
 }
-/* UNUSED COMPONENT CLASS: dropup-menu - Auto-commented by script
 .dropup-menu {
     transform: translateY(-101%) !important;
 }
-*/
 
 
 @media screen and (max-width: 1340px) {
     .table-responsive {
         height: auto !important; 
+    }
+}
+
+@media (min-width: 768px) {
+    .table-responsive.remove-overflow {
+        overflow: inherit;
+    }
+}
+@media (max-width: 768px) {
+    .dropdown-left {
+        right: auto !important;
+        left: 0 !important;
+    }
+    .modal-body {
+        .text-right {
+            text-align: left !important;
+        }
+    }
+    .custom-tabs {
+        table {
+            margin-top: 0;
+        }
+    }
+}
+@media (max-width: 767px) {
+    .custom-tabs::ng-deep .nav-tabs {
+        position: fixed !important;
     }
 }

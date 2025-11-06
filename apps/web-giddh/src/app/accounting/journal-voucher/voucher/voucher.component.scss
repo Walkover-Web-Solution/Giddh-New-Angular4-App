@@ -1,19 +1,22 @@
+$hilighted-color: var(--color-blue-primary) !important;
+$text-overflow-ellipsis-width: 255px;
+
 .virtual-group-list {
     height: 100%;
     min-height: 500px;
 }
 
-// .day-date {
-//     display: flex;
+.day-date {
+    display: flex;
 
-//     .voucher-date-field {
-//         width: auto;
-//     }
-// }
+    .voucher-date-field {
+        width: auto;
+    }
+}
 
-// .discount-sidebar-section {
-//     padding: 5px !important;
-// }
+.discount-sidebar-section {
+    padding: 5px !important;
+}
 
 .grp-list {
     padding: 0 !important;
@@ -24,22 +27,25 @@
 }
 
 .hilighted {
-    color: var(--text-primary-color) !important;
+    color: var(--color-blue-primary) !important;
     background-color: var(--color-border-light) !important;
-    & > a {
-        color: var(--text-primary-color) !important;
-    }
 }
 
 .account-list:hover {
-    color: var(--text-primary-color) !important;
+    color: var(--color-blue-primary) !important;
     background-color: var(--color-border-light) !important;
+}
+
+.hilighted {
+    &>a {
+        color: $hilighted-color;
+    }
 }
 
 .text-overflow-ellipsis {
     .list-item {
         text-overflow: ellipsis;
-        width: 255px;
+        width: $text-overflow-ellipsis-width;
     }
 }
 
@@ -48,9 +54,9 @@
     font-weight: bolder;
 }
 
-// #content-wrapper {
-//     padding-bottom: 0px !important;
-// }
+#content-wrapper {
+    padding-bottom: 0px !important;
+}
 
 .current-balance {
     font-size: var(--font-size-15);
@@ -59,8 +65,7 @@
     padding-left: 70px;
 }
 
-// .cheque-popup .new-account-form .modal-body {
-.new-account-form {
+.cheque-popup .new-account-form .modal-body {
     .check-clearance-date {
         .form-control[readonly] {
             background-color: var(--color-white) !important;
@@ -68,75 +73,68 @@
     }
 }
 
-// .debtor-details-form {
-//     display: flex;
-//     font-size: var(--font-size-15);
-//     background-color: var(--color-medium-gray);
-//     padding: 10px 9px;
-//     margin-bottom: 10px;
+.debtor-details-form {
+    display: flex;
+    font-size: var(--font-size-15);
+    background-color: var(--color-medium-gray);
+    padding: 10px 9px;
+    margin-bottom: 10px;
 
-//     .form-fields {
-//         display: flex;
-//         align-items: center;
+    .form-fields {
+        display: flex;
+        align-items: center;
 
-//         .single-field {
-//             width: 20%;
-//             margin-right: 15px;
-//             min-width: 180px;
+        .single-field {
+            width: 20%;
+            margin-right: 15px;
+            min-width: 180px;
 
-//             &.cr-dr-field {
-//                 width: 5% !important;
-//             }
+            &.cr-dr-field {
+                width: 5% !important;
+            }
 
-//             label {
-//                 margin-bottom: 5px;
-//                 display: none;
-//             }
+            label {
+                margin-bottom: 5px;
+                display: none;
+            }
 
-//             input.form-control {
-//                 background-color: var(--color-white) !important;
-//                 border: 1px solid var(--border-color);
-//                 border-radius: var(--mat-border-radius-4) !important;
-//             }
+            input.form-control {
+                background-color: var(--color-white) !important;
+                border: 1px solid var(--color-silver);
+                border-radius: 5px !important;
+            }
 
-//             &.set-width {
-//                 width: 30%;
-//             }
+            &.set-width {
+                width: 30%;
+            }
 
-//             &:last-child {
-//                 width: 5%;
-//             }
+            &:last-child {
+                width: 5%;
+            }
 
-//             .icon-arrow-down {
-//                 font-size: var(--font-size-15);
-//                 position: absolute;
-//                 right: 5px;
-//                 top: 7px;
-//                 color: var(--color-black);
-//             }
-//         }
+            .icon-arrow-down {
+                font-size: var(--font-size-15);
+                position: absolute;
+                right: 5px;
+                top: 7px;
+                color: var(--color-black);
+            }
+        }
 
-//         .icon-cross {
-//             color: var(--color-dark-gray);
-//             cursor: pointer;
-//             padding: 5px;
-//         }
+        .icon-cross {
+            color: var(--color-dark-gray);
+            cursor: pointer;
+            padding: 5px;
+        }
 
-//         .cr-dr-field,
-//         .delete-row {
-//             min-width: 30px;
-//             max-width: 30px;
-//         }
-//     }
-// }
-
-// .modal-dialog {
-//     width: 298px !important;
-// }
-
-::ng-deep .account-wrapper {
-    .from-or-to-acc[type="text"],
-    .form-control.debit-credit[type="text"] {
-        border: 1px solid var(--border-color) !important;
+        .cr-dr-field,
+        .delete-row {
+            min-width: 30px;
+            max-width: 30px;
+        }
     }
+}
+
+.modal-dialog {
+    width: 298px !important;
 }

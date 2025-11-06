@@ -21,13 +21,13 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
       background: #fff;
       min-height: 100vh;
     }
-/* UNUSED COMPONENT CLASS: month-picker - Auto-commented by script
+
     :host ::ng-deep .nav-tabs > li {
       width: 50%;
       text-align: center;
       background: #f5f5f5;
     }
-*/  `]
+  `]
 })
 
 export class InventoryInOutSidebarComponent implements OnInit, OnDestroy {

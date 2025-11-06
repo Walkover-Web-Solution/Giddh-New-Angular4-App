@@ -85,6 +85,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             this.vatReportTransactionsRequest.from = params['from'];
             this.vatReportTransactionsRequest.to = params['to'];
             this.vatReportTransactionsRequest.taxNumber = params['taxNumber'];
+
             this.getVatReportTransactions(true);
         });
 
@@ -154,7 +155,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public onSelectInvoice(invoice: any): void {
-        const uniqueName = invoice.voucherUniqueName;
+        const uniqueName =  invoice.voucherUniqueName;
         if (invoice.voucherNumber) {
             this.selectedInvoice = invoice;
             this.selectedInvoice.uniqueName = uniqueName;
@@ -199,7 +200,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {{ action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }} userResponse
      * @memberof VatReportTransactionsComponent
      */
-    public onDownloadOrSendMailEvent(userResponse: any): void {
+        public onDownloadOrSendMailEvent(userResponse: any): void {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {

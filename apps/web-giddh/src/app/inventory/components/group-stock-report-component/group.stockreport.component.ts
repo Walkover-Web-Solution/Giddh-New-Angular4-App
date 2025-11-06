@@ -20,6 +20,7 @@ import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { InvViewService } from '../../inv.view.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { PageEvent } from '@angular/material/paginator';
 import { ASIDE_PANE_CONFIG, IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
@@ -204,6 +205,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     valueWidth = false;
     public branchTransferMode: string = '';
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
     /** Holds available page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Stores the current organization type */
@@ -231,9 +234,15 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         private _toasty: ToasterService,
         private inventoryAction: InventoryAction,
         private invViewService: InvViewService,
+        private breakPointObservar: BreakpointObserver,
         private generalService: GeneralService,
         private dialog: MatDialog
     ) {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
 
         this.groupStockReport$ = this.store.pipe(select(p => p.inventory.groupStockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();

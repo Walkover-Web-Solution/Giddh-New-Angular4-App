@@ -9,7 +9,7 @@
     }
 }
 
-:host ::ng-deep .invoice-preview-wrapper {
+.invoice-preview-wrapper {
     display: flex;
     height: calc(100vh - (var(--header-height) + 30px));
 
@@ -23,13 +23,6 @@
             &:hover,
             &.active {
                 background-color: var(--color-light-gray);
-
-                .text-primary {
-                    color: var(--theme-primary-color) !important;
-                }
-                .text-default {
-                    color: var(--color-black) !important;
-                }
             }
         }
     }
@@ -39,7 +32,7 @@
         overflow-y: auto;
 
         .preview-header {
-            background-color: var(--theme-primary-light);
+            background-color: var(--color-light-gray);
             .action-btn {
                 column-gap: 6px;
 
@@ -61,7 +54,7 @@
                 padding: 5px 10px;
                 color: var(--color-black);
                 background-color: var(--color-silver);
-                border: 1px solid var(--border-color);
+                border: 1px solid var(--color-silver);
             }
         }
 
@@ -83,7 +76,7 @@
                 li {
                     &:not(:last-child) {
                         &::after {
-                            content: "";
+                            content: '';
                             position: absolute;
                             top: 20px;
                             left: -10px;

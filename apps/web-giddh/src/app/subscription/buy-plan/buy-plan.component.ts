@@ -556,17 +556,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         const reqObj = {
                             subscriptionId: this.upgradeSubscriptionId,
                             billingRequestId: this.goCardLessBillingRequestId
-                        }
+                        };
                         this.componentStore.activatePlan(reqObj);
-                        this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                            if (response) {
-                                if (this.subscriptionId && this.isChangePlan) {
-                                    this.router.navigate(['/pages/user-details/subscription']);
-                                } else {
-                                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
-                                };
-                            }
-                        });
+                        setTimeout(() => {
+                            this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                                if (response) {
+                                    if (this.subscriptionId && this.isChangePlan) {
+                                        this.router.navigate(['/pages/user-details/subscription']);
+                                    } else {
+                                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                                    };
+                                }
+                            });
+                        }, 100);
                     } else {
                         setTimeout(() => {
                             if (this.subscriptionId && this.isChangePlan) {
@@ -740,8 +742,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.upgradePlan && this.upgradeRegion === 'GBR') {
             const reqObj = {
                 subscriptionId: this.upgradeSubscriptionId,
-                goCardLessBillingRequestId : this.goCardLessBillingRequestId
-            }
+                goCardLessBillingRequestId: this.goCardLessBillingRequestId
+            };
             this.componentStore.activatePlan(reqObj);
             this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {

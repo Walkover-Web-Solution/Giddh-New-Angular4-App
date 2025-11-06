@@ -87,7 +87,7 @@
         "user": "User",
         "select_user": "Select User",
         "list_beneficiary": "List Beneficiary",
-        "connection_request_message": "Congratulations!! A request has been sent to your account, go to <a class='text-decoration-underline pointer-event-none' href='https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD=Y&AuthenticationFG.LOGIN_FLAG=1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk' target='_blank'>ICICI bank portal</a> and accept it.",
+        "connection_request_message": "Congratulations!! A request has been sent to your account, go to <a class='btn-link' href='https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD=Y&AuthenticationFG.LOGIN_FLAG=1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk' target='_blank'>ICICI bank portal</a> and accept it.",
         "note": "Once it is done you can link your ICICI bank account/s and make payment directly through GIDDH.",
         "add_more": "Add More ID",
         "max_limit_alert": "You can not select max bank limit more than 1",

@@ -8,10 +8,10 @@
     <mat-dialog-content class="dialog-body" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
             <div>
-                <p>{{ message }}</p>
+                <h3>{{ message }}</h3>
             </div>
         </form>
-        <div class="d-flex justify-content-end column-gap-1 mt-3">
+        <div class="d-flex justify-content-end column-gap1 mt-3">
             <button mat-raised-button color="primary" type="submit" (click)="onConfirmation()">
                 {{ commonLocaleData?.app_yes }}
             </button>

@@ -6,7 +6,7 @@
                 stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"
             }}</span>
         </span>
-        <div class="d-flex align-items-center column-gap-15">
+        <div class="d-flex align-items-center column-gap15">
             <button
                 mat-raised-button
                 aria-label="back"
@@ -23,7 +23,7 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <div class="aside-panel-ledger" *ngIf="!hideFirstScreen">
-            <div class="buttons-wrapper column-gap-15">
+            <div class="buttons-wrapper column-gap15">
                 <button mat-raised-button color="primary" class="mb-2" (click)="toggleAccountPane()">
                     {{ commonLocaleData?.app_add_account }}
                 </button>

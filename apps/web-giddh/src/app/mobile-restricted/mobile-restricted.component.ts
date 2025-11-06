@@ -5,7 +5,6 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
-import { BREAKPOINT_SCREEN_SIZE } from "../app.constant";
 
 @Component({
     selector: 'mobile-restricted',
@@ -23,11 +22,11 @@ export class MobileRestrictedComponent {
     constructor(@Inject(ServiceConfig) private serviceConfig,  private breakpointObserver: BreakpointObserver, private router: Router, private generalService: GeneralService) {
         this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-text-primary-logo.svg';
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-blue-logo.svg';
         this.breakpointObserver.observe([
-            BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
+            '(min-width: 768px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (!result?.breakpoints[BREAKPOINT_SCREEN_SIZE.UNSUPPORTED]) {
+            if (result?.matches) {
                 this.router.navigate(['/home']);
             }
         });

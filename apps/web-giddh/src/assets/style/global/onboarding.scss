@@ -1,0 +1,13 @@
+.manage-invoice {
+    .mat-list-item {
+        .mat-list-item-content {
+            padding: 0 !important;
+            margin-top: 10px;
+        }
+        &.no-margin {
+            .mat-list-item-content {
+                margin-top: unset;
+            }
+        }
+    }
+}

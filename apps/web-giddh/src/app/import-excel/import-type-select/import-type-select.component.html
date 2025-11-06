@@ -9,8 +9,8 @@
         <div class="col-12">
             <div class="pd-t2 mt-2">
                 <div class="text-center mr-t2 mr-b2">
-                    <p class="lead">{{ localeData?.section_heading }}</p>
-                    <p>{{ localeData?.easy_import }}</p>
+                    <h1 class="lead">{{ localeData?.section_heading }}</h1>
+                    <h2>{{ localeData?.easy_import }}</h2>
                     <a
                         href="javascript:void(0);"
                         class="text-link-2 mt-1 d-block text-center"
@@ -20,34 +20,34 @@
                 </div>
                 <ul class="import-type mr-b2 mr-t4 pd-t3">
                     <li *ngIf="!isBranch">
-                        <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'master']" href="javascript:void(0);">
+                        <a class="text-link-2 h-100" [routerLink]="['/pages', 'import', 'master']" href="javascript:void(0);">
                             <img src="{{ imgPath }}new/group-import.svg" alt="group import" />
-                            <p>{{ commonLocaleData?.app_import_type?.master }}</p>
+                            <h2>{{ commonLocaleData?.app_import_type?.master }}</h2>
                         </a>
                     </li>
                     <li *ngIf="isBranch || branches?.length === 1">
-                        <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'entries']" href="javascript:void(0);">
+                        <a class="text-link-2 h-100" [routerLink]="['/pages', 'import', 'entries']" href="javascript:void(0);">
                             <img src="{{ imgPath }}new/entries-import.svg" alt="entries import" />
-                            <p>{{ commonLocaleData?.app_import_type?.entries }}</p>
+                            <h2>{{ commonLocaleData?.app_import_type?.entries }}</h2>
                         </a>
                     </li>
                     <li *ngIf="!isBranch">
-                        <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'stock']" href="javascript:void(0);">
+                        <a class="text-link-2 h-100" [routerLink]="['/pages', 'import', 'stock']" href="javascript:void(0);">
                             <img src="{{ imgPath }}new/Inventory-13.svg" alt="inventory" />
-                            <p>{{ commonLocaleData?.app_import_type?.inventory }}</p>
+                            <h2>{{ commonLocaleData?.app_import_type?.inventory }}</h2>
                         </a>
                     </li>
                     <ng-container *ngIf="isBranch || branches?.length === 1">
                         <li>
-                            <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', voucherType.AccountWise]" href="javascript:void(0);">
+                            <a [routerLink]="['/pages', 'import', voucherType.AccountWise]" href="javascript:void(0);">
                                 <img src="{{ imgPath }}new/account.svg" alt="account wise" />
-                                <p>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.account_wise }}</p>
+                                <h2>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.account_wise }}</h2>
                             </a> 
                         </li>
                         <li>
-                            <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', voucherType.VoucherWise]" href="javascript:void(0);">
+                            <a [routerLink]="['/pages', 'import', voucherType.VoucherWise]" href="javascript:void(0);">
                                 <img src="{{ imgPath }}new/voucher.svg" alt="voucher wise" />
-                                <p>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.voucher_wise }}</p>
+                                <h2>{{ commonLocaleData?.app_import_type?.voucher }} - {{ commonLocaleData?.app_import_type?.voucher_wise }}</h2>
                             </a> 
                         </li>
                     </ng-container>

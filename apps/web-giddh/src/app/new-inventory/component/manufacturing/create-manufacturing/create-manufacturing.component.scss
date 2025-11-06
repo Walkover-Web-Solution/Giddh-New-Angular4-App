@@ -8,9 +8,9 @@
         }
         .max-width-stock {
             max-width: 1400px;
-            // .section-head {
-            //     color: var(--text-primary-color);
-            // }
+            .section-head {
+                color: var(--color-blue-primary);
+            }
         }
         .less-than-text {
             font-size: 32px;
@@ -20,7 +20,7 @@
         }
 
         .branch-msg {
-            color: var(--text-primary-color);
+            color: var(--color-blue-primary);
             background-color: var(--color-light-gray);
             display: flex;
             justify-content: center;
@@ -30,12 +30,10 @@
         }
 
         .form-fields {
-            /* UNUSED COMPONENT CLASS: max-width-230 - Auto-commented by script
-.max-width-230 {
+            .max-width-230 {
                 display: block;
                 width: auto;
             }
-*/
             .gap-between {
                 gap: 1rem;
             }
@@ -72,10 +70,10 @@
                 }
 
                 thead {
-                    border-bottom: 1px solid var(--border-color);
+                    border-bottom: 1px solid var(--color-silver);
                     tr {
                         th {
-                            color: var(--text-primary-color);
+                            color: var(--color-blue-primary);
                             font-weight: 500;
                         }
                     }
@@ -83,8 +81,7 @@
                 tbody {
                     tr {
                         td {
-                            /*& UNUSED COMPONENT CLASS: before-line - Auto-commented by script
-.before-line {
+                            &.before-line {
                                 &::before {
                                     content: "";
                                     position: absolute;
@@ -99,7 +96,6 @@
                                     border-radius: 3px 0 0 3px;
                                 }
                             }
-*/
 
                             .mat-stroked-button {
                                 padding: 4px 6px !important;
@@ -124,10 +120,10 @@
                     }
                 }
                 tfoot {
-                    border-top: 1px solid var(--border-color);
+                    border-top: 1px solid var(--color-silver);
                     tr {
                         td {
-                            // color: var(--color-black);
+                            color: var(--color-black);
                             font-weight: 100;
                             &:nth-child(2) {
                                 text-align: right;
@@ -166,11 +162,9 @@
                     width: 10%;
                 }
             }
-            /* UNUSED COMPONENT CLASS: icon-cross - Auto-commented by script
-.icon-cross {
+            .icon-cross {
                 color: var(--color-red);
             }
-*/
         }
         .total-cost-card {
             padding: 15px 0;
@@ -187,27 +181,23 @@
 
                 .col-5 {
                     flex: unset !important;
-                    /* & ~  UNUSED COMPONENT CLASS: col-5 - Auto-commented by script
-.col-5 {
+                    & ~ .col-5 {
                         text-align: right;
                     }
-*/
                 }
             }
         }
-        /* UNUSED COMPONENT CLASS: arrow - Auto-commented by script
-.arrow {
+        .arrow {
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: 600;
             font-size: 44px;
         }
-*/
 
         .custom-card {
             padding: 12px 15px;
-            border-radius: var(--mat-border-radius-4);
+            border-radius: 5px;
             min-width: 280px;
 
             &.bg-green {
@@ -220,7 +210,7 @@
             }
             &.bg-expense {
                 background-color: var(--color-border-light);
-                color: var(--text-primary-color);
+                color: var(--color-blue-primary);
             }
             .card-head-text {
                 font-size: var(--font-size-12);

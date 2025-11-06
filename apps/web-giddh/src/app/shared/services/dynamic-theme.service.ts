@@ -108,12 +108,11 @@ export class DynamicThemeService {
 
     /**
      * Applies Material Design color variables to document root
-     * Creates --theme-{type}-color, --theme-{type}-color-rgb, --theme-{type}-contrast-color, and --theme-{type}-color-light variables
-     * The -light variant uses CSS color-mix() function for consistent transparency with theme base classes
+     * Creates --mat-{type}-color, --mat-{type}-color-rgb, and --mat-{type}-contrast-color variables
      * 
      * @private
      * @param {string} paletteType - Type of palette ('primary', 'accent', 'warn')
-     * @param {string} hexColor - Hex color value in format #RRGGBB
+     * @param {string} hexColor - Hex color value
      * @memberof DynamicThemeService
      */
     private applyCSSVariables(paletteType: string, hexColor: string): void {
@@ -139,10 +138,9 @@ export class DynamicThemeService {
         };
         
         // Set Material Design CSS variables
-        root.style.setProperty(`--theme-${paletteType}-color`, hexColor);
-        root.style.setProperty(`--theme-${paletteType}-color-rgb`, hexToRgb(hexColor));
-        root.style.setProperty(`--theme-${paletteType}-contrast-color`, getContrastColor(hexColor));
-        root.style.setProperty(`--theme-${paletteType}-color-light`, `color-mix(in srgb, ${hexColor} 15%, transparent)`);
+        root.style.setProperty(`--mat-${paletteType}-color`, hexColor);
+        root.style.setProperty(`--mat-${paletteType}-color-rgb`, hexToRgb(hexColor));
+        root.style.setProperty(`--mat-${paletteType}-contrast-color`, getContrastColor(hexColor));
     }
 
     /**

@@ -1,7 +1,7 @@
 {
     "enter_description": "विवरण दर्ज करें",
     "select_state" : "राज्य चुनें",
-    "confirm_delete_tax_authority": "क्या आप वाकई <span class='font-weight-medium'>[NAME] को हटाना चाहते हैं?<span>",
+    "confirm_delete_tax_authority": "क्या आप वाकई <span class='fw-bold'>[NAME] को हटाना चाहते हैं?<span>",
      "no_values_changed_message": "कोई मान नहीं बदला गया है",
      "reporting_tax_authority": "प्रतिवेदन कर प्राधिकरण",
      "sales_with_tax": "कर सहित बिक्री",

@@ -8,100 +8,85 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: input-group-btn - Auto-commented by script
+#inlnImg img {
+    max-height: 18px;
+}
+
 .input-group-btn {
     font-size: 21px;
-    color: var(--text-primary-color) !important;
+    color: var(--color-blue-primary) !important;
     cursor: pointer;
     margin-right: 5px;
     padding-top: 5px;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: font-16 - Auto-commented by script
 .font-16 {
     font-weight: bold;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: check-search - Auto-commented by script
 .check-search {
     position: absolute;
     right: 10px;
     top: 18px;
     width: 13px;
 }
-*/
 
-// .disabled:after {
-//     background: transparent;
-//     content: "";
-//     display: block;
-//     width: 100%;
-//     height: 100%;
-//     top: 0;
-//     left: 0;
-//     right: 0;
-//     clear: both;
-//     float: none;
-//     overflow: hidden;
-//     position: absolute;
-//     z-index: 999;
-//     cursor: not-allowed;
-// }
+.disabled:after {
+    background: transparent;
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    clear: both;
+    float: none;
+    overflow: hidden;
+    position: absolute;
+    z-index: 999;
+    cursor: not-allowed;
+}
 
-/* .disabled UNUSED COMPONENT CLASS: list-item - Auto-commented by script
-.list-item {
+.disabled .list-item {
     position: relative;
 }
-*/
 
-// .disabled {
-//     position: relative;
-// }
+.disabled {
+    position: relative;
+}
 
-/* UNUSED COMPONENT CLASS: disabled-list-item - Auto-commented by script
 .disabled-list-item {
     padding: 6px;
     height: 100%;
     background: var(--color-white);
     font-size: var(--font-size-15);
 }
-*/
 
-/* UNUSED COMPONENT CLASS: tooltip-box - Auto-commented by script
 .tooltip-box {
     position: absolute;
     right: 0;
     top: 0;
 
-    /* UNUSED COMPONENT CLASS: icon-info - Auto-commented by script
-.icon-info {
+    .icon-info {
         color: var(--color-dark-gray);
     }
 }
-*/
 
 .form-control,
-/* UNUSED COMPONENT CLASS: linked-account - Auto-commented by script
 .linked-account {
     width: 100% !important;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
 .form-control {
     width: 100% !important;
 }
-*/
-// .linked-account {
-//     width: calc(100% - 42px);
-// }
-/* UNUSED COMPONENT CLASS: payment-text - Auto-commented by script
+.linked-account {
+    width: calc(100% - 42px);
+}
 .payment-text {
     color: var(--color-dark-gray);
 }
-*/
 
 .bank-logo {
     img {
@@ -111,33 +96,24 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: mat-form-field - Auto-commented by script
 .mat-form-field {
     width: 38%;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: copied-url - Auto-commented by script
 .copied-url {
     padding-top: 3px;
     padding-left: 6px;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: mat-form-field-wrapper - Auto-commented by script
 .mat-form-field-wrapper {
     padding-bottom: 0 !important;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: magic-link-container - Auto-commented by script
 .magic-link-container {
     margin-bottom: 0 !important;
     padding-left: 0 !important;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: doc-link - Auto-commented by script
 .doc-link {
     a {
         text-decoration: none;
@@ -152,108 +128,77 @@
         text-decoration: underline;
     }
 }
-*/
 .mat-tab-bottom-spacing{
     padding-bottom: 140px;
 }
 ::ng-deep {
-    /* UNUSED COMPONENT CLASS: mat-tab-label - Auto-commented by script
-.mat-tab-label {
+    .mat-tab-label {
         height: 36px;
         min-width: 142px;
         padding: 0px 3px;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: mat-tab-labels - Auto-commented by script
-.mat-tab-labels {
+    .mat-tab-labels {
         height: 42px;
         background-color: none;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: mat-tab-label-active - Auto-commented by script
-.mat-tab-label-active {
+    .mat-tab-label-active {
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: setting-container - Auto-commented by script
-.setting-container {
+    .setting-container {
         padding: 0px 0px 15px !important;
     }
-*/
 
-/* UNUSED COMPONENT CLASS: mat-header-cell - Auto-commented by script
-    th
-.mat-header-cell:first-of-type {
+    th.mat-header-cell:first-of-type {
         width: 18%;
     }
-*/
 
-/* UNUSED COMPONENT CLASS: type-column - Auto-commented by script
-    table 
-.type-column {
+    table .type-column {
         width: 10% !important;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: mat-mdc-table - Auto-commented by script
-.mat-mdc-table tbody > tr > td:first-child {
+    .mat-mdc-table tbody > tr > td:first-child {
         color: var(--color-black) !important;
     }
-*/
 
     th.mat-header-cell,
-    /* td UNUSED COMPONENT CLASS: mat-mdc-cell - Auto-commented by script
-.mat-mdc-cell {
+    td.mat-mdc-cell {
         white-space: normal !important;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: content-text - Auto-commented by script
-.content-text {
+    .content-text {
         font-size: var(--font-size-12) !important;
         width: 26%;
         text-transform: none;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: number-container - Auto-commented by script
-.number-container {
+    .number-container {
         width: 16%;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: icon-container - Auto-commented by script
-.icon-container {
+    .icon-container {
         width: 25%;
     }
-/* UNUSED COMPONENT CLASS: mat-mdc-row - Auto-commented by script
 
     .mat-mdc-table tbody .mat-mdc-row:hover td {
         background-color: #e7ebf6 !important;
     }
-*/
 
-/* UNUSED COMPONENT CLASS: visibility - Auto-commented by script
-    .mat-mdc-table tbody .mat-mdc-row:hover .mat-mdc-cell 
-.visibility {
+    .mat-mdc-table tbody .mat-mdc-row:hover .mat-mdc-cell .visibility {
         display: block !important;
     }
-*/
 
     .mat-mdc-table {
         tbody {
             .mat-mdc-row{
                 &:hover{
                     .mat-mdc-cell{
-                        /* UNUSED COMPONENT CLASS: icon-visibility - Auto-commented by script
-.icon-visibility {
+                        .icon-visibility {
                             visibility: visible !important;
                         }
-*/
                     }
                 }
             }
@@ -263,17 +208,13 @@
 
 /*responsive*/
 @media (max-width: 1359px) {
-    /* UNUSED COMPONENT CLASS: xs-pd-l15 - Auto-commented by script
-.xs-pd-l15 {
+    .xs-pd-l15 {
         padding-left: 15px !important;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: hidden-1359 - Auto-commented by script
-.hidden-1359 {
+    .hidden-1359 {
         display: none;
     }
-*/
 }
 
 @media (max-width: 1440px) {
@@ -282,7 +223,6 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: plus-cross-btn - Auto-commented by script
 .plus-cross-btn {
     i {
         padding: 5px 0;
@@ -290,7 +230,6 @@
         font-size: 20px;
     }
 }
-*/
 
 .edit-save-button {
     .btn {
@@ -300,58 +239,105 @@
 }
 
 @media (max-width: 1199px) {
-    .clear-both {
+    .clearfix {
         .form {
-            /* UNUSED COMPONENT CLASS: input-field - Auto-commented by script
-.input-field {
+            .input-field {
                 input {
                     width: 277px;
                 }
             }
-*/
         }
     }
 
-    /* UNUSED COMPONENT CLASS: edit-save-button - Auto-commented by script
-.edit-save-button {
+    .edit-save-button {
         display: flex;
         width: 100%;
         justify-content: flex-end;
         margin-right: 7px;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: button-wrapper - Auto-commented by script
-.button-wrapper {
+    .button-wrapper {
         margin-top: 0;
         margin-bottom: 30px;
     }
-*/
+}
+
+@media (max-width: 767px) {
+    #inlnImg {
+        margin-top: 0;
+    }
+
+    .mat-form-field {
+        width: 72% !important;
+    }
+
+    .empty-label label,
+    .empty-label br {
+        display: none;
+    }
+
+    #inlnImg label,
+    .inlnImg label {
+        margin: 0;
+        display: none;
+    }
+
+    .gmail-integration-message {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        h4 {
+            align-self: self-start !important;
+            padding-bottom: 10px;
+            font-size: var(--font-size-15);
+        }
+
+        .btn-danger {
+            margin-left: 0 !important;
+        }
+    }
+
+    .plus-cross-btn {
+        label {
+            display: none;
+        }
+
+        i {
+            float: right;
+            margin-right: 15px;
+        }
+    }
+
+    .update-btn-wrapper {
+        label {
+            display: none;
+        }
+
+        .btn {
+            margin-right: 0;
+            margin-left: 15px;
+        }
+    }
 }
 
 @media (max-width: 1400px) and (min-width: 992px) {
-    /* UNUSED COMPONENT CLASS: payment-col - Auto-commented by script
-.payment-col {
+    .payment-col {
         flex: 0 0 33.333333% !important;
         max-width: 33.333333% !important;
     }
-*/
 
-    /* UNUSED COMPONENT CLASS: payment-col1 - Auto-commented by script
-.payment-col1 {
+    .payment-col1 {
         flex: 0 0 25% !important;
         max-width: 25% !important;
     }
-*/
 }
 
 @media (max-width: 1680px) and (min-width: 1401px) {
-    /* UNUSED COMPONENT CLASS: amount-upto - Auto-commented by script
-.amount-upto {
+    .amount-upto {
         flex: 0 0 20.666667% !important;
         max-width: 20.666667% !important;
     }
-*/
 }
 
 .icici-button {
@@ -365,7 +351,7 @@
 
 .account-wrapper {
     width: 65%;
-    border-bottom: 1px solid var(--theme-primary-light);
+    border-bottom: 1px solid var(--color-blue-light);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
@@ -379,19 +365,19 @@
     padding-bottom: 9px;
     margin-top: 3px;
     margin-left: 1px;
-    background-color: var(--theme-primary-light);
+    background-color: var(--color-blue-light);
 }
 
 .view-only-field {
     background-color: var(--color-white);
     padding: 8px;
-    border-radius: var(--mat-border-radius-4);
-    color: var(--text-primary-color);
+    border-radius: 5px;
+    color: var(--color-blue-primary);
 }
 
 .disabled-field {
     padding: 8px;
-    border-radius: var(--mat-border-radius-4);
+    border-radius: 5px;
     word-break: break-word;
     color: var(--color-black);
     background-color: var(--color-light-gray);
@@ -406,7 +392,7 @@
 }
 
 .account-number {
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
 }
 
 .limit-upto {
@@ -458,12 +444,10 @@
     height: 100%;
 }
 
-/* UNUSED COMPONENT CLASS: btn-light-text-primary - Auto-commented by script
-.btn-light-text-primary {
-    color: var(--text-primary-color);
-    background-color: var(--theme-primary-light);
+.btn-light-blue {
+    color: var(--color-blue-primary);
+    background-color: var(--color-blue-light);
 }
-*/
 
 .modal {
     .account-modal {
@@ -480,13 +464,11 @@
 .payor-duration {
     margin-top: 2px;
 }
-/* UNUSED COMPONENT CLASS: mat-autocapture-payment - Auto-commented by script
 .mat-autocapture-payment {
     margin-left: 10px;
     vertical-align: top;
     margin-top: -4px;
 }
-*/
 .bank-menu {
     top: -12px;
     padding: 0 !important;
@@ -507,7 +489,7 @@
 }
 
 @media (min-width: 768px) and (orientation: portrait) {
-    .clear-both {
+    .clearfix {
         .form {
             .input-field {
                 input {
@@ -518,17 +500,13 @@
 
         .table-one {
             table {
-                /* UNUSED COMPONENT CLASS: activeTriggers-width - Auto-commented by script
-.activeTriggers-width {
+                .activeTriggers-width {
                     width: 0%;
                 }
-*/
 
-                /* UNUSED COMPONENT CLASS: type-width - Auto-commented by script
-.type-width {
+                .type-width {
                     width: 4%;
                 }
-*/
             }
         }
     }
@@ -540,25 +518,20 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: account-dropdown - Auto-commented by script
 .account-dropdown {
     display: flex;
     align-items: center;
     column-gap: 10px;
-    /* UNUSED COMPONENT CLASS: delete-account - Auto-commented by script
-.delete-account {
+    .delete-account {
         padding: 11px;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100%;
-        border: 1px solid var(--border-color);
-        border-radius: var(--mat-border-radius-4);
+        border: 1px solid var(--color-silver);
+        border-radius: 5px;
     }
 }
-*/
-/* UNUSED COMPONENT CLASS: link-color - Auto-commented by script
 .link-color {
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
 }
-*/

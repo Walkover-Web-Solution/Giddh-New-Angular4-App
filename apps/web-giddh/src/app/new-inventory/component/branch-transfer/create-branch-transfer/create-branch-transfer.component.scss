@@ -1,11 +1,14 @@
 #branch-transfer-create {
+    background-color: var(--color-white);
+    color: var(--color-black);
+
     .branch-transfer-header {
         padding: 10px 15px;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
         font-size: var(--font-size-16);
 
         h2 {
-            color: var(--text-primary-color);
+            color: var(--color-blue-primary);
             font-weight: 600;
         }
     }
@@ -14,7 +17,7 @@
         &-radio-btns {
             font-size: var(--font-size-15);
             padding: 15px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--color-silver);
         }
 
         &-multiple-wrapper {
@@ -36,17 +39,17 @@
             #table-receipt {
                 width: 100%;
 
-                // th{
-                //     color: var(--text-primary-color) !important;
-                // }
+                th{
+                    color: var(--color-blue-primary) !important;
+                }
                 th,
                 td {
                     padding: 10px 15px;
                     font-size: var(--font-size-15);
                     text-align: right;
-                    border: 1px solid var(--border-color);
+                    border: 1px solid var(--color-silver);
                     vertical-align: top !important;
-                    color: var(--theme-foreground-color);
+                    color: var(--color-black);
                     font-weight: 400;
 
                     &:first-child {
@@ -59,24 +62,22 @@
                 }
 
                 thead {
-                    border-bottom: 1px solid var(--border-color);
+                    border-bottom: 1px solid var(--color-silver);
                 }
 
                 tbody {
                     tr {
                         &:hover {
                             td {
-                                background: var(--theme-primary-light);
+                                background: var(--color-blue-light);
                                 transition: 200ms ease;
                             }
                         }
 
                         td {
-                            /* UNUSED COMPONENT CLASS: placeholder-color - Auto-commented by script
-.placeholder-color {
+                            .placeholder-color {
                                 color: var(--color-silver);
                             }
-*/
 
                             .show-code-position {
                                 position: absolute;
@@ -91,7 +92,7 @@
 
                                 .delete-icon {
                                     color: var(--color-medium-gray);
-                                    border: 1px solid var(--border-color);
+                                    border: 1px solid var(--color-silver);
                                     border-radius: 50%;
                                     text-align: center;
                                     width: 20px;
@@ -108,7 +109,7 @@
                                 .icon-info {
                                     margin-left: 10px;
                                     font-size: 15px;
-                                    color: var(--theme-foreground-color);
+                                    color: var(--color-black);
                                 }
                             }
 

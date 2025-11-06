@@ -1,26 +1,19 @@
-/* UNUSED COMPONENT CLASS: daterange-picker-tb-pl-bs - Auto-commented by script
 .daterange-picker-tb-pl-bs {
     background-color: var(--color-white) !important;
     text-decoration: none;
     text-align: left;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-silver);
     vertical-align: middle;
     height: 36px;
     font-size: var(--font-size-15);
 }
-*/
-/* UNUSED COMPONENT CLASS: tb-btn-apply - Auto-commented by script
 .tb-btn-apply {
     margin-top: 5px;
 }
-*/
-/* UNUSED COMPONENT CLASS: liabilities-assets - Auto-commented by script
 .liabilities-assets {
     max-width: 760px;
     width: 100%;
 }
-*/
-/* UNUSED COMPONENT CLASS: input-wrapper - Auto-commented by script
 .input-wrapper:before {
     position: absolute;
     content: "";
@@ -32,24 +25,23 @@
     z-index: 100;
     top: 0;
 }
-*/
-// .expand-icon {
-//     height: 36px;
-//     display: flex;
-//     align-items: flex-end;
-// }
-// .expand-icon span {
-//     display: flex;
-//     width: 36px;
-//     height: 36px;
-//     justify-content: center;
-//     align-items: center;
-//     background-color: var(--color-white);
-//     font-size: var(--font-size-16);
-//     color: var(--text-primary-color) !important;
-//     border: 1px solid var(--border-color);
-//     border-radius: var(--mat-border-radius-4);
-// }
+.expand-icon {
+    height: 36px;
+    display: flex;
+    align-items: flex-end;
+}
+.expand-icon span {
+    display: flex;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-white);
+    font-size: var(--font-size-16);
+    color: var(--color-blue-primary) !important;
+    border: 1px solid var(--color-silver);
+    border-radius: 5px;
+}
 .download-data-icon {
     display: flex;
     align-items: center;
@@ -63,14 +55,14 @@
         align-items: center;
         background-color: var(--color-white);
         font-size: var(--font-size-15);
-        color: var(--text-primary-color) !important;
-        border: 1px solid var(--border-color);
-        border-radius: var(--mat-border-radius-4);
+        color: var(--color-blue-primary) !important;
+        border: 1px solid var(--color-silver);
+        border-radius: 5px;
     }
 }
-// .d-inline-flex {
-//     display: inline-flex;
-// }
+.d-inline-flex {
+    display: inline-flex;
+}
 .glyphicon-triangle-bottom {
     z-index: 1;
     position: absolute;
@@ -84,37 +76,28 @@
 }
 .linked-entities {
     .list-item {
-        /* UNUSED COMPONENT CLASS: entity-icon - Auto-commented by script
-.entity-icon {
+        .entity-icon {
             padding: 4px;
         }
-*/
-        /* UNUSED COMPONENT CLASS: entity-details - Auto-commented by script
-.entity-details {
+        .entity-details {
             margin-left: 6px;
             flex: 1;
-            /* UNUSED COMPONENT CLASS: item - Auto-commented by script
-.item {
+            .item {
                 font-weight: var(--font-weight-semibold);
             }
-}
-*/
-        /* UNUSED COMPONENT CLASS: default-entity - Auto-commented by script
-.default-entity {
+        }
+        .default-entity {
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--text-primary-color);
+                color: var(--color-blue-primary);
             }
-            /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
-.icon-favorite-selected {
-                color: var(--text-primary-color);
+            .icon-favorite-selected {
+                color: var(--color-blue-primary);
             }
-}
-*/
+        }
     }
 }
-/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
 .icon-calender {
     position: absolute;
     z-index: 1;
@@ -126,22 +109,24 @@
     height: 36px !important;
     cursor: pointer;
 }
-*/
 @media (max-width: 1099px) and (min-width: 1019px) {
     .financial-select-year {
         .company-branch-dropdown {
             width: 158px;
         }
-        /* UNUSED COMPONENT CLASS: expand-collapse-icon - Auto-commented by script
-.expand-collapse-icon {
+        .expand-collapse-icon {
             position: absolute;
             bottom: -36px;
             right: 15px;
         }
-*/
     }
     .download-data-icon {
         padding-right: 60px !important;
+    }
+}
+@media (min-width: 768px) {
+    .form-inline.financial-select-year .form-group {
+        min-width: auto !important;
     }
 }
 @media (max-width: 991px) {
@@ -160,5 +145,34 @@
     }
     .download-data-icon {
         margin: 2px 0 2px;
+    }
+}
+@media screen and (max-width: 767px) {
+    .tb-mobile-header {
+        .datepicker-field,
+        .custom-datepicker {
+            min-width: 100% !important;
+            width: 100% !important;
+            input {
+                min-width: 100% !important;
+                width: 100% !important;
+                text-align: center;
+                padding: 0 10px;
+            }
+        }
+        .refresh-btn {
+            display: flex;
+            width: 36px;
+            height: 36px;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--color-white);
+            font-size: var(--font-size-15);
+            color: var(--color-blue-primary) !important;
+            border: 1px solid var(--color-silver);
+        }
+    }
+    .list-inline > li {
+        font-size: var(--font-size-12);
     }
 }

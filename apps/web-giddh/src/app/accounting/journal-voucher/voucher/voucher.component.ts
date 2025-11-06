@@ -35,7 +35,7 @@ import { KeyboardService } from '../../keyboard.service';
 import { KEYS } from '../journal-voucher.component';
 import { AdjustmentTypesEnum } from "../../../shared/helpers/adjustmentTypes";
 import { IForceClear } from '../../../models/api-models/Sales';
-import { KeyCodesEnum, PAGINATION_LIMIT } from '../../../app.constant';
+import { PAGINATION_LIMIT } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { VOUCHERS } from '../../constants/accounting.constant';
 import { GeneralService } from '../../../services/general.service';
@@ -1613,7 +1613,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public handleEnterAndTabKeyPress(event: KeyboardEvent, submitButton: HTMLButtonElement): void {
-        if ((event.key === KeyCodesEnum.ENTER || event.key === KeyCodesEnum.TAB) && !this.showDiscountSidebar && !this.showTaxSidebar) {
+        if ((event.key === 'Enter' || event.key === 'Tab') && !this.showDiscountSidebar && !this.showTaxSidebar) {
             const descriptionControl = this.journalVoucherForm.get('description');
             if (!descriptionControl?.value || descriptionControl.value.trim() === '') {
                 event.preventDefault();

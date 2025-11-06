@@ -1,6 +1,6 @@
 <div class="inventory-main">
     <div class="relative">
-        <hamburger-menu></hamburger-menu>
+        <hamburger-menu [pageHeading]="getPageHeading()"></hamburger-menu>
         <div class="inventory-control">
             <mat-tab-group 
                 #inventoryStaticTabs
@@ -14,19 +14,19 @@
                 >
                     <!--sidebar-->
                     <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
-                        <inventory-sidebar *ngIf="!isTabletScreen || (isTabletScreen && activeView !== 'group')">
+                        <inventory-sidebar *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')">
                         </inventory-sidebar>
                         <!--/sidebar-->
 
                         <section
                             class="right-bar"
-                            *ngIf="!isTabletScreen || (isTabletScreen && activeView === 'group')"
+                            *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')"
                             [ngClass]="{ 'welcome-inventory-page': !activeView }"
                         >
                             <!-- uiView: inventory-detail -->
-                            <section class="container-fluid clear-both inventory-head">
+                            <section class="container-fluid clearfix inventory-head">
                                 <div *ngIf="shouldShowInventoryReport$ | async" class="wrap-top-inventory">
-                                    <div *ngIf="isTabletScreen && activeView === 'group'" class="mr-b15">
+                                    <div *ngIf="isMobileScreen && activeView === 'group'" class="mr-b15">
                                         <button
                                             mat-raised-button color="primary"
                                             [routerLink]="['/pages/inventory/']"

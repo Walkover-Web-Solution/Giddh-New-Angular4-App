@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="bulk-entry" *ngIf="localeData?.add_bulk_items">
         <div class="dialog-header">
-            <span class="font-size-16">{{ localeData?.add_bulk_items }}</span>
+            <span class="font-16">{{ localeData?.add_bulk_items }}</span>
             <i mat-dialog-close class="icon-cross" (click)="closeEvent?.emit()"></i>
         </div>
         <div mat-dialog-content class="bulk-entry-body dialog-body d-flex">
@@ -85,16 +85,16 @@
                                                 </div>
 
                                                 <div
-                                                    class="d-flex align-items-center justify-content-between column-gap-1">
+                                                    class="d-flex align-items-center justify-content-between column-gap1">
                                                     <button mat-stroked-button
                                                         (click)="alterQuantity(item, 'minus')">
                                                         <i class="icon-minus"></i>
                                                     </button>
                                                     <input matInput type="number" name="quantity"
-                                                        class="form-control input-number text-center"
+                                                        class="form-control input-number text-align-center"
                                                         value="1" min="1" [(ngModel)]="item.quantity" />
                                                     <button mat-stroked-button (click)="alterQuantity(item)">
-                                                        <i class="icon-add font-size-16 font-weight-semibold"></i>
+                                                        <i class="icon-add font-16 fw-bold"></i>
                                                     </button>
                                                     <button mat-button (click)="
                                                 removeSelectedItem(
@@ -103,7 +103,7 @@
                                                         : item?.uniqueName
                                                 )
                                             ">
-                                                        <i class="icon-cross font-size-16"></i>
+                                                        <i class="icon-cross font-16"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -112,7 +112,7 @@
                                 </ng-container>
                             </cdk-virtual-scroll-viewport>
                         </div>
-                        <div class="selected-item-action d-flex column-gap-1">
+                        <div class="selected-item-action d-flex column-gap1">
                             <button mat-raised-button color="primary"
                                 (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"> {{
                                 commonLocaleData?.app_add }}</button>

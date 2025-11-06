@@ -13,7 +13,7 @@
     }
     .stock-table {
         white-space: nowrap;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--color-silver);
         width: min-content;
         grid-template-columns: 240px auto;
 
@@ -25,7 +25,7 @@
             .warehouse-list-wrapper {
                 .warehouse-list {
                     &:nth-child(odd) {
-                        background-color: var(--theme-primary-light);
+                        background-color: var(--color-blue-light);
                     }
                 }
             }
@@ -63,38 +63,38 @@
             z-index: 1;
             position: sticky;
             padding-top: 0;
-            border-right: 1px solid var(--border-color);
+            border-right: 1px solid var(--color-silver);
             word-break: break-word;
             white-space: normal;
-            background-color: var(--theme-background-color);
+            background-color: var(--color-white);
         }
     }
     .searching-stocks {
         .list-head {
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--color-silver);
             height: 62px;
             width: fit-content;
             .account-name {
                 width: 240px;
-                border-right: 1px solid var(--border-color);
+                border-right: 1px solid var(--color-silver);
                 left: 0;
                 z-index: 18;
                 position: sticky;
-                // background: var(--color-white);
+                background: var(--color-white);
             }
             .unique-name-wrapper {
                 min-width: 140px;
             }
-            // .wrapper-warehouse {
+            .wrapper-warehouse {
                 .warehouse-list-head {
-                    // &:nth-child(odd) {
-                    //     background-color: var(--color-light-gray);
-                    // }
-                    // &:nth-child(even) {
-                    //     background-color: var(--color-white);
-                    // }
+                    &:nth-child(odd) {
+                        background-color: var(--color-light-gray);
+                    }
+                    &:nth-child(even) {
+                        background-color: var(--color-white);
+                    }
                 }
-            // }
+            }
         }
         .stock-table-wrapper {
             .stock-table {
@@ -121,7 +121,7 @@
     width: 290px;
 
     .warehouse-list-head-num {
-        color: var(--text-primary-color);
+        color: var(--color-blue-primary);
     }
 }
 .stock-list-box {
@@ -134,34 +134,27 @@
 @media (max-width: 1180px) {
     .stock-balance-wrapper {
         .searching-stocks,
-        /* UNUSED COMPONENT CLASS: stock-balance-top-bar - Auto-commented by script
-.stock-balance-top-bar {
+        .stock-balance-top-bar {
             width: 101%;
         }
-*/
         .stock-balance-top-bar {
-            /* UNUSED COMPONENT CLASS: stock-balance-top-bar-right-side - Auto-commented by script
-.stock-balance-top-bar-right-side {
+            .stock-balance-top-bar-right-side {
                 margin-top: 0;
             }
-*/
         }
     }
 }
 
 .input-group {
-    /* UNUSED COMPONENT CLASS: input-group - Auto-commented by script
-/* UNUSED COMPONENT CLASS: input-group-addon - Auto-commented by script
-.input-group-addon {
-        border-left: 1px solid var(--border-color) !important;
+    .input-group-addon {
+        border-left: 1px solid var(--color-silver) !important;
     }
-*/
 
     input {
-        border-left: 1px solid var(--border-color) !important;
+        border-left: 1px solid var(--color-silver) !important;
 
         &:focus {
-            border-left: 1px solid var(--theme-primary-color) !important;
+            border-left: 1px solid var(--color-blue-primary) !important;
         }
     }
 }

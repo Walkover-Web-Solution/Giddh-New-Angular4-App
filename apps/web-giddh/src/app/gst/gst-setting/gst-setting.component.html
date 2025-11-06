@@ -20,7 +20,7 @@
             ></tax-sidebar>
         </div>
         <hamburger-menu class="gst-menu-item" [pageHeading]="localeData?.page_heading"></hamburger-menu>
-        <div class=" pd-15 ">
+        <div class="pd-15">
             <form name="paymentIntegrateForm" [formGroup]="paymentIntegrateForm" autocomplete="off">
                 <div class="w-100">
                     <div class="mr-t2 payment-dropdown">
@@ -49,9 +49,9 @@
                                     <table class="w-100">
                                         <thead>
                                             <tr>
-                                                <th class="font-weight-semibold text-primary">{{ commonLocaleData?.app_date }}</th>
-                                                <th class="font-weight-semibold text-primary">{{ localeData?.lut_number }}</th>
-                                                <th class="text-right font-weight-semibold text-primary">
+                                                <th class="fw-bold text-primary">{{ commonLocaleData?.app_date }}</th>
+                                                <th class="fw-bold text-primary">{{ localeData?.lut_number }}</th>
+                                                <th class="text-right fw-bold text-primary">
                                                     {{ commonLocaleData?.app_action }}
                                                 </th>
                                             </tr>
@@ -62,7 +62,7 @@
                                                     let lutItem of gstSettingForm?.get('gstData')['controls'];
                                                     let i = index
                                                 "
-                                                class="position-relative "
+                                                class="position-relative"
                                                 [ngClass]="{ 'invalid-row': responseArray[i]?.message }"
                                                 [formGroupName]="i"
                                             >

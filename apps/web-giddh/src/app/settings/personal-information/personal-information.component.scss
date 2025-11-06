@@ -1,25 +1,18 @@
-/* UNUSED COMPONENT CLASS: custom-file - Auto-commented by script
 .custom-file {
     border: 1px dashed var(--color-silver);
-    border-radius: var(--mat-border-radius-0);
+    border-radius: 2px;
     background: var(--color-white);
     width: 100px;
     height: 100px;
 }
-*/
 
-/* UNUSED COMPONENT CLASS: portal-url - Auto-commented by script
 .portal-url {
     font-size: 14px;
     word-break: break-all;
 }
-*/
-/* UNUSED COMPONENT CLASS: custom-file-input - Auto-commented by script
-.custom-file-input~/* UNUSED COMPONENT CLASS: custom-file-label - Auto-commented by script
-.custom-file-label::after {
+.custom-file-input~.custom-file-label::after {
     content: "";
 }
-*/
 
 .custom-file-label {
     border: none;
@@ -32,12 +25,10 @@
         padding: 0 !important;
     }
 
-    /* UNUSED COMPONENT CLASS: icon-plus - Auto-commented by script
-.icon-plus {
+    .icon-plus {
         font-size: 40px;
         color: var(--color-border-light);
     }
-*/
 }
 
 .unique-name,
@@ -64,32 +55,33 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: img-size - Auto-commented by script
 .img-size {
     color: var(--color-dark-gray);
 }
-*/
 
-/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
 .container-fluid {
     padding-left: 0;
 }
-*/
-/* UNUSED COMPONENT CLASS: input-group-btn - Auto-commented by script
 .input-group-btn {
     font-size: var(--font-size-24);
-    color: var(--text-primary-color) !important;
+    color: var(--color-blue-primary) !important;
     cursor: pointer;
 }
-*/
-/* UNUSED COMPONENT CLASS: copy-text-position - Auto-commented by script
 .copy-text-position{
     position: absolute;
     top: 5px;
     right: 0;
     transform: translateX(90%);
 }
-*/
+@media (max-width: 767px) {
+    label {
+        line-height: 2.3;
+    }
+
+    .border-bottom {
+        margin-top: 5px;
+    }
+}
 .view-txt {
     display: flex;
     justify-content: flex-end;

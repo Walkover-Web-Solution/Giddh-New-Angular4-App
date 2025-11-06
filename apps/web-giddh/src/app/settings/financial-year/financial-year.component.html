@@ -5,16 +5,16 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="section-center pd-15 clear-both overflow-visible">
+    <div class="section-center box clearfix overflow-visible">
         <form class="overflow-visible">
             <div class="row overflow-visible">
                 <div class="col-sm-12 overflow-visible">
-                    <div class="financial-year-header d-flex align-items-start align-items-lg-center column-gap-4 flex-lg-row flex-column row-gap-1">
-                        <div class="d-flex align-items-center column-gap-2">
+                    <div class="financial-year-header d-flex align-items-start align-items-lg-center column-gap4 flex-lg-row flex-column row-gap1">
+                        <div class="d-flex align-items-center column-gap2">
                             <a
                                 href="javascript:void(0);"
                                 aria-label="add financial year"
-                                class="d-inline-block select-financial-year text-primary underline"
+                                class="d-inline-block select-financial-year color-primary underline"
                                 (click)="fyAddNewDropdownIsOpen = true"
                                 *ngIf="!fyAddNewDropdownIsOpen; else fyDropdown"
                             >
@@ -39,11 +39,11 @@
                             </button>
                         </div>
 
-                        <div class="d-flex align-items-center column-gap-2 border-left pd-l4">
+                        <div class="d-flex align-items-center column-gap2 border-left pd-l4">
                             <a
                                 href="javascript:void(0);"
                                 aria-label="update financial year period"
-                                class="d-inline-block width-150 text-primary underline"
+                                class="d-inline-block w150 color-primary underline"
                                 (click)="fyPeriodDropdownIsOpen = true"
                                 *ngIf="!fyPeriodDropdownIsOpen; else fyPeriodDropdown"
                             >
@@ -54,7 +54,7 @@
                                     [openDropdown]="true"
                                     [showLabel]="false"
                                     [appearance]="'fill'"
-                                    class="width-150"
+                                    class="w150"
                                     [cssClass]="'w-100 p-1 border-color-transparent bg-transparent'"
                                     [label]="localeData?.financial_year_period"
                                     [name]="'selectedFYPeriod'"

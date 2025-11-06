@@ -5,14 +5,14 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div id="share-modal">
-        <div class="dialog-header">
-            <span>{{ localeData?.page_heading }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
-                <i class="icon-cross"></i>
-            </button>
-        </div>
-        <mat-dialog-content class="dialog-body" id="SharePop">
-            <div class="container-fluid">
+        <div id="share-modal">
+            <div class="dialog-header">
+                <span>{{ localeData?.page_heading }}</span>
+                <button mat-icon-button aria-label="close" mat-dialog-close>
+                    <i class="icon-cross"></i>
+                </button>
+            </div>
+            <mat-dialog-content class="dialog-body" id="SharePop">
                 <div class="row">
                     <div class="col-12">
                         <div class="modal-wrap">
@@ -49,12 +49,12 @@
                                 <div class="row mr-b2 mt-1" *ngIf="activeAccountSharedWith?.length > 0">
                                     <div class="pd-l15 pd-r1 w-75">
                                         <ul class="shared-list">
-                                            <li *ngFor="let val of activeAccountSharedWith" class="clear-both">
+                                            <li *ngFor="let val of activeAccountSharedWith" class="clearfix">
                                                 <span class="pull-left">
                                                     <small class="user-email">{{ val?.emailId }}</small>
                                                 </span>
                                                 <span>
-                                                    <span class="delete-icon w-inherit pull-right">
+                                                    <span class="delete-icon pull-right">
                                                         <i
                                                             (click)="unShareAccount(val?.uniqueName)"
                                                             class="icon-cross"
@@ -68,11 +68,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-wrap clear-both">
-                            <div class="clear-both">
+                        <div class="modal-wrap clearfix">
+                            <div class="clearfix">
                                 <span>{{ commonLocaleData?.app_or | titlecase }}</span>
                                 <a
-                                    class="btn-link share-link mr-b05 font-size-15"
+                                    class="btn-link share-link mr-b05 font-15"
                                     href="javascript:;"
                                     (click)="getMagicLink()"
                                 >
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </mat-dialog-content>
+            </mat-dialog-content>
+        </div>
     </div>
 </ng-container>

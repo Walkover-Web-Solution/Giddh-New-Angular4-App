@@ -76,7 +76,7 @@ export class D3TreeChartComponent implements OnDestroy, OnChanges {
           <div id="${nodeId}" class=" branch-tree-wrapper pd-t3 overflow-visible">
             <div class="tree-content pt-0">
               <div class="tree-inner-content"></div>
-              <div class="tree-container pd-b2 pd-t2 text-center">
+              <div class="tree-container pd-b2 pd-t2 text-align-center">
                 <span class="d-inline-flex align-items-center">
                   <div class="tree-name text-limit overflow-hidden font-16"> <i class="cursor-pointer icon-branch-icon mr-r05"></i>${d.data.name}</div>
                 </span>

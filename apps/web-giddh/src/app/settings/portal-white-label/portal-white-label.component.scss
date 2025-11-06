@@ -19,7 +19,7 @@
             background: var(--color-transparent-backgrounds);
 
             .status {
-                border-radius: var(--mat-border-radius-16);
+                border-radius: 16px;
                 padding: 6px 12px;
             }
 
@@ -41,5 +41,5 @@
 }
 
 .fill-status {
-    color: var(--text-primary-color);
+    color: var(--color-blue-primary);
 }

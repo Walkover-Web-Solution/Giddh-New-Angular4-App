@@ -22,7 +22,7 @@
                     <button
                         *ngIf="showClearFilter"
                         mat-stroked-button
-                        class="min-width-160 mr-l1"
+                        class="min160 mr-l1"
                         (click)="clearFilter()"
                         aria-label="clear"
                     >
@@ -37,7 +37,8 @@
                     (click)="createCompanyInSubscription()"
                     mat-raised-button
                     [matTooltip]="localeData?.add_company_subscription"
-                    [matTooltipPosition]="'above'"    
+                    [matTooltipPosition]="'above'"
+                    matTooltipClass="tooltip-black"
                     color="primary"
                     aria-label="back"
                 >
@@ -135,7 +136,7 @@
                 </table>
             </section>
             <div class="no-data" *ngIf="!dataSource?.filteredData?.length">
-                <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
+                <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
             </div>
         </div>
     </div>

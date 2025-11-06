@@ -29,18 +29,18 @@
             </div>
         </div>
 
-        <mat-card-content class="position-relative ">
+        <mat-card-content class="position-relative">
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <div class="dashboard-doughnut-chart-container" [ngClass]="{ 'visibility-hidden': requestInFlight }">
+            <div class="dashboard-doughnut-chart-container">
                 <canvas id="profitLossChartCanvas" [ngClass]="{ 'hide-chart': !dataFound }"></canvas>
                 <div class="no-data-available" *ngIf="!dataFound">
                     <img src="{{ imgPath }}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
             </div>
             <div class="chart-div mt-auto" *ngIf="!requestInFlight">
-                <div class="clear-both mb-2 total-income">
+                <div class="clearfix mb-2 total-income">
                     <div>
                         <span class="mr-b1 due-amount">{{ localeData?.net_profit_loss }}</span>
                         <span class="total-amount pull-right">
@@ -56,7 +56,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="clear-both mb-2 total-income">
+                <div class="clearfix mb-2 total-income">
                     <div>
                         <span class="mr-b1 due-amount">{{ localeData?.total_income }}</span>
                         <span class="total-amount pull-right total-expenses-text">
@@ -72,7 +72,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="clear-both total-income">
+                <div class="clearfix total-income">
                     <div>
                         <span class="mr-b1 due-amount">{{ localeData?.total_expense }}</span>
                         <span class="total-amount pull-right total-income-text">

@@ -7,12 +7,24 @@
 .show-columnar-button {
     display: inline-block;
 }
-textarea/* UNUSED COMPONENT CLASS: receipient-email - Auto-commented by script
-.receipient-email {
+textarea.receipient-email {
     width: 98%;
     height: 42px;
 }
-*/
+
+.export-border {
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 55%;
+        background-color: var(--color-medium-gray);
+        top: 46%;
+        right: 50px;
+        transform: translateY(-50%);
+    }
+}
 
 .export-ledger-right {
     &::after {
@@ -28,7 +40,7 @@ textarea/* UNUSED COMPONENT CLASS: receipient-email - Auto-commented by script
 
 #exportModal {
     #export-body {
-        .clear-both {
+        .clearfix {
             .radio-inline {
                 mat-slide-toggle {
                     position: relative;
@@ -38,17 +50,18 @@ textarea/* UNUSED COMPONENT CLASS: receipient-email - Auto-commented by script
         }
     }
 }
-
-.export-border {
-    &::after {
-        content: "";
-        display: block;
-        position: absolute;
-        width: 1px;
-        height: 100%;
-        background-color: var(--theme-foreground-color);
-        top: 46%;
-        right: 50px;
-        transform: translateY(-50%);
+@media (max-width: 767px) {
+    .descendingRadioBtn {
+        display: block !important;
+        margin-left: 100px !important;
+    }
+    .export-type {
+        flex-direction: column;
+        span {
+            margin-right: 15px !important;
+        }
+    }
+    .show-columnar-button {
+        display: none;
     }
 }

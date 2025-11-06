@@ -408,7 +408,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     this.handleAttachmentDeletion(response);
                 }
             });
-
     }
 
     /**

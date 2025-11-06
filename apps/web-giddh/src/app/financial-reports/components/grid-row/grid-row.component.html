@@ -85,7 +85,7 @@
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
-            <div class="col-4 account user-select-none d-flex align-items-center row-height" [style.padding-left]="padding + 20 + 'px !important'">
+            <div class="col-4 account no-select d-flex align-items-center row-height" [style.padding-left]="padding + 20 + 'px !important'">
                 <mat-checkbox
                     color="primary"
                     (change)="onItemChecked($event, account?.uniqueName, 'account')"
@@ -95,7 +95,7 @@
                     class="tailed-checkbox"
                 ></mat-checkbox>
                 <div
-                    class="p-0 border-right-none"
+                    class="p-0 bd-r-right-none"
                     [innerHTML]="account.name | lowercase | highlight: search"
                 ></div>
                 <span class="position-absolute" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="accountDetailModalTemplate">&nbsp;</span>

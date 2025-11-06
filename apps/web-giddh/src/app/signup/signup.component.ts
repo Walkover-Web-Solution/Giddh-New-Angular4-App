@@ -150,6 +150,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
+        this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this.fb.group({
             country: ["India", [Validators.required]],
@@ -362,6 +363,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        this.document.body.classList.add("unresponsive");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

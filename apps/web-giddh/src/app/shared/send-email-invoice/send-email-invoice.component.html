@@ -24,7 +24,7 @@
             </div>
         </div>
         <div
-            class="clear-both"
+            class="clearfix"
             *ngIf="
                 voucherType !== 'proforma' &&
                 voucherType !== 'proformas' &&
@@ -34,7 +34,7 @@
                 voucherType !== 'credit note'
             "
         >
-            <p class="font-size-15 mr-b05">{{ localeData?.invoice_copy }}</p>
+            <h3 class="font-15 mr-b05">{{ localeData?.invoice_copy }}</h3>
             <hr />
 
             <div class="checkbox" *ngIf="voucherApiVersion === 2">
@@ -79,7 +79,7 @@
         <!-- region buttons -->
         <div class="row mr-t2 mr-b1">
             <div class="col-sm-12">
-                <div class="btn-group column-gap-15" role="group">
+                <div class="btn-group column-gap15" role="group">
                     <button
                         mat-raised-button
                         color="primary"

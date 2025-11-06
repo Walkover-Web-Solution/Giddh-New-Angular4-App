@@ -7,13 +7,13 @@
             <i class="icon-cross"></i>
         </button>
     </div>
-    <mat-dialog-content class="dialog-body font-size-15">
+    <mat-dialog-content class="dialog-body font-15">
         <p
             [ngClass]="inputData?.configuration?.messageCssClass"
             [innerHTML]="inputData?.configuration?.messageText"
         ></p>
         <p [ngClass]="inputData?.configuration?.footerCssClass">{{ inputData?.configuration?.footerText }}</p>
-        <div class="d-flex column-gap-15 mt-4 justify-content-end">
+        <div class="d-flex column-gap15 mt-4 justify-content-end">
             <ng-container *ngFor="let button of inputData?.configuration?.buttons">
                 <ng-container *ngIf="button?.color === 'primary'; else elseBlock">
                     <button

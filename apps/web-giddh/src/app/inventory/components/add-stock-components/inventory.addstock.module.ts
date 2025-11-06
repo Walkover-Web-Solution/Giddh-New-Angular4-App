@@ -11,7 +11,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [InventoryAddStockComponent],
@@ -28,8 +27,7 @@ import { MatButtonModule } from '@angular/material/button';
         MatCheckboxModule,
         MatMenuModule,
         MatRadioModule,
-        MatRadioModule,
-        MatButtonModule
+        MatRadioModule
     ],
     exports: [InventoryAddStockComponent]
 })

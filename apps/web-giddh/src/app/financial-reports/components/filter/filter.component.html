@@ -5,18 +5,18 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="clear-both">
+    <div class="clearfix">
         <div class="row">
-            <div class="col-12 d-flex justify-content-between align-items-start column-gap-15">
+            <div class="col-12 d-flex justify-content-between align-items-start column-gap15">
                 <form
                     [formGroup]="filterForm"
                     (submit)="filterData()"
-                    class="form-inline financial-select-year column-gap-15 row-gap-15"
+                    class="form-inline financial-select-year column-gap15 row-gap15"
                     name="fromToDateForm"
                     novalidate
                 >
                     <div
-                        class="linked-entities"
+                        class="form-group linked-entities"
                         *ngIf="
                             showLabels &&
                             !isProjectWiseAccounting &&
@@ -24,17 +24,20 @@
                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                         "
                     >
-                        <reactive-dropdown-field
-                            [options]="currentCompanyBranches"
-                            formControlName="branchUniqueName"
-                            class="company-branch-dropdown"
-                            (selectedOption)="handleBranchChange($event)"
-                            [placeholder]="commonLocaleData?.app_select_entity"
-                            [labelValue]="currentBranch?.name"
-                        >
-                        </reactive-dropdown-field>
+                        <div class="form-group">
+                            <reactive-dropdown-field
+                                [options]="currentCompanyBranches"
+                                formControlName="branchUniqueName"
+                                class="company-branch-dropdown"
+                                (selectedOption)="handleBranchChange($event)"
+                                [placeholder]="commonLocaleData?.app_select_entity"
+                                [labelValue]="currentBranch?.name"
+                            >
+                            </reactive-dropdown-field>
+                        </div>
                     </div>
-                    <div *ngIf="showLabels">
+                    <div class="form-group" *ngIf="showLabels">
+                        <div class="form-group">
                             <reactive-dropdown-field
                                 [options]="dateOptions"
                                 (selectedOption)="dateOptionIsSelected($event)"
@@ -44,8 +47,10 @@
                                 formControlName="selectedDateOption"
                             >
                             </reactive-dropdown-field>
+                        </div>
                     </div>
-                    <div *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
+                    <div class="form-group" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
+                        <div class="form-group">
                             <reactive-dropdown-field
                                 [options]="financialOptions"
                                 formControlName="selectedFinancialYearOption"
@@ -54,8 +59,10 @@
                                 [label]="commonLocaleData?.app_financial_year"
                                 [placeholder]="commonLocaleData?.app_datepicker?.select_financial_year"
                             ></reactive-dropdown-field>
+                        </div>
                     </div>
                     <div
+                        class="form-group relative datepicker-field"
                         *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
                     >
                         <div 
@@ -99,7 +106,7 @@
                             </ng-template>
                         </mat-menu>
                     </div>
-                    <div *ngIf="plBsExportXLS">
+                    <div class="form-group" *ngIf="plBsExportXLS">
                         <giddh-compare-with-date-range-picker
                             [endDate]="toDate"
                             [startDate]="fromDate"
@@ -108,9 +115,9 @@
                         >
                         </giddh-compare-with-date-range-picker>
                     </div>
-                    <ng-container *ngIf="!showLoader">
+                    <div class="form-group" *ngIf="!showLoader">
                         <div
-                            class="pull-left mr-r15 d-inline-flex position-relative"
+                            class="form-group pull-left mr-r15 d-inline-flex relative"
                             *ngIf="!isProjectWiseAccounting && tags?.length"
                         >
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
@@ -125,24 +132,34 @@
                             </reactive-dropdown-field>
                         </div>
                         <!-- Filter by Tag -->
-                         <button
-                            mat-stroked-button
-                            class="btn-stroked-icon"
-                            (click)="emitExpand(!expandAll)"
-                            type="button"
-                            [matTooltip]="expandAll ? commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all"
-                            matTooltipPosition="above"
-                         >
-                            <i [ngClass]="expandAll ? 'icon-collapse' : 'icon-expandIcon'"></i>
-                         </button>
-                    </ng-container>
+                        <div class="form-group pull-left">
+                            <a
+                                class="cp expand-icon"
+                                (click)="emitExpand(true)"
+                                matTooltip="{{ commonLocaleData?.app_expand_all }}"
+                                matTooltipPosition="above"
+                                *ngIf="!expandAll"
+                            >
+                                <span class="icon-expandIcon"></span>
+                            </a>
+                            <a
+                                class="cp expand-icon"
+                                (click)="emitExpand(false)"
+                                matTooltip="{{ commonLocaleData?.app_collapse_all }}"
+                                matTooltipPosition="above"
+                                *ngIf="expandAll"
+                            >
+                                <span class="icon-collapse"></span>
+                            </a>
+                        </div>
+                    </div>
                     <button mat-raised-button color="primary" type="submit">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </form>
-                <div class="d-flex align-items-center column-gap-1 download-data-icon">
+                <div class="d-flex align-items-center column-gap1 download-data-icon">
                     <ng-container *ngIf="isReconciled !== null && !isProjectWiseAccounting">
-                        <p *ngIf="isReconcileModeDateRange" class="text-light nowrap">{{ isReconcileModeDateRange }}</p>
+                        <p *ngIf="isReconcileModeDateRange" class="text-gray nowrap">{{ isReconcileModeDateRange }}</p>
                         <ng-container *ngIf="showReconcileOptions">
                             <button
                                 *ngIf="!isReconciled"
@@ -178,15 +195,9 @@
                             <span class="d-inline-block nowrap">{{ localeData?.switch_back_to_reconcile_mode }}</span>
                         </button>
                     </ng-container>
-                    <button
-                        mat-stroked-button
-                        class="btn-stroked-icon"
-                        (click)="refreshData()"
-                        [matTooltip]="localeData?.reload_data"
-                        matTooltipPosition="above"
-                    >
-                        <i class="icon-refresh"></i>
-                    </button>
+                    <a class="cursor-pointer" (click)="refreshData()" matTooltip="{{ localeData?.reload_data }}">
+                        <span class="icon-refresh"></span>
+                    </a>
                     <button
                         class="ml-1"
                         *ngIf="isProjectWiseAccounting"
@@ -195,7 +206,7 @@
                     >
                         {{ commonLocaleData?.app_back }}
                     </button>
-                    <div class="d-flex column-gap-1">
+                    <div class="d-flex column-gap1">
                         <trial-balance-export-csv
                             *ngIf="tbExportCsv"
                             [trialBalanceRequest]="filterForm?.value"

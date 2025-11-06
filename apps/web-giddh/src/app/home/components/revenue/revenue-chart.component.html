@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-lg-9 col-md-12">
                     <div class="left-column">
-                        <div class="panel-heading pl-0 pt-0 clear-both">
+                        <div class="panel-heading pl-0 pt-0 clearfix">
                             <div class="panel-heading-inner-content w-100">
                                 <div class="cursor-pointer">
                                     <span [matMenuTriggerFor]="revenueChartMenu" class="menu-trigger-btn" role="button" aria-label="income-select">
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-body pl-0 pr-0 position-relative ">
+                        <div class="panel-body pl-0 pr-0 position-relative">
                             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </div>
@@ -76,7 +76,7 @@
                                     commonLocaleData?.app_this_week
                                 }})
                             </p>
-                            <p>
+                            <h3>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="summaryData.totalCurrent"
@@ -85,7 +85,7 @@
                                     >
                                     </amount-field>
                                 </span>
-                            </p>
+                            </h3>
                         </div>
                         <div class="single-sale-detail">
                             <p>
@@ -93,7 +93,7 @@
                                     commonLocaleData?.app_last_week
                                 }})
                             </p>
-                            <p>
+                            <h3>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="summaryData.totalLast"
@@ -102,11 +102,11 @@
                                     >
                                     </amount-field>
                                 </span>
-                            </p>
+                            </h3>
                         </div>
                         <div class="single-sale-detail">
                             <p>{{ localeData?.highest }} {{ activeGraphType["uniqueName"] }}</p>
-                            <p>
+                            <h3>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="summaryData.highest"
@@ -115,12 +115,12 @@
                                     >
                                     </amount-field>
                                 </span>
-                            </p>
+                            </h3>
                             <span>{{ summaryData.highestLabel }}</span>
                         </div>
                         <div class="single-sale-detail">
                             <p>{{ localeData?.lowest }} {{ activeGraphType["uniqueName"] }}</p>
-                            <p>
+                            <h3>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="summaryData.lowest"
@@ -129,7 +129,7 @@
                                     >
                                     </amount-field>
                                 </span>
-                            </p>
+                            </h3>
                             <span>{{ summaryData.lowestLabel }}</span>
                         </div>
                     </div>
@@ -145,8 +145,9 @@
                         <div class="col-sm-4">
                             <div class="date-range-block">
                                 <mat-form-field
+                                    class="mr-3"
                                     appearance="outline"
-                                    class="w-100 mr-3"
+                                    class="w-100"
                                     (click)="campaignOnepicker?.open()"
                                 >
                                     <mat-label>{{ localeData?.date_range }}</mat-label>
@@ -209,14 +210,14 @@
                         <div class="collapse-close" (click)="showColumnChart()">
                             <span class="icon-collapse-icon" [matTooltip]="commonLocaleData?.app_collapse"></span>
                         </div>
-                        <p>{{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] | titlecase }}</p>
+                        <h1>{{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] | titlecase }}</h1>
                     </div>
                 </div>
             </div>
         </div>
         <mat-card class="mr-t15">
             <mat-card-content>
-                <div class="clear-both top-dates">
+                <div class="clearfix top-dates">
                     <div class="pull-left about-date">
                         <div class="active-date">
                             <span></span>{{ getPreviousWeekStartEndDate[0] | date }} -
@@ -228,18 +229,18 @@
                         </div>
                         <div class="pull-right revenue-tabs">
                             <div class="total-sales-tabs">
-                                <span
+                                <a
                                     [ngClass]="{ 'active-graph': graphParams.interval == 'daily' }"
                                     (click)="updateChartFrequency('daily')"
-                                    >{{ localeData?.daily }}</span
-                                >|<span
+                                    >{{ localeData?.daily }}</a
+                                >|<a
                                     [ngClass]="{ 'active-graph': graphParams.interval == 'weekly' }"
                                     (click)="updateChartFrequency('weekly')"
-                                    >{{ localeData?.weekly }}</span
-                                >|<span
+                                    >{{ localeData?.weekly }}</a
+                                >|<a
                                     [ngClass]="{ 'active-graph': graphParams.interval == 'monthly' }"
                                     (click)="updateChartFrequency('monthly')"
-                                    >{{ localeData?.monthly }}</span
+                                    >{{ localeData?.monthly }}</a
                                 >
                             </div>
                         </div>
@@ -251,7 +252,7 @@
                         <canvas id="revenueChartLargeCanvas" width="100%" height="300px" [hidden]="!chart"></canvas>
                     </div>
                 </div>
-                <div class="total-sale-data clear-both">
+                <div class="total-sale-data clearfix">
                     <div class="row">
                         <div class="col-sm-3 single-sale-data">
                             <div>
@@ -260,7 +261,7 @@
                                         getCurrentWeekStartEndDate[1] | date
                                     }})
                                 </p>
-                                <p>
+                                <h3>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="summaryData.totalCurrent"
@@ -269,7 +270,7 @@
                                         >
                                         </amount-field>
                                     </span>
-                                </p>
+                                </h3>
                             </div>
                         </div>
                         <div class="col-sm-3 single-sale-data">
@@ -279,7 +280,7 @@
                                         getPreviousWeekStartEndDate[1] | date
                                     }})
                                 </p>
-                                <p>
+                                <h3>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="summaryData.totalLast"
@@ -288,7 +289,7 @@
                                         >
                                         </amount-field>
                                     </span>
-                                </p>
+                                </h3>
                             </div>
                         </div>
                         <div class="col-sm-3 single-sale-data">
@@ -296,7 +297,7 @@
                                 <p class="small-heading">
                                     {{ localeData?.highest }} {{ activeGraphType["uniqueName"] }}
                                 </p>
-                                <p>
+                                <h3>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="summaryData.highest"
@@ -305,7 +306,7 @@
                                         >
                                         </amount-field>
                                     </span>
-                                </p>
+                                </h3>
                                 <span class="date-wise-sale">{{ summaryData.highestLabel }}</span>
                             </div>
                         </div>
@@ -314,7 +315,7 @@
                                 <p class="small-heading">
                                     {{ localeData?.lowest }} {{ activeGraphType["uniqueName"] }}
                                 </p>
-                                <p>
+                                <h3>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="summaryData.lowest"
@@ -323,7 +324,7 @@
                                         >
                                         </amount-field>
                                     </span>
-                                </p>
+                                </h3>
                                 <span class="date-wise-sale">{{ summaryData.lowestLabel }}</span>
                             </div>
                         </div>

@@ -9,7 +9,7 @@
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <div class="stock-balance-wrapper" *ngIf="!isLoading">
         <div class="stock-balance-top-bar">
-            <div class="stock-balance-top-bar-left-side column-gap-15">
+            <div class="stock-balance-top-bar-left-side column-gap15">
                 <ng-container *ngIf="voucherApiVersion == 2">
                     <button aria-label="new stock" mat-raised-button color="primary" [matMenuTriggerFor]="newStock" class="stock-btn-height">
                         {{ localeData?.warehouse_opening_balance?.new_stock }}
@@ -31,7 +31,6 @@
                         [(ngModel)]="selectedWarehouse"
                         class="stock-mat-salect"
                         [placeholder]="localeData?.warehouse_opening_balance?.select_warehouse"
-                        color="primary"
                     >
                         <mat-option class="balance-options">
                             <ngx-mat-select-search
@@ -71,9 +70,9 @@
                 </select-table-column>
             </div>
         </div>
-        <div class="searching-stocks mat-app-background">
+        <div class="searching-stocks">
             <div class="list-head">
-                <div class="custom-material-search-bar stock-searchbar d-flex align-items-center">
+                <div class="custom-material-search-bar stock-searchbar">
                     <img src="{{ imgPath }}search-new.svg" class="search-icon" alt="search icon" />
                     <text-field
                         [placeholder]="commonLocaleData?.app_stock"
@@ -84,7 +83,7 @@
                     ></text-field>
                 </div>
                 <div class="unique-name-wrapper" *ngIf="showUniqueName">
-                    <p class="unique-name font-size-15">{{ commonLocaleData?.app_unique_name }}</p>
+                    <h2 class="unique-name font-15">{{ commonLocaleData?.app_unique_name }}</h2>
                 </div>
                 <div class="group-list-head group-searchbar" *ngIf="showGroupName">
                     <img src="{{ imgPath }}search-new.svg" class="search-icon" alt="search icon" />
@@ -319,6 +318,7 @@
             </div>
         </div>
         <div
+            class="mt-4"
             *ngIf="GroupStockReportRequest?.totalItems > pageSizeOptions[0] && !isLoading"
         >
             <mat-paginator

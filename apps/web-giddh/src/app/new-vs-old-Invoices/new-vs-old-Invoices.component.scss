@@ -1,11 +1,23 @@
 .height-25px {
     height: 25px;
 }
+
+.pad-8 {
+    padding: 8px;
+}
+
 .div-table {
     display: table;
     width: 50%;
-    // background-color: var(--color-white);
+    background-color: var(--color-white);
     padding: 15px 30px;
+}
+
+.h3-heading {
+    text-align: center;
+    margin: 20px 0;
+    font-weight: bold;
+    font-size: var(--font-size-16);
 }
 
 .div-row {
@@ -14,15 +26,60 @@
     width: auto;
 }
 
+.head-row {
+    display: flex;
+}
+
 .div-cell {
     float: left;
     display: table-column;
     width: 150px;
+    font-size: var(--font-size-15);
+}
+
+.align-end {
+    text-align: end;
+}
+.align-center {
+    align-items: center;
+}
+.d-initial {
+    display: initial;
+}
+.d-initial label {
+    justify-content: left;
+}
+.form-inline {
+    form {
+        width: 100%;
+        display: flex;
+        .select-fields {
+            width: 100%;
+        }
+    }
+}
+.bg-gray-color {
+    background-color: var(--color-border-light);
+}
+
+.strong {
+    font-weight: bold;
 }
 
 @media (max-width: 991px) {
     .div-table {
         display: block;
         width: 100%;
+    }
+    .d-initial {
+        width: 25%;
+    }
+    .h3-heading {
+        margin: 0;
+    }
+    .div-row {
+        .div-cell {
+            font-size: var(--font-size-15) !important;
+        }
     }
 }

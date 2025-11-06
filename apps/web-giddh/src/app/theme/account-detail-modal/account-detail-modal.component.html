@@ -13,21 +13,21 @@
             <div class="account-detail-modal-header-div" >
                 <div class="account-detail-modal-div">
                     <div class="account-detail-custom-header">
-                        <div class="d-flex p-0 border-right-none">
-                            <div class="account-detail-padding flex-grow-1 border-right-none">
-                                <p class="account-detail-custom-title">{{ accInfo?.name }}</p>
+                        <div class="d-flex p-0 border-right-0">
+                            <div class="account-detail-padding flex-grow-1 border-right-0">
+                                <h3 class="account-detail-custom-title">{{ accInfo?.name }}</h3>
                             </div>
                             <a
                                 (click)="performActions(0, $event)"
                                 class="edit-icon pl-1 pd-t05"
                             >
-                                <i *ngIf="!isLoading" class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
+                                <i *ngIf="!isLoading" class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
                             </a>
                         </div>
 
                         <div class="custom-detail account-detail-padding">
-                            <p>{{ accInfo?.mobileNo }}</p>
-                            <p>{{ accInfo?.email }}</p>
+                            <h4>{{ accInfo?.mobileNo }}</h4>
+                            <h4>{{ accInfo?.email }}</h4>
                         </div>
                     </div>
 

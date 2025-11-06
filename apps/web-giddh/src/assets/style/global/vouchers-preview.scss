@@ -1,0 +1,13 @@
+.invoice-preview-wrapper {
+    .preview-header {
+        .action-btn {
+            button {
+                &.mdc-button {
+                    .mdc-button__label {
+                        line-height: 14px;
+                    }
+                }
+            }
+        }
+    }
+}

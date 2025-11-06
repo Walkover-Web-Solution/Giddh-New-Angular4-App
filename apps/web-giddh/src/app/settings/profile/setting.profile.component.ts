@@ -20,6 +20,7 @@ import { CompanyService } from '../../services/company.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
 import { IOption, PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
@@ -150,6 +151,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public activeLocale: string = "";
     /** This holds perforsonal information tab heading */
     public personalInformationTabHeading: string = "";
+    /* This will store screen size */
+    public isMobileScreen: boolean = false;
     /** True if initial data is fetched */
     private initialDataFetched: boolean = false;
     /* This will hold list of tax (trn/vat) supported countries */
@@ -191,7 +194,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private router: Router,
         public route: ActivatedRoute,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private breakPointObservar: BreakpointObserver
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
@@ -987,9 +991,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             name: addressDetails.formValue.name,
             pincode: addressDetails.formValue.pincode,
             county: { code: addressDetails.formValue.county },
+            isDefault: addressDetails.formValue.isDefault,
             linkEntity
         };
-
+        
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
@@ -1044,6 +1049,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             pincode: addressDetails.formValue.pincode,
             uniqueName: addressDetails.formValue?.uniqueName,
             county: { code: addressDetails.formValue.county },
+            isDefault: addressDetails.formValue.isDefault,
             linkEntity
         };
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {

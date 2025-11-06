@@ -1,37 +1,36 @@
 .wrapper {
-//     .header {
-//         display: flex;
-//         align-items: center;
-//         background-color: var(--bg-primary-color);
-//         color: var(--color-white);
-//         width: 100%;
-//         padding-left: 10px;
-//         height: 50px;
-//         .attachment-back-button {
-//             width: 64px;
-//             color: var(--color-white) !important;
-//             i {
-//                 margin-right: 2px;
-//             }
-//             /* UNUSED COMPONENT CLASS: mdc-button__label - Auto-commented by script
-// .mdc-button__label{
-//                 color: var(--color-white);
-//             }
-// */
-//         }
-//     }
+    .header {
+        display: flex;
+        align-items: center;
+        background-color: var(--color-blue-primary);
+        color: var(--color-white);
+        width: 100%;
+        padding-left: 10px;
+        height: 50px;
+        .attachment-back-button {
+            width: 64px;
+            color: var(--color-white) !important;
+            i {
+                margin-right: 2px;
+            }
+            .mdc-button__label{
+                color: var(--color-white);
+            }
+        }
+    }
     .section {
         display: flex;
         height: 77vh;
-        // background-color: var(--color-white);
+        background-color: var(--color-white);
         .left-side {
-            border-right: 1px solid var(--border-color);
+            border-right: 1px solid var(--color-silver);
             width: 35%;
-            padding-right: 10px;
+            padding: 10px 10px 10px 13px;
             position: relative;
             .left-side-subhead {
                 font-size: var(--font-size-12);
-                margin-left: 30px;
+                margin-top: 10px;
+                margin-left: 35px;
             }
             .invoice-head {
                 display: flex;
@@ -94,14 +93,14 @@
             padding: 10px 13px;
             .right-side-buttons {
                 display: flex;
-                // background-color: var(--color-white);
-                border: 1px solid var(--border-color);
-                border-radius: var(--mat-border-radius-4);
+                background-color: var(--color-white);
+                border: 1px solid var(--color-silver);
+                border-radius: 5px;
                 min-width: 67px;
                 float: right;
                 margin-right: 2px;
                 span {
-                    border-left: 1px solid var(--border-color);
+                    border-left: 1px solid var(--color-silver);
                     padding: 5px;
                     display: flex;
                     justify-content: center;
@@ -121,7 +120,7 @@
             .display-area {
                 height: 90%;
                 margin-top: 8px;
-                border-radius: var(--mat-border-radius-4);
+                border-radius: 5px;
                 overflow: hidden;
                 float: left;
                 width: 100%;
@@ -141,18 +140,29 @@
     }
 }
 .active-file {
-    color: var(--text-primary-color) !important;
+    color: var(--color-blue-primary) !important;
 }
 .disabled {
     background-color: var(--color-silver) !important;
     cursor: not-allowed !important;
 }
 ::ng-deep {
-    /* UNUSED COMPONENT CLASS: mat-list-item-content - Auto-commented by script
-.mat-list-item-content {
+    .mat-list-item-content {
         height: auto !important;
         padding: 0px !important;
         align-items: flex-start !important;
     }
-*/
+}
+
+@media (max-width: 767px) {
+    .wrapper {
+        .section {
+            .left-side {
+                width: 100%;
+            }
+            .right-side {
+                display: none;
+            }
+        }
+    }
 }
