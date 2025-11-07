@@ -149,6 +149,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private route: ActivatedRoute
     ) {
+        this.selectedToggle = OcrAction.List;
     }
 
     /**
