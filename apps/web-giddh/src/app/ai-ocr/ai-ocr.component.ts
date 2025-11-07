@@ -126,10 +126,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public broadcast: any;
     /** This will use for active company */
     public activeCompany: any = {};
-    /** This will use for initial page */
-    public initialUpload: boolean = true;
-    /** This will use for initial file upload */
-    public initialUploadFile: boolean = false;
     /** This will use for main page upload file */
     public mainPageUploadFile: boolean = false;
     /** This will use for ocr type */
@@ -186,9 +182,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 }
                 // Reset local state on route change to avoid stale UI/state
                 this.ocrType = "";
-                this.initialUpload = true;
                 this.mainPageUploadFile = false;
-                this.initialUploadFile = false;
                 this.listCount = 0;
                 this.countVariable = 0;
                 this.ocrType = response.type;
@@ -212,10 +206,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         return;
                     }
                     this.aiOcrService.mainPageOcrData$.next(res);
-                    // Update initial upload state
-                    if (this.initialUploadFile) {
-                        this.initialUpload = false;
-                    }
                     // Update list data
                     this.listCount = res.totalItems || 0;
                     this.ocrMainList = res;
@@ -248,7 +238,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
                 // Call getCompletedCount every 5 seconds
                 this.completedIntervalId = setInterval(() => {
-                    if (this.listCount > 0 || this.initialUploadFile) {
+                    if (this.listCount > 0) {
                         this.aiOcrStore.getCompletedCount(this.ocrType);
                     }
                 }, 5000);
@@ -307,9 +297,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     /** Universal date observer */
                     this.aiOcrStore.universalDate$.pipe(takeUntil(this.routeScope$)).subscribe((dateObj) => {
                         if (dateObj) {
-                            if (this.countVariable > 0) {
-                                this.initialUpload = false;
-                            }
                             this.universalDate = _.cloneDeep(dateObj);
                             this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                             this.selectedDateRangeUi =
@@ -331,10 +318,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         return;
                     }
                     this.signedUrlResponse = res;
-                    // Update initial upload state
-                    if (this.initialUploadFile) {
-                        this.initialUpload = false;
-                    }
                     this.ledgerComponentStore.uploadVoucher({
                         url: res.signedUrl,
                         file: this.file
@@ -507,7 +490,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @memberof AiOcrComponent
      */
     public onUploadFile(event: any, fileInput: HTMLInputElement, mainUpload: boolean): void {
-        this.initialUploadFile = true;
         this.mainPageUploadFile = mainUpload;
         // Trigger file input dialog if event exists
         if (event) {
