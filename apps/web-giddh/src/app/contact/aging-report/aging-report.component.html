@@ -148,7 +148,7 @@
                     !isAdvanceSearchApplied
                 "
             >
-                <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center">
+                <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                     <button
                         mat-raised-button
@@ -204,13 +204,13 @@
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
         ></div>
         <div
-            class="icon-sort-asc text-light d-block font-size-9"
+            class="icon-sort-asc text-light d-block"
             (click)="sort(col, 'desc')"
             *ngIf="key === col && order === 'asc'"
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
         ></div>
         <div
-            class="icon-sort-asc text-light d-block font-size-9"
+            class="icon-sort-asc text-light d-block"
             *ngIf="key === col && order === 'desc'"
             (click)="sort(col, 'asc')"
             [ngClass]="{ 'active-text-color': key === col && order === 'desc' }"

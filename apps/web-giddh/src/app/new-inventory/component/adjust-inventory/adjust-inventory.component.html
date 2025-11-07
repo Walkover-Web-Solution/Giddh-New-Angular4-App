@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6 custom-mat-form-field">
+                    <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
                         <reactive-dropdown-field
                             [label]="commonLocaleData?.app_import_type?.inventory"
                             [placeholder]="commonLocaleData?.app_select_inventory_type"
@@ -174,7 +174,7 @@
                                                 }}
                                             </td>
                                             <td (click)="$event.preventDefault(); $event.stopPropagation()">
-                                                <div class="d-flex select-input-field custom-mat-form-field">
+                                                <div class="d-flex select-input-field">
                                                     <reactive-dropdown-field
                                                         [options]="calculationMethod"
                                                         [required]="true"

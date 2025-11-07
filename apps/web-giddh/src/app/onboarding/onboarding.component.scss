@@ -32,16 +32,16 @@
             font-size: var(--font-size-15);
             display: block;
         }
-        a {
-            &.text-dark {
-                text-decoration: underline;
-                font-size: var(--font-size-16);
-                color: var(--color-dark-gray) !important;
-                &:hover {
-                    color: var(--color-dark-gray) !important;
-                }
-            }
-        }
+        // a {
+        //     &.text-dark {
+        //         text-decoration: underline;
+        //         font-size: var(--font-size-16);
+        //         color: var(--color-dark-gray) !important;
+        //         &:hover {
+        //             color: var(--color-dark-gray) !important;
+        //         }
+        //     }
+        // }
         .schedule-img {
             img {
                 width: 200px;

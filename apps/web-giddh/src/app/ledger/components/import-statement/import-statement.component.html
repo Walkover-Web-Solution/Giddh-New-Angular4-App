@@ -25,7 +25,7 @@
     <div *ngIf="importStep === importStepEnum.First" class="row m-0">
         <div class="col-md-6 p-0">
             <div class="statement-card" (click)="selectStatementAccount(importStepEnum.Second, importStatementType.Voucher)">
-                <div class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center">
+                <div class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1">
                     <i class="icon-import mr-r1 icon-font-48 opacity-5"></i>
                     <p class="mr-t2 font-size-15 text-center">{{ inputData?.localeData?.import_voucher }}</p>
                 </div>
@@ -36,7 +36,7 @@
                 class="statement-card"
                 (click)="selectStatementAccount(importStepEnum.Second, importStatementType.BankStatement)"
             >
-                <div class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center">
+                <div class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1">
                     <i class="icon-balance-sheet-new mr-r1 icon-font-48 opacity-5"></i>
                     <p class="mr-t2 font-size-15 text-center">{{ inputData?.localeData?.import_bank_statement }}</p>
                 </div>

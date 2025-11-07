@@ -10,7 +10,7 @@
             [matSortDirection]="pettycashRequest.sort"
         >
             <ng-container matColumnDef="s_no">
-                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-number" width="2%">#</th>
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="serial-no-column">#</th>
                 <td mat-cell *matCellDef="let expenses" data-title="#">
                     <span class="responsive-label" [hidden]="!expensesItems?.length">#</span>
                     {{ expenses.index + 1 }}

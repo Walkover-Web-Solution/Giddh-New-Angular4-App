@@ -39,7 +39,7 @@
                     class="w-100"
                     [id]="'update-ledger-select-account'"
                     *ngIf="openDropDown"
-                    [cssClass]="'text-left d-inline-block cursor-pointer w-100 pd-l15'"
+                    [cssClass]="'form-control bg-white text-black text-left d-inline-block cursor-pointer w-100 pd-l15'"
                     [placeholder]="commonLocaleData?.app_select_account"
                     [isPaginationEnabled]="true"
                     (scrollEnd)="handleScrollEnd()"
@@ -83,20 +83,18 @@
 
             <!-- Right Section -->
             <div class="col d-flex justify-content-end align-items-center pr-0">
-                <button
-                    aria-hidden="true"
-                    class="cross-button text-white d-flex align-items-center justify-content-center"
-                    mat-button
-                    mat-dialog-close
+                 <button 
+                    mat-dialog-close 
+                    mat-icon-button aria-label="close" 
                     [attr.aria-label]="commonLocaleData?.app_close"
                 >
-                    ×
+                    <i class="icon-cross"></i>
                 </button>
             </div>
         </div>
         <!-- endregion -->
         <!-- region main body -->
-        <mat-dialog-content>
+        <mat-dialog-content class="dialog-body">
             <div class="d-flex justify-content-center w-100" *ngIf="isShowNoDataFound">
                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
                     <h2>{{ localeData?.no_transaction_found_message }}</h2>
@@ -1427,8 +1425,8 @@
                                         </input-field>
                                     </div>
 
-                                    <div class="w100 custom-mat-form-field">
-                                        <mat-form-field appearance="outline">
+                                    <div class="w100">
+                                        <mat-form-field appearance="outline" class="initial-height w-100">
                                             <mat-label>{{ commonLocaleData?.app_unit }}</mat-label>
                                             <mat-select
                                                 id="update-ledger-unit"
@@ -1860,7 +1858,7 @@
                                             isAdjustReceiptSelected)
                                     "
                                 >
-                                    <p class="bold">
+                                    <p class="font-weight-semibold">
                                         {{ localeData?.adjusted_amount_full }}
                                         <a
                                             href="javascript:void(0)"
@@ -2331,7 +2329,7 @@
                                         </div>
 
                                         <div class="pull-right">
-                                            <span class="text-primary" *ngIf="!vm.isMultiCurrencyAvailable">
+                                            <span class="font-weight-semibold" *ngIf="!vm.isMultiCurrencyAvailable">
                                                 {{ localeData?.compound_total }}:
 
                                                 <span class="d-inline-flex">

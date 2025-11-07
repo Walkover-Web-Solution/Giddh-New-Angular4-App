@@ -15,7 +15,7 @@
                 [selectedIndex]="selectedStep"
                 (selectionChange)="onSelectedTab($event)"
                 [disableRipple]="firstStepForm.invalid"
-                class="bg-transparent text-default"
+                class="bg-transparent theme-foreground-color"
             >
                 <mat-step [stepControl]="firstStepForm">
                     <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
@@ -1058,8 +1058,8 @@
                         </div>
                         <div class="position-relative mt-3" *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="w-100">
-                                <div class="d-flex align-items-center justify-content-between custom-mat-form-field">
-                                    <mat-form-field appearance="outline">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <mat-form-field appearance="outline" class="initial-height w-100">
                                         <mat-label>{{ localeData?.promo_code }}</mat-label>
                                         <input
                                             matInput

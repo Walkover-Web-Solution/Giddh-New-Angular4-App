@@ -9,6 +9,14 @@
     }
 }
 
+
+::ng-deep .dark-theme .single-invoice-detail {
+    &:hover,
+    &.active {
+        background-color: var(--theme-primary-light) !important;
+    }
+}
+
 :host ::ng-deep .invoice-preview-wrapper {
     display: flex;
     height: calc(100vh - (var(--header-height) + 30px));
@@ -24,12 +32,12 @@
             &.active {
                 background-color: var(--color-light-gray);
 
-                .text-primary {
-                    color: var(--theme-primary-color) !important;
-                }
-                .text-default {
-                    color: var(--color-black) !important;
-                }
+                // .text-primary {
+                //     color: var(--theme-primary-color) !important;
+                // }
+                // .text-default {
+                //     color: var(--color-black) !important;
+                // }
             }
         }
     }

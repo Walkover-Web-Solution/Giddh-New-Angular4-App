@@ -515,7 +515,7 @@
                         <table class="table basic mb-0" id="table-receipt">
                             <thead *ngIf="transferType === 'products'">
                                 <tr>
-                                    <th width="2%">#</th>
+                                    <th class="serial-no-column">#</th>
                                     <th data-title="Product Description" width="30%" class="min-wid-product">
                                         Product Description
                                     </th>
@@ -526,7 +526,7 @@
                             </thead>
                             <thead *ngIf="transferType !== 'products'">
                                 <tr>
-                                    <th width="2%">#</th>
+                                    <th class="serial-no-column">#</th>
                                     <th width="30%" *ngIf="branchTransferMode === 'deliverynote'">
                                         Receiver’s Details
                                     </th>

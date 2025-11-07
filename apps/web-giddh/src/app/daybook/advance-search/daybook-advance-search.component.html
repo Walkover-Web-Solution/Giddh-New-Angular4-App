@@ -89,7 +89,7 @@
                                     </mat-slide-toggle>
                                 </div>
                                 <div class="col-9">
-                                    <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['particulars']?.value?.length}">
+                                    <div class="form-group">
                                         <select-multiple-fields
                                             [name]="'particulars'"
                                             [appearance]="'outline'"
@@ -142,7 +142,7 @@
                                     </mat-slide-toggle>
                                 </div>
                                 <div class="col-9">
-                                    <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['vouchers']?.value?.length}">
+                                    <div class="form-group">
                                         <select-multiple-fields
                                             [name]="'vouchers'"
                                             [appearance]="'outline'"
@@ -185,7 +185,7 @@
                                     </mat-slide-toggle>
                                 </div>
                                 <div class="col-sm-9">
-                                    <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['tags']?.value?.length}">
+                                    <div class="form-group">
                                         <select-multiple-fields
                                             [name]="'tags'"
                                             [appearance]="'outline'"
@@ -234,8 +234,8 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-9 col-8 col-12">
-                                    <div class="custom-mat-form-field mr-t15">
-                                        <mat-form-field appearance="outline">
+                                    <div class="mr-t15">
+                                        <mat-form-field appearance="outline" class="initial-height">
                                             <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
                                             <mat-select
                                                 panelClass="py-0"
@@ -347,7 +347,7 @@
                                                 </mat-slide-toggle>
                                             </div>
                                             <div class="col-sm-9 col-12">
-                                                <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['inventory'].controls['inventories']?.value?.length}">
+                                                <div class="form-group">
                                                     <select-multiple-fields
                                                         [name]="'inventory'"
                                                         [appearance]="'outline'"

@@ -20,15 +20,13 @@
                         </reactive-dropdown-field>
                     </div>
                     <div class="col-6">
-                        <span class="custom-mat-form-field">
-                            <reactive-dropdown-field
-                                [options]="calculationMethodOptions"
-                                [label]="commonLocaleData?.app_calculation_method"
-                                [appearance]="'outline'"
-                                [required]="true"
-                                formControlName="calculationMethod">
-                            </reactive-dropdown-field>
-                        </span>
+                        <reactive-dropdown-field
+                            [options]="calculationMethodOptions"
+                            [label]="commonLocaleData?.app_calculation_method"
+                            [appearance]="'outline'"
+                            [required]="true"
+                            formControlName="calculationMethod">
+                        </reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="row mt-4">

@@ -1291,7 +1291,7 @@
                         <ng-container *ngIf="allTransactionDates && allTransactionDates.length > 0">
                             <ng-container *ngFor="let transactionDate of allTransactionDates">
                                 <div class="border-none pt-0 pb-0 pd-l15 pd-r15">
-                                    <div class="transaction-date pd-t2 bold">
+                                    <div class="transaction-date pd-t2 font-weight-semibold">
                                         {{ transactionDate }}
                                     </div>
                                     <mat-grid-list cols="2" rowHeight="55px">
@@ -1464,10 +1464,10 @@
                         >
                             <!-- region debit transaction header-->
                             <mat-grid-list class="mat-app-background" cols={{ledgerGridTotalColumns}} rowHeight="50px">
-                                <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[0]}}>
+                                <mat-grid-tile class="font-weight-semibold" colspan={{ledgerGridColumnsValue[0]}}>
                                     <span class="cursor-pointer">{{ commonLocaleData?.app_date }}</span>
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[1]}}>
+                                <mat-grid-tile class="font-weight-semibold" colspan={{ledgerGridColumnsValue[1]}}>
                                     {{ commonLocaleData?.app_particular }}
                                 </mat-grid-tile>
                                 <mat-grid-tile class="font-weight-semibold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
@@ -1862,10 +1862,10 @@
                             >
                                 <!-- region credit transaction header-->
                                 <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px">
-                                    <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[0]}}>
+                                    <mat-grid-tile class="font-weight-semibold" colspan={{ledgerGridColumnsValue[0]}}>
                                         <span class="cursor-pointer">{{ commonLocaleData?.app_date }}</span>
                                     </mat-grid-tile>
-                                    <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[1]}}>
+                                    <mat-grid-tile class="font-weight-semibold" colspan={{ledgerGridColumnsValue[1]}}>
                                         {{ commonLocaleData?.app_particular }}
                                     </mat-grid-tile>
                                     <mat-grid-tile class="font-weight-semibold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
@@ -2895,7 +2895,7 @@
                         <ng-container
                             *ngIf="!option.additional?.stock">
                             <a href="javascript:;"
-                                class="d-block py-1 text-default">
+                                class="d-block py-1 theme-foreground-color">
                                 <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
@@ -2908,7 +2908,7 @@
                         <ng-container
                             *ngIf="option.additional?.stock">
                             <a href="javascript:;"
-                                class="py-1 text-default">
+                                class="py-1 theme-foreground-color">
                                 <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
@@ -2978,35 +2978,35 @@
                         rowHeight="50px"
                     >
                         <!-- Date Column -->
-                        <mat-grid-tile class="bold" colspan={{ledgerStatementViewGridColumnsValue[0]}}>
+                        <mat-grid-tile class="font-weight-semibold" colspan={{ledgerStatementViewGridColumnsValue[0]}}>
                             <div class="p-2 d-flex align-items-center column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_date }}
                             </div>
                         </mat-grid-tile>
 
                         <!-- Particular Column -->
-                        <mat-grid-tile class="bold" colspan={{ledgerStatementViewGridColumnsValue[1]}}>
+                        <mat-grid-tile class="font-weight-semibold" colspan={{ledgerStatementViewGridColumnsValue[1]}}>
                             <div class="p-2 d-flex align-items-center column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_particular }}
                             </div>
                         </mat-grid-tile>
 
                         <!-- Debit Column -->
-                        <mat-grid-tile class="bold" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
+                        <mat-grid-tile class="font-weight-semibold" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
                             <div class="p-2 d-flex align-items-center justify-content-end column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_debit }}
                             </div>
                         </mat-grid-tile>
 
                         <!-- Credit Column -->
-                        <mat-grid-tile class="bold" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
+                        <mat-grid-tile class="font-weight-semibold" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
                             <div class="p-2 d-flex align-items-center justify-content-end column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_credit }}
                             </div>
                         </mat-grid-tile>
 
                         <!-- Balance Column -->
-                        <mat-grid-tile class="bold" *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
+                        <mat-grid-tile class="font-weight-semibold" *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
                             <div class="p-2 d-flex align-items-center justify-content-end column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_closing_balance }}
                             </div>

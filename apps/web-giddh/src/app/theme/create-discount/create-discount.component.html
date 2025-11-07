@@ -18,14 +18,12 @@
                 <form autocomplete="off" novalidate name="createDiscountForm" [formGroup]="createDiscountForm">
                     <div class="row row-gap-15 mt-2">
                         <div class="col-6">
-                            <span class="custom-mat-form-field">
-                                <reactive-dropdown-field
-                                    [options]="discountTypeOptions"
-                                    [label]="localeData?.discount_type"
-                                    [appearance]="'outline'"
-                                    formControlName="type">
-                                </reactive-dropdown-field>
-                            </span>
+                            <reactive-dropdown-field
+                                [options]="discountTypeOptions"
+                                [label]="localeData?.discount_type"
+                                [appearance]="'outline'"
+                                formControlName="type">
+                            </reactive-dropdown-field>
                         </div>
                         <div class="col-6">
                             <input-field [type]="'text'" [showError]="isFormSubmitted && !createDiscountForm.get('name')?.value"

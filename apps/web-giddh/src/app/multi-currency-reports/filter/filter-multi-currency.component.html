@@ -29,10 +29,11 @@
                             </div>
                         </div>
                         <div
-                            class="form-group mr-r15 custom-mat-form-field"
+                            class="form-group mr-r15"
                         >
                             <mat-form-field 
                                 appearance="outline"
+                                class="initial-height w-100"
                                 [ngClass]="{'mat-form-field-invalid': getForm('shareCompanyList').value?.length === 0 && !isValidForm}"
                             >
                                 <mat-label>{{ localeData?.company_list }}</mat-label>

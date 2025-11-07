@@ -12,7 +12,7 @@
     <div mat-dialog-content class="dialog-body">
         <div class="row">
             <div class="col-md-12">
-                <span class="text-default" *ngIf="isUpdateMode && isVoucherModule">
+                <span class="theme-foreground-color" *ngIf="isUpdateMode && isVoucherModule">
                     {{ localeData?.adjusted_amount_error }}
                 </span>
                 <div class="row mb-2" *ngIf="isModal">
@@ -69,7 +69,7 @@
                                     ? commonLocaleData?.app_balance
                                     : commonLocaleData?.app_due
                             }}
-                            <span class="text-default">{{ localeData?.post_adj }}</span>
+                            <span class="theme-foreground-color">{{ localeData?.post_adj }}</span>
                             <span class="nowrap"><i class="icon-font-10"></i> </span>
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field
@@ -152,7 +152,7 @@
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <a href="javascript:void(0)" aria-label="label">
-                                                <p class="text-default">
+                                                <p class="theme-foreground-color">
                                                     {{ option?.label }}
                                                 </p>
                                                 <div class="text-light">
@@ -218,7 +218,7 @@
                                         *ngIf="
                                             entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'
                                         "
-                                        class="text-default inclusive-tax"
+                                        class="theme-foreground-color inclusive-tax"
                                         >({{ localeData?.inclusive_tax }})</span
                                     >
                                 </div>
@@ -228,7 +228,7 @@
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
                                     (click)="deleteAdjustVoucherRow(entryIdx)"
-                                    class="icon-font-22 text-default d-inline-block pt-2"
+                                    class="icon-font-22 theme-foreground-color d-inline-block pt-2"
                                     ><i class="icon-trash"></i
                                 ></a>
                             </div>
@@ -241,7 +241,7 @@
                     </p>
 
                     <div class="clear-both">
-                        <div class="text-default mb-3" *ngIf="exceedDueAmount < 0">
+                        <div class="theme-foreground-color mb-3" *ngIf="exceedDueAmount < 0">
                             {{ localeData?.excess_amount }}:
                             <span class="d-inline-flex">
                                 <amount-field
