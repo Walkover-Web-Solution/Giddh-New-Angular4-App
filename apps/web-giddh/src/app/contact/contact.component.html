@@ -1526,21 +1526,21 @@
     <ng-template #sortingTemplate let-col>
         <div class="icon-pointer cursor-pointer">
             <div
-                class="icon-sort-asc text-light d-block font-size-9"
+                class="icon-sort-asc text-light d-block"
                 (click)="sort(col, 'asc')"
                 *ngIf="key !== col"
                 [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
             ></div>
 
             <div
-                class="icon-sort-asc text-light d-block font-size-9"
+                class="icon-sort-asc text-light d-block"
                 (click)="sort(col, 'desc')"
                 *ngIf="key === col && order === 'asc'"
                 [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
             ></div>
 
             <div
-                class="icon-sort-asc text-light d-block font-size-9"
+                class="icon-sort-asc text-light d-block"
                 *ngIf="key === col && order === 'desc'"
                 (click)="sort(col, 'asc')"
                 [ngClass]="{ 'active-text-color': key === col && order === 'desc' }"

@@ -12,31 +12,29 @@
             <!--share group/account-->
             <div class="col-lg-4 pr-0 pl-0 full-width" *ngIf="showEditGroup$ | async">
                 <!--group-->
-                <div class="pull-right text-right">
+                <div class="d-flex align-items-center justify-content-end column-gap-1">
+                     <p
+                        class="theme-accent-color"
+                        *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
+                    >
+                        {{ groupSharedWith }}
+                    </p>
                     <button 
                         mat-raised-button
                         color="primary"
                         (click)="exportGroupLedger()"
                         aria-label="export" 
-                        class="mr-r1"
                     >
                         {{ commonLocaleData?.app_export }}
                     </button>
                     <button 
                         mat-raised-button
                         aria-label="share" 
-                        class="pull-right" 
                         (click)="openShareGroupDialog()"
                         color="primary"
                     >
                         {{ commonLocaleData?.app_share }}
                     </button>
-                    <div
-                        class="text-primary text-right mr-r1 clear-both"
-                        *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
-                    >
-                        {{ groupSharedWith }}
-                    </div>
                 </div>
             </div>
             <!--account-->

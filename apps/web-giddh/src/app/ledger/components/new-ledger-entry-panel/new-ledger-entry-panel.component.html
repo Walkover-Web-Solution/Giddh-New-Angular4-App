@@ -88,8 +88,8 @@
                         </input-field>
                     </div>
                     <!-- Unit -->
-                    <div *ngIf="currentTxn?.unitRate" class="custom-mat-form-field">
-                        <mat-form-field [appearance]="'outline'" class="w-100">
+                    <div *ngIf="currentTxn?.unitRate">
+                        <mat-form-field [appearance]="'outline'" class="initial-height w-100">
                             <mat-label class="font-size-12">{{ commonLocaleData?.app_unit }}</mat-label>
                             <mat-select
                                 class="w-100"
@@ -714,7 +714,7 @@
                             <table class="mr-t2 tag-wrapper w-100">
                                 <tbody>
                                     <tr>
-                                        <td [ngClass]="{'custom-mat-form-field': !blankLedger?.tagNames?.length}">
+                                        <td>
                                             <select-multiple-fields
                                                 class="d-block w-100"
                                                 (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"

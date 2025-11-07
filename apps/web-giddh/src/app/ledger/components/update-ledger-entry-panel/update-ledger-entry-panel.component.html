@@ -83,14 +83,12 @@
 
             <!-- Right Section -->
             <div class="col d-flex justify-content-end align-items-center pr-0">
-                <button
-                    aria-hidden="true"
-                    class="cross-button text-white d-flex align-items-center justify-content-center"
-                    mat-button
-                    mat-dialog-close
+                 <button 
+                    mat-dialog-close 
+                    mat-icon-button aria-label="close" 
                     [attr.aria-label]="commonLocaleData?.app_close"
                 >
-                    ×
+                    <i class="icon-cross"></i>
                 </button>
             </div>
         </div>
@@ -1427,8 +1425,8 @@
                                         </input-field>
                                     </div>
 
-                                    <div class="w100 custom-mat-form-field">
-                                        <mat-form-field appearance="outline">
+                                    <div class="w100">
+                                        <mat-form-field appearance="outline" class="initial-height w-100">
                                             <mat-label>{{ commonLocaleData?.app_unit }}</mat-label>
                                             <mat-select
                                                 id="update-ledger-unit"
@@ -2331,7 +2329,7 @@
                                         </div>
 
                                         <div class="pull-right">
-                                            <span class="text-primary" *ngIf="!vm.isMultiCurrencyAvailable">
+                                            <span class="font-weight-semibold" *ngIf="!vm.isMultiCurrencyAvailable">
                                                 {{ localeData?.compound_total }}:
 
                                                 <span class="d-inline-flex">

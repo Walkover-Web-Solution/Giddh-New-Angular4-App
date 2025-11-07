@@ -52,7 +52,7 @@
             <div class="table-responsive table-header-sticky">
                 <table mat-table [dataSource]="addresses" class="w-100 table basic giddh-table on-mobile-view">
                     <ng-container matColumnDef="no">
-                        <th class="min-wid-check" width="2%" mat-header-cell *matHeaderCellDef>#</th>
+                        <th class="min-wid-check serial-no-column" mat-header-cell *matHeaderCellDef>#</th>
                         <td class="min-width-50" mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}.</td>
                     </ng-container>
                     <ng-container matColumnDef="name">

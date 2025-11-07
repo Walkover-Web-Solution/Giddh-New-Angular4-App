@@ -5355,7 +5355,7 @@ table input[type="number"] {
     // color: var(--color-black);
     border-right: 1px solid var(--border-color);
     padding: 11px !important;
-    font-weight: 400;
+    font-weight: var(--font-weight-semibold);
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -8372,7 +8372,7 @@ button.btn.btn-filter {
 }
 
 .td-search-box div i.icon-search {
-    color: var(--text-primary-color) !important;
+    // color: var(--text-primary-color) !important;
     font-size: 16px;
 }
 
@@ -11623,7 +11623,9 @@ body.prevent-body-scroll {
         */
     }
 }
-
+.icon-sort-asc {
+    font-size: 16px !important;
+}
 .giddh-table {
     // font-weight: var(--font-weight-semibold);
     border: 1px solid var(--color-silver);
@@ -11727,10 +11729,10 @@ body.prevent-body-scroll {
     tbody tr:first-child .status-mobile {
         border-top: none !important;
     }
-    .icon-sort-asc {
-        // color: var(--color-dark-gray);
-        font-size: 16px !important;
-    }
+    // .icon-sort-asc {
+    //     // color: var(--color-dark-gray);
+    //     font-size: 16px !important;
+    // }
     .icon-pointer .active-text-color {
         // color: var(--color-blue-primary);
         opacity: 1;

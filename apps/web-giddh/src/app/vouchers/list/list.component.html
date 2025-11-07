@@ -113,7 +113,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -572,7 +572,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -1089,7 +1089,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -1623,7 +1623,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -2097,7 +2097,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -2518,7 +2518,7 @@
                                 [hidden]="(isGetAllRequestInProcess$ | async) || !ledgersData?.length"
                             >
                                 <ng-container matColumnDef="position">
-                                    <th mat-header-cell *matHeaderCellDef>
+                                    <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                         <ng-container *ngIf="!selectedPendingVouchers?.length">#</ng-container>
                                         <span *ngIf="selectedPendingVouchers?.length">
                                             <mat-checkbox
@@ -2788,7 +2788,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -3203,7 +3203,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -3699,7 +3699,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -4097,7 +4097,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -4399,7 +4399,7 @@
                                 [hidden]="(isGetAllRequestInProcess$ | async) || !ledgersData?.length"
                             >
                                 <ng-container matColumnDef="position">
-                                    <th mat-header-cell *matHeaderCellDef>
+                                    <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                         <ng-container *ngIf="!selectedPendingVouchers?.length">#</ng-container>
                                         <span *ngIf="selectedPendingVouchers?.length">
                                             <mat-checkbox
@@ -5564,7 +5564,7 @@
                                                 </mat-slide-toggle>
                                                 {{ localeData?.send_email_gmail }}
                                                 <span class="ml-3 integrated-email" *ngIf="!isGmailIntegrated">
-                                                    <a [href]="gmailAuthCodeUrl$ | async">{{
+                                                    <a [href]="gmailAuthCodeUrl$ | async" class="text-underline">{{
                                                         localeData?.integrate_gmail
                                                     }}</a>
                                                 </span>

@@ -86,7 +86,7 @@
                                                     }}
                                                 </span>
                                                 <span class="font-size-12 light-gray"> | {{ item?.voucherDate }} </span>
-                                                <p class="theme-foreground-color pd-r3 text-wrap">
+                                                <p class="pd-r3 text-wrap">
                                                     {{
                                                         item?.account?.customerName ||
                                                             item?.account?.name ||
@@ -274,22 +274,22 @@
                             selectedInvoice?.balanceStatus !== 'CANCEL'
                         "
                     >
-                        <span class="d-flex justify-content-center align-items-center border-r">
+                        <span class="d-flex justify-content-center align-items-center">
                             <img src="{{imgPath}}dollar-icon.svg" alt="dollar-icon" />
                         </span>
                         <p class="my-1">
                             {{ localeData?.record_payment }}
                         </p>
-                        <a href="javascript:;" (click)="showPaymentDialog()"> {{ localeData?.receipt_payment }}</a>
+                        <a href="javascript:;" class="text-underline" (click)="showPaymentDialog()"> {{ localeData?.receipt_payment }}</a>
                     </div>
                     <div>
-                        <span class="d-flex justify-content-center align-items-center border-r">
+                        <span class="d-flex justify-content-center align-items-center">
                             <img src="{{imgPath}}send-icon.svg" alt="send-icon" />
                         </span>
                         <p class="my-1">
                             {{ localeData?.email_invoice }}
                         </p>
-                        <a href="javascript:;" (click)="openEmailSendDialog()">{{ localeData?.send_invoice }}</a>
+                        <a href="javascript:;" class="text-underline" (click)="openEmailSendDialog()">{{ localeData?.send_invoice }}</a>
                     </div>
                 </div>
                 <div class="d-flex" *ngIf="invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice">
@@ -340,7 +340,7 @@
                 <div class="pdf-preview" *ngIf="voucherType === voucherTypeEnum.purchase">
                     <div class="position-relative ">
                         <p class="pd-l15 py-2">
-                            <strong class="text-primary">{{ localeData?.uploaded_purchase_bill }}</strong>
+                            <strong>{{ localeData?.uploaded_purchase_bill }}</strong>
                         </p>
                         <giddh-page-loader *ngIf="isFileUploading"></giddh-page-loader>
                         <div #attachedDocumentPreview>
@@ -404,7 +404,7 @@
                 </div>
                 <div class="pdf-preview mr-t5 h-100">
                     <p class="pd-l15 pd-t1 pd-b1">
-                        <strong class="text-primary">{{ localeData?.auto_generated_purchase_bill }}</strong>
+                        <strong>{{ localeData?.auto_generated_purchase_bill }}</strong>
                     </p>
                     <div
                         *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"

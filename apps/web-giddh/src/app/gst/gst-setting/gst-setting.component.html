@@ -67,29 +67,27 @@
                                                 [formGroupName]="i"
                                             >
                                                 <td>
-                                                    <div class="custom-mat-form-field">
-                                                        <div class="date-range-wrapper">
-                                                            <mat-form-field
-                                                                [matDatepickerToggleIcon]="false"
-                                                                (click)="picker?.open()"
-                                                                class="w-100 mat-form-field-border"
-                                                                [name]="'date_' + i"
-                                                            >
-                                                                <mat-date-range-input [rangePicker]="picker">
-                                                                    <input
-                                                                        matStartDate
-                                                                        [placeholder]="commonLocaleData?.app_start_date"
-                                                                        formControlName="fromDate"
-                                                                    />
-                                                                    <input
-                                                                        matEndDate
-                                                                        [placeholder]="commonLocaleData?.app_end_date"
-                                                                        formControlName="toDate"
-                                                                    />
-                                                                </mat-date-range-input>
-                                                                <mat-date-range-picker #picker></mat-date-range-picker>
-                                                            </mat-form-field>
-                                                        </div>
+                                                    <div class="date-range-wrapper">
+                                                        <mat-form-field
+                                                            [matDatepickerToggleIcon]="false"
+                                                            (click)="picker?.open()"
+                                                            class="w-100 mat-form-field-border initial-height"
+                                                            [name]="'date_' + i"
+                                                        >
+                                                            <mat-date-range-input [rangePicker]="picker">
+                                                                <input
+                                                                    matStartDate
+                                                                    [placeholder]="commonLocaleData?.app_start_date"
+                                                                    formControlName="fromDate"
+                                                                />
+                                                                <input
+                                                                    matEndDate
+                                                                    [placeholder]="commonLocaleData?.app_end_date"
+                                                                    formControlName="toDate"
+                                                                />
+                                                            </mat-date-range-input>
+                                                            <mat-date-range-picker #picker></mat-date-range-picker>
+                                                        </mat-form-field>
                                                     </div>
                                                 </td>
                                                 <td>

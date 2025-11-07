@@ -101,7 +101,6 @@
 
                     <!-- Select copy -->
                 <div
-                    class="custom-mat-form-field"
                     [ngClass]="{
                         'border-bottom':
                             inputData?.voucherType === 'receipt' ||
@@ -119,7 +118,7 @@
                         exportForm.get('voucherExport').value
                     "
                 >
-                    <mat-form-field appearance="outline" class="w-100 mr-b1 mr-t15">
+                    <mat-form-field appearance="outline" class="initial-height w-100 mr-b1 mr-t15">
                         <mat-label>{{ localeData?.select_copy }}</mat-label>
                         <mat-select multiple [placeholder]="localeData?.select_copy" formControlName="copyTypes">
                             <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">

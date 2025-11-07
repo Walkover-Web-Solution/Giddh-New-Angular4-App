@@ -944,27 +944,27 @@
                                                     >
                                                         <table class="stock-table font-size-15">
                                                             <tr>
-                                                                <th class="variant-image table-heading-color">
+                                                                <th class="variant-image">
                                                                     Variant Image
                                                                 </th>
-                                                                <th class="variant-name-column table-heading-color">
+                                                                <th class="variant-name-column">
                                                                     {{ localeData?.variant_name
                                                                     }}<span class="text-red">*</span>
                                                                 </th>
-                                                                <th class="unit-name table-heading-color">
+                                                                <th class="unit-name">
                                                                     {{ commonLocaleData?.app_unit }}
                                                                 </th>
-                                                                <th class="opening-qty table-heading-color">
+                                                                <th class="opening-qty">
                                                                     {{ localeData?.opening_quantity }}
                                                                 </th>
-                                                                <th class="opening-amount table-heading-color">
+                                                                <th class="opening-amount">
                                                                     {{ localeData?.opening_amount }}
                                                                 </th>
-                                                                <th class="sku-code table-heading-color">
+                                                                <th class="sku-code">
                                                                     {{ commonLocaleData?.app_sku_code }}
                                                                 </th>
                                                                 <th
-                                                                    class="sales-purchase-info table-heading-color"
+                                                                    class="sales-purchase-info"
                                                                     *ngIf="
                                                                         stockForm?.purchaseAccountDetails
                                                                             .accountUniqueName
@@ -973,7 +973,7 @@
                                                                     {{ localeData?.purchase_unit }}
                                                                 </th>
                                                                 <th
-                                                                    class="sales-purchase-info table-heading-color"
+                                                                    class="sales-purchase-info"
                                                                     *ngIf="
                                                                         stockForm?.salesAccountDetails.accountUniqueName
                                                                     "
@@ -981,7 +981,7 @@
                                                                     {{ localeData?.sales_unit }}
                                                                 </th>
                                                                 <th
-                                                                    class="sales-purchase-info table-heading-color"
+                                                                    class="sales-purchase-info"
                                                                     *ngIf="
                                                                         stockForm?.fixedAssetAccountDetails
                                                                             .accountUniqueName
@@ -992,7 +992,7 @@
                                                                 <ng-container
                                                                     *ngFor="let customField of variantCustomFields"
                                                                 >
-                                                                    <th class="sales-purchase-info table-heading-color">
+                                                                    <th class="sales-purchase-info">
                                                                         {{ customField?.fieldName }}
                                                                         <span
                                                                             *ngIf="customField?.isMandatory"
@@ -1001,7 +1001,7 @@
                                                                         >
                                                                     </th>
                                                                 </ng-container>
-                                                                <th class="archive table-heading-color">
+                                                                <th class="archive">
                                                                     {{ commonLocaleData?.app_archive }}
                                                                 </th>
                                                             </tr>
@@ -3352,7 +3352,7 @@
                                 <table class="table giddh-table bulk-create-table on-mobile-view">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th class="serial-no-column">#</th>
                                             <th>Stock Name <span class="text-red">*</span></th>
                                             <th>Unique Name <span class="text-red">*</span></th>
                                             <th>Inventory Type <span class="text-red">*</span></th>
