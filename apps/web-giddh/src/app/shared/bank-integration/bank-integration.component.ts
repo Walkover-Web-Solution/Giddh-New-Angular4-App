@@ -251,12 +251,8 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
 
         this.deleteEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.reconnectBankResponse && this.reconnectBankResponse.institutionId) {
-                    this.componentStore.createEndUserAgreementByInstitutionId(this.reconnectBankResponse.institutionId);
-                } else {
-                    this.toasty.showSnackBar('success', this.localeData?.account_deleted_successfully);
-                    this.loadPaymentData();
-                }
+                this.toasty.showSnackBar('success', this.localeData?.account_deleted_successfully);
+                this.loadPaymentData();
             }
         });
 
@@ -483,7 +479,9 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
  */
     public reconnectBank(bank: any): void {
         this.reconnectBankResponse = bank;
-        this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
+        if (bank && bank.institutionId) {
+            this.componentStore.createEndUserAgreementByInstitutionId(bank.institutionId);
+        }
     }
 
     /**

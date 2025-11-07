@@ -2471,7 +2471,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const account = entries.at(entryIndex)?.value?.transactions?.[0]?.account;
             // Delete entry if account is not selected
             if (!(account?.uniqueName && account?.name)) {
-            this.deleteLineEntry(entryIndex);
+                this.deleteLineEntry(entryIndex);
             }
             return;
         }
@@ -3850,17 +3850,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.dateChangeType = "voucher";
+        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder)) {
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: "mat-dialog-sm",
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+                },
+            });
+            dialogRef.afterClosed().subscribe((response) => {
+                this.handleDateChangeConfirmation(response);
+            });
+        }
 
-        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            panelClass: "mat-dialog-sm",
-            data: {
-                configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
-            },
-        });
-
-        dialogRef.afterClosed().subscribe((response) => {
-            this.handleDateChangeConfirmation(response);
-        });
     }
 
     /**
@@ -5356,7 +5357,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.forceClear = true;
 
         setTimeout(() => {
-             this.forceClear = false;
+            this.forceClear = false;
             this.openAccountDropdown = openAccountDropdown;
         }, 200);
     }
@@ -6502,7 +6503,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             barcodeValue: this.barcodeValue,
             customerUniqueName: this.invoiceForm.controls["account"]?.get("uniqueName")?.value ?? ""
         };
-        
+
         if (this.invoiceType.isPurchaseOrder) {
             params.invoiceType = VoucherTypeEnum.purchase;
         } else if (this.invoiceType.isCashInvoice) {
@@ -6994,16 +6995,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
       */
     public selectVoucherType(value: string): void {
         this.selectedVoucherType = value?.toLowerCase();
-        
+
         // Optimize type mapping using object lookup instead of if-else chain
         const typeMapping = { 'bill': 'purchase', 'invoice': 'sales' };
         const mappedType = typeMapping[this.selectedVoucherType] || this.selectedVoucherType;
-        
+
         const req = {
             row: this.rowData,
             type: mappedType,
             list: this.transactionOptions,
-            aiOcrDetails : this.aiOcrDetails
+            aiOcrDetails: this.aiOcrDetails,
+            ocrType: this.ocrType
         }
         this.voucherType = this.vouchersUtilityService.parseVoucherType(req.type);
         this.getVoucherType();
