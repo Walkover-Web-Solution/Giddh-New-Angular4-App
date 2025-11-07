@@ -132,7 +132,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <ng-container *ngFor="let option of addresses">
+                                    <ng-container *ngFor="let option of filteredAddresses">
                                         <mat-option
                                             [value]="option"
                                             (click)="selectAddress(option)"
@@ -164,7 +164,7 @@
                                             </div>
                                         </mat-option>
                                     </ng-container>
-                                    <div class="px-2" *ngIf="addresses?.length === 0">
+                                    <div class="px-2" *ngIf="filteredAddresses?.length === 0">
                                         {{ commonLocaleData?.app_no_result_found }}
                                     </div>
                                 </mat-select>
