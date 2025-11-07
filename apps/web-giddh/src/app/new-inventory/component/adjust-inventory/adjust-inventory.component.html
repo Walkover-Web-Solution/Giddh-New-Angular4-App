@@ -175,31 +175,23 @@
                                             </td>
                                             <td (click)="$event.preventDefault(); $event.stopPropagation()">
                                                 <div class="d-flex select-input-field">
-                                                    <mat-form-field appearance="outline" class="initial-height w-100">
-                                                        <mat-select
-                                                            [required]="true"
-                                                            formControlName="calculationMethod"
-                                                            [name]="'calculationMethod'"
-                                                            [placeholder]="commonLocaleData?.app_select_method"
-                                                            (selectionChange)="
-                                                                updateMode
-                                                                    ? resetInventory(true)
-                                                                    : calculateInventory(
-                                                                          adjustInventoryCreateEditForm,
-                                                                          stockGroupClosingBalance
-                                                                      )
-                                                            "
-                                                        >
-                                                            <mat-option
-                                                                *ngFor="let method of calculationMethod"
-                                                                [value]="method.value"
-                                                                [disabled]="apiCallInProgress"
-                                                                [value]="method.value"
-                                                            >
-                                                                {{ method.label }}
-                                                            </mat-option>
-                                                        </mat-select>
-                                                    </mat-form-field>
+                                                    <reactive-dropdown-field
+                                                        [options]="calculationMethod"
+                                                        [required]="true"
+                                                        formControlName="calculationMethod"
+                                                        [name]="'calculationMethod'"
+                                                        [placeholder]="commonLocaleData?.app_select_method"
+                                                        [appearance]="'outline'"
+                                                        [disabled]="apiCallInProgress"
+                                                        (selectedOption)="
+                                                            updateMode
+                                                                ? resetInventory(true)
+                                                                : calculateInventory(
+                                                                      adjustInventoryCreateEditForm,
+                                                                      stockGroupClosingBalance
+                                                                  )
+                                                        ">
+                                                    </reactive-dropdown-field>
                                                 </div>
                                             </td>
 
