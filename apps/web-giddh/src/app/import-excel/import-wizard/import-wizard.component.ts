@@ -178,11 +178,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
      * @memberof ImportWizardComponent
      */
     public onFileUpload(data: any): void {
-        if ([VoucherType.AccountWise, VoucherType.VoucherWise, ImportStatementType.Stock, ImportStatementType.BankTransactions, ImportStatementType.Entries, ImportStatementType.Master].includes(this.entity as VoucherType || ImportStatementType.Stock || ImportStatementType.BankTransactions || ImportStatementType.Entries || ImportStatementType.Master)) {
-            this.voucherResponse = data;
-            this.ledgerComponentStore.getSignedUrl(this.voucherResponse.file.name);
-            return;
-        }
+        this.voucherResponse = data;
+        this.ledgerComponentStore.getSignedUrl(this.voucherResponse.file.name);
     }
 
     public onContinueUpload(e) {
