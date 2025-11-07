@@ -588,7 +588,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public selectVoucher(voucherTypeObj: any, element: any): void {
         const req = {
             row: element,
-            type: voucherTypeObj.value
+            type: voucherTypeObj.value,
+            ocrType: this.ocrType
         }
         this.aiOcrService.ocrListToCreate$.next(req);
     }
