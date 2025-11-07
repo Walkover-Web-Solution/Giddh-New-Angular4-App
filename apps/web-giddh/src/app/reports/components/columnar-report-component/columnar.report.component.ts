@@ -387,7 +387,6 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.forceClear = !this.forceClear; 
         this.fromMonthNames = [];
         this.toMonthNames = [];
-        this.selectActiveFinancialYear();
         this.columnarReportResponse = null;
         this.exportRequest.balanceTypeAsSign = false;
         this.exportRequest.showHideOpeningClosingBalance = false;
