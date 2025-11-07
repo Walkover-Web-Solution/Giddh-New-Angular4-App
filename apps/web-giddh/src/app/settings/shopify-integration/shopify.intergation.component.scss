@@ -19,7 +19,7 @@
 
 // Communication Page Styling
 .msg91-container:hover {
-    background-color: var(--color-sidebar-create-company-list-background);
+    background-color: var(--color-light-gray);
 }
 
 .small-button {
@@ -28,12 +28,12 @@
 }
 
 .edit-buttons {
-    color: var(--color-nero) !important;
+    color: var(--color-black) !important;
 }
 
 .auth-key-input {
-    color: var(--color-nero) !important;
-    background-color: var(--color-discount-search-bar-background) !important;
+    color: var(--color-black) !important;
+    background-color: var(--color-white) !important;
 }
 
 .back-text {
@@ -56,14 +56,14 @@
     width: 100%;
     margin-top: 5px;
     margin-bottom: 5px;
-    color: var(--color-company-profile-input-label);
+    color: var(--color-black);
     font-size: var(--font-size-15) !important;
 }
 
 .msg91-container {
     position: relative;
-    border: 1px solid var(--color-lavender);
-    background-color: var(--color-common-quaternary-background-for-all-components) !important;
+    border: 1px solid var(--color-border-light);
+    background-color: var(--color-blue-light) !important;
     border-radius: 7px;
     cursor: pointer;
     width: 241px;
@@ -91,7 +91,7 @@
 
     .integrate {
         p {
-            color: var(--color-master-page-input-label);
+            color: var(--color-black);
             font-size: var(--font-size-12);
             margin-top: 12px;
         }
@@ -164,13 +164,13 @@
 }
 
 .mandatory-label {
-    color: var(--color-primary-login-hash-tag);
+    color: var(--color-red);
 }
 
 .dropdown-heading {
     font-size: var(--font-size-15) !important;
     font-weight: bold;
-    color: var(--color-nero) !important;
+    color: var(--color-black) !important;
 }
 
 .trigger-form {
@@ -189,7 +189,7 @@
             .trigger-heading {
                 margin-left: 10px;
                 display: inline-block;
-                color: var(--color-nero) !important;
+                color: var(--color-black) !important;
             }
 
             .return {
@@ -208,7 +208,7 @@
                 margin-bottom: 5px;
 
                 span {
-                    color: var(--color-primary-login-hash-tag);
+                    color: var(--color-red);
                 }
             }
         }
@@ -235,7 +235,7 @@
         .variables-bottom-border {
             margin-bottom: 5px;
             padding-bottom: 5px;
-            color: var(--color-nero) !important;
+            color: var(--color-black) !important;
             font-weight: none !important;
         }
 

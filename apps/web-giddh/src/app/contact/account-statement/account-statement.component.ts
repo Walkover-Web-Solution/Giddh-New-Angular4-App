@@ -441,10 +441,13 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public exportAccountStatement(): void {
         const requestObj = {
-            accountUniqueName: this.accountListRequest.accountUniqueName,
-            query: this.accountListRequest.q,
-            from: this.accountListRequest.from,
-            to: this.accountListRequest.to
+            queryParam: {
+                accountUniqueName: this.accountListRequest.accountUniqueName,
+                query: this.accountListRequest.q,
+                from: this.accountListRequest.from,
+                to: this.accountListRequest.to
+            },
+            payload: this.advanceFiltersApplied ? this.advanceSearchRequest.dataToSend : {}
         }
         this.contactComponentStore.exportAccountStatement(requestObj);
     }

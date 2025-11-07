@@ -12,6 +12,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { OrganizationProfile, SettingsAsideFormType } from '../constants/settings.constant';
 import { WarehouseActions } from '../warehouse/action/warehouse.action';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'address-settings',
@@ -131,13 +132,16 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     private asideAccountAsidePaneRef: MatDialogRef<any>;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: number;
 
     /** @ignore */
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
         private settingsBranchActions: SettingsBranchActions,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private generalService: GeneralService
     ) { }
 
     /**
@@ -146,6 +150,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

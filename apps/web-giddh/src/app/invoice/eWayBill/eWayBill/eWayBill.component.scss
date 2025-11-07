@@ -47,7 +47,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-silver);
 }
 
 .icon-pointer .glyphicon {
@@ -55,8 +55,8 @@
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue);
-    background: var(--color-dark-fog);
+    color: var(--color-blue-primary);
+    background: var(--color-border-light);
 }
 
 .dropdown-menu {
@@ -82,7 +82,7 @@ label {
 }
 .eway-bill-date .form-control {
     background: var(--color-white) !important;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
 }
 .input-group {
     position: relative;
@@ -93,7 +93,7 @@ label {
             display: block;
             height: 36px;
             width: 1px;
-            background-color: var(--color-iron);
+            background-color: var(--color-silver);
             left: 37px !important;
             z-index: 100;
             top: 0;

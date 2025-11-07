@@ -1,5 +1,5 @@
 .select-plan-block .your-account span {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
     font-size: var(--font-size-15);
     padding: 4px 0;
     display: inline-block;
@@ -7,7 +7,7 @@
 .select-plan-block {
     padding-bottom: 40px;
     background-color: var(--color-white);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
     height: 97%;
 }
 .welcome-msg {
@@ -32,7 +32,7 @@
     position: fixed;
     bottom: 30px;
     width: 100%;
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     padding: 10px;
 }
 .plan-table-content {
@@ -76,7 +76,7 @@
         width: 370px;
         left: 0px;
         z-index: 9;
-        border-bottom: 1px solid var(--color-common-primary-border);
+        border-bottom: 1px solid var(--color-silver);
         position: sticky;
         background-color: var(--color-white);
         padding-top: 0px;
@@ -95,7 +95,7 @@
         height: 64px !important;
         .sub-plan-feature {
             text-decoration: underline;
-            color: var(--color-giddh-blue) !important;
+            color: var(--color-blue-primary) !important;
         }
     }
     .sub-plan-name {
@@ -116,10 +116,10 @@
         font-size: var(--font-size-15);
     }
     .grid-title-list-changes:nth-child(even) {
-        background-color: var(--color-dark-fog) !important;
+        background-color: var(--color-border-light) !important;
         height: 70px;
         color: transparent !important;
-        border: 1px solid var(--color-dark-fog);
+        border: 1px solid var(--color-border-light);
         margin-top: 5px;
         margin-left: 5px;
     }
@@ -130,10 +130,10 @@
         margin-top: 5px;
     }
     .grid-title-list-changes:nth-child(odd) {
-        background-color: var(--color-dark-fog) !important;
+        background-color: var(--color-border-light) !important;
         height: 70px;
         color: transparent !important;
-        border: 1px solid var(--color-dark-fog);
+        border: 1px solid var(--color-border-light);
         margin-top: 5px;
         margin-left: 5px;
     }
@@ -149,11 +149,11 @@
         line-height: 4.8 !important;
     }
     .grid-title-list:nth-child(even) {
-        background-color: var(--color-solitude-light);
-        color: var(--color-nero) !important;
+        background-color: var(--color-blue-light);
+        color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-common-primary-border);
+        border-bottom: 1px solid var(--color-silver);
         width: 205px;
         font-weight: 500;
         font-size: var(--font-size-15);
@@ -162,14 +162,14 @@
         margin-right: 0 !important;
     }
     .grid-list {
-        border-bottom: 1px solid var(--color-iron);
+        border-bottom: 1px solid var(--color-silver);
     }
     .grid-title-list:nth-child(odd) {
         background-color: var(--color-white);
-        color: var(--color-nero) !important;
+        color: var(--color-black) !important;
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-common-primary-border);
+        border-bottom: 1px solid var(--color-silver);
         width: 205px;
         font-weight: 500;
         font-size: var(--font-size-15);
@@ -189,16 +189,16 @@
 .payment-log-list {
     list-style-type: none;
     font-size: var(--font-size-15);
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
 }
 .payment-log-list {
     list-style-type: none;
     font-size: var(--font-size-15);
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
 }
 .payment-log-list > li {
     padding: 0px 0 20px 10px;
-    border-left: 1px dashed var(--color-abbey);
+    border-left: 1px dashed var(--color-dark-gray);
     position: relative;
     line-height: 10px;
 }
@@ -209,14 +209,14 @@
     position: relative;
     width: 10px;
     height: 10px;
-    background: var(--color-dark-fog);
+    background: var(--color-border-light);
     content: "";
     display: block;
     position: absolute;
     left: -5px;
     top: 0px;
     border-radius: 90px;
-    border: 1px solid var(--color-abbey);
+    border: 1px solid var(--color-dark-gray);
 }
 .account-aside-menu-state {
     position: fixed;
@@ -232,15 +232,15 @@
     z-index: 991;
 }
 .selected {
-    background-color: var(--color-primary-subscription-plans-selected-background);
+    background-color: var(--color-blue-light);
 }
 .select-plan-head {
     text-align: center;
-    background: var(--color-upgrade-plan-primary-background);
+    background: var(--color-border-light);
     font-size: var(--font-size-16);
     padding: 20px 15px;
     h2 {
-        color: var(--color-common-senary-text);
+        color: var(--color-blue-primary);
         font-weight: bold;
     }
 }
@@ -248,7 +248,7 @@
     padding: 10px 30px 10px;
     height: 97%;
     justify-content: space-around;
-    background-color: var(--color-upgrade-plan-secondary-background);
+    background-color: var(--color-white);
     p.total-price {
         margin: 0 -8px;
     }
@@ -265,27 +265,27 @@
 .inner-your-account {
     position: relative;
     z-index: 2;
-    background: var(--color-upgrade-plan-secondary-background);
+    background: var(--color-white);
     padding: 30px 15px 15px 30px;
-    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
-    border: 1px solid var(--color-iron);
+    box-shadow: 0px 3px 6px var(--color-shadow-light);
+    border: 1px solid var(--color-silver);
     transition: 0.5s all ease;
 }
 .inner-your-account:hover,
 .inner-your-account.active {
-    background: var(--color-upgrade-plan-card-primary-background-hover);
-    border-color: var(--color-upgrade-plan-card-primary-border-hover);
+    background: var(--color-border-light);
+    border-color: var(--color-blue-primary);
 }
 .your-account:after,
 .your-account:before {
     content: "";
     display: block;
     width: 100%;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
     height: 100%;
     position: absolute;
     z-index: 1;
-    background: var(--color-upgrade-plan-secondary-background);
+    background: var(--color-white);
 }
 .your-account:after {
     top: -10px;
@@ -310,7 +310,7 @@
 }
 .inner-your-account > h3 {
     font-size: var(--font-size-15);
-    color: var(--color-common-senary-text);
+    color: var(--color-blue-primary);
     font-weight: bold;
     margin-bottom: 5px;
     .plans-head-top {
@@ -328,8 +328,8 @@
 }
 .transactions-popup {
     width: 360px;
-    background: var(--color-popup-background);
-    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+    background: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-shadow-light);
     padding: 15px;
     z-index: 9;
     position: absolute;
@@ -341,7 +341,7 @@
     visibility: hidden;
     transition: 0.5s all ease-in;
     .close {
-        color: var(--color-nero);
+        color: var(--color-black);
         opacity: 1;
         font-size: 16px;
         position: absolute;
@@ -372,7 +372,7 @@
         top: 15px;
         width: 60px;
         height: 1px;
-        background: var(--color-danger);
+        background: var(--color-red);
         transform: rotate(10deg);
     }
 }
@@ -408,12 +408,12 @@
     margin-top: 10px;
 }
 .see-all-features .inner-your-account {
-    border-color: var(--color-giddh-blue);
+    border-color: var(--color-blue-primary);
     margin-bottom: 20px;
 }
 .btn-group .close {
     font-size: 16px;
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     opacity: 1;
 }
 .inner-close {
@@ -421,7 +421,7 @@
     right: 10px;
     top: 10px;
     font-size: var(--font-size-15);
-    color: var(--color-nero);
+    color: var(--color-black);
 }
 .btn-green:focus {
     color: var(--color-white);
@@ -470,8 +470,8 @@
         width: 27%;
         height: 55px;
         .success-btn {
-            color: var(--color-nonary-button-text) !important;
-            border-color: var(--color-nonary-button-background);
+            color: var(--color-white) !important;
+            border-color: var(--color-green);
         }
     }
     .redeem-button {
@@ -480,13 +480,13 @@
     }
 }
 .all-plans {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
 }
 .btn-cancel {
-    background: var(--color-primary-cancel-button-background-hover);
-    border-color: var(--color-primary-cancel-button-background-hover);
-    color: var(--color-secondary-button-text);
-    font-family: var(--font-semibold) !important;
+    background: var(--color-medium-gray);
+    border-color: var(--color-medium-gray);
+    color: var(--color-white);
+    font-weight: var(--font-weight-semibold) !important;
     margin-bottom: 15px !important;
     padding-left: 12px !important;
     padding-right: 18px !important;
@@ -543,7 +543,7 @@
     margin-top: 5px;
 }
 .renewal-card-subtitle {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
     font-size: var(--font-size-15);
     font-weight: bold;
     margin-bottom: 0 !important;
@@ -571,18 +571,18 @@
     box-shadow: none !important;
 }
 .renewal-off {
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
     font-size: var(--font-size-12);
     font-weight: 600;
     padding-left: 4px;
 }
 .discount-off {
-    color: var(--color-teal);
+    color: var(--color-green);
     font-weight: bold;
 }
 .features {
     line-height: 1.7;
-    color: var(--color-gray);
+    color: var(--color-medium-gray);
     font-size: var(--font-size-16);
 }
 .renewal-card-content a {
@@ -606,7 +606,7 @@
     float: left;
     width: 24%;
     .extra-addons-value {
-        color: var(--color-giddh-blue);
+        color: var(--color-blue-primary);
     }
 }
 .plan-table-layout {
@@ -618,7 +618,7 @@
 
 ::ng-deep {
     .color-primary {
-        color: var(--color-upgrade-plan-primary) !important;
+        color: var(--color-blue-primary) !important;
     }
 }
 
@@ -720,8 +720,8 @@
         width: 100%;
     }
     .main-row-plans::-webkit-scrollbar-thumb {
-        background-color: var(--color-iron);
-        outline: 1px solid var(--color-abbey);
+        background-color: var(--color-silver);
+        outline: 1px solid var(--color-dark-gray);
         border-radius: 20px;
     }
     .single-plan-for-company {

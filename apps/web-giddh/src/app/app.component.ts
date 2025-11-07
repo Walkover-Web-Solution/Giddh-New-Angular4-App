@@ -84,11 +84,38 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!(this._generalService.user && this._generalService.sessionId)) {
-            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership') && !window.location.href.includes('dns')) {
-                if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = this._generalService.getGiddhRegionUrl() + '/';
+            const href = window.location.href;
+            const path = window.location.pathname || '';
+            const search = window.location.search || '';
+            const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
+            // Generate returnUrl for any non-login-like path (including root path)
+            if (!isLoginLike) {
+                const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+                if (PRODUCTION_ENV && !isElectron && !isLocalHost) {
+                    const currentUrl = path + search;
+                    let returnUrl = '';
+                    if (currentUrl.startsWith('/pages/')) {
+                        returnUrl = currentUrl.split('/pages/')[1] || '';
+                    } else {
+                        returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
+                    }
+                    const regionLogin = this._generalService.getGiddhRegionUrl() + '/login';
+                    const target = returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '' ? `${regionLogin}?returnUrl=${encodeURIComponent(returnUrl)}` : regionLogin;
+                    window.location.href = target;
                 } else {
-                    this.router.navigate(['/login']);
+                    const currentUrl = path + search;
+                    let returnUrl = '';
+                    if (currentUrl.startsWith('/pages/')) {
+                        returnUrl = currentUrl.split('/pages/')[1] || '';
+                    } else {
+                        returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
+                    }
+                    if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
+                        try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) {}
+                        this.router.navigate(['/login'], { queryParams: { returnUrl } });
+                    } else {
+                        this.router.navigate(['/login']);
+                    }
                 }
             }
         }
@@ -207,11 +234,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         setTimeout(() => {
-            this._generalService.addLinkTag("./assets/css/font-awesome.css");
+            this._generalService.addLinkTag("./assets/style/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
-            this._generalService.addLinkTag("./assets/css/toastr.css");
-            this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
-            this._generalService.addLinkTag("./assets/css/lightbox.css");
+            this._generalService.addLinkTag("./assets/style/toastr.css");
+            this._generalService.addLinkTag("./assets/style/ladda-themeless.min.css");
+            this._generalService.addLinkTag("./assets/style/lightbox.css");
 
             /* RAZORPAY */
             if (window['Razorpay'] === undefined) {
@@ -235,7 +262,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             /* Xml */
         }, 1000);
 
-        this._generalService.addLinkTag("./assets/css/code-mirror.css");
+        this._generalService.addLinkTag("./assets/style/code-mirror.css");
 
 
         // if (this._generalService.getUrlParameter("region") === "uk") {
@@ -270,20 +297,42 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             window.scrollTo(0, 0);
         });
 
+        const search = location.search || '';
+        if (this._generalService.user && this._generalService.sessionId && search) {
+            const params = new URLSearchParams(search);
+            const raw = params.get('returnUrl') || params.get('returnurl');
+            if (raw && raw.trim()) {
+                try {
+                    const decoded = decodeURIComponent(raw);
+                    if (!isElectron) {
+                        const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded.startsWith('/') ? decoded.substring(1) : decoded}`;
+                        this.router.navigateByUrl(`/${target}`);
+                        return;
+                    }
+                } catch (_) {
+                    // ignore decode issues
+                }
+            }
+        }
+
+        if (this._generalService.user && this._generalService.sessionId) {
+            try {
+                const stored = sessionStorage.getItem('returnUrl');
+                if (stored && stored.trim()) {
+                    const decoded = decodeURIComponent(stored);
+                    const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded.startsWith('/') ? decoded.substring(1) : decoded}`;
+                    sessionStorage.removeItem('returnUrl');
+                    this.router.navigateByUrl(`/${target}`);
+                    return;
+                }
+            } catch (_) {}
+        }
+
         const lastState = localStorage.getItem('lastState');
 
         if (lastState) {
             localStorage.removeItem('lastState');
             return this.router.navigate([lastState]);
-        }
-
-        if (location.href.includes('returnUrl')) {
-            let tUrl = location.href.split('returnUrl=');
-            if (tUrl[1]) {
-                if (!isElectron) {
-                    this.router.navigate(['pages/' + tUrl[1]]);
-                }
-            }
         }
 
         if (!LOCAL_ENV && !isElectron) {

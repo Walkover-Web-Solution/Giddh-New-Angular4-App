@@ -3,9 +3,18 @@
     max-width: 600px;
     margin: 0 auto;
 
+    // Ensure stepper icons are visible
+    ::ng-deep .mat-step-icon {
+        .mat-step-icon-content {
+            font-size: 14px !important;
+            font-weight: 500;
+            color: var(--color-white);
+        }
+    }
+
     form {
         p {
-            color: var(--color-abbey);
+            color: var(--color-dark-gray);
         }
 
         .mobile-number {
@@ -32,7 +41,7 @@
                 height: 46px;
                 width: 100%;
                 border-radius: 8px !important;
-                border: 1px solid var(--color-iron);
+                border: 1px solid var(--color-silver);
             }
         }
 

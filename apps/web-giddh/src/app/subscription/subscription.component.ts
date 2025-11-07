@@ -117,7 +117,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
         this.isVerifyAddNewMobileNoSuccess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoSuccess), takeUntil(this.destroyed$));
         this.userSessionResponse$ = this.store.pipe(select(appState => appState.userLoggedInSessions.Usersession), takeUntil(this.destroyed$));
-        this.isUpdateCompanyInProgress$ = this.store.pipe(select(appState => appState.settings.updateProfileInProgress), takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(appState => appState.settings.getProfileInProgress), takeUntil(this.destroyed$));
 
         this.authenticateTwoWay$ = this.store.pipe(select(appState => {
             if (appState.session.user) {

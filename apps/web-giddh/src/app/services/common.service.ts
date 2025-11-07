@@ -238,18 +238,18 @@ export class CommonService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof CommonService
      */
-    public getBarcodeScanData(barcodeValue: string, model: any): Observable<BaseResponse<any, any>> {
+    public getBarcodeScanData(model: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.BARCODE_SCAN;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
-        url = url?.replace(':barcode', barcodeValue);
-        url = url?.replace(':customerUniqueName', model.customerUniqueName);
-        url = url?.replace(':invoiceType', model.invoiceType);
+        url = url?.replace(':barcode', encodeURIComponent(model.barcodeValue));
+        url = url?.replace(':customerUniqueName', encodeURIComponent(model.customerUniqueName));
+        url = url?.replace(':invoiceType', encodeURIComponent(model.invoiceType));
         return this.http.get(url).pipe(
             map((res) => {
-                let data: BaseResponse<CountryResponse, any> = res;
+                let data: BaseResponse<any, any> = res;
                 data.queryString = { model };
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
     public getCountryStates(country: string): Observable<any> {
