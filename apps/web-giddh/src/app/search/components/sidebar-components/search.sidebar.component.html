@@ -3,22 +3,20 @@
         <div>
             <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline flex-row flex-nowrap">
                 <div
-                    class="form-group select-entity mr-r15 select-entity-height"
+                    class="select-entity mr-r15 select-entity-height"
                     *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
                     <div class="linked-entities">
-                        <div class="form-group">
-                            <reactive-dropdown-field
-                                [options]="currentCompanyBranches"
-                                [name]="'entity'"
-                                [(ngModel)]="currentBranch.uniqueName"
-                                (selectedOption)="handleBranchChange($event)"
-                                [placeholder]="commonLocaleData?.app_select_entity"
-                                [labelValue]="currentBranch?.name"
-                                class="entity-dropdown"
-                            >
-                            </reactive-dropdown-field>
-                        </div>
+                        <reactive-dropdown-field
+                            [options]="currentCompanyBranches"
+                            [name]="'entity'"
+                            [(ngModel)]="currentBranch.uniqueName"
+                            (selectedOption)="handleBranchChange($event)"
+                            [placeholder]="commonLocaleData?.app_select_entity"
+                            [labelValue]="currentBranch?.name"
+                            class="entity-dropdown"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="mr-r15">
@@ -35,7 +33,7 @@
                     >
                     </reactive-dropdown-field>
                 </div>
-                <div class="form-group mr-r15">
+                <div class="mr-r15">
                     <div class="custom-datepicker custom-new-datepicker"
                         [matMenuTriggerFor]="universalDatepicker"
                         #universalDatepickerTrigger="matMenuTrigger"
@@ -53,7 +51,7 @@
                         />
                     </div>
                 </div>
-                <div class="d-flex column-gap15">
+                <div class="d-flex column-gap-15">
                     <button
                         [disabled]="!groupUniqueName"
                         mat-raised-button

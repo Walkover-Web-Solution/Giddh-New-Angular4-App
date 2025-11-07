@@ -1,12 +1,12 @@
 .unit-mapping-grid-list {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     .grid-box {
         font-size: var(--font-size-15);
     }
 
     .grid-box-head,
     .grid-box-content {
-        border-right: 1px solid var(--color-silver);
+        border-right: 1px solid var(--border-color);
         .unit-value {
             width: 130px;
             display: -webkit-box;
@@ -16,14 +16,14 @@
         }
     }
     .grid-box-head {
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         .unit-box {
             width: 82px;
         }
         .unit-box,
         .map-unit-box {
             font-weight: var(--font-weight-semibold);
-            color: var(--color-blue-primary);
+            // color: var(--text-primary-color);
             font-size: var(--font-size-16);
         }
     }
@@ -34,4 +34,25 @@
     justify-content: flex-start;
     padding-left: 30px;
     padding-top: 20px;
+}
+
+::ng-deep .unit-mapping-page {
+    .grid-box {
+        .mat-grid-tile-content {
+            justify-content: space-around;
+        }
+    }
+
+    .unit-mapping-grid-list {
+        .grid-box-content {
+            .map-unit-value {
+                .map-unit-select-field {
+                    input {
+                        width: 160px;
+                        min-width: 160px;
+                    }
+                }
+            }
+        }
+    }
 }

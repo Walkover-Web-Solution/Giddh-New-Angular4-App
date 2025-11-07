@@ -2,7 +2,7 @@
     background-color: var(--color-border-light);
 }
 .stock-items .active a .span {
-    color: var(--color-blue-primary) !important;
+    color: var(--text-primary-color) !important;
 }
 .span {
     color: var(--color-black);
@@ -17,15 +17,20 @@
         padding-right: 8px;
     }
 }
-.in-list .btn {
+/* UNUSED COMPONENT CLASS: btn - Auto-commented by script
+.in-list 
+.btn {
     line-height: 14px !important;
 }
-.stock-items .active .btn-link .fa {
-    color: var(--color-blue-primary);
+/* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
+.stock-items .active .btn-link /* UNUSED COMPONENT CLASS: fa - Auto-commented by script
+.fa {
+    color: var(--text-primary-color);
 }
+*/
 .stock-items > li .in-list:hover {
     background-color: var(--color-border-light);
 }
 .stock-items > li .in-list:hover a > span {
-    color: var(--color-blue-primary) !important;
+    color: var(--text-primary-color) !important;
 }

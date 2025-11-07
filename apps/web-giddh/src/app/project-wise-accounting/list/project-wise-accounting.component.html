@@ -9,9 +9,9 @@
   <div *ngIf="(isFetchingProjects$ | async) && !totalResults && !isSearch && !(isShowSearchBox.name || isShowSearchBox.status)">
     <giddh-page-loader></giddh-page-loader>
   </div>
-   <div class="project clearfix section-center position-relative overflow-visible pd-2">
-      <div class="d-flex align-items-center justify-content-space-between section-center" *ngIf="totalResults || isSearch || isShowSearchBox.name || isShowSearchBox.status">
-        <div class="d-flex flex-row justify-content-center align-items-center">
+   <div class="project clear-both section-center position-relative overflow-visible pd-15">
+      <div class="d-flex align-items-center justify-content-between section-center column-gap-1" *ngIf="totalResults || isSearch || isShowSearchBox.name || isShowSearchBox.status">
+        <div class="d-flex justify-content-center align-items-center column-gap-1">
           <div class="custom-datepicker" 
                [matMenuTriggerFor]="universalDatepicker" 
                #universalDatepickerTrigger="matMenuTrigger"
@@ -29,28 +29,25 @@
                 readonly
               />
           </div>
-          <div *ngIf="isCompany" class="mr-l1">
-              <reactive-dropdown-field
-                  [label]="commonLocaleData?.app_branch"
-                  [options]="branches"
-                  (selectedOption)="projectListRequest.branchUniqueName = $event?.value; isSearch = true; getAllProjectList()"
-                  (onClear)="projectListRequest.branchUniqueName = ''; isSearch = false; getAllProjectList()"
-                  [labelValue]="activeCompany?.name"
-                  [placeholder]="commonLocaleData?.app_select_branch"
-              ></reactive-dropdown-field>
-          </div>
+          <reactive-dropdown-field
+              *ngIf="isCompany"
+              [label]="commonLocaleData?.app_branch"
+              [options]="branches"
+              (selectedOption)="projectListRequest.branchUniqueName = $event?.value; isSearch = true; getAllProjectList()"
+              (onClear)="projectListRequest.branchUniqueName = ''; isSearch = false; getAllProjectList()"
+              [labelValue]="activeCompany?.name"
+              [placeholder]="commonLocaleData?.app_select_branch"
+          ></reactive-dropdown-field>
           <button *ngIf="(projectName.value?.length || projectStatus.value?.length)" mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
-              <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+              <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
           </button>
         </div>
-        <div *ngIf="!isCompany" class="pull-right">
-          <button mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ {{ localeData?.create_project }}</button>
-        </div>
+        <button *ngIf="!isCompany" mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ {{ localeData?.create_project }}</button>
       </div>
       <div *ngIf="!(isFetchingProjects$ | async) && !(totalResults || isSearch)" class="min-height d-flex align-items-center justify-content-center">
         <button *ngIf="!isCompany" mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ {{ localeData?.create_project }}</button>
         <div class="d-flex justify-content-center align-items-center" *ngIf="isCompany">
-            <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+            <span class="font-size-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
             <button
                 mat-raised-button
                 color="primary"
@@ -182,7 +179,7 @@
         <div class="no-data" *ngIf="!(isFetchingProjects$ | async) && !totalResults">
           <no-data *ngIf="(projectName.value?.length || projectStatus.value?.length)" [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
           <div *ngIf="!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)" class="d-flex justify-content-center align-items-center">
-            <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+            <span class="font-size-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
             <button
                 mat-raised-button
                 color="primary"
@@ -194,7 +191,6 @@
         </div>
         <mat-paginator
             *ngIf="totalResults > pageSizeOptions[0]"
-            class="mt-3"
             (page)="handlePageChange($event)"
             [length]="totalResults"
             [pageSize]="projectListRequest.count"
@@ -240,12 +236,12 @@
   let-fieldName="fieldName"
   let-formControl="formControl"
 >
-  <div class="align-items-center d-flex column-gap5" [hidden]="show">
+  <div class="align-items-center d-flex column-gap-05" [hidden]="show">
       <button
           mat-icon-button
           aria-label="search"
           (click)="toggleSearch(fieldName)"
-          class="project-search-icon font-16"
+          class="project-search-icon font-size-16"
       >
           <span class="icon-search"></span>
       </button>

@@ -5,11 +5,11 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div id="main" class="welcome-container clearfix">
+    <div id="main" class="welcome-container clear-both">
         <div>
             <div class="row mt-2 mr-0 ml-0">
                 <div class="col-xl-5 col-lg-12 order-1 order-xl-0">
-                    <h1 class="border-btm">{{ localeData?.try_things }}</h1>
+                    <p class="border-btm">{{ localeData?.try_things }}</p>
                     <mat-list role="list" class="manage-invoice pt-0">
                         <mat-list-item role="listitem" class="mr-b1 px-0">
                             <a [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales']">
@@ -46,9 +46,9 @@
                             >
                         </mat-list-item>
                     </mat-list>
-                    <h1 class="border-btm mr-t4">{{ localeData?.have_data_tally }}</h1>
+                    <p class="border-btm mr-t4">{{ localeData?.have_data_tally }}</p>
                     <p [innerHTML]="localeData?.giddh_usage"></p>
-                    <div class="d-flex column-gap15">
+                    <div class="d-flex column-gap-15">
                         <a
                             mat-raised-button
                             color="primary"
@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="right-section">
-                        <h1 class="border-btm mr-t4">{{ localeData?.ask_question }}</h1>
+                        <p class="border-btm mr-t4">{{ localeData?.ask_question }}</p>
                         <span>{{ localeData?.request_demo }}</span>
                         <button mat-raised-button color="primary" class="mr-t1" (click)="scheduleNow()">
                             {{ commonLocaleData?.app_schedule_now }}
@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="col-xl-7 col-lg-12 order-0 order-xl-1">
-                    <h1 class="border-btm">{{ localeData?.watch_onboarding }}</h1>
+                    <p class="border-btm">{{ localeData?.watch_onboarding }}</p>
                     <div class="onboarding-video">
                         <iframe
                             title="onboarding"

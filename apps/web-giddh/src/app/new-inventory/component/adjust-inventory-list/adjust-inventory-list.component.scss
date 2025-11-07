@@ -1,6 +1,6 @@
 $color-nero: var(--color-black);
 $color-wild-sand: var(--color-light-gray);
-$color-giddh-blue: var(--color-blue-primary);
+$color-giddh-text-primary: var(--theme-primary-color);
 
 .td-search-box {
     .input-container {
@@ -19,7 +19,7 @@ $color-giddh-blue: var(--color-blue-primary);
     div {
         i {
             margin-top: 1px;
-            color: $color-giddh-blue;
+            color: $color-giddh-text-primary;
             padding: 0 8px;
         }
 

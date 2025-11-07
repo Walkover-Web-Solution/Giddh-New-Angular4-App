@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="d-flex flex-column">
             <div class="d-flex date-advance-search justify-content-between">
-                <div class="clearfix d-flex">
+                <div class="clear-both d-flex">
                     <!-- <button
                         *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
                         mat-raised-button color="primary"
@@ -104,7 +104,7 @@
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
                         <ng-container *ngIf="currentOrganizationType !== 'BRANCH'">
-                            <th width="17%" class="bd-rr bd-rb td-search-box">
+                            <th width="17%" class="border-right border-bottom td-search-box">
                                 <div [hidden]="inlineSearch == 'sender'">
                                     <i class="icon-search" (click)="focusOnColumnSearch('sender')"></i>
                                     <span class="pl-0">Sender</span>
@@ -122,7 +122,7 @@
                                     />
                                 </div>
                             </th>
-                            <th width="17%" class="bd-rr bd-rb td-search-box">
+                            <th width="17%" class="border-right border-bottom td-search-box">
                                 <div [hidden]="inlineSearch == 'receiver'">
                                     <i class="icon-search" (click)="focusOnColumnSearch('receiver')"></i>
                                     <span class="pl-0">Receiver</span>
@@ -142,7 +142,7 @@
                             </th>
                         </ng-container>
                         <ng-container *ngIf="currentOrganizationType === 'BRANCH'">
-                            <th width="17%" class="bd-rr bd-rb td-search-box">
+                            <th width="17%" class="border-right border-bottom td-search-box">
                                 <div [hidden]="inlineSearch == 'senderReceiver'">
                                     <i class="icon-search" (click)="focusOnColumnSearch('senderReceiver')"></i>
                                     <span class="pl-0">Sender/Receiver</span>
@@ -250,7 +250,7 @@
                                     class="select-action-button"
                                     [matMenuTriggerFor]="actionMenu"
                                 >
-                                    <span class="text-light-2">Select Action</span>
+                                    <span class="text-light">Select Action</span>
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
                                 <mat-menu #actionMenu="matMenu" class="action-dropdown-menu" xPosition="before" yPosition="below">
@@ -280,24 +280,23 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4" *ngIf="branchTransferResponse.totalItems > pageSizeOptions[0]">
-            <mat-paginator
-                [length]="branchTransferResponse.totalPages"
-                [pageSize]="branchTransferGetRequestParams.count"
-                [pageIndex]="branchTransferResponse.page - 1"
-                [pageSizeOptions]="pageSizeOptions"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)"
-            ></mat-paginator>
-            <section class="mr-b8"></section>
-        </div>
+        <mat-paginator
+            *ngIf="branchTransferResponse.totalItems > pageSizeOptions[0]"
+            [length]="branchTransferResponse.totalPages"
+            [pageSize]="branchTransferGetRequestParams.count"
+            [pageIndex]="branchTransferResponse.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
+        <section class="mr-b8"></section>
         <div
             class="no-data"
             *ngIf="!isLoading && (!branchTransferResponse.items || branchTransferResponse.items.length === 0)"
         >
-            <h1>No entries found within given criteria.</h1>
-            <h1 class="p-0">Do search with some other dates.</h1>
+            <h2>No entries found within given criteria.</h2>
+            <h2 class="p-0">Do search with some other dates.</h2>
         </div>
     </div>
 </div>
@@ -310,7 +309,7 @@
         </button>
     </div>
     <mat-dialog-content class="dialog-body">
-        <form class="clearfix">
+        <form class="clear-both">
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
                 <div class="col-sm-8">

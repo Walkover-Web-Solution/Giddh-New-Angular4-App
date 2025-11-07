@@ -2,9 +2,9 @@
     (commonLocaleData)="commonLocaleData = $event">
     <div class="pd-b2 mt-2" *ngIf="localeData?.give_permission">
         <div class="d-flex justify-content-between">
-            <h3 class="mr-b2">
+            <p class="mr-b2">
                 <strong>{{ localeData?.give_permission }}:</strong>
-            </h3>
+            </p>
             <watch-video [cssClass]="'text-primary'" [moduleName]="'MULTI_USER_ACCESS'"></watch-video>
         </div>
         <setting-permission-form [userdata]="null" [isLblShow]="false" [isUpdtCase]="false" [isHorizntl]="true"
@@ -14,10 +14,10 @@
     </div>
 
     <div *ngIf="localeData?.give_permission">
-        <h3 class="mr-b1">
+        <p class="mr-b1">
             <strong>{{ localeData?.form_heading }}</strong>
-        </h3>
-        <div class="box" *ngIf="currentUser">
+        </p>
+        <div class=" pd-15 "  *ngIf="currentUser">
             <div *ngFor="let usrGrp of usersList">
                 <div class="user-list">
                     <div class="row">

@@ -5,8 +5,9 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
+<section class="aside-dialog-wrapper">
     <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
-        <h3>{{ commonLocaleData?.app_custom_email_template }}</h3>
+        <p>{{ commonLocaleData?.app_custom_email_template }}</p>
         <button mat-icon-button cdkFocusInitial (click)="handleDialogClose()" aria-label="close icon" class="p-0">
             <i class="icon-cross"></i>
         </button>
@@ -14,7 +15,7 @@
 
     <mat-dialog-content class="dialog-body d-flex flex-column template-froala-wrapper">
         <form [formGroup]="isTrigger ? customTriggerForm : emailForm" class="d-flex flex-column flex-grow-1">
-            <div class="d-grid grid-column-3 column-gap15 row-gap15 mb-4" *ngIf="isTrigger">
+            <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mb-4" *ngIf="isTrigger">
                 <!-- Trigger Name -->
                 <div class="custom-mat-form-field">
                     <mat-form-field appearance="outline">
@@ -310,14 +311,14 @@
                 <!-- Disabled Trigger Checkbox -->
                 <div>
                     <mat-checkbox formControlName="disabled" color="primary">
-                        <span class="font-15">{{ localeData?.disabled_trigger }}</span>
+                        <span class="font-size-15">{{ localeData?.disabled_trigger }}</span>
                     </mat-checkbox>
                 </div>
             </div>
 
             <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
                 <div
-                    class="form-group position-relative"
+                    class="form-group position-relative "
                     (click)="clickedInsideEmailSection && setEmailFocus(emailType.To)"
                 >
                     <div class="d-flex border-bottom">
@@ -325,14 +326,14 @@
                         <div [hidden]="!allStaticEmails.length" class="w-100 mr-b05">
                             {{ allStaticEmails }}
                             <span
-                                class="suffix-emails font-15 d-inline-block text-primary"
+                                class="suffix-emails font-size-15 d-inline-block text-primary"
                                 *ngIf="hiddenEmailList.length"
                                 (click)="$event.stopPropagation(); clickedInsideEmail()"
                                 >{{ hiddenEmailList }}</span
                             >
                         </div>
                         <div
-                            class="d-flex w-100"
+                            class="d-flex w-100 mat-form-field-clean"
                             [ngClass]="{ 'flex-column': selectedToEmails.length }"
                             *ngIf="!getTotalEmailsCount || clickedInsideEmailSection"
                         >
@@ -354,7 +355,7 @@
                             ></select-multiple-fields>
                             <div
                                 *ngIf="clickedInsideEmailSection && !showCc && !showBcc"
-                                class="d-flex column-gap1 justify-content-end"
+                                class="d-flex column-gap-1 justify-content-end"
                             >
                                 <a
                                     class="btn-link"
@@ -373,7 +374,7 @@
                     </div>
                 </div>
                 <div
-                    class="form-group position-relative"
+                    class="form-group position-relative "
                     *ngIf="showCc && clickedInsideEmailSection"
                     (click)="setEmailFocus(emailType.Cc)"
                 >
@@ -394,7 +395,7 @@
                                 [commonLocaleData]="commonLocaleData"
                             ></select-multiple-fields>
 
-                            <div class="d-flex column-gap1 justify-content-end">
+                            <div class="d-flex column-gap-1 justify-content-end">
                                 <a
                                     *ngIf="!showBcc"
                                     class="btn-link"
@@ -407,7 +408,7 @@
                     </div>
                 </div>
                 <div
-                    class="form-group position-relative"
+                    class="form-group position-relative "
                     *ngIf="showBcc && clickedInsideEmailSection"
                     (click)="setEmailFocus(emailType.Bcc)"
                 >
@@ -428,7 +429,7 @@
                                 [commonLocaleData]="commonLocaleData"
                             ></select-multiple-fields>
 
-                            <div class="d-flex column-gap1 justify-content-end">
+                            <div class="d-flex column-gap-1 justify-content-end">
                                 <a
                                     *ngIf="!showCc"
                                     class="btn-link"
@@ -447,11 +448,11 @@
                         name="emailSubject"
                         matInput
                         formControlName="emailSubject"
-                        class="form-control border-bottom border-left-0 border-right-0 border-top-0"
+                        class="form-control border-bottom border-left-none border-right-none border-top-none"
                         [placeholder]="localeData?.subject"
                     />
                     <p
-                        class="text-danger font-14"
+                        class="text-danger font-size-14"
                         *ngIf="isFormInvalid && customTriggerForm?.controls?.emailSubject?.invalid"
                     >
                         {{ localeData?.validation_error_message?.email_subject_required }}
@@ -460,12 +461,12 @@
             </div>
             <div class="form-group editor-container">
                 <textarea [froalaEditor]="froalaOptions" formControlName="html"></textarea>
-                <p class="text-danger font-14" *ngIf="isFormInvalid && customTriggerForm?.controls?.html?.invalid">
+                <p class="text-danger font-size-14" *ngIf="isFormInvalid && customTriggerForm?.controls?.html?.invalid">
                     {{ localeData?.validation_error_message?.email_content_required }}
                 </p>
             </div>
         </form>
-        <div mat-dialog-actions class="justify-content-start">
+        <div class="d-flex column-gap-1">
             <button
                 aria-label="save"
                 mat-raised-button
@@ -487,4 +488,5 @@
             </button>
         </div>
     </mat-dialog-content>
+</section>
 </ng-container>

@@ -28,10 +28,10 @@
     <div
         (mouseover)="expandSidebar()"
         (mouseout)="collapseSidebar(false, true)"
-        class="nav-left-bar"
+        class="nav-left-bar mat-app-background"
         [ngClass]="{
             'open': isSidebarExpanded,
-            'unvisible': companyList?.length === 0 && !isSubscriptionModule,
+            'visibility-hidden': companyList?.length === 0 && !isSubscriptionModule,
             'hide-sidebar': isSubscriptionModule
         }"
         (clickOutside)="closeSidebarMobile($event)"
@@ -45,7 +45,6 @@
                 class="icon-bar"
                 [matTooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
                 matTooltipPosition="right"
-                matTooltipClass="tooltip-black"
             ></span>
         </div>
     </div>
@@ -55,33 +54,36 @@
         <div
             class="primary-main-header"
             id="primary-new-header"
-            [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 && !isSubscriptionModule }"
+            [ngClass]="{ 'open': sideMenu.isopen, 'visibility-hidden': companyList?.length === 0 && !isSubscriptionModule }"
         >
             <div class="d-flex justify-content-between align-items-center h-100">
                 <div *ngIf="companyList?.length && (isSubscriptionModule || isSubscriptionPage)">
                     <button
                         *ngIf="companyList?.length && isSubscriptionModule"
-                        class="min160 company-button"
+                        class="min-width-160 company-button"
                         mat-raised-button
                         (click)="backToCompany()"
                         [matTooltip]="activeCompany?.name"
                         [matTooltipPosition]="'below'"
-                        matTooltipClass="tooltip-black"
                     >
-                        <i class="icon-left back-left"></i>
-                        {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}
-                        <span class="word-wrap-dots">{{ activeCompany?.name }}</span>
+                        <span class="d-inline-flex align-items-center column-gap-05">
+                            <i class="icon-left back-left"></i>
+                            <span>{{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}</span>
+                            <span class="word-wrap-dots">{{ activeCompany?.name }}</span>
+                        </span>
                     </button>
                     <button
                         *ngIf="companyList?.length && isSubscriptionPage"
-                        class="min160 company-button ml-3"
+                        class="min-width-160 bg-white ml-3"
                         mat-raised-button
                         (click)="backToSubscription()"
                         aria-label="back"
                     >
-                        <i class="icon-left back-left"></i>
-                        {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}
-                        <span class="word-wrap-dots">{{ localeData?.subscription }}</span>
+                        <span class="d-inline-flex align-items-center column-gap-05">
+                            <i class="icon-left back-left"></i>
+                            <span>{{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}</span>
+                            <span class="word-wrap-dots">{{ localeData?.subscription }}</span>
+                        </span>
                     </button>
                 </div>
                 <div class="logo-wrapper pd-l4">
@@ -121,7 +123,7 @@
                             </button>
                             <mat-menu #menu="matMenu" class="icon-circle">
                                 <div (click)="$event.stopPropagation()">
-                                    <span class="create-txt font-16 d-block">
+                                    <span class="create-txt font-size-16 d-block">
                                         {{ commonLocaleData?.app_create_new }}
                                     </span>
                                     <div class="menu-dropdown-wrapper">
@@ -148,7 +150,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <ul class="d-flex column-gap2">
+                                            <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -208,7 +210,7 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <ul class="d-flex column-gap2">
+                                            <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -263,7 +265,7 @@
                                                 </span>
                                                 <span> {{ localeData?.branch_transfer }} </span>
                                             </div>
-                                            <ul class="d-flex column-gap2">
+                                            <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -293,7 +295,7 @@
                                                 </span>
                                                 <span> {{ localeData?.stock }} </span>
                                             </div>
-                                            <ul class="d-flex column-gap2">
+                                            <ul class="d-flex column-gap-2">
                                                 <li>
                                                     <span class="dot d-block"></span>
                                                     <a
@@ -453,11 +455,11 @@
                             </button>
                         </li>
                         <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
-                            <button mat-button class="p-1 font-15" (click)="dateSelectedCallback()">
+                            <button mat-button class="p-1 font-size-15" (click)="dateSelectedCallback()">
                                 {{ commonLocaleData?.app_today }}
                             </button>
                         </li>
-                        <li class="not-today cursor-pointer" [ngClass]="{ 'if-today': isTodaysDateSelected }">
+                        <li class="not-today cursor-pointer position-relative ">
                             <span class="icon-calender-new calendar-addon" (click)="toggleGiddhDatepicker(true)"></span>
                             <div class="input-date" [ngClass]="{ 'today-date pl-2': isTodaysDateSelected }">
                                 <input
@@ -465,7 +467,8 @@
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker"
+                                    class="giddh-datepicker date-range-picker border-none border-radius-4 m-0"
+                                    [ngClass]="{'text-center': !isTodaysDateSelected }"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -546,9 +549,9 @@
                         <mat-menu #profileMenu="matMenu">
                             <div class="user-profile-menu">
                                 <div class="user-info p-3" (click)="$event.stopPropagation()">
-                                    <span class="font-16">{{ userFullName }}</span>
+                                    <span class="font-size-16">{{ userFullName }}</span>
                                     <p
-                                        class="font-14 text-gray"
+                                        class="font-size-14 text-light"
                                         [matTooltip]="userEmail?.length > 26 ? userEmail : null"
                                         matTooltipPosition="left"
                                     >
@@ -558,7 +561,7 @@
                                 <mat-divider></mat-divider>
                                 <button
                                     mat-menu-item
-                                    class="font-16"
+                                    class="font-size-16"
                                     [routerLink]="['/pages/user-details/mobile-number']"
                                 >
                                     {{ commonLocaleData?.app_user_settings }}
@@ -566,7 +569,7 @@
                                 <mat-divider></mat-divider>
                                 <button
                                     mat-menu-item
-                                    class="font-16"
+                                    class="font-size-16"
                                     [routerLink]="['/pages/user-details/subscription']"
                                 >
                                     {{ commonLocaleData?.app_subscription }}
@@ -576,7 +579,7 @@
                                 <button mat-menu-item (click)="logout()">
                                     <div class="d-flex align-items-center">
                                         <i class="icon-logout mr-2"></i>
-                                        <span class="font-14">{{ localeData?.logout }}</span>
+                                        <span class="font-size-14">{{ localeData?.logout }}</span>
                                     </div>
                                 </button>
                             </div>
@@ -598,10 +601,10 @@
         isCurrentSubscriptionTrialOrCancelled"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue d-flex justify-content-between">
+        <div class="warning-msg-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionEndNote() }}
-                <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="go to plan" (click)="goToSelectPlan()">{{
+                <i class="icon-traingle-info font-size-15 mr-r1"></i> {{ getSubscriptionEndNote() }}
+                <a href="javascript:void(0);" class="theme-primary-color cursor-pointer text-decoration-underline" aria-label="go to plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
@@ -615,10 +618,10 @@
         subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue d-flex justify-content-between">
+        <div class="warning-msg-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionEndedNote() }}
-                <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="text-primary cursor-pointer" aria-label="get select " (click)="goToSelectPlan()">
+                <i class="icon-traingle-info font-size-15 mr-r1"></i> {{ getSubscriptionEndedNote() }}
+                <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="theme-primary-color cursor-pointer text-decoration-underline" aria-label="get select " (click)="goToSelectPlan()">
                     {{ localeData?.click_here }}
                 </a>
             </p>
@@ -632,10 +635,10 @@
         subscribedPlan !== undefined && subscribedPlan.additionalCharges"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue d-flex justify-content-between">
+        <div class="warning-msg-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i> {{ getSubscriptionTransactionEndedNote() }}
-                <a href="javascript:void(0);" class="text-primary cursor-pointer" aria-label="get plan" (click)="goToSelectPlan()">{{
+                <i class="icon-traingle-info font-size-15 mr-r1"></i> {{ getSubscriptionTransactionEndedNote() }}
+                <a href="javascript:void(0);" class="theme-primary-color cursor-pointer text-decoration-underline" aria-label="get plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
@@ -648,9 +651,9 @@
         *ngIf="showAlertMessage.isObligationExpired && isUKCompany && obligation"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+        <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i>
+                <i class="icon-traingle-info font-size-15 mr-r1"></i>
                 <span *ngIf="obligation.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining)"></span>
                 <span *ngIf="obligation.daysRemaining === 0 && !obligation.isExpired" [innerHTML]="localeData?.obligation_today_expired"></span>
                 <span *ngIf="obligation.isExpired" [innerHTML]="localeData?.obligation_expired_passed"></span>
@@ -664,9 +667,9 @@
         *ngIf="showAlertMessage.isLiabilitiesExpired && isUKCompany && liabilities"
         [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
-        <div class="white-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
+        <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
-                <i class="icon-traingle-info font-15 mr-r1"></i>
+                <i class="icon-traingle-info font-size-15 mr-r1"></i>
                 <span *ngIf="liabilities.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining)"></span>
                 <span *ngIf="liabilities.daysRemaining === 0 && !liabilities.isExpired" [innerHTML]="localeData?.liabilities_today_expired"></span>
                 <span *ngIf="liabilities.isExpired" [innerHTML]="localeData?.liabilities_expired_passed"></span>
@@ -682,10 +685,10 @@
             </button>
         </div>
         <mat-dialog-content class="dialog-body">
-            <div class="clearfix mb-3">
+            <div class="clear-both mb-3">
                 <p [innerHTML]="getPlanExpiredNote()"></p>
             </div>
-            <div class="clearfix">
+            <div class="clear-both">
                 <ul class="list-inline upgrade-plan">
                     <li>
                         <button mat-raised-button color="primary" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
@@ -720,11 +723,11 @@
             </button>
         </div>
         <mat-dialog-content class="dialog-body">
-            <div class="clearfix mb-3">
+            <div class="clear-both mb-3">
                 <p class="mb-2" [innerHTML]="getTransactionLimitCrossedNote()"></p>
                 <p>{{ localeData?.continue_giddh_note }}</p>
             </div>
-            <div class="clearfix">
+            <div class="clear-both">
                 <ul class="list-inline">
                     <li>
                         <button mat-raised-button color="primary" (click)="goToSelectPlan()">
@@ -768,7 +771,7 @@
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
                 <button mat-stroked-button class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
-                    <i class="icon-cross"></i>
+                    <i class="icon-cross text-black"></i>
                 </button>
                 <object [data]="calendlyUrl" title="calendar"></object>
             </div>

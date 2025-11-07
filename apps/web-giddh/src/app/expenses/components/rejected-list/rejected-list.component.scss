@@ -1,6 +1,8 @@
+/* UNUSED COMPONENT CLASS: basic - Auto-commented by script
 .basic > thead > tr > th {
     position: relative;
 }
+*/
 .action-btns {
     display: flex;
     height: 52px;
@@ -16,19 +18,26 @@
     align-items: center;
     margin-right: 0;
     margin: 0 5px;
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
     height: 34px;
     width: 34px;
-    background-color: var(--color-white);
+    // background-color: var(--color-white);
 }
 
 .btn-icon .icon-trash {
     font-size: 20px;
 }
-.icon-pointer .active-text-color {
-    color: var(--color-blue-primary) !important;
+/* .icon-pointer  UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
+.active-text-color {
+    color: var(--text-primary-color) !important;
 }
+*/
+/* UNUSED COMPONENT CLASS: icon-pointer - Auto-commented by script
 .icon-pointer {
     cursor: pointer;
+}
+*/
+.responsive-label {
+    display: none;
 }

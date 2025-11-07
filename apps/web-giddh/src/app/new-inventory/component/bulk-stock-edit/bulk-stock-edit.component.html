@@ -1,5 +1,5 @@
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <text-field [type]="'text'" [formControl]="formControl" [autoFocus]="true"></text-field>
+    <text-field [type]="'text'" [formControl]="formControl" [autoFocus]="true" [cssClass]="'font-size-15'"></text-field>
 </ng-template>
 <ng-container
     appTranslate
@@ -21,7 +21,7 @@
                 (selectedDynamicColumns)="setDisplayColumns($event)"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
-                [iconClass]="'icon-options font-16'"
+                [iconClass]="'icon-options font-size-16'"
                 [cssClass]="'bulk-stock-hide-show-button'"
             >
             </select-table-column>
@@ -45,7 +45,7 @@
                             (click)="isApiCalled = true; resetSearch()"
                             aria-label="cross icon"
                         >
-                            <span class="icon-cross position-relative"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="icon-cross position-relative "></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                     <div>
@@ -61,7 +61,7 @@
                                 [matTooltip]="commonLocaleData?.app_advanced_filter"
                                 aria-label="filter"
                             >
-                                <i class="icon-advance-filter font-16"></i>
+                                <i class="icon-advance-filter font-size-16"></i>
                             </button>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                     <ng-container *ngIf="(!noDataFound || searchString) && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
-                                <table class="table table-bordered">
+                                <table class="table border">
                                     <thead>
                                         <tr (clickOutside)="hideTableHeadInput()">
                                             <!-- Variant Name -->
@@ -82,10 +82,10 @@
                                                         (click)="toggleInput('variantName'); $event.stopPropagation()"
                                                         class="w-100"
                                                     >
-                                                        <h3 *ngIf="!tableHeadInput.variantName">
+                                                        <p *ngIf="!tableHeadInput.variantName">
                                                             <span class="icon-search mr-r05"></span
                                                             >{{ localeData?.variant_name }}
-                                                        </h3>
+                                                        </p>
                                                         <div
                                                             *ngIf="tableHeadInput.variantName"
                                                             class="border-line"
@@ -105,7 +105,7 @@
                                                         (click)="sort('variant_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -118,10 +118,10 @@
                                                         "
                                                         class="w-100"
                                                     >
-                                                        <h3 *ngIf="!tableHeadInput.variantUniqueName">
+                                                        <p *ngIf="!tableHeadInput.variantUniqueName">
                                                             <span class="icon-search mr-r05"></span>
                                                             {{ localeData?.variant_unique_name }}
-                                                        </h3>
+                                                        </p>
                                                         <div
                                                             *ngIf="tableHeadInput.variantUniqueName"
                                                             class="border-line"
@@ -141,7 +141,7 @@
                                                         (click)="sort('variant_unique_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -152,10 +152,10 @@
                                                         (click)="toggleInput('stockName'); $event.stopPropagation()"
                                                         class="w-100"
                                                     >
-                                                        <h3 *ngIf="!tableHeadInput.stockName">
+                                                        <p *ngIf="!tableHeadInput.stockName">
                                                             <span class="icon-search mr-r05"></span>
                                                             {{ localeData?.stock_name }}
-                                                        </h3>
+                                                        </p>
                                                         <div
                                                             *ngIf="tableHeadInput.stockName"
                                                             class="border-line"
@@ -175,7 +175,7 @@
                                                         (click)="sort('stock_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -188,10 +188,10 @@
                                                         "
                                                         class="w-100"
                                                     >
-                                                        <h3 *ngIf="!tableHeadInput.stockUniqueName">
+                                                        <p *ngIf="!tableHeadInput.stockUniqueName">
                                                             <span class="icon-search mr-r05"></span>
                                                             {{ localeData?.stock_unique_name }}
-                                                        </h3>
+                                                        </p>
                                                         <div
                                                             *ngIf="tableHeadInput.stockUniqueName"
                                                             class="border-line"
@@ -211,7 +211,7 @@
                                                         (click)="sort('stock_unique_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -227,10 +227,10 @@
                                                         "
                                                         class="w-100"
                                                     >
-                                                        <h3 *ngIf="!tableHeadInput.stockGroupName">
+                                                        <p *ngIf="!tableHeadInput.stockGroupName">
                                                             <span class="icon-search mr-r05"></span>
                                                             {{ localeData?.stock_group_name }}
-                                                        </h3>
+                                                        </p>
                                                         <div
                                                             *ngIf="tableHeadInput.stockGroupName"
                                                             class="border-line"
@@ -250,17 +250,17 @@
                                                         (click)="sort('stock_group_name')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
                                             <!--  Stock Group Unique Name -->
                                             <th *ngIf="tableHeaderShowHide.stockGroupUniqueName" class="cursor-pointer">
-                                                <h3>{{ localeData?.stock_group_unique_name }}</h3>
+                                                <p>{{ localeData?.stock_group_unique_name }}</p>
                                             </th>
                                             <!--  Stock Unit -->
                                             <th *ngIf="tableHeaderShowHide.stockUnit">
-                                                <h3>{{ localeData?.stock_unit }}</h3>
+                                                <p>{{ localeData?.stock_unit }}</p>
                                             </th>
                                             <!-- HSN -->
                                             <th
@@ -269,10 +269,10 @@
                                                 (click)="toggleInput('hsn'); $event.stopPropagation()"
                                             >
                                                 <div class="w-100">
-                                                    <h3 *ngIf="!tableHeadInput.hsn">
+                                                    <p *ngIf="!tableHeadInput.hsn">
                                                         <span class="icon-search mr-r05"></span>
                                                         {{ commonLocaleData?.app_hsn }}
-                                                    </h3>
+                                                    </p>
                                                     <div
                                                         *ngIf="tableHeadInput.hsn"
                                                         class="border-line"
@@ -294,10 +294,10 @@
                                                         (click)="toggleInput('sac'); $event.stopPropagation()"
                                                         class="w-100"
                                                     >
-                                                        <h3 *ngIf="!tableHeadInput.sac">
+                                                        <p *ngIf="!tableHeadInput.sac">
                                                             <span class="icon-search mr-r05"></span>
                                                             {{ commonLocaleData?.app_sac }}
-                                                        </h3>
+                                                        </p>
                                                         <div
                                                             *ngIf="tableHeadInput.sac"
                                                             class="border-line"
@@ -320,10 +320,10 @@
                                                 (click)="toggleInput('skuCode'); $event.stopPropagation()"
                                             >
                                                 <div class="w-100">
-                                                    <h3 *ngIf="!tableHeadInput.skuCode">
+                                                    <p *ngIf="!tableHeadInput.skuCode">
                                                         <span class="icon-search mr-r05"></span>
                                                         {{ commonLocaleData?.app_sku_code }}
-                                                    </h3>
+                                                    </p>
                                                     <div
                                                         *ngIf="tableHeadInput.skuCode"
                                                         class="border-line"
@@ -345,7 +345,7 @@
                                                     tableHeaderShowHide.purchaseAccountName
                                                 "
                                             >
-                                                <h3>{{ localeData?.purchases_account_name }}</h3>
+                                                <p>{{ localeData?.purchases_account_name }}</p>
                                             </th>
                                             <!--  Purchases Account UN -->
                                             <th
@@ -354,7 +354,7 @@
                                                     tableHeaderShowHide.purchaseAccountUniqueName
                                                 "
                                             >
-                                                <h3>{{ localeData?.purchase_account_unique_name }}</h3>
+                                                <p>{{ localeData?.purchase_account_unique_name }}</p>
                                             </th>
                                             <!--  Purchases Rate -->
                                             <th
@@ -363,15 +363,15 @@
                                                     tableHeaderShowHide.purchaseRate
                                                 "
                                             >
-                                                <div class="d-flex align-items-center justify-content-space-between">
-                                                    <h3>{{ localeData?.purchase_rate }}</h3>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <p>{{ localeData?.purchase_rate }}</p>
                                                     <button
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('purchase_rate')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -382,7 +382,7 @@
                                                     tableHeaderShowHide.purchaseUnits
                                                 "
                                             >
-                                                <h3>{{ localeData?.purchase_unit }}</h3>
+                                                <p>{{ localeData?.purchase_unit }}</p>
                                             </th>
                                             <!--  Sales Account Name -->
                                             <th
@@ -391,7 +391,7 @@
                                                     tableHeaderShowHide.salesAccountName
                                                 "
                                             >
-                                                <h3>{{ localeData?.sales_account_name }}</h3>
+                                                <p>{{ localeData?.sales_account_name }}</p>
                                             </th>
                                             <!--  Sales Account UN -->
                                             <th
@@ -400,7 +400,7 @@
                                                     tableHeaderShowHide.salesAccountUniqueName
                                                 "
                                             >
-                                                <h3>{{ localeData?.sales_account_unique_name }}</h3>
+                                                <p>{{ localeData?.sales_account_unique_name }}</p>
                                             </th>
                                             <!--  Sales Rate -->
                                             <th
@@ -409,15 +409,15 @@
                                                     tableHeaderShowHide.salesRate
                                                 "
                                             >
-                                                <div class="d-flex align-items-center justify-content-space-between">
-                                                    <h3>{{ localeData?.sales_rate }}</h3>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <p>{{ localeData?.sales_rate }}</p>
                                                     <button
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('sales_rate')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -428,7 +428,7 @@
                                                     tableHeaderShowHide.salesUnits
                                                 "
                                             >
-                                                <h3>{{ localeData?.sales_unit }}</h3>
+                                                <p>{{ localeData?.sales_unit }}</p>
                                             </th>
                                             <!-- Fixed Assets Units (Menu) -->
                                             <th
@@ -437,7 +437,7 @@
                                                     tableHeaderShowHide.fixedAssetUnits
                                                 "
                                             >
-                                                <h3>{{ localeData?.fixed_asset_units }}</h3>
+                                                <p>{{ localeData?.fixed_asset_units }}</p>
                                             </th>
                                             <!-- Fixed Assets Rate -->
                                             <th
@@ -446,15 +446,15 @@
                                                     tableHeaderShowHide.fixedAssetRate
                                                 "
                                             >
-                                                <div class="d-flex align-items-center justify-content-space-between">
-                                                    <h3>{{ localeData?.fixed_asset_rate }}</h3>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <p>{{ localeData?.fixed_asset_rate }}</p>
                                                     <button
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('fixed_asset_rate')"
                                                         aria-label="sort icon"
                                                     >
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                        <span class="icon-sort-asc text-light d-block"></span>
                                                     </button>
                                                 </div>
                                             </th>
@@ -465,7 +465,7 @@
                                                     tableHeaderShowHide.fixedAssetAccountName
                                                 "
                                             >
-                                                <h3>{{ localeData?.fixed_asset_account_name }}</h3>
+                                                <p>{{ localeData?.fixed_asset_account_name }}</p>
                                             </th>
                                             <!-- Fixed Assets Account UN -->
                                             <th
@@ -474,15 +474,15 @@
                                                     tableHeaderShowHide.fixedAssetAccountUniqueName
                                                 "
                                             >
-                                                <h3>{{ localeData?.fixed_asset_account_unique_name }}</h3>
+                                                <p>{{ localeData?.fixed_asset_account_unique_name }}</p>
                                             </th>
                                             <!-- Archive -->
                                             <th *ngIf="tableHeaderShowHide.archive" class="min-width-140">
-                                                <h3>{{ commonLocaleData?.app_archive }}</h3>
+                                                <p>{{ commonLocaleData?.app_archive }}</p>
                                             </th>
                                             <!-- Taxes -->
                                             <th *ngIf="tableHeaderShowHide.taxes" class="min-width-140">
-                                                <h3>{{ commonLocaleData?.app_tax }}</h3>
+                                                <p>{{ commonLocaleData?.app_tax }}</p>
                                             </th>
                                             <!-- Sales Tax Inclusive -->
                                             <th
@@ -491,7 +491,7 @@
                                                     tableHeaderShowHide.salesTaxInclusive
                                                 "
                                             >
-                                                <h3>{{ localeData?.sales_tax_inclusive }}</h3>
+                                                <p>{{ localeData?.sales_tax_inclusive }}</p>
                                             </th>
                                             <!-- Purchase Tax Inclusive -->
                                             <th
@@ -500,7 +500,7 @@
                                                     tableHeaderShowHide.purchaseTaxInclusive
                                                 "
                                             >
-                                                <h3>{{ localeData?.purchase_tax_inclusive }}</h3>
+                                                <p>{{ localeData?.purchase_tax_inclusive }}</p>
                                             </th>
                                             <!-- FixedAsset Tax Inclusive -->
                                             <th
@@ -509,11 +509,11 @@
                                                     tableHeaderShowHide.fixedAssetTaxInclusive
                                                 "
                                             >
-                                                <h3>{{ localeData?.fixed_asset_tax_inclusive }}</h3>
+                                                <p>{{ localeData?.fixed_asset_tax_inclusive }}</p>
                                             </th>
                                             <ng-container *ngFor="let column of tableHeaderDynamicColumns">
                                                 <th>
-                                                    <h3>{{ column?.label }}</h3>
+                                                    <p>{{ column?.label }}</p>
                                                 </th>
                                             </ng-container>
                                         </tr>
@@ -1229,17 +1229,15 @@
                                         <tr *ngIf="noDataFound && !isLoading">
                                             <td colspan="100%">
                                                 <div class="no-data mb-5">
-                                                    <h1 class="mb-5">{{ commonLocaleData?.app_no_entries_found }}</h1>
+                                                    <h2>{{ commonLocaleData?.app_no_entries_found }}</h2>
                                                 </div>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </form>
-                        </div>
-
-                        <div class="mt-3" *ngIf="pagination?.totalItems > pageSizeOptions[0] && !isLoading">
                             <mat-paginator
+                                *ngIf="pagination?.totalItems > pageSizeOptions[0] && !isLoading"
                                 [length]="pagination?.totalItems"
                                 [pageSize]="pageCount"
                                 [pageIndex]="pagination.currentPage - 1"
@@ -1248,18 +1246,18 @@
                                 [hidePageSize]="false"
                                 (page)="handlePageEvent($event)"
                             ></mat-paginator>
-                            <section class="mr-b8"></section>
                         </div>
                     </ng-container>
                     <div *ngIf="!(!noDataFound || searchString) && !isLoading" class="no-data mb-5">
-                        <h1>{{ commonLocaleData?.app_no_entries_found }}</h1>
+                        <h2>{{ commonLocaleData?.app_no_entries_found }}</h2>
                     </div>
                 </div>
             </div>
         </div>
         <div *ngIf="noDataFound && !(advanceSearchData || searchString) && !isLoading" class="no-data mb-5">
-            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+            <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
         </div>
+        <section class="mr-b8"></section>
     </div>
 </ng-container>
 

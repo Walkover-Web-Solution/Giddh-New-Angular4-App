@@ -1,5 +1,5 @@
 <div class="dialog-header">
-    <h3 class="modal-title">{{ localeData?.filing?.push_to_portal }}</h3>
+    <p class="modal-title">{{ localeData?.filing?.push_to_portal }}</p>
     <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
 </div>
 <mat-dialog-content class="dialog-body">
@@ -21,16 +21,16 @@
                 </div>
                 <mat-list>
                     <mat-list-item>
-                        <p class="summary-content font-15">{{ localeData?.filing?.excel_file_support }}</p>
+                        <p class="summary-content font-size-15">{{ localeData?.filing?.excel_file_support }}</p>
                     </mat-list-item>
                     <mat-list-item>
-                        <p class="summary-content font-15 last-content">
+                        <p class="summary-content font-size-15 last-content">
                             {{ localeData?.filing?.organised_accountant }}
                         </p>
                     </mat-list-item>
                 </mat-list>
                 <a class="mr-0 downloads-button json-button" target="_blank" [href]="gstUtilityDownloadLink">
-                    <span class="return-link font-15">{{ localeData?.filing?.gst_offline_utility }} </span>
+                    <span class="return-link font-size-15">{{ localeData?.filing?.gst_offline_utility }} </span>
                 </a>
             </div>
             <div class="col-sm-6 p-0 right-side">
@@ -46,7 +46,7 @@
                 </div>
                 <mat-list>
                     <mat-list-item>
-                        <p class="summary-content font-15">{{ localeData?.filing?.json_support }}</p>
+                        <p class="summary-content font-size-15">{{ localeData?.filing?.json_support }}</p>
                     </mat-list-item>
                 </mat-list>
             </div>

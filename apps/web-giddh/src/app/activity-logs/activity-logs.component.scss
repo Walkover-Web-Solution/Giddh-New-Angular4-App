@@ -19,16 +19,18 @@
 
     .filter-wrapper {
         display: flex;
-        background-color: var(--color-blue-light);
+        background-color: var(--theme-primary-light);
         padding-bottom: 4px;
         padding-top: 4px;
         margin-bottom: 0px;
-        margin-top: 5px;
+        // margin-top: 5px;
     }
 
-    .entry-datepicker {
+    /* UNUSED COMPONENT CLASS: entry-datepicker - Auto-commented by script
+.entry-datepicker {
         padding-left: 10px;
     }
+*/
 
     .and-text {
         margin-left: 10px !important;
@@ -38,26 +40,25 @@
         margin: auto;
     }
 
-    .button-wrapper {
-        margin-bottom: 5px !important;
-    }
+    // .button-wrapper {
+    //     margin-bottom: 5px !important;
+    // }
 
     .add-button {
         border: none;
-        height: 44px;
+        height: -webkit-fill-available;
         cursor: pointer;
-        background-color: var(--color-blue-light);
+        background-color: var(--theme-primary-light);
         font-size: var(--font-size-24);
         padding-left: 0px !important;
         padding-right: 0px !important;
-        min-width: 44px !important;
+        min-width: 55px !important;
         color: var(--color-black) !important;
         padding-top: 0 !important;
-        border-radius: 0 !important;
+        border-radius: var(--mat-border-radius-0) !important;
         padding-top: 4px !important;
         margin: auto;
         margin-left: 3px;
-        margin-top: 5px;
         margin-right: 0 !important;
         padding-bottom: 4px;
     }
@@ -66,33 +67,31 @@
         display: flex;
     }
 
-    .clear-filter {
-        color: var(--color-blue-primary);
+    /* UNUSED COMPONENT CLASS: clear-filter - Auto-commented by script
+.clear-filter {
+        color: var(--text-primary-color);
         cursor: pointer;
     }
+*/
 
-    .log-clear-button {
+    /* UNUSED COMPONENT CLASS: log-clear-button - Auto-commented by script
+.log-clear-button {
         margin-bottom: 15px;
     }
+*/
 
     .activity-filter-wrap {
-        align-items: center;
-        padding-bottom: 9px;
-        padding-top: 9px;
+        align-items: stretch;
         display: flex;
         flex-wrap: wrap;
-        padding-left: 9px;
-        .custom-datepicker {
-            input {
-                height: 36px;
-            }
-        }
     }
 
-    .filter-button {
+    /* UNUSED COMPONENT CLASS: filter-button - Auto-commented by script
+.filter-button {
         float: left;
         width: 15%;
     }
+*/
 
     .activity-table {
         .activity-td {
@@ -105,10 +104,12 @@
             transition: 0ms;
         }
 
-        .mat-column-history {
+        /* UNUSED COMPONENT CLASS: mat-column-history - Auto-commented by script
+.mat-column-history {
             margin: 0 !important;
             padding: 0 !important;
         }
+*/
 
         tr {
             &:hover {
@@ -133,10 +134,12 @@
             min-height: 0;
         }
 
-        .mat-column-operation {
+        /* UNUSED COMPONENT CLASS: mat-column-operation - Auto-commented by script
+.mat-column-operation {
             padding-right: 0;
             margin-right: 0;
         }
+*/
 
         .history-child-row {
             position: relative;
@@ -151,12 +154,12 @@
         .compare-json {
             text-decoration: underline;
             text-decoration: underline;
-            color: var(--color-blue-primary);
+            color: var(--text-primary-color);
             z-index: 99;
             padding: 13px 20px;
 
             &:hover {
-                color: var(--color-blue-primary);
+                color: var(--text-primary-color);
             }
         }
 
@@ -171,22 +174,6 @@
         .activity-table {
             .activity-td {
                 width: 16.9%;
-            }
-        }
-
-        .add-button {
-            padding-left: 0px !important;
-            padding-right: 0px !important;
-            padding-top: 0 !important;
-        }
-    }
-}
-
-@media (max-width: 768px) {
-    .activity-container {
-        .activity-table {
-            .activity-td {
-                width: 16%;
             }
         }
 

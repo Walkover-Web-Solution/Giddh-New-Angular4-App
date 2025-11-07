@@ -1,16 +1,16 @@
-.invoice-list {
-    height: calc(100vh - (var(--header-height) + 30px));
-    overflow-y: auto;
-}
+// .invoice-list {
+//     height: calc(100vh - (var(--header-height) + 30px));
+//     overflow-y: auto;
+// }
 
 .vouchers-wrapper {
     .total-wrapper {
         .total-sale {
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
 
-            p {
-                color: var(--color-dark-gray);
-            }
+            // p {
+            //     color: var(--color-dark-gray);
+            // }
 
             &.opening-box {
                 span {
@@ -24,12 +24,12 @@
                 }
             }
 
-            &.payment-receipt,
-            &.closing-box {
-                span {
-                    color: var(--color-dark-gray);
-                }
-            }
+            // &.payment-receipt,
+            // &.closing-box {
+            //     span {
+            //         color: var(--color-dark-gray);
+            //     }
+            // }
         }
     }
 
@@ -60,9 +60,11 @@
         max-width: 258px;
     }
 
-    .invoice-video {
+    /* UNUSED COMPONENT CLASS: invoice-video - Auto-commented by script
+.invoice-video {
         display: none;
     }
+*/
 }
 
 table {
@@ -99,9 +101,12 @@ table {
 // account-detail
 .account-detail-wrapper {
     max-width: 250px;
+    margin-block: 6px;
 
     .account-header {
         background-color: var(--color-border-light);
+        border-top-right-radius: var(--mat-border-radius-4);
+        border-top-left-radius: var(--mat-border-radius-4);
     }
 }
 
@@ -131,7 +136,7 @@ table {
         color: var(--color-black);
 
         &.active {
-            background-color: var(--color-blue-primary) !important;
+            background-color: var(--bg-primary-color) !important;
             color: var(--color-white);
         }
     }
@@ -149,10 +154,10 @@ table {
     color: var(--color-green);
 }
 
-:host ::ng-deep select-table-column > button {
-    height: 42px !important;
-    padding: 0 !important;
-}
+// :host ::ng-deep select-table-column > button {
+//     height: 42px !important;
+//     padding: 0 !important;
+// }
 
 @media screen and (max-width: 1199px) {
     .vouchers-wrapper {

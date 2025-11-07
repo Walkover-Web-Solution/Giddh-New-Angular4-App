@@ -28,7 +28,7 @@
         </div>
         <mat-dialog-content class="dialog-body icici-account-create-edit">
                 <ng-container *ngIf="!isLoading && localeData?.payment">
-                    <div class="" *ngIf="!activeBankAccount">
+                    <div *ngIf="!activeBankAccount">
                         <input-field
                             [label]="localeData?.payment?.icici_login_id"
                             [required]="true"

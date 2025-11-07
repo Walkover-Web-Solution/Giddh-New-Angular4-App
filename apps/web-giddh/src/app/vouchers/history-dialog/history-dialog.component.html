@@ -1,7 +1,7 @@
 <div class="aside-dialog-wrapper">
     <div class="dialog-header">
-        <span class="font-16">{{ inputData?.localeData?.revision_history }}</span>
-        <i mat-dialog-close class="icon-cross icon-font-16"></i>
+        <span class="font-size-16">{{ inputData?.localeData?.revision_history }}</span>
+        <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
     </div>
     <div mat-dialog-content class="create-discount-aside dialog-body">
         <div class="aside-pane-form position-relative p-3 h-100 overflow-auto">
@@ -12,15 +12,15 @@
             <ng-container *ngIf="!(isVoucherVersionsInProgress$ | async)">
                 <ng-container *ngFor="let item of versionHistory?.items; let lastItem = last">
                     <div class="py-2" [ngClass]="{ 'border-bottom': lastItem }" *ngFor="let change of item?.changes">
-                        <p class="text-gray">{{ item.versionTime | date : giddhDateFormatWithTime }}</p>
+                        <p class="text-light">{{ item.versionTime | date : giddhDateFormatWithTime }}</p>
                         <p>
-                            {{ change.message }} <span class="text-gray">{{ item?.userName }}</span>
+                            {{ change.message }} <span class="text-light">{{ item?.userName }}</span>
                         </p>
                     </div>
                 </ng-container>
             </ng-container>
             <div
-                class="mt-5 text-center font-24"
+                class="mt-5 text-center font-size-24"
                 *ngIf="!(isVoucherVersionsInProgress$ | async) && versionHistory?.items?.length === 0"
             >
                 {{ inputData?.commonLocaleData?.app_no_result_found }}
@@ -29,7 +29,6 @@
                 *ngIf="
                     (!(isVoucherVersionsInProgress$ | async) && versionHistory?.totalItems > pageSizeOptions[0])
                 "
-                class="mt-3"
                 (page)="handlePageChange($event)"
                 [length]="versionHistory?.totalItems"
                 [pageSize]="pagination.count"

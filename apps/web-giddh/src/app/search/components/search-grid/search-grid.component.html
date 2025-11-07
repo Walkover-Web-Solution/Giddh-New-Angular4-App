@@ -85,7 +85,7 @@
                             </amount-field>
                         </span>
                         <span *ngIf="element.openingBalance > 0">
-                            <span class="text-success" *ngIf="element.openBalanceType === 'DEBIT'">
+                            <span class="text-green" *ngIf="element.openBalanceType === 'DEBIT'">
                                 {{ localeData?.balance_type.dr }}</span
                             >
                             <span class="text-danger" *ngIf="element.openBalanceType === 'CREDIT'">
@@ -149,7 +149,7 @@
                             </amount-field>
                         </span>
                         <span *ngIf="element.closingBalance > 0">
-                            <span class="text-success" *ngIf="element.closeBalanceType === 'DEBIT'">
+                            <span class="text-green" *ngIf="element.closeBalanceType === 'DEBIT'">
                                 {{ localeData?.balance_type.dr }}</span
                             >
                             <span class="text-danger" *ngIf="element.closeBalanceType === 'CREDIT'">
@@ -164,7 +164,7 @@
             </table>
         </div>
         <ng-container *ngIf="(searchResponseFiltered$ | async)?.length && totalItems > pageSizeOptions[0]">
-            <div class="d-flex align-items-center justify-content-center mt-4 mb-5">
+            <div class="mb-5">
                 <mat-paginator
                     [length]="totalItems"
                     [pageSize]="countPerPage"
@@ -181,7 +181,7 @@
             <no-data [secondaryMessageClass]="'p-0'"></no-data>
         </div>
     </section>
-    <!-- end pd div -->
+    <!-- end div -->
 </div>
 <!--Modal for Mail/SMS-->
 <ng-template #mailSmsDialog>
@@ -191,7 +191,7 @@
             <i class="icon-cross"></i>
         </button>
     </div>
-    <mat-dialog-content class="modal-body pd-l2 pd-r2 clearfix">
+    <mat-dialog-content class="modal-body pd-l2 pd-r2 clear-both">
         <input-field
             *ngIf="messageBody.type == 'Email'"
             [type]="'text'"
@@ -203,7 +203,7 @@
         >
         </input-field>
 
-        <mat-form-field appearance="outline" class="w-100 mt-3">
+        <mat-form-field appearance="outline" class="initial-height w-100 mt-3">
             <mat-label>{{ localeData?.company_address }}</mat-label>
             <textarea
                 #messageBox

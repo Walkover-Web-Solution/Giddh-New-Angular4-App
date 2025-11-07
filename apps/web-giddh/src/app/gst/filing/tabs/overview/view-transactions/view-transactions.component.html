@@ -1,5 +1,5 @@
 <div class="fill scroll-y noscroll-x scrollbox">
-    <div class="filter-band">
+    <div class="filter-band px-0">
         <button
             mat-stroked-button
             (click)="redirectToGstFilingReturn()"
@@ -234,21 +234,19 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </div>
-        <!-- pagination -->
-        <div *ngIf="(viewTransaction$ | async)?.totalItems > pageSizeOptions[0]">
-            <mat-paginator
-                (page)="pageChanged($event)"
-                [length]="(viewTransaction$ | async)?.totalItems"
-                [pageSize]="filterParam?.count"
-                [showFirstLastButtons]="true"
-                [pageSizeOptions]="pageSizeOptions"
-                [hidePageSize]="false"
-                [pageIndex]="pageIndex"
-                class="mt-15"
-            >
-            </mat-paginator>
-            <section class="mr-b8"></section>
-        </div>
+        <mat-paginator
+            *ngIf="(viewTransaction$ | async)?.totalItems > pageSizeOptions[0]"
+            (page)="pageChanged($event)"
+            [length]="(viewTransaction$ | async)?.totalItems"
+            [pageSize]="filterParam?.count"
+            [showFirstLastButtons]="true"
+            [pageSizeOptions]="pageSizeOptions"
+            [hidePageSize]="false"
+            [pageIndex]="pageIndex"
+            class="mt-15"
+        >
+        </mat-paginator>
+        <section class="mr-b8"></section>
         <!-- no records -->
         <div
             class="filings-empty-state"

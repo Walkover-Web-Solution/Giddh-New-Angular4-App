@@ -26,50 +26,48 @@
             class="table-header-sticky"
         >
             <mat-tab [label]="localeData?.auth_key?.tab_heading">
-                <div class="wrap-tab-content-pd-15">
-                    <div class="box clearfix mt-3">
-                        <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
-                            <div class="form-group row align-items-center" [ngClass]="{ 'mb-1': isCopied }">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                    <input-field
-                                        [label]="localeData?.auth_key?.main_auth_key"
-                                        #authKeyUrl
-                                        [id]="'authKey'"
-                                        [name]="'userAuthKey'"
-                                        [(ngModel)]="userAuthKey"
-                                        [readonly]="true"
-                                    ></input-field>
-                                </div>
-                                <button type="button" mat-raised-button color="primary" (click)="toggleIsCopied()">
-                                    {{ commonLocaleData?.app_copy }}
-                                </button>
+                <div class="wrap-tab-content- pd-15">
+                    <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
+                        <div class="row align-items-center mb-3" [ngClass]="{ 'mb-1': isCopied }">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                <input-field
+                                    [label]="localeData?.auth_key?.main_auth_key"
+                                    #authKeyUrl
+                                    [id]="'authKey'"
+                                    [name]="'userAuthKey'"
+                                    [(ngModel)]="userAuthKey"
+                                    [readonly]="true"
+                                ></input-field>
                             </div>
-                            <div class="row mb-3" *ngIf="isCopied">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                    <span class="success">{{ localeData?.auth_key?.copied }}</span>
-                                </div>
+                            <button type="button" mat-raised-button color="primary" (click)="toggleIsCopied()">
+                                {{ commonLocaleData?.app_copy }}
+                            </button>
+                        </div>
+                        <div class="row mb-3" *ngIf="isCopied">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                <span class="success">{{ localeData?.auth_key?.copied }}</span>
                             </div>
-                            <div class="form-group clearfix mb-0">
-                                <button
-                                    mat-raised-button
-                                    color="primary"
-                                    type="submit"
-                                    (click)="regenerateKey()"
-                                    class="mr-4"
-                                >
-                                    {{ localeData?.auth_key?.regenerate_auth_key }}
-                                </button>
-                                <a class="text-primary" href="{{ apiPostmanDocUrl }}" target="_blank">{{
-                                    localeData?.auth_key?.documentation
-                                }}</a>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="form-group clear-both mb-0">
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                type="submit"
+                                (click)="regenerateKey()"
+                                class="mr-4"
+                            >
+                                {{ localeData?.auth_key?.regenerate_auth_key }}
+                            </button>
+                            <a class="text-primary" href="{{ apiPostmanDocUrl }}" target="_blank">{{
+                                localeData?.auth_key?.documentation
+                            }}</a>
+                        </div>
+                    </form>
                 </div>
             </mat-tab>
             <mat-tab [label]="localeData?.mobile_number?.tab_heading">
-                <div class="wrap-tab-content-pd-15">
-                    <div class="box clearfix mt-1">
+                <div class="wrap-tab-content- pd-15">
+                    <div class=" pd-15 clear-both mt-1">
                         <form class="row" name="mobileForm" novalidate>
                             <div class="col-lg-3 pd-r05">
                                 <input-field
@@ -136,16 +134,16 @@
                                                 </mat-expansion-panel-header>
 
                                                 <div>
-                                                    <div class="long-code-details text-black">
+                                                    <div class="long-code-details text-default">
                                                         <figure>
-                                                            <h1 class="section-head">
+                                                            <p class="section-head">
                                                                 {{ localeData?.mobile_number?.accounts }}
-                                                            </h1>
+                                                            </p>
                                                             <ul>
                                                                 <li>
-                                                                    <h2>
+                                                                    <p>
                                                                         {{ localeData?.mobile_number?.accounts_case1 }}:
-                                                                    </h2>
+                                                                    </p>
                                                                     <div class="cases">
                                                                         <p>
                                                                             {{
@@ -168,9 +166,9 @@
                                                                     </div>
                                                                 </li>
                                                                 <li>
-                                                                    <h2>
+                                                                    <p>
                                                                         {{ localeData?.mobile_number?.accounts_case2 }}:
-                                                                    </h2>
+                                                                    </p>
                                                                     <div class="cases">
                                                                         <p>
                                                                             {{
@@ -195,14 +193,14 @@
                                                             </ul>
                                                         </figure>
                                                         <figure>
-                                                            <h1 class="section-head">
+                                                            <p class="section-head">
                                                                 {{ localeData?.mobile_number?.groups }}
-                                                            </h1>
+                                                            </p>
                                                             <ul>
                                                                 <li>
-                                                                    <h2>
+                                                                    <p>
                                                                         {{ localeData?.mobile_number?.groups_case1 }}:
-                                                                    </h2>
+                                                                    </p>
                                                                     <div class="cases">
                                                                         <p>
                                                                             {{
@@ -227,16 +225,16 @@
                                                             </ul>
                                                         </figure>
                                                         <figure>
-                                                            <h1 class="section-head">
+                                                            <p class="section-head">
                                                                 {{ localeData?.mobile_number?.net_worth }}
-                                                            </h1>
+                                                            </p>
                                                             <ul>
                                                                 <li>
-                                                                    <h2>
+                                                                    <p>
                                                                         {{
                                                                             localeData?.mobile_number?.net_worth_case1
                                                                         }}:
-                                                                    </h2>
+                                                                    </p>
                                                                     <div class="cases">
                                                                         <p>
                                                                             {{
@@ -271,7 +269,7 @@
 
                         <div class="mr-t2">
                             <!--two way auth-->
-                            <h1 class="section-head">
+                            <p class="section-head">
                                 <mat-slide-toggle
                                     [(ngModel)]="twoWayAuth"
                                     name="twoWayAuth"
@@ -279,17 +277,17 @@
                                     (change)="changeTwoWayAuth()"
                                     >{{ localeData?.mobile_number?.two_way_auth_label }}
                                 </mat-slide-toggle>
-                            </h1>
+                            </p>
                             <p class="grey" *ngIf="twoWayAuth">{{ localeData?.mobile_number?.two_way_auth_content }}</p>
                         </div>
                     </div>
                 </div>
             </mat-tab>
             <mat-tab [label]="localeData?.session?.tab_heading">
-                <div class="wrap-tab-content-pd-15 overflow-visible">
-                    <div class="box clearfix mt-1 overflow-visible">
+                <div class="wrap-tab-content- pd-15 overflow-visible">
+                    <div class=" pd-15 clear-both mt-1 overflow-visible">
                         <div class="d-flex pd-b1 activity-title">
-                            <h1 class="section-head pt-0">{{ localeData?.session?.section_heading }}</h1>
+                            <p class="section-head pt-0">{{ localeData?.session?.section_heading }}</p>
                             <button mat-stroked-button class="mr-0" (click)="clearAllSession()">
                                 {{ commonLocaleData?.app_delete_all }}
                             </button>
