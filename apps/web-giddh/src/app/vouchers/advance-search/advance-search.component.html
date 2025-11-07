@@ -5,7 +5,7 @@
 <div mat-dialog-content class="dialog-body" [formGroup]="searchForm">
     <!-- invoice-search-start -->
     <ng-container *ngIf="type === 'invoice'">
-        <div class="d-flex d-flex column-gap-1 mr-b15 w-100">
+        <div class="d-flex column-gap-1 mr-b15 w-100">
             <reactive-dropdown-field [name]="'invoice_date_range'" [label]="localeData?.invoice_date_range" [placeholder]="commonLocaleData?.app_select_action"
                 [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')" formControlName="invoiceDateRange" [labelValue]="fieldLabelValues.invoiceDateRange">
             </reactive-dropdown-field>
@@ -70,7 +70,7 @@
     <!-- invoice-search-end -->
 
     <ng-container *ngIf="type === 'drcr'">
-        <div class="d-flex d-flex column-gap-1 mr-b15 w-100">
+        <div class="d-flex column-gap-1 mr-b15 w-100">
             <reactive-dropdown-field [name]="'app_date_range'" [label]="commonLocaleData?.app_date_range" [placeholder]="commonLocaleData?.app_select_action"
                 [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')" formControlName="dateRange" [labelValue]="fieldLabelValues.dateRange">
             </reactive-dropdown-field>
@@ -102,18 +102,18 @@
     </ng-container>
 
     <ng-container *ngIf="type === 'receipt' || type === 'payment'">
-        <div class="d-flex d-flex column-gap-1 mr-b15 w-100" *ngIf="type === 'receipt'">
+        <div class="d-flex column-gap-1 mr-b15 w-100" *ngIf="type === 'receipt'">
             <reactive-dropdown-field [name]="'adjustment_voucher'" [label]="localeData?.adjustment_voucher_label" [placeholder]="commonLocaleData?.app_select"
                 [options]="adjustmentVoucherOptions" class="w-50" [labelValue]="fieldLabelValues.adjustmentVoucherOptions" formControlName="receiptType">
             </reactive-dropdown-field>
         </div>
-        <div class="d-flex d-flex column-gap-1 mr-b15 w-100">
+        <div class="d-flex column-gap-1 mr-b15 w-100">
             <reactive-dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.total_amt" [placeholder]="commonLocaleData?.app_select"
             [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)" formControlName="invoiceTotalAmount" [labelValue]="fieldLabelValues.invoiceTotalAmount">
             </reactive-dropdown-field>
             <input-field [type]="'number'" [allowDigitsOnly]="true" [placeholder]="'00'" [label]="commonLocaleData?.app_amount" class="w-50" name="total" formControlName="total"></input-field>
         </div>
-        <div class="d-flex d-flex column-gap-1 mr-b15 w-100" *ngIf="searchForm?.get('receiptType')?.value !== 'NORMAL_RECEIPT'">
+        <div class="d-flex column-gap-1 mr-b15 w-100" *ngIf="searchForm?.get('receiptType')?.value !== 'NORMAL_RECEIPT'">
             <reactive-dropdown-field [name]="'grandTotalOperation'" [label]="localeData?.unused_amount" [placeholder]="commonLocaleData?.app_select"
             [options]="filtersForEntryTotal" class="w-50" (selectedOption)="dueTotalRangeChanged($event)" formControlName="grandTotalOperation" [labelValue]="fieldLabelValues.dueAmount">
             </reactive-dropdown-field>
@@ -161,7 +161,7 @@
     </ng-container>
 
     <ng-container *ngIf="type === 'purchase'">
-        <div class="d-flex d-flex column-gap-1 mr-b15 w-100">
+        <div class="d-flex column-gap-1 mr-b15 w-100">
             <reactive-dropdown-field [name]="'app_date_range'" [label]="commonLocaleData?.app_date_range" [placeholder]="commonLocaleData?.app_select_action"
                 [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')" formControlName="dateRange" [labelValue]="fieldLabelValues.dateRange">
             </reactive-dropdown-field>
@@ -188,7 +188,7 @@
     </ng-container>
 
     <ng-container *ngIf="type === 'purchase-order'">
-        <div class="d-flex d-flex column-gap-1 mr-b15 w-100">
+        <div class="d-flex column-gap-1 mr-b15 w-100">
             <div class="w-50">
                 <div class="date-range-wrapper">
                     <mat-form-field
