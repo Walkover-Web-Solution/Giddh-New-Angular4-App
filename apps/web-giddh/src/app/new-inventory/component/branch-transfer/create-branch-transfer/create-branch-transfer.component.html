@@ -1238,7 +1238,7 @@
                             <table id="table-receipt">
                                 <thead *ngIf="transferType === 'products'">
                                     <tr>
-                                        <th width="2%">#</th>
+                                        <th class="serial-no-column">#</th>
                                         <th width="30%">{{ commonLocaleData?.app_product_description }}</th>
                                         <th width="20%">{{ commonLocaleData?.app_quantity_unit }}</th>
                                         <th width="20%">{{ commonLocaleData?.app_rate }}</th>
@@ -1246,7 +1246,7 @@
                                     </tr>
                                 </thead>
                                 <thead *ngIf="transferType !== 'products'">
-                                    <th width="2%">#</th>
+                                    <th class="serial-no-column">#</th>
                                     <th width="30%" *ngIf="branchTransferMode === 'delivery-challan'">
                                         {{ localeData?.select_label_receiver }} {{ commonLocaleData?.app_details }}
                                     </th>

@@ -17,15 +17,13 @@
                 <form autocomplete="off" novalidate name="createDiscountForm" [formGroup]="createDiscountForm">
                     <div class="row row-gap-15 mt-2">
                         <div class="col-6">
-                            <span class="custom-mat-form-field">
-                                <mat-form-field appearance="outline">
-                                    <mat-label>{{ localeData?.discount_type }}</mat-label>
-                                    <mat-select formControlName="type">
-                                        <mat-option [value]="'FIX_AMOUNT'">{{ localeData?.discount_types?.as_per_value }}</mat-option>
-                                        <mat-option [value]="'PERCENTAGE'">{{ localeData?.discount_types?.as_per_percent }}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </span>
+                            <mat-form-field appearance="outline" class="initial-height w-100">
+                                <mat-label>{{ localeData?.discount_type }}</mat-label>
+                                <mat-select formControlName="type">
+                                    <mat-option [value]="'FIX_AMOUNT'">{{ localeData?.discount_types?.as_per_value }}</mat-option>
+                                    <mat-option [value]="'PERCENTAGE'">{{ localeData?.discount_types?.as_per_percent }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </div>
                         <div class="col-6">
                             <input-field [type]="'text'" [showError]="isFormSubmitted && !createDiscountForm.get('name')?.value"

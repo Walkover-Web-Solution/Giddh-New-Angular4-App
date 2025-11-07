@@ -1,7 +1,7 @@
-<div class="mobile-number-container custom-mat-form-field" [id]="id || undefined">
-    <mat-form-field appearance="outline" floatLabel="always" class="initial-height pointer-event-none mobile-input">
+<div class="mobile-number-container" [id]="id || null">
+    <mat-form-field appearance="outline" floatLabel="always" class="pointer-event-none mobile-input">
         <mat-label>{{ label }}</mat-label>
-        <div class="input-wrapper d-flex column-gap1">
+        <div class="input-wrapper d-flex column-gap-1">
             <div class="country-select-wrapper" (click)="$event.stopPropagation()">
                 <mat-select
                     [formControl]="countryControl"

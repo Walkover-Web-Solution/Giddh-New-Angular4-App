@@ -17,8 +17,8 @@
         <form [formGroup]="isTrigger ? customTriggerForm : emailForm" class="d-flex flex-column flex-grow-1">
             <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mb-4" *ngIf="isTrigger">
                 <!-- Trigger Name -->
-                <div class="custom-mat-form-field">
-                    <mat-form-field appearance="outline">
+                <div>
+                    <mat-form-field appearance="outline" class="initial-height w-100">
                         <mat-label>{{ localeData?.trigger_name }}</mat-label>
                         <input
                             matInput
@@ -46,8 +46,8 @@
                 </div>
 
                 <!-- Actions -->
-                <div class="custom-mat-form-field">
-                    <mat-form-field appearance="outline">
+                <div>
+                    <mat-form-field appearance="outline" class="initial-height w-100">
                         <mat-label>{{ localeData?.actions }}</mat-label>
                         <mat-select
                             name="actions"
@@ -112,8 +112,8 @@
                         >
                         </reactive-dropdown-field>
                     </div>
-                    <div class="custom-mat-form-field">
-                        <mat-form-field appearance="outline">
+                    <div>
+                        <mat-form-field appearance="outline" class="initial-height w-100">
                             <mat-label>{{
                                 emailConditionSuggestionsLabelOptions[field.variable].inputLabel
                             }}</mat-label>
@@ -130,8 +130,8 @@
                 </ng-container>
 
                 <!-- Execution Time -->
-                <div formGroupName="executionTime" class="custom-mat-form-field">
-                    <mat-form-field appearance="outline">
+                <div formGroupName="executionTime">
+                    <mat-form-field appearance="outline" class="initial-height w-100">
                         <mat-label>{{ commonLocaleData?.app_time }}</mat-label>
                         <input matInput type="time" [placeholder]="localeData?.enter_time" formControlName="time" />
                     </mat-form-field>
@@ -214,8 +214,8 @@
                 </div>
 
                 <!-- List of Account or Group dropdown -->
-                <div *ngIf="customTriggerForm?.controls?.entity?.value" class="custom-mat-form-field">
-                    <mat-form-field appearance="outline">
+                <div *ngIf="customTriggerForm?.controls?.entity?.value">
+                    <mat-form-field appearance="outline" class="initial-height w-100">
                         <mat-label>{{
                             customTriggerForm?.controls?.entity?.value === entityEnum.Account
                                 ? commonLocaleData?.app_account
@@ -267,8 +267,8 @@
                 </div>
 
                 <!-- Voucher Types -->
-                <div class="custom-mat-form-field">
-                    <mat-form-field appearance="outline">
+                <div>
+                    <mat-form-field appearance="outline" class="initial-height w-100">
                         <mat-label>{{ commonLocaleData?.app_voucher }}</mat-label>
                         <mat-select
                             name="voucherTypes"

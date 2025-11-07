@@ -79,7 +79,7 @@ table {
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--text-primary-color);
+    // color: var(--text-primary-color);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -126,9 +126,9 @@ table {
 }
 */
 
-.td-search-box div i:hover {
-    color: var(--color-medium-gray);
-}
+// .td-search-box div i:hover {
+//     color: var(--color-medium-gray);
+// }
 
 /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu > li > a:hover {

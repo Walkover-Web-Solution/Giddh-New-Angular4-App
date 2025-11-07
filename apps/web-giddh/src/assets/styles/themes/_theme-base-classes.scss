@@ -61,12 +61,15 @@ body {
     
         // Image url 
         --url-caret-image: url("../../images/caret-light.svg");
+
+        --table-background-color: #ffffff;
     }
 
     &.dark-theme { 
         // --text-primary-color: var(--color-white);
         --color-dark-gray: var(--color-light-gray);
         --color-image-filter-quaternary: brightness(0) invert(1);
+        --table-background-color: #424242;
     }
 }
 

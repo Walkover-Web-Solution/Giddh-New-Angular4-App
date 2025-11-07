@@ -29,7 +29,7 @@
         display: flex;
         i {
             margin-top: 1px;
-            color: var(--text-primary-color);
+            // color: var(--text-primary-color);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -61,9 +61,6 @@
     }
 }
 table{
-    .mat-mdc-number{
-        width: 2%;
-    }
     .mat-mdc-entry{
         width: 12%;
     }

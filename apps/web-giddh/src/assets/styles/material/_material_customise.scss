@@ -6,6 +6,12 @@
     padding-inline: 10px;
 }
 
+/** Used to make stroked button in dark background with white color */
+.btn-stroked-white {
+    color: var(--color-white) !important;
+    border-color: currentColor !important;
+}
+
 .btn-no-ripple {
     &.mat-mdc-icon-button {
         .mat-mdc-button-persistent-ripple {

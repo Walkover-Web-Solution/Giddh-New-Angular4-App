@@ -21,7 +21,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--text-primary-color);
+    // color: var(--text-primary-color);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -62,9 +62,9 @@
 }
 */
 
-.td-search-box div i:hover {
-    color: var(--color-medium-gray);
-}
+// .td-search-box div i:hover {
+//     color: var(--color-medium-gray);
+// }
 
 .dropdown-menu > li > a:hover {
     color: var(--text-primary-color);
