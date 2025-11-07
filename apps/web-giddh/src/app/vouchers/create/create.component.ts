@@ -7010,8 +7010,4 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.get("type").patchValue(this.voucherType);
         this.aiOcrService.ocrListToCreate$.next(req);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 90239fd9705a80d92b6d77ef3c8cf8d8478f9176
