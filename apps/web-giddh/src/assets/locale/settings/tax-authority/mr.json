@@ -1,7 +1,7 @@
 {
     "enter_description": "वर्णन प्रविष्ट करा",
     "select_state" : "राज्य निवडा",
-    "confirm_delete_tax_authority": "तुमची खात्री आहे की तुम्ही <span class='fw-bold'>[NAME]?<span> हटवू इच्छिता",
+    "confirm_delete_tax_authority": "तुमची खात्री आहे की तुम्ही <span class='font-weight-medium'>[NAME]?<span> हटवू इच्छिता",
     "no_values_changed_message": "कोणतीही मूल्ये बदलली नाहीत",
     "reporting_tax_authority": "अहवाल देणारी कर प्राधिकरण",
     "sales_with_tax": "करासह विक्री",

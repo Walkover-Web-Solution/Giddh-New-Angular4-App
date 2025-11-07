@@ -13,7 +13,7 @@
         content: "";
         width: 12px;
         height: 12px;
-        background-color: var(--color-light-gray);
+        background-color: var(--theme-background-color);
         top: -6px;
         right: 178px;
         @media screen and (max-width: 1024px) {
@@ -26,7 +26,9 @@
         transform: rotate(45deg);
     }
 }
-:host.setting-sidebar {
+/* UNUSED COMPONENT CLASS: setting-sidebar - Auto-commented by script
+:host
+.setting-sidebar {
     position: fixed;
     top: var(--top-distance);
     bottom: 0;
@@ -40,6 +42,7 @@
         display: none;
     }
 }
+*/
 :host.in #close {
     display: block;
     position: fixed;
@@ -47,26 +50,31 @@
     top: var(--top-distance);
     z-index: 5;
     border: 0;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
     cursor: pointer;
 }
 
-:host .container-fluid {
+/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
+:host 
+.container-fluid {
     padding-left: 0;
     padding-right: 0;
 }
+*/
 
 :host .aside-pane {
     max-width: 240px;
     width: 100%;
 }
+/* UNUSED COMPONENT CLASS: aside-header - Auto-commented by script
 .aside-header {
     background-color: var(--color-white);
     padding: 20px 10px;
 }
+*/
 .aside-pane {
     padding: 0;
-    background-color: var(--color-white);
+    // background-color: var(--color-white);
     .aside-help-header {
         display: flex;
         justify-content: space-between;
@@ -81,6 +89,7 @@
         }
     }
 }
+/* UNUSED COMPONENT CLASS: aside-pane-form - Auto-commented by script
 .aside-pane-form {
     background-color: var(--color-white);
     box-shadow: 0px 3px 6px var(--color-shadow-light);
@@ -91,6 +100,7 @@
     position: relative;
     margin-top: 15px;
 }
+*/
 
 :host.setting-sidebar {
     position: fixed;
@@ -107,7 +117,7 @@
         display: none;
     }
     .aside-pane {
-        background: var(--color-white);
+        // background: var(--color-white);
         overflow: initial;
         z-index: unset;
         .aside-help-header {
@@ -117,14 +127,16 @@
             display: block;
             padding: 15px 15px 3px;
             margin-bottom: 0;
-            &.setting-close-icon {
+            /*& UNUSED COMPONENT CLASS: setting-close-icon - Auto-commented by script
+.setting-close-icon {
                 padding: 15px 15px 15px;
             }
+*/
             img {
                 width: 15px;
             }
             a {
-                color: var(--color-blue-primary);
+                color: var(--text-primary-color);
                 span {
                     display: flex;
                     align-items: center;
@@ -153,9 +165,11 @@
 
 ::ng-deep {
     .back-to-main-slider {
-        .ng-star-inserted {
-            color: var(--color-blue-primary);
+        /* UNUSED COMPONENT CLASS: ng-star-inserted - Auto-commented by script
+.ng-star-inserted {
+            color: var(--text-primary-color);
         }
+*/
     }
 }
 

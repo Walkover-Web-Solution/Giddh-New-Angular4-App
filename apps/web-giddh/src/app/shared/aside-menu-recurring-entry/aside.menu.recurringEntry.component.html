@@ -5,9 +5,9 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="aside-pane account-aside-menu-state">
+    <div class="aside-pane mat-app-background account-aside-menu-state">
         <div class="form-header">
-            <h3 class="aside-title">{{ localeData?.recurring_account }}</h3>
+            <p class="aside-title">{{ localeData?.recurring_account }}</p>
         </div>
         <button mat-button (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="aside-body">
@@ -69,7 +69,7 @@
                             </ng-template>
                         </select-field>
                     </div>
-                    <div class="clearfix text-right" *ngIf="mode === 'create'">
+                    <div class="clear-both text-right" *ngIf="mode === 'create'">
                         <button mat-stroked-button class="mat-field-border" (click)="closeAsidePane($event)">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
@@ -81,7 +81,7 @@
                             {{ commonLocaleData?.app_save }}
                         </button>
                     </div>
-                    <div class="clearfix text-right" *ngIf="mode === 'update'">
+                    <div class="clear-both text-right" *ngIf="mode === 'update'">
                         <button
                             mat-stroked-button
                             *ngIf="(!isCompany && !isConsolidatedBranch)"

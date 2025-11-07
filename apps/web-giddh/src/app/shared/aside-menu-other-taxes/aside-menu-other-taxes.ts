@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { cloneDeep } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
@@ -21,8 +19,6 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     public taxesOptions: IOption[] = [];
     public selectedTaxUniqueName: string;
     public calculationMethodOptions: IOption[] = [];
-    /** True if mobile screen */
-    public isMobileScreen: boolean;
     /** To unsubscribe from subscription */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
@@ -33,13 +29,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     public selectedCalculationMethod: any;
 
     constructor(
-        private breakPointObservar: BreakpointObserver
     ) {
-        this.breakPointObservar.observe([
-            '(max-width:1024px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
     }
 
     public ngOnInit(): void {

@@ -192,7 +192,7 @@
         "gstn_username": "GSTN Username",
         "filing_period": "Filing Period",
         "gst_return_type": "GST Return Type",
-        "type_submit": "Type <strong>SUBMIT</strong> in the text box<span class='text-danger'>*</span>",
+        "type_submit": "Type <strong>SUBMIT</strong> in the text box<span class='text-red'>*</span>",
         "otp_required_error": "Please add Otp..",
         "submit_gst_error": "Please Enter Submit In Text Box.."
     },

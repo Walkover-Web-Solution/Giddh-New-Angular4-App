@@ -16,8 +16,8 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid var(--color-silver);
-            border-radius: 100%;
+            border: 2px solid var(--border-color);
+            border-radius: var(--mat-border-radius-circle);
             transition: background-color 1s;
             background-color: var(--color-white);
             position: relative;
@@ -30,6 +30,7 @@
     }
 }
 
+/* UNUSED COMPONENT CLASS: upload-excel - Auto-commented by script
 .upload-excel {
     display: flex;
     height: 320px;
@@ -38,13 +39,19 @@
     justify-content: center;
     margin: 20px auto 0 !important;
 }
+*/
+/* UNUSED COMPONENT CLASS: center-block - Auto-commented by script
 .center-block {
     margin: 0 auto;
 }
+*/
+/* UNUSED COMPONENT CLASS: max-width-500 - Auto-commented by script
 .max-width-500 {
     max-width: 500px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: uploader-label - Auto-commented by script
 .uploader-label {
     position: absolute;
     left: 0;
@@ -53,33 +60,42 @@
     bottom: 0;
     cursor: pointer;
 }
+*/
 
 #csvUploadInput {
     visibility: hidden;
 }
 
+/* UNUSED COMPONENT CLASS: upload-icon - Auto-commented by script
 .upload-icon {
     font-size: 62px;
     float: none;
     color: var(--color-border-light);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: sample-file-btn - Auto-commented by script
 .sample-file-btn {
     z-index: 9;
     position: relative;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: dashed-border - Auto-commented by script
 .dashed-border {
     border: 2px dashed var(--color-silver);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: import-type - Auto-commented by script
 .import-type {
     display: flex;
     justify-content: center;
 }
+*/
 
 .import-type li {
-    list-style: none;
+    // list-style: none;
     width: 320px;
     height: 150px;
     text-align: center;
@@ -88,7 +104,7 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background: var(--color-light-gray);
     padding: 15px;
     cursor: pointer;
@@ -103,14 +119,19 @@
     transform: scale(1.01);
 }
 
+/* UNUSED COMPONENT CLASS: lead - Auto-commented by script
 .lead {
     font-size: var(--font-size-32);
     margin-bottom: 10px;
 }
+*/
 
-.has-error .form-control {
+/* UNUSED COMPONENT CLASS: has-error - Auto-commented by script
+.has-error /* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
+.form-control {
     border-color: var(--color-red) !important;
 }
+*/
 @media (max-width: 991px) {
     .import-type {
         flex-wrap: wrap;

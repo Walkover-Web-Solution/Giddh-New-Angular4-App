@@ -2,19 +2,28 @@
     padding: 0;
     border-right: 1px solid transparent;
 }
+/* UNUSED COMPONENT CLASS: receipt-wrapper - Auto-commented by script
+/* UNUSED COMPONENT CLASS: dropdown-toggle - Auto-commented by script
+/* UNUSED COMPONENT CLASS: doc-checkbox - Auto-commented by script
+/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
+/* UNUSED COMPONENT CLASS: doc-actions - Auto-commented by script
 .doc-actions {
-    border-color: var(--color-blue-primary) !important;
-    background: var(--color-blue-primary);
+    border-color: var(--theme-primary-color) !important;
+    background: var(--bg-primary-color);
     color: var(--color-white);
 }
+*/
+/* UNUSED COMPONENT CLASS: btn-sm - Auto-commented by script
 
 .btn,
 .btn-sm,
+/* UNUSED COMPONENT CLASS: btn-xs - Auto-commented by script
 .btn-xs {
-    border-radius: 3px;
+    border-radius: var(--mat-border-radius-4);
 }
+*/
 
 .btn {
     display: inline-block;
@@ -39,7 +48,7 @@ svg.icon.icon-xxlg-md {
     .return-top {
         display: inline-block;
         margin-left: 1%;
-        .font-xlarge {
+        .font-size-16 {
             margin: 3px auto;
         }
     }
@@ -53,9 +62,12 @@ svg.icon.icon-xxlg-md {
     margin: 22px 0;
 }
 
-.return-content .return-filed {
+/* UNUSED COMPONENT CLASS: return-filed - Auto-commented by script
+.return-content 
+.return-filed {
     background-color: var(--color-green);
 }
+*/
 
 .text-uppercase {
     text-transform: uppercase;
@@ -80,17 +92,13 @@ svg.icon.gstr-icon {
     vertical-align: text-top;
 }
 
-.font-xs {
-    font-size: var(--font-size-12);
-}
-
 .return-body b {
     font-weight: 500;
 }
 
 .return-content .line {
     margin: 5px 18px;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .return-content .line::before {
@@ -98,31 +106,36 @@ svg.icon.gstr-icon {
     display: block;
     width: 9px;
     height: 9px;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     background-color: var(--color-border-light);
     position: relative;
     top: 5px;
     right: 19px;
 }
 
-.return-content .count a {
-    color: var(--dark-blue01);
-}
+// .return-content .count a {
+//     color: var(--text-primary-color);
+// }
 
-.font-xxxlarge {
-    font-size: var(--font-size-24);
-}
+// .font-size-24 {
+//     font-size: var(--font-size-24);
+// }
 
+/* UNUSED COMPONENT CLASS: bottom-action - Auto-commented by script
 .bottom-action,
 .tax-engine a,
 .tax-engine a > .dropdown {
     cursor: pointer;
 }
+*/
 
-.return-content .line-gradient {
+/* UNUSED COMPONENT CLASS: line-gradient - Auto-commented by script
+.return-content 
+.line-gradient {
     border-image: linear-gradient(to right, #eee 0, #eee 30%, #fff 60%);
     border-image-slice: 1;
 }
+*/
 
 .return-content .purchase-colm {
     width: 24%;
@@ -136,7 +149,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     margin: 20px 0px 0px;
     i {
         padding: 0 4%;
@@ -158,60 +171,83 @@ svg.icon.icon-xxlg-md {
     margin-bottom: 0;
 }
 
+/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
 .btn-default {
     color: var(--color-black);
     background-color: var(--color-light-gray);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
+*/
 
-.return-body .notification {
+/* UNUSED COMPONENT CLASS: notification - Auto-commented by script
+.return-body 
+.notification {
     padding-top: 25px;
     background: var(--color-white);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: filing-demo-video - Auto-commented by script
 .filing-demo-video {
     padding: 10px;
     display: block;
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
     margin-bottom: 12px;
 }
+*/
 
-.filing-demo-video .video-thumbnail {
+/* UNUSED COMPONENT CLASS: video-thumbnail - Auto-commented by script
+.filing-demo-video 
+.video-thumbnail {
     display: inline-block;
 }
+*/
 
 .filing-demo-video .video-thumbnail > svg {
     width: 60px;
     height: 40px;
 }
 
-.filing-demo-video .video-desc {
+/* UNUSED COMPONENT CLASS: video-desc - Auto-commented by script
+.filing-demo-video 
+.video-desc {
     display: inline-block;
     padding-left: 10px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: font-medium - Auto-commented by script
 .font-medium {
     font-size: var(--font-size-15);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: label-default - Auto-commented by script
 .label-default {
     background-color: var(--color-medium-gray);
 }
+*/
 
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 
-.return-body .notification .activity-graph {
+/* UNUSED COMPONENT CLASS: activity-graph - Auto-commented by script
+.return-body .notification 
+.activity-graph {
     padding: 20px 0 25px;
 }
+*/
 
-.return-body .notification .activity-graph .notify {
+/* UNUSED COMPONENT CLASS: notify - Auto-commented by script
+.return-body .notification .activity-graph 
+.notify {
     position: relative;
     padding-bottom: 30px;
 }
+*/
 
 .return-body .notification .activity-graph .notify:not(:last-child)::before {
     content: "";
@@ -223,20 +259,26 @@ hr {
     border-left: 1px solid var(--color-border-light);
 }
 
-.return-body .notification .activity-graph .notify-circle {
+/* UNUSED COMPONENT CLASS: notify-circle - Auto-commented by script
+.return-body .notification .activity-graph 
+.notify-circle {
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     display: inline-block;
     margin-right: 15px;
     margin-top: 4px;
 }
+*/
 
-.return-body .notification .activity-graph .notify-content {
+/* UNUSED COMPONENT CLASS: notify-content - Auto-commented by script
+.return-body .notification .activity-graph 
+.notify-content {
     display: inline-block;
     width: 90%;
 }
+*/
 
 .return-body .notification .activity-graph h4 {
     line-height: 1.5;
@@ -244,53 +286,63 @@ hr {
     margin-top: 10px;
 }
 
-.notify label.font-xs.text-muted strong {
+.notify label.font-size-12.text-muted strong {
     font-weight: 600;
     color: var(--color-dark-gray) !important;
 }
 
+/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
 #c-tab ::ng-deep .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
     color: var(--color-dark-gray);
     cursor: default;
     background-color: var(--color-white);
-    border: 2px solid var(--color-silver);
+    border: 2px solid var(--border-color);
     border-right: 0 !important;
     border-left: 0 !important;
     border-top: 0 !important;
-    border-bottom-color: var(--color-blue-primary);
+    border-bottom-color: var(--theme-primary-color);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: my-dropdown-menu - Auto-commented by script
 .my-dropdown-menu {
     top: 8px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: section-disabled - Auto-commented by script
 .section-disabled {
     pointer-events: none;
     opacity: 0.6;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: daterangePicker - Auto-commented by script
 .daterangePicker {
     position: absolute;
     opacity: 0;
     right: -160px;
     top: 0;
-    /* visibility: hidden; */
+    // visibility: hidden;
     pointer-events: none;
 }
+/* UNUSED COMPONENT CLASS: daterangepicker - Auto-commented by script
 
 :host ::ng-deep .daterangepicker.opensright:after,
-:host ::ng-deep .daterangepicker.opensright:before {
+:host ::ng-deep .daterangepicker/* UNUSED COMPONENT CLASS: opensright - Auto-commented by script
+.opensright:before {
     content: none;
 }
+*/
 
 :focus {
     outline: none !important;
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     background: var(--color-border-light);
 }
 
@@ -307,34 +359,44 @@ hr {
     }
 }
 
+/* UNUSED COMPONENT CLASS: icon-download - Auto-commented by script
 .icon-download {
     font-weight: 600;
 }
+*/
 
-.header-info .btn-group > .dropdown-menu {
+/* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
+.header-info .btn-group > /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
+.dropdown-menu {
     margin-top: 0;
     z-index: 989;
 }
-::ng-deep #monthPicker button.btn.btn-default.btn-info {
-    background: var(--color-blue-primary) !important;
+*/
+/* UNUSED COMPONENT CLASS: btn-info - Auto-commented by script
+::ng-deep #monthPicker button.btn.btn-default
+.btn-info {
+    background: var(--bg-primary-color) !important;
     color: var(--color-white) !important;
     text-decoration: none;
-    border-radius: 3px;
+    border-radius: var(--mat-border-radius-4);
 }
+*/
 
-::ng-deep #monthPicker .btn-info > .text-success {
-    color: var(--color-blue-primary) !important;
+ /* ::ng-deep #monthPicker .btn-info > UNUSED COMPONENT CLASS: text-green - Auto-commented by script
+.text-green {
+    color: var(--text-primary-color) !important;
 }
-::ng-deep #monthPicker .btn-default.btn-info > .text-success {
+*/
+::ng-deep #monthPicker .btn-default.btn-info > .text-green {
     color: inherit !important;
 }
-::ng-deep #monthPicker .btn-info:hover .text-success {
+::ng-deep #monthPicker .btn-info:hover .text-green {
     color: var(--color-white) !important;
 }
-::ng-deep #monthPicker .btn-default > .text-success {
+::ng-deep #monthPicker .btn-default > .text-green {
     color: inherit !important;
 }
-::ng-deep #monthPicker .btn-default:hover > .text-success {
+::ng-deep #monthPicker .btn-default:hover > .text-green {
     color: var(--color-white) !important;
 }
 .parent {
@@ -360,14 +422,14 @@ hr {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     animation: loading 2s linear infinite;
 }
 
 .list-inline {
     padding-left: 0;
     margin-left: -5px;
-    list-style: none;
+    // list-style: none;
     > li {
         display: inline-block;
         padding-right: 5px;
@@ -403,52 +465,4 @@ hr {
 .seperate-border {
     background: var(--color-light-gray);
     height: 10px;
-}
-/*responsive*/
-@media screen and (max-width: 768px) {
-    .month-picker {
-        position: absolute;
-        top: 100px !important;
-        left: 0 !important;
-        right: auto !important;
-    }
-}
-@media (max-width: 767px) {
-    .daterangePicker {
-        right: 0;
-    }
-    .return-content {
-        background-color: var(--color-white);
-    }
-    .filing-steps .font-large {
-        font-size: var(--font-size-15);
-    }
-    .return-content .content-graph {
-        padding: 15px 0;
-    }
-    .gstr-1-label,
-    .gstr-2-label {
-        display: flex !important;
-        margin-left: 0 !important;
-        img {
-            margin-right: 10px;
-        }
-    }
-}
-.return-content .sales-colm {
-    width: 100%;
-}
-@media (max-width: 575px) {
-    .view-summary-btn {
-        float: none !important;
-        display: block;
-        margin-top: 10px;
-    }
-    .list-inline.list-middle {
-        display: flex;
-        flex-direction: column;
-        li {
-            margin-bottom: 8px;
-        }
-    }
 }

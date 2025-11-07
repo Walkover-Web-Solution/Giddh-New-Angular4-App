@@ -11,12 +11,11 @@
         padding-bottom: 5px;
     }
 }
-.btn-success,
-.btn-primary {
+.btn-success {
     margin-top: 24px;
     margin-bottom: 24px;
-    border-color: var(--color-blue-primary) !important;
-    background-color: var(--color-blue-primary) !important;
+    border-color: var(--theme-primary-color) !important;
+    background-color: var(--bg-primary-color) !important;
 }
 
 .input-upload {

@@ -1,9 +1,9 @@
 <div class="company-branch-dropdown">
     <div class="search-bar">
         <div class="search-box position-relative mr-t1 mr-b1">
-            <div class="input-group flex-nowrap">
+            <div class="d-flex flex-nowrap align-items-center">
                 <div class="input-group-prepend">
-                    <span class="input-group-text border-right-none">
+                    <span class="input-group-text d-inline-block border-right-none text-black">
                         <i class="icon-search"></i>
                     </span>
                 </div>
@@ -42,7 +42,7 @@
         >
             <mat-tab [label]="commonLocaleData?.app_company">
                 <div class="wrap-company-refresh">
-                    <p class="font-12 d-flex justify-content-between mr-t1">
+                    <p class="font-size-12 d-flex justify-content-between mr-t1 mr-b1">
                         <span
                             ><small>{{ companyList?.length }} {{ localeData?.companies }}</small></span
                         >
@@ -56,7 +56,7 @@
                 </div>
                 <div class="company-list mt-2" tabindex="0">
                     <ul
-                        class="list-style-none font-15"
+                        class="list-style-none font-size-15"
                         *ngIf="
                             companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)
                         "
@@ -78,7 +78,7 @@
                                 <i class="icon-company mr-2"></i>
                                 <span class="company-name-right">{{ company?.name }}</span>
                                 <span
-                                    class="font-12 text-right branch-count pt-0 pb-0"
+                                    class="font-size-12 text-right branch-count pt-0 pb-0"
                                     *ngIf="company?.branchCount > 1 && company?.unarchivedBranchCount >= 1"
                                     >{{ company?.unarchivedBranchCount }}</span
                                 >
@@ -93,7 +93,7 @@
                 [label]="commonLocaleData?.app_branch"
             >
                 <div class="wrap-company-refresh">
-                    <p class="font-12 d-flex justify-content-between mr-t1">
+                    <p class="font-size-12 d-flex justify-content-between mr-t1 mr-b1">
                         <span
                             ><small
                                 >{{
@@ -119,12 +119,12 @@
                         (click)="createBranch()"
                         *ngIf="activeCompany?.uniqueName && companyBranches?.uniqueName && activeCompany.uniqueName === companyBranches.uniqueName && !currentBranchUniqueName"
                     >
-                        <i class="icon-plus font-12"></i>
+                        <i class="icon-plus font-size-12"></i>
                         <span>{{ localeData?.create_branch }}</span>
                     </button>
                 </div>
                 <div class="company-list branch-list mt-2">
-                    <ul class="list-style-none font-15" *ngIf="!branchRefreshInProcess">
+                    <ul class="list-style-none font-size-15" *ngIf="!branchRefreshInProcess">
                         <ng-container *ngIf="companyBranches?.unarchivedBranchCount >= 1">
                             <li *ngFor="let branch of companyBranches?.branches">
                                 <ng-container *ngIf="
@@ -141,7 +141,7 @@
                                         <i class="icon-head-branch mr-2"></i>
                                         <span class="d-flex flex-column">
                                             <span class="branch-alias">{{ branch?.name }}</span>
-                                            <span class="font-12 branch-company-name"
+                                            <span class="font-size-12 branch-company-name"
                                                 >{{ commonLocaleData?.app_company }}
                                                 {{ commonLocaleData?.app_mode }}</span
                                             >
@@ -182,7 +182,7 @@
                                         <span class="branch-alias">
                                             {{ branch?.name }}
                                         </span>
-                                        <span *ngIf="branch?.consolidatedBranch" class="font-12 branch-company-name">{{
+                                        <span *ngIf="branch?.consolidatedBranch" class="font-size-12 branch-company-name">{{
                                             localeData?.company_consolidated_data
                                         }}</span>
                                         <!-- Company name will show once we release the concept of headquarters -->

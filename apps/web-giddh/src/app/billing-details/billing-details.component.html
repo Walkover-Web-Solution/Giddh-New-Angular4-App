@@ -12,12 +12,13 @@
                     <div class="back-btnn">
                         <button
                             mat-stroked-button
-                            class="back-button"
                             (click)="backToSubscriptions()"
                             *ngIf="!showLoader"
                         >
-                            <i class="icon-left back-left"></i>
-                            {{ commonLocaleData?.app_back }}
+                            <span class="d-inline-flex align-items-center justify-content-center column-gap-1">
+                                <i class="icon-left back-left"></i>
+                                {{ commonLocaleData?.app_back }}
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -45,9 +46,9 @@
         </div>
         <div class="billing-details">
             <div class="col-md-2 billing-name-content">
-                <h3 class="billing-name" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                <p class="billing-name" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     {{ localeData?.billing_details }}
-                </h3>
+                </p>
             </div>
             <div class="row display-line">
                 <div class="col-md-3 left-side">
@@ -57,7 +58,7 @@
                                 <mat-form-field appearance="fill" class="mat-input">
                                     <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ localeData?.billing_name }}
-                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                        <span [ngClass]="{ 'text-red-content': showLoader }" class="text-red"
                                             >*</span
                                         ></label
                                     >
@@ -79,7 +80,7 @@
                                 <mat-form-field appearance="fill" class="mat-input">
                                     <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ commonLocaleData?.app_email_id }}
-                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                        <span [ngClass]="{ 'text-red-content': showLoader }" class="text-red"
                                             >*</span
                                         ></label
                                     >
@@ -154,7 +155,7 @@
                                                 ? commonLocaleData?.app_state
                                                 : commonLocaleData?.app_region
                                         }}
-                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                        <span [ngClass]="{ 'text-red-content': showLoader }" class="text-red"
                                             >*
                                         </span></label
                                     >
@@ -219,7 +220,7 @@
                 <div class="col-md-3 right-side">
                     <div class="whole-renewal">
                         <div class="renewal-heading">
-                            <h3
+                            <p
                                 class="renewal-details"
                                 [ngClass]="{
                                     'skeleton-common-class': showLoader,
@@ -227,7 +228,7 @@
                                 }"
                             >
                                 {{ localeData?.renewal_plan_details }}
-                            </h3>
+                            </p>
                         </div>
                         <div class="renewal-data">
                             <mat-card class="renewal-card">
@@ -280,13 +281,13 @@
                         <section class="renewal-section">
                         </section>
                         <div class="renewal-payable">
-                            <h3
+                            <p
                                 class="new-payable"
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'new-payable-content': showLoader }"
                             >
                                 {{ localeData?.net_payable_amount }}
-                            </h3>
-                            <h2
+                            </p>
+                            <div
                                 class="renewal-amount"
                                 [ngClass]="{
                                     'skeleton-common-class': showLoader,
@@ -313,7 +314,7 @@
                                     [ngClass]="{ 'including-text-content': showLoader }"
                                     >{{ localeData?.including_tax }}</span
                                 >
-                            </h2>
+                            </div>
 
                             <div class="form-group" [ngClass]="{ 'form-group-div': showLoader }">
                                 <div

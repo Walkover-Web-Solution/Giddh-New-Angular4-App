@@ -2,16 +2,16 @@
     <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
 </ng-container>
 <ng-container *ngIf="!isLoading">
-    <h1 class="page-title" *ngIf="(logs$ | async)?.length > 0">{{ localeData?.audit_logs }}</h1>
+    <p class="page-title" *ngIf="(logs$ | async)?.length > 0">{{ localeData?.audit_logs }}</p>
     <br />
     <section class="audit-log" *ngFor="let log of logs$ | async; let i = index">
-        <h1 class="audit-log-heading">
+        <p class="audit-log-heading">
             {{ log.operationType }}
             <span *ngIf="log && log.accountName && log.accountName != null">
                 - {{ log.accountName }} ({{ log.accountUniqueName }})</span
             >
-        </h1>
-        <div class="mr-t05 border-top-btm clearfix">
+        </p>
+        <div class="mr-t05 border-top-btm clear-both">
             <div>
                 <label class="pull-left">{{ commonLocaleData?.app_entity }}:</label>
                 <p class="pull-left mr-l05">{{ log.entityType }}</p>
@@ -67,7 +67,7 @@
             <table
                 mat-table
                 [dataSource]="log.log.transactions"
-                class="table table-bordered w-100"
+                class="table border w-100"
             >
                 <!-- Index Column -->
                 <ng-container matColumnDef="index">
@@ -314,7 +314,7 @@
     </section>
     <section class="no-logs" *ngIf="(logs$ | async)?.length < 1">
         <div class="no-data">
-            <h1>{{ localeData?.no_results_found }}</h1>
+            <h2>{{ localeData?.no_results_found }}</h2>
             <p>{{ localeData?.no_results_note }}</p>
         </div>
     </section>

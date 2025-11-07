@@ -89,15 +89,14 @@
                     <div class="branch-form-field">
                         <div
                             class="address-dropdown form-group mb-0"
-                            [ngClass]="{ 'custom-mat-form-field': !branchForm?.get('address')?.value?.length }"
                         >
-                            <mat-form-field appearance="outline" class="w-100" (click)="trigger.open()">
+                            <mat-form-field appearance="outline" class="initial-height w-100" [ngClass]="{ 'hide-select-arrow': !branchForm?.get('address')?.value?.length }" (click)="trigger.open()">
                                 <mat-label>{{ localeData?.addresses }}</mat-label>
-                                <mat-chip-grid #chipGrid class="d-flex flex-wrap column-gap5 row-gap1">
+                                <mat-chip-grid #chipGrid class="d-flex flex-wrap column-gap-05 row-gap-1">
                                     <ng-container *ngFor="let chipItem of branchForm?.get('address')?.value">
                                         <mat-chip-row (removed)="removeItem(chipItem)" role="option">
                                             <span>{{ chipItem?.label }}</span>
-                                            <span matChipRemove><i class="icon-cross font-14"></i></span>
+                                            <span matChipRemove><i class="icon-cross font-size-14"></i></span>
                                         </mat-chip-row>
                                     </ng-container>
                                     <input
@@ -118,19 +117,17 @@
                                     multiple
                                     #trigger
                                 >
-                                    <div>
-                                        <div class="bg-grey-on-hover">
-                                            <a
-                                                href="javascript:;"
-                                                [keyboardShortcut]="'alt+c'"
-                                                (onShortcutPress)="handleShortcutPress()"
-                                                (click)="handleShortcutPress(); trigger.close()"
-                                                class="px-2 py-3 d-flex justify-content-between w-100"
-                                            >
-                                                <div class="item">{{ localeData?.add_address }}</div>
-                                                <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
-                                            </a>
-                                        </div>
+                                    <div class="bg-grey-on-hover">
+                                        <a
+                                            href="javascript:;"
+                                            [keyboardShortcut]="'alt+c'"
+                                            (onShortcutPress)="handleShortcutPress()"
+                                            (click)="handleShortcutPress(); trigger.close()"
+                                            class="px-2 py-3 d-flex justify-content-between w-100"
+                                        >
+                                            <div class="item">{{ localeData?.add_address }}</div>
+                                            <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
+                                        </a>
                                     </div>
                                     <ng-container *ngFor="let option of addresses">
                                         <mat-option

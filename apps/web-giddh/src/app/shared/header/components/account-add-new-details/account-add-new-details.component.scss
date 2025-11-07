@@ -1,12 +1,16 @@
+/* UNUSED COMPONENT CLASS: form-header - Auto-commented by script
 .form-header {
     padding: 20px 15px;
-    background: var(--color-blue-primary);
+    background: var(--bg-primary-color);
     color: var(--color-white);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: portal-height - Auto-commented by script
 .portal-height {
     height: 85px !important;
 }
+*/
 
 .inc-dec {
     position: relative;
@@ -15,7 +19,8 @@
     display: flex;
     align-items: center;
 
-    .plus-minus {
+    /* UNUSED COMPONENT CLASS: plus-minus - Auto-commented by script
+.plus-minus {
         display: flex;
         justify-content: center;
 
@@ -24,8 +29,10 @@
             padding: 0 5px;
         }
     }
+*/
 }
 
+/* UNUSED COMPONENT CLASS: aside-pane-form - Auto-commented by script
 .aside-pane-form {
     background-color: var(--color-white);
     box-shadow: 0px 3px 6px var(--color-shadow-light);
@@ -34,21 +41,26 @@
     scroll-behavior: smooth;
     position: relative;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: aside-pane-container - Auto-commented by script
 .aside-pane-container {
     padding: 15px;
     font-size: var(--font-size-15);
     color: var(--color-black);
 }
+*/
 
 .aside-pane-form label {
     margin-bottom: 5px;
     display: block;
 }
 
+/* UNUSED COMPONENT CLASS: cr-dr-account - Auto-commented by script
 .cr-dr-account {
     position: relative;
 }
+*/
 
 .cr-dr-account span {
     width: 36px;
@@ -63,15 +75,19 @@
     right: 0;
 }
 
-span.dr-label {
+/* span UNUSED COMPONENT CLASS: dr-label - Auto-commented by script
+.dr-label {
     right: 36px !important;
 }
+*/
 
 .cr-dr-account span.active {
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     color: var(--color-white);
 }
 
+/* UNUSED COMPONENT CLASS: col-sm-2 - Auto-commented by script
+/* UNUSED COMPONENT CLASS: col-sm-10 - Auto-commented by script
 .aside-pane-form .col-sm-4,
 .aside-pane-form .col-sm-8,
 .aside-pane-form .col-sm-10,
@@ -80,28 +96,32 @@ span.dr-label {
 .aside-pane-form .col-sm-12 {
     padding: 0 10px;
 }
+*/
 
 .upper-form {
     margin-bottom: 20px;
 
     .input-group {
         .input-group-addon {
-            border-left: 1px solid var(--color-silver) !important;
+            border-left: 1px solid var(--border-color) !important;
         }
 
         input {
-            border-left: 1px solid var(--color-silver) !important;
+            border-left: 1px solid var(--border-color) !important;
 
             &:focus {
-                border-left: 1px solid var(--color-blue-primary) !important;
+                border-left: 1px solid var(--theme-primary-color) !important;
             }
         }
     }
 }
 
-form.gstin-form {
+/* UNUSED COMPONENT CLASS: gstin-form - Auto-commented by script
+form
+.gstin-form {
     padding-top: 15px;
 }
+*/
 
 .add-address-default {
     display: flex;
@@ -112,6 +132,7 @@ form.gstin-form {
     margin: 20px 0;
 }
 
+/* UNUSED COMPONENT CLASS: add-address-btn - Auto-commented by script
 .add-address-btn {
     width: 140px;
     display: flex;
@@ -122,6 +143,7 @@ form.gstin-form {
         margin-right: 10px;
     }
 }
+*/
 
 .add-address-default h3 {
     font-size: var(--font-size-15);
@@ -134,28 +156,23 @@ form.gstin-form {
     padding-top: 15px;
 }
 
-.other-form .btn-sky-blue {
-    display: block;
-}
 
-#asidePaneFormTabs ul.nav.nav-tabs {
-    display: flex;
-    align-items: flex-start;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-}
-
+/* UNUSED COMPONENT CLASS: mobile-number-sh-select - Auto-commented by script
 .mobile-number-sh-select {
     width: 90px;
     margin-right: 10px;
 }
+*/
 
-a.btn-remove {
+/* UNUSED COMPONENT CLASS: btn-remove - Auto-commented by script
+a
+.btn-remove {
     padding: 3px 10px;
     background-color: var(--color-white);
     color: var(--color-black);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
+*/
 
 .name-of-field {
     display: flex;
@@ -173,12 +190,6 @@ a.btn-remove {
     }
 }
 
-@media (max-width: 767px) {
-    .upper-form .select-group {
-        margin-bottom: 15px;
-    }
-}
-
 .is-default-address {
     margin-top: 5px !important;
     height: 29px;
@@ -186,14 +197,14 @@ a.btn-remove {
 
 .remove-radio-btn {
     span {
-        margin-top: 3px;
+        margin-top: -1px;
     }
 }
 
-.only-right-radius {
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-}
+// .only-right-radius {
+//     border-top-right-radius: 4px;
+//     border-bottom-right-radius: 4px;
+// }
 
 .expiry-days-input-width {
     min-width: 220px;

@@ -1,6 +1,9 @@
-.single-item .dropdown-menu {
+/* UNUSED COMPONENT CLASS: single-item - Auto-commented by script
+.single-item /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
+.dropdown-menu {
     height: 50px !important;
 }
+*/
 
 :host .dropdown-menu {
     width: 100%;
@@ -10,11 +13,13 @@
     z-index: 9;
 }
 
+/* UNUSED COMPONENT CLASS: fake-label - Auto-commented by script
 .fake-label {
     cursor: pointer;
     padding: 5px 10px;
     line-height: 24px;
 }
+*/
 
 .disabled-label {
     cursor: not-allowed;
@@ -25,9 +30,12 @@
     background-image: unset !important;
 }
 
-.multi-select .caret {
+/* UNUSED COMPONENT CLASS: caret - Auto-commented by script
+.multi-select 
+.caret {
     display: block !important;
 }
+*/
 sup.mandatory-asterisk {
     font-size: var(--font-size-15);
     top: 0;
@@ -47,10 +55,13 @@ sup.mandatory-asterisk {
 }
 
 
+/* UNUSED COMPONENT CLASS: tax-dropdown - Auto-commented by script
 .tax-dropdown {
     max-height: 102px;
     min-height: 134px
 }
+*/
+/* UNUSED COMPONENT CLASS: show-caret-icon - Auto-commented by script
 .show-caret-icon {
     background-image: var(--url-caret-image) !important;
     background-color: var(--color-white) !important;
@@ -58,6 +69,7 @@ sup.mandatory-asterisk {
     background-size: 10px !important;
     background-repeat: no-repeat;
 }
+*/
 
 .tax-wrapper {
     max-height: 156px;

@@ -4,9 +4,9 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="aside-pane">
+    <div class="aside-pane mat-app-background d-flex flex-column">
         <div class="aside-help-header">
-            <h2>{{ localeData?.page_heading }}</h2>
+            <p>{{ localeData?.page_heading }}</p>
             <div mat-dialog-close class="cursor-pointer">
                 <i class="icon-cross"></i>
             </div>
@@ -37,7 +37,7 @@
                     </mat-list>
                 </div>
                 <div class="download-block">
-                    <h3>{{ commonLocaleData?.app_download }}</h3>
+                    <p>{{ commonLocaleData?.app_download }}</p>
                     <mat-list role="list">
                         <div class="d-flex">
                             <mat-list-item role="listitem">
@@ -92,12 +92,12 @@
                 <div class="request-demo">
                     <div class="file-image">
                         <img src="{{ imgPath }}request-demo.svg" alt="request img" />
-                        <p class="text-gray">{{ localeData?.request_demo }}:</p>
+                        <p class="text-light">{{ localeData?.request_demo }}:</p>
                         <button mat-raised-button color="primary" (click)="scheduleNow($event)" aria-label="schedule img">
                             {{ commonLocaleData?.app_schedule_now }}
                         </button>
                         <br />
-                        <p class="text-gray">{{ localeData?.contact }}:</p>
+                        <p class="text-light">{{ localeData?.contact }}:</p>
                     </div>
                     <div class="contact-block">
                         <p class="d-flex  align-items-center mb-1  support-mail-tel">

@@ -4,7 +4,7 @@
 }
 
 .import-type li {
-    list-style: none;
+    // list-style: none;
     width: 20%;
     text-align: center;
     display: flex;
@@ -12,12 +12,12 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background: var(--color-light-gray);
     cursor: pointer;
     transition: all 0.3s ease;
     color: initial;
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
     justify-content: center;
 }
 
@@ -32,9 +32,11 @@
     margin-bottom: 10px;
 }
 
+/* UNUSED COMPONENT CLASS: has-error - Auto-commented by script
 .has-error .form-control {
     border-color: var(--color-red) !important;
 }
+*/
 
 .import-type img {
     max-width: 90px;
@@ -46,10 +48,10 @@
     width: 100%;
     background-color: var(--color-white);
 }
-.text-link-2 {
-    color: var(--color-blue-primary) !important;
-    &:hover {
-        color: var(--color-blue-primary) !important;
+    .text-link-2 {
+        color: var(--theme-primary-color) !important;
+        &:hover {
+            color: var(--theme-primary-color) !important;
     }
 }
 @media (max-width: 991px) {
@@ -62,38 +64,12 @@
     }
 }
 
-@media (max-width: 767px) {
-    .import-type {
-        display: block;
-        justify-content: center;
-        text-align: center;
-    }
-    .import-type li {
-        width: 30.33%;
-        margin: 10px;
-        float: left;
-    }
+/* UNUSED COMPONENT CLASS: icon-import - Auto-commented by script
+.import-type .icon-import,
+.import-type .icon-invoice-new {
+    background: var(--color-light-gray);
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
 }
-
-@media (max-width: 575px) {
-    .import-type li {
-        width: 100%;
-        margin: 10px auto;
-        float: none;
-        max-width: 220px;
-        text-align: center;
-        display: block;
-    }
-    .lead {
-        font-size: var(--font-size-24);
-    }
-}
-
-.import-type {
-    .icon-import, .icon-invoice-new {
-        background: var(--color-light-gray);
-        width: 90px;
-        height: 90px;
-        line-height: 90px;
-    }
-}
+*/

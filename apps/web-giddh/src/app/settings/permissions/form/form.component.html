@@ -1,7 +1,7 @@
 <form name="permissionForm" [formGroup]="permissionForm" [ngClass]="{ 'permission-form': isHorizntl }"
     (ngSubmit)="submitPermissionForm()" autocomplete="off">
     <div class="d-flex align-items-center justify-content-between form-wrapper">
-        <div class="field-wrapper d-flex align-items-center column-gap15 row-gap15"
+        <div class="field-wrapper d-flex align-items-center column-gap-15 row-gap-15"
             [ngClass]="{ 'flex-wrap w-100 permission-update-mode': isUpdtCase }">
             <div>
                 <input-field [label]="isLblShow ? localeData?.unique_name_email_label : ''" [type]="'text'"
@@ -29,7 +29,7 @@
                 </button>
                 <mat-menu #menu="matMenu">
                     <section class="mr-b1 time-span-dropdown custom-date-range-menu" (click)="$event.stopPropagation()">
-                        <div class="pd-15">
+                        <div class=" pd-15 ">
                             <mat-radio-group formControlName="periodOptions" class="d-flex flex-column">
                                 <mat-radio-button value="daterange" id="dateRange" color="primary"
                                     (click)="isOpenedInModal ? handleTimeSpanChange('daterange') : ''"
@@ -50,7 +50,7 @@
                                 <div>
                                     <div class="date-range-wrapper">
                                         <mat-form-field [matDatepickerToggleIcon]="false" appearance="outline"
-                                            (click)="picker?.open()" class="w-100">
+                                            (click)="picker?.open()" class="initial-height w-100">
                                             <mat-label>{{ localeData?.from_to_label }}</mat-label>
                                             <mat-date-range-input [rangePicker]="picker">
                                                 <input matStartDate [placeholder]="commonLocaleData?.app_start_date"
@@ -91,7 +91,7 @@
                     </button>
                     <mat-menu #menurange="matMenu">
                         <section class="ip-addresses-dropdown" role="menu" (click)="$event.stopPropagation()">
-                            <div class="pd-15">
+                            <div class=" pd-15 ">
                                 <mat-radio-group formControlName="ipOptions" class="d-flex flex-column">
                                     <mat-radio-button value="cidr_range" id="cidrRange" color="primary"
                                         (click)="isOpenedInModal ? handleIpAddressChange('cidr_range') : ''"
@@ -108,7 +108,7 @@
 
                             <section formArrayName="allowedCidrs" class="ip-range container-fluid mt-2"
                                 *ngIf="permissionForm.get('ipOptions')?.value === 'cidr_range'">
-                                <div class="d-flex column-gap1 align-items-center mr-b1" *ngFor="
+                                <div class="d-flex column-gap-1 align-items-center mr-b1" *ngFor="
                                         let item of permissionForm.get('allowedCidrs')['controls'];
                                         let i = index;
                                         let l = last
@@ -128,7 +128,7 @@
 
                             <section formArrayName="allowedIps" class="ip-range container-fluid mt-2"
                                 *ngIf="permissionForm.get('ipOptions')?.value === 'ip_address'">
-                                <div class="d-flex column-gap1 align-items-center mr-b1" *ngFor="
+                                <div class="d-flex column-gap-1 align-items-center mr-b1" *ngFor="
                                         let item of permissionForm.get('allowedIps')['controls'];
                                         let i = index;
                                         let l = last

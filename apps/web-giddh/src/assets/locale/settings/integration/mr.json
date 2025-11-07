@@ -87,7 +87,7 @@
 		"user": "वापरकर्ता",
 		"select_user": "वापरकर्ता निवडा",
 		"list_beneficiary": "यादी लाभार्थी",
-		"connection_request_message": "अभिनंदन !! आपल्या खात्यावर एक विनंती पाठविली गेली आहे, <a class='btn-link' href='https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD_FG.LOAD&ACTION.LOAD=Y&Authentication पर जाएं। =1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk' target='_blank'>आयसीआयसीआय बँक पोर्टल</a> आणि ते स्वीकारा.",
+		"connection_request_message": "अभिनंदन !! आपल्या खात्यावर एक विनंती पाठविली गेली आहे, <a class='text-decoration-underline pointer-event-none' href='https://cibnext.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD_FG.LOAD&ACTION.LOAD=Y&Authentication पर जाएं। =1&BANK_ID=ICI&ITM=nli_corp_primer_login_btn_desk' target='_blank'>आयसीआयसीआय बँक पोर्टल</a> आणि ते स्वीकारा.",
 		"note": "एकदा ते पूर्ण झाल्यावर आपण आपल्या आयसीआयसीआय बँक खात्याशी / लिंक करू शकता आणि थेट जीआयडीडीएचद्वारे देय देऊ शकता.",
 		"add_more": "अधिक आयडी जोडा",
 		"max_limit_alert": "आपण 1 पेक्षा जास्त बँक मर्यादा निवडू शकत नाही",
