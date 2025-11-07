@@ -3803,17 +3803,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.dateChangeType = "voucher";
+        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder)) {
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: "mat-dialog-sm",
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+                },
+            });
+            dialogRef.afterClosed().subscribe((response) => {
+                this.handleDateChangeConfirmation(response);
+            });
+        }
 
-        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            panelClass: "mat-dialog-sm",
-            data: {
-                configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
-            },
-        });
-
-        dialogRef.afterClosed().subscribe((response) => {
-            this.handleDateChangeConfirmation(response);
-        });
     }
 
     /**
@@ -5303,6 +5304,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         setTimeout(() => {
+<<<<<<< HEAD
+=======
+            this.forceClear = false;
+>>>>>>> be73fb1d29 (fixed popup date changes issue)
             this.openAccountDropdown = openAccountDropdown;
         }, 200);
     }
@@ -6424,7 +6429,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             barcodeValue: this.barcodeValue,
             customerUniqueName: this.invoiceForm.controls["account"]?.get("uniqueName")?.value ?? ""
         };
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> be73fb1d29 (fixed popup date changes issue)
         if (this.invoiceType.isPurchaseOrder) {
             params.invoiceType = VoucherTypeEnum.purchase;
         } else if (this.invoiceType.isCashInvoice) {
@@ -6906,4 +6915,35 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!uniqueName || !salesPersonList?.length) return false;
         return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
+<<<<<<< HEAD
 }
+=======
+
+    /**
+      * Select voucher type
+      *
+      * @private
+      * @param {string} type - The unique name to search for
+      * @memberof VoucherCreateComponent
+      */
+    public selectVoucherType(value: string): void {
+        this.selectedVoucherType = value?.toLowerCase();
+
+        // Optimize type mapping using object lookup instead of if-else chain
+        const typeMapping = { 'bill': 'purchase', 'invoice': 'sales' };
+        const mappedType = typeMapping[this.selectedVoucherType] || this.selectedVoucherType;
+
+        const req = {
+            row: this.rowData,
+            type: mappedType,
+            list: this.transactionOptions,
+            aiOcrDetails: this.aiOcrDetails,
+            ocrType: this.ocrType
+        }
+        this.voucherType = this.vouchersUtilityService.parseVoucherType(req.type);
+        this.getVoucherType();
+        this.invoiceForm.get("type").patchValue(this.voucherType);
+        this.aiOcrService.ocrListToCreate$.next(req);
+    }
+}
+>>>>>>> be73fb1d29 (fixed popup date changes issue)
