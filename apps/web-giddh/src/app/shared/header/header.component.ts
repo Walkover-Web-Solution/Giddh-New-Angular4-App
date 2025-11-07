@@ -19,13 +19,12 @@ import { createSelector } from 'reselect';
 import * as dayjs from 'dayjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { clone, cloneDeep, slice, find } from '../../lodash-optimized';
-import { DbService } from '../../services/db.service';
+import { clone, cloneDeep, find } from '../../lodash-optimized';
 import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DEFAULT_AC, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/default-menus';
+import { NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/default-menus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
@@ -124,7 +123,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
     public userAvatar: string;
-    public accountItemsFromIndexDB: any[] = DEFAULT_AC;
     public selectedPage: any = '';
     public selectedLedgerName: string;
     public companyList: CompanyResponse[] = [];
@@ -282,7 +280,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private zone: NgZone,
         private _generalActions: GeneralActions,
         private authService: AuthenticationService,
-        private _dbService: DbService,
         private changeDetection: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
@@ -684,20 +681,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.manageGroupsAccountsDialogRef?.close();
             }
         });
-
-        this.store.pipe(select(s => s.general.headerTitle)).pipe(takeUntil(this.destroyed$)).subscribe(menu => {
-            if (menu) {
-                let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
-                    if (menu.additional && item.additional) {
-                        return item?.uniqueName?.toLowerCase() === menu.uniqueName?.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
-                    }
-                    return item?.uniqueName.toLocaleLowerCase() === menu.uniqueName?.toLowerCase();
-                });
-                if (menuItem) {
-                    this.doEntryInDb('menus', menuItem);
-                }
-            }
-        });
         this.totalNumberOfcompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.totalNumberOfcompanies = res;
         });
@@ -707,18 +690,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
             }
         });
-
-        if (this.activeCompanyForDb?.uniqueName) {
-            this._dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').subscribe(accountList => {
-                if (accountList?.length) {
-                    if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                        this.accountItemsFromIndexDB = accountList.slice(0, 7);
-                    } else {
-                        this.accountItemsFromIndexDB = accountList.slice(0, 5);
-                    }
-                }
-            });
-        }
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
@@ -1056,29 +1027,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         name = `/pages/${name}`;
         this.analyzeMenus(null, name, additional);
     }
-
-    public findListFromDb(dbResult: ICompAidata) {
-        if (!this.activeCompanyForDb) {
-            return;
-        }
-        if (!this.activeCompanyForDb?.uniqueName) {
-            return;
-        }
-        if (dbResult) {
-            // slice menus
-            if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
-            } else {
-                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
-            }
-        } else {
-            // slice default menus and account on small screen
-            if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
-                this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
-            }
-        }
-    }
-
     public showManageGroupsModal(search: any = "") {
         this.toggleHelpSupportPane(false);
         this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(search));
@@ -1369,25 +1317,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-    private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
-        if (entity === 'menus') {
-            this.isLedgerAccSelected = false;
-        }
-
-        if (this.activeCompanyForDb?.uniqueName) {
-            let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            let branches = [];
-            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
-                branches = response || [];
-            });
-            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
-                this.currentOrganizationType === OrganizationType.Company && branches?.length > 1).then((res) => {
-                    this.findListFromDb(res);
-                }, (err: any) => {
-                    console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
-                });
-        }
-    }
 
     private adjustNavigationBar() {
         this.sideBarStateChange(this.isLargeWindow);
