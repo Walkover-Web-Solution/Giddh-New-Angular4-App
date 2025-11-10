@@ -1,19 +1,19 @@
 import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable, ReplaySubject } from 'rxjs';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { BsModalRef } from 'ngx-bootstrap/modal';
-import { DATE_REGEX, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { debounceTime, filter, Observable, ReplaySubject, skip, take, takeUntil, tap } from 'rxjs';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from '../../shared/helpers/defaultDateFormat';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, DATE_REGEX, IOption } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
-import { GeneralService } from '../../services/general.service';
+import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
+import { SalesPersonComponent } from '../../shared/sales-person/sales-person.component';
 
 @Component({
     selector: 'app-advance-search',
     templateUrl: './advance-search.component.html',
-    styleUrls: ['./advance-search.component.scss']
+    styleUrls: ['./advance-search.component.scss'],
+    providers: [SalesPersonComponentStore]
 })
 export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -46,24 +46,10 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Directive to get reference of element */
     @ViewChild('filterDatepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
-    /* This will store selected date range to use in api */
-    public selectedDateRange: any;
-    /* This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
-    /* This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
-    /* Selected range label */
-    public selectedRangeLabel: any = "";
-    /* Universal date observer */
-    public universalDate$: Observable<any>;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
     /** Holds field label values */
@@ -80,11 +66,18 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public isLoading: boolean = true;
     /** Holds date adjustment Voucher list items */
     public adjustmentVoucherOptions: IOption[] = [];
+    /** Sales Person List */
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
+    /** This will use for instance of sales person Dropdown */
+    public salesPersonDropdown: FormControl = new FormControl();
+    /** Filtered Sales Person List */
+    public filteredSalesPersonList: IOption[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
-        private generalService: GeneralService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private dialog: MatDialog,
+        private salesPersonStore: SalesPersonComponentStore
     ) { }
 
     /**
@@ -158,11 +151,10 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             statuses: [this.advanceFilters?.statuses ?? []],
             dueFrom: [(this.advanceFilters?.dueFrom && dayjs(this.advanceFilters?.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
             dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
-            receiptType: ['']
+            receiptType: [''],
+            salesPersonName: [this.advanceFilters?.salesPersonName ?? ''],
+            salesPersonUniqueNames: [this.advanceFilters?.salesPersonUniqueNames ?? '']
         });
-
-        this.selectedDateRange = { startDate: this.advanceFilters.from, endDate: this.advanceFilters.to };
-        this.selectedDateRangeUi = this.advanceFilters.from + " - " + this.advanceFilters.to;
 
         const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
         if (invoiceDateRange?.length) {
@@ -192,6 +184,24 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         if (adjustmentVoucherOptions?.length) {
             this.fieldLabelValues.adjustmentVoucherOptions = adjustmentVoucherOptions[0]?.label;
         }
+        this.getSalesPersonList();
+        this.salesPersonList$.pipe(skip(1), take(1), filter(Boolean)).subscribe(res => {
+            this.filteredSalesPersonList = res as IOption[];
+        });
+        
+        /** Search for action dropdown */
+        this.salesPersonDropdown.valueChanges.pipe(debounceTime(700),
+        takeUntil(this.destroyed$)).subscribe((search: string) => {
+            if (!search) {
+                this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                    this.filteredSalesPersonList = res as IOption[];
+                });
+            } else {
+                this.salesPersonList$.pipe(take(1)).subscribe(res => {
+                    this.filteredSalesPersonList = res?.filter(salesPerson => salesPerson?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
+                });
+            }
+        });
     }
 
     /**
@@ -450,5 +460,24 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public expiryDateChanges(): void {
         this.fromDate = dayjs(this.searchForm.get('expireFrom')?.value).format(GIDDH_DATE_FORMAT);
         this.toDate = dayjs(this.searchForm.get('expireTo')?.value).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
+     * Open sales person dialog
+     *
+     * @memberof AdvanceSearchComponent
+     */
+    public openSalesPersonDialog(): void {
+        const dialogRef = this.dialog.open(SalesPersonComponent, ASIDE_PANE_CONFIG);
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap(() => this.getSalesPersonList())).subscribe();
+    }
+
+    /**
+     * Get sales person list as label value
+     *
+     * @memberof AdvanceSearchComponent
+     */
+    public getSalesPersonList(): void {
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT, archive: '' } });
     }
 }

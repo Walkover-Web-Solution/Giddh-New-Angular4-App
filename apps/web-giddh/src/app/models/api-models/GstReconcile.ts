@@ -1,4 +1,5 @@
 // tslint:disable:variable-name
+import { PAGINATION_LIMIT } from '../../app.constant';
 import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 
 export class VerifyOtpRequest {
@@ -78,7 +79,7 @@ export class GstReconcileInvoiceResponse {
 
 export class GstReconcileInvoiceDetails {
     public page: number = 1;
-    public count: number;
+    public count: number = PAGINATION_LIMIT;
     public totalPages: number;
     public totalItems: number;
     public results: GstReconcileInvoiceResult[];
@@ -114,6 +115,9 @@ export class GStTransactionRequest extends GstOverViewRequest {
     public type: string;
     public status: string;
     public count: number;
+    public page: number;
+    public totalItems: number;
+    public results: GstReconcileInvoiceResult[];
 }
 
 export class Gstr1SummaryRequest extends GstOverViewRequest {

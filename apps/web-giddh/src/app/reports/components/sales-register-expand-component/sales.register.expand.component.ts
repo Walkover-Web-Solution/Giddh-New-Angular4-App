@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
-import { ReplaySubject, Observable } from 'rxjs';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
+import { ReplaySubject, Observable, combineLatest } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
@@ -16,8 +16,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-register-export/sales-purchase-register-export.component';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatTableDataSource } from '@angular/material/table';
+import { ServiceConfig } from '../../../services/service.config';
+import { CompanyActions } from '../../../actions/company.actions';
+import { PageEvent } from '@angular/material/paginator';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
@@ -35,17 +37,14 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public selectedMonth: string;
     // public showSearchCustomer: boolean = false;
     public showSearchInvoiceNo: boolean = false;
-    /** Pagination limit for records */
-    public paginationLimit: number = PAGINATION_LIMIT;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
-    @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Directive to get reference of datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
 
     /** Universal date observer */
     public universalDate$: Observable<any>;
@@ -54,17 +53,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Modal reference */
-    public modalRef: BsModalRef;
-
-    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;
@@ -79,7 +73,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /* This will hold module type */
     public moduleType = 'SALES_REGISTER';
     /** This will use for sales register column check values */
@@ -103,7 +97,18 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     /** Holds page size options for pagination */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
+    constructor(
+        @Inject(ServiceConfig) private serviceConfig,
+        private store: Store<AppState>,
+        private invoiceReceiptActions: InvoiceReceiptActions,
+        private activeRoute: ActivatedRoute,
+        private router: Router,
+        private _cd: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService,
+        private dialog: MatDialog,
+        private companyActions: CompanyActions
+    ) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
@@ -117,9 +122,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
-        this.getDetailedsalesRequestFilter.count = this.paginationLimit;
+        this.getDetailedsalesRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedsalesRequestFilter.q = '';
 
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
@@ -134,13 +139,15 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
+        combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
             if (params.from && params.to) {
                 this.from = params.from;
                 this.to = params.to;
                 this.getDetailedsalesRequestFilter.from = this.from;
                 this.getDetailedsalesRequestFilter.to = this.to;
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.getDetailedsalesRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedsalesRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
                 this.params = params;
                 this.setDataPickerDateRange();
                 this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
@@ -293,6 +300,13 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
             }
         });
+
+        this.router.events.pipe(
+            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/sales-register') || event.url.includes('/reports/sales-detailed-expand')))),
+            takeUntil(this.destroyed$)).subscribe(() => {
+                // Reset the chosen financial year when user leaves the module
+                this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
+            });
     }
 
     public getDetailedSalesReport(SalesDetailedfilter) {
@@ -323,18 +337,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public emitExpand() {
         this.expand = !this.expand;
     }
-    public hideListItems() {
-        if (this.filterDropDownList.isOpen) {
-            this.filterDropDownList.hide();
-        }
-    }
-    public goToDashboard(val: boolean) {
-        if (val) {
-            this.router.navigate(['/pages/reports']);
-        } else {
-            this.router.navigate(['/pages/reports', 'sales-register']);
-        }
-    }
 
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
@@ -361,15 +363,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             }
             this.selectedMonth = this.monthYear[parseInt(idx[1]) - 1];
         }
-
-    }
-    public selectedFilterMonth(monthYridx: string, i) {
-        let date = this.getDateFromMonth(i);
-        this.getDetailedsalesRequestFilter.from = date.firstDay;
-        this.getDetailedsalesRequestFilter.to = date.lastDay;
-        this.getDetailedsalesRequestFilter.q = '';
-        this.selectedMonth = monthYridx;
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
 
     }
 
@@ -453,7 +446,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.voucherNumberInput?.reset();
         this.showSearchInvoiceNo = false;
         this.getDetailedsalesRequestFilter.page = 1;
-        this.getDetailedsalesRequestFilter.count = this.paginationLimit;
+        this.getDetailedsalesRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedsalesRequestFilter.q = '';
         this.getDetailedsalesRequestFilter.sort = null;
         this.getDetailedsalesRequestFilter.sortBy = null;
@@ -508,39 +501,30 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     /**
-    *To show the datepicker
-    *
-    * @param {*} element
-    * @memberof SalesRegisterExpandComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
+     * This will toggle the datepicker
      *
+     * @param {boolean} isOpen Set to true to open the datepicker, false to close it
      * @memberof SalesRegisterExpandComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (this.universalDatepickerTrigger) {
+            if (isOpen) {
+                this.universalDatepickerTrigger.openMenu();
+            } else {
+                this.universalDatepickerTrigger.closeMenu();
+            }
+        }
     }
 
     /**
      * Call back function for date/range selection in datepicker
      *
-     * @param {*} value
+     * @param {*} value Selected date range object
      * @memberof SalesRegisterExpandComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -548,7 +532,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -579,10 +563,10 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
       * @param {*} event
       * @memberof SalesRegisterExpandComponent
       */
-    public handlePageChange(event: any): void {
+    public handlePageChange(event: PageEvent): void {
         if (event) {
+            this.getDetailedsalesRequestFilter.page = this.getDetailedsalesRequestFilter.count !== event.pageSize ? 1 : event.pageIndex + 1;
             this.getDetailedsalesRequestFilter.count = event.pageSize;
-            this.getDetailedsalesRequestFilter.page = event.pageIndex + 1;
             this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
         }
     }

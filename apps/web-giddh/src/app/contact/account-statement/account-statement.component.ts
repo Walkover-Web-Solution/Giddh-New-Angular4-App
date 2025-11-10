@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, Input, SimpleChanges, TemplateRef } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, Input, SimpleChanges } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -7,13 +7,14 @@ import { debounceTime, delay, distinctUntilChanged, skip, takeUntil } from "rxjs
 import * as dayjs from 'dayjs';
 import { ContactComponentStore } from "../utility/contact.store";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS } from "../../app.constant";
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from "../../services/general.service";
 import { FormControl } from "@angular/forms";
 import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-request";
 import { cloneDeep } from "../../lodash-optimized";
 import { TransactionType } from "../../models/api-models/Ledger";
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: "account-statement",
@@ -22,8 +23,8 @@ import { TransactionType } from "../../models/api-models/Ledger";
     providers: [ContactComponentStore]
 })
 export class AccountStatementComponent implements OnInit, OnDestroy {
-    /** Template reference for the datepicker modal */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     /** Template reference for the advance search modal */
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** Reference to the Material paginator component */
@@ -42,8 +43,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Holds common localized JSON data shared across modules */
     public commonLocaleData: any = {};
-    /** True if API call is in progress */
-    public isLoading: boolean = true;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
     /** Used to unsubscribe all store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Array of column names displayed in the account statement table */
@@ -58,7 +59,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public accountListRequest: any = {
         accountUniqueName: '',
         page: 1,
-        count: '',
+        count: PAGINATION_LIMIT,
         sortBy: 'date',
         sort: '',
         q: '',
@@ -69,14 +70,12 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public totalRecords: number | null = null;
     /** Observable for the list of account statements from the store */
     public accountStatementList$: Observable<any> = this.contactComponentStore.getAccountStatementList$;
+    /** Observable for the loading state of account statement list */
+    public getAccountStatementInProgress$: Observable<any> = this.contactComponentStore.getAccountStatementInProgress$;
     /** Stores the selected date range for API queries */
     public selectedDateRange: any;
     /** Stores the selected date range formatted for UI display */
     public selectedDateRangeUi: any;
-    /** Reference to the currently open modal */
-    public modalRef: BsModalRef;
-    /** Stores the x/y position for displaying the datepicker under its field */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Available date range options for the datepicker */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Label for the currently selected date range */
@@ -101,12 +100,13 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     public clearFilter: boolean = false;
     /** Holds transaction type */
     public transactionType: typeof TransactionType = TransactionType;
+    /** Balance due */
+    public balanceDue: string = '';
 
     constructor(
         public dialog: MatDialog,
         private contactComponentStore: ContactComponentStore,
         private generalService: GeneralService,
-        private modalService: BsModalService
     ) {
         this.advanceSearchRequest = new AdvanceSearchRequest();
     }
@@ -119,16 +119,22 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.accountStatementList$.pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.isLoading = false;
             if (response && response.transactionDetailList?.length) {
-                    this.accountListData = response.transactionDetailList;
-                    this.responseAccountList = response;
-                    this.totalRecords = response.totalItems;
+                this.accountListData = response.transactionDetailList;
+                this.responseAccountList = response;
+                this.totalRecords = response.totalItems;
+                this.balanceDue = this.responseAccountList.accountSummary?.closingBalance?.amount >= 0
+                    ? (this.responseAccountList.accountSummary.closingBalance.type ===
+                        this.transactionType.Credit
+                        ? "-"
+                        : "") +
+                    (this.responseAccountList.accountAddress?.currency?.symbol ?? "") +
+                    this.responseAccountList.accountSummary.closingBalance.amount
+                    : ""
             }
-            setTimeout(() => {
-                this.isLoading = false;
-            }, 200);
         });
-        
+
 
         this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
             dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -148,7 +154,16 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.accountListRequest.page = 1;
                 this.advanceFiltersApplied = false;
                 this.clearFilter = true;
-                this.getAccountStatementList();
+                if (!this.isLoading) {
+                    this.getAccountStatementList();
+                }
+            }
+        });
+
+        this.contactComponentStore.exportAccountStatementResponse$.pipe(takeUntil(this.destroyed$)).subscribe(exportResponse => {
+            if (exportResponse?.data) {
+                const data = this.generalService.base64ToBlob(exportResponse.data, 'application/xml', 512);
+                saveAs(data, exportResponse.name);
             }
         });
     }
@@ -167,7 +182,6 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         event.stopPropagation();
     }
 
-
     /**
      * Resets all applied advance filters and optionally fetches the account statement list.
      *
@@ -182,7 +196,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             from: this.from ?? '',
             to: this.to ?? '',
             page: 1,
-            count: this.pageSizeOptions[2], // Set default Count 50
+            count: PAGINATION_LIMIT,
             q: ''
         };
         this.transactionInput.patchValue(null, { emitEvent: false });
@@ -209,8 +223,8 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
      * @memberof AccountStatementComponent
      */
     public handlePageChange(event: PageEvent): void {
+        this.accountListRequest.page = this.accountListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.accountListRequest.count = event.pageSize;
-        this.accountListRequest.page = event.pageIndex + 1;
         this.getAccountStatementList(true);
     }
 
@@ -227,7 +241,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.clearFilter = false;
             this.isSearching = false;
             this.accountListRequest.accountUniqueName = this.activeAccountUniqueName;
-            this.accountListRequest.count = this.pageSizeOptions[1];
+            this.accountListRequest.count = PAGINATION_LIMIT;
             this.accountListRequest.page = 1;
             this.accountListRequest.q = '';
             this.accountListRequest.sort = 'asc';
@@ -246,7 +260,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.from, this.to);
             this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
             this.selectedDateRangeUi = dayjs(this.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.getAccountStatementList();
+            if (!this.isLoading) {
+                this.getAccountStatementList();
+            }
         }
     }
 
@@ -346,30 +362,17 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Hides the datepicker modal.
+     * Toggles the datepicker menu open/close state.
      *
+     * @param {boolean} isOpen Whether to open or close the datepicker menu
      * @memberof AccountStatementComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef?.hide();
-    }
-
-    /**
-     * Shows the datepicker modal at the position of the provided element.
-     *
-     * @param {*} element DOM element triggering the datepicker
-     * @memberof AccountStatementComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            const position = this.generalService.getPosition(element.target);
-            position.y = position.y - 370;
-            this.dateFieldPosition = position;
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**
@@ -389,7 +392,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             })
         });
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -397,7 +400,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -429,6 +432,24 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                 this.showTransactionInput = false;
             }
         }
+    }
+
+    /**
+     * Export account statement
+     *
+     * @memberof AccountStatementComponent
+     */
+    public exportAccountStatement(): void {
+        const requestObj = {
+            queryParam: {
+                accountUniqueName: this.accountListRequest.accountUniqueName,
+                query: this.accountListRequest.q,
+                from: this.accountListRequest.from,
+                to: this.accountListRequest.to
+            },
+            payload: this.advanceFiltersApplied ? this.advanceSearchRequest.dataToSend : {}
+        }
+        this.contactComponentStore.exportAccountStatement(requestObj);
     }
 
     /**

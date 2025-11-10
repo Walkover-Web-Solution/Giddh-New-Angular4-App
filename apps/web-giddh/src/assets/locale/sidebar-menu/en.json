@@ -333,6 +333,17 @@
                             "queryParams": { "addVendor" : true }
                         }
                     }
+                },
+                {
+                    "label": "Template",
+                    "link": "/pages/vouchers/preview/purchase/templates",
+                    "icon": "icon-template",
+                    "description": "Edit design & content of the template",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -652,6 +663,12 @@
                     "icon": "icon-balance-sheet-new"
                 }
             ]
+        }, 
+        {
+            "label": "AI OCR",
+            "link": "/pages/ai-ocr",
+            "icon": "icon-audit-log",
+            "description": "Upload images, pdf, jpeg, zip"
         }
     ],
     "switch_branch": "Switch Branch",

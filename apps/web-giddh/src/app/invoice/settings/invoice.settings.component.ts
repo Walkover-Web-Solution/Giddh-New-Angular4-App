@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { delay, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store';
@@ -9,7 +9,7 @@ import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,10 +17,11 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { BootstrapToggleSwitch, RestrictedModules } from '../../app.constant';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { ASIDE_PANE_CONFIG, RestrictedModules } from '../../app.constant';
+import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
+import { ServiceConfig } from '../../services/service.config';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -29,8 +30,10 @@ import { TemplateFroalaComponent } from '../../shared/template-froala/template-f
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
-
-    @ViewChild('staticTabsSettings', { static: true }) public staticTabs: TabsetComponent;
+    /** Selected tab index for Material tabs */
+    @ViewChild('staticTabsSettings', { static: true }) public staticTabs: MatTabGroup;
+    /** Selected tab index for Material tabs */
+    public selectedTabIndex: number = 0;
     /* This will hold selected voucher type */
     @Input() public selectedVoucher: string;
     public invoiceSetting: InvoiceSettings = new InvoiceSettings();
@@ -79,11 +82,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** True if user has invoice setting permissions */
     public hasInvoiceSettingPermissions: boolean = true;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
-    /** Index of selected tab */
-    public selectedTabIndex: number = 0;
+    public voucherApiVersion: number;
     /** Active tab name */
     public activeTab: string;
     /** Active company details */
@@ -101,9 +100,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         private _authenticationService: AuthenticationService,
         public _route: ActivatedRoute,
         private router: Router,
+        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService
     ) {
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl)))?.replace(':client_id', (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID));
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
     }
@@ -228,11 +228,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             }
         });
     }
-    // public onChangeSendInvoiceViaSms(isChecked) {
-    //     if (!isChecked) {
-    //         this.invoiceSetting.smsContent = '';
-    //     }
-    // }
 
     /**
      * Add New Webhook
@@ -501,7 +496,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             this.invoiceSetting.generateAutoEWayBill = false;
         }
     }
-    
+
     /**
      * setInvoiceLockDate
      */
@@ -525,7 +520,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             client_secret: GOOGLE_CLIENT_SECRET,
             client_id: GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
-            redirect_uri: this.getRedirectUrl(AppUrl)
+            redirect_uri: this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl))
         };
         this._authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
@@ -611,20 +606,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @memberof InvoiceSettingComponent
      */
     public selectTab(id: number) {
-        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
-            this.staticTabs.tabs[id].active = true;
+        if (this.staticTabs) {
+            this.staticTabs.selectedIndex = id;
         }
     }
 
-    /**
-     * Handles tab change
-     *
-     * @param {*} event
-     * @memberof InvoiceSettingComponent
-     */
-    public tabChanged(event: any): void {
-        this.selectedTabIndex = event?.index;
-    }
+
 
     /**
      * Open custom email dialog
@@ -634,14 +621,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
-            data: voucherType,
-            width: 'var(--aside-pane-width)',
-            height: '70vh',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
+            ...ASIDE_PANE_CONFIG,
+            data: voucherType
         });
     }
 
@@ -654,5 +635,15 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public getWhatsappSettingLabel(voucherType: string): string {
         return this.commonLocaleData?.app_send_voucher_type_whatsapp?.replace("[VOUCHER_TYPE]", voucherType);
+    }
+
+    /**
+     * Callback for tab change event
+     * @param {any} event - Tab change event
+     * @memberof InvoiceSettingComponent
+     */
+    public tabChanged(event: any): void {
+        this.selectedTabIndex = event?.index || 0;
+        this.cdr.detectChanges();
     }
 }

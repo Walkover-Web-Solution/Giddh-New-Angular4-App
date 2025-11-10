@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -13,7 +13,7 @@ import { AppState } from '../../store';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { cloneDeep } from '../../lodash-optimized';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'upload-file',
@@ -55,7 +55,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Default result count for account searches */
-    public defaultCount: number = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
+    public defaultCount: number = API_BULK_FETCH_LIMIT;
     /** Stores account unique name */
     public accountUniqueName: string;
     /** Stores the search results for accounts */
@@ -128,7 +128,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      */
 
     public ngOnInit(): void {
-        this.voucherListResponse = this.generalService.getVoucherTypeList(this.commonLocaleData);
+        this.voucherListResponse = this.generalService.getVoucherTypeList(this.commonLocaleData, ['sales', 'purchase', 'receipt', 'payment', 'journal', 'contra', 'debit note', 'credit note', 'advance-receipt']);
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

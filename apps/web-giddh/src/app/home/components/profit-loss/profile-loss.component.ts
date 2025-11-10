@@ -1,5 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Observable, ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -14,13 +15,13 @@ import {
 } from "../../../models/api-models/tb-pl-bs";
 import { TBPlBsActions } from "../../../actions/tl-pl.actions";
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
+import { ServiceConfig } from '../../../services/service.config';
 Chart.register(...registerables);
 
 @Component({
@@ -31,20 +32,16 @@ Chart.register(...registerables);
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
-    /* This will store if device is mobile or not */
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+/* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* Selected from date */
@@ -75,7 +72,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     /** Chart object */
     public chart: any;
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private tlPlService: TlPlService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -87,7 +84,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         // img path
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -149,28 +146,17 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show the datepicker
+     * To show/hide the datepicker
      *
-     * @param {*} element input element reference
+     * @param {boolean} isOpen - If true, opens the datepicker; if false, closes it
      * @memberof ProfitLossComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof ProfitLossComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -181,7 +167,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -189,7 +175,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);

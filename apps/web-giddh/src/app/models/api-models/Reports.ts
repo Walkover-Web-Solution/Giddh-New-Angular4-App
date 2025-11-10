@@ -1,3 +1,5 @@
+import { PAGINATION_LIMIT } from "../../app.constant";
+
 /*
 * Report Model to be iterated and displayed in tabular format
 * */
@@ -16,6 +18,7 @@ export class ReportsModel {
     public to?: string;
     public interval?: string;
     public selectedMonth?: string;
+    public salesPerson?: {name: string, uniqueName: string};
 }
 /*
 * Report Response Model to be bind with get sales report API
@@ -45,8 +48,10 @@ export class ReportsDetailedRequestFilter {
     public sort?: string;
     public sortBy?: string;
     public page?: number
-    public count?: number
+    public count?: number = PAGINATION_LIMIT;
     public branchUniqueName?: string;
+    public salesPersonUniqueName?: string;
+    public accountUniqueNames?: string[];
 }
 export class Balance {
     public amount: number;
@@ -142,6 +147,7 @@ export class PurchaseReportsModel {
     public to?: string;
     public interval?: string;
     public selectedMonth?: string;
+    public salesPerson?: {name: string, uniqueName: string};
 }
 
 export interface PurchaseRegisteDetailedResponse {

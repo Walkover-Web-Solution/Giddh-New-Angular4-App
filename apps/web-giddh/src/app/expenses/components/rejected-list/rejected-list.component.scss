@@ -8,7 +8,7 @@
 .btn-icon {
     display: inline-block;
     padding: 0px 8px;
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     font-size: 16px;
     cursor: pointer;
     display: inline-flex;
@@ -16,7 +16,7 @@
     align-items: center;
     margin-right: 0;
     margin: 0 5px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
     height: 34px;
     width: 34px;
@@ -27,7 +27,7 @@
     font-size: 20px;
 }
 .icon-pointer .active-text-color {
-    color: var(--color-blue) !important;
+    color: var(--color-blue-primary) !important;
 }
 .icon-pointer {
     cursor: pointer;

@@ -1,25 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { AccountOperationsComponent, ManageGroupsAccountsComponent } from './header/components';
@@ -60,8 +50,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
 import { SubscriptionUpgradeButtonModule } from './subscription-upgrade-button/subscription-upgrade-button.module';
 import { CallBackPageComponent } from './call-back-page/call-back-page.component';
+import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -95,13 +90,7 @@ export function provideConfig() {
         RouterModule,
         FormsModule,
         ReactiveFormsModule,
-        ModalModule.forRoot(),
-        TypeaheadModule.forRoot(),
-        TooltipModule.forRoot(),
-        BsDropdownModule.forRoot(),
-        PopoverModule.forRoot(),
         SocialLoginModule,
-        SelectModule,
         ClickOutsideModule,
         ConfirmModalModule,
         LaddaModule.forRoot({
@@ -109,15 +98,12 @@ export function provideConfig() {
             spinnerSize: 30
         }),
         ElementViewChildModule,
-        ShSelectModule,
         DecimalDigitsModule,
         DigitsOnlyModule,
-        BsDatepickerModule.forRoot(),
-        PaginationModule.forRoot(),
+        MatPaginatorModule,
         Daterangepicker,
         TextCaseChangeModule,
         HighlightModule,
-        TabsModule.forRoot(),
         NgxMaskModule.forRoot(),
         CommandKModule,
         NgxDaterangepickerMd.forRoot(),
@@ -143,32 +129,26 @@ export function provideConfig() {
         CallBackPageComponent,
         SubscriptionUpgradeButtonModule,
         FormFieldsModule,
-        MatMenuModule
+        MatMenuModule,
+        MatListModule,
+        MatExpansionModule,
+        OverlayModule
     ],
     exports: [
         CommonModule,
         DecimalDigitsModule,
-        PopoverModule,
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
-        ShSelectModule,
-        ModalModule,
         ManageGroupsAccountsComponent,
         AccountFilterPipe,
-        SelectModule,
-        PaginationModule,
         ClickOutsideModule,
         ScrollingModule,
         ConfirmModalModule,
         TextCaseChangeModule,
         KeyboardShortutModule,
         MfReportComponent,
-        TabsModule,
-        BsDropdownModule,
         ElementViewChildModule,
-        TooltipModule,
-        BsDatepickerModule,
         NgxDaterangepickerMd,
         CurrencyModule,
         TranslateDirectiveModule,
@@ -191,11 +171,24 @@ export function provideConfig() {
     providers: [
         {
             provide: AuthServiceConfig,
-            useFactory: provideConfig
+            useFactory: (injector: Injector) => {
+                const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
+                return new AuthServiceConfig(
+                    [
+                        {
+                            id: GoogleLoginProvider.PROVIDER_ID,
+                            provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
+                        }
+                    ],
+                    false
+                );
+            },
+            deps: [Injector]
         }
     ]
 })
 export class SharedModule {
+    constructor(private injector: Injector){}
     public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,

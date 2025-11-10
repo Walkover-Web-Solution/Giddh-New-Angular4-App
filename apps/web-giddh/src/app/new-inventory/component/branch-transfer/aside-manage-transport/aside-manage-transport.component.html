@@ -5,17 +5,15 @@
     (localeData)="localeData = $event"
 
 >
-    <div class="aside-pane">
-        <div class="header-create-unit">
-            <div class="form-header">
-                <h3 mat-dialog-title>{{ commonLocaleData?.app_manage_transporter }}</h3>
-                <button id="close" mat-dialog-close>
-                    <i class="icon-cross"></i>
-                </button>
-            </div>
+    <section class="aside-dialog-wrapper">
+        <div class="dialog-header">
+            <span>{{ commonLocaleData?.app_manage_transporter }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
+            </button>
         </div>
-        <mat-dialog-content class="w-100">
-            <div class="aside-body create-group-aside-body">
+        <mat-dialog-content class="dialog-body">
+            <div class="create-group-aside-body">
                 <div class="aside-pane-form">
                     <form
                         class="row form-gap"
@@ -60,14 +58,14 @@
                             <div class="d-flex column-gap1">
                                 <button
                                     *ngIf="!transportEditMode"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     (click)="generateTransporter(transportedCreateEditForm.value)"
                                 >
                                     {{ commonLocaleData?.app_save }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     *ngIf="transportEditMode"
                                     (click)="updateTransporter(transportedCreateEditForm.value)"
@@ -84,7 +82,7 @@
                         <giddh-page-loader></giddh-page-loader>
                     </div>
                     <div class="table-responsive manage-table" *ngIf="!isLoading">
-                        <table mat-table [dataSource]="transporterListDetails" class="mat-elevation-z8">
+                        <table mat-table [dataSource]="transporterListDetails">
                             <!-- Name Column -->
                             <ng-container matColumnDef="name">
                                 <th mat-header-cell *matHeaderCellDef class="mat-table-name">{{commonLocaleData?.app_name}}</th>
@@ -114,26 +112,21 @@
                         </table>
                     </div>
                     <div
-                        class="pagination-wrapper mt-4"
-                        *ngIf="transporterObj?.totalItems > transporterObj.count && !isLoading"
+                        class="mt-4"
+                        *ngIf="transporterObj?.totalItems > pageSizeOptions[0] && !isLoading"
                     >
-                        <pagination
-                            [totalItems]="transporterObj?.totalItems"
-                            [(ngModel)]="transporterObj.page"
-                            [maxSize]="5"
-                            class="pagination-sm"
-                            [boundaryLinks]="true"
-                            [itemsPerPage]="transporterObj.count"
-                            [rotate]="false"
-                            (pageChanged)="pageChanged($event)"
-                            [firstText]="commonLocaleData?.app_first"
-                            [previousText]="commonLocaleData?.app_previous"
-                            [nextText]="commonLocaleData?.app_next"
-                            [lastText]="commonLocaleData?.app_last"
-                        ></pagination>
+                        <mat-paginator
+                            [length]="transporterObj?.totalItems"
+                            [pageSize]="transporterObj.count"
+                            [pageIndex]="transporterObj.page - 1"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [showFirstLastButtons]="true"
+                            [hidePageSize]="false"
+                            (page)="handlePageEvent($event)"
+                        ></mat-paginator>
                     </div>
                 </div>
             </div>
         </mat-dialog-content>
-    </div>
+    </section>
 </ng-container>

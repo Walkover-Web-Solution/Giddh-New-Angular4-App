@@ -18,10 +18,11 @@
                 </a>
             </div>
             <button
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 type="button"
                 class="mr-0"
+                *ngIf="voucherApiVersion === 2"
                 (click)="openAddAndManage()"
                 aria-label="address"
             >
@@ -35,10 +36,11 @@
         >
             <div class="font-15">{{ localeData?.address_list }}</div>
             <button
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 type="button"
                 class="mr-0"
+                *ngIf="voucherApiVersion === 2"
                 (click)="openAddAndManage()"
                 aria-label="address"
             >
@@ -308,20 +310,17 @@
         </div>
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center mt-4 mb-5">
-            <pagination
-                [(ngModel)]="paginationConfig.page"
-                *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
-                [totalItems]="paginationConfig?.totalItems"
-                [maxSize]="5"
-                [itemsPerPage]="paginationConfig?.count"
-                [boundaryLinks]="true"
-                [rotate]="true"
-                (pageChanged)="handlePageChange($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
+            <mat-paginator
+                *ngIf="!shouldShowLoader && paginationConfig?.totalItems > pageSizeOptions[0]"
+                [length]="paginationConfig?.totalItems"
+                [pageSize]="paginationConfig?.count || paginationLimit"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="paginationConfig.page - 1"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+                aria-label="Select page of addresses"
+            ></mat-paginator>
         </div>
     </div>
 </div>
@@ -370,20 +369,20 @@
     <div class="modal-md">
         <div class="modal-content">
             <div>
-                <div class="modal-header theme-bg pd-2 pl-2 pr-2 clearfix">
-                    <h3 mat-dialog-title class="modal-title bg" id="modal-title">
-                        {{ commonLocaleData?.app_confirmation }}
-                    </h3>
-                    <i mat-dialog-close class="icon-cross text-right close-modal"></i>
+                <div class="dialog-header">
+                    <span>{{ commonLocaleData?.app_confirmation }}</span>
+                    <button mat-icon-button aria-label="close" mat-dialog-close>
+                        <i class="icon-cross"></i>
+                    </button>
                 </div>
-                <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+                <mat-dialog-content class="dialog-body">
                     <form name="newRole" novalidate autocomplete="off">
                         <div class="modal-wrap mr-b2">
                             <h3>{{ localeData?.want_to_continue }}</h3>
                         </div>
-                        <div class="d-flex justify-content-start column-gap1">
+                        <div class="d-flex justify-content-end column-gap1">
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 type="submit"
                                 (click)="onConfirmation()"
@@ -402,7 +401,7 @@
                             </button>
                         </div>
                     </form>
-                </div>
+                </mat-dialog-content>
             </div>
         </div>
     </div>

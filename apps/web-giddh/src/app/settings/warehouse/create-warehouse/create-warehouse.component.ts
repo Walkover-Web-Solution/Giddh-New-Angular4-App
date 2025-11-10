@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -18,6 +18,8 @@ import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constan
 import { SettingsUtilityService } from '../../services/settings-utility.service';
 import { WarehouseActions } from '../action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
+import { ServiceConfig } from '../../../services/service.config';
+import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 @Component({
     selector: 'create-warehouse',
@@ -84,6 +86,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         private companyService: CompanyService,
         private formBuilder: UntypedFormBuilder,
         private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
         private router: Router,
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
@@ -154,7 +157,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-image.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-image.svg';
 
         this.warehouseForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.showPageLeaveConfirmation) {
@@ -385,15 +388,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     */
     public handleShortcutPress(): void  {
         this.loadLinkedEntities(() => {
-            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, {
-                width: '760px',
-                height: '100vh !important',
-                disableClose: true,
-                position: {
-                    right: '0',
-                    top: '0'
-                }
-            });
+            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, ASIDE_PANE_CONFIG);
         });
     }
 

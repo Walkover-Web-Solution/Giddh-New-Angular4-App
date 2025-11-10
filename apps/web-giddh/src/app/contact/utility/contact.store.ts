@@ -15,6 +15,7 @@ export interface ContactState {
     getAccountStatementInProgress: boolean;
     contactsList: any;
     accountStatementList: any;
+    exportAccountStatementResponse:any;
 }
 
 export const DEFAULT_CONTACT_STATE: ContactState = {
@@ -22,7 +23,8 @@ export const DEFAULT_CONTACT_STATE: ContactState = {
     getLastAccountsInProgress: false,
     getAccountStatementInProgress: false,
     contactsList: null,
-    accountStatementList: null
+    accountStatementList: null,
+    exportAccountStatementResponse: null
 };
 
 @Injectable()
@@ -40,9 +42,11 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     public getContactsList$ = this.select((state) => state.contactsList);
     public getAccountStatementList$ = this.select((state) => state.accountStatementList);
     public getAccountStatementInProgress$ = this.select((state) => state.getAccountStatementInProgress);
-    public updateAccountInProcess$: Observable<boolean> = this.select(this.store.select(state => state.groupwithaccounts.updateAccountInProcess), (response) => response);;
+    public updateAccountInProcess$: Observable<boolean> = this.select(this.store.select(state => state.groupwithaccounts.updateAccountInProcess), (response) => response);
     public updateAccountIsSuccess$: Observable<boolean> = this.select(this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess), (response) => response);
     public isDeleteAccSuccess$: Observable<any> = this.store.pipe(select(state => state.groupwithaccounts.isDeleteAccSuccess), (response) => response);
+    public createAccountIsSuccess$: Observable<any> = this.store.pipe(select(state => state.sales.createAccountSuccess), (response) => response);
+    public lastDeletedAccountUniqueName$: Observable<any> = this.store.pipe(select(state => state.groupwithaccounts.lastDeletedAccountUniqueName), (response) => response);
     public activeAccount$: Observable<any> = this.select(this.store.select(state => state.groupwithaccounts.activeAccount), (response) => response);
     public activeGroupUniqueName$: Observable<string> = this.select(this.store.select(state => state.groupwithaccounts.activeGroupUniqueName), (response) => response);
     public activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), (response) => response);
@@ -50,6 +54,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
     public currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), (response) => response);
     public showEditAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showEditAccount), (response) => response);
     public isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), (response) => response);
+    public exportAccountStatementResponse$ = this.select((state) => state.exportAccountStatementResponse);
 
     /**
      * Send email template
@@ -172,15 +177,19 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({
-                                    accountStatementList: res?.body ?? [],
-                                    getAccountStatementInProgress: false
+                                    accountStatementList: res?.body ?? []
                                 });
+                                setTimeout(() => {
+                                    this.patchState({
+                                        getAccountStatementInProgress: false
+                                    });
+                                }, 400);
                             } else {
                                 if (res?.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    accountStatementList: null,
+                                    accountStatementList: [],
                                     getAccountStatementInProgress: false
                                 });
                             }
@@ -189,7 +198,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                             this.toasterService.showSnackBar("error", error);
 
                             return this.patchState({
-                                accountStatementList: null,
+                                accountStatementList: [],
                                 getAccountStatementInProgress: false
                             });
                         }
@@ -200,6 +209,43 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
         );
     });
 
+    /**
+     * Export account statement 
+     *
+     * @memberof ContactComponentStore
+     */
+    readonly exportAccountStatement = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    exportAccountStatementResponse: null
+                });
+                return this.contactService.exportAccountStatement(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    exportAccountStatementResponse: res.body
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res.message);
+                                this.patchState({
+                                    exportAccountStatementResponse: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            this.patchState({
+                                exportAccountStatementResponse: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 
     /**
      * Lifecycle hook for component destroy

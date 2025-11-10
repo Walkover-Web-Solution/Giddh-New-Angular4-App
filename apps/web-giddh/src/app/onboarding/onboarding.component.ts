@@ -1,38 +1,30 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { GeneralService } from '../services/general.service';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { Observable, ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OnboardingComponentStore } from './utility/onboarding.store';
-import { SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
-
+import { ASIDE_PANE_CONFIG, SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
+import { ServiceConfig } from '../services/service.config';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
     styleUrls: ['./onboarding.component.scss'],
-    providers: [OnboardingComponentStore],
-    animations: [
-        trigger("slideInOut", [
-            state("in", style({
-                transform: "translate3d(0, 0, 0)",
-            })),
-            state("out", style({
-                transform: "translate3d(100%, 0, 0)",
-            })),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
+    providers: [OnboardingComponentStore]
 })
 
 export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
+    /** Template reference for aside menu */
+    @ViewChild('asideMenuTemplate') public asideMenuTemplate: TemplateRef<any>;
+    /** Reference for aside menu dialog */
+    public asideMenuDialogRef: MatDialogRef<any>;
     public sideMenu: { isopen: boolean } = { isopen: true };
     public loadAPI: Promise<any>;
     public CompanySettingsObj: any = {};
@@ -43,8 +35,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Account update modal state */
-    public accountAsideMenuState: string = "out";
     /** Account group unique name */
     public selectedGroupForCreateAcc: string = "";
     /** Holds account details */
@@ -56,42 +46,46 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds true if current company country is gocardless supported country */
     public isGoCardlessSupportedCountry: boolean = false;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Holds help documentation url for syncing with Tally */
-    public syncWithTallyHelpDocUrl: string = SYNC_TALLY_HELP_DOC_URL;
+    public syncWithTallyHelpDocUrl: string = "";
 
     constructor(
-        private _router: Router, private _generalService: GeneralService,
+        private router: Router,
+        private generalService: GeneralService,
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions,
-        private componentStore: OnboardingComponentStore
+        private componentStore: OnboardingComponentStore,
+        private dialog: MatDialog
     ) {
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        const whiteLabelDomain = `${whiteLabel?.giddhWhiteLabel?.domainName}/help/sync-with-tally-1591360375828781`;
+        this.syncWithTallyHelpDocUrl = whiteLabelDomain ? whiteLabelDomain : SYNC_TALLY_HELP_DOC_URL;
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
-    }  
+    }
 
     public ngOnInit() {
-        this.voucherApiVersion = this._generalService.voucherApiVersion;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.companyCountry = res.country;
-                this.isPlaidSupportedCountry = this._generalService.checkCompanySupportPlaid(res.country);
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
             }
         });
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.isGoCardlessSupportedCountry = this._generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
+                this.isGoCardlessSupportedCountry = this.generalService.checkCompanySupportGoCardless(profile.countryV2.alpha2CountryCode);
             }
         });
-        
+
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.accountAsideMenuState === "in") {
-                    this.toggleAccountAsidePane();
-                }
+                this.asideMenuDialogRef?.close();
             }
         });
 
@@ -99,46 +93,31 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-        this._generalService.IAmLoaded.next(true);
+        this.generalService.IAmLoaded.next(true);
     }
 
     /**
-    * Toggle's fixed class in body
-    *
-    * @memberof OnboardingComponent
-    */
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === "in") {
-            document.querySelector("body").classList.add("fixed");
-        } else {
-            document.querySelector("body").classList.remove("fixed");
-        }
-    }
-
-    /**
-     * Toggle's account update modal
+     * Opens aside menu dialog
      *
      * @memberof OnboardingComponent
      */
 
-    public toggleAccountAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
-        this.selectedGroupForCreateAcc = "bankaccounts";
-        this.toggleBodyClass();
+    public openAccountAsidePaneDialog(): void {
+        this.asideMenuDialogRef = this.dialog.open(this.asideMenuTemplate, ASIDE_PANE_CONFIG);
+        this.asideMenuDialogRef.afterOpened().subscribe(() => {
+            this.selectedGroupForCreateAcc = "bankaccounts";
+        });
     }
 
     public selectConfigureBank() {
         if (this.companyCountry) {
             this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/payment'));
-            this._router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
+            this.router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
 
 
         } else {
             this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration'));
-            this._router.navigate(['pages/settings/integration'], { replaceUrl: true });
+            this.router.navigate(['pages/settings/integration'], { replaceUrl: true });
 
         }
     }
@@ -163,7 +142,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public openCreateAccountAsidepan(): void {
-        this.toggleAccountAsidePane();
+        this.openAccountAsidePaneDialog();
     }
 
     /**

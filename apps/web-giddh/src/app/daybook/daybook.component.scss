@@ -5,12 +5,12 @@
     position: relative;
     z-index: 1;
     cursor: default;
-    border: 1px solid var(--color-common-secondary-border);
+    border: 1px solid var(--color-silver);
     width: 230px;
 }
 
 .date-range-picker:focus {
-    border-color: var(--color-primary-button-border) !important;
+    border-color: var(--color-silver) !important;
 }
 .input-wrapper {
     position: relative;
@@ -23,29 +23,13 @@
     display: block;
     height: 36px;
     width: 1px;
-    background-color: var(--color-iron);
+    background-color: var(--color-silver);
     left: 37px !important;
     z-index: 2;
     top: 0;
 }
 .transactions-page .form-group label {
     padding-bottom: 5px;
-}
-.advance-icon {
-    display: -webkit-inline-box;
-    display: inline-flex;
-    -webkit-box-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    align-items: center;
-    font-size: var(--font-size-15);
-    margin-left: 15px;
-    border: 1px solid var(--color-primary-button-border);
-    border-radius: 5px;
-    margin-right: 15px;
-    cursor: pointer;
-    height: 37px;
-    min-width: 37px;
 }
 .table > tbody + tbody {
     border-top: none;
@@ -78,28 +62,24 @@
     width: 40px;
     height: 40px;
     background-color: var(--color-white);
-    border: 1px solid var(--color-common-secondary-border);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: var(--font-size-16);
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     &:hover {
-        background: var(--color-blue);
+        background: var(--color-blue-primary);
         color: var(--color-white);
     }
 }
 
-.export-btn {
-    height: 36px;
-}
-
 button.btn.btn-filter {
-    background: var(--color-dark-fog);
-    border: 1px solid var(--color-dark-fog);
+    background: var(--color-border-light);
+    border: 1px solid var(--color-border-light);
     font-size: var(--font-size-15);
-    color: var(--color-giddh-blue);
+    color: var(--color-blue-primary);
     align-items: center;
 }
 
@@ -122,98 +102,4 @@ button.btn.btn-filter {
 .daybook-w-300 {
     width: 300px;
     min-width: 300px;
-}
-
-/*responsive */
-@media (max-width: 768px) {
-    .on-mobile-view th {
-        display: none !important;
-    }
-    .hide-td {
-        display: none;
-    }
-    .transaction-report {
-        margin-bottom: 0;
-    }
-    td.text-right.hide-td {
-        display: none;
-    }
-}
-@media (max-width: 767px) {
-    .expand-collapse-btn.form-group {
-        display: none !important;
-    }
-    .export-btn {
-        display: none !important;
-    }
-    .expand-btn-hide-desktop {
-        display: inline-block;
-    }
-    .linked-entities {
-        margin-bottom: 0 !important;
-    }
-    .desktop-view {
-        display: none !important;
-    }
-    .mobile-view {
-        display: inline-block !important;
-    }
-    .advance-icon {
-        margin-right: 0 !important;
-    }
-}
-@media (max-width: 575px) {
-    .daybook-filter {
-        clear: both;
-    }
-    .linked-entities {
-        width: 100%;
-    }
-    .advance-icon {
-        margin-left: 21px;
-        margin-right: 0;
-    }
-}
-@media (min-width: 320px) {
-    .form-inline .form-group {
-        display: inline-block;
-        margin-bottom: 0;
-        vertical-align: middle;
-    }
-}
-.daybook-table-tbody > tr {
-    cursor: pointer;
-}
-
-.table-container section div > div {
-    padding: 8px 8px;
-}
-
-.trial-balance.table-container > div > section {
-    border-left: 0;
-}
-.daybook-other-transactions {
-    min-height: 0;
-}
-@media (max-width: 1100px) {
-    .company-date-picker {
-        flex-direction: column;
-    }
-    .linked-entities {
-        padding-bottom: 10px;
-    }
-}
-
-@media (max-width: 475px) {
-    .clear-filter-responsive {
-        display: block !important;
-        width: 100%;
-        .btn {
-            width: 100%;
-        }
-    }
-
-    .clear-filter.form-group {
-        display: none;
-    }
 }

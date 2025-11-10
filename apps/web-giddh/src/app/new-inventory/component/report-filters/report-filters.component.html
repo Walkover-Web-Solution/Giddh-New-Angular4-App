@@ -1,16 +1,18 @@
 <div class="inventory-filter-bar top-main-bar align-items-center">
     <div class="back-btnn" *ngIf="reportUniqueName">
-        <button mat-stroked-button class="report-back-button" color="primary" (click)="backToPreviousPage()">
+        <button mat-stroked-button class="report-back-button" (click)="backToPreviousPage()">
             {{ commonLocaleData?.app_back }}
         </button>
     </div>
     <div class="custom-datepicker-wrapper">
-        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+        <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
             <input
+                matInput
                 type="text"
                 name="selectedDateRange"
                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                 class="giddh-datepicker date-range-picker"
+                readonly
             />
         </div>
     </div>
@@ -29,6 +31,7 @@
                     [formControl]="branchesDropdown"
                     [placeholderLabel]="localeData?.header?.select_branch"
                     class="mat-select-search-inventory"
+                    [clearSearchInput]="false"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
@@ -54,6 +57,7 @@
                     [formControl]="warehousesDropdown"
                     [placeholderLabel]="localeData?.header?.select_warehouse"
                     class="mat-select-search-inventory"
+                    [clearSearchInput]="false"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
@@ -64,7 +68,7 @@
         </mat-select>
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
-        <button mat-stroked-button class="create-btn-inventory ml-3 mr-0" color="primary" (click)="resetFilter()">
+        <button mat-stroked-button class="create-btn-inventory ml-3 mr-0" (click)="resetFilter()">
             <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
         </button>
     </div>
@@ -85,6 +89,8 @@
             <i class="icon-edit-pencil text-blue font-16 cursor-pointer"></i>
         </span>
     </div>
+</div>
+<div class="d-flex mb-3">
     <ng-container *ngIf="moduleName === 'GROUP_WISE_REPORT'">
         <span class="ml-auto">
             <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_GROUPWISE'"></watch-video>
@@ -178,11 +184,11 @@
             </mat-form-field>
         </div>
         <div class="menu-btn-control d-flex justify-content-end align-items-center">
-            <button mat-button class="advance-filter-button" (click)="exportReport()" [disabled]="isLoading$ | async">
+            <button mat-icon-button aria-hidden="true" class="advance-filter-button font-14" (click)="exportReport()" [disabled]="isLoading$ | async">
                 <i class="icon-download-circle mr-1"></i>
                 {{ commonLocaleData?.app_export }}
             </button>
-            <button mat-button (click)="openModal()" class="advance-filter-button">
+            <button mat-stroked-button (click)="openModal()" class="advance-filter-button">
                 <i class="icon-advance-filter mr-1"></i>
                 {{ localeData?.header?.advance_filter }}
             </button>
@@ -202,46 +208,26 @@
             </select-table-column>
         </div>
     </div>
-    <!-- <div class="d-flex transactional-filter-section">
-        <button
-        mat-mini-fab
-        class="transactional-wise-common-btn d-flex align-items-center justify-content-center mr-l1"  [matMenuTriggerFor]="importExport" aria-label="Customise"
-    >
-        <span class="icon-download-circle strong"></span>
-    </button>
-    <mat-menu #importExport="matMenu">
-        <div class="menu-selector">
-            <button mat-menu-item>
-                <span>CSV</span>
-            </button>
-            <button mat-menu-item>
-                <span>XLS</span>
-            </button>
-        </div>
-    </mat-menu>
-</div> -->
 </div>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                [locale]="{ applyLabel: commonLocaleData?.app_done }"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            [locale]="{ applyLabel: commonLocaleData?.app_done }"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

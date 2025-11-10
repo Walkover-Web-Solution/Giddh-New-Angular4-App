@@ -1,16 +1,11 @@
 <div id="exportModal" class="disable-ripple">
-    <div class="modal-header d-flex flex-row-reverse">
-        <button
-            aria-hidden="true"
-            class="close"
-            (click)="closeExportDaybookModal.emit('close')"
-            [attr.aria-label]="commonLocaleData?.app_close"
-        >
-            ×
+    <div class="dialog-header">
+        <span>{{ commonLocaleData?.export_daybook }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeExportDaybookModal.emit('close')">
+            <i class="icon-cross"></i>
         </button>
-        <h3 mat-dialog-title>{{ localeData?.export_daybook }}</h3>
     </div>
-    <div class="modal-body" id="export-body">
+    <mat-dialog-content class="dialog-body" id="export-body">
         <form name="addShareEmailForm" class="export-daybook" novalidate autocomplete="off">
             <div class="pd-b2 clearfix">
                 <label class="w100 d-sm-inline-flex d-flex">{{ localeData?.type }} </label>
@@ -67,9 +62,9 @@
                     </mat-radio-group>
                 </div>
             </ng-container>
-            <button mat-stroked-button color="primary" (click)="exportLedger()">
+            <button mat-raised-button color="primary" (click)="exportLedger()">
                 {{ commonLocaleData?.app_download }}
             </button>
         </form>
-    </div>
+    </mat-dialog-content>
 </div>

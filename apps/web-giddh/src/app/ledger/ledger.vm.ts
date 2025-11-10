@@ -6,13 +6,13 @@ import * as dayjs from 'dayjs';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flatten-accounts-result-item.interface';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
 import { INameUniqueName } from '../models/api-models/Inventory';
-import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { ICurrencyResponse } from '../models/api-models/Company';
 import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { ITaxControlData } from '../models/interfaces/tax.interface';
+import { IOption } from '../app.constant';
 
 export class LedgerVM {
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
@@ -142,13 +142,14 @@ export class LedgerVM {
             delete bl.creditAmount;
             delete bl.debitTotal;
             delete bl.creditTotal;
+            delete bl.duplicateEntry;
         });
 
         // map over transactions array
         requestObj.transactions.map((bl) => {
             if (bl) {
                 // set transaction.particular to selectedAccount uniqueName
-                bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName : bl.particular;
+                bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName || bl.selectedAccount?.value : bl.particular;
                 bl.isInclusiveTax = false;
                 // filter taxes uniqueNames
                 bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
@@ -168,6 +169,7 @@ export class LedgerVM {
         if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid && requestObj.invoicesToBePaid.length) {
             requestObj.invoicesToBePaid = [];
         }
+        delete requestObj['salesPersonName'];
         return requestObj;
     }
 
@@ -442,6 +444,8 @@ export class BlankLedgerVM {
     public mergePB?: boolean;
     public referenceVoucher?: ReferenceVoucher;
     public generateEInvoice?: boolean;
+    public salesPersonUniqueName?: string;
+    public salesPersonName?: string;
 }
 
 export class IInvoiceLinkingRequest {
@@ -501,6 +505,8 @@ export class TransactionVM {
     public stockUniqueName?: string;
     public oppositeAccountUniqueName?: string;
     public isMrpDiscountApplied?: boolean;
+    public duplicateEntry?: boolean = false;
+    public subVoucher?: string;
 }
 
 export interface IInventory {

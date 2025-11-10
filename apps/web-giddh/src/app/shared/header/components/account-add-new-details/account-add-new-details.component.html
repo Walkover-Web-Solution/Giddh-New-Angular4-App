@@ -131,9 +131,22 @@
                 </div>
                 <div
                     class="row pd-b2"
-                    *ngIf="addAccountForm.get('currency')?.value !== companyCurrency"
                 >
+                    <!-- Sales Person -->
                     <div class="col-sm-4">
+                        <reactive-dropdown-field 
+                            formControlName="salesPersonUniqueName"
+                            [name]="'sales-person'"
+                            [label]="commonLocaleData?.app_sales_person"
+                            [labelValue]="addAccountForm.get('salesPersonName').value"
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                            [options]="salesPersonList$ | async"
+                            [showCreateNew]="true"
+                            [createNewText]="commonLocaleData?.app_create_new"
+                            (createOption)="openSalesPersonDialog()"
+                        ></reactive-dropdown-field>
+                    </div>
+                    <div class="col-sm-4" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
                         <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                         >
                             <input-field
@@ -267,7 +280,6 @@
                                         <span class="pd-r1" *ngIf="!firstItem">
                                             <button
                                                 mat-stroked-button
-                                                color="warn"
                                                 (click)="removeGstDetailsForm(i)"
                                                 class="bg-white"
                                             >
@@ -275,9 +287,9 @@
                                             </button>
                                         </span>
                                         <span
-                                            [tooltip]="localeData?.address_tooltip"
+                                            [matTooltip]="localeData?.address_tooltip"
                                             class="pull-right is-default-address"
-                                            placement="left"
+                                            matTooltipPosition="left"
                                         >
                                             <mat-slide-toggle
                                                 aria-label="address"
@@ -389,21 +401,6 @@
                                     >
                                     </reactive-dropdown-field>
                                 </div>
-
-                                <!-- <div
-                                    class="col-sm-4"
-                                    *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
-                                >
-                                    <div class="form-group">
-                                        <label class="d-block">&nbsp;</label>
-                                        <label>
-                                            <input type="checkbox" formControlName="isComposite" /><label
-                                                >&nbsp;
-                                                {{ localeData?.is_composite }}
-                                            </label></label
-                                        >
-                                    </div>
-                                </div> -->
                             </ng-container>
                         </div>
                         <div
@@ -415,7 +412,7 @@
                             "
                         >
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="text-left w-50 pd-r2"
                                 (click)="showMoreGst()"
@@ -424,7 +421,7 @@
                                 }})
                             </button>
                             <button
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                                 class="text-left w-50"
                                 (click)="showLessGst()"
@@ -434,7 +431,6 @@
                         <div *ngIf="lastItem">
                             <button
                                 mat-stroked-button
-                                color="primary"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             >
                                 + {{ localeData?.add_address }}
@@ -474,6 +470,7 @@
                                         [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
                                         formControlName="mobileNo"
                                         (change)="openConfirmLeaveDialog()"
+                                        (focus)="reInitializeMobileField('init-contact-add')"
                                     >
                                     </input-field>
                                 </div>
@@ -569,6 +566,7 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [label]="commonLocaleData?.app_mobile_number"
                                 (input)="portalIndex = i"
+                                (focus)="reInitializeMobileField('init-contact-portal_' + i)"
                                 [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
                             ></input-field>
                             <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
@@ -587,7 +585,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewPortalUser()">
+                            <a href="javascript:void(0);" (click)="addNewPortalUser()">
                                 <i class="icon-plus"></i> {{ localeData?.portal_add_user }}
                             </a>
                         </div>
@@ -769,10 +767,27 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row pd-b2">
+                        <div class="col-sm-6">
+                            <input-field
+                                [name]="'duePeriod'"
+                                [label]="localeData?.default_expiry_days"
+                                [placeholder]="'00'"
+                                [type]="'text'"
+                                [maxlength]="3"
+                                [allowDigitsOnly]="true"
+                                formControlName="duePeriod"
+                                class="settings-field d-block expiry-days-input-width"
+                                [matSuffix]="commonLocaleData?.app_days"
+                            ></input-field>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="description">{{ localeData?.description_label }}</label>
+                                <label>{{ commonLocaleData?.app_note }}</label>
                                 <textarea
                                     id="description"
                                     rows="3 "
@@ -884,10 +899,10 @@
     </form>
 </ng-container>
 <ng-template #templateForSaveButton>
-    <div class="row pd-t2">
+    <div class="row pd-t2" *ngIf="voucherApiVersion === 2">
         <div class="col-sm-12">
             <button
-                mat-stroked-button
+                mat-raised-button
                 color="primary"
                 aria-label="save"
                 type="submit"

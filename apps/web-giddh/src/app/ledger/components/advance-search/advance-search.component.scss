@@ -1,31 +1,15 @@
-.clear-filter-close {
-    justify-content: flex-end;
-    align-items: center;
-}
-.clear-filter-close a {
-    color: var(--color-popup-list-head-text);
-    font-size: var(--font-size-15);
-    line-height: 2.2;
-}
 .modal-header {
     display: flex;
     justify-content: space-between;
     padding: 16px !important;
 }
 .modal-header .close {
-    color: var(--color-popup-list-head-text);
+    color: var(--color-white);
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
     font-size: 30px;
     cursor: pointer;
-}
-.collapse-icons {
-    font-size: 10px;
-    border: 1px solid var(--color-blue);
-    border-radius: 4px;
-    padding: 2px;
-    top: 0 !important;
 }
 .mat-switch {
     margin-left: 16px;
@@ -34,7 +18,7 @@
 ::ng-deep {
     .advance-search {
         .clearfix {
-            background-color: var(--color-popup-background) !important;
+            background-color: var(--color-white) !important;
         }
     }
 }
@@ -55,7 +39,7 @@
         margin-bottom: 20px;
     }
     .amount-total {
-        background: var(--color-dark-fog);
+        background: var(--color-border-light);
     }
     .page-count {
         width: 100%;

@@ -392,29 +392,6 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getBarcodeData = this.effect((data: Observable<{ barcodeValue: string, params: any }>) => {
-        return data.pipe(
-            switchMap((req) => {
-                return this.commonService.getBarcodeScanData(req.barcodeValue, req.params).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                barcodeData: res?.body ?? {}
-                            });
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({
-                                barcodeData: {}
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
     readonly deleteAttachment = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
@@ -1054,7 +1031,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
                                 this.patchState({
                                     bulkExportVoucherInProgress: false,
-                                    bulkExportVoucherResponse: res.body
+                                    bulkExportVoucherResponse: res
                                 });
                             } else {
                                 this.toaster.showSnackBar("error", res.message);
@@ -1810,5 +1787,4 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public ngOnDestroy(): void {
         super.ngOnDestroy();
     }
-
 }

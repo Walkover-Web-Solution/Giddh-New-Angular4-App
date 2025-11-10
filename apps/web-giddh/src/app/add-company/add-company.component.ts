@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
@@ -17,7 +17,7 @@ import { GeneralService } from "../services/general.service";
 import { ToasterService } from "../services/toaster.service";
 import { AppState } from "../store";
 import { ItemOnBoardingState } from "../store/item-on-boarding/item-on-boarding.reducer";
-import { IOption } from "../theme/ng-select/option.interface";
+import { IOption } from '../app.constant';
 import { PageLeaveUtilityService } from "../services/page-leave-utility.service";
 import { MatDialog } from "@angular/material/dialog";
 import { VerifyMobileActions } from "../actions/verify-mobile.actions";
@@ -29,6 +29,7 @@ import { userLoginStateEnum } from "../models/user-login-state";
 import { CommonService } from "../services/common.service";
 import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store";
 import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
+import { ServiceConfig } from "../services/service.config";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -136,7 +137,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Hold state gst code list */
     public stateGstCode: any[] = [];
     /** Hold states list */
-    public states: IOption[] = [];
+    public states: any[] = [];
     /** True if gstin number valid */
     public isGstinValid: boolean = false;
     /** Hold selected country */
@@ -246,6 +247,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalActions: GeneralActions,
         private companyActions: CompanyActions,
+        @Inject(ServiceConfig) private serviceConfig,
         private route: Router,
         private loginAction: LoginActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
@@ -371,7 +373,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 const module = response.moduleRestrictionStatus.find(
                     (module) => module?.moduleName === RestrictedModules.Users
                 );
-                this.remainingUsers = module.remainingUsers;
+                this.remainingUsers = module?.remainingUsers;
             }
         });
         this.changeDetection.detectChanges();
@@ -451,8 +453,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }, 500);
 
         let configuration = {
-            widgetId: OTP_WIDGET_ID_NEW,
-            tokenAuth: OTP_WIDGET_TOKEN_NEW,
+            widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW) ,
+            tokenAuth: (this.serviceConfig.OTP_WIDGET_TOKEN_NEW || OTP_WIDGET_TOKEN_NEW),
             exposeMethods: true,
             success: (data: any) => { },
             failure: (error: any) => {
@@ -791,7 +793,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                             permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
                         }
                     });
-                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    dialogRef.afterClosed().subscribe(response => {
                         if (response) {
                             let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
                             this.firstStepForm.get('name')?.patchValue(result.body?.lgnm);
@@ -1118,10 +1120,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.company.baseCurrency = this.firstStepForm.controls['currency'].value.value;
         this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
         this.generalService.createNewCompany = this.company;
-        if (PRODUCTION_ENV && this.companiesList?.length === 0) {
-            this.sendNewUserInfo();
-            this.fireSocketCompanyCreateRequest();
-        }
     }
 
 
@@ -1278,6 +1276,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.company.otherBusinessNature = this.secondStepForm.value.businessNature === "Other" ? this.secondStepForm.value.otherBusinessNature : "NA";
         this.nextStepForm();
+        if (PRODUCTION_ENV && this.companiesList?.length === 0) {
+            this.sendNewUserInfo();
+            this.fireSocketCompanyCreateRequest();
+        }
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
@@ -1401,7 +1403,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;

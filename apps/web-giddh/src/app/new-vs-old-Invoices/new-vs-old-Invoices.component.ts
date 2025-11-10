@@ -1,16 +1,18 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { IOption } from '../theme/ng-select/option.interface';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { AppState } from '../store';
 import { Store, select } from '@ngrx/store';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
-import { takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil, tap } from 'rxjs/operators';
 import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
+import { ASIDE_PANE_CONFIG, GetBifurcationType, IOption } from '../app.constant';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     selector: 'new-vs-old-invoices',
@@ -30,19 +32,13 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public selectedYear: string;
     public NewVsOldInvoicesQueryRequest: NewVsOldInvoicesRequest;
     public columnName: string = '';
-    public crdTotal: number = 0;
-    public invTotal: number = 0;
-    public clientTotal: number = 0;
     public newSalesClientTotal: number = 0;
     public totalSalesClientTotal: number = 0;
-    public clientAllTotal: number = 0;
     public newSalesAmount: number = 0;
     public totalSalesAmount: number = 0;
-    public totalAmount: number = 0;
     public newSalesInvCount: number = 0;
     public totalSalesInvCount: number = 0;
     public invoiceCountAll: number = 0;
-    @ViewChild('paginationChild', { static: true }) public paginationChild: ElementViewContainerRef;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */
@@ -55,12 +51,18 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public bifurcationClients: string = "";
     /** This will hold report year */
     public reportYear: string;
+    /** Delete attached file dialog ref */
+    public salesBifurcationDetailsDialogRef: MatDialogRef<any>;
+    /** Selected type enum */
+    public selectedTypeEnum: any = GetBifurcationType;
 
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private newVsOldInvoicesService: NewVsOldInvoicesService
+        private newVsOldInvoicesService: NewVsOldInvoicesService,
+        private dialog: MatDialog,
+        private generalService: GeneralService
     ) {
         this.NewVsOldInvoicesQueryRequest = new NewVsOldInvoicesRequest();
     }
@@ -105,21 +107,31 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public resetData(): void {
         this.selectedmonth = null;
         this.selectedQuater = null;
-        this.clientAllTotal = 0;
-        this.totalAmount = 0;
-        this.invoiceCountAll = 0;
         this.newVsOldInvoicesData = {
             totalSales: {
                 invoiceCount: null,
                 total: null,
                 month: '',
-                uniqueCount: null
+                uniqueCount: null,
+                fromDate: null,
+                toDate: null
             },
             newSales: {
                 invoiceCount: null,
                 total: null,
                 month: '',
-                uniqueCount: null
+                uniqueCount: null,
+                fromDate: null,
+                toDate: null
+            },
+            oldSales: {
+                invoiceCount: null,
+                total: null,
+                month: '',
+                uniqueCount: null,
+                uniqueNames: [],
+                fromDate: null,
+                toDate: null
             },
             carriedSales: []
         };
@@ -133,7 +145,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public getSalesBifurcation(): void {
         this.isLoading = true;
         this.NewVsOldInvoicesQueryRequest.type = this.selectedType;
-        if (this.NewVsOldInvoicesQueryRequest.type === 'month') {
+        if (this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.MONTH) {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedmonth + '-' + this.selectedYear;
         } else {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedQuater + '-' + this.selectedYear;
@@ -142,32 +154,14 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.reportYear = this.selectedYear;
 
         this.newVsOldInvoicesService.GetNewVsOldInvoices(this.NewVsOldInvoicesQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.status === "success" && response?.body) {
+            if (response?.status === "success" && response?.body) {
                 this.newVsOldInvoicesData = response?.body;
-
-                this.crdTotal = 0;
-                this.invTotal = 0;
-                this.clientTotal = 0;
-
-                this.newVsOldInvoicesData.carriedSales?.forEach((sale) => {
-                    this.crdTotal += sale.total;
-                    this.invTotal += sale.invoiceCount;
-                    this.clientTotal += sale.uniqueCount;
-                });
-
                 this.newSalesClientTotal = this.newVsOldInvoicesData?.newSales?.uniqueCount;
                 this.totalSalesClientTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
-                this.clientAllTotal = this.newVsOldInvoicesData?.totalSales?.uniqueCount;
                 this.newSalesAmount = this.newVsOldInvoicesData?.newSales?.total;
                 this.totalSalesAmount = this.newVsOldInvoicesData?.totalSales?.total;
-                this.totalAmount = this.newVsOldInvoicesData?.totalSales?.total;
                 this.newSalesInvCount = this.newVsOldInvoicesData?.newSales?.invoiceCount;
                 this.totalSalesInvCount = this.newVsOldInvoicesData?.totalSales?.invoiceCount;
-                this.invoiceCountAll = this.newVsOldInvoicesData?.totalSales?.invoiceCount;
-            } else {
-                this.clientAllTotal = 0;
-                this.totalAmount = 0;
-                this.invoiceCountAll = 0;
             }
             this.isLoading = false;
 
@@ -198,7 +192,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         if (event) {
             this.monthOptions = [{ label: this.commonLocaleData?.app_months_full.january, value: '01' }, { label: this.commonLocaleData?.app_months_full.february, value: '02' }, { label: this.commonLocaleData?.app_months_full.march, value: '03' }, { label: this.commonLocaleData?.app_months_full.april, value: '04' }, { label: this.commonLocaleData?.app_months_full.may, value: '05' }, { label: this.commonLocaleData?.app_months_full.june, value: '06' }, { label: this.commonLocaleData?.app_months_full.july, value: '07' }, { label: this.commonLocaleData?.app_months_full.august, value: '08' }, { label: this.commonLocaleData?.app_months_full.september, value: '09' }, { label: this.commonLocaleData?.app_months_full.october, value: '10' }, { label: this.commonLocaleData?.app_months_full.november, value: '11' }, { label: this.commonLocaleData?.app_months_full.december, value: '12' }];
 
-            this.GetTypeOptions = [{ label: this.localeData?.get_type_options?.month, value: 'month' }, { label: this.localeData?.get_type_options?.quarter, value: 'quater' }];
+            this.GetTypeOptions = [{ label: this.localeData?.get_type_options?.month, value: GetBifurcationType.MONTH }, { label: this.localeData?.get_type_options?.quarter, value: GetBifurcationType.QUATER }];
             this.quaterOptions = [{ label: this.localeData?.quarters?.q1, value: '01' }, { label: this.localeData?.quarters?.q2, value: '02' }, { label: this.localeData?.quarters?.q3, value: '03' }, { label: this.localeData?.quarters?.q4, value: '04' }];
 
             this.getBifurcationClientsString();
@@ -211,14 +205,46 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      * @memberof NewVsOldInvoicesComponent
      */
     public getBifurcationClientsString(): void {
-        if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
+        if (this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.MONTH && this.selectedmonth) {
             this.columnName = this.monthOptions.find(f => f?.value === this.selectedmonth)?.label;
-        } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
+        } else if (this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.QUATER && this.selectedQuater) {
             this.columnName = this.quaterOptions.find(f => f?.value === this.selectedQuater)?.label;
         }
 
-        if(this.columnName) {
+        if (this.columnName) {
             this.bifurcationClients = this.localeData?.bifurcation_clients?.replace("[COLUMN_NAME]", this.columnName);
         }
+    }
+
+    /**
+     * This will show client list
+     *
+     * @param {any} newVsOldInvoicesData
+     * @param {string} type
+     * @param {string} subType
+     * @param {string} salesFrom
+     * @memberof NewVsOldInvoicesComponent
+     */
+    public showClientList(newVsOldInvoicesData: any, type: string, subType: string, salesFrom: string): void {
+        const goToLedgerDateRange = this.generalService.getStartAndEndDateOfMonthOrQuater(this.NewVsOldInvoicesQueryRequest.type === GetBifurcationType.QUATER ? GetBifurcationType.QUARTER : GetBifurcationType.MONTH, this.NewVsOldInvoicesQueryRequest.value);
+        const reportType = this.NewVsOldInvoicesQueryRequest.type == GetBifurcationType.QUATER ? GetBifurcationType.QUARTER : GetBifurcationType.MONTH;
+        const reportReq = {
+            type: reportType,
+            value: this.NewVsOldInvoicesQueryRequest.value,
+            fromDate: goToLedgerDateRange.fromDate,
+            toDate: goToLedgerDateRange.toDate
+        }
+        const data = {
+            newVsOldInvoicesData,
+            type,
+            subType,
+            salesFrom,
+            newVsOldInvoicesQueryRequest: reportReq
+        };
+        ASIDE_PANE_CONFIG.data = data;
+        this.salesBifurcationDetailsDialogRef = this.dialog.open(SalesBifurcationDetailsComponent, ASIDE_PANE_CONFIG);
+        this.salesBifurcationDetailsDialogRef.afterClosed().pipe(take(1), filter(Boolean), tap(() => {
+            this.getSalesBifurcation(); this.salesBifurcationDetailsDialogRef = undefined;
+        })).subscribe();
     }
 }

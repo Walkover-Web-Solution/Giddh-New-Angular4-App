@@ -144,7 +144,7 @@ export class ContactService {
 
     /**
      * Refresh go-cardless bank transactions
-     * 
+     *
      * . @returns {Observable<BaseResponse<IBankRefreshResponse, any>>}
      * @memberof ContactService
      */
@@ -226,5 +226,22 @@ export class ContactService {
         } else {
             return this.http.get(buildUrl()).pipe(handleResponse, catchError(handleError));
         }
+    }
+
+    /**
+     * Export account statement API call
+     * 
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof ContactService
+     */
+    public exportAccountStatement(requestObj: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.generalService.replaceUrlPlaceholders(ACCOUNT_STATEMENT_API.EXPORT_ACCOUNT_STATEMENT, requestObj.queryParam), requestObj.payload).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                data.request = '';
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', ''))
+        );
     }
 }

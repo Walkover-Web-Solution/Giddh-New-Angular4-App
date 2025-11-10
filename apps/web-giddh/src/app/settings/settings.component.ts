@@ -7,7 +7,7 @@ import { FinancialYearComponent } from './financial-year/financial-year.componen
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsTagsComponent } from './tags/tags.component';
@@ -21,7 +21,7 @@ import { HttpClient } from "@angular/common/http";
 import { LocaleService } from '../services/locale.service';
 import { GeneralService } from '../services/general.service';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
-
+import { ServiceConfig } from '../services/service.config';
 @Component({
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss']
@@ -56,10 +56,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public activeLocale: string = "";
     /** This holds heading for profile tab */
     public profileTabHeading: string = "";
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideGstSidebarMenuState: string = 'in';
+    /* This will hold the boolean value to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: boolean = true;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** True if permission form has unsaved changes */
     public hasUnsavedChanges: boolean = true;
     /** Returns true if form is dirty else false */
@@ -71,6 +71,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private _permissionDataService: PermissionDataService,
         public _route: ActivatedRoute,
+        @Inject(ServiceConfig) private serviceConfig,
         private router: Router,
         private _authenticationService: AuthenticationService,
         private _toast: ToasterService,
@@ -141,11 +142,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             }
             if (this.activeTab === "taxes" || this.activeTab === "addresses" || this.activeTab === "reports") {
-                this.asideGstSidebarMenuState = "in";
+                this.asideGstSidebarMenuState = true;
                 document.querySelector('body').classList.remove('setting-sidebar-open');
                 document.querySelector('body').classList.add('gst-sidebar-open');
             } else {
-                this.asideGstSidebarMenuState = "out";
+                this.asideGstSidebarMenuState = false;
                 document.querySelector('body').classList.add('setting-sidebar-open');
                 document.querySelector('body').classList.remove('gst-sidebar-open');
             }
@@ -248,10 +249,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string) {
         const getAccessTokenData = {
             code: authCode,
-            client_secret: GOOGLE_CLIENT_SECRET,
-            client_id: GOOGLE_CLIENT_ID,
+            client_secret: (this.serviceConfig.GOOGLE_CLIENT_SECRET || GOOGLE_CLIENT_SECRET),
+            client_id: (this.serviceConfig.GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID),
             grant_type: 'authorization_code',
-            redirect_uri: this.getRedirectUrl(AppUrl)
+            redirect_uri: this.getRedirectUrl((this.serviceConfig.AppUrl || AppUrl))
         };
 
         let options = { headers: {} };
@@ -303,7 +304,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('setting-sidebar-open');
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState = "out";
+        this.asideGstSidebarMenuState = false;
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -314,8 +315,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       * @memberof SettingsComponent
       */
     public toggleGstPane(): void {
-        if (this.asideGstSidebarMenuState === 'in') {
-            this.asideGstSidebarMenuState = "out";
+        if (this.asideGstSidebarMenuState) {
+            this.asideGstSidebarMenuState = false;
         }
     }
 

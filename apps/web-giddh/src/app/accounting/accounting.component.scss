@@ -25,14 +25,14 @@
 }
 
 .bg-wrap {
-    background: var(--color-common-primary-background-for-all-components);
+    background: var(--color-white);
 }
 
 .entry-table thead th {
     font-weight: normal;
     padding: 8px 6px;
-    color: var(--color-table-tertiary-heading);
-    border-color: var(--color-table-primary-header-bar-border);
+    color: var(--color-black);
+    border-color: var(--color-silver);
 }
 
 .entry-table {
@@ -52,13 +52,13 @@
     height: 28px;
     line-height: 28px;
     padding: 0 6px !important;
-    color: var(--color-table-quinary-content) !important;
+    color: var(--color-black) !important;
     background: transparent !important;
 }
 
 .entry-table tbody tr td .form-control.focus:focus {
     background: transparent !important;
-    border: 1px solid var(--color-secondary-input-bar-border) !important;
+    border: 1px solid var(--color-silver) !important;
 }
 
 .active-row-transparent {
@@ -66,7 +66,7 @@
 }
 
 .active-row {
-    background: var(--color-sidebar-company-background) !important;
+    background: var(--color-blue-light) !important;
 }
 
 .confirmation-box {
@@ -88,7 +88,7 @@
     border-bottom: 1px solid;
     margin: 10px 0;
     font-size: var(--font-size-15);
-    border-color: var(--color-table-primary-content-bar-border);
+    border-color: var(--color-silver);
     margin-bottom: 3px;
 }
 
@@ -107,10 +107,10 @@
 }
 
 .appearance-none {
-    background: var(--color-dark-fog) !important;
+    background: var(--color-border-light) !important;
     border: 0 !important;
     font-size: var(--font-size-15);
-    color: var(--color-nero);
+    color: var(--color-black);
 }
 
 .account-listbar {
@@ -125,7 +125,7 @@
 
 .sidebar-menu {
     min-height: 100vh;
-    background: var(--color-nero);
+    background: var(--color-black);
     color: var(--color-white);
     float: right;
     /* width: 250px; */
@@ -147,7 +147,7 @@
 }
 
 .menu-list li a.isHidden {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
 }
 
 .sidebar-list {
@@ -160,41 +160,25 @@
     padding: 0 !important;
     border: 0;
     z-index: 0;
-    border-left: 1px solid var(--color-iron);
+    border-left: 1px solid var(--color-silver);
 }
 
 .sidebar-list h3 {
     background: var(--color-white);
 }
 
-/*
-.label.isActive {
-  font-weight: normal;
-  background: #F85C88;
-  color: #fff !important;
-  cursor: auto;
-} */
-
 input[name="entryDate"] {
     background: transparent !important;
     border: 0;
     padding: 0 !important;
-    color: var(--color-nero);
+    color: var(--color-black);
     height: auto;
     width: 100px;
     font-size: var(--font-size-15);
 }
 
-.custom-textarea {
-    .form-control {
-        border: none;
-        background: transparent !important;
-        width: 50%;
-    }
-}
-
 textarea[name="narration"]:focus {
-    border: 1px solid var(--color-secondary-input-bar-border) !important;
+    border: 1px solid var(--color-silver) !important;
 }
 
 .custom-entry-date {
@@ -205,7 +189,7 @@ textarea[name="narration"]:focus {
 }
 
 input[name="entryDate"]:focus {
-    border: 1px solid var(--color-secondary-input-bar-border) !important;
+    border: 1px solid var(--color-silver) !important;
     background-color: transparent !important;
 }
 

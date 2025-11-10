@@ -9,19 +9,6 @@
     z-index: 9999;
 }
 
-:host.in #closedialog {
-    position: absolute;
-    left: auto;
-    right: 10px;
-    z-index: 9999999;
-    background-color: transparent;
-    color: var(--color-primary-right-side-popup-header-text);
-    font-size: 17px;
-    top: 18px;
-    margin-right: 0;
-    border: 0;
-}
-
 :host .container-fluid {
     padding-left: 0;
     padding-right: 0;
@@ -37,7 +24,7 @@
 }
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
+    box-shadow: 0 3px 6px var(--color-shadow-light);
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -48,8 +35,8 @@
 .form-header {
     height: 57.8px;
     padding: 20px 15px;
-    background: var(--color-primary-right-side-popup-header-background);
-    color: var(--color-primary-right-side-popup-header-text);
+    background: var(--color-blue-primary);
+    color: var(--color-white);
 }
 
 .label-tax {

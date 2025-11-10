@@ -7,7 +7,7 @@
             <div class="col-sm-6 text-right xs-left">
                 <div class="d-flex justify-content-end align-items-center column-gap1">
                     <button
-                        mat-stroked-button
+                        mat-raised-button
                         color="primary"
                         class="mr-b05 d-flex align-items-center"
                         type="button"
@@ -17,7 +17,6 @@
                     </button>
                     <button
                         mat-stroked-button
-                        color="warn"
                         class="mr-b05"
                         type="button"
                         (click)="openModal(rejectionReason)"
@@ -56,59 +55,41 @@
             <div class="col-sm-12">
                 <div class="petty-cash">
                     <div class="bg-color pd-b1">
-                        <div class="row">
+                        <div class="row mr-t2">
                             <div class="col-12">
-                                <div class="form-group mb-2 custom-input-field">
-                                    <mat-form-field appearance="fill" class="w-100">
-                                        <label>{{ commonLocaleData?.app_description }}</label>
-                                        <textarea
-                                            matInput
-                                            name="comment"
-                                            class="textarea form-control mat-field-border mt-2"
-                                            [(ngModel)]="comment"
-                                            [placeholder]="localeData?.description_placeholder"
-                                        ></textarea>
-                                    </mat-form-field>
-                                </div>
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
+                                    <textarea
+                                        matInput
+                                        rows="3"
+                                        [name]="'comment'"
+                                        [(ngModel)]="comment"
+                                        [placeholder]="localeData?.description_placeholder"
+                                    ></textarea>
+                                </mat-form-field>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mr-t2">
                             <div class="col-8">
                                 <div class="d-inline-block mr-2">
-                                    <label class="font-15">
-                                        {{ entryAgainstObject.base }}<span class="text-danger">*</span>
-                                    </label>
-                                    <div class="clearfix">
-                                        <sh-select
-                                            [ngClass]="{ 'error-box': showEntryAgainstRequired }"
-                                            class="text-left multi-select entry-against"
-                                            name="depositAccountUniqueName"
-                                            #entryAgainstAccountDropDown
-                                            [options]="entryAgainstObject.dropDownOption"
-                                            [(ngModel)]="entryAgainstObject.model"
-                                            (selected)="onSelectEntryAgainstAccount($event)"
-                                            (onClear)="onClearEntryAgainstAccount()"
-                                            [placeholder]="commonLocaleData?.app_select_account"
-                                            [notFoundLink]="false"
-                                            [enableDynamicSearch]="true"
-                                            [isPaginationEnabled]="true"
-                                            (scrollEnd)="handleAccountScrollEnd()"
-                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                            [defaultValue]="entryAgainstObject?.name"
-                                            [fixedValue]="entryAgainstObject?.name"
-                                            [forceClearReactive]="forceClear$ | async"
-                                            [multiple]="false"
-                                            [ItemHeight]="33"
-                                            [useInBuiltFilterForIOptionTypeItems]="true"
-                                        >
-                                            <ng-template #optionTemplate1 let-option="option">
-                                                <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">{{ option.label }}</div>
-                                                    <div class="item-unique">{{ option?.value }}</div>
-                                                </a>
-                                            </ng-template>
-                                        </sh-select>
-                                    </div>
+                                    <reactive-dropdown-field
+                                        [ngClass]="{ 'error-box': showEntryAgainstRequired }"
+                                        class="text-left multi-select entry-against"
+                                        [name]="'depositAccountUniqueName'"
+                                        [options]="entryAgainstObject.dropDownOption"
+                                        [(ngModel)]="entryAgainstObject.model"
+                                        (selectedOption)="onSelectEntryAgainstAccount($event)"
+                                        (onClear)="onClearEntryAgainstAccount()"
+                                        [label]="entryAgainstObject.base"
+                                        [required]="true"
+                                        [placeholder]="commonLocaleData?.app_select_account"
+                                        [enableDynamicSearch]="true"
+                                        [isPaginationEnabled]="true"
+                                        (scrollEnd)="handleAccountScrollEnd()"
+                                        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                        [labelValue]="entryAgainstObject?.name"
+                                    >
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
 
@@ -132,6 +113,7 @@
                                     [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
                                     [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular?.uniqueName"
                                     (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+                                    (showQuickAccountModalFromUpdateLedger)="openLedgerAsidePaneDialog()"
                                 ></update-ledger-entry-panel>
                             </div>
                         </div>
@@ -180,3 +162,15 @@
     </app-aside-menu-sales-other-taxes>
 </ng-template>
 <!-- endregion -->
+
+<!-- region ledger aside pane -->
+<ng-template #ledgerAsidePane>
+    <ledger-aside-pane
+        [keyboardShortcut]="'esc'"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (onShortcutPress)="ledgerAsidePaneDialogRef?.close()"
+        (closeAsideEvent)="ledgerAsidePaneDialogRef?.close()"
+    >
+    </ledger-aside-pane>
+</ng-template>

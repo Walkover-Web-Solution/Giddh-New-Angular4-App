@@ -1,45 +1,26 @@
-.right-penal {
-    border-left: 1px solid var(--color-gray);
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    top: calc(var(--top-distance) + 54px);
+.right-panel {
+    border-left: 1px solid var(--color-medium-gray);
     width: 280px;
-    padding: 15px;
-    overflow: auto;
-    .card {
-        width: 100%;
-        margin-bottom: 15px;
-        border-radius: 4px;
-        background-color: var(--color-white);
-        padding: 15px;
+    mat-card {
         h2 {
             font-size: var(--font-size-15);
-            color: var(--color-blue);
+            color: var(--color-blue-primary);
         }
         label {
-            color: var(--color-abbey);
+            color: var(--color-dark-gray);
             font-size: var(--font-size-12);
             width: 20%;
             font-weight: 800;
         }
         span {
             font-size: var(--font-size-12);
-            color: var(--color-nero);
+            color: var(--color-black);
         }
     }
 }
 
-.e-way-body {
-    .col-md-3 {
-        display: flex;
-        align-items: center;
-    }
-    .col-md-8 {
-        .input {
-            width: 300px;
-        }
-    }
+.eway-bill-height {
+    min-height: calc(100vh - (var(--header-height) + 20px));
 }
 
 .list-icon-group {
@@ -78,7 +59,7 @@
 
 .list-icon-group input:checked + label {
     background-color: var(--color-white);
-    box-shadow: 2px 2px 5px var(--color-primary-common-box-shadow);
+    box-shadow: 2px 2px 5px var(--color-shadow-light);
 }
 
 .select-style {
@@ -122,7 +103,7 @@
 }
 
 .bg-gray {
-    background: var(--color-wild-sand);
+    background: var(--color-light-gray);
 }
 
 .aside-right .list-icon-group label {
@@ -146,21 +127,21 @@
 
 .table-modal tbody td {
     border-top: 0px solid !important;
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-silver);
 }
 
 .table-modal thead th {
-    border-right: 1px solid var(--color-iron) !important;
+    border-right: 1px solid var(--color-silver) !important;
 }
 
 .table-modal {
-    border-bottom: 1px solid var(--color-iron) !important;
+    border-bottom: 1px solid var(--color-silver) !important;
 }
 
 .table-modal tbody tr td button {
     background: none;
     border: 0px;
-    color: var(--color-dark-fog);
+    color: var(--color-border-light);
     font-size: var(--font-size-15);
     padding: 2px;
     margin-right: 3px;
@@ -168,7 +149,7 @@
 }
 
 .table-modal tbody tr td .icon-edit {
-    border-bottom: 2px solid var(--color-iron);
+    border-bottom: 2px solid var(--color-silver);
 }
 
 .aside-overlay.out {

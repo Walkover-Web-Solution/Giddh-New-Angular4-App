@@ -4,9 +4,8 @@ import { FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
-import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN } from "../../../app.constant";
+import { EMAIL_VALIDATION_REGEX, IOption, MOBILE_REGEX_PATTERN } from "../../../app.constant";
 import { cloneDeep } from "../../../lodash-optimized";
-import { IOption } from "../../ng-virtual-select/sh-options.interface";
 
 @Component({
     selector: "select-multiple-fields",
@@ -68,6 +67,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showMatLabel: boolean = false;
     /** List of selected values represented by their unique names. */
     @Input() public chipListUniqueName: string[] = [];
+    /** True if field is required */
+    @Input() public required: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */

@@ -15,6 +15,32 @@
             })(window, document, "script", "dataLayer", "GTM-K2L9QG");
         </script>
         <!-- End Google Tag Manager -->
+        <script type="text/javascript">
+            // Add preconnect for domainName extracted from cookie
+            window.onload = function () {
+                let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
+                const logoUrl = "./assets/images/giddh-big-logo.svg";
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://api.giddh.com";
+                
+                if (whiteLabelConfig) {
+                    // Remove the h1 tag containing the image
+                    const logoContainer = document.querySelector("#main-giddh-loader h1");
+                    if (logoContainer) {
+                        logoContainer.remove();
+                    }
+                } else {
+                    // If no whiteLabel object, set the logo as usual
+                    document.getElementById("dynamic-logo").src = logoUrl;
+                }
+                // Create a new preconnect link element
+                const preconnectLink = document.createElement("link");
+                preconnectLink.rel = "preconnect";
+                preconnectLink.href = apiDomain;
+
+                // Append the preconnect link to the head
+                document.head.appendChild(preconnectLink);
+            };
+        </script>
         <script defer src="./assets/js/lodash.min.js"></script>
         <script defer src="./assets/js/jquery.min.js"></script>
         <script type="text/javascript">
@@ -35,15 +61,16 @@
         <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
         <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software" />
         <link rel="icon" href="assets/images/favicons.png" type="image/png" sizes="16x16" />
-        <link rel="stylesheet" href="./assets/css/bootstrap.min.css" crossorigin="anonymous" />
-        <link
-            rel="preload"
-            as="font"
-            href="./assets/fonts/interfont/Inter-Regular.ttf"
-            type="font/ttf"
-            crossorigin="anonymous"
-        />
-        <link rel="stylesheet" href="./assets/css/default.css" crossorigin="anonymous" />
+        <link rel="stylesheet" href="./assets/style/bootstrap.min.css" crossorigin="anonymous" />
+        
+        <!-- Preload Inter fonts for better performance -->
+        <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Regular.ttf" type="font/ttf" crossorigin="anonymous" />
+        <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_RegularItalic.ttf" type="font/ttf" crossorigin="anonymous" />
+        <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Medium.ttf" type="font/ttf" crossorigin="anonymous" />
+        <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_SemiBold.ttf" type="font/ttf" crossorigin="anonymous" />
+        <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Bold.ttf" type="font/ttf" crossorigin="anonymous" />
+        
+        <link rel="stylesheet" href="./assets/style/default.css" crossorigin="anonymous" />
         <script type="text/javascript">
             try {
                 var HW_config = { selector: ".notification", account: "7eB4aJ" };
@@ -55,9 +82,8 @@
         <link rel="preconnect" href="https://headway-widget.net" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://s3-ap-south-1.amazonaws.com" />
-        <link rel="preconnect" href="https://api.giddh.com" />
     </head>
-    <body class="unresponsive">
+    <body class="unresponsive mat-app-background">
         <!-- Google Tag Manager (noscript) -->
         <noscript
             ><iframe

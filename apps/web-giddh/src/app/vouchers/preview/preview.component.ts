@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";
@@ -8,7 +8,7 @@ import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
+import { ASIDE_PANE_CONFIG, FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
@@ -25,6 +25,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 import { DownloadVoucherComponent } from "../download-voucher/download-voucher.component";
+import { ServiceConfig } from "../../services/service.config";
 
 @Component({
     selector: "preview",
@@ -193,6 +194,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public voucherTypeEnum: any = VoucherTypeEnum;
     /** Holds true when need to refresh page */
     private isRefresh: boolean = null;
+    /** Voucher api version */
+    public voucherApiVersion: number;
 
     constructor(
         private router: Router,
@@ -206,6 +209,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         private domSanitizer: DomSanitizer,
         private thermalService: ThermalService,
         private toaster: ToasterService,
+        @Inject(ServiceConfig) private serviceConfig,
         private changeDetection: ChangeDetectorRef,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private adjustmentUtilityService: AdjustmentUtilityService
@@ -218,6 +222,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @memberof VouchersPreviewComponent
     */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         /** If this is true, it means we are in branch consolidated mode.  */
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -253,7 +258,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
                 // Reset Filter
@@ -797,16 +802,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             model.postRequestObject[this.voucherType === VoucherTypeEnum.generateProforma ? 'proformaNumber' : 'estimateNumber'] = this.selectedInvoice?.voucherNumber;
         }
         this.dialog.open(this.historyAsideDialog, {
-            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData },
-            position: {
-                top: '0',
-                right: '0'
-            },
-            maxWidth: 'var(--aside-pane-width)',
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh',
-            disableClose: true
+            ...ASIDE_PANE_CONFIG,
+            data: { model: model, localeData: this.localeData, commonLocaleData: this.commonLocaleData }
         });
     }
 
@@ -825,7 +822,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
     * Open Adjust payment dialog
     *
-    * @memberof VoucherListComponent
+    * @memberof VouchersPreviewComponent
     */
     public showAdjustmentDialog(): void {
         this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: this.selectedInvoice?.account?.uniqueName, payload: { uniqueName: this.selectedInvoice?.uniqueName, voucherType: this.voucherType } });
@@ -1193,12 +1190,33 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handle Cancel Voucher Dialog
+     *
+     * @param {*} voucher
+     * @memberof VouchersPreviewComponent
+     */
+    public openCancelVoucherDialog(action: any): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.cancel_voucher_confirmation_message, this.commonLocaleData)
+            }
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.actionVoucher(action);
+            }
+        });
+    }
+
 
     /**
      * Handle Estimate Proforma Actions API Call
      *
      * @param {string} action
-     * @memberof VoucherListComponent
+     * @memberof VouchersPreviewComponent
      */
     public actionEstimateProforma(action: string): void {
         const model = {
@@ -1219,7 +1237,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
      * Convert To Invoice API Call
      *
-     * @memberof VoucherListComponent
+     * @memberof VouchersPreviewComponent
      */
     public convertToInvoice(): void {
         const model = {
@@ -1241,7 +1259,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /**
      * Convert To Proforma API Call
      *
-     * @memberof VoucherListComponent
+     * @memberof VouchersPreviewComponent
      */
     public convertToProforma(): void {
         this.componentStore.convertToProforma({

@@ -23,9 +23,6 @@ export class HttpWrapperService {
         options = this.prepareOptions(options);
         options.params = params;
         return this.http.get(url, options).pipe(
-            tap(res => {
-                //
-            }),
             finalize(() => {
                 this.hideLoader();
             })
@@ -34,9 +31,6 @@ export class HttpWrapperService {
     public post = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
         return this.http.post(url, body, options).pipe(
-            tap(res => {
-                //
-            }),
             finalize(() => {
                 this.hideLoader();
             })
@@ -45,9 +39,6 @@ export class HttpWrapperService {
     public put = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
         return this.http.put(url, body, options).pipe(
-            tap(res => {
-                //
-            }),
             finalize(() => {
                 this.hideLoader();
             })
@@ -61,9 +52,6 @@ export class HttpWrapperService {
         options = this.prepareOptions(options);
         options.search = this.objectToParams(params);
         return this.http.delete(url, options).pipe(
-            tap(res => {
-                //
-            }),
             finalize(() => {
                 this.hideLoader();
             })
@@ -75,14 +63,10 @@ export class HttpWrapperService {
         options.headers["Session-Id"] = this.generalService.sessionId;
         options.headers["Content-Type"] = "application/json";
         options.headers["Accept"] = "application/json";
-        // options.headers["X-Tenant"] = this.generalService.getUtmParameter("X-Tenant");
         options.headers = new HttpHeaders(options.headers);
         options.body = request;
         this.showLoader();
         return this.http.delete(url, options).pipe(
-            tap(res => {
-                //
-            }),
             finalize(() => {
                 this.hideLoader();
             })
@@ -92,9 +76,6 @@ export class HttpWrapperService {
     public patch = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
         return this.http.patch(url, body, options).pipe(
-            tap(res => {
-                //
-            }),
             finalize(() => {
                 this.hideLoader();
             })

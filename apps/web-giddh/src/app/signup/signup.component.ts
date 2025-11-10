@@ -3,8 +3,9 @@ import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration, OTP_PROVIDER_URL, ELECTRON_OTP_PROVIDER_URL, OTP_WIDGET_ID, OTP_WIDGET_TOKEN } from "../app.constant";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TemplateRef } from '@angular/core';
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -19,13 +20,14 @@ import {
     GoogleLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { LoaderService } from "../loader/loader.service";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
+import { GeneralService } from "../services/general.service";
+import { ServiceConfig } from "../services/service.config";
 
 declare var initSendOTP: any;
 
@@ -36,10 +38,19 @@ declare var initSendOTP: any;
 })
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
-    @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
-    @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
+    /** Template reference for email verification dialog */
+    @ViewChild('emailVerifyTemplate', { static: true }) public emailVerifyTemplate: TemplateRef<any>;
+    /** Template reference for mobile verification dialog */
+    @ViewChild('mobileVerifyTemplate', { static: true }) public mobileVerifyTemplate: TemplateRef<any>;
+    /** Template reference for two-way authentication dialog */
+    @ViewChild('twoWayAuthTemplate', { static: true }) public twoWayAuthTemplate: TemplateRef<any>;
+    /** Dialog reference for email verify modal */
+    private emailVerifyDialogRef: MatDialogRef<any>;
+    /** Dialog reference for mobile verify modal */
+    private mobileVerifyDialogRef: MatDialogRef<any>;
+    /** Dialog reference for two way auth modal */
+    private twoWayAuthDialogRef: MatDialogRef<any>;
     public urlPath: string = "";
     public isSubmited: boolean = false;
     public mobileVerifyForm: UntypedFormGroup;
@@ -68,6 +79,12 @@ export class SignupComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
+    /* Hold domain url */
+    public giddhDomainUrl: string = "";
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     // tslint:disable-next-line:no-empty
     constructor(private fb: UntypedFormBuilder,
@@ -78,9 +95,13 @@ export class SignupComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        @Inject(ServiceConfig) private serviceConfig,
+        private generalService : GeneralService,
+        private dialog: MatDialog
     ) {
-        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER;
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -126,6 +147,9 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this.fb.group({
@@ -200,9 +224,17 @@ export class SignupComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Shows the email verification modal dialog
+     *
+     * @memberof SignupComponent
+     */
     public showEmailModal() {
-        this.emailVerifyModal?.show();
-        this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+        this.emailVerifyDialogRef = this.dialog.open(this.emailVerifyTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+        this.emailVerifyDialogRef.afterOpened().subscribe(() => {
             this.isSubmited = false;
         });
     }
@@ -240,28 +272,49 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
 
+    /**
+     * Hides the email verification modal dialog
+     *
+     * @memberof SignupComponent
+     */
     public hideEmailModal() {
-        this.emailVerifyModal.hide();
+        this.emailVerifyDialogRef?.close();
         this.store.dispatch(this.loginAction.ResetSignupWithEmailState());
         this.emailVerifyForm.reset();
     }
 
+    /**
+     * Shows the mobile verification modal dialog
+     *
+     * @memberof SignupComponent
+     */
     public showMobileModal() {
-        this.mobileVerifyModal?.show();
+        this.mobileVerifyDialogRef = this.dialog.open(this.mobileVerifyTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
+    /**
+     * Hides the mobile verification modal dialog
+     *
+     * @memberof SignupComponent
+     */
     public hideMobileModal() {
-        this.mobileVerifyModal.hide();
+        this.mobileVerifyDialogRef?.close();
         this.store.dispatch(this.loginAction.ResetSignupWithMobileState());
         this.mobileVerifyForm.get("mobileNumber").reset();
     }
 
     public showTwoWayAuthModal() {
-        this.twoWayAuthModal?.show();
+        this.twoWayAuthDialogRef = this.dialog.open(this.twoWayAuthTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
     public hideTowWayAuthModal() {
-        this.twoWayAuthModal?.hide();
+        this.twoWayAuthDialogRef?.close();
     }
 
     public resetTwoWayAuthModal() {
@@ -355,8 +408,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.loaderService.show();
 
         let configuration = {
-            widgetId: OTP_WIDGET_ID,
-            tokenAuth: OTP_WIDGET_TOKEN,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID,
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,
             success: (data: any) => {
                 this.ngZone.run(() => {
                     this.initiateSignup(data);
@@ -391,7 +444,7 @@ export class SignupComponent implements OnInit, OnDestroy {
      * @param {*} data
      * @memberof SignupComponent
      */
-     private initiateSignup(data: any): void {
+    private initiateSignup(data: any): void {
         this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));

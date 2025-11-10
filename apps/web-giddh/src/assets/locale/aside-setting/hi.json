@@ -12,7 +12,7 @@
           "linked_pages": [
             "/pages/settings/profile/personal",
             "/pages/settings/profile/address",
-            "/pages/settings/profile/other"
+            "/pages/settings/profile/export"
           ]
         },
         {
@@ -57,7 +57,7 @@
         {
           "label": "ट्रिगर्स",
           "link": "/pages/settings/trigger",
-          "icon": "<i class='icon-permission1'></i>"
+          "icon": "<i class='icon-trigger'></i>"
         },
         {
           "label": "टॅग्ज",
@@ -114,8 +114,7 @@
           "icon": "<i class='icon-branch1'></i>",
           "linked_pages": [
             "/pages/settings/profile/personal",
-            "/pages/settings/profile/address",
-            "/pages/settings/profile/other"
+            "/pages/settings/profile/address"
           ]
         },
         {
@@ -155,7 +154,7 @@
         {
           "label": "ट्रिगर्स",
           "link": "/pages/settings/trigger",
-          "icon": "<i class='icon-permission1'></i>"
+          "icon": "<i class='icon-trigger'></i>"
         },
         {
           "label": "टैग",

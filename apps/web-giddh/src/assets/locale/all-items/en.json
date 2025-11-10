@@ -513,6 +513,18 @@
                     "additionalRoutes": [
                         "/pages/reports/purchase-detailed-expand"
                     ]
+                },
+                {
+                    "label": "Template",
+                    "link": "/pages/vouchers/preview/purchase/templates",
+                    "icon": "icon-template",
+                    "description": "Edit design & content of the template",
+                    "alwaysPresent": true,
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -944,10 +956,27 @@
                     "icon": "icon-tally-import1"
                 },
                 {
+                    "label": "Multi-currency Report",
+                    "link": "/pages/multi-currency-report",
+                    "icon": "icon-multi-currency"
+                },
+                {
                     "label": "Project wise accounting",
                     "link": "/pages/project-wise-accounting/list",
                     "icon": "icon-balance-sheet-new",
                     "description": "Track, manage, and analyze financials for each project efficiently."
+                }
+            ]
+        },
+        {
+            "label": "AI",
+            "icon": "icon-audit-log",
+            "items": [
+                {
+                    "label": "OCR",
+                    "link": "/pages/ai-ocr",
+                    "icon": "icon-audit-log",
+                    "description": "Upload images, pdf, jpeg, zip"
                 }
             ]
         },

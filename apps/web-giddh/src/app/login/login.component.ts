@@ -3,8 +3,9 @@ import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration, OTP_PROVIDER_URL, ELECTRON_OTP_PROVIDER_URL, OTP_WIDGET_ID, OTP_WIDGET_TOKEN } from "../app.constant";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { TemplateRef } from "@angular/core";
+import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, KeyCodesEnum, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -19,7 +20,6 @@ import {
     GoogleLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
@@ -28,6 +28,7 @@ import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { CommonActions } from "../actions/common.actions";
 import { GeneralService } from "../services/general.service";
+import { ServiceConfig } from "../services/service.config";
 
 declare var initSendOTP: any;
 
@@ -38,10 +39,16 @@ declare var initSendOTP: any;
 })
 export class LoginComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
-    @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
+    @ViewChild("emailVerifyTemplate", { static: true }) public emailVerifyTemplate: TemplateRef<any>;
+    /** Dialog reference for email verification modal */
+    private emailVerifyDialogRef: MatDialogRef<any>;
     public isLoginWithEmailSubmited$: Observable<boolean>;
-    @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
+    @ViewChild("mobileVerifyTemplate", { static: true }) public mobileVerifyTemplate: TemplateRef<any>;
+    /** Dialog reference for mobile verification modal */
+    private mobileVerifyDialogRef: MatDialogRef<any>;
+    @ViewChild("twoWayAuthTemplate", { static: false }) public twoWayAuthTemplate: TemplateRef<any>;
+    /** Dialog reference for two way auth modal */
+    private twoWayAuthDialogRef: MatDialogRef<any>;
 
     public isSubmited: boolean = false;
     public mobileVerifyForm: UntypedFormGroup;
@@ -82,6 +89,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Show apple login if electron app and mac user */
     public showAppleLogin: boolean = false;
+    /* Hold logo source */
+    public giddhLogoSrc: string = '';
+    /* Hold domain url */
+    public giddhDomainUrl: string = "";
+    /* Hold image path */
+    public imgPath: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -94,9 +107,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private ngZone: NgZone,
         private commonAction: CommonActions,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
+        private dialog: MatDialog
     ) {
-        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || (this.serviceConfig.AppUrl || AppUrl)) + APP_FOLDER;
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -304,28 +323,64 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
 
+    /**
+     * Hides the email verification dialog
+     *
+     * @memberof LoginComponent
+     */
     public hideEmailModal() {
-        this.emailVerifyModal.hide();
+        this.emailVerifyDialogRef?.close();
         this.store.dispatch(this.loginAction.ResetSignupWithEmailState());
         this.emailVerifyForm.reset();
     }
 
+    /**
+     * Shows the mobile verification dialog
+     *
+     * @memberof LoginComponent
+     */
     public showMobileModal() {
-        this.mobileVerifyModal?.show();
+        this.mobileVerifyDialogRef = this.dialog.open(this.mobileVerifyTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
     }
 
+    /**
+     * Hides the mobile verification dialog
+     *
+     * @memberof LoginComponent
+     */
     public hideMobileModal() {
-        this.mobileVerifyModal.hide();
+        this.mobileVerifyDialogRef?.close();
         this.store.dispatch(this.loginAction.ResetSignupWithMobileState());
         this.mobileVerifyForm.get("mobileNumber").reset();
     }
 
+    /**
+     * Shows the two way authentication dialog
+     *
+     * @memberof LoginComponent
+     */
     public showTwoWayAuthModal() {
-        this.twoWayAuthModal?.show();
+        this.twoWayAuthDialogRef = this.dialog.open(this.twoWayAuthTemplate, {
+            panelClass: 'mat-dialog-md',
+            disableClose: true
+        });
+        
+        // Handle dialog close event to replace onHidden functionality
+        this.twoWayAuthDialogRef.afterClosed().subscribe(() => {
+            this.onHiddenAuthModal({dismissReason: KeyCodesEnum.ESC});
+        });
     }
 
+    /**
+     * Hides the two way authentication dialog
+     *
+     * @memberof LoginComponent
+     */
     public hideTowWayAuthModal() {
-        this.twoWayAuthModal?.hide();
+        this.twoWayAuthDialogRef?.close();
     }
 
     public resetTwoWayAuthModal() {
@@ -361,6 +416,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
+                
                 this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
 
                 if (!isElectron) {
@@ -436,12 +492,12 @@ export class LoginComponent implements OnInit, OnDestroy {
      */
     public signInWithOtp(): void {
         this.loaderService.show();
-
         let configuration = {
-            widgetId: OTP_WIDGET_ID,
-            tokenAuth: OTP_WIDGET_TOKEN,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || '33686b716134333831313239' ,
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || '205968TmXguUAwoD633af103P1',
             success: (data: any) => {
                 this.ngZone.run(() => {
+
                     this.initiateLogin(data);
                 });
             },
@@ -491,8 +547,9 @@ export class LoginComponent implements OnInit, OnDestroy {
      * @memberof LoginComponent
      */
     public async appleLogin(): Promise<void> {
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
         const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : 'https://apitest.giddh.com';
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : whiteLabel?.giddhWhiteLabel?.apiDomain ?`${whiteLabel.giddhWhiteLabel.apiDomain}` : 'https://apitest.giddh.com';
         const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
         window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');

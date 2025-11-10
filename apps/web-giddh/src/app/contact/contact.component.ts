@@ -1,12 +1,11 @@
 import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
-import { animate, state, style, transition, trigger } from "@angular/animations";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import {
     ChangeDetectorRef,
     Component,
-    ComponentFactoryResolver,
     ElementRef,
     EventEmitter,
+    Inject,
     OnDestroy,
     OnInit,
     Output,
@@ -14,13 +13,11 @@ import {
     TemplateRef,
     ViewChild,
 } from "@angular/core";
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { combineLatest, BehaviorSubject, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
 import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
@@ -29,7 +26,7 @@ import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,
@@ -44,7 +41,6 @@ import { CompanyService } from "../services/company.service";
 import { ContactService } from "../services/contact.service";
 import { GeneralService } from "../services/general.service";
 import { ToasterService } from "../services/toaster.service";
-import { ElementViewContainerRef } from "../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { AppState } from "../store";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
@@ -54,29 +50,18 @@ import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ContactComponentStore } from "./utility/contact.store";
 import { TemplateFroalaComponent } from '../shared/template-froala/template-froala.component';
+import { ServiceConfig } from '../services/service.config';
 import { ContactsTab, ContactsColumn } from './contacts.enum';
 
 @Component({
     selector: "contact-detail",
     templateUrl: "./contact.component.html",
     styleUrls: ["./contact.component.scss"],
-    animations: [
-        trigger("slideInOut", [
-            state("in", style({
-                transform: "translate3d(0, 0, 0)",
-            })),
-            state("out", style({
-                transform: "translate3d(100%, 0, 0)",
-            })),
-            transition("in => out", animate("400ms ease-in-out")),
-            transition("out => in", animate("400ms ease-in-out")),
-        ]),
-    ],
     providers: [ContactComponentStore]
 })
 export class ContactComponent implements OnInit, OnDestroy {
@@ -93,8 +78,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public sundryCreditorsAccounts: any[] = [];
     public activeTab: any = "";
     public groupUniqueName: any;
-    public accountAsideMenuState: string = "out";
-    public paymentAsideMenuState: string = "out";
     public selectedAccForPayment: any;
     public dueAmountReportRequest: DueAmountReportQueryRequest;
     public selectedGroupForCreateAcc: "sundrydebtors" | "sundrycreditors" = "sundrydebtors";
@@ -122,11 +105,22 @@ export class ContactComponent implements OnInit, OnDestroy {
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
     @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-    @ViewChild("paginationChild", { static: true }) public paginationChild: ElementViewContainerRef;
     @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
     @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
-    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: TemplateRef<any>;
+    /** Template reference for aside menu account modal */
+    @ViewChild("accountAsideMenuTemplate", { static: true }) public accountAsideMenuTemplate: TemplateRef<any>;
+    /** Template reference for aside menu payment modal */
+    @ViewChild("paymentAsideMenuTemplate", { static: true }) public paymentAsideMenuTemplate: TemplateRef<any>;
+    /** Template reference for success payment dialog */
+    @ViewChild('successTemplate', { static: true }) public successTemplate: TemplateRef<any>;
+    /** Payment successful message */
+    public paymentSuccessfulMessage: string = '';
+    /** Reference for account aside menu dialog */
+    public accountAsideMenuDialogRef: MatDialogRef<any>;
+    /** Reference for payment aside menu dialog */
+    public paymentAsideMenuDialogRef: MatDialogRef<any>;
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
     public messageBody = {
@@ -166,6 +160,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isBulkPaymentShow: boolean = false;
     /** selected account list array */
     public selectedAccountsList: any[] = [];
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Pagination count */
     public paginationLimit: number = PAGINATION_LIMIT;
     /** Giddh decimal places set by user */
@@ -176,11 +172,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private createAccountIsSuccess$: Observable<boolean>;
     public universalDate: any;
-    /** model reference to open/close bulk payment model */
-    // public bulkPaymentModalRef: BsModalRef;
-    public modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /**True, if get accounts request in process */
     public isGetAccountsInProcess: boolean = false;
     /** This will hold the current page number */
@@ -242,7 +234,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2 = 2;
+    public voucherApiVersion: number;
     /** Stores the send email bulk request  */
     public sendBulkEmailRequest: SendBulkEmailTemplateRequest;
     /** Observable for bulk email success response */
@@ -270,9 +262,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         sortBy: ''
     };
 
-    constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
+    constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
+        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver, private settingsProfileActions: SettingsProfileActions,
         private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -282,7 +274,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
                 this.dueAmountReportRequest.page = data.page;
-                this.loadPaginationComponent(data);
             }
             this.dueAmountReportData$ = observableOf(data);
         });
@@ -307,7 +298,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
@@ -443,9 +434,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.accountAsideMenuState === "in") {
-                    this.toggleAccountAsidePane();
-                }
+                this.accountAsideMenuDialogRef?.close();
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -700,40 +689,31 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.activeAccountDetails = account;
         this.isUpdateAccount = true;
         this.selectedGroupForCreateAcc = account ? account.groupUniqueName : openFor === "customer" ? "sundrydebtors" : "sundrycreditors";
-        this.toggleAccountAsidePane();
+        this.openAccountAsidePaneDialog();
     }
 
     public openAddAndManage(openFor: "customer" | "vendor") {
         this.isUpdateAccount = false;
         this.selectedGroupForCreateAcc = openFor === "customer" ? "sundrydebtors" : "sundrycreditors";
-        this.toggleAccountAsidePane();
+        this.openAccountAsidePaneDialog();
     }
 
-    public toggleAccountAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
-
-        this.toggleBodyClass();
+    /**
+     * Opens account aside menu dialog
+     * @memberof ContactComponent
+     */
+    public openAccountAsidePaneDialog(): void {
+        this.accountAsideMenuDialogRef = this.dialog.open(this.accountAsideMenuTemplate, ASIDE_PANE_CONFIG);
     }
 
     public getUpdatedList(grpName?: any): void {
         if (grpName) {
             this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$)).subscribe(response => {
-                if (!response && this.accountAsideMenuState === "in") {
-                    this.toggleAccountAsidePane();
+                if (!response) {
+                    this.accountAsideMenuDialogRef?.close();
                     this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
             });
-        }
-    }
-
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === "in") {
-            document.querySelector("body").classList.add("fixed");
-        } else {
-            document.querySelector("body").classList.remove("fixed");
         }
     }
 
@@ -747,13 +727,34 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public pageChanged(event: any): void {
-        if (this.currentPage !== event.page) {
-            this.checkboxInfo.selectedPage = event.page;
-            this.advanceFilters.page = event.page + 1;
-            this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
-            this.getAccounts(this.fromDate, this.toDate, event.page, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+
+    /**
+     * Handles pagination events and updates API parameters
+     * 
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof ContactComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.advanceFilters.count !== event.pageSize) {
+            this.advanceFilters.page = 1;
+            this.checkboxInfo.selectedPage = 1;
+        } else {
+            this.advanceFilters.page = event.pageIndex + 1;
+            this.checkboxInfo.selectedPage = event.pageIndex + 1;
         }
+        this.advanceFilters.count = event.pageSize;
+        this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
+        this.getAccounts(
+            this.fromDate,
+            this.toDate,
+            this.advanceFilters.page,
+            "false",
+            this.advanceFilters.count,
+            this.searchStr,
+            this.key,
+            this.order,
+            (this.currentBranch ? this.currentBranch.uniqueName : "")
+        );
     }
 
     /**
@@ -910,19 +911,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open Modal for SMS
-     *
-     * @memberof ContactComponent
-     */
-    // public openSmsDialog() {
-    //     this.messageBody.msg = '';
-    //     this.messageBody.type = 'sms';
-    //     this.messageBody.btn.set = this.messageBody.btn.sms;
-    //     this.messageBody.header.set = this.messageBody.header.sms;
-    //     this.mailModal.show();
-    // }
-
-    /**
      * Send Email/Sms for Accounts
      *
      * @param {string} groupsUniqueName
@@ -975,39 +963,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public pageChangedDueReport(event: any): void {
-        this.dueAmountReportRequest.page = event.page;
-    }
 
-    public loadPaginationComponent(s) {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-        if (this.paginationChild && this.paginationChild.viewContainerRef) {
-            let viewContainerRef = this.paginationChild.viewContainerRef;
-            viewContainerRef.remove();
-
-            let componentInstanceView = componentFactory.create(viewContainerRef.injector);
-            viewContainerRef.insert(componentInstanceView.hostView);
-
-            let componentInstance = componentInstanceView.instance as PaginationComponent;
-            componentInstance.totalPages = s.totalPages;
-            componentInstance.totalItems = s.count * s.totalPages;
-            componentInstance.itemsPerPage = this.paginationLimit;
-            componentInstance.maxSize = 5;
-            componentInstance.writeValue(s.page);
-            componentInstance.boundaryLinks = true;
-            componentInstance.firstText = this.commonLocaleData?.app_first;
-            componentInstance.previousText = this.commonLocaleData?.app_previous;
-            componentInstance.nextText = this.commonLocaleData?.app_next;
-            componentInstance.lastText = this.commonLocaleData?.app_last;
-            componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
-                this.pageChangedDueReport(e);
-            });
-        }
-    }
 
     public selectedDate(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -1016,8 +976,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedRangeLabel = value.name;
         }
 
-        this.hideGiddhDatepicker();
-
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -1203,7 +1162,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {string} groupUniqueName Group unique name ('sundrycreditors' or 'sundrydebtors')
      * @param {number} [pageNumber] Page number of the data to be fetched
      * @param {string} [refresh] If true, then fetch the most refreshed data instead of cached data
-     * @param {number} [count=20] Page size
+     * @param {number} [count=PAGINATION_LIMIT] Page size
      * @param {string} [query] Query string to be searched such as customer name
      * @param {string} [sortBy=''] Sorting entity by which we need to sort such as debitTotal, creditTotal or name
      * @param {string} [order='asc'] Order of sorting (asc or desc)
@@ -1355,14 +1314,15 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public closeBulkPaymentModel(event: any): void {
         //  if bulk paymemt success then clear all selected contacts lists
-        if (event) {
-            this.clearSelectedContacts(false);
-        }
-        this.isBulkPaymentShow = false;
-        this.selectedAccForPayment = null;
-
         if (this.bulkPaymentModalRef) {
             this.dialog.closeAll();
+            if (event.isPaySuccess) {
+                this.clearSelectedContacts(false);
+                this.paymentSuccessfulMessage = event.paymentSuccessfulMessage;
+                this.dialog.open(this.successTemplate, { panelClass: 'mat-dialog-md' });
+            }
+            this.isBulkPaymentShow = false;
+            this.selectedAccForPayment = null;
         }
     }
 
@@ -1383,32 +1343,17 @@ export class ContactComponent implements OnInit, OnDestroy {
 
 
     /**
-     * This will show datepicker
+     * This will toggle datepicker
      *
-     * @param {*} element
+     * @param {boolean} isOpen
      * @memberof ContactComponent
      */
-    public showGiddhDatepicker(element): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, {
-                class: "modal-xl giddh-datepicker-modal",
-                backdrop: false,
-                ignoreBackdropClick: this.isMobileScreen,
-            }),
-        );
-    }
-
-    /**
-     * This will hide datepicker
-     *
-     * @memberof ContactComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
     }
 
     /**
@@ -1720,25 +1665,20 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Open custom email dialog
-   *
-   * @param {any} account
-   * @memberof ContactComponent
-   */
+    * Open custom email dialog
+    *
+    * @param {any} account
+    * @memberof ContactComponent
+    */
     public openCustomEmailDialog(account: any, activeTab: string, sendBulk: boolean): void {
         const dialogRef = this.dialog.open(TemplateFroalaComponent, {
+            ...ASIDE_PANE_CONFIG,
             data: {
                 activeTab: activeTab,
                 accountUniqueName: sendBulk ? account?.map((account) => account.uniqueName) : account?.uniqueName
-            },
-            width: 'var(--aside-pane-width)',
-            position: {
-                right: '15px',
-                bottom: '0'
-            },
-            disableClose: true
+            }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.selectedCheckedContacts = [];
                 this.selectedAccountsList = [];

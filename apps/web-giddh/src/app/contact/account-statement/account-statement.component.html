@@ -4,10 +4,10 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-<div class="no-data" *ngIf="isLoading">
+<div class="no-data" *ngIf="getAccountStatementInProgress$ | async">
     <giddh-page-loader></giddh-page-loader>
 </div>
-    <div class="common-wrapper" *ngIf="accountListData?.length && !isLoading">
+    <div class="common-wrapper">
         <div class="account-statement p-20 mr-t20">
             <table class="w-100">
                 <tr>
@@ -153,14 +153,7 @@
                                     <td class="font-16 text-gray">{{ localeData?.balance_due }}</td>
                                     <td class="p-0 text-right">
                                         {{
-                                            responseAccountList.accountSummary.closingBalance?.amount >= 0
-                                                ? (responseAccountList.accountSummary.closingBalance?.type ===
-                                                  transactionType.Credit
-                                                      ? "-"
-                                                      : "") +
-                                                  (responseAccountList.accountAddress.currency?.symbol ?? "") +
-                                                  responseAccountList.accountSummary.closingBalance.amount
-                                                : ""
+                                            balanceDue
                                         }}
                                     </td>
                                 </tr>
@@ -170,14 +163,21 @@
                 </tr>
             </table>
             <div class="inner-content">
-                <div class="w-100 d-flex align-items-baseline">
+                <div class="w-100 d-flex align-items-center justify-content-between">
                     <div class="custom-datepicker-wrapper">
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div class="custom-datepicker" 
+                             [matMenuTriggerFor]="universalDatepicker"
+                             #universalDatepickerTrigger="matMenuTrigger"
+                             role="button"
+                             aria-haspopup="true"
+                             aria-controls="universal-datepicker-menu">
                             <input
+                                matInput
                                 type="text"
                                 name="selectedDateRange"
+                                class="form-control"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker"
+                                readonly
                             />
                         </div>
                     </div>
@@ -192,17 +192,29 @@
                             <span>{{ commonLocaleData?.app_clear_filter }}</span>
                         </span>
                     </button>
-                    <button
-                        aria-label="filter"
-                        mat-stroked-button
-                        (click)="onOpenAdvanceSearch()"
-                        class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
-                        [matTooltip]="commonLocaleData?.app_advance_search"
-                        [matTooltipPosition]="'above'"
-                        matTooltipClass="tooltip-black"
-                    >
-                        <span class="icon-advance-filter"></span>
-                    </button>
+                    <div class="d-flex justify-content-between">
+                        <button
+                            mat-stroked-button
+                            class="mr-r1"
+                            [matTooltip]="commonLocaleData?.app_export"
+                            [matTooltipPosition]="'above'"
+                            matTooltipClass="tooltip-black"
+                            (click)="exportAccountStatement()"
+                        >
+                            <i aria-label="export-account"class="icon-export-icon lh-0"></i>
+                        </button>
+                        <button
+                            aria-label="filter"
+                            mat-stroked-button
+                            (click)="onOpenAdvanceSearch()"
+                            class="d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
+                            [matTooltip]="commonLocaleData?.app_advance_search"
+                            [matTooltipPosition]="'above'"
+                            matTooltipClass="tooltip-black"
+                        >
+                            <i class="icon-advance-filter"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="invoice-table mr-t15">
                     <div class="table-responsive position-relative">
@@ -349,14 +361,7 @@
                                 <span class="font-16 fw-900 pd-1">{{ localeData?.balance_due }}</span>
                                 <span class="pd-1">
                                         {{
-                                            responseAccountList.accountSummary.closingBalance?.amount >= 0
-                                                ? (responseAccountList.accountSummary.closingBalance?.type ===
-                                                  transactionType.Credit
-                                                      ? "-"
-                                                      : "") +
-                                                  (responseAccountList.accountAddress.currency?.symbol ?? "") +
-                                                  responseAccountList.accountSummary.closingBalance.amount
-                                                : ""
+                                            balanceDue
                                         }}
                                     </span>
                             </div>
@@ -390,30 +395,27 @@
         </div>
     </div>
 </ng-container>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                [locale]="{ applyLabel: commonLocaleData?.app_done }"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>
 <!-- table-search -->
 <ng-template
     #searchTemplate

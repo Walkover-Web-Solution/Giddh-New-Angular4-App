@@ -284,11 +284,11 @@
                         [prefixInput]="selectedPrefixForCurrency"
                         [suffixInput]="selectedSuffixForCurrency"
                         [applicableTaxes]="
-                            taxListForStock?.length
+                            taxListForStock?.length && !currentTxn?.duplicateEntry
                                 ? taxListForStock
-                                : currentTxn?.selectedAccount?.applicableTaxes
+                                : currentTxn?.selectedAccount?.applicableTaxes?.length
                                 ? currentTxn?.selectedAccount?.applicableTaxes
-                                : currentAccountApplicableTaxes?.length
+                                : currentAccountApplicableTaxes?.length && !currentTxn?.duplicateEntry
                                 ? currentAccountApplicableTaxes
                                 : []
                         "
@@ -355,8 +355,25 @@
                 </div>
             </div>
         </div>
-        <div class="row warehouse-field mr-b05 mr-t15">
-            <div class="col-md-12">
+        <div class="row warehouse-field mr-b15 mr-t15">
+            <!-- Sales Person -->
+            <div class="col-5 pr-0">
+                <reactive-dropdown-field 
+                    #salesPersonDropdownRef
+                    (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
+                    [(ngModel)]="blankLedger.salesPersonUniqueName"
+                    [labelValue]="blankLedger.salesPersonName || ''"
+                    [name]="'sales-person'"
+                    [label]="commonLocaleData?.app_sales_person"
+                    [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                    [options]="salesPersonList$ | async"
+                    [showCreateNew]="true"
+                    [createNewText]="commonLocaleData?.app_create_new"
+                    (createOption)="openSalesPersonDialog()"
+                    (selectedOption)="blankLedger.salesPersonName = $event.label"
+                ></reactive-dropdown-field>
+            </div>
+            <div class="col-7">
                 <div class="text-right" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
@@ -372,6 +389,7 @@
                         <div class="clearfix">
                             <div *ngIf="blankLedger.isOtherTaxesApplicable" class="pull-right">
                                 <span class="d-flex mr-b05">
+                                    <span class="align-item-center pd-r1">{{ blankLedger.otherTaxModal?.appliedOtherTax?.name }}</span>
                                     <span class="d-flex align-item-center">
                                         <a
                                             href="javascript:void(0)"
@@ -449,12 +467,15 @@
                                     <td>
                                         <div class="form-group">
                                             <reactive-dropdown-field
+                                                #voucherDropdownRef
+                                                (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
                                                 id="ledger-voucher-type"
                                                 [name]="'variantDropdown'"
                                                 [label]="commonLocaleData?.app_voucher_type"
                                                 [placeholder]="localeData?.select_vouchers"
                                                 (selectedOption)="getInvoiceListsData($event)"
                                                 [options]="voucherTypeList | async"
+                                                [labelValue]="getVoucherLabel((voucherTypeList | async) || [])"
                                                 [(ngModel)]="blankLedger.voucherType"
                                                 [readonly]="isReadOnly"
                                             >
@@ -551,59 +572,6 @@
                                                 </a>
                                             </ng-template>
                                             </reactive-dropdown-field>
-                                        
-                                            <!-- <sh-select
-                                                *ngIf="voucherApiVersion !== 2"
-                                                [disabled]="isReadOnly"
-                                                [class.disabled-ledger]="isReadOnly"
-                                                id="ledger-voucher-type-debit-note"
-                                                [options]="invoiceList"
-                                                #invoice
-                                                [placeholder]="localeData?.select_invoice"
-                                                [(ngModel)]="selectedInvoiceForCreditNote"
-                                                [notFoundLink]="false"
-                                                [forceClearReactive]="forceClear$ | async"
-                                                (selected)="creditNoteInvoiceSelected($event)"
-                                                [multiple]="false"
-                                                [ItemHeight]="67"
-                                                [showClear]="false"
-                                            >
-                                                <ng-template #optionTemplate let-option="option">
-                                                    <a href="javascript:void(0)" class="list-item sh-template">
-                                                        <div class="item">
-                                                            {{
-                                                                (blankLedger.voucherType === "pur" ||
-                                                                    blankLedger.voucherType === "purchase") &&
-                                                                !option.label
-                                                                    ? commonLocaleData?.app_not_available
-                                                                    : option.label
-                                                            }}
-                                                        </div>
-                                                        <div class="item-unique">
-                                                            ({{ localeData?.dated }}:
-                                                            {{ option.additional?.voucherDate }})
-                                                        </div>
-                                                        <div class="item-unique">
-                                                            ({{ commonLocaleData?.app_amount }}:
-                                                            <span class="d-inline-flex">
-                                                                <amount-field
-                                                                    [amount]="
-                                                                        voucherApiVersion === 2
-                                                                            ? option.additional?.unadjustedAmount
-                                                                                  ?.amountForAccount
-                                                                            : option.additional?.balanceDue
-                                                                                  ?.amountForAccount
-                                                                    "
-                                                                    [currencySymbol]="false"
-                                                                    [currencyCode]="false"
-                                                                >
-                                                                </amount-field>
-                                                            </span>
-                                                            )
-                                                        </div>
-                                                    </a>
-                                                </ng-template>
-                                            </sh-select> -->
                                         </div>
                                     </td>
                                     <td
@@ -757,6 +725,7 @@
                                                 [disabled]="isReadOnly"
                                                 [appearance]="'outline'"
                                                 [(ngModel)]="blankLedger.tagNames"
+                                                [selectedValues]="blankLedger.tagNames"
                                                 [commonLocaleData]="commonLocaleData"
                                                 [showMatLabel]="true"
                                                 [label]="localeData?.assign_tag"
@@ -1035,10 +1004,10 @@
                         </button>
 
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             id="saveLedger"
-                            [disabled]="isFileUploading || isReadOnly"
+                            [disabled]="isFileUploading || isReadOnly || (voucherApiVersion === 1)"
                             [ladda]="isLedgerCreateInProcess$ | async"
                             (click)="saveLedger()"
                         >

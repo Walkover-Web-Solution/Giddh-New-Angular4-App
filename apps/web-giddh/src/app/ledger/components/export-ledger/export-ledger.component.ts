@@ -1,5 +1,6 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ToasterService } from '../../../services/toaster.service';
@@ -13,13 +14,13 @@ import { download } from '@giddh-workspaces/utils';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { saveAs } from 'file-saver';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../app.constant';
 import { CopyType } from '../../../shared/Enums/common.enum';
+import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
@@ -48,16 +49,14 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
+    /** Reference to universal date picker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
     public dayjs = dayjs;
     /* Selected from date */
@@ -66,8 +65,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** To hold export request object */
     public exportRequest: ExportBodyRequest = {
         from: '',
@@ -89,7 +86,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         showInAccountCurrency: null
     }
     /** Stores the voucher API version of the company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This will show/hide for v2 for bill to bill*/
     public enableBillToBill: boolean = false;
     /** This will use for bill to bill value*/
@@ -102,18 +99,24 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public todayDate: any = new Date();
     /** List of available file formats with predefined values */
     public fileFormatList = [
-        { uniqueName: 'DATE', name: 'Voucher Date', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
-        { uniqueName: 'ENTRY_NO', name: 'Entry No', showValue: "3824" },
-        { uniqueName: 'ACC_NAME', name: 'Account Name', showValue: "Walkover" }
+        { value: 'Voucher Date', label: 'Voucher Date', key: 'DATE', showValue: dayjs(this.todayDate).format(GIDDH_DATE_FORMAT) },
+        { value: 'Entry No', label: 'Entry No', key: 'ENTRY_NO', showValue: "3824" },
+        { value: 'Account Name', label: 'Account Name', key: 'ACC_NAME', showValue: "Walkover" }
     ];
     /** List of selected file formats */
-    public selectedFormatList: any[] = [];
+    public selectedFormatList: string = "";
     /** List of copy type */
     public copyTypes: IOption[] = [];
     /** Prefix of format file name */
     public fileFormatPrefix: string = "AS";
     /* Will check if form is valid */
     public isValidForm: boolean = true;
+    /** Tribute config */
+    public tributeConfig: TributeConfig = {
+        trigger: '{',
+        suggestionPrefix: '{',
+        suggestionSuffix: '}',
+    };
 
     constructor(
         private ledgerService: LedgerService,
@@ -124,7 +127,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
         private changeDetectorRef: ChangeDetectorRef,
-        private modalService: BsModalService,
         private router: Router,
         private componentStore: VoucherComponentStore
     ) {
@@ -237,10 +239,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === "success") {
                     if (response?.body?.type === "message") {
-                        this.toaster.showSnackBar("success", response.body.file);
+                        this.toaster.showSnackBar("success", response.body.name);
                     } else {
-                        let blob = this.generalService.base64ToBlob(response?.body?.file, 'application/vnd.ms-excel', 512);
-                        return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
+                        let blob = this.generalService.base64ToBlob(response?.body?.data, 'application/vnd.ms-excel', 512);
+                        return download(response.body.name, blob, 'application/vnd.ms-excel');
                     }
                 } else if (response?.message) {
                     this.toaster.showSnackBar("error", response?.message);
@@ -259,7 +261,16 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     entryUniqueNames: this.inputData?.selectEntryUniqueName
                 };
                 if (this.exportRequest.attachmentExport) {
-                    postRequest.fileNameFormat = this.selectedFormatList.length ? this.exportRequest.fileNameFormat : (this.fileFormatPrefix + "-${" + this.fileFormatList[0].uniqueName + "}-${" + this.fileFormatList[1].uniqueName + "}-${" + this.fileFormatList[2].uniqueName + "}");
+                    let fileNameFormat = this.selectedFormatList?.trim();
+                    if (fileNameFormat?.length) {
+                        this.fileFormatList.forEach(format => {
+                            const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
+                            fileNameFormat = fileNameFormat.replace(pattern, `\${${format.key}}`);
+                        });
+                        postRequest.fileNameFormat = fileNameFormat;
+                    } else {
+                        postRequest.fileNameFormat = this.fileFormatPrefix + "-${" + this.fileFormatList[0].key + "}-${" + this.fileFormatList[1].key + "}-${" + this.fileFormatList[2].key + "}";
+                    }
                 }
                 if (this.exportRequest.voucherExport) {
                     postRequest.mergePdf = this.exportRequest.mergePdf;
@@ -291,10 +302,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                 if (response?.body?.status === "success") {
                                     if (response.queryString.fileType === 'xlsx') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                                        return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
+                                        return download(response.body.fileName, blob, 'application/vnd.ms-excel');
                                     } else if (response.queryString.fileType === 'pdf') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
-                                        return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+                                        return download(response.body.fileName, blob, 'application/pdf');
                                     }
                                 } else {
                                     this.toaster.showSnackBar("success", response.body.message);
@@ -344,28 +355,17 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         });
     }
     /**
-    *To show the datepicker
-    *
-    * @param {*} element
-    * @memberof ExportLedgerComponent
-    */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
+     * This will show the datepicker
      *
+     * @param {boolean} isOpen
      * @memberof ExportLedgerComponent
      */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {            
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
     }
 
     /**
@@ -376,7 +376,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -384,7 +384,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -404,38 +404,19 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Returns a sorted list of file formats.The selected formats appear at the top in the order they were selected.
-     * 
-     * @returns {any []} A sorted array of file formats.
-     * @memberof ExportLedgerComponent
-     */
-    public getSortedFormatList(): any[] {
-        return [...this.fileFormatList].sort((a, b) => {
-            let indexA = this.selectedFormatList.findIndex(item => item.uniqueName === a.uniqueName);
-            let indexB = this.selectedFormatList.findIndex(item => item.uniqueName === b.uniqueName);
-
-            if (indexA === -1) indexA = Infinity;
-            if (indexB === -1) indexB = Infinity;
-
-            return indexA - indexB;
-        });
-    }
-
-    /**
      * Generates a formatted file name based on selected file formats.
      *
      * @returns {string} The formatted file name string.
      * @memberof ExportLedgerComponent
      */
-    public getFileFormat(): string {
-        let showFileFormat = this.fileFormatPrefix;
-        let fileNameFormat = this.fileFormatPrefix;
-        this.selectedFormatList.forEach((format) => {
-            showFileFormat += `-${format.showValue}`
-            fileNameFormat += "-${" + format.uniqueName + "}";
+    public getFileFormat() {
+        let fileNameFormat = this.selectedFormatList;
+        this.fileFormatList.forEach((format) => {
+            if (this.selectedFormatList.includes(`{${format.value}}`)) {
+                fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
+            }
         });
         this.exportRequest.fileNameFormat = fileNameFormat;
-        return showFileFormat;
     }
 
     /**

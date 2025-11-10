@@ -1,9 +1,6 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ReconcileActionState } from '../../../../store/gst-reconcile/GstReconcile.reducer';
-import { AlertConfig } from 'ngx-bootstrap/alert';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from '../../../../models/api-models/GstReconcile';
 import { AppState } from '../../../../store';
 import { publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
@@ -11,31 +8,13 @@ import { GstReconcileActions } from '../../../../actions/gst-reconcile/gst-recon
 import { Observable, ReplaySubject } from 'rxjs';
 import { GstReport } from '../../../constants/gst.constant';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
+import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'reconcile',
     templateUrl: './reconcilation.component.html',
-    styleUrls: ['./reconcilation.component.scss'],
-    providers: [
-        {
-            provide: BsDropdownConfig, useValue: { autoClose: true },
-        },
-        {
-            provide: AlertConfig, useValue: {}
-        }
-    ],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in <=> out', animate('400ms ease-in-out')),
-        ])
-    ]
+    styleUrls: ['./reconcilation.component.scss']
 })
 export class ReconcileComponent implements OnInit, OnDestroy {
     @Input() public data: GstReconcileInvoiceDetails = null;
@@ -69,6 +48,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private reconcileActions: GstReconcileActions
     ) {
         this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
@@ -81,7 +61,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
         this.fireGstReconcileRequest(GstReconcileActionsEnum.notfoundonportal);
     }
 
@@ -120,14 +100,14 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     }
     /**
      * Handle the fire gst reconcile request
-     * 
-     * @param action 
-     * @param page 
-     * @param refresh 
-     * @param count 
-     * @returns 
+     *
+     * @param action
+     * @param page
+     * @param refresh
+     * @param count
+     * @returns
      */
-    public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false, count: number = this.pageSizeOptions[2]) {
+    public fireGstReconcileRequest(action: GstReconcileActionsEnum, page: number = 1, refresh: boolean = false, count: number = PAGINATION_LIMIT) {
         if (!this.currentPeriod) {
             return;
         }
@@ -157,7 +137,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     public getPageInfo(): { pageNumber: number, count: number } {
         const page = {
             pageNumber: 1,
-            count: this.pageSizeOptions[2]
+            count: PAGINATION_LIMIT
         }
 
         switch (this.reconcileActiveTab) {

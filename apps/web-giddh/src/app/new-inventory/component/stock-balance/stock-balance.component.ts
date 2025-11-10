@@ -1,11 +1,12 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
-import { AppState } from "../../../store";
-import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
+import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../app.constant';
+import { PageEvent } from '@angular/material/paginator';
+import { AppState } from '../../../store';
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { cloneDeep } from "../../../lodash-optimized";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
@@ -14,6 +15,7 @@ import { SettingsFinancialYearActions } from "../../../actions/settings/financia
 import { GeneralService } from "../../../services/general.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { SelectFieldComponent } from "../../../theme/form-fields/select-field/select-field.component";
+import { ServiceConfig } from "../../../services/service.config";
 @Component({
     selector: 'stock-balance',
     templateUrl: './stock-balance.component.html',
@@ -28,6 +30,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     @ViewChild('warehouseInput2', { static: false }) warehouseInput2: ElementRef;
     /** Open Account Selection Dropdown instance */
     @ViewChild('warehouseDropdown', { static: false }) public warehouseDropdown: SelectFieldComponent;
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Image path variable */
     public imgPath: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -81,7 +87,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
 
     constructor(
 
@@ -90,6 +96,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
         private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private toaster: ToasterService
     ) {
@@ -113,7 +120,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.isLoading = true;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.getStockUnits();
         this.getStockGroups();
         this.getWarehouses();
@@ -205,12 +212,19 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    * @param {*} event
    * @memberof StockBalanceComponent
    */
-    public pageChanged(event: any): void {
-        if (this.GroupStockReportRequest.page !== event.page) {
-            this.GroupStockReportRequest.page = event.page;
-            this.getStocks();
-        }
+    /**
+     * Handles pagination events and updates API parameters
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof StockBalanceComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.GroupStockReportRequest.page = this.GroupStockReportRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
+        this.GroupStockReportRequest.count = event.pageSize;
+        this.getStocks();
     }
+
+
 
     /**
     * Get stock details

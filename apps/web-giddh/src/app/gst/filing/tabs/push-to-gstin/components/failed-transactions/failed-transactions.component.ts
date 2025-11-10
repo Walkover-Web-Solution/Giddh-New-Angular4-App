@@ -1,8 +1,10 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Gstr1SummaryErrors } from '../../../../../../models/api-models/GstReconcile';
 import { orderBy } from '../../../../../../lodash-optimized';
-import { PageChangedEvent } from 'ngx-bootstrap/pagination';
+import { PageEvent } from '@angular/material/paginator';
+import { DROPDOWN_ITEMS_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../../../../../app.constant';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -11,7 +13,6 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
     styleUrls: ['failed-transactions.component.scss'],
 })
 export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy {
-
     @Input() public failedTransactions: Gstr1SummaryErrors[] = [];
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -20,15 +21,17 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     public filteredTransactions: Gstr1SummaryErrors[] = [];
     public imgPath: string = '';
 
-    public itemsPerPage: number = 10;
+    public itemsPerPage: number = DROPDOWN_ITEMS_COUNT_LIMIT;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor() {
+    constructor(@Inject(ServiceConfig) private serviceConfig ) {
 
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
     }
 
     /**
@@ -36,7 +39,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
      */
     public ngOnChanges(s: SimpleChanges) {
         if (s['failedTransactions']?.currentValue && s['failedTransactions']?.currentValue !== s['failedTransactions']?.previousValue) {
-            this.pageChanged({ page: 1, itemsPerPage: this.itemsPerPage });
+            this.handlePageEvent({ pageIndex: 0, pageSize: this.itemsPerPage, length: this.failedTransactions?.length });
         }
     }
 
@@ -45,8 +48,15 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     }
 
 
-    public pageChanged(event: PageChangedEvent) {
-        let startIndex = (event.page - 1) * this.itemsPerPage;
+    /**
+     * Handles pagination events for failed transactions
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof FailedTransactionsComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        this.itemsPerPage = event.pageSize;
+        let startIndex = event.pageIndex * this.itemsPerPage;
         let endIndex = Math.min(startIndex + this.itemsPerPage - 1, this.failedTransactions?.length - 1);
         this.filteredTransactions = this.failedTransactions?.slice(startIndex, endIndex + 1);
     }

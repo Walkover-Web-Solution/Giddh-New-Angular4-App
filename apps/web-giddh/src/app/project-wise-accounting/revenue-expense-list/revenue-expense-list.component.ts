@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { GeneralService } from '../../services/general.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { OrganizationType } from '../../models/user-login-state';
+import { AccountingGroupEnum } from '../../shared/Enums/common.enum';
 
 @Component({
     selector: 'revenue-expense-list',
@@ -28,20 +29,18 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Reference to the mat-menu trigger for the datepicker */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
     /** This will store selected date ranges */
     public selectedDateRange: any;
     /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /** Request parameters for fetching project entries */
-    public getProjectEntryListRequest: any = { count: 50, page: 1 };
+/** Request parameters for fetching project entries */
+    public getProjectEntryListRequest: any = { count: PAGINATION_LIMIT, page: 1 };
     /** Default parameters for API requests */
     public defaultParamsValue: DefaultParamType = {
         companyUniqueName: '',
@@ -53,8 +52,6 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     };
     /** Active company details */
     public activeCompany: any;
-    /** Reference to the modal instance */
-    public modalRef: BsModalRef;
     /** ReplaySubject to handle component's lifecycle */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Columns to be displayed in the table */
@@ -72,13 +69,13 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     /** Total number of results in the entry list */
     public totalResults: number = 0;
     /** Default result count for account searches */
-    public defaultCount = ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT;
+    public defaultCount = API_BULK_FETCH_LIMIT;
     /** Index of the currently selected tab */
     public selectedTabIndex: number = 0;
     /** Income group categories */
-    public incomeGroup: string = "revenuefromoperations,otherincome";
+    public incomeGroup: string = `${AccountingGroupEnum.RevenueFromOperations},${AccountingGroupEnum.OtherIncome},${AccountingGroupEnum.FixedAssets}`;
     /** Expense group categories */
-    public expenseGroup: string = "indirectexpenses,operatingcost";
+    public expenseGroup: string = `${AccountingGroupEnum.IndirectExpenses},${AccountingGroupEnum.OperatingCost},${AccountingGroupEnum.FixedAssets}`;
     /** Holds true, if form is valid */
     public isCreateAccountValidForm: boolean = true;
     /** Getter for the entry list form array */
@@ -109,7 +106,6 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
 
     constructor(
         private generalService: GeneralService,
-        private modalService: BsModalService,
         private route: ActivatedRoute,
         private componentStore: ProjectWiseAccountingComponentStore,
         private formBuilder: FormBuilder,
@@ -232,6 +228,10 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             if (entryDeleteSuccess) {
                 this.totalResults -= 1;
                 this.entryList.removeAt(entryDeleteSuccess.index);
+                this.getProjectEntryListRequest.page = this.generalService.adjustPageIndex(this.totalResults, this.getProjectEntryListRequest.page, this.getProjectEntryListRequest.count);
+                if (this.entryList.length === 0) {
+                    this.getEntryList();
+                }
                 this.getRevenueExpense();
             }
         });
@@ -328,6 +328,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public getProjectEntry(requestObject: any): void {
+        requestObject.category = this.defaultParamsValue.category === this.projectWiseAccountingType.Expenses ? 'expense' : this.defaultParamsValue.category;
         this.componentStore.searchEntry(requestObject);
     }
 
@@ -359,8 +360,8 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
      * @memberof RevenueExpenseListComponent
      */
     public handlePageChange(event: PageEvent): void {
+        this.getProjectEntryListRequest.page = this.getProjectEntryListRequest.count !== event.pageSize ? 1 : event.pageIndex + 1;
         this.getProjectEntryListRequest.count = event.pageSize;
-        this.getProjectEntryListRequest.page = event.pageIndex + 1;
         this.getEntryList();
     }
 
@@ -469,39 +470,30 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To show the datepicker
+     * Toggles the datepicker menu open/close state
      *
-     * @param {*} element
+     * @param {boolean} isOpen - Whether to open or close the menu
      * @memberof RevenueExpenseListComponent
      */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (this.universalDatepickerTrigger) {
+            if (isOpen) {
+                this.universalDatepickerTrigger.openMenu();
+            } else {
+                this.universalDatepickerTrigger.closeMenu();
+            }
         }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
     }
 
     /**
-     * This will hide the datepicker
+     * Callback function for date/range selection in datepicker
      *
-     * @memberof RevenueExpenseListComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef?.hide();
-    }
-
-    /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
+     * @param {*} value - Selected date range value
      * @memberof RevenueExpenseListComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
+            this.toggleGiddhDatepicker(false);
             return;
         }
         this.selectedRangeLabel = "";
@@ -509,7 +501,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.hideGiddhDatepicker();
+        this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -554,7 +546,7 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        dialogRef.afterClosed().subscribe((response) => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.deleteEntry(index);
             }

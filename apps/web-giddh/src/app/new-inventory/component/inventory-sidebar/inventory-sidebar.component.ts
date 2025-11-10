@@ -1,18 +1,21 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, Inject, TemplateRef, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Store, select } from '@ngrx/store';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { AppState } from '../../../store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { Location } from '@angular/common';
-import { BranchHierarchyType } from '../../../app.constant';
+import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../../app.constant';
+import { ServiceConfig } from '../../../services/service.config';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
+import { ComponentCanDeactivate } from '../../../decorators/page-leave-confirmation-guard';
 
 /**
  * Data with nested structure.
@@ -39,21 +42,17 @@ interface SidebarFlatNode {
     selector: 'inventory-sidebar',
     templateUrl: './inventory-sidebar.component.html',
     styleUrls: [`./inventory-sidebar.component.scss`],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InventorySidebarComponent implements OnDestroy {
+export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactivate {
+    /** This will hold new inventory template reference */
+    @ViewChild('asideMenuStateForCreateNewInventoryTemplate') asideMenuStateForCreateNewInventoryTemplate: TemplateRef<any>;
+    /** This will hold aside menu state */
+    public asideMenuStateForCreateNewInventoryDialogRef: MatDialogRef<any>;
+    /** Callback function to check for unsaved changes from parent component */
+    public hasUnsavedChangesCallback: () => boolean;
+    /** Callback function to clean up forms from parent component */
+    public markFormsAsPristineCallback: () => void;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -100,8 +99,6 @@ export class InventorySidebarComponent implements OnDestroy {
     public dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
     /** Holds tree data has child */
     public hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
-    /* Aside pane state*/
-    public asideMenuState: string = 'out';
     /** Holds inventory type module  */
     public moduleType: string = '';
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
@@ -117,8 +114,11 @@ export class InventorySidebarComponent implements OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private settingsBranchAction: SettingsBranchActions,
-        private location: Location
+        private location: Location,
+        private dialog: MatDialog,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.breakPointObserver.observe([
             '(max-width: 767px)'
@@ -133,8 +133,9 @@ export class InventorySidebarComponent implements OnDestroy {
      * @memberof InventorySidebarComponent
     */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentUrl = this.router.url;
+        this.setupNavigationListener();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.currentUrl = event.url;
@@ -198,6 +199,33 @@ export class InventorySidebarComponent implements OnDestroy {
      * @memberof InventorySidebarComponent
      */
     public goToPreviousPage(): void {
+        // Check for unsaved changes before proceeding
+        
+        if (this.showPageLeaveConfirmation) {
+            let dialogRef = this.pageLeaveUtilityService.openDialog();
+            
+            dialogRef.afterClosed().subscribe((action) => {
+                if (action) {
+                    // User confirmed to proceed - clean up and continue
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                    this.markFormsAsPristine();
+                    this.proceedWithGoToPreviousPage();
+                }
+                // If user cancelled, do nothing - stay on current state
+            });
+            return;
+        }
+        
+        this.proceedWithGoToPreviousPage();
+    }
+
+    /**
+     * Proceeds with navigation to previous page after confirmation check
+     *
+     * @private
+     * @memberof InventorySidebarComponent
+     */
+    private proceedWithGoToPreviousPage(): void {
         this.location.back();
     }
 
@@ -269,7 +297,6 @@ export class InventorySidebarComponent implements OnDestroy {
                     icons: 'manufacturing.svg',
                     children: [
                         { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', link: '/pages/inventory/v2/manufacturing/create', onlyBranchMode: true },
-                        // { name: this.localeData?.sidebar?.recipe, icons: 'create-new.svg', link: '/pages/inventory/v2/recipe/create' },
                         { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/manufacturing/list' }
                     ],
                 },
@@ -309,48 +336,112 @@ export class InventorySidebarComponent implements OnDestroy {
     }
 
     /**
-    *Aside pane toggle fixed class
-    *
-    * @memberof InventorySidebarComponent
-    */
-    public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
-    }
-
-    /**
-     *Aside pane open function
+     * This will use for open aside pane dialog
      *
-     * @param {*} [event]
      * @param {*} [node]
      * @memberof InventorySidebarComponent
      */
-    public toggleAsidePane(event?: any, node?: any): void {
+    public openAsidePaneDialog(node?: any): void {
         this.moduleType = node?.moduleType;
         if (node?.openActiveMenu) {
-            if (event) {
-                event.preventDefault();
-            }
-            this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-            this.toggleBodyClass();
+            this.asideMenuStateForCreateNewInventoryDialogRef = this.dialog.open(this.asideMenuStateForCreateNewInventoryTemplate, ASIDE_PANE_CONFIG);
         }
     }
 
     /**
-     * This will use for close aside menu
+     * Sets up navigation listener to intercept route changes and check for unsaved changes
      *
-     * @param {*} [event]
+     * @private
      * @memberof InventorySidebarComponent
      */
-    public closeAsideMenu(event?: any): void {
-        if (event) {
-            event.preventDefault();
+    private setupNavigationListener(): void {
+        // Set up browser confirmation dialog for page leave
+        this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+        
+        // Use GeneralService's navigation listener which properly handles router interception
+        this.generalService.setupNavigationListener(
+            this.router,
+            this.pageLeaveUtilityService,
+            this.destroyed$,
+            () => this.hasUnsavedChanges(),
+            () => this.markFormsAsPristine(),
+            { value: false } // isNavigating flag
+        );
+    }
+
+    /**
+     * Checks if there are unsaved changes using GeneralService
+     *
+     * @private
+     * @returns {boolean}
+     * @memberof InventorySidebarComponent
+     */
+    private hasUnsavedChanges(): boolean {
+        // Use GeneralService to check for unsaved changes globally
+        return this.generalService.checkForUnsavedChanges();
+    }
+
+    /**
+     * Marks all forms as pristine using GeneralService
+     *
+     * @private
+     * @memberof InventorySidebarComponent
+     */
+    private markFormsAsPristine(): void {
+        // Use GeneralService to mark forms as pristine globally
+        this.generalService.markAllFormsAsPristine();
+    }
+
+    /**
+     * Sets the callback functions for checking unsaved changes and cleaning up forms
+     *
+     * @param {() => boolean} hasUnsavedChangesCallback
+     * @param {() => void} markFormsAsPristineCallback
+     * @memberof InventorySidebarComponent
+     */
+    public setPageLeaveCallbacks(hasUnsavedChangesCallback: () => boolean, markFormsAsPristineCallback: () => void): void {
+        this.hasUnsavedChangesCallback = hasUnsavedChangesCallback;
+        this.markFormsAsPristineCallback = markFormsAsPristineCallback;
+    }
+
+    /**
+     * Getter to check if page leave confirmation should be shown
+     * This is used by PageLeaveConfirmationGuard
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof InventorySidebarComponent
+     */
+    public get showPageLeaveConfirmation(): boolean {
+        return this.hasUnsavedChanges();
+    }
+
+    /**
+     * Implementation of ComponentCanDeactivate interface
+     * This method is called by PageLeaveConfirmationGuard
+     *
+     * @returns {Promise<boolean>}
+     * @memberof InventorySidebarComponent
+     */
+    public canDeactivate(): Promise<boolean> {
+        if (this.showPageLeaveConfirmation) {
+            return new Promise<boolean>((resolve) => {
+                let dialogRef = this.pageLeaveUtilityService.openDialog();
+                
+                dialogRef.afterClosed().subscribe((action) => {
+                    if (action) {
+                        // User confirmed to proceed - clean up and continue
+                        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                        this.markFormsAsPristine();
+                        resolve(true);
+                    } else {
+                        // User cancelled - stay on current page
+                        resolve(false);
+                    }
+                });
+            });
         }
-        this.asideMenuState = 'out';
-        this.toggleBodyClass();
+        return Promise.resolve(true);
     }
 
     /**
@@ -363,4 +454,3 @@ export class InventorySidebarComponent implements OnDestroy {
         this.destroyed$.complete();
     }
 }
-

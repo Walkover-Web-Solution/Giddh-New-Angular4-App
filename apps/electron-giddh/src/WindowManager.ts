@@ -76,7 +76,8 @@ export default class WindowManager {
                 icon: __dirname + '/assets/icon/favicon.ico',
                 show: false,
                 webPreferences: {
-                    nodeIntegration: true
+                    nodeIntegration: true,
+                    contextIsolation: false
                 },
                 tabbingIdentifier: 'giddh'
             };
@@ -119,6 +120,7 @@ export default class WindowManager {
         }
     }
 
+
     private registerWindowEventHandlers(window: BrowserWindow, descriptor: WindowItem): void {
         window.on('close', () => {
             WindowManager.saveWindowState(window, descriptor);
@@ -128,10 +130,11 @@ export default class WindowManager {
             }
             this.stateManager.save();
         });
-        window.on('closed', (event: WindowEvent) => {
-            const index = this.windows.indexOf(event.sender);
-            console.assert(index >= 0);
-            this.windows.splice(index, 1);
+        window.on('closed', () => {
+            const index = this.windows.indexOf(window);
+            if (index >= 0) {
+                this.windows.splice(index, 1);
+            }
         });
 
         window.on('app-command', (e: any, command: string) => {

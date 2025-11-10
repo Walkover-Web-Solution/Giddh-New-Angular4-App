@@ -20,28 +20,29 @@
 }
 
 .move-group-form .list-item {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-silver);
 }
 .form-box .btn {
     width: 95px;
 }
-.collapse-icons {
-    font-size: 10px;
-    border: 1px solid var(--color-blue);
-    border-radius: 4px;
-    padding: 2px;
-    top: 0 !important;
-}
 .manage-group-account-form {
     .form-group {
         .ladda-button[type="submit"] {
-            border-color: var(--color-secondary-button-background) !important;
-            background-color: var(--color-secondary-button-background) !important;
+            border-color: var(--color-blue-primary) !important;
+            background-color: var(--color-blue-primary) !important;
             color: var(--color-white) !important;
             &:hover {
-                border-color: var(--color-secondary-button-background-hover) !important;
-                background-color: var(--color-secondary-button-background-hover) !important;
+                border-color: var(--color-blue-primary) !important;
+                background-color: var(--color-blue-primary) !important;
             }
         }
     }
+}
+
+.width-select {
+    width: calc(100% - 112px);
+}
+
+.closing-balance-width {
+    min-width: 250px;
 }

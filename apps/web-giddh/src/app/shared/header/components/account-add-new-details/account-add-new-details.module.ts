@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RouterModule } from '@angular/router';
 import { TranslateDirectiveModule } from 'apps/web-giddh/src/app/theme/translate/translate.directive.module';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccountAddNewDetailsComponent } from './account-add-new-details.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +13,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { FormFieldsModule } from 'apps/web-giddh/src/app/theme/form-fields/form-fields.module';
 import { NewConfirmModalModule } from 'apps/web-giddh/src/app/theme/new-confirm-modal';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SalesPersonService } from '../../../sales-person/utility/sales-person.service';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
@@ -32,6 +32,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         FormFieldsModule,
         NewConfirmModalModule,
         MatTooltipModule
-    ]
+    ],
+    providers: [SalesPersonService]
 })
 export class AccountAddNewDetailsModule { }

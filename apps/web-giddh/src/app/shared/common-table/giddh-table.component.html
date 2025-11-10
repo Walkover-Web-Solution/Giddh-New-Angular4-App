@@ -18,7 +18,7 @@
                     ></amount-field>
 
                     <!-- String field -->
-                    <span *ngIf="!isNumber(tableSecondaryHeader[trimColumn(column)])">
+                    <span *ngIf="!isNumber(tableSecondaryHeader[trimColumn(column)])" class="text-uppercase">
                         {{ tableSecondaryHeader[trimColumn(column)] }}
                     </span>
                 </ng-container>

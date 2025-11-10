@@ -7,73 +7,76 @@
     (submit)="updateGroup()"
 >
     <div class="container-fluid mr-t1">
-        <div class="row">
-            <div class="form-group col-xs-12 col-sm-6">
-                <label>{{ localeData?.group_name_label }}</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    #autoFocused
+        <div class="row pd-b2">
+            <div class="col-xs-12 col-sm-6">
+                <input-field
+                    [type]="'text'"
                     [placeholder]="localeData?.group_name_placeholder"
+                    [label]="localeData?.group_name_label"
+                    [name]="'name'"
                     formControlName="name"
-                />
+                    [disabled]="groupDetailForm.get('name')?.disabled"
+                    [autoFocus]="true"
+                >
+                </input-field>
+
             </div>
-            <div class="form-group col-xs-12 col-sm-6">
-                <label>{{ commonLocaleData?.app_unique_name }}</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    [control]="groupDetailForm.get('uniqueName')"
-                    textCaseChangeDirective
-                    UniqueNameDirective
+            <div class="col-xs-12 col-sm-6">
+                <input-field
+                    [type]="'text'"
                     [placeholder]="commonLocaleData?.app_unique_name_placeholder"
+                    [label]="commonLocaleData?.app_unique_name"
+                    [name]="'uniqueName'"
                     formControlName="uniqueName"
-                />
+                    [disabled]="groupDetailForm.get('uniqueName')?.disabled"
+                >
+                </input-field>
             </div>
         </div>
 
-        <div class="row">
-            <div class="form-group col-xs-12 col-sm-6" *ngIf="!(activeGroup$ | async)?.fixed">
-                <label for="" class="some">{{ localeData?.balance_for_trigger }}</label>
-                <div [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }">
-                    <input
-                        type="number"
-                        min="0"
-                        class="form-control text-right"
+        <div class="row pd-b2">
+            <div class="col-sm-6 closing-balance-width" *ngIf="!(activeGroup$ | async)?.fixed">
+                <div
+                    [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
+                >
+                    <input-field
+                        [type]="'number'"
+                        [label]="localeData?.balance_for_trigger"
+                        [name]="'closingBalanceTriggerAmount'"
                         formControlName="closingBalanceTriggerAmount"
-                        [placeholder]="
-                            commonLocaleData?.app_numbers?.zero +
-                            '' +
-                            commonLocaleData?.app_numbers?.zero +
-                            '.' +
-                            commonLocaleData?.app_numbers?.zero +
-                            '' +
-                            commonLocaleData?.app_numbers?.zero
-                        "
-                    />
-                    <div
-                        class="input-group-addon"
-                        (click)="closingBalanceTypeChanged('DEBIT')"
-                        [ngClass]="{
-                            'active-toggle-btn':
-                                groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
-                            'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
-                        }"
-                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
+                        [min]="0"
+                        class="flex-grow-1"
+                        [cssClass]="'text-right'"
+                        [ngClass]="{ 'w100 remove-right-border-radius': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
+                        [placeholder]="'0.00'"
+                        [allowDecimalDigitsOnly]="true"
                     >
-                        {{ commonLocaleData?.app_dr?.toUpperCase() }}
-                    </div>
-                    <div
-                        class="input-group-addon"
-                        (click)="closingBalanceTypeChanged('CREDIT')"
-                        [ngClass]="{
-                            'active-toggle-btn':
-                                groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                            'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
-                        }"
-                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
-                    >
-                        {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                    </input-field>
+                    <div class="d-flex">
+                        <div
+                            class="input-group-addon d-flex align-item-center"
+                            (click)="closingBalanceTypeChanged('DEBIT')"
+                            [ngClass]="{
+                                'active-toggle-btn':
+                                    groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
+                                'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
+                            }"
+                            *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
+                        >
+                            {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                        </div>
+                        <div
+                            class="input-group-addon only-right-radius d-flex align-item-center"
+                            (click)="closingBalanceTypeChanged('CREDIT')"
+                            [ngClass]="{
+                                'active-toggle-btn':
+                                    groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
+                                'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
+                            }"
+                            *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
+                        >
+                            {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -91,22 +94,25 @@
             ></textarea>
         </div>
 
-        <div class="form-group text-right">
+        <div class="text-right" *ngIf="voucherApiVersion === 2">
             <button
-                class="btn btn-danger"
-                type="button"
+                mat-stroked-button
                 *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
-                (click)="showDeleteGroupModal()"
+                (click)="openDeleteGroupDialog()"
+                aria-label="delete"
+                type="button"
             >
                 {{ commonLocaleData?.app_delete }}
             </button>
 
             <button
-                class="btn btn-primary mr-l1"
-                type="submit"
                 *ngIf="showEditGroup$ | async"
-                [ladda]="isUpdateGroupInProcess$ | async"
-                [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid"
+                mat-raised-button
+                color="primary"
+                class="mr-l1"
+                type="submit"
+                aria-label="update"
+                [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid || (isUpdateGroupInProcess$ | async)"
             >
                 {{ commonLocaleData?.app_update }}
             </button>
@@ -126,33 +132,36 @@
         (submit)="moveGroup()"
         [formGroup]="moveGroupForm"
     >
-        <label class="d-block">{{ localeData?.move_to_group }}</label>
-        <span>
-            <sh-select
-                #moveToGroupDropDown
-                formControlName="moveto"
-                [placeholder]="localeData?.group_name_label"
-                [options]="searchedGroups"
-                [isFilterEnabled]="true"
-                class="pull-left move-group-form"
-                [enableDynamicSearch]="true"
-                [isPaginationEnabled]="true"
-                (scrollEnd)="handleGroupScrollEnd()"
-                (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-            >
-                <ng-template #optionTemplate let-option="option">
-                    <a href="javascript:void(0)" class="list-item">
-                        <div class="item">{{ option?.label }}</div>
-                        <div class="item-unique">{{ option?.value }}</div>
-                    </a>
-                </ng-template>
-            </sh-select>
-        </span>
-        <span class="pull-right"
-            ><button type="submit" class="btn btn-primary" [disabled]="moveGroupForm.invalid">
-                {{ localeData?.move }}
-            </button></span
-        >
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>{{ localeData?.move_to_group }}</label>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <reactive-dropdown-field
+                            class="pull-left width-select"
+                            [label]="commonLocaleData?.move_to_group"
+                            [placeholder]="localeData?.group_name_label"
+                            [options]="searchedGroups"
+                            formControlName="moveto"
+                            [enableDynamicSearch]="true"
+                            [isPaginationEnabled]="true"
+                            (scrollEnd)="handleGroupScrollEnd()"
+                            (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+                        >
+                        </reactive-dropdown-field>
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="submit"
+                            [disabled]="moveGroupForm.invalid"
+                            aria-label="move"
+                        >
+                            {{ localeData?.move }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <!--move group-->
@@ -161,99 +170,116 @@
 <!-- Taxes collapse -->
 <div class="clearfix tax-operation horizontal-form manage-group-account-form" *ngIf="isTaxableGroup$ | async">
     <div class="col-xs-12 col-sm-12">
-        <div class="form-group toggle-btn mr-b05">
-            <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
-                <i
-                    class="cp collapse-icons"
-                    aria-hidden="true"
-                    [ngClass]="{ 'icon-minus': showTaxes, 'icon-plus': !showTaxes }"
-                ></i
-                >{{ commonLocaleData?.app_taxes }}
-            </label>
-        </div>
-    </div>
-    <!-- taxes container -->
-    <ng-container *ngIf="showTaxes">
-        <div class="col-xs-12 col-sm-12">
-            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
-                <div class="tax-label">
-                    <label>{{ localeData?.all_applicable_taxes_label }}</label>
-                </div>
-                <div class="form-group">
-                    <div class="input-group justify-content-end row-gap">
-                        <sh-select
-                            formControlName="taxes"
-                            class="w-100"
-                            [placeholder]="localeData?.all_applicable_taxes_placeholder"
-                            (selected)="taxesSelected($event)"
-                            [options]="companyTaxDropDown"
-                            [multiple]="true"
-                        >
-                        </sh-select>
-                        <span class="input-group-btn">
-                            <button type="submit" [disabled]="isTaxesSaveDisable$ | async" class="btn btn-success">
-                                {{ commonLocaleData?.app_save }}
-                            </button>
-                        </span>
-                    </div>
-                </div>
-            </form>
-            <div class="edit-tax-section">
-                <div class="form-group">
+        <mat-expansion-panel class="mr-t1" (opened)="showTaxes && taxHierarchy()">
+            <mat-expansion-panel-header>
+                <mat-panel-title>{{ commonLocaleData?.app_taxes }}</mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="col-xs-12 col-sm-12">
+                <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                     <div class="tax-label">
-                        <label>{{ localeData?.all_inherited_taxes }}</label>
+                        <label>{{ localeData?.all_applicable_taxes_label }}</label>
                     </div>
-                    <div *ngFor="let inTax of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes">
-                        <ng-template #popTemplate>
-                            <div
-                                *ngIf="taxPopOverTemplate"
-                                [innerHtml]="taxPopOverTemplate?.replace('@inTax.name', inTax.name)"
-                            ></div>
-                        </ng-template>
-                        <span
-                            class="tax-bullet"
-                            *ngFor="let inAppTax of inTax.applicableTaxes"
-                            [popover]="popTemplate"
-                            placement="right"
-                            triggers="mouseenter:mouseleave"
-                            >{{ inAppTax?.name }}
-                        </span>
+                    <div class="d-flex justify-content-between align-items-center form-group">
+                        <select-multiple-fields
+                            [label]="localeData?.all_applicable_taxes_label"
+                            [commonLocaleData]="commonLocaleData"
+                            [selectedValues]="defaultTaxLabel"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [options]="companyTaxDropDown"
+                            [chipListUniqueName]="taxGroupForm.get('taxes')?.value"
+                            (selectedOptionUniqueName)="taxesSelected($event)"
+                            (selectedOption)="defaultTaxLabel = $event"
+                            class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
+                        ></select-multiple-fields>
+                        <button
+                            [disabled]="isTaxesSaveDisable$ | async"
+                            type="submit"
+                            mat-raised-button
+                            color="primary"
+                            aria-label="save"
+                            [matTooltip]="commonLocaleData?.app_save"
+                            matTooltipPosition="above"
+                        >
+                            {{ commonLocaleData?.app_save }}
+                        </button>
                     </div>
-                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes?.length">
-                        {{ localeData?.no_inherited_taxes }}
-                    </p>
+                </form>
+                <div class="edit-tax-section">
+                    <div class="form-group">
+                        <div class="tax-label">
+                            <label>{{ localeData?.all_inherited_taxes }}</label>
+                        </div>
+                        <div *ngFor="let inTax of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes; let i = index">
+                            <ng-container *ngFor="let inAppTax of inTax.applicableTaxes; let j = index">
+                                <span
+                                    cdkOverlayOrigin
+                                    #taxTrigger="cdkOverlayOrigin"
+                                    class="tax-bullet"
+                                    (mouseenter)="currentTax = inAppTax"
+                                    (mouseleave)="currentTax = null"
+                                >
+                                    {{ inAppTax?.name }}
+                                </span>
+
+                                <ng-template
+                                    cdkConnectedOverlay
+                                    [cdkConnectedOverlayOrigin]="taxTrigger"
+                                    [cdkConnectedOverlayOpen]="currentTax === inAppTax"
+                                    [cdkConnectedOverlayPositions]="[
+                                        {
+                                            originX: 'end',
+                                            originY: 'center',
+                                            overlayX: 'start',
+                                            overlayY: 'center',
+                                            offsetX: 8
+                                        }
+                                    ]">
+                                    <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper">
+                                        <div>
+                                            <p>{{ localeData?.tax_inherited }}:</p>
+                                            <p>{{ inTax?.name }}</p>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ng-container>
+                        </div>
+                        <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes?.length">
+                            {{ localeData?.no_inherited_taxes }}
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </ng-container>
-    <!-- taxes container -->
+        </mat-expansion-panel>
+    </div>
 </div>
 <!-- commented for later use isDebtorCreditorGroups -->
 <div class="horizontal-form" *ngIf="isDebtorCreditorGroups">
-    <div class="mb-2 select-box container-fluid mt-1">
+    <div class="mb-2 select-box container-fluid mr-t2">
         <div class="form-group">
             <label>{{ localeData?.default_discounts }} <span class="primary-color"></span></label>
-            <div class="clearfix">
-                <span>
-                    <sh-select
-                        class="pull-left adjusted-content-width"
-                        [options]="discountList"
-                        [isFilterEnabled]="true"
-                        [multiple]="true"
-                        (selected)="discountSelected()"
-                        [(ngModel)]="selectedDiscounts"
-                        [placeholder]="localeData?.select_discounts"
-                    ></sh-select>
-                </span>
-                <span class="pull-right">
-                    <button
-                        class="btn btn-primary merge-btn"
-                        [disabled]="isDiscountSaveDisable$ | async"
-                        (click)="applyDiscounts()"
-                    >
-                        {{ commonLocaleData?.app_apply }}
-                    </button>
-                </span>
+            <div class="d-flex justify-content-between align-items-center pd-t1">
+                <select-multiple-fields
+                    [label]="localeData?.select_discounts"
+                    [commonLocaleData]="commonLocaleData"
+                    [selectedValues]="defaultDiscountLabel"
+                    [placeholder]="commonLocaleData?.app_select"
+                    [options]="discountList"
+                    [chipListUniqueName]="discountGroupForm.get('discounts')?.value"
+                    (selectedOptionUniqueName)="discountSelected($event)"
+                    (selectedOption)="defaultDiscountLabel = $event"
+                    class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
+                ></select-multiple-fields>
+                <button
+                    mat-raised-button
+                    color="primary"
+                    [disabled]="isDiscountSaveDisable$ | async"
+                    (click)="applyDiscounts()"
+                    aria-label="apply"
+                    [matTooltip]="commonLocaleData?.app_apply"
+                    matTooltipPosition="above"
+                >
+                    {{ commonLocaleData?.app_apply }}
+                </button>
             </div>
         </div>
     </div>
@@ -263,38 +289,49 @@
                 <label>{{ localeData?.all_inherited_discounts }}</label>
             </div>
             <div *ngFor="let item of (activeGroup$ | async)?.inheritedDiscounts">
-                <ng-template #popTemplate>
-                    <div class="popover-content">
-                        <label>{{ localeData?.discounts_inherited_from }}:</label>
-                        <ul>
-                            <li>{{ item?.name }}</li>
-                        </ul>
-                    </div>
-                </ng-template>
-                <span
-                    class="tax-bullet"
-                    *ngFor="let inAppDiscount of item.applicableDiscounts"
-                    [popover]="popTemplate"
-                    placement="right"
-                    triggers="mouseenter:mouseleave"
-                    >{{ inAppDiscount.name }}
-                </span>
+                <ng-container *ngFor="let inAppDiscount of item.applicableDiscounts">
+                    <span
+                        cdkOverlayOrigin
+                        #discountTrigger="cdkOverlayOrigin"
+                        class="tax-bullet"
+                        (mouseenter)="currentDiscount = inAppDiscount"
+                        (mouseleave)="currentDiscount = null"
+                    >
+                        {{ inAppDiscount?.name }}
+                    </span>
+                    <ng-template
+                        cdkConnectedOverlay
+                        [cdkConnectedOverlayOrigin]="discountTrigger"
+                        [cdkConnectedOverlayOpen]="currentDiscount === inAppDiscount"
+                        [cdkConnectedOverlayPositions]="[
+                            {
+                                originX: 'end',
+                                originY: 'center',
+                                overlayX: 'start',
+                                overlayY: 'center',
+                                offsetX: 8
+                            }
+                        ]">
+                        <div class="tax-tooltip bg-gray font-14 custom-cdk-overlay-wrapper">
+                            <div>
+                                <p>{{ localeData?.discounts_inherited_from }}:</p>
+                                <p>{{ item?.name }}</p>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ng-container>
             </div>
             <p *ngIf="!(activeGroup$ | async)?.inheritedDiscounts?.length">{{ localeData?.no_inherited_discounts }}</p>
         </div>
     </div>
 </div>
 <!--delete Group modal  -->
-<div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <confirm-modal
-                [title]="localeData?.delete_group_title"
-                [body]="localeData?.delete_group_content"
-                (cancelCallBack)="hideDeleteGroupModal()"
-                (successCallBack)="deleteGroup()"
-            >
-            </confirm-modal>
-        </div>
-    </div>
-</div>
+<ng-template #deleteGroupModal>
+    <confirm-modal
+        [title]="localeData?.delete_group_title"
+        [body]="localeData?.delete_group_content"
+        (cancelCallBack)="closeDeleteGroupDialog()"
+        (successCallBack)="deleteGroup()"
+    >
+    </confirm-modal>
+</ng-template>

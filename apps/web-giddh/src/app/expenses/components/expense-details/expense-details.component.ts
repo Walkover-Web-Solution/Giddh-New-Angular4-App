@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
@@ -6,14 +6,11 @@ import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Ledger';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,23 +18,13 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
+import { ServiceConfig } from '../../../services/service.config';
+import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
 
 @Component({
     selector: 'app-expense-details',
     templateUrl: './expense-details.component.html',
-    styleUrls: ['./expense-details.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./expense-details.component.scss']
 })
 
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
@@ -47,8 +34,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Instance of approve confirm dialog */
     @ViewChild("rejectionReason") public rejectionReason;
+    /** Instance of ledger aside pane modal */
+    @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-    @ViewChild('entryAgainstAccountDropDown', { static: false }) public entryAgainstAccountDropDown: ShSelectComponent;
     @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     /** This will emit true if we need to show next record in preview */
@@ -58,7 +46,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public selectedRowItem: any;
-    public modalRef: any;
+    /** Ledger aside pan modal */
+    public ledgerAsidePaneDialogRef: any;
+    /** Instance of dialog */
+    public dialogRef: any;
     public approveEntryModalRef: any;
     public message: string;
     public actionPettyCashRequestBody: ExpenseActionRequest;
@@ -158,6 +149,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private expenseService: ExpenseService,
         private searchService: SearchService,
         private dialog: MatDialog,
+        @Inject(ServiceConfig) private serviceConfig,
         private companyActions: CompanyActions,
         private lightbox: Lightbox,
         private generalService: GeneralService,
@@ -187,7 +179,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public openModal(rejectionReason: TemplateRef<any>): void {
-        this.modalRef = this.dialog.open(rejectionReason, {
+        this.dialogRef = this.dialog.open(rejectionReason, {
             width: '630px',
             disableClose: true
         });
@@ -206,7 +198,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
         this.comment = res?.description;
         let imgs = res?.attachedFileUniqueNames;
-        let imgPrefix = ApiUrl + 'company/' + this.companyUniqueName + '/image/';
+        let imgPrefix = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/';
         this.imageURL = [];
 
         if (imgs) {
@@ -268,9 +260,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 break;
 
         }
-        if (this.entryAgainstAccountDropDown) {
-            this.entryAgainstAccountDropDown.clear();
-        }
         this.entryAgainstObject.model = null;
     }
 
@@ -295,7 +284,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             return;
         }
         this.approveEntryModalRef = this.dialog.open(ref, {
-            width: '500px',
+            panelClass: "mat-dialog-sm",
             disableClose: true
         });
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
@@ -366,7 +355,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             if (res?.status === 'success') {
                 this.hideApproveConfirmPopup(false);
                 this.toaster.showSnackBar("success", res?.body);
-                this.processNextRecord();
+                this.processNextRecord(true);
             } else {
                 this.toaster.showSnackBar("error", res?.message);
                 this.approveEntryRequestInProcess = false;
@@ -434,9 +423,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.imgUploadInprogress = false;
                     if (response?.status === 'success') {
-                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName;
+                        this.signatureSrc = (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName;
                         let img = {
-                            src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName
+                            src: (this.serviceConfig.ApiUrl || ApiUrl) + 'company/' + this.companyUniqueName + '/image/' + response?.body?.uniqueName
                         }
                         this.DownloadAttachedImgResponse.push(response?.body);
                         this.imgAttachedFileName = response?.body?.name;
@@ -468,15 +457,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
-            position: {
-                right: '0'
-            },
-            maxWidth: '760px',
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh'
-        });
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, ASIDE_PANE_CONFIG);
     }
 
     /**
@@ -925,7 +906,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     private processNextRecord(event?: any): void {
-        this.modalRef?.close();
+        this.dialogRef?.close();
         if (event) {
             this.previewNextItem.emit(true);
         }
@@ -941,5 +922,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.accountEntryPettyCash.particular.uniqueName = "";
         this.accountEntryPettyCash.particular.name = "";
         this.entryAgainstObject.model = "";
+    }
+
+    /**
+     * Open ledger aside pane
+     *
+     * @memberof LedgerComponent
+     */
+    public openLedgerAsidePaneDialog(): void {
+        this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
     }
 }

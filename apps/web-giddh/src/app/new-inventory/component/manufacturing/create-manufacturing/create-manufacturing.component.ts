@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
+import { BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
@@ -19,7 +19,6 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -129,6 +128,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     private isOtherExpenseExpanded: boolean;
     /** Stores the list of stock variants */
     public stockVariants: any[] = [];
+    /** True if stock is cleared */
+    public forceClear: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -722,7 +723,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                dialogRef.afterClosed().subscribe(response => {
                     if (response) {
                         this.saveRecipe(manufacturingObject, recipeObject);
                     }
@@ -739,7 +740,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 }
             });
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     this.saveRecipe(manufacturingObject, recipeObject);
                 }
@@ -1042,7 +1043,15 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public resetForm(): void {
-        this.manufacturingObject = new CreateManufacturing();
+        // Preserve specific fields before resetting
+        const prevDetails = this.manufacturingObject?.manufacturingDetails?.[0];
+        const preserveFields = {
+            stocks: prevDetails?.stocks,
+            stocksPageNumber: prevDetails?.stocksPageNumber,
+            stocksTotalPages: prevDetails?.stocksTotalPages
+        };
+        
+        this.manufacturingObject = new CreateManufacturing(preserveFields);
         this.initializeOtherExpenseObj();
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);
         this.increaseExpenseAmount = true;
@@ -1053,7 +1062,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.preventStocksApiCall = false;
         this.preventByProductStocksApiCall = false;
         this.errorFields = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false };
-
+        this.forceClear = !this.forceClear;
         this.calculateTotals();
         this.changeDetectionRef.detectChanges();
     }
@@ -1505,7 +1514,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().subscribe(response => {
             if (response) {
                 this.manufacturingService.deleteManufacturing(this.manufactureUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
@@ -1548,7 +1557,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                dialogRef.afterClosed().subscribe(response => {
                     if (response) {
                         this.saveRecipe(manufacturingObject, recipeObject);
                     } else {
@@ -1569,7 +1578,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 }
             });
 
-            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            dialogRef.afterClosed().subscribe(response => {
                 if (response) {
                     this.saveRecipe(manufacturingObject, recipeObject);
                 } else {

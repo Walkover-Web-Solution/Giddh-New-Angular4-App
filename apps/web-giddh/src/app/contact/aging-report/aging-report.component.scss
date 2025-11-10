@@ -1,4 +1,4 @@
-@import "../../../assets/css/mixin-common.scss";
+@import "../../../assets/style/_mixin.scss";
 .dropdown-menu > li > a {
     padding: 2px 10px;
 }
@@ -50,20 +50,6 @@
     display: none !important;
 }
 
-.advance-icon {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    font-size: var(--font-size-15);
-    border-radius: 5px;
-    margin-right: 0;
-    width: 73px;
-    position: relative;
-    right: 1px;
-    border-color: var(--color-common-secondary-border);
-    color: var(--color-primary-filter-button-text);
-}
-
 .search-field {
     position: relative;
     margin-bottom: 0;
@@ -71,20 +57,20 @@
 
 .search-field input {
     width: 235px;
-    background-color: var(--color-dark-fog) !important;
-    border-color: var(--color-dark-fog) !important;
+    background-color: var(--color-border-light) !important;
+    border-color: var(--color-border-light) !important;
 }
 
 .search-field input:focus {
     background-color: var(--color-white) !important;
-    border-color: var(--color-common-primary-blue-border) !important;
+    border-color: var(--color-black) !important;
 }
 
 span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: var(--color-blue);
+    background-color: var(--color-blue-primary);
     color: var(--color-white);
     font-size: var(--font-size-16);
     border-radius: 5px;
@@ -93,7 +79,7 @@ span.input-addon {
 
 tr.aging-table-top td {
     padding: 8px 0;
-    background-color: var(--color-common-primary-background-for-all-components) !important;
+    background-color: var(--color-white) !important;
 }
 
 .refresh-btn {
@@ -103,7 +89,7 @@ tr.aging-table-top td {
     justify-content: center;
     align-items: center;
     background-color: var(--color-white);
-    border: 1px solid var(--color-common-secondary-border);
+    border: 1px solid var(--color-silver);
     border-radius: 5px;
     margin-left: 10px !important;
     button {
@@ -113,7 +99,7 @@ tr.aging-table-top td {
         justify-content: center;
     }
     .icon-refresh {
-        color: var(--color-abbey);
+        color: var(--color-dark-gray);
     }
 }
 
@@ -135,9 +121,9 @@ tr.aging-table-top td {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: var(--color-nero);
+        color: var(--color-black);
         border: none;
-        background-color: var(--color-input-tertiary-background) !important;
+        background-color: var(--color-light-gray) !important;
         border-radius: 5px;
     }
 }
@@ -171,7 +157,7 @@ tr.mat-header-row {
     .mat-customer-name {
         .icon-pointer {
             .font-xxs {
-                color: var(--color-blue) !important;
+                color: var(--color-blue-primary) !important;
             }
         }
     }
@@ -220,17 +206,17 @@ tr.mat-header-row {
 }
 ::ng-deep {
     .btn-sky-blue {
-        color: var(--color-secondary-button-text);
-        background-color: var(--color-secondary-button-background);
-        border-color: var(--color-secondary-button-background);
+        color: var(--color-white);
+        background-color: var(--color-blue-primary);
+        border-color: var(--color-blue-primary);
     }
 }
 
 .btn-filters {
     @include common-filters(
-        var(--color-giddh-blue),
-        var(--color-primary-filter-background),
-        1px solid var(--color-primary-button-border)
+        var(--color-blue-primary),
+        var(--color-border-light),
+        1px solid var(--color-silver)
     );
 }
 
@@ -239,12 +225,12 @@ tr.mat-header-row {
     .header {
         height: $header-height;
         padding: 20px 15px;
-        background: var(--color-primary-right-side-popup-header-background);
-        color: var(--color-primary-right-side-popup-header-text);
+        background: var(--color-blue-primary);
+        color: var(--color-white);
 
         button {
-            background: var(--color-transparent-background);
-            color: var(--color-primary-right-side-popup-header-text);
+            background: var(--color-transparent);
+            color: var(--color-white);
             min-width: 0;
             border-radius: 0;
         }
@@ -263,14 +249,14 @@ tr.mat-header-row {
                 }
             }
             &:not(:last-child) {
-                border-bottom: 1px solid var(--color-common-primary-border);
+                border-bottom: 1px solid var(--color-silver);
             }
             &:hover {
-                background-color: var(--color-table-row-hover-secondary-background);
+                background-color: var(--color-blue-light);
             }
 
             .customer-name {
-                color: var(--color-nero);
+                color: var(--color-black);
                 white-space: normal;
                 word-break: break-all;
             }
@@ -347,7 +333,7 @@ tr.mat-header-row {
             display: flex;
 
             i {
-                color: var(--color-abbey);
+                color: var(--color-dark-gray);
             }
         }
     }
@@ -374,7 +360,7 @@ tr.mat-header-row {
         display: flex !important;
 
         a {
-            color: var(--color-abbey);
+            color: var(--color-dark-gray);
         }
 
         .max-width-250 {
@@ -453,7 +439,7 @@ tr.mat-header-row {
     justify-content: center;
     align-items: center;
     height: 36px !important;
-    // border-right: 1px solid var(--color-iron) !important;
+    border-right: 1px solid var(--color-silver) !important;
     cursor: pointer;
 }
 
@@ -468,7 +454,7 @@ tr.mat-header-row {
     height: 93px;
     padding-top: 10px;
     margin-top: 17px;
-    box-shadow: 0 0 19px var(--color-primary-common-box-shadow);
+    box-shadow: 0 0 19px var(--color-shadow-light);
 }
 
 .icon-cross {

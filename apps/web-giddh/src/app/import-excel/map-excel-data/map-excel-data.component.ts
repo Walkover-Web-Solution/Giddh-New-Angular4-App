@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChildren } from '@angular/core';
 import { HeaderItem, ImportExcelResponseData, Mappings } from '../../models/api-models/import-excel';
-import { IOption } from '../../theme/ng-select/option.interface';
+import { IOption } from '../../app.constant';
 import { cloneDeep } from '../../lodash-optimized';
-import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import { ServiceConfig } from '../../services/service.config';
 
 interface DataModel {
     field: HeaderItem;
@@ -34,19 +34,18 @@ export class MapExcelDataComponent implements OnInit {
     @Output() public onNext = new EventEmitter<ImportExcelResponseData>();
     @Output() public onBack = new EventEmitter();
     @Input() public dataModel: DataModel[];
-    @ViewChildren(ShSelectComponent) public shSelectComponents: ShSelectComponent[];
     public imgPath: string;
     private importRequestData: ImportExcelResponseData;
     private _importData: ImportExcelResponseData;
 
     constructor(
-
+        @Inject(ServiceConfig) private serviceConfig
     ) {
 
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
     }
 
     public mapExcelData() {

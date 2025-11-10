@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil, pairwise, filter } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
@@ -9,6 +9,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
+import { ServiceConfig } from '../../services/service.config';
 @Component({
     selector: 'personal-information',
     templateUrl: './personal-information.component.html',
@@ -34,6 +35,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
             currencyName: '',
             currencyCode: ''
         },
+        baseCurrencySymbol: '',
+        baseCurrency: '',
         businessTypes: [],
         businessType: '',
         nameAlias: '',
@@ -54,11 +57,11 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     /** Portal Domain name validation with regex pattern */
     public isValidDomain: boolean;
     /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: number;
     /** This will hold isCopied */
     public isCopied: boolean = false;
     /** This will hold portal url */
-    public portalUrl: any = PORTAL_URL;
+    public portalUrl: string = '';
     /** Holds Profile Form */
     public profileForm: FormGroup;
     /** This will hold region */
@@ -68,8 +71,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
-    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private store: Store<AppState>) {
+    constructor(@Inject(ServiceConfig) private serviceConfig,  private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder, private store: Store<AppState>) {
         this.initProfileForm();
+        this.portalUrl = (this.serviceConfig.PORTAL_URL || PORTAL_URL);
     }
 
     /**
@@ -91,6 +95,16 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
                 this.saveProfile.emit(this.updatedData);
             }
         });
+    }
+
+    /**
+     * Handles profile update operation
+     *
+     * @param {any} event
+     * @memberof PersonalInformationComponent
+     */
+    public updateOtherSettings(event): void {
+        this.saveProfile.emit(event);
     }
 
     /**
@@ -175,6 +189,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges, OnDestro
                 currencyName: [profileData?.country?.currencyName ?? ''],
                 currencyCode: [profileData?.country?.currencyCode ?? '']
             }),
+            baseCurrencySymbol: [profileData?.baseCurrencySymbol ?? ''],
+            baseCurrency: [profileData?.baseCurrency ?? ''],
             businessTypes: [profileData?.businessTypes ?? []],
             businessType: [profileData?.businessType ?? ''],
             nameAlias: [profileData?.nameAlias ?? ''],

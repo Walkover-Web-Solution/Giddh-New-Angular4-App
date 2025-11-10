@@ -4,12 +4,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
-
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
@@ -20,7 +18,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { BalanceSheetComponent } from './components/balance-sheet/balance-sheet.component';
@@ -49,11 +47,11 @@ import { FinancialAccordionDirective } from './directives/financial-accordion.di
 import { FinancialReportsComponent } from './financial-reports.component';
 import { FinancialReportsRoutingModule } from './financial-reports.routing.module';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
-import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 import { MatButtonModule } from '@angular/material/button';
 import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date-range-picker/compare-with-date-range-picker.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
 
 @NgModule({
     declarations: [
@@ -75,6 +73,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         FinancialAccordionDirective,
         AccountsFilterPipe
     ],
+    providers: [ProjectAccountingService],
     exports: [
         FinancialReportsComponent, 
         CurrencyModule,
@@ -86,26 +85,23 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ProfitLossExportXlsComponent,
         FinancialReportsFilterComponent
     ],
-    providers: [ProjectAccountingService],
+
     imports: [
         CommonModule,
-        ModalModule.forRoot(),
         FormsModule,
         ReactiveFormsModule,
         Daterangepicker,
         FinancialReportsRoutingModule,
-        TabsModule.forRoot(),
+        MatTabsModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
         HighlightModule,
         RecTypeModule,
-        ShSelectModule,
+        FormFieldsModule,
         ClickOutsideModule,
-        BsDropdownModule.forRoot(),
         CurrencyModule,
-        TooltipModule.forRoot(),
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,
@@ -113,13 +109,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PopoverModule.forRoot(),
         AsideMenuAccountModule,
         FinancialSearchPipe,
         MatButtonModule,
         CompareWithDateRangePickerComponent,
         MatCheckboxModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatMenuModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
 })
 export class FinancialReportsModule {

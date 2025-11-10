@@ -3,14 +3,12 @@
     [file]="'watch-video'"
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
-
 >
-    <span *ngIf="translatedText" >
-        <button 
-            class="toggle-btn" 
-            (click)="openVideoTutorialDialog()" 
-            [ngClass]="cssClass"
-        >
+    <span *ngIf="translatedText">
+        <div *ngIf="showIcon">
+            <i class="icon-info1" (click)="openVideoTutorialDialog()" [ngClass]="iconCssClass"  [matTooltip]="translatedText" matTooltipPosition="above"></i>
+        </div>
+        <button class="toggle-btn" *ngIf="!showIcon" (click)="openVideoTutorialDialog()" [ngClass]="iconCssClass">
             {{ translatedText }}
         </button>
     </span>

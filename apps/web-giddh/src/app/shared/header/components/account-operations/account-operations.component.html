@@ -2,7 +2,7 @@
     <ng-container *ngIf="breadcrumbPath?.length > 0">
         <!--breadcrumbs-->
         <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100 d-flex justify-content-space-between">
-            <div class="col-lg-8">
+            <div class="col-lg-8 full-width">
                 <ol class="breadcrumb row">
                     <li *ngFor="let value of breadcrumbPath; let last = last" [ngClass]="{ 'active': last }">
                         <a href="javascript:void(0)"> {{ value }}</a>
@@ -10,17 +10,29 @@
                 </ol>
             </div>
             <!--share group/account-->
-            <div class="col-lg-4 pr-0 pl-0" *ngIf="showEditGroup$ | async">
+            <div class="col-lg-4 pr-0 pl-0 full-width" *ngIf="showEditGroup$ | async">
                 <!--group-->
                 <div class="pull-right text-right">
-                    <button aria-label="export" class="btn btn-share mr-r1" (click)="exportGroupLedger()">
+                    <button 
+                        mat-raised-button
+                        color="primary"
+                        (click)="exportGroupLedger()"
+                        aria-label="export" 
+                        class="mr-r1"
+                    >
                         {{ commonLocaleData?.app_export }}
                     </button>
-                    <button aria-label="share" class="btn btn-share pull-right" (click)="showShareGroupModal()">
+                    <button 
+                        mat-raised-button
+                        aria-label="share" 
+                        class="pull-right" 
+                        (click)="openShareGroupDialog()"
+                        color="primary"
+                    >
                         {{ commonLocaleData?.app_share }}
                     </button>
                     <div
-                        class="primary-color text-right pull-right mr-t1 clearfix"
+                        class="primary-color text-right mr-r1 clearfix"
                         *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
                     >
                         {{ groupSharedWith }}
@@ -28,12 +40,18 @@
                 </div>
             </div>
             <!--account-->
-            <div class="col-lg-4 pull-right pr-0 pl-0" *ngIf="showEditAccount$ | async">
-                <button aria-label="share" class="btn btn-share pull-right" (click)="showShareAccountModal()">
+            <div class="col-lg-4 pull-right pr-0 pl-0 full-width" *ngIf="showEditAccount$ | async">
+                <button
+                    mat-raised-button
+                    aria-label="share" 
+                    class="pull-right"
+                    (click)="openShareAccountDialog()"
+                    color="primary"
+                >
                     {{ commonLocaleData?.app_share }}
                 </button>
                 <div
-                    class="primary-color text-right pull-right mr-t1 clearfix"
+                    class="primary-color text-right mr-r1 clearfix"
                     *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length"
                 >
                     {{ accountSharedWith }}
@@ -94,7 +112,7 @@
             (isGroupSelected)="isGroupSelected($event)"
             [accountDetails]="accountDetails"
             [updateAccountIsSuccess$]="updateAccountIsSuccess$"
-            (deleteClicked)="showDeleteAccountModal()"
+            (deleteClicked)="openDeleteAccountDialog()"
             (submitClicked)="updateAccount($event)"
             (updateViaPatchApi)="updateAccount($event, true)"
             [showBankDetail]="showBankDetail"
@@ -112,44 +130,38 @@
 </div>
 
 <!--share Group modal  -->
-<div bsModal #shareGroupModal="bs-modal" class="modal translatY8 fade" role="dialog">
-    <div class="modal-dialog modal-share-group">
-        <div class="modal-content">
-            <share-group-modal
-                #shareGroupModalComp
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (closeShareGroupModal)="hideShareGroupModal()"
-            ></share-group-modal>
-        </div>
-    </div>
-</div>
+<ng-template #shareGroupDialog>
+    <share-group-modal
+        #shareGroupModalComp
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (closeShareGroupModal)="closeShareGroupDialog()"
+    ></share-group-modal>
+</ng-template>
 
 <!--share Account modal  -->
-<div bsModal #shareAccountModal="bs-modal" class="modal translatY8 fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <share-account-modal
-                #shareAccountModalComp
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (closeShareAccountModal)="hideShareAccountModal()"
-            >
-            </share-account-modal>
-        </div>
-    </div>
-</div>
+<ng-template #shareAccountDialog>
+    <share-account-modal
+        #shareAccountModalComp
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (closeShareAccountModal)="closeShareAccountDialog()"
+    >
+    </share-account-modal>
+</ng-template>
 
 <!--add new buttons-->
 <div class="inline-table new-form ng-scope" *ngIf="showNewForm$ | async">
     <div class="vertical-center groups-buttons">
-        <button aria-label="create group" class="btn isActive mr-b2" (click)="showAddGroupForm()">
+        <button mat-raised-button color="primary" aria-label="create group" class="w125 mr-b2" (click)="showAddGroupForm()">
             {{ commonLocaleData?.app_create_group }}
         </button>
         <span class="clearfix"></span>
         <button
+            mat-raised-button
+            color="primary"
+            class="w125"
             aria-label="create account"
-            class="btn isActive"
             *ngIf="!isRootLevelGroup"
             (click)="showAddAccountForm()"
         >
@@ -159,63 +171,47 @@
 </div>
 
 <!--deleteMergedAccount account modal  -->
-<div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <confirm-modal
-                [title]="localeData?.delete_merged_account_title"
-                [body]="deleteMergedAccountModalBody"
-                (cancelCallBack)="hideDeleteMergedAccountModal()"
-                (successCallBack)="deleteMergedAccount()"
-            >
-            </confirm-modal>
-        </div>
-    </div>
-</div>
+<ng-template #deleteMergedAccountDialog>
+    <confirm-modal
+        [title]="localeData?.delete_merged_account_title"
+        [body]="deleteMergedAccountModalBody"
+        (cancelCallBack)="closeDeleteMergedAccountDialog()"
+        (successCallBack)="deleteMergedAccount()"
+    >
+    </confirm-modal>
+</ng-template>
 <!--moveMergedAccount account modal  -->
-<div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <confirm-modal
-                [title]="localeData?.move_merged_account_title"
-                [body]="moveMergedAccountModalBody"
-                (cancelCallBack)="hideMoveMergedAccountModal()"
-                (successCallBack)="moveMergeAccountTo()"
-            >
-            </confirm-modal>
-        </div>
-    </div>
-</div>
+<ng-template #moveMergedAccountDialog>
+    <confirm-modal
+        [title]="localeData?.move_merged_account_title"
+        [body]="moveMergedAccountModalBody"
+        (cancelCallBack)="closeMoveMergedAccountDialog()"
+        (successCallBack)="moveMergeAccountTo()"
+    >
+    </confirm-modal>
+</ng-template>
 
 <!--delete Account modal  -->
-<div bsModal #deleteAccountModal="bs-modal" class="modal fade align-content-center" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <confirm-modal
-                [title]="localeData?.delete_account_title"
-                [body]="localeData?.delete_account_content"
-                (cancelCallBack)="hideDeleteAccountModal()"
-                (successCallBack)="deleteAccount()"
-            >
-            </confirm-modal>
-        </div>
-    </div>
-</div>
+<ng-template #deleteAccountDialog>
+    <confirm-modal
+        [title]="localeData?.delete_account_title"
+        [body]="localeData?.delete_account_content"
+        (cancelCallBack)="closeDeleteAccountDialog()"
+        (successCallBack)="deleteAccount()"
+    >
+    </confirm-modal>
+</ng-template>
 
 <!-- export ladger popup -->
-<div bsModal #groupExportLedgerModal="bs-modal" class="modal translatY8 fade master-export" role="dialog">
-    <div class="modal-dialog modal-md modal-lg">
-        <div class="modal-content">
-            <export-group-ledger
-                [localeData]="localeData"
-                [activeGroupUniqueName]="activeGroupUniqueName"
-                [commonLocaleData]="commonLocaleData"
-                (closeExportGroupLedgerModal)="hideGroupExportModal($event)"
-                (closeExportGroupAccountModal)="hideAccountGroupExportModal($event)"
-            ></export-group-ledger>
-        </div>
-    </div>
-</div>
+<ng-template #groupExportLedgerDialog>
+    <export-group-ledger
+        [localeData]="localeData"
+        [activeGroupUniqueName]="activeGroupUniqueName"
+        [commonLocaleData]="commonLocaleData"
+        (closeExportGroupLedgerModal)="hideGroupExportModal($event)"
+        (closeExportGroupAccountModal)="hideAccountGroupExportModal($event)"
+    ></export-group-ledger>
+</ng-template>
 <!-- ./ export ladger popup -->
 <!-- modals -->
 <div
@@ -232,7 +228,7 @@
         )
     "
 >
-    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">
+    <button mat-raised-button color="primary" (click)="exportMasterDialog()">
         {{ commonLocaleData?.app_export }}
     </button>
 </div>

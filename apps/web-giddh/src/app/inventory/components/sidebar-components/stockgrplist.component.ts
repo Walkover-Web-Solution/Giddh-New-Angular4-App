@@ -94,6 +94,6 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
      * setInventoryAsideState
      */
     public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-        this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
+        // this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
     }
 }

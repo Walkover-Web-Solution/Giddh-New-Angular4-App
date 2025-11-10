@@ -6,10 +6,7 @@
 >
     <div class="clearfix petty-cash collection-integration">
         <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
-            <mat-tab
-                [label]="localeData?.portal_information"
-                *ngIf="voucherApiVersion === 2"
-            >
+            <mat-tab [label]="localeData?.portal_information" *ngIf="voucherApiVersion === 2">
                 <div class="box clearfix mb-2 pd-t05">
                     <form novalidate name="profileForm" [formGroup]="profileForm">
                         <div class="row pd-b1 mt-3">
@@ -27,7 +24,7 @@
                                 </input-field>
                             </div>
                         </div>
-                          <div class="row pd-b1" *ngIf="organizationType !== 'COMPANY'">
+                        <div class="row pd-b1" *ngIf="organizationType !== 'COMPANY'">
                             <div class="pl-0 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
                                 <span>{{ commonLocaleData?.go_to_company_mode }}</span>
                             </div>
@@ -90,25 +87,23 @@
                         <div class="row">
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                 <div class="input-group align-items-center column-gap1 flex-nowrap">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         class="linked-account"
                                         [name]="'account'"
-                                        [scrollableElementId]="'linkedAccount'"
                                         [label]="localeData?.collection?.link_account_label"
                                         [placeholder]="localeData?.collection?.link_account_placeholder"
                                         [options]="accounts"
                                         (selectedOption)="selectAccount($event)"
-                                        [defaultValue]="razorPayObj?.account?.name"
+                                        [labelValue]="razorPayObj?.account?.name"
                                         [enableDynamicSearch]="true"
                                         [isPaginationEnabled]="true"
                                         (scrollEnd)="handleScrollEnd()"
                                         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                        [allowValueReset]="true"
                                         (onClear)="
                                             razorPayObj.account.name = null; razorPayObj.account.uniqueName = null
                                         "
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                     <div
                                         class="input-group-addon cursor-pointer"
                                         *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name"
@@ -134,7 +129,7 @@
                             <div class="col-sm-12 form-group">
                                 <div class="d-flex column-gap1">
                                     <button
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         aria-label="save"
                                         *ngIf="!updateRazor"
@@ -144,7 +139,7 @@
                                         {{ commonLocaleData?.app_save }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         aria-label="update"
                                         *ngIf="updateRazor"
@@ -183,23 +178,21 @@
                             </div>
                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                 <div class="d-flex align-items-center column-gap15">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         class="linked-account"
                                         [name]="'paypalAccount'"
-                                        [scrollableElementId]="'paypalLinkedAccount'"
                                         [label]="localeData?.collection?.link_account_label"
                                         [placeholder]="localeData?.collection?.link_account_placeholder"
                                         [options]="paypalAccounts"
                                         (selectedOption)="selectLinkedAccount($event)"
-                                        [defaultValue]="linkedAccountLabel"
+                                        [labelValue]="linkedAccountLabel"
                                         [enableDynamicSearch]="true"
                                         [isPaginationEnabled]="true"
                                         (scrollEnd)="paypalHandleScrollEnd()"
                                         (dynamicSearchedQuery)="paypalOnAccountSearchQueryChanged($event)"
-                                        [allowValueReset]="true"
                                         (onClear)="paypalObj.account.name = null; paypalObj.account.uniqueName = null"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                     <button
                                         mat-stroked-button
                                         class="min-width-unset"
@@ -218,7 +211,7 @@
                                         aria-label="save"
                                         type="button"
                                         *ngIf="!updatePaypal"
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         [disabled]="paypalForm.invalid"
                                         (click)="savePaypalDetails()"
@@ -229,7 +222,7 @@
                                         aria-label="update"
                                         *ngIf="updatePaypal"
                                         type="button"
-                                        mat-stroked-button
+                                        mat-raised-button
                                         color="primary"
                                         [disabled]="paypalForm.invalid"
                                         (click)="updatePaypalDetails()"
@@ -240,9 +233,84 @@
                                         aria-label="delete"
                                         *ngIf="updatePaypal"
                                         mat-stroked-button
-                                        color="warn"
                                         type="button"
                                         (click)="deletePaypalDetails()"
+                                    >
+                                        {{ commonLocaleData?.app_delete }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <mat-divider class="w-100"></mat-divider>
+                <div class="box clearfix mb-2">
+                    <h3 class="font-16 bold mb-3">{{ localeData?.collection?.payu_form_heading }}</h3>
+                    <form [formGroup]="payuForm" novalidate>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                <input-field
+                                    [type]="'text'"
+                                    [label]="localeData?.collection?.payu_merchant_key_placeholder"
+                                    [placeholder]="localeData?.collection?.payu_merchant_key_placeholder"
+                                    formControlName="merchantKey"
+                                    [name]="'merchantKey'"
+                                    [required]="true"
+                                    [showError]="isFormSubmitted"
+                                ></input-field>
+                            </div>
+                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                <input-field
+                                    [type]="'password'"
+                                    [label]="localeData?.collection?.payu_merchant_salt_placeholder"
+                                    [placeholder]="localeData?.collection?.payu_merchant_salt_placeholder"
+                                    formControlName="merchantSalt"
+                                    [name]="'merchantSalt'"
+                                    [required]="true"
+                                    [showError]="isFormSubmitted"
+                                ></input-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-4 col-md-6 col-xs-12">
+                                <div class="input-group align-items-center column-gap1 flex-nowrap">
+                                    <reactive-dropdown-field
+                                        class="linked-account"
+                                        [label]="localeData?.collection?.link_account_label"
+                                        [placeholder]="localeData?.collection?.link_account_placeholder"
+                                        [name]="'payuAccount'"
+                                        [options]="payuAccounts"
+                                        (scrollEnd)="payuHandleScrollEnd()"
+                                        [labelValue]="payuLinkedAccountLabel"
+                                        [enableDynamicSearch]="true"
+                                        [isPaginationEnabled]="true"
+                                        (dynamicSearchedQuery)="payuOnAccountSearchQueryChanged($event)"
+                                        formControlName="accountUniqueName"
+                                        (selectedOption)="selectPayuLinkedAccount($event)"
+                                        (onClear)="onPayuAccountClear()"
+                                        [required]="true"
+                                        [showError]="isFormSubmitted"
+                                    >
+                                    </reactive-dropdown-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <div class="d-flex column-gap1">
+                                    <button
+                                        mat-raised-button
+                                        color="primary"
+                                        aria-label="save"
+                                        (click)="savePayuDetails()"
+                                    >
+                                        {{ !updatePayu ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        aria-label="delete"
+                                        *ngIf="updatePayu"
+                                        (click)="deletePayuDetails()"
                                     >
                                         {{ commonLocaleData?.app_delete }}
                                     </button>

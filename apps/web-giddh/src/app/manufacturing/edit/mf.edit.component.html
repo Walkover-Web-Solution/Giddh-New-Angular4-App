@@ -1,7 +1,7 @@
 <section id="manufacture" class="clearfix" *ngIf="!(isGetManufactureStockInProgress$ | async)">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Manufacture of Product'"></hamburger-menu>
     <div class="col-sm-12 mr-t15 clearfix">
-        <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
+        <button mat-stroked-button class="pull-right" (click)="goBackToListPage()" type="button">Back</button>
     </div>
     <!-- form -->
     <div class="col-xl-10 col-lg-12 col-md-12">
@@ -11,17 +11,16 @@
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group">
                             <label class="d-block">Product Name</label>
-                            <sh-select
+                            <reactive-dropdown-field
                                 [options]="stockListDropDown$ | async"
                                 [disabled]="isUpdateCase"
-                                defaultValue="{{ selectedProductName }}"
-                                (selected)="getStocksWithRate($event)"
+                                [labelValue]="selectedProductName"
+                                (selectedOption)="getStocksWithRate($event)"
                                 [(ngModel)]="manufacturingDetails.stockUniqueName"
-                                name="stockUniqueName"
-                                placeholder="--Select product--"
-                                [ItemHeight]="33"
+                                [name]="'stockUniqueName'"
+                                [placeholder]="'--Select product--'"
                             >
-                            </sh-select>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
@@ -50,31 +49,27 @@
                         <div class="form-group mr-r1">
                             <label class="d-block">Date</label>
                             <div class="col-xs-8 p-0">
-                                <input
-                                    type="text"
+                                <giddh-datepicker
                                     name="invoiceDateRange"
-                                    bsDatepicker
-                                    required
-                                    class="form-control w-100"
                                     [(ngModel)]="manufacturingDetails.date"
-                                    [bsValue]="bsValue"
-                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                />
+                                    [appearance]="'outline'"
+                                    class="w-100"
+                                    [required]="true"
+                                ></giddh-datepicker>
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group">
                             <label class="d-block">Warehouse</label>
-                            <sh-select
-                                placeholder="Select Warehouse"
+                            <reactive-dropdown-field
+                                [placeholder]="'Select Warehouse'"
                                 [options]="warehouses"
                                 [(ngModel)]="manufacturingDetails.warehouseUniqueName"
-                                required
-                                [isRequired]="true"
-                                [defaultValue]="manufacturingDetails?.warehouse?.name"
-                                name="warehouseUniqueName"
-                            ></sh-select>
+                                [required]="true"
+                                [labelValue]="manufacturingDetails?.warehouse?.name"
+                                [name]="'warehouseUniqueName'"
+                            ></reactive-dropdown-field>
                         </div>
                     </div>
                 </div>
@@ -130,20 +125,17 @@
                                 <tr *ngIf="toggleAddLinkedStocks" class="new-row">
                                     <td colspan="2">
                                         <span class="hr"></span>
-                                        <sh-select
-                                            [forceClearReactive]="needForceClearProductList$ | async"
-                                            placeholder="--Select--"
+                                        <reactive-dropdown-field
+                                            [placeholder]="'--Select--'"
                                             [options]="allStocksDropDown$ | async"
-                                            name="linkedStocks.stockUniqueName"
+                                            [name]="'linkedStocks.stockUniqueName'"
                                             [(ngModel)]="linkedStocks.stockUniqueName"
-                                            required
-                                            [isRequired]="true"
+                                            [required]="true"
                                             #linkedStockList="ngModel"
-                                            (selected)="
+                                            (selectedOption)="
                                                 getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)
                                             "
-                                            [ItemHeight]="33"
-                                        ></sh-select>
+                                        ></reactive-dropdown-field>
                                     </td>
                                     <td>
                                         <input
@@ -186,6 +178,7 @@
                                     </td>
                                     <td class="action">
                                         <button
+                                            mat-stroked-button
                                             [disabled]="
                                                 linkedStockQuantity.invalid ||
                                                 linkedStockRate.invalid ||
@@ -202,12 +195,14 @@
                                 <tr>
                                     <td colspan="7">
                                         <button
+                                            mat-raised-button
+                                            color="primary"
                                             *ngIf="
                                                 ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                     (currentCompanyBranches$ | async)?.length === 1) ||
                                                 currentOrganizationType === 'BRANCH'
                                             "
-                                            class="btn-link btn px-0"
+                                            class="px-0"
                                             (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks"
                                         >
                                             Add New
@@ -255,10 +250,10 @@
                                                 (currentCompanyBranches$ | async)?.length === 1) ||
                                             currentOrganizationType === 'BRANCH'
                                         "
-                                        class="cp btn-link"
+                                        mat-raised-button color="primary" class="cp"
                                         (click)="onToggleAddExpensesBlock(toggleAddExpenses)"
-                                        tooltip="Add A/C where expense entries will be done."
-                                        placement="top"
+                                        matTooltip="Add A/C where expense entries will be done."
+                                        matTooltipPosition="above"
                                         colspan="5"
                                     >
                                         <i class="icon-plus" aria-hidden="true"></i> Add Expense
@@ -269,12 +264,10 @@
                                 <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index">
                                     <td colspan="1">
                                         <div class="custom-select position-relative">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="liabilityGroupAccounts$ | async"
-                                                [ItemHeight]="56"
-                                                [isFilterEnabled]="true"
                                                 [(ngModel)]="expense.baseAccount.uniqueName"
-                                                name="baseAccount_{{ i }}"
+                                                [name]="'baseAccount_' + i"
                                                 class="pull-left select-caret w-100"
                                                 [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
@@ -282,15 +275,14 @@
                                                 (dynamicSearchedQuery)="
                                                     onLiabilitiesAssetAccountSearchQueryChanged($event)
                                                 "
-                                                (selected)="expense.baseAccount.defaultName = $event?.label"
-                                                [defaultValue]="expense.baseAccount.defaultName"
-                                                [fixedValue]="expense.baseAccount.defaultName"
+                                                (selectedOption)="expense.baseAccount.defaultName = $event?.label"
+                                                [labelValue]="expense.baseAccount.defaultName"
                                                 [disabled]="
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                     (currentCompanyBranches$ | async)?.length > 1
                                                 "
                                             >
-                                            </sh-select>
+                                            </reactive-dropdown-field>
                                         </div>
                                     </td>
                                     <td class="text-center">
@@ -298,26 +290,23 @@
                                     </td>
                                     <td>
                                         <div class="custom-select position-relative">
-                                            <sh-select
+                                            <reactive-dropdown-field
                                                 [options]="expenseGroupAccounts$ | async"
-                                                [ItemHeight]="56"
-                                                [isFilterEnabled]="true"
                                                 [(ngModel)]="expense.transactions[0].account.uniqueName"
-                                                name="expenseAccount_{{ i }}"
+                                                [name]="'expenseAccount_' + i"
                                                 class="pull-left select-caret w-100"
                                                 [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleExpenseAccountScrollEnd()"
                                                 (dynamicSearchedQuery)="onExpenseAccountSearchQueryChanged($event)"
-                                                (selected)="expense.transactions[0].account.defaultName = $event?.label"
-                                                [defaultValue]="expense.transactions[0].account.defaultName"
-                                                [fixedValue]="expense.transactions[0].account.defaultName"
+                                                (selectedOption)="expense.transactions[0].account.defaultName = $event?.label"
+                                                [labelValue]="expense.transactions[0].account.defaultName"
                                                 [disabled]="
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                     (currentCompanyBranches$ | async)?.length > 1
                                                 "
                                             >
-                                            </sh-select>
+                                            </reactive-dropdown-field>
                                         </div>
                                     </td>
                                     <td class="text-right w100">
@@ -345,13 +334,11 @@
 
                                 <tr *ngIf="toggleAddExpenses">
                                     <td colspan="1">
-                                        <sh-select
-                                            [forceClearReactive]="needForceClearLiability$ | async"
-                                            [ItemHeight]="56"
-                                            (selected)="addExpense(otherExpenses, $event, 'transaction')"
+                                        <reactive-dropdown-field
+                                            (selectedOption)="addExpense(otherExpenses, $event, 'transaction')"
                                             [options]="liabilityGroupAccounts$ | async"
                                             [(ngModel)]="otherExpenses.transactionAccountUniqueName"
-                                            name="transactionAccountUniqueName"
+                                            [name]="'transactionAccountUniqueName'"
                                             [placeholder]="'Liability/Asset A/c'"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
@@ -362,21 +349,19 @@
                                                 (currentCompanyBranches$ | async)?.length > 1
                                             "
                                         >
-                                        </sh-select>
+                                        </reactive-dropdown-field>
                                     </td>
                                     <td class="text-center">
                                         <label class="pd">to</label>
                                     </td>
                                     <td>
                                         <div class="position-relative">
-                                            <sh-select
-                                                [forceClearReactive]="needForceClearGroup$ | async"
-                                                (selected)="addExpense(otherExpenses, $event, 'base')"
+                                            <reactive-dropdown-field
+                                                (selectedOption)="addExpense(otherExpenses, $event, 'base')"
                                                 [options]="expenseGroupAccounts$ | async"
                                                 [(ngModel)]="otherExpenses.baseAccountUniqueName"
-                                                name="baseAccountUniqueName"
+                                                [name]="'baseAccountUniqueName'"
                                                 [placeholder]="'Expense A/c'"
-                                                [ItemHeight]="56"
                                                 [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleExpenseAccountScrollEnd()"
@@ -386,7 +371,7 @@
                                                     (currentCompanyBranches$ | async)?.length > 1
                                                 "
                                             >
-                                            </sh-select>
+                                            </reactive-dropdown-field>
                                         </div>
                                     </td>
                                     <td class="text-right w100">
@@ -411,6 +396,7 @@
                                     </td>
                                     <td>
                                         <button
+                                            mat-stroked-button
                                             [disabled]="transactionAmount.invalid"
                                             *ngIf="
                                                 ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
@@ -458,8 +444,8 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button type="submit" class="btn btn-sm btn-success" (click)="createEntry()">Save</button>
-                            <button type="button" class="btn btn-sm btn-primary" (click)="goBackToListPage()">
+                            <button mat-raised-button color="primary" type="submit" (click)="createEntry()">Save</button>
+                            <button mat-stroked-button type="button" (click)="goBackToListPage()">
                                 Cancel
                             </button>
                         </div>
@@ -472,8 +458,8 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button type="submit" class="btn btn-sm btn-success" (click)="updateEntry()">Update</button>
-                            <button type="button" class="btn btn-sm btn-danger" (click)="deleteEntry()">Delete</button>
+                            <button mat-raised-button color="primary" type="submit" (click)="updateEntry()">Update</button>
+                            <button mat-stroked-button type="button" (click)="deleteEntry()">Delete</button>
                         </div>
                     </form>
                 </div>
@@ -498,12 +484,9 @@
 </ng-template>
 
 <!--delete manufacturing confirmation modal -->
-<div bsModal #manufacturingConfirmationModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <!-- modal-liq-90 class is removed for now-->
-        <div class="modal-content">
-            <delete-manufacturing-confirmation-modal (closeModelEvent)="closeConfirmationPopup($event)">
-            </delete-manufacturing-confirmation-modal>
-        </div>
+<ng-template #manufacturingConfirmationTemplate>
+    <div mat-dialog-content>
+        <delete-manufacturing-confirmation-modal (closeModelEvent)="closeConfirmationPopup($event)">
+        </delete-manufacturing-confirmation-modal>
     </div>
-</div>
+</ng-template>

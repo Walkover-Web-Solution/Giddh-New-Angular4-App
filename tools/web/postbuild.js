@@ -2,68 +2,256 @@ const path = require('path');
 const fs = require('fs');
 const util = require('util');
 
-// get application version from package.json
+// Get application version from package.json
 const appVersion = require('../../package.json').version;
 
-// promisify core API's
+// Promisify core API's
 const readDir = util.promisify(fs.readdir);
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
+const renameFile = util.promisify(fs.rename);
+const mkdir = util.promisify(fs.mkdir);
 
 console.log('\nRunning post-build tasks');
 
-// our version.json will be in the dist folder
+// Define variables
 let rootDirectiory = '';
-for (var i = 0; i < process.argv.length; i++) {
-    console.log(process.argv[i]);
+for (let i = 0; i < process.argv.length; i++) {
     if (process.argv[i].startsWith('--path=')) {
-
-        rootDirectiory = '../../' + process.argv[i].replace('--path=', '').replace(' ', '');
+        rootDirectiory = '../../' + process.argv[i].replace('--path=', '').trim();
         console.log("Dist Folder Path = " + rootDirectiory);
     }
 }
 
+if (!rootDirectiory) {
+    console.error('Error: Missing --path argument. Please provide the dist folder path.');
+    process.exit(1);
+}
+
 const versionFilePath = path.join(__dirname, rootDirectiory, 'version.json');
+const indexFilePath = path.join(__dirname, rootDirectiory, 'index.html');
+const newIndexFilePath = path.join(__dirname, rootDirectiory, 'index.php');
+const phpConfPath = path.join(
+    __dirname,
+    rootDirectiory,
+    '.platform/nginx/conf.d/elasticbeanstalk/php.conf'
+);
 
 let mainHash = '';
 let mainBundleFile = '';
+const mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
 
-// RegExp to find main.bundle.js, even if it doesn't include a hash in it's name (dev build)
-let mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
+// PHP script to prepend to index.html
+const phpScript = `<?php
+    $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    if ($requestUri === '/instance-metadata') {
+        header('Content-Type: application/json');
+        $cacheFile = __DIR__ . '/instance-metadata.json';
+        $instanceInfo = null;
+        if (file_exists($cacheFile)) {
+            $instanceInfo = file_get_contents($cacheFile);
+        }
+        if ($instanceInfo === null) {
+            $token = @file_get_contents(
+                "http://169.254.169.254/latest/api/token",
+                false,
+                stream_context_create([
+                    'http' => [
+                        'method' => 'PUT',
+                        'header' => "X-aws-ec2-metadata-token-ttl-seconds: 21600"
+                    ]
+                ])
+            );
 
-// read the dist folder files and find the one we're looking for
+            if ($token !== false) {
+                $ctx = stream_context_create([
+                    'http' => [
+                        'method' => 'GET',
+                        'header' => "X-aws-ec2-metadata-token: $token"
+                    ]
+                ]);
+                $instanceInfo = @file_get_contents(
+                    "http://169.254.169.254/latest/dynamic/instance-identity/document",
+                    false,
+                    $ctx
+                );
+                if ($instanceInfo) {
+                    file_put_contents($cacheFile, $instanceInfo);
+                }
+            }
+        }
+
+        http_response_code(200);
+        echo $instanceInfo;
+        exit;
+    }
+
+    $protocol   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+    $host       = $_SERVER['HTTP_HOST'];
+    $requestUri = $_SERVER['REQUEST_URI'];
+    $fullUrl    = $protocol . "://" . $host . $requestUri;
+    $parsedUrl  = parse_url($fullUrl);
+    $baseUrl    = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+
+    $headers = [
+        "Origin: $baseUrl"
+	];
+
+    $targetUrl = getenv("GIDDH_WHITE_LABEL_URL");
+
+    $parsedUrl = parse_url($fullUrl);
+    parse_str($parsedUrl['query'] ?? '', $queryParams);
+    if (!empty($queryParams['region']) && in_array(strtolower($queryParams['region']), ['uk', 'gb', 'UK', 'GB'])) {
+            $targetUrl = getenv("GIDDH_GB_WHITE_LABEL_URL");
+    }
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_URL, $targetUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    curl_close($ch);
+?>`;
+
+// JavaScript to append to index.html
+const whiteLabelScript = `
+<script>
+    var response = '<?php echo json_encode($response) ?>';
+    if (response) {
+        localStorage.setItem('whiteLabel', response.slice(1,-1));
+    }
+</script>`;
+
+// Nginx configuration for php.conf
+const nginxConfig = `
+# This file is managed by Elastic Beanstalk, Pass the PHP scripts to FastCGI server
+
+root /var/www/html;
+
+index index.php index.html index.htm;
+
+# Exclude Angular files (static assets or specific routes)
+location ~* \.(?:js|css|png|jpg|jpeg|gif|ico|woff|woff2|ttf|otf|eot|svg|mp4|webm|html|json|map|pdf|txt|br)$ {
+    try_files $uri =404;
+}
+
+# Serve Angular application paths directly
+location /assets/ {
+    try_files $uri $uri/ =404;
+}
+
+# Redirect all other requests to PHP
+location / {
+    try_files ^ /index.php$is_args$args;
+}
+
+location ~ \.(php|phar)(/.*)?$ {
+    fastcgi_split_path_info ^(.+\.(?:php|phar))(/.*)$;
+    fastcgi_intercept_errors on;
+    fastcgi_index  index.php;
+    fastcgi_param  QUERY_STRING       $query_string;
+    fastcgi_param  REQUEST_METHOD     $request_method;
+    fastcgi_param  CONTENT_TYPE       $content_type;
+    fastcgi_param  CONTENT_LENGTH     $content_length;
+    fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
+    fastcgi_param  REQUEST_URI        $request_uri;
+    fastcgi_param  DOCUMENT_URI       $document_uri;
+    fastcgi_param  DOCUMENT_ROOT      $document_root;
+    fastcgi_param  SERVER_PROTOCOL    $server_protocol;
+    fastcgi_param  REQUEST_SCHEME     $scheme;
+    fastcgi_param  HTTPS              $https if_not_empty;
+    fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
+    fastcgi_param  SERVER_SOFTWARE    nginx/$nginx_version;
+    fastcgi_param  REMOTE_ADDR        $remote_addr;
+    fastcgi_param  REMOTE_PORT        $remote_port;
+    fastcgi_param  SERVER_ADDR        $server_addr;
+    fastcgi_param  SERVER_PORT        $server_port;
+    fastcgi_param  SERVER_NAME        $server_name;
+    # PHP only, required if PHP was built with --enable-force-cgi-redirect
+    fastcgi_param  REDIRECT_STATUS    200;
+    fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+    fastcgi_param  PATH_INFO $fastcgi_path_info;
+    fastcgi_pass   php-fpm;
+}`;
+
+// Function to append script to index.html
+const appendScriptToIndex = (indexPath, phpScriptContent, jsScriptContent) => {
+    return readFile(indexPath, 'utf8')
+        .then((indexContent) => {
+            // Prepend the PHP script and append the JS script just before the closing </body> tag
+            const updatedContent = indexContent.replace('</body>', `${jsScriptContent}\n</body>`);
+            const finalContent = `${phpScriptContent}\n${updatedContent}`;
+            return writeFile(indexPath, finalContent);
+        })
+        .then(() => {
+            console.log('Successfully appended PHP and JS scripts to index.html');
+        });
+};
+
+// Ensure directories exist
+const ensureDirectoriesExist = (filePath) => {
+    const dirPath = path.dirname(filePath);
+    return mkdir(dirPath, { recursive: true })
+        .then(() => console.log(`Directories ensured for path: ${dirPath}`))
+        .catch((err) => {
+            if (err.code !== 'EEXIST') {
+                console.error(`Error ensuring directories for ${dirPath}:`, err);
+                throw err;
+            }
+        });
+};
+
+// Read the dist folder and perform operations
 readDir(path.join(__dirname, rootDirectiory))
     .then(files => {
         mainBundleFile = files.find(f => mainBundleRegexp.test(f));
         if (mainBundleFile) {
-            let matchHash = mainBundleFile.match(mainBundleRegexp);
-
-            // if it has a hash in it's name, mark it down
+            const matchHash = mainBundleFile.match(mainBundleRegexp);
             if (matchHash.length > 1 && !!matchHash[1]) {
                 mainHash = matchHash[1];
             }
         }
 
         console.log(`Writing version and hash to ${versionFilePath}`);
-
-        // write current version and hash into the version.json file
-        const src = `{"version": "${appVersion}", "hash": "${mainHash}"}`;
-        return writeFile(versionFilePath, src);
-    }).then(() => {
-        // main bundle file not found, dev build?
+        const versionContent = `{"version": "${appVersion}", "hash": "${mainHash}"}`;
+        return writeFile(versionFilePath, versionContent);
+    })
+    .then(() => {
         if (!mainBundleFile) {
+            console.warn('Main bundle file not found, skipping hash replacement.');
             return;
         }
 
         console.log(`Replacing hash in the ${mainBundleFile}`);
-
-        // replace hash placeholder in our main.js file so the code knows it's current hash
-        const mainFilepath = path.join(__dirname, rootDirectiory, mainBundleFile);
-        return readFile(mainFilepath, 'utf8')
+        const mainFilePath = path.join(__dirname, rootDirectiory, mainBundleFile);
+        return readFile(mainFilePath, 'utf8')
             .then(mainFileData => {
-                const replacedFile = mainFileData.replace('{{POST_BUILD_ENTERS_HASH_HERE}}', mainHash);
-                return writeFile(mainFilepath, replacedFile);
+                const replacedContent = mainFileData.replace('{{POST_BUILD_ENTERS_HASH_HERE}}', mainHash);
+                return writeFile(mainFilePath, replacedContent);
             });
-    }).catch(err => {
-        console.log('Error with post build:', err);
+    })
+    .then(() => {
+        console.log('Appending PHP and JS scripts to index.html...');
+        return appendScriptToIndex(indexFilePath, phpScript, whiteLabelScript);
+    })
+    .then(() => {
+        console.log('Renaming index.html to index.php...');
+        return renameFile(indexFilePath, newIndexFilePath);
+    })
+    .then(() => {
+        console.log('Ensuring directories for php.conf...');
+        return ensureDirectoriesExist(phpConfPath); // Ensures directory exists before writing
+    })
+    .then(() => {
+        console.log('Writing nginx configuration to php.conf...');
+        return writeFile(phpConfPath, nginxConfig);
+    })
+    .then(() => {
+        console.log('Creating .platform folder ');
+        return mkdir(path.join(__dirname, rootDirectiory, '.platform', 'nginx', 'conf.d'), { recursive: true });
+    })
+    .then(() => {
+        console.log('Post-build tasks completed successfully.');
+    })
+    .catch(err => {
+        console.error('Error during post-build tasks:', err);
     });

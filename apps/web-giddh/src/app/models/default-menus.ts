@@ -35,7 +35,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
 
     { type: 'MENU', name: 'New Inventory', uniqueName: '/pages/new-inventory', hasTabs: true },
     { type: 'MENU', name: 'New Inventory > Group Detail', uniqueName: '/pages/new-inventory/about-group-detail', hasTabs: false },
-    { type: 'MENU', name: 'New Inventory > About Product Detail', uniqueName: '/pages/new-inventory/about-product-service-detail', hasTabs: false },
     { type: 'MENU', name: 'New Inventory > Create New inventory', uniqueName: '/pages/new-inventory/create-new-inventory', hasTabs: true },
     { type: 'MENU', name: 'New Inventory > About Combo Detail', uniqueName: '/pages/new-inventory/about-combo-detail', hasTabs: false },
     { type: 'MENU', name: 'New Inventory > Create Custom Field', uniqueName: '/pages/new-inventory/create-custom-field', hasTabs: false },
@@ -56,7 +55,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Settings > Permission', uniqueName: '/pages/settings/permission', additional: { tab: 'permission', tabIndex: 5 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings/branch', additional: { tab: 'branch', tabIndex: 6 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings/tag', additional: { tab: 'tag', tabIndex: 7 }, hasTabs: true },
-    { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings/trigger', additional: { tab: 'trigger', tabIndex: 8 }, hasTabs: true },
+    { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings/trigger', hasTabs: false },
     { type: 'MENU', name: 'Settings > Discount', uniqueName: '/pages/settings/discount', additional: { tab: 'discount', tabIndex: 9 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 }, hasTabs: true },
@@ -104,7 +103,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Reports > Purchase Register', uniqueName: '/pages/reports/purchase-register', hasTabs: false },
     { type: 'MENU', name: 'Reports > Monthly Columnar Report', uniqueName: '/pages/reports/monthly-columnar-report', hasTabs: false },
     { type: 'MENU', name: 'Reports > Cash Flow Statement', uniqueName: '/pages/reports/cash-flow-statement' },
-    { type: 'MENU', name: 'Reports', uniqueName: '/pages/reports/reports-dashboard', hasTabs: false },
     { type: 'MENU', name: 'Petty Cash Management > Pending', uniqueName: '/pages/expenses-manager', additional: { tab: 'pending', tabIndex: 0 }, hasTabs: true },
     { type: 'MENU', name: 'Petty Cash Management > Rejected', uniqueName: '/pages/expenses-manager', additional: { tab: 'rejected', tabIndex: 1 }, hasTabs: true },
 
@@ -188,7 +186,7 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Settings > Permission', uniqueName: '/pages/settings/permission', additional: { tab: 'permission', tabIndex: 5 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings/branch', additional: { tab: 'branch', tabIndex: 6 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings/tag', additional: { tab: 'tag', tabIndex: 7 }, hasTabs: true },
-    { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings/trigger', additional: { tab: 'trigger', tabIndex: 8 }, hasTabs: true },
+    { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings/trigger', hasTabs: false },
     { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, hasTabs: true },
     { type: 'MENU', name: 'Create Warehouse', uniqueName: '/pages/settings/create-warehouse', hasTabs: false },
     { type: 'MENU', name: 'Create Branch', uniqueName: '/pages/settings/create-branch', hasTabs: false },

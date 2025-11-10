@@ -2,7 +2,8 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, delay, distinctUntilChanged, Observable, of, ReplaySubject, skip, take, takeUntil } from "rxjs";
+import { Observable, of, ReplaySubject } from "rxjs";
+import { takeUntil, take, debounceTime, distinctUntilChanged, delay, skip, filter } from 'rxjs/operators';
 import * as dayjs from "dayjs";
 import { BranchHierarchyType, PAGINATION_LIMIT } from "../../app.constant";
 import { FormControl } from "@angular/forms";
@@ -18,9 +19,6 @@ import { AccountsAction } from "../../actions/accounts.actions";
 import { AccountRequestV2 } from "../../models/api-models/Account";
 import { cloneDeep } from "../../lodash-optimized";
 import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
-import { AccountService } from "../../services/account.service";
-import { SalesActions } from "../../actions/sales/sales.action";
-
 @Component({
     selector: "preview",
     templateUrl: "./preview.component.html",
@@ -36,6 +34,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public deleteAccountmodalRef: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Flag to prevent duplicate API calls during account updates */
+    private isAccountUpdateInProgress: boolean = false;
     /** Holds localized text for this component */
     public localeData: any = {};
     /** Holds common localized text used across the app */
@@ -89,6 +89,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /** Flag indicating if the page needs to be refreshed */
     private isRefresh: boolean = null;
+    /** Flag to prevent duplicate API calls after account deletion */
+    private isRefreshingAfterDelete: boolean = false;
     /** Observable indicating if account data is being loaded */
     public getAccountsInProgress$: Observable<any> = this.componentStore.getLastAccountsInProgress$;
     /** Observable for the list of branches in the current company */
@@ -121,6 +123,10 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public updateAccountIsSuccess$: Observable<boolean> = this.componentStore.updateAccountIsSuccess$;
     /** Observable indicating if an account delete was successful */
     public isDeleteAccSuccess$: Observable<any> = this.componentStore.isDeleteAccSuccess$;
+    /** Observable indicating if an account create was successful */
+    public createAccountIsSuccess$: Observable<any> = this.componentStore.createAccountIsSuccess$;
+    /** Observable indicating if an account delete was successful */
+    public lastDeletedAccountUniqueName$: Observable<any> = this.componentStore.lastDeletedAccountUniqueName$;
     /** Observable for the currently active account */
     public activeAccount$: Observable<any> = this.componentStore.activeAccount$;
     /** Observable for the unique name of the currently active group */
@@ -155,8 +161,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public showEditAccount$: Observable<boolean> = this.componentStore.showEditAccount$;
     /** Enum representing standard accounting group unique names */
     public AccountingGroupEnum = AccountingGroupEnum;
-    /** Property to track if the user has updated before */
-    private hasUpdatedBefore: boolean = false;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean> = this.componentStore.isAddAndManageOpenedFromOutside$;
     /** Holds true if master is open */
@@ -171,9 +175,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions,
-        private accountsAction: AccountsAction,
-        private accountService: AccountService,
-        private salesAction: SalesActions
+        private accountsAction: AccountsAction
     ) {
     }
 
@@ -232,11 +234,37 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             this.isMasterOpen = isAddAndManageOpenedFromOutside;
             if (!isAddAndManageOpenedFromOutside) {
                 this.store.dispatch(this.accountsAction.resetActiveAccount());
-                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+                this.lastDeletedAccountUniqueName$?.pipe(take(1)).subscribe(response => {
+                    if (response && this.queryParams.accountUniqueName === response) {
+                        this.isRefreshingAfterDelete = true;
+                        this.contactList = [];
+                        this.advanceFilters.page = 1;
+                        this.advanceFilters.q = '';
+                        this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                        this.router.navigate([], {
+                            relativeTo: this.activatedRoute,
+                            queryParams: { accountUniqueName: this.queryParams.accountUniqueName },
+                            queryParamsHandling: 'merge', // keeps other params
+                            replaceUrl: true // optionally replace history entry
+                        }).then(() => {
+                            setTimeout(() => {
+                                this.isRefreshingAfterDelete = false;
+                            }, 100);
+                        });
+                    } else {
+                        this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
+                    }
+                });
             }
         });
 
-        this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((params) => {
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.selectedContact?.uniqueName) {
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact.uniqueName));
+            }
+        });
+
+        this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params) {
                 this.params = params;
                 this.contactActiveTab = params?.type;
@@ -246,8 +274,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activatedRoute.queryParams.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((queryParams) => {
-            if (queryParams) {
+        this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams) => {
+            if (queryParams && !this.isAccountUpdateInProgress) {
                 this.isSearching = false;
                 this.selectedContact = null;
                 this.queryParams = queryParams;
@@ -269,7 +297,9 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 if (searchString) {
                     this.search.setValue(searchString);
                 } else {
-                    this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                    if (!this.isRefreshingAfterDelete) {
+                        this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                    }
                 }
             }
         });
@@ -318,7 +348,8 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
         });
 
         this.isDeleteAccSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && !this.isMasterOpen) {
+                this.isRefreshingAfterDelete = true;
                 this.contactList = [];
                 this.advanceFilters.page = 1;
                 this.advanceFilters.q = '';
@@ -328,7 +359,18 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                     queryParams: { accountUniqueName: this.queryParams.accountUniqueName },
                     queryParamsHandling: 'merge', // keeps other params
                     replaceUrl: true // optionally replace history entry
+                }).then(() => {
+                    setTimeout(() => {
+                        this.isRefreshingAfterDelete = false;
+                    }, 100);
                 });
+            }
+        });
+
+        // Single subscription to handle all getContactsList responses
+        this.componentStore.getContactsList$.pipe(skip(1), takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.handleGetAllContactResponse(res);
             }
         });
     }
@@ -377,27 +419,48 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
      */
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }, isPatch: boolean = false) {
         this.updateAccountInProcess$ = of(true);
+        this.isAccountUpdateInProgress = true;
+
         if (isPatch) {
             this.store.dispatch(this.accountsAction.updateAccountV2Patch(accRequestObject?.value, accRequestObject.accountRequest));
         } else {
             accRequestObject.value.accountUniqueName = this.selectedContact?.uniqueName;
             this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
         }
-        this.updateAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+        this.updateAccountIsSuccess$?.pipe(
+            filter(response => response !== null && response !== undefined),
+            take(1),
+            takeUntil(this.destroyed$)
+        ).subscribe(response => {
+            this.updateAccountInProcess$ = of(false);
             if (response) {
-                this.updateAccountInProcess$ = of(false);
+                // Navigate to update query params, then reset the flag to allow normal API calls
                 this.router.navigate([], {
                     relativeTo: this.activatedRoute,
                     queryParams: { accountUniqueName: accRequestObject?.value?.accountUniqueName },
                     queryParamsHandling: 'merge',
                     replaceUrl: true
+                }).then(() => {
+                    // Reset flag after navigation to allow query param subscription to work
+                    setTimeout(() => {
+                        this.isAccountUpdateInProgress = false;
+                        // Manually trigger contact list refresh after flag is reset
+                        this.getContactsListData(
+                            this.advanceFilters.from,
+                            this.advanceFilters.to,
+                            this.advanceFilters.page,
+                            "true",
+                            PAGINATION_LIMIT,
+                            this.advanceFilters.q ?? '',
+                            this.key,
+                            this.order,
+                            (this.currentBranch ? this.currentBranch.uniqueName : "")
+                        );
+                    }, 100);
                 });
             } else {
-                this.store.dispatch(this.accountsAction.resetActiveAccount());
-                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedContact?.uniqueName));
-                setTimeout(() => {
-                    this.updateAccountInProcess$ = of(false);
-                }, 500);
+                this.isAccountUpdateInProgress = false;
             }
         });
     }
@@ -442,7 +505,7 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 currentContactList.push(item);
             });
 
-            if (this.isSearching) {
+            if (this.isSearching && !this.isRefreshingAfterDelete) {
                 // Handle page number is more than total pages in query params
                 if (this.totalPages < this.advanceFilters.page) {
                     this.advanceFilters.page = 1;
@@ -572,11 +635,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
             order,
             postData: this.advanceSearchRequestModal,
             branchUniqueName
-        });
-        this.componentStore.getContactsList$.pipe(skip(1), takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.handleGetAllContactResponse(res);
-            }
         });
     }
 

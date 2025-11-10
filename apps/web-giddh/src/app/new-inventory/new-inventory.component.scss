@@ -8,8 +8,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid var(--color-primary-button-border);
-        color: var(--color-gray);
+        border: 1px solid var(--color-silver);
+        color: var(--color-medium-gray);
         background-color: var(--color-white);
         cursor: pointer;
     }
@@ -26,7 +26,7 @@
             }
 
             .icon-search {
-                border-right: 1px solid var(--color-primary-button-border);
+                border-right: 1px solid var(--color-silver);
             }
         }
 
@@ -72,7 +72,7 @@
             i {
                 vertical-align: top;
                 font-size: var(--font-size-16);
-                color: var(--color-gray);
+                color: var(--color-medium-gray);
             }
         }
     }
@@ -88,7 +88,7 @@ sh-select::ng-deep input {
     margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid var(--color-gray);
+    border-bottom: 1px solid var(--color-medium-gray);
     align-items: center;
 
     .inventory-header-right {

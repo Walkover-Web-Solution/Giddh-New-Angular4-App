@@ -8,7 +8,7 @@
     background: var(--color-white);
     width: 50%;
     padding: 1px;
-    box-shadow: 1px 0 9px var(--color-primary-common-box-shadow);
+    box-shadow: 1px 0 9px var(--color-shadow-light);
 }
 
 .account-detail-modal-header-div {
@@ -25,12 +25,12 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: var(--color-dark-fog);
+    background: var(--color-border-light);
     white-space: initial;
 }
 
 .account-detail-custom-title {
-    font-family: var(--font-semibold) !important;
+    font-weight: var(--font-weight-semibold) !important;
     font-size: var(--font-size-15) !important;
 }
 
@@ -40,15 +40,15 @@
 }
 
 .custom-detail h4 {
-    color: var(--color-abbey);
+    color: var(--color-dark-gray);
     margin-top: 7px;
     font-size: var(--font-size-15) !important;
-    font-family: var(--font-regular) !important;
+    font-family: var(--font-family) !important;
 }
 
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-silver);
 }
 
 ul.list-unstyled li {
@@ -56,13 +56,10 @@ ul.list-unstyled li {
 }
 
 ul.list-unstyled li a {
-    color: var(--color-nero);
+    color: var(--color-black);
 }
 
 .p-modal-tooltip {
-    display: block;
-    position: absolute;
-    background-color: var(--color-white);
     width: 257px;
     @media screen and (max-width: 1870px) {
         width: 225px;
@@ -73,9 +70,6 @@ ul.list-unstyled li a {
     @media screen and (max-width: 1499px) {
         width: 180px;
     }
-    border: 1px solid var(--color-iron);
-    border-radius: 4px;
-    box-shadow: 0 7px 24px var(--color-primary-common-box-shadow);
 }
 
 .model-position {
@@ -86,7 +80,7 @@ ul.list-unstyled li a {
 .li-link {
     margin-top: 15px !important;
     a:hover {
-        color: var(--color-giddh-blue) !important;
+        color: var(--color-blue-primary) !important;
     }
 }
 ul.pills {

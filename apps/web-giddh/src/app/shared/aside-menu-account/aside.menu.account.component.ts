@@ -5,12 +5,12 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountRequestV2, AccountResponseV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../models/api-models/Group';
 import { AccountAddNewDetailsComponent } from '../header/components';
 import { AccountService } from '../../services/account.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'aside-menu-account',
@@ -50,6 +50,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
     public deleteAccountmodalRef: any;
+    /** True if action menu is open */
+    @Input() public isActionMenu: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -68,7 +70,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.deleteAccountSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.isDeleteAccSuccess)).pipe(takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() { 
+    public ngOnInit() {
         if (this.isUpdateAccount && this.activeAccountDetails) {
             this.accountDetails = this.activeAccountDetails;
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
@@ -140,7 +142,13 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public closeAsidePane(event) {
+    /**
+     * Closes the aside pane.
+     *
+     * @param {*} event
+     * @memberof AsideMenuAccountInContactComponent
+     */
+    public closeAsidePane(event: any): void {
         if (this.hasUnsavedChanges) {
             this.confirmPageLeave(() => {
                 this.ngOnDestroy();

@@ -1,5 +1,10 @@
-$hilighted-color: var(--color-blue) !important;
+$hilighted-color: var(--color-blue-primary) !important;
 $text-overflow-ellipsis-width: 255px;
+
+.virtual-group-list {
+    height: 100%;
+    min-height: 500px;
+}
 
 .day-date {
     display: flex;
@@ -22,13 +27,13 @@ $text-overflow-ellipsis-width: 255px;
 }
 
 .hilighted {
-    color: var(--color-blue) !important;
-    background-color: var(--color-dark-fog) !important;
+    color: var(--color-blue-primary) !important;
+    background-color: var(--color-border-light) !important;
 }
 
 .account-list:hover {
-    color: var(--color-blue) !important;
-    background-color: var(--color-dark-fog) !important;
+    color: var(--color-blue-primary) !important;
+    background-color: var(--color-border-light) !important;
 }
 
 .hilighted {
@@ -56,7 +61,7 @@ $text-overflow-ellipsis-width: 255px;
 .current-balance {
     font-size: var(--font-size-15);
     font-style: italic;
-    color: var(--color-table-primary-content);
+    color: var(--color-black);
     padding-left: 70px;
 }
 
@@ -71,7 +76,7 @@ $text-overflow-ellipsis-width: 255px;
 .debtor-details-form {
     display: flex;
     font-size: var(--font-size-15);
-    background-color: var(--color-gray);
+    background-color: var(--color-medium-gray);
     padding: 10px 9px;
     margin-bottom: 10px;
 
@@ -95,7 +100,7 @@ $text-overflow-ellipsis-width: 255px;
 
             input.form-control {
                 background-color: var(--color-white) !important;
-                border: 1px solid var(--color-iron);
+                border: 1px solid var(--color-silver);
                 border-radius: 5px !important;
             }
 
@@ -112,12 +117,12 @@ $text-overflow-ellipsis-width: 255px;
                 position: absolute;
                 right: 5px;
                 top: 7px;
-                color: var(--color-nero);
+                color: var(--color-black);
             }
         }
 
         .icon-cross {
-            color: var(--color-abbey);
+            color: var(--color-dark-gray);
             cursor: pointer;
             padding: 5px;
         }

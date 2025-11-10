@@ -6,7 +6,7 @@
     margin-bottom: 30px;
     li {
         list-style-type: none;
-        color: var(--color-popup-list-all-features-text);
+        color: var(--color-dark-gray);
         font-size: var(--font-size-12);
         padding: 3px 0;
         line-height: 20px;
@@ -32,26 +32,23 @@
 }
 .money-back-guarantee {
     font-size: var(--font-size-12);
-    background-color: var(--color-popup-secondary-background);
-    color: var(--color-all-features-money-back-guarantee);
+    background-color: var(--color-orange-light);
+    color: var(--color-gray);
     padding-left: 20px;
     padding-right: 20px;
 }
 .all-feature-modal {
     p {
-        color: var(--color-common-senary-text);
+        color: var(--color-blue-primary);
         margin-bottom: 10px;
         i {
             font-size: 21px;
-            color: var(--color-common-senary-text);
+            color: var(--color-blue-primary);
         }
     }
     [class*="col-"] {
         padding: 0 10px;
     }
-}
-.all-features-content {
-    margin: 0 !important;
 }
 @media only screen and (max-width: 1360px) and (min-width: 767px) {
     .inventory-last-box {

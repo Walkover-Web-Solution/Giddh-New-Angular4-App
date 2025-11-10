@@ -1,6 +1,6 @@
 .pl-grid-row {
     flex-wrap: nowrap;
-    border-bottom: 1px solid var(--color-dark-fog);
+    border-bottom: 1px solid var(--color-border-light);
 }
 .group {
     width: 30%;
@@ -17,7 +17,7 @@
     }
 }
 .trial-balance-viewport {
-    background-color: var(--color-common-quinary-background-for-all-components);
+    background-color: var(--color-light-gray);
 }
 .row-height {
     height: 38px;

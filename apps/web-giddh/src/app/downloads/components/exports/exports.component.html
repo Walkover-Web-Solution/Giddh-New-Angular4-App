@@ -3,25 +3,41 @@
     [file]="'downloads/exports'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
-    (translationComplete)="translationComplete($event)"
 >
-    <div class="download-table-container overflow-visible">
-        <div class="activity-filter-wrap">
-            <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                    <input
-                        type="text"
-                        name="selectedDateRange"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                    />
+    <div class="download-table-container overflow-visible pd-15">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <div class="custom-datepicker-wrapper">
+                    <div class="custom-datepicker" 
+                         [matMenuTriggerFor]="universalDatepicker" 
+                         #universalDatepickerTrigger="matMenuTrigger"
+                         role="button"
+                         aria-haspopup="true"
+                         aria-controls="universalDatepicker">
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
+                        />
+                    </div>
+                </div>
+                <div class="clear-filter" *ngIf="showClearFilter">
+                    <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
+                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                    </button>
                 </div>
             </div>
-            <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
-                <button mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
-                    <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
-                </button>
-            </div>
+            <a
+                class="cursor-pointer pd-1 mr-r1 bdr d-flex"
+                (click)="getDownloads()"
+                [matTooltip]="commonLocaleData?.app_refresh"
+                [matTooltipPosition]="'above'"
+            >
+                <span class="icon-refresh"></span>
+            </a>
         </div>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
@@ -67,7 +83,7 @@
                             target="_blank"
                             [href]="element.s3Path"
                             *ngIf="!isElectron && element.status === 'COMPLETED'"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="download-button-status desktop"
                         >
@@ -76,7 +92,7 @@
                         <a
                             *ngIf="isElectron && element.status === 'COMPLETED'"
                             (click)="downloadFile(element.s3Path)"
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             class="download-button-status electron"
                         >
@@ -102,43 +118,35 @@
         <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
     </div>
 </section>
-<div class="pagination-wrapper mt-4" *ngIf="downloadRequest?.totalItems > downloadRequest.count && !isLoading">
-    <pagination
-        [totalItems]="downloadRequest?.totalItems"
-        [(ngModel)]="downloadRequest.page"
-        [maxSize]="5"
-        class="pagination-sm"
-        [boundaryLinks]="true"
-        [itemsPerPage]="downloadRequest.count"
-        [rotate]="false"
-        (pageChanged)="pageChanged($event)"
-        [firstText]="commonLocaleData?.app_first"
-        [previousText]="commonLocaleData?.app_previous"
-        [nextText]="commonLocaleData?.app_next"
-        [lastText]="commonLocaleData?.app_last"
-    ></pagination>
+<div class="mt-4" *ngIf="downloadRequest?.totalItems > pageSizeOptions[0] && !isLoading">
+    <mat-paginator
+        [length]="downloadRequest?.totalItems"
+        [pageSize]="downloadRequest.count"
+        [pageIndex]="downloadRequest.page - 1"
+        [pageSizeOptions]="pageSizeOptions"
+        [showFirstLastButtons]="true"
+        [hidePageSize]="false"
+        (page)="handlePageEvent($event)">
+    </mat-paginator>
 </div>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                [locale]="{ applyLabel: commonLocaleData?.app_done }"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

@@ -18,66 +18,30 @@
                                 *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY'|| isConsolidatedBranch)"
                             >
                                 <div class="form-group mb-0">
-                                    <sh-select
+                                    <reactive-dropdown-field
                                         [options]="currentCompanyBranches"
                                         [(ngModel)]="currentBranch.uniqueName"
-                                        [showClear]="false"
-                                        [ItemHeight]="33"
-                                        width="100%"
-                                        (selected)="handleBranchChange($event)"
-                                        [isFilterEnabled]="true"
+                                        [name]="'currentBranch'"
+                                        (selectedOption)="handleBranchChange($event)"
                                         [placeholder]="localeData?.select_entity"
-                                        [fixedValue]="currentBranch?.name"
-                                    >
-                                        <ng-template #optionTemplate let-option="option">
-                                            <ng-container>
-                                                <a
-                                                    href="javascript:void(0);"
-                                                    aria-label="branch"
-                                                    class="list-item d-flex"
-                                                >
-                                                    <span class="entity-icon">
-                                                        <i
-                                                            class="pull-right"
-                                                            [ngClass]="{
-                                                                'icon-company-profile': option.consolidatedBranch,
-                                                                'icon-branch-icon': !option.consolidatedBranch
-                                                            }"
-                                                            *ngIf="!option.isCompany"
-                                                            [matTooltip]="commonLocaleData?.app_branch"
-                                                            [matTooltipPosition]="'above'"
-                                                            matTooltipClass="tooltip-black"
-                                                        ></i>
-                                                        <i
-                                                            class="icon-company-profile pull-right"
-                                                            *ngIf="option.isCompany"
-                                                            [matTooltip]="commonLocaleData?.app_company"
-                                                            [matTooltipPosition]="'above'"
-                                                            matTooltipClass="tooltip-black"
-                                                        ></i>
-                                                    </span>
-                                                    <span class="entity-details">
-                                                        <div class="item giddh-limit single-line-clamp">
-                                                            {{ option.label || "-" }}
-                                                        </div>
-                                                        <div class="item-unique giddh-limit single-line-clamp">
-                                                            {{ option.name || "-" }}
-                                                        </div>
-                                                    </span>
-                                                </a>
-                                            </ng-container>
-                                        </ng-template>
-                                    </sh-select>
+                                        [labelValue]="currentBranch?.name"
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                             <div class="form-inline align-items-center d-flex flex-nowrap daybook-filter">
-                                <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
+                                <div class="form-group custom-datepicker mr-r15" 
+                                     [matMenuTriggerFor]="universalDatepicker" 
+                                     #universalDatepickerTrigger="matMenuTrigger"
+                                     role="button"
+                                     aria-haspopup="true"
+                                     aria-controls="universalDatepicker">
                                     <input
                                         matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker form-control date-range-picker"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
@@ -120,23 +84,22 @@
                         </div>
                         <div class="form-group mb-0 cursor-pointer">
                             <button
-                                class="advance-icon align-items-center"
+                                class="mr-r15"
                                 [matTooltip]="commonLocaleData?.app_advance_search"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
                                 (click)="onOpenAdvanceSearch()"
-                                mat-stroked-button
+                                mat-raised-button
                                 color="primary"
                             >
-                                <span class="pd-r05 d-sm-inline d-none">{{ commonLocaleData?.app_filter }}</span>
+                                <span class="pd-r05">{{ commonLocaleData?.app_filter }}</span>
                                 <span class="icon-advance-filter"></span>
                             </button>
                         </div>
                         <button
-                            mat-stroked-button
+                            mat-raised-button
                             color="primary"
                             type="button"
-                            class="bdr export-btn mr-0 d-flex align-items-center"
                             (click)="exportDaybook()"
                             *ngIf="daybookData?.entries?.length > 0"
                         >
@@ -145,7 +108,7 @@
                     </div>
                 </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
-                    <button mat-stroked-button color="primary" (click)="initialRequest()">
+                    <button mat-stroked-button (click)="initialRequest()">
                         <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
@@ -698,37 +661,20 @@
                     </table>
                 </div>
 
-                <div class="mt-5 text-center" [hidden]="!daybookData?.entries?.length">
-                    <small class="grey" *ngIf="daybookData?.totalItems"
-                        >{{ daybookData?.totalItems }}
-                        {{ commonLocaleData?.app_transactions }}
-                        | {{ daybookData?.totalPages }} {{ commonLocaleData?.app_pages }}
-                    </small>
-                    <small class="grey" *ngIf="!daybookData?.totalItems"
-                        >0 {{ commonLocaleData?.app_transactions }} | 0 {{ commonLocaleData?.app_pages }}</small
-                    >
-                </div>
-
                 <!-- pagination -->
                 <div
-                    class="pagination-wrapper mt-1"
-                    [hidden]="!daybookData?.entries?.length || daybookData?.totalItems <= daybookData?.count"
+                    class="mt-2"
+                    *ngIf="daybookData?.totalItems > pageSizeOptions[0]"
                 >
-                    <pagination
-                        [totalItems]="daybookData?.totalItems"
-                        [(ngModel)]="daybookData.page"
-                        [maxSize]="5"
-                        class="pagination-sm"
-                        [boundaryLinks]="true"
-                        [itemsPerPage]="daybookData?.count"
-                        [rotate]="false"
-                        (pageChanged)="pageChanged($event)"
-                        [firstText]="commonLocaleData?.app_first"
-                        [previousText]="commonLocaleData?.app_previous"
-                        [nextText]="commonLocaleData?.app_next"
-                        [lastText]="commonLocaleData?.app_last"
-                    >
-                    </pagination>
+                    <mat-paginator
+                        [length]="daybookData?.totalItems"
+                        [pageSize]="daybookData?.count"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [pageIndex]="daybookData?.page - 1"
+                        (page)="handlePageEvent($event)"
+                        [hidePageSize]="false"
+                        [showFirstLastButtons]="true">
+                    </mat-paginator>
                 </div>
                 <!-- pagination -->
             </div>
@@ -761,29 +707,27 @@
         ></export-daybook>
     </ng-template>
     <!-- ./ export ladger popup -->
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                ></app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            ></app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
 </ng-container>
 
 <!-- update ladger entry popup -->
@@ -795,13 +739,13 @@
         [entrySide]="entrySide"
         [activeCompany]="activeCompany"
         (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
+        [isDaybook]="true"
     ></update-ledger-entry-panel>
 </ng-template>
 
 <!-- aside menu section -->
 <ng-template #ledgerAsidePane>
     <ledger-aside-pane
-        [class]="ledgerAsidePane"
         [keyboardShortcut]="'esc'"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"

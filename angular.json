@@ -41,8 +41,8 @@
                             }
                         ],
                         "styles": [
-                            "apps/web-giddh/src/assets/css/style-1.scss",
-                            "apps/web-giddh/src/assets/css/style-2.scss",
+                            "apps/web-giddh/src/assets/style/style-1.scss",
+                            "apps/web-giddh/src/assets/style/style-2.scss",
                             "node_modules/intl-tel-input/build/css/intlTelInput.css",
                             "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
                             "node_modules/froala-editor/css/froala_style.min.css",
@@ -251,7 +251,7 @@
                 "build": {
                     "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
-                        "baseHref": "http://localhost:3000",
+                        "baseHref": "/",
                         "allowedCommonJsDependencies": [
                             "file-saver",
                             "ngrx-store-localstorage",
@@ -288,8 +288,8 @@
                             }
                         ],
                         "styles": [
-                            "apps/web-giddh/src/assets/css/style-1.scss",
-                            "apps/web-giddh/src/assets/css/style-2.scss",
+                            "apps/web-giddh/src/assets/style/style-1.scss",
+                            "apps/web-giddh/src/assets/style/style-2.scss",
                             "node_modules/intl-tel-input/build/css/intlTelInput.css",
                             "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
                             "node_modules/froala-editor/css/froala_style.min.css",
@@ -325,7 +325,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "http://localhost:3000",
+                            "baseHref": "/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
@@ -360,7 +360,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://stage.giddh.com/",
+                            "baseHref": "/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
@@ -395,7 +395,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://books.giddh.com/",
+                            "baseHref": "/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
@@ -430,7 +430,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://test.giddh.com/",
+                            "baseHref": "/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",

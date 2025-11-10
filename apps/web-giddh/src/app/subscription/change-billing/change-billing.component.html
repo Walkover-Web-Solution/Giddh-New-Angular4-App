@@ -108,7 +108,7 @@
                         </div>
                         <div class="form-group">
                             <div class="width-100">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'billingCountry' + currentTimeStamp"
                                     [autocomplete]="'billingCountry' + currentTimeStamp"
                                     [label]="commonLocaleData?.app_country + '*'"
@@ -116,10 +116,10 @@
                                     class="mb-3 d-block"
                                     [options]="countrySource"
                                     (selectedOption)="selectCountry($event)"
-                                    [defaultValue]="selectedCountry"
+                                    [labelValue]="selectedCountry"
                                     [showError]="isFormSubmitted && !changeBillingForm.get('country')?.value"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="form-group">
@@ -131,7 +131,7 @@
                                 [type]="'text'"
                                 formControlName="taxNumber"
                                 [showError]="
-                                    (isFormSubmitted && !changeBillingForm.get('taxNumber')?.value) || !isGstinValid
+                                    isFormSubmitted && (changeBillingForm.get('taxNumber')?.value && !isGstinValid)
                                 "
                                 [maxlength]="15"
                                 (change)="validateGstNumber()"
@@ -140,32 +140,32 @@
                         </div>
                         <div class="form-group">
                             <div *ngIf="!countyList?.length">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'billingState' + currentTimeStamp"
                                     [autocomplete]="'billingState' + currentTimeStamp"
                                     [label]="commonLocaleData?.app_state"
                                     [placeholder]="commonLocaleData?.app_state"
                                     [options]="states"
-                                    [showError]="isFormSubmitted && !changeBillingForm.get('state')?.value"
+                                    [showError]="isFormSubmitted && changeBillingForm.get('state')?.invalid"
                                     [readonly]="disabledState"
-                                    [defaultValue]="selectedState"
+                                    [labelValue]="selectedState"
                                     (selectedOption)="selectState($event)"
                                     [ngClass]="{ 'readonly-field': disabledState }"
+                                    [required]="true"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <div *ngIf="countyList?.length">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'billingCounty' + currentTimeStamp"
                                     [autocomplete]="'billingCounty' + currentTimeStamp"
                                     [label]="commonLocaleData?.app_region"
                                     [placeholder]="commonLocaleData?.app_select_region"
                                     [options]="countyList"
-                                    [showError]="isFormSubmitted && !changeBillingForm.get('state')?.value"
-                                    [defaultValue]="selectedState"
+                                    [labelValue]="selectedState"
                                     (selectedOption)="changeBillingForm.get('state')?.patchValue($event)"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="form-group">
@@ -183,7 +183,7 @@
                     </div>
                     <div class="form-group">
                         <div class="pt-2 d-flex column-gap15">
-                            <button aria-label="submit" mat-stroked-button color="primary" (click)="onSubmit()">
+                            <button aria-label="submit" mat-raised-button color="primary" (click)="onSubmit()">
                                 {{ commonLocaleData?.app_submit }}
                             </button>
                             <button aria-label="back" mat-stroked-button (click)="back()">

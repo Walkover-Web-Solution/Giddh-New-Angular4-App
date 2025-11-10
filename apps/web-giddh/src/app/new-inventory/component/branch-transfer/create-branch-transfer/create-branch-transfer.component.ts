@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
-import { PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { ASIDE_PANE_CONFIG, IOption, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
@@ -17,12 +17,12 @@ import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { SettingsWarehouseService } from 'apps/web-giddh/src/app/services/settings.warehouse.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { transporterModes } from 'apps/web-giddh/src/app/shared/helpers/transporterModes';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -176,10 +176,13 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public universalFrom: any;
     /** This will hold universal date  */
     public universalTo: any;
+    /** This will use for force clear */
+    public forceClear: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
+        @Inject(ServiceConfig) private serviceConfig,
         private changeDetection: ChangeDetectorRef,
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
@@ -204,7 +207,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.showContent = false;
@@ -896,6 +899,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dateOfSupply);
         this.assignCurrentCompany();
         this.calculateOverallTotal();
+        this.getBranches();
         this.activeIndx = null
         this.stockUnits[0] = [];
     }
@@ -957,7 +961,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 });
                 this.branchTransferCreateEditForm.get('transporterDetails').patchValue({
                     dispatchedDate: response.body?.transporterDetails?.dispatchedDate,
-                    transporterName: this.transporterDropdown.find(res => res.value === response.body?.transporterDetails?.transporterId)?.label,
+                    transporterName: this.transporterDropdown.find(res => res.value === response.body?.transporterDetails?.transporterId)?.label ?? '',
                     transporterId: response.body?.transporterDetails?.transporterId,
                     transportMode: response.body?.transporterDetails?.transportMode,
                     vehicleNumber: response.body?.transporterDetails?.vehicleNumber
@@ -1173,7 +1177,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         sourcesWarehouseFormGroup.get('name')?.setValue(res.body.name);
                         if (res.body.addresses && res.body.addresses.length) {
                             const defaultAddress = res.body.addresses.find(address => address.isDefault);
-                            sourcesWarehouseFormGroup.get('address')?.setValue(defaultAddress ? `${defaultAddress.address}${defaultAddress?.pincode ? '\n' + 'PIN: ' + defaultAddress?.pincode : ''}` : '');
+                            sourcesWarehouseFormGroup.get('address')?.setValue(defaultAddress ? `${defaultAddress?.address ?? ''}${defaultAddress?.pincode ? '\n' + 'PIN: ' + defaultAddress?.pincode : ''}` : '');
                             sourcesWarehouseFormGroup.get('taxNumber')?.setValue(defaultAddress ? defaultAddress.taxNumber : '');
                         } else {
                             sourcesWarehouseFormGroup.get('taxNumber')?.setValue('');
@@ -1220,7 +1224,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         destinationsWarehouseFormGroup.get('name')?.setValue(res.body.name);
                         if (res.body.addresses && res.body.addresses.length) {
                             const defaultAddress = res.body.addresses.find(address => address.isDefault);
-                            destinationsWarehouseFormGroup.get('address')?.setValue(defaultAddress ? `${defaultAddress.address}${defaultAddress?.pincode ? '\n' + 'PIN: ' + defaultAddress?.pincode : ''}` : '');
+                            destinationsWarehouseFormGroup.get('address')?.setValue(defaultAddress ? `${defaultAddress?.address ?? ''}${defaultAddress?.pincode ? '\n' + 'PIN: ' + defaultAddress?.pincode : ''}` : '');
                             destinationsWarehouseFormGroup.get('taxNumber')?.setValue(defaultAddress ? defaultAddress.taxNumber : '');
                         } else {
                             destinationsWarehouseFormGroup.get('taxNumber')?.setValue('');
@@ -1379,16 +1383,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public onProductNoResultsClicked(idx?: number): void {
         this.innerEntryIndex = idx;
         document.querySelector("body").classList.add("new-branch-transfer-page");
-        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: '760px',
-            height: '100vh !important'
-        });
+        this.asideMenuStateForProductService = this.dialog.open(this.asideMenuProductService, ASIDE_PANE_CONFIG);
 
-        this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
+        this.asideMenuStateForProductService.afterClosed().subscribe(response => {
             document.querySelector("body").classList.remove("new-branch-transfer-page");
         });
 
@@ -1484,6 +1481,22 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public onSelectTransportMode(event: any): void {
         this.branchTransferCreateEditForm.get('transporterDetails.transportMode').setValue(event?.value);
+    }
+
+    /**
+     * This will be use for reset sender name
+     *
+     * @memberof CreateBranchTransferComponent
+     */
+    public resetSenderAndRecieverName(): void {
+        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        const sourceGroup = sourcesArray?.at(0) as UntypedFormGroup;
+        sourceGroup.reset();
+        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        const destinationGroup = destinationsArray?.at(0) as UntypedFormGroup;
+        destinationGroup.reset();
+        this.getBranches();
+        this.forceClear = !this.forceClear;
     }
 
     /**
@@ -2250,15 +2263,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public toggleTransporterModel(): void {
-        let dialgRef = this.dialog.open(this.asideManageTransport, {
-            position: {
-                right: '0',
-                top: '0'
-            },
-            width: '760px',
-            height: '100vh !important'
-        });
-        dialgRef.afterClosed().pipe(take(1)).subscribe(response => {
+        let dialgRef = this.dialog.open(this.asideManageTransport, ASIDE_PANE_CONFIG);
+        dialgRef.afterClosed().subscribe(response => {
             this.getTransportersList();
         });
     }

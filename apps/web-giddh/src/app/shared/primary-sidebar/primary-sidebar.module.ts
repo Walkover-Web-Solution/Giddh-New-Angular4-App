@@ -1,12 +1,10 @@
 import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
+import { Injector, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
-import { BsDropdownModule } from "ngx-bootstrap/dropdown";
-import { TabsModule } from "ngx-bootstrap/tabs";
-import { TooltipModule } from "ngx-bootstrap/tooltip";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { CheckPermissionModule } from "../../permissions/check-permission.module";
 import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { AuthServiceConfig, GoogleLoginProvider } from "../../theme/ng-social-login-module";
@@ -15,17 +13,13 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
 import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
 import { CompanyBranchComponent } from "./company-branch/company-branch.component";
 import { PrimarySidebarComponent } from "./primary-sidebar.component";
+import { IServiceConfigArgs, ServiceConfig } from "../../services/service.config";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatButtonModule } from "@angular/material/button";
+import {CdkTreeModule} from '@angular/cdk/tree';
+import { MatInputModule } from "@angular/material/input";
 
-const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
-    {
-        id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
-    }
-], false);
-
-export function provideConfig() {
-    return SOCIAL_CONFIG || { id: null, providers: [] };
-}
 
 @NgModule({
     declarations: [
@@ -38,15 +32,18 @@ export function provideConfig() {
         ReactiveFormsModule,
         TranslateDirectiveModule,
         ClickOutsideModule,
-        BsDropdownModule.forRoot(),
-        TooltipModule.forRoot(),
+        MatTooltipModule,
         RouterModule,
         CheckPermissionModule,
         CommandKModule,
-        TabsModule.forRoot(),
         SocialLoginModule,
         GenericAsideMenuAccountModule,
-        MatDialogModule
+        MatDialogModule,
+        MatTabsModule,
+        MatMenuModule,
+        MatButtonModule,
+        CdkTreeModule,
+        MatInputModule
     ],
     exports: [
         PrimarySidebarComponent
@@ -54,11 +51,23 @@ export function provideConfig() {
     providers: [
         {
             provide: AuthServiceConfig,
-            useFactory: provideConfig
+            useFactory: (injector: Injector) => {
+                const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
+                return new AuthServiceConfig(
+                    [
+                        {
+                            id: GoogleLoginProvider.PROVIDER_ID,
+                            provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
+                        }
+                    ],
+                    false
+                );
+            },
+            deps: [Injector]
         }
     ]
 })
 
 export class PrimarySidebarModule {
-    
+
 }

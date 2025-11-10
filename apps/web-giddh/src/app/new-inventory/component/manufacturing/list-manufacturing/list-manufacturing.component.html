@@ -11,51 +11,57 @@
             <div class="form-fields clearfix">
                 <form class="col-12 pl-0 pr-0 mr-b05 manufacturing-form">
                     <div class="row">
-                        <div class="d-flex flex-wrap gap-between w-100 mb-2">
+                        <div class="d-flex align-items-center flex-wrap gap-between w-100 mb-2">
                             <div>
                                 <div
-                                    class="input-group custom-datepicker custom-new-datepicker"
-                                    (click)="showGiddhDatepicker($event)"
+                                    class="custom-datepicker custom-new-datepicker"
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
                                 >
                                     <input
+                                        matInput
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
                                     />
                                 </div>
                             </div>
                             <div class="list-header" *ngIf="(isCompany || isConsolidatedBranch)">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     class="max-width-230"
                                     [name]="'branch'"
                                     [placeholder]="commonLocaleData?.app_select_branch"
                                     [options]="currentCompanyBranches"
                                     (selectedOption)="handleBranchChange($event)"
-                                    [defaultValue]="selectedBranchName"
+                                    [labelValue]="selectedBranchName"
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                             <div class="list-header" *ngIf="warehouses?.length > 1">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     class="max-width-230"
                                     [name]="'warehouse'"
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"
-                                    [defaultValue]="selectedWarehouseName"
+                                    [labelValue]="selectedWarehouseName"
                                     (selectedOption)="
                                         selectedWarehouseName = $event.label;
                                         manufacturingSearchRequest.warehouseUniqueName = $event.value
                                     "
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
 
                             <div>
                                 <button
                                     type="button"
                                     class="mr-0 search-btn"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     (click)="getReport()"
                                 >
@@ -68,7 +74,6 @@
                                     type="button"
                                     class="mr-0"
                                     mat-stroked-button
-                                    color="primary"
                                     (click)="initializeSearchReqObj()"
                                     *ngIf="showClearButton"
                                 >
@@ -80,7 +85,7 @@
                                 <button
                                     type="button"
                                     (click)="openAdvanceFilterDialog()"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                 >
                                     {{ commonLocaleData?.app_filter }}
@@ -183,21 +188,16 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </section>
-        <div class="pagination-wrapper mt-4" *ngIf="(totalItems >= paginationLimit) && !isReportLoading">
-            <pagination
-                [totalItems]="totalItems"
-                [maxSize]="5"
-                [(ngModel)]="currentPage"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="paginationLimit"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
+        <div class="mt-4" *ngIf="(totalItems > pageSizeOptions[0]) && !isReportLoading">
+            <mat-paginator
+                [length]="totalItems"
+                [pageSize]="manufacturingSearchRequest.count"
+                [pageIndex]="currentPage"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+            ></mat-paginator>
         </div>
     </section>
 
@@ -205,34 +205,35 @@
 
     <ng-template #advanceFilterDialog>
         <div class="advance-search-dialog">
-            <div class="modal-header theme-bg pd-l2 pd-r2">
-                <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advanced_filter }}</h3>
-                <i mat-dialog-close class="icon-cross color-white"></i>
+            <div class="dialog-header">
+                <span>{{ commonLocaleData?.app_advanced_filter }}</span>
+                <button mat-icon-button aria-label="close" mat-dialog-close>
+                    <i class="icon-cross"></i>
+                </button>
             </div>
-
-            <div class="modal-body clearfix">
+            <mat-dialog-content class="dialog-body">
                 <div class="form-fields clearfix">
                     <form class="col-md-12 pl-0 pr-0 mr-b05">
                         <div class="row mt-2 mr-b15">
                             <div class="col-md-12 col-sm-12">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'inventoryType'"
                                     [placeholder]="commonLocaleData?.app_select_inventory_type"
                                     [label]="commonLocaleData?.app_inventory_type"
                                     [options]="inventoryTypeFilters"
-                                    [defaultValue]="selectedInventoryTypeName"
+                                    [labelValue]="selectedInventoryTypeName"
                                     (selectedOption)="
                                         manufacturingSearchRequest.inventoryType = $event.value;
                                         selectedInventoryTypeName = $event.label
                                     "
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
                                 <div class="list-header">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         class="max-width-230"
                                         [name]="'stock'"
                                         [placeholder]="commonLocaleData?.app_select_stock"
@@ -243,16 +244,16 @@
                                             manufacturingSearchRequest.product = $event.value;
                                             getVariants()
                                         "
-                                        [defaultValue]="selectedStockName"
+                                        [labelValue]="selectedStockName"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
                                 <div class="list-header">
-                                    <dropdown-field
+                                    <reactive-dropdown-field
                                         class="max-width-230"
                                         [name]="'variant'"
                                         [placeholder]="commonLocaleData?.app_select_variant"
@@ -262,42 +263,42 @@
                                             selectedVariantName = $event.label;
                                             manufacturingSearchRequest.productVariant = $event.value
                                         "
-                                        [defaultValue]="selectedVariantName"
+                                        [labelValue]="selectedVariantName"
                                     >
-                                    </dropdown-field>
+                                    </reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'searchBy'"
                                     [placeholder]="localeData?.select_search_by"
                                     [label]="localeData?.search_by"
                                     [options]="searchByFilters"
-                                    [defaultValue]="selectedOperationName"
+                                    [labelValue]="selectedOperationName"
                                     (selectedOption)="
                                         manufacturingSearchRequest.searchBy = $event.value;
                                         selectedOperationName = $event.label
                                     "
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mr-b15">
                             <div class="col-md-12 col-sm-12">
-                                <dropdown-field
+                                <reactive-dropdown-field
                                     [name]="'searchOperation'"
                                     [placeholder]="localeData?.select_operation"
                                     [label]="localeData?.operation"
                                     [options]="operatorFilters"
-                                    [defaultValue]="selectedFilterByName"
+                                    [labelValue]="selectedFilterByName"
                                     (selectedOption)="
                                         manufacturingSearchRequest.searchOperation = $event.value;
                                         selectedFilterByName = $event.label
                                     "
                                 >
-                                </dropdown-field>
+                                </reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mr-b15">
@@ -318,7 +319,7 @@
                                 <button
                                     type="button"
                                     class="mr-0"
-                                    mat-stroked-button
+                                    mat-raised-button
                                     color="primary"
                                     mat-dialog-close
                                     (click)="getReport()"
@@ -334,34 +335,32 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </mat-dialog-content>
         </div>
     </ng-template>
 
     <!-- Date Picker  -->
 
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOption"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                >
-                </app-datepicker-wrapper>
-            </div>
-        </div>
-    </ng-template>
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            >
+        </app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
 </ng-container>

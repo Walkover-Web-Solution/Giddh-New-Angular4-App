@@ -1,6 +1,8 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -19,6 +21,7 @@ import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
+import { ServiceConfig } from '../../../services/service.config';
 import { InventoryComponentStore } from '../inventory.store';
 
 @Component({
@@ -92,6 +95,10 @@ export class ReportsComponent implements OnInit {
     public reportType: string = '';
     /** Holds report unique name */
     public reportUniqueName: string = '';
+    /** Holds selected warehouse */
+    public selectedWarehouse: string;
+    /** Holds available page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds inventory type module  */
     public moduleType: string = '';
     /** Holds module name */
@@ -130,6 +137,7 @@ export class ReportsComponent implements OnInit {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
+        @Inject(ServiceConfig) private serviceConfig,
         private commonAction: CommonActions,
         private inventoryStore: InventoryComponentStore
     ) {
@@ -175,7 +183,7 @@ export class ReportsComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -549,16 +557,19 @@ export class ReportsComponent implements OnInit {
     }
 
     /**
-    * This function will change the page of activity logs
-    *
-    * @param {*} event
-    * @memberof ReportsComponent
-    */
-    public pageChanged(event: any): void {
-        if (this.stockReportRequest.page !== event?.page) {
-            this.stockReportRequest.page = event?.page;
-            this.getReport(false);
+     * Handles pagination events for inventory reports
+     *
+     * @param {PageEvent} event - Contains pagination details
+     * @memberof ReportsComponent
+     */
+    public handlePageEvent(event: PageEvent): void {
+        if (this.stockReportRequest.count !== event.pageSize) {
+            this.stockReportRequest.page = 1;
+        } else {
+            this.stockReportRequest.page = event.pageIndex + 1;
         }
+        this.stockReportRequest.count = event.pageSize;
+        this.getReport(false);
     }
 
     /**
@@ -631,7 +642,7 @@ export class ReportsComponent implements OnInit {
             this.displayedColumns = event
                 .filter(item => item?.checked)
                 .map(item => item?.value);
-            this.getReport(false);
+            this.getReport(true);
         }
     }
 

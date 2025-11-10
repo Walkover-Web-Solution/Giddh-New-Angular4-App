@@ -1,6 +1,7 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -8,8 +9,8 @@ import { IUlist } from '../models/interfaces/ulist.interface';
 import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
-import { ActivatedRoute, Params, QueryParamsHandling, Router } from '@angular/router';
-import { AdjustedVoucherType, COUNTRY_REGION_MAP, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
+import { AdjustedVoucherType, COUNTRY_REGION_MAP, IOption, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS, WeekdaysEnum } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -18,9 +19,9 @@ import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/
 import { HttpClient } from '@angular/common/http';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LedgerViewEnum } from '../models/api-models/Ledger';
-import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
+import { PageLeaveUtilityService } from './page-leave-utility.service';
 
 @Injectable()
 export class GeneralService {
@@ -35,7 +36,7 @@ export class GeneralService {
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     /** Stores the version number for new voucher APIs (1 for old APIs and 2 for new APIs) */
-    public voucherApiVersion: 1 | 2 = 1;
+    public voucherApiVersion: number;
 
     get user(): UserDetails {
         return this._user;
@@ -368,9 +369,10 @@ export class GeneralService {
      */
     public checkIfEmailDomainAllowed(email: string): boolean {
         let isAllowed = false;
+        const whiteLabelDomainsAllowed = this.getDecodedWhiteLabel();
         if (email) {
             let emailSplit = email.split("@");
-            if (JOURNAL_VOUCHER_ALLOWED_DOMAINS.includes(emailSplit[1])) {
+            if ((whiteLabelDomainsAllowed?.emailDomains || JOURNAL_VOUCHER_ALLOWED_DOMAINS).includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
@@ -1097,7 +1099,7 @@ export class GeneralService {
      */
     public getAvailableThemes(): any {
         return [
-            { label: 'Default', value: 'default-theme' },
+            { label: 'Light', value: 'default-theme' },
             { label: 'Dark', value: 'dark-theme' }
         ];
     }
@@ -1147,9 +1149,6 @@ export class GeneralService {
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
                 balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
-                if (this.voucherApiVersion !== 2) {
-                    item.exchangeRate = balanceDueAmountConversionRate;
-                }
             }
             let text = localeData?.currency_conversion;
             let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
@@ -2067,7 +2066,7 @@ export class GeneralService {
         return window.open(
             url,
             title,
-            `width=${width},height=${height},top=${top},left=${left}`
+            `popup,width=${width},height=${height},top=${top},left=${left}`
         );
     }
 
@@ -2227,24 +2226,29 @@ export class GeneralService {
     }
 
     /**
-     * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+     * Retrieves the decoded white label data from the local storage.
      *
-     * @param {string} text - The string containing placeholders.
-     * @param {string[]} args - The list of values to replace the placeholders.
-     * @returns {string} A string where placeholders are replaced with corresponding arguments.
-     * @memberof GeneralService
+     * @returns {any} The decoded white label data or null if the data is not available or cannot be parsed.
+     *
+     * @throws {Error} If there is an error parsing the white label data from the local storage.
      */
-    public replacePlaceholders(text: string, ...args: string[]): string {
-        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    public getDecodedWhiteLabel(): any {
+        try {
+            const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+            return whiteLabelData?.body || null;
+        } catch (error) {
+            console.error('Error parsing whiteLabel data from localStorage:', error);
+            return null;
+        }
     }
-    
+
     /**
      * Replaces placeholders in a URL with corresponding values from a model object.
      * @param url - The URL containing placeholders like `:key`.
      * @param model - An object containing key-value pairs to replace in the URL.
      * @returns The formatted URL with placeholders replaced.
      * @memberof GeneralService
-     */
+    */
     public replaceUrlPlaceholders(url: string, model: Record<string, any>): string {
         if (!url) return url;
         const updatedModel = {
@@ -2259,41 +2263,357 @@ export class GeneralService {
     }
 
     /**
+    * Helper function that replaces placeholders (`[...]`) in a string with the provided arguments.
+    *
+    * @param {string} text - The string containing placeholders.
+    * @param {string[]} args - The list of values to replace the placeholders.
+    * @returns {string} A string where placeholders are replaced with corresponding arguments.
+    * @memberof GeneralService
+    */
+    public replacePlaceholders(text: string, ...args: string[]): string {
+        return text.replace(/\[.*?\]/g, () => args.shift() || '');
+    }
+
+    /**
      * Retrieves a list of available voucher types with localized labels.
      *
      * @param commonLocaleData 
+     * @param onlyVouchers Optional array of voucher types to filter by. Defaults to all voucher types.
      * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
      * @memberof GeneralService
      */
-    public getVoucherTypeList(commonLocaleData: any): IOption[] {
-        return [{
+    public getVoucherTypeList(commonLocaleData: any, onlyVouchers: string[] = []): IOption[] {
+        const allVouchers = [{
             label: commonLocaleData?.app_voucher_types.sales,
             value: 'sales'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.purchase,
             value: 'purchase'
-        }, {
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.purchase_order,
+            value: 'purchase order'
+        },
+        {
             label: commonLocaleData?.app_voucher_types.receipt,
             value: 'receipt'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.payment,
             value: 'payment'
-        }, {
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.estimate,
+            value: 'estimate'
+        },
+        {
+            label: commonLocaleData?.app_voucher_types.proforma,
+            value: 'proforma'
+        },
+        {
             label: commonLocaleData?.app_voucher_types.journal,
             value: 'journal'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.contra,
             value: 'contra'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.debit_note,
             value: 'debit note'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.credit_note,
             value: 'credit note'
-        }, {
+        },
+        {
             label: commonLocaleData?.app_voucher_types.advance_receipt,
             value: 'advance-receipt'
         }];
+
+        return onlyVouchers.length > 0 ? allVouchers.filter(voucher => onlyVouchers.includes(voucher.value)) : allVouchers;
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @param {any} commonLocaleData
+     * @param {boolean} [isDaily=false]
+     * @param {string[]} [excludeDays=[]] must be array of day values in ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDayOfWeekOptions(commonLocaleData: any, isDaily: boolean = false, excludeDays: string[] = []): IOption[] {
+        let days = [
+            { label: commonLocaleData?.app_weekdays.sunday, value: WeekdaysEnum.SUNDAY },
+            { label: commonLocaleData?.app_weekdays.monday, value: WeekdaysEnum.MONDAY },
+            { label: commonLocaleData?.app_weekdays.tuesday, value: WeekdaysEnum.TUESDAY },
+            { label: commonLocaleData?.app_weekdays.wednesday, value: WeekdaysEnum.WEDNESDAY },
+            { label: commonLocaleData?.app_weekdays.thursday, value: WeekdaysEnum.THURSDAY },
+            { label: commonLocaleData?.app_weekdays.friday, value: WeekdaysEnum.FRIDAY },
+            { label: commonLocaleData?.app_weekdays.saturday, value: WeekdaysEnum.SATURDAY }
+        ];
+        if (isDaily) {
+            days = [{ label: commonLocaleData?.app_weekdays.daily, value: WeekdaysEnum.DAILY }, ...days];
+        }
+        return days.filter(day => !excludeDays.includes(day.value));
+    }
+
+    /**
+     * This will return the day of week options
+     *
+     * @returns {IOption[]}
+     * @memberof GeneralService
+     */
+    public getDaysOfMonth(): IOption[] {
+        return Array.from({ length: 31 }, (_, i) => ({
+            label: (i + 1).toString(),
+            value: (i + 1).toString()
+        }));
+    }
+
+    /**
+     * Returns the first and last date of a given month or quarter and year.
+     * @param type - 'month' or 'quarter'
+     * @param value - For 'month': 'MM-YYYY', for 'quarter': 'Q-YYYY' where Q is 01-04
+     * @returns An object with fromDate and toDate in 'DD-MM-YYYY' format.
+     */
+    public getStartAndEndDateOfMonthOrQuater(type: 'month' | 'quarter', value: string): { fromDate: string, toDate: string } {
+        const pad = (n: number) => n < 10 ? '0' + n : n.toString();
+        if (type === 'month') {
+            if (!value || !/^\d{2}-\d{4}$/.test(value)) {
+                return { fromDate: '', toDate: '' };
+            }
+            const [month, year] = value.split('-').map(Number);
+            const lastDay = new Date(year, month, 0).getDate();
+            const fromDate = `01-${pad(month)}-${year}`;
+            const toDate = `${pad(lastDay)}-${pad(month)}-${year}`;
+            return { fromDate, toDate };
+        } else if (type === 'quarter') {
+            if (!value || !/^\d{2}-\d{4}$/.test(value)) {
+                return { fromDate: '', toDate: '' };
+            }
+            const [quarterStr, yearStr] = value.split('-');
+            const quarter = Number(quarterStr);
+            const year = Number(yearStr);
+            let fromMonth = 1, toMonth = 3;
+            switch (quarter) {
+                case 1:
+                    fromMonth = 1; toMonth = 3; break;
+                case 2:
+                    fromMonth = 4; toMonth = 6; break;
+                case 3:
+                    fromMonth = 7; toMonth = 9; break;
+                case 4:
+                    fromMonth = 10; toMonth = 12; break;
+                default:
+                    return { fromDate: '', toDate: '' };
+            }
+            const fromDate = `01-${pad(fromMonth)}-${year}`;
+            const lastDay = new Date(year, toMonth, 0).getDate();
+            const toDate = `${pad(lastDay)}-${pad(toMonth)}-${year}`;
+            return { fromDate, toDate };
+        }
+        return { fromDate: '', toDate: '' };
+    }
+
+    /**
+     * Adjusts the page index based on the total number of items and the number of items to remove.
+     * If the total number of items minus the number of items to remove is a multiple of the count,
+     * and the page is greater than 1, the page index is decremented by 1.
+     *
+     * @param totalItems The total number of items.
+     * @param page The current page index.
+     * @param count The number of items per page.
+     * @param removeCount The number of items to remove (default is 1).
+     * @returns The adjusted page index.
+     */
+    public adjustPageIndex(totalItems: number, page: number, count: number, removeCount: number = 1) {
+        if (((totalItems - removeCount) % count === 0) && page > 1) {
+            page = page - 1;
+        }
+        return page;
+    }
+
+    /**
+     * Sets up navigation listener to intercept route changes and show confirmation dialog
+     * This is a common method that can be used by any component to handle page leave confirmation
+     *
+     * @param {Router} router - Angular Router instance
+     * @param {PageLeaveUtilityService} pageLeaveUtilityService - Service for handling page leave dialogs
+     * @param {Subject<boolean>} destroyed$ - Subject to handle component destruction
+     * @param {() => boolean} hasUnsavedChangesCallback - Callback function to check if there are unsaved changes
+     * @param {() => void} cleanupCallback - Callback function to clean up forms/state after user confirmation
+     * @param {{ value: boolean }} isNavigatingRef - Reference to navigation flag to prevent multiple dialogs
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public setupNavigationListener(
+        router: Router,
+        pageLeaveUtilityService: PageLeaveUtilityService,
+        destroyed$: Subject<boolean>,
+        hasUnsavedChangesCallback: () => boolean,
+        cleanupCallback: () => void,
+        isNavigatingRef: { value: boolean }
+    ): void {
+        let pendingNavigationUrl: string = '';
+        
+        // Listen for navigation attempts
+        router.events.pipe(
+            filter(event => event instanceof NavigationStart),
+            takeUntil(destroyed$)
+        ).subscribe((event: NavigationStart) => {
+            // Only intercept if we have unsaved changes and this is a different route
+            if (hasUnsavedChangesCallback() && event.url !== router.url) {
+                // Always update the pending navigation URL to the most recent attempt
+                pendingNavigationUrl = event.url;
+                
+                if (!isNavigatingRef.value) {
+                    // Set flag to prevent multiple dialogs
+                    isNavigatingRef.value = true;
+                    
+                    // Cancel the current navigation
+                    router.navigateByUrl(router.url, { skipLocationChange: true });
+                    
+                    // Show confirmation dialog
+                    let dialogRef = pageLeaveUtilityService.openDialogWithoutAutoCleanup();
+                    
+                    dialogRef.afterClosed().subscribe((action) => {
+                        
+                        // Remove body CSS class that was added when dialog opened
+                        document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
+                        
+                        if (action === true) {
+                        // User confirmed to leave - clean up and navigate
+                            
+                            pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                            cleanupCallback();
+                            
+                            // Use setTimeout to ensure navigation happens after all cleanup
+                            setTimeout(() => {
+                                // Reset navigation flag after cleanup but before navigation
+                                isNavigatingRef.value = false;
+                                
+                                // Try Angular navigation first (smooth SPA navigation)
+                                router.navigateByUrl(pendingNavigationUrl, { replaceUrl: false }).then(
+                                    (success) => {
+                                        if (!success) {
+                                            // Try with different navigation options
+                                            return router.navigateByUrl(pendingNavigationUrl, { 
+                                                skipLocationChange: false,
+                                                replaceUrl: false 
+                                            });
+                                        }
+                                        return success;
+                                    }
+                                )
+                            }, 200);
+                        } else {
+                            // User cancelled or closed dialog (false, null, undefined) - reset navigation flag and cleanup
+                            pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                            isNavigatingRef.value = false;
+                        }
+                    });
+                } else {
+                    // Dialog is already open, just cancel this navigation attempt
+                    router.navigateByUrl(router.url, { skipLocationChange: true });
+                }
+            }
+        });
+    }
+
+    /**
+     * Common cleanup method for page leave confirmation
+     * Removes browser confirmation dialog and resets navigation flag
+     *
+     * @param {PageLeaveUtilityService} pageLeaveUtilityService - Service for handling page leave dialogs
+     * @param {{ value: boolean }} isNavigatingRef - Reference to navigation flag
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public cleanupPageLeaveConfirmation(
+        pageLeaveUtilityService: PageLeaveUtilityService,
+        isNavigatingRef: { value: boolean }
+    ): void {
+        pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        isNavigatingRef.value = false;
+    }
+
+    /**
+     * Global registry for unsaved changes callbacks
+     * Components can register their hasUnsavedChanges callback here
+     */
+    private unsavedChangesCallbacks: (() => boolean)[] = [];
+    private markFormsAsPristineCallbacks: (() => void)[] = [];
+
+    /**
+     * Register a callback to check for unsaved changes
+     *
+     * @param {() => boolean} callback - Function to check for unsaved changes
+     * @returns {() => void} - Unregister function
+     * @memberof GeneralService
+     */
+    public registerUnsavedChangesCallback(callback: () => boolean): () => void {
+        this.unsavedChangesCallbacks.push(callback);
+        
+        // Return unregister function
+        return () => {
+            const index = this.unsavedChangesCallbacks.indexOf(callback);
+            if (index > -1) {
+                this.unsavedChangesCallbacks.splice(index, 1);
+            }
+        };
+    }
+
+    /**
+     * Register a callback to mark forms as pristine
+     *
+     * @param {() => void} callback - Function to mark forms as pristine
+     * @returns {() => void} - Unregister function
+     * @memberof GeneralService
+     */
+    public registerMarkFormsAsPristineCallback(callback: () => void): () => void {
+        this.markFormsAsPristineCallbacks.push(callback);
+        
+        // Return unregister function
+        return () => {
+            const index = this.markFormsAsPristineCallbacks.indexOf(callback);
+            if (index > -1) {
+                this.markFormsAsPristineCallbacks.splice(index, 1);
+            }
+        };
+    }
+
+    /**
+     * Check for unsaved changes globally across all registered components
+     *
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkForUnsavedChanges(): boolean {
+        return this.unsavedChangesCallbacks.some(callback => {
+            try {
+                return callback();
+            } catch (error) {
+                console.warn('Error checking unsaved changes:', error);
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Mark all forms as pristine globally across all registered components
+     *
+     * @memberof GeneralService
+     */
+    public markAllFormsAsPristine(): void {
+        this.markFormsAsPristineCallbacks.forEach(callback => {
+            try {
+                callback();
+            } catch (error) {
+                console.warn('Error marking forms as pristine:', error);
+            }
+        });
     }
 }
-

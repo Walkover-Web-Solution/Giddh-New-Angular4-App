@@ -132,6 +132,9 @@ export class LedgerResponse {
     public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
     public generateEInvoice?: boolean = null;
+    public salesPerson?: { name: string, uniqueName: string, email: string };
+    public salesPersonUniqueName?: string;
+    public isPartOfMultiEntryVoucher?: boolean;
 }
 
 /** Model adjusted amounts for invoices */
@@ -309,6 +312,8 @@ export class ExportLedgerRequest {
     public withInvoice?: boolean = false;
     public balanceTypeAsSign?: boolean = false;
     public branchUniqueName?: string = '';
+    public page?: number = 1;
+    public count?: number = PAGINATION_LIMIT;
 }
 
 /**
