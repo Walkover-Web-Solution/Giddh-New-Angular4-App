@@ -211,6 +211,9 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     /** Flag to track if country was set programmatically via writeValue */
     private countrySetProgrammatically: boolean = false;
 
+    /** Flag to track if user has manually selected a country */
+    private userHasManuallySelectedCountry: boolean = false;
+
     /** ControlValueAccessor callbacks */
     private onChange = (value: string) => {};
     private onTouched = () => {};
@@ -238,7 +241,6 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     public ngOnInit(): void {
         this.loadTranslations();
         this.setupFormControls();
-        this.detectUserCountry();
     }
     
     /**
@@ -366,27 +368,16 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     }
 
     /**
-     * Detects user's country based on IP address and sets as default
-     *
-     * @private
-     * @memberof MobileNumberInputComponent
-     */
-    private detectUserCountry(): void {
-        // Don't override if country was already set programmatically
-        if (this.countrySetProgrammatically) {
-            return;
-        }
-        
-        this.performCountryDetection();
-    }
-
-    /**
      * Detects user's country for writeValue method (cache-first approach)
      *
      * @private
      * @memberof MobileNumberInputComponent
      */
     private detectUserCountryForWriteValue(): void {
+        // Don't override if user has manually selected a country
+        if (this.countrySetProgrammatically || this.userHasManuallySelectedCountry) {
+            return;
+        }
         this.performCountryDetection();
     }
 
@@ -401,17 +392,18 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         this.geolocationService.getCountryData()
             .pipe(takeUntil(this.destroyed$))
             .subscribe(location => {
-                // Only perform country detection if mobile number field is empty
-                if (location && location.countryCode && !this.mobileControl.value) {
-                    const dialCode = this.geolocationService.mapCountryCodeToDialCode(location.countryCode);
-                    if (dialCode) {
-                        const detectedCountry = this.countries.find(country => country.dialCode === dialCode);
-                        if (detectedCountry) {
-                            this.selectedCountry = detectedCountry;
-                            this.countryControl.setValue(detectedCountry, { emitEvent: false });
-                            this.updateValidators();
-                            return;
-                        }
+                // Only perform country detection if:
+                // 1. Mobile number field is empty
+                // 2. User hasn't manually selected a country
+                if (location && location.countryCode && !this.mobileControl.value && !this.userHasManuallySelectedCountry) {
+                    // Use the new geolocation service method that handles all duplicate cases
+                    const detectedCountry = this.geolocationService.mapCountryCodeToCountry(location.countryCode);
+                    
+                    if (detectedCountry) {
+                        this.selectedCountry = detectedCountry;
+                        this.countryControl.setValue(detectedCountry, { emitEvent: false });
+                        this.updateValidators();
+                        return;
                     }
                 }
             });
@@ -456,6 +448,16 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                 if (country) {
                     this.selectedCountry = country;
                     this.updateValidators();
+                    
+                    // Track manual user selections to prevent auto-detection override
+                    if (!this.countrySetProgrammatically) {
+                        // This is a manual user selection via dropdown
+                        this.userHasManuallySelectedCountry = true;
+                    }
+                    
+                    // Reset programmatic flag after change is processed
+                    this.countrySetProgrammatically = false;
+                    
                     this.countryChanged.emit(country);
                     this.onChange(this.getFullPhoneNumber());
                 }
@@ -499,7 +501,8 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         this.selectedCountry = country;
         this.updateValidators();
         
-        // Reset the programmatic flag when user manually changes country
+        // Mark as manual user selection to prevent auto-detection override
+        this.userHasManuallySelectedCountry = true;
         this.countrySetProgrammatically = false;
         
         // Handle mobile number when country changes
