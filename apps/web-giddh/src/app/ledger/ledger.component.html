@@ -835,7 +835,7 @@
                                                                                 : commonLocaleData?.app_select_accounts
                                                                         }}</div
                                                                     >
-                                                                    <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: false, txn: txn, index: index, dr: true, openDropdown: true }"></ng-container>
+                                                                    <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: false, txn: txn, index: index, dr: true, openDropdown: true, isBankTransaction: true }"></ng-container>
                                                                     <ul
                                                                         class="no-result-template"
                                                                         *ngIf="lc.noAccountChosenForNewEntry"
@@ -891,7 +891,10 @@
                                                                             isConsolidatedBranch) &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
+                                                                    [selectedCurrency]="selectedCurrency"
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
+                                                                    [baseCurrencyDetails]="baseCurrencyDetails"
+                                                                    [foreignCurrencyDetails]="foreignCurrencyDetails"
                                                                     (changeTransactionType)="
                                                                         toggleTransactionType($event)
                                                                     "
@@ -899,6 +902,9 @@
                                                                         lc.currentBlankTxn?.showTaxationDiscountBox
                                                                     "
                                                                     [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
+                                                                    [isLedgerAccountAllowsMultiCurrency]="
+                                                                        particularMultiCurrency
+                                                                    "
                                                                     (saveBlankLedger)="saveBankTransaction()"
                                                                     (clickedOutsideEvent)="
                                                                         hideBankLedgerPopup($event);
@@ -1096,7 +1102,7 @@
                                                                                 : commonLocaleData?.app_select_accounts
                                                                         }}</div
                                                                     >
-                                                                    <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: false, txn: txn, index: index, cr: true, openDropdown: true }"></ng-container>
+                                                                    <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: false, txn: txn, index: index, cr: true, openDropdown: true, isBankTransaction: true }"></ng-container>
                                                                     <ul
                                                                         class="no-result-template"
                                                                         *ngIf="lc.noAccountChosenForNewEntry"
@@ -1145,11 +1151,14 @@
                                                                     [blankLedger]="item"
                                                                     [currentTxn]="lc.currentBlankTxn"
                                                                     [needToReCalculate]="needToReCalculate"
+                                                                    [baseCurrencyDetails]="baseCurrencyDetails"
+                                                                    [foreignCurrencyDetails]="foreignCurrencyDetails"
                                                                     [isReadOnly]="
                                                                         (currentOrganizationType === 'COMPANY' ||
                                                                             isConsolidatedBranch) &&
                                                                         currentCompanyBranches?.length > 2
                                                                     "
+                                                                    [selectedCurrency]="selectedCurrency"
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                     (changeTransactionType)="
                                                                         toggleTransactionType($event)
@@ -1158,6 +1167,9 @@
                                                                         lc.currentBlankTxn?.showTaxationDiscountBox
                                                                     "
                                                                     [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
+                                                                    [isLedgerAccountAllowsMultiCurrency]="
+                                                                        particularMultiCurrency
+                                                                    "
                                                                     (saveBlankLedger)="saveBankTransaction()"
                                                                     (clickedOutsideEvent)="
                                                                         hideBankLedgerPopup($event);
@@ -2874,6 +2886,7 @@
                 let-cr="cr"
                 let-dr="dr"
                 let-openDropdown="openDropdown"
+                let-isBankTransaction="isBankTransaction"
             >
                 <reactive-dropdown-field
                     [data]="isLedgerEntry ? (cr ? transactionType.Credit : transactionType.Debit) : null "
@@ -2902,7 +2915,7 @@
                     "
                     (selectedOption)="
                         addBrowserConfirmation();
-                        selectAccount($event, txn, false, true);
+                        selectAccount($event, txn, false, isBankTransaction, null, cr ? transactionType.Credit : transactionType.Debit);
                         (isLedgerEntry && showNewLedgerEntryPopup(txn))
                     "
                     (dynamicSearchedQuery)="
