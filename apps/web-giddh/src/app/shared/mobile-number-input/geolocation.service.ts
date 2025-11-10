@@ -113,6 +113,36 @@ export class GeolocationService {
     }
 
     /**
+     * Maps country code directly to Country object (most accurate for geolocation)
+     * Handles all duplicate dial code cases correctly by using country code first
+     * 
+     * @param {string} countryCode - ISO country code (e.g., 'RU', 'KZ', 'US', 'GB')
+     * @returns {any | null} Country object if found, null otherwise
+     * @memberof GeolocationService
+     */
+    public mapCountryCodeToCountry(countryCode: string): any | null {
+        // Direct country code mapping - handles all duplicate dial codes correctly
+        const country = COUNTRIES_DATA.find(c => c.code === countryCode);
+        
+        if (country) {
+            return country;
+        }
+
+        // Fallback mapping for any edge cases or country code variations
+        const countryCodeMappings: { [key: string]: string } = {
+            // Handle any country code variations if needed
+            // Example: 'UK': 'GB' - if API returns UK instead of GB
+        };
+
+        const mappedCode = countryCodeMappings[countryCode];
+        if (mappedCode) {
+            return COUNTRIES_DATA.find(c => c.code === mappedCode) || null;
+        }
+
+        return null;
+    }
+
+    /**
      * Checks if there is valid cached country data
      * 
      * @returns {boolean} True if valid cache exists, false otherwise
