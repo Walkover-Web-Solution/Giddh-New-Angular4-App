@@ -67,7 +67,7 @@
     padding: 0;
     margin: 0 0 0 -1px;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-    background-color: var(--theme-background-color, white);
+    background-color: var(--theme-background-color) !important;
     border: 1px solid var(--border-color);
     white-space: nowrap;
     max-height: 200px;
@@ -101,6 +101,11 @@
 }
 .iti__country.iti__highlight {
     background-color: rgba(0, 0, 0, 0.05);
+}
+.dark-theme {
+    .iti__country.iti__highlight {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+    }
 }
 .iti__flag-box,
 .iti__country-name,
