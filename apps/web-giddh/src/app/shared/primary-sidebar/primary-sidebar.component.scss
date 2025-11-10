@@ -1,7 +1,3 @@
-@mixin highlight-color($bgColor, $color) {
-    // background-color: $bgColor !important;
-    color: $color !important;
-}
 .primary-sidebar {
     padding-top: 0 !important;
     // background-color: var(--color-white);
@@ -165,7 +161,8 @@
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color(var(--color-white), var(--theme-primary-color));
+                font-weight: var(--font-weight-semibold);
+                color: var(--theme-primary-color) !important;
             }
         }
         p {
@@ -509,7 +506,8 @@ cdk-tree {
                     line-height: 18px;
 
                     &:hover {
-                        @include highlight-color(var(--color-white), var(--color-black));
+                        background-color: var(--color-white) !important;
+                        color: var(--color-black) !important;
                     }
                 }
                 .rotate-270 {
