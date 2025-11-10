@@ -22,14 +22,17 @@
             </a>
             <div class="form-group d-flex flex-fill" *ngIf="translationsLoaded">
                 <div class="form-group mr-l15 filter-container">
-                    <reactive-dropdown-field
-                        [options]="fieldModules"
+                    <mat-select
+                        class="form-control"
+                        name="modules"
                         [placeholder]="localeData?.modules_placeholder"
-                        [name]="'modules'"
-                        [(ngModel)]="customFieldsRequest.moduleUniqueName"
-                        (selectedOption)="customFieldsRequest.moduleUniqueName = $event?.value; getCustomFields()"
-                        [cssClass]="'form-control'">
-                    </reactive-dropdown-field>
+                        (selectionChange)="customFieldsRequest.moduleUniqueName = $event?.value; getCustomFields()"
+                        [(value)]="customFieldsRequest.moduleUniqueName"
+                    >
+                        <mat-option *ngFor="let module of fieldModules" [value]="module?.uniqueName"
+                            >{{ module.name }}
+                        </mat-option>
+                    </mat-select>
                 </div>
             </div>
             <watch-video [cssClass]="'text-primary'" [moduleName]="'CUSTOM_FIELD'"></watch-video>
