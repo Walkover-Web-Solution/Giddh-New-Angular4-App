@@ -609,6 +609,7 @@
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="stockGroupUniqueName"
+                                                            [openDropdown]="selectTableRowName === 'stockGroupName'"
                                                             [options]="stockUnitGroupList"
                                                             (selectedOption)="row.get('stockGroupName').setValue($event.label); row.get('stockGroupUniqueName').setValue($event.value)"
                                                             [required]="true"
@@ -731,6 +732,7 @@
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="purchaseAccountUniqueName"
                                                             [options]="purchaseAccountList"
+                                                            [openDropdown]="selectTableRowName === 'purchaseAccountName'"
                                                             [showLabel]="false"
                                                             (selectedOption)="row.get('purchaseAccountName').setValue($event.label); row.get('purchaseAccountUniqueName').setValue($event.value)"
                                                         >
@@ -787,17 +789,20 @@
                                                         <text-field
                                                             *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
-                                                            formControlName="purchaseUnits"
+                                                            formControlName="purchaseUnitsCode"
                                                             [readonly]="true"
-                                                            [matTooltip]="row.get('purchaseUnits').value"
+                                                            [matTooltip]="row.get('purchaseUnitsCode').value"
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="purchaseUnits"
+                                                            [openDropdown]="selectTableRowName === 'purchaseUnits'"
                                                             [options]="stockMainUnits"
                                                             [labelValue]="row.get('purchaseUnits').value"
+                                                            (selectedOption)="row.get('purchaseUnitsCode').setValue($event.label)"
+                                                            (onClear)="row.get('purchaseUnitsCode').setValue('')"
                                                             [showLabel]="false"
                                                         >
                                                         </reactive-dropdown-field>
@@ -825,6 +830,7 @@
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="salesAccountUniqueName"
                                                             [options]="salesAccountList"
+                                                            [openDropdown]="selectTableRowName === 'salesAccountName'"
                                                             [showLabel]="false"
                                                             (selectedOption)="row.get('salesAccountName').setValue($event.label); row.get('salesAccountUniqueName').setValue($event.value)"
                                                         >
@@ -881,9 +887,9 @@
                                                         <text-field
                                                             *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
-                                                            formControlName="salesUnits"
+                                                            formControlName="salesUnitsCode"
                                                             [readonly]="true"
-                                                            [matTooltip]="row.get('salesUnits').value"
+                                                            [matTooltip]="row.get('salesUnitsCode').value"
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
@@ -891,8 +897,10 @@
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="salesUnits"
                                                             [options]="stockMainUnits"
+                                                            [openDropdown]="selectTableRowName === 'salesUnits'"
                                                             [labelValue]="row.get('salesUnits').value"
-                                                            (selectOption)="row.get('salesUnits').setValue($event.value)"
+                                                            (selectedOption)="row.get('salesUnitsCode').setValue($event.label)"
+                                                            (onClear)="row.get('salesUnitsCode').setValue('')"
                                                             [showLabel]="false"
                                                         >
                                                         </reactive-dropdown-field>
@@ -910,9 +918,9 @@
                                                         <text-field
                                                             *ngIf="selectTableRowIndex !== i"
                                                             [type]="'text'"
-                                                            formControlName="fixedAssetUnits"
+                                                            formControlName="fixedAssetUnitsCode"
                                                             [readonly]="true"
-                                                            [matTooltip]="row.get('fixedAssetUnits').value"
+                                                            [matTooltip]="row.get('fixedAssetUnitsCode').value"
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
@@ -920,6 +928,10 @@
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="fixedAssetUnits"
                                                             [options]="stockMainUnits"
+                                                            [labelValue]="row.get('fixedAssetUnits').value"
+                                                            (selectedOption)="row.get('fixedAssetUnitsCode').setValue($event.label)"
+                                                            (onClear)="row.get('fixedAssetUnitsCode').setValue('')"
+                                                            [openDropdown]="selectTableRowName === 'fixedAssetUnits'"
                                                             [showLabel]="false"
                                                         >
                                                         </reactive-dropdown-field>
@@ -966,6 +978,7 @@
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="fixedAssetAccountName"
                                                             [options]="fixedAssetAccountList"
+                                                            [openDropdown]="selectTableRowName === 'fixedAssetAccountName'"
                                                             [showLabel]="false"
                                                             (selectedOption)="row.get('fixedAssetAccountName').setValue($event.label); row.get('fixedAssetAccountUniqueName').setValue($event.value)"
                                                         >
@@ -1047,13 +1060,28 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                        <reactive-dropdown-field
-                                                            *ngIf="selectTableRowIndex === i"
-                                                            formControlName="taxes"
-                                                            [options]="taxes"
-                                                            [showLabel]="false"
-                                                        >
-                                                        </reactive-dropdown-field>
+                                                            <mat-select
+                                                                #taxSelect
+                                                                *ngIf="selectTableRowIndex === i"
+                                                                panelClass="py-0"
+                                                                class="w-100"
+                                                                name="salesPerson"
+                                                                [multiple]="true"
+                                                                formControlName="taxes"
+                                                            >
+                                                                <mat-option class="mt-0">
+                                                                    <ngx-mat-select-search
+                                                                        [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
+                                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                                                        [formControl]="taxDropdown"
+                                                                    >
+                                                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                                                    </ngx-mat-select-search>
+                                                                </mat-option>
+                                                                <mat-option *ngFor="let tax of taxes" [value]="tax?.value" (click)="$event.stopPropagation()">
+                                                                    {{ tax?.label }}
+                                                                </mat-option>
+                                                            </mat-select>
                                                         <!-- <mat-select
                                                             class="vertical-margin"
                                                             name="taxes"
@@ -1214,7 +1242,7 @@
                                                     "
                                                 >
                                                     <td
-                                                        *ngFor="let column of row.get('customFields').value"
+                                                        *ngFor="let column of row.get('customFields').value" (click)="getInputIndex(i, column.key)"
                                                         class="min-width-140"
                                                     >
                                                         <div class="border-line">

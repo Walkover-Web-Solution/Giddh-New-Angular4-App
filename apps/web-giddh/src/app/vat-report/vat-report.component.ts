@@ -200,12 +200,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     * @param {*} description
     * @memberof VatReportComponent
     */
-    public viewVatReportTransactions(section: string, description: string) {
-        this.breadCrumbService.setBreadCrumbPath([
-            { url: '/pages/vat-report', queryParams: { }, currentPageName: 'VAT-Report' },
-            { url: `/pages/vat-report/transactions/section/${section}`, queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber }, currentPageName: description }
-        ]);
-        this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
+    public viewVatReportTransactions(section: string) {
+       this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
     }
 
     /**
