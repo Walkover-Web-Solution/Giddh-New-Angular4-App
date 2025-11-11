@@ -3575,7 +3575,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     setTimeout(() => {
                         this.cdRf.detectChanges();
                         this.needToReCalculate.next(true);
-                    });
+                    }, 500);
                 }
 
                 txn.selectedAccount = {
