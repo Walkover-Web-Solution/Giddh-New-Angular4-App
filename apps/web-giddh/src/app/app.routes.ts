@@ -52,7 +52,7 @@ export const ROUTES: Routes = [
     { path: 'group-name', redirectTo: 'pages/group-name', pathMatch: 'full' },
     { path: 'mobile-restricted', component: MobileRestrictedComponent },
     {
-        path: 'pages', component: PageComponent,
+        path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },

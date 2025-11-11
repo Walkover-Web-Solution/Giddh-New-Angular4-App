@@ -468,6 +468,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -925,6 +926,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -1489,6 +1491,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -1962,6 +1965,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -2211,7 +2215,7 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
                                                     >
-                                                        <h3>{{ element?.customerName | titlecase }}</h3>
+                                                        <h3>{{ element.account?.customerName || element?.account?.name | titlecase }}</h3>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
                                                             <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
                                                         </a>
@@ -2429,6 +2433,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -2674,6 +2679,7 @@
                             <ng-container
                                 *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !ledgersData?.length }"
                             ></ng-container>
+                            <section class="mr-b8"></section>
                         </div>
                     </div>
                 </div>
@@ -3111,6 +3117,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -3549,6 +3556,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -3969,6 +3977,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -4328,6 +4337,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -4547,6 +4557,7 @@
                             <ng-container
                                 *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !ledgersData?.length }"
                             ></ng-container>
+                            <section class="mr-b8"></section>
                         </div>
                     </div>
                 </div>
