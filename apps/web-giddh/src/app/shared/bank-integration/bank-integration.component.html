@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="!isLoading && connectedBankAccounts?.length > 0">
+    <div *ngIf="!isLoading && connectedBankAccounts?.length > 0" class="pd-15">
         <div
             *ngIf="
                 iciciAllowedCompanies.includes(activeCompany?.uniqueName) ||

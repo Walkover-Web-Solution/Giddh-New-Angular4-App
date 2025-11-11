@@ -485,7 +485,7 @@
                     *ngIf="searchStr || sundryDebtorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryDebtorsAccounts"
-                    class="w-100"
+                    class="table-layout-fixed w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
@@ -535,7 +535,7 @@
                                 [attr.data-title]="localeData?.customer"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column pd-l1"
+                                class="hover-trigger name-column-td pd-l1"
                                 [ngClass]="{'hover-trigger--active': selectedCheckedContacts.length}"
                             >
                                 <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
@@ -888,7 +888,7 @@
                     *ngIf="searchStr || sundryCreditorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryCreditorsAccounts"
-                    class="w-100"
+                    class="table-layout-fixed w-100"
                     (mouseenter)="showSelectAll = true"
                     (mouseleave)="showSelectAll = false"
                 >
@@ -942,7 +942,7 @@
                                 [attr.data-title]="commonLocaleData?.app_vendor_name"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column pd-l1"
+                                class="hover-trigger name-column-td pd-l1"
                                 [ngClass]="{'hover-trigger--active': selectedCheckedContacts.length}"
                             >
                                 <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">

@@ -840,16 +840,6 @@ no-data,
 //         background-color: var(--color-silver) !important;
 //     }
 // }
-
-.table-bordered {
-    > tbody {
-        > tr.selected-for-inv {
-            > td {
-                border-color: var(--color-medium-gray);
-            }
-        }
-    }
-}
 .ledger-table {
     td {
         > input {
@@ -2786,12 +2776,15 @@ ul.sub-list {
         border-radius: var(--mat-border-radius-4);
         border: 1px solid var(--border-color);
         color: inherit !important;
-        background: none !important;
         font-size: inherit !important;
+        background: none !important;
         // height: 33px;
         // border: 0px;
         // padding: 3px !important;
         // text-align: center;
+        &.bg-white {
+            background: var(--color-white) !important;
+        }
     }
     // input {
     //     position: relative;
@@ -3709,7 +3702,7 @@ select.form-control {
 
 // .grp-list .master-list,
 // .new-btn-ul .new-btn {
-    // list-style: none;
+// list-style: none;
 // }
 
 .grp-list .master-list a,
@@ -3784,7 +3777,7 @@ select.form-control {
 form label {
     padding-bottom: 0;
     font-size: var(--font-size-15);
-    // line-height: 2.3;
+    // line-height: var(--line-height-36);
     margin-bottom: 0 !important;
 }
 
@@ -4046,7 +4039,7 @@ label {
     width: 100%;
     z-index: 9;
 }
- @include theme(default) {
+@include theme(default) {
     .new-btn {
         background-color: var(--color-light-gray);
     }
@@ -5898,13 +5891,13 @@ textarea {
     color: var(--color-black);
 }
 
-.small-button {
-    width: 100% !important;
-    margin-right: 0 !important;
-    float: left !important;
-    margin-bottom: 12px !important;
-    min-width: auto !important;
-}
+// .small-button {
+//     // width: 100% !important;
+//     margin-right: 0 !important;
+//     float: left !important;
+//     margin-bottom: 12px !important;
+//     min-width: auto !important;
+// }
 
 .create-btn-inventory {
     padding: 0 26px;
@@ -6438,7 +6431,7 @@ hamburger-menu {
     width: 100%;
     margin-bottom: 20px;
     // color: var(--color-black);
-    background-color: transparent;
+    background-color: var(--table-background-color);
     // border-collapse: collapse;
 
     th,
@@ -6472,22 +6465,6 @@ hamburger-menu {
 //         white-space: nowrap;
 //     }
 // }
-
-.table-bordered {
-    border: 1px solid var(--border-color);
-
-    th,
-    td {
-        border: 1px solid var(--border-color);
-    }
-
-    thead {
-        th,
-        td {
-            border-bottom-width: 2px;
-        }
-    }
-}
 
 .table-hover {
     tbody tr:hover {
@@ -6590,6 +6567,11 @@ hamburger-menu {
     min-width: 40px !important;
     width: 60px !important;
     max-width: 60px !important;
+}
+
+.name-column {
+    width: 180px !important;
+    min-width: 180px !important;
 }
 
 // Main table responsive styles
@@ -7158,9 +7140,9 @@ hamburger-menu {
     margin-bottom: 20px;
 }
 
-.tax-engine .table.transactions-table thead:first-child tr:first-child th:first-child {
-    padding-left: 20px;
-}
+// .tax-engine .table.transactions-table thead:first-child tr:first-child th:first-child {
+//     padding-left: 20px;
+// }
 
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
@@ -7383,7 +7365,7 @@ hamburger-menu {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid var(--color-black);
+    border-top: 4px solid var(--theme-foreground-color);
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -7487,10 +7469,10 @@ hamburger-menu {
     table-layout: fixed;
 }
 
-.tax-engine .table.reconciliations-table tbody > tr > td:first-child,
-.tax-engine .table.reconciliations-table thead > tr > th:first-child {
-    padding: 13px 13px 13px 20px;
-}
+// .tax-engine .table.reconciliations-table tbody > tr > td:first-child,
+// .tax-engine .table.reconciliations-table thead > tr > th:first-child {
+//     padding: 13px 13px 13px 20px;
+// }
 
 .tax-engine .table thead:first-child tr:first-child th {
     border-top: 1px solid var(--border-color);
@@ -11711,18 +11693,18 @@ body.prevent-body-scroll {
     // tbody > tr > td:last-child {
     //     border-right: none;
     // }
-    tfoot > tr > td {
-        vertical-align: middle !important;
-        font-size: var(--font-size-15);
-        word-break: break-word;
-        white-space: nowrap;
-    }
-    tbody tr:hover td {
-        background: var(--theme-primary-light) !important;
-    }
-    tbody tr:last-child td {
-        border-bottom: 1px solid var(--color-silver) !important;
-    }
+    // tfoot > tr > td {
+    //     vertical-align: middle !important;
+    //     font-size: var(--font-size-15);
+    //     word-break: break-word;
+    //     white-space: nowrap;
+    // }
+    // tbody tr:hover td {
+    //     background: var(--theme-primary-light) !important;
+    // }
+    // tbody tr:last-child td {
+    //     border-bottom: 1px solid var(--color-silver) !important;
+    // }
     tbody tr:last-child .status-mobile {
         border-bottom: none !important;
     }

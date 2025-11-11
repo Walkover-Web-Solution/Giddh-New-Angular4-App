@@ -319,13 +319,11 @@
         tbody {
             .mat-mdc-row {
                 &:hover {
-                    /* UNUSED COMPONENT CLASS: mat-mdc-cell - Auto-commented by script
-.mat-mdc-cell {
+                    .mat-mdc-cell {
                         .icon-visibility {
                             visibility: visible !important;
                         }
                     }
-*/
                 }
             }
         }

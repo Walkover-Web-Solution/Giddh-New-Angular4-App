@@ -28,7 +28,7 @@
                                 </span>
                             </mat-slide-toggle>
                             <button 
-                                class="h-auto p-0"
+                                class="ml-1 p-0"
                                 mat-icon-button
                                 [matTooltip]="commonLocaleData?.app_filter"
                                 [matTooltipPosition]="'above'"
@@ -774,7 +774,6 @@
                                         <mat-checkbox 
                                             [disabled]="true" [color]="primary">
                                         </mat-checkbox>
-                                        hero
                                         <label for="reverse-charge"
                                             (click)="!isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"
                                             [innerHTML]="localeData?.transaction_reverse_charge">
@@ -900,7 +899,6 @@
                                                                     </ng-container>
                                                                     <reactive-dropdown-field
                                                                         class="mat-form-field-clean"
-                                                                        [cssClass]="'px-2'"
                                                                         #accountDropdown
                                                                         (click)="setUserManuallyClicked()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
@@ -987,6 +985,7 @@
                                                                         </ng-container>
                                                                         <div class="mr-t1">
                                                                             <reactive-dropdown-field
+                                                                                class="mat-form-field-clean"
                                                                                 *ngIf="activeEntryIndex === entryIndex"
                                                                                 [label]="localeData?.select_variant"
                                                                                 [placeholder]="localeData?.select_variant"
@@ -1883,7 +1882,7 @@
                                                         <td>
                                                             <text-field [id]="'grandTotalMultiCurrency'"
                                                                 #grandTotalMultiCurrency [type]="'text'"
-                                                                [cssClass]="'form-control mat-field-border'"
+                                                                [cssClass]="'form-control border'"
                                                                 [name]="'grandTotalMultiCurrency'"
                                                                 [prefix]="company?.baseCurrencySymbol"
                                                                 [mask]="company?.inputMaskFormat" [useMask]="true"

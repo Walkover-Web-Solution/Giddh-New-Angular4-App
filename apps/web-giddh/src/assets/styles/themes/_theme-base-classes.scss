@@ -13,9 +13,9 @@ body {
     // --theme-foreground-color: rgba(0, 0, 0, 0.26);
     // --theme-background-color: rgba(0, 0, 0, 0.12);
 
-    --theme-primary-light: color-mix(in srgb, var(--theme-primary-color) 15%, transparent);
-    --theme-accent-light: color-mix(in srgb, var(--theme-accent-color) 15%, transparent);
-    --theme-warn-light: color-mix(in srgb, var(--theme-warn-color) 15%, transparent);
+    --theme-primary-light: color-mix(in oklch, var(--theme-primary-color) 10%, white);
+    --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) 10%, white);
+    --theme-warn-light: color-mix(in oklch, var(--theme-warn-color) 10%, white);
 
     &.default-theme, &.dark-theme {
         --color-black: #0D0D0D;

@@ -96,7 +96,7 @@
             <ng-container *ngFor="let item of subMenuItems">
                 <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional?.queryParams">
                     <mat-card-title>
-                        <p><i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}</p>
+                        <h4><i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}</h4>
                     </mat-card-title>
                     <mat-card-content class="p-0">
                         <p>{{ item?.description }}</p>

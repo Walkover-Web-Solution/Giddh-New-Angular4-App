@@ -162,7 +162,7 @@
                                     <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
                                     <select-field
                                         *ngIf="(statesSource$ | async)?.length"
-                                        [cssClass]="'form-control mat-field-border'"
+                                        [cssClass]="'form-control border'"
                                         [name]="'stateCode'"
                                         [ngClass]="{ 'form-field': showLoader }"
                                         [placeholder]="commonLocaleData?.app_state"
@@ -175,7 +175,7 @@
                                     </select-field>
                                     <select-field
                                         *ngIf="countyList?.length"
-                                        [cssClass]="'form-control mat-field-border'"
+                                        [cssClass]="'form-control border'"
                                         [name]="'regionCode'"
                                         [ngClass]="{ 'form-field': showLoader }"
                                         [placeholder]="commonLocaleData?.app_region"

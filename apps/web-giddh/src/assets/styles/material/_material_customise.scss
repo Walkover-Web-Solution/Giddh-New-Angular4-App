@@ -61,7 +61,7 @@
 }
 
 .prefix-icon-field {
-    i {
+    .icon-prefix {
         @include absolute-center-vertical();
         left: -10px;
     }
