@@ -3536,9 +3536,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                         item.valuesInAccountCurrency = false;
                                         item.selectedCurrencyToDisplay = this.selectedCurrency;
                                         this.getCurrencyRate(null, isBankTransaction, item);
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    } else {
+                                        this.cdRf.detectChanges();
                                         return item;
                                     }
-                                    return item;
                                 });
                         } else {
                             this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
@@ -3546,7 +3549,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.lc.blankLedger.valuesInAccountCurrency = false;
                             this.getCurrencyRate();
                         }
-                        this.cdRf.detectChanges();
                     } else {
                         this.particularMultiCurrency = false;
                         this.baseCurrencyDetails = { code: this.profileObj?.baseCurrency, symbol: this.profileObj?.baseCurrencySymbol };
@@ -3561,17 +3563,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
                                         item.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
                                         item.valuesInAccountCurrency = true;
                                         item.selectedCurrencyToDisplay = this.selectedCurrency;
+                                        item.exchangeRate = 1;
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    } else {
+                                        this.cdRf.detectChanges();
                                         return item;
                                     }
-                                    return item;
                                 });
                         } else {
                             this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
                             this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
                             this.lc.blankLedger.valuesInAccountCurrency = true;
+                            this.lc.blankLedger.exchangeRate = 1;
                         }
                     }
-                    this.cdRf.detectChanges();
+                    setTimeout(() => {
+                        this.cdRf.detectChanges();
+                        this.needToReCalculate.next(true);
+                    });
                 }
 
                 txn.selectedAccount = {
