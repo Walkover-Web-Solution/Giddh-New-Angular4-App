@@ -233,6 +233,16 @@
         }
     }
 }
+::ng-deep .disable-bg {
+    border: 0;
+    background-color: transparent !important;
+
+    &.mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
+        }
+    }
+}
 
 @media screen and (max-width: 1440px) {
     #create-manufacturing {

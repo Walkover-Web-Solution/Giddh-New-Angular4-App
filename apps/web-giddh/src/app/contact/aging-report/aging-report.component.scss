@@ -243,24 +243,10 @@ tr.mat-header-row {
 }
 */
 
-.unpaid-invoice-aside-pane {
-    $header-height: 57.8px;
-    .header {
-        height: $header-height;
-        padding: 20px 15px;
-        background: var(--bg-primary-color);
-        color: var(--color-white);
-
-        button {
-            background: var(--color-transparent);
-            color: var(--color-white);
-            min-width: 0;
-            border-radius: var(--mat-border-radius-0);
-        }
-    }
+::ng-deep .unpaid-invoice-aside-pane {
     .list-wrapper {
         .list-viewport {
-            height: calc(100vh - ($header-height + 30px));
+            height: calc(100vh - (60px + 30px));
             width: 730px;
         }
 

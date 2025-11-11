@@ -33,7 +33,7 @@
             <div class="bulk-stock-header">
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="mr-5">
-                        <button mat-stroked-button
+                        <button
                             *ngIf="
                                 (advanceSearchData !== null ||
                                     sortOrderStatus !== null ||
@@ -54,9 +54,8 @@
                                 {{ localeData?.total_inventory_count }} : <span>{{ totalInventoryCount }}</span>
                             </p>
                             <button
-                                mat-icon-button
-                                color="primary"
-                                class="bulk-stock-hide-show-button p-0 ml-2"
+                                mat-stroked-button
+                                class="btn-stroked-icon bulk-stock-hide-show-button p-0 ml-2"
                                 (click)="openAdvanceFilter()"
                                 [matTooltip]="commonLocaleData?.app_advanced_filter"
                                 aria-label="filter"
@@ -72,7 +71,7 @@
                     <ng-container *ngIf="(!noDataFound || searchString) && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
-                                <table class="table border">
+                                <table class="table-bordered">
                                     <thead>
                                         <tr (clickOutside)="hideTableHeadInput()">
                                             <!-- Variant Name -->

@@ -42,8 +42,10 @@ h6 {
     font-weight: inherit;
 }
 button,
-input {
+input,
+textarea {
     outline: none !important;
+    font-family: inherit;
 }
 textarea,
 input {

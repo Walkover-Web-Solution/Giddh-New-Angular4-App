@@ -2168,7 +2168,7 @@
                                                                 [isPaginationEnabled]="true"
                                                                 (scrollEnd)="handleScrollEnd('item')"
                                                                 [scrollableElementId]="'selectAccount'"
-                                                                [cssClass]="'form-control mat-field-border'"
+                                                                [cssClass]="'form-control border'"
                                                                 [name]="'transaction.fakeAccForSelect2_' + entryIdx"
                                                                 [placeholder]="localeData?.select_acc"
                                                                 [options]="salesAccounts$ | async"
@@ -2485,7 +2485,7 @@
                                                             [placeholder]="commonLocaleData?.app_quantity"
                                                             [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                             [type]="'text'"
-                                                            [cssClass]="'form-control mat-field-border text-right stock1'"
+                                                            [cssClass]="'form-control border text-right stock1'"
                                                             [name]="'transaction.quantity_' + entryIdx"
                                                             [mask]="inputMaskFormat" [useMask]="true"
                                                             [(ngModel)]="transaction.quantity"
@@ -2527,7 +2527,7 @@
                                                                 [placeholder]="commonLocaleData?.app_rate"
                                                                 [type]="'text'"
                                                                 [cssClass]="
-                                                                    'form-control mat-field-border transaction-rate text-right '
+                                                                    'form-control border transaction-rate text-right '
                                                                 "
                                                                 [name]="'transaction.rate_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol"
@@ -2568,7 +2568,7 @@
                                                             (click)="transactionAmountClicked(transaction)"
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             [type]="'text'"
-                                                            [cssClass]="'form-control mat-field-border text-right '"
+                                                            [cssClass]="'form-control border text-right '"
                                                             [name]="'transaction.amount_' + entryIdx"
                                                             [prefix]="invFormData.accountDetails.currencySymbol"
                                                             [suffix]="selectedSuffixForCurrency"
@@ -2708,7 +2708,7 @@
                                                             <text-field
                                                                 [id]="'transaction'"
                                                                 [type]="'text'"
-                                                                [cssClass]="'form-control mat-field-border text-right '"
+                                                                [cssClass]="'form-control border text-right '"
                                                                 [name]="'transaction.total_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol"
                                                                 [suffix]="selectedSuffixForCurrency"
@@ -3554,7 +3554,7 @@
                                                             #grandTotalInr
                                                             [type]="'text'"
                                                             [cssClass]="
-                                                                'form-control mat-field-border multicurrency-grandtotal'
+                                                                'form-control border multicurrency-grandtotal'
                                                             "
                                                             [name]="'grandTotalMulDum'"
                                                             [prefix]="baseCurrencySymbol"

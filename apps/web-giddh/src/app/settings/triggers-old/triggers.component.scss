@@ -319,13 +319,11 @@
         tbody {
             .mat-mdc-row {
                 &:hover {
-                    /* UNUSED COMPONENT CLASS: mat-mdc-cell - Auto-commented by script
-.mat-mdc-cell {
+                    .mat-mdc-cell {
                         .icon-visibility {
                             visibility: visible !important;
                         }
                     }
-*/
                 }
             }
         }
@@ -333,7 +331,6 @@
 }
 
 @media (max-width: 1024px) and (min-width: 768px) {
-
     /* UNUSED COMPONENT CLASS: discount-form-setting-tab - Auto-commented by script
 .discount-form-setting-tab label,
     .discount-form-setting-tab br {

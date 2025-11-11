@@ -68,3 +68,8 @@
     }
 }
 
+:host ::ng-deep .password-label {
+    .mat-mdc-text-field-wrapper {
+        border-radius: var(--mat-border-radius-0) !important;
+    }
+}

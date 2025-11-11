@@ -65,7 +65,7 @@
                         </reactive-dropdown-field>
                     </div>
                     <div class="mr-r15">
-                        <mat-form-field appearance="outline" class="duration-dropdown initial-height w-100">
+                        <mat-form-field appearance="outline" class="duration-dropdown w-100">
                             <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
                             <mat-select #durationMatSelect [value]="getSelectedDuration()">
                                 <mat-option (click)="populateRecords(durationEnum.Monthly)" [value]="commonLocaleData?.app_duration?.monthly">
@@ -106,7 +106,7 @@
                 </ng-container>
                 <ng-template #salesPersonBlock>
                     <div class="dropdown-width" *ngIf="(salesPersonList$ | async)?.length">
-                        <mat-form-field appearance="outline" class="initial-height w-100">
+                        <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
                             <mat-select
                                 panelClass="py-0"
@@ -151,7 +151,7 @@
                     </div>
                 </ng-template>
                 <div class="dropdown-width">
-                    <mat-form-field appearance="outline" class="initial-height w-100">
+                    <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{ commonLocaleData?.app_account }}</mat-label>
                         <mat-select
                             panelClass="py-0"

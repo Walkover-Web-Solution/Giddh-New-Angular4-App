@@ -131,7 +131,7 @@
                         <label>{{ commonLocaleData?.app_total_amount }}<span class="text-red">*</span></label>
                         <text-field
                             type="text"
-                            [cssClass]="'form-control mat-field-border'"
+                            [cssClass]="'form-control border'"
                             decimalDigitsDirective
                             [readonly]="true"
                             [mask]="inputMaskFormat"
@@ -153,7 +153,7 @@
                         </label>
                         <text-field
                             type="text"
-                            [cssClass]="'form-control mat-field-border'"
+                            [cssClass]="'form-control border'"
                             [placeholder]="commonLocaleData?.app_enter_otp"
                             required
                             name="receivedOtp"
@@ -280,7 +280,7 @@
                                     >
                                     <div class="input-content">
                                         <text-field
-                                            [cssClass]="'form-control amount-input mat-field-border'"
+                                            [cssClass]="'form-control amount-input border'"
                                             name="closingBalanceAmount{{ entryIdx }}"
                                             maxLength="12"
                                             decimalDigitsDirective
@@ -312,7 +312,7 @@
                                         autocomplete="off"
                                         required
                                         type="text"
-                                        class="form-control mat-field-border"
+                                        class="form-control border"
                                         [disabled]="isPayClicked"
                                         [placeholder]="commonLocaleData?.app_remark"
                                     ></textarea>

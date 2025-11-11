@@ -560,7 +560,7 @@
             <text-field
                 [type]="'text'"
                 [placeholder]="getSearchFieldText(fieldName)"
-                [cssClass]="'form-control mat-field-border'"
+                [cssClass]="'form-control border'"
                 [formControl]="formControl"
                 [autoFocus]="show"
             ></text-field>
@@ -569,14 +569,15 @@
 </ng-template>
 
 <ng-template #unpaidInvoice>
-    <div class="unpaid-invoice-aside-pane">
-        <div class="header d-flex justify-content-between align-items-center">
-            <p>{{ localeData?.unpaid_invoices }}</p>
-            <button mat-button class="border-radius-circle" (click)="unpaidInvoiceDailogRef.close()" aria-label="cross icon">
-                <i class="icon-cross"></i>
-            </button>
-        </div>
-        <div class="list-wrapper pd-15">
+<section class="aside-dialog-wrapper unpaid-invoice-aside-pane">
+    <div class="dialog-header">
+        <span>{{ localeData?.unpaid_invoices }}</span>
+        <button mat-icon-button mat-dialog-close aria-label="cross icon">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+         <div class="list-wrapper">
             <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading">
                 <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
                     <mat-list-item class="list-item px-2" *cdkVirtualFor="let item of unpaidInvoiceData">
@@ -612,5 +613,6 @@
                 <giddh-page-loader></giddh-page-loader>
             </div>
         </div>
-    </div>
+    </mat-dialog-content>
+</section>
 </ng-template>

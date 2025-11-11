@@ -27,6 +27,17 @@
                         &.disabled {
                             cursor: not-allowed;
                         }
+                        &.active {
+                            background-color: var(--bg-primary-color) !important;
+                            // min-height: 34px;
+                            span,
+                            span i {
+                                color: var(--color-white) !important;
+                            }
+                            .unit-mapping-icon {
+                                filter: var(--filter-image-color-white);
+                            }
+                        }
                         a {
                             display: flex;
                             align-items: flex-start;
@@ -37,17 +48,6 @@
                                     color: var(--color-dark-gray);
                                     margin-right: 10px;
                                     font-size: 20px;
-                                }
-                            }
-                            &.active {
-                                background-color: var(--bg-primary-color) !important;
-                                min-height: 34px;
-                                span,
-                                span i {
-                                    color: var(--color-white) !important;
-                                }
-                                .unit-mapping-icon {
-                                    filter: var(--filter-image-color-white);
                                 }
                             }
                         }

@@ -1840,7 +1840,7 @@
                                             id="update-ledger-description"
                                             rows="3"
                                             [(ngModel)]="vm.selectedLedger.description"
-                                            class="form-control mat-field-border"
+                                            class="form-control border"
                                             [placeholder]="commonLocaleData?.app_description"
                                         ></textarea>
                                     </mat-form-field>
@@ -2381,7 +2381,7 @@
                                                     <text-field
                                                         [type]="'text'"
                                                         [id]="'update-ledger-price-input'"
-                                                        [cssClass]="'form-control mat-field-border'"
+                                                        [cssClass]="'form-control border'"
                                                         [(ngModel)]="vm.selectedLedger.exchangeRate"
                                                         [readonly]="isEinvoiceGenerated"
                                                         (change)="exchangeRateChanged()"

@@ -9,9 +9,9 @@
     color: var(--text-primary-color);
 }
 */
-.s-no-column-width{ // -Create this for all columns which use in global
-    min-width: 40px;
-}
+// .s-no-column-width{ // -Create this for all columns which use in global
+//     min-width: 40px;
+// }
 
 /* UNUSED COMPONENT CLASS: voucher-type-dropdown - Auto-commented by script
 .voucher-type-dropdown {
@@ -63,8 +63,8 @@
     }
 }
 */
-@media only screen and (max-width: 767px) {
-    .basic > thead > tr > th {
-        min-width: initial;
-    }
-}
+// @media only screen and (max-width: 767px) {
+//     .basic > thead > tr > th {
+//         min-width: initial;
+//     }
+// }

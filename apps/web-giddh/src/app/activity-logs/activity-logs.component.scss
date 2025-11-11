@@ -84,6 +84,7 @@
         align-items: stretch;
         display: flex;
         flex-wrap: wrap;
+        row-gap: 5px;
     }
 
     /* UNUSED COMPONENT CLASS: filter-button - Auto-commented by script
@@ -152,7 +153,6 @@
         }
 
         .compare-json {
-            text-decoration: underline;
             text-decoration: underline;
             color: var(--text-primary-color);
             z-index: 99;

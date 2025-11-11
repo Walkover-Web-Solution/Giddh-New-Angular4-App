@@ -709,3 +709,10 @@
         right: 4px;
     }
 }
+
+.table-layout-auto {
+    table-layout: auto !important;
+}
+.table-layout-fixed {
+    table-layout: fixed !important;
+}

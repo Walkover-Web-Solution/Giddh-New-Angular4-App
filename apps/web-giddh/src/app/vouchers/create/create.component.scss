@@ -169,6 +169,7 @@
                             &.description {
                                 .description-text {
                                     word-wrap: break-word;
+                                    word-break: break-all;
                                 }
 
                                 .characters-left-text {
