@@ -783,7 +783,8 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     }
 
     /**
-     * Auto-detects country based on dial code and area code for NANP
+     * Auto-detects country based on dial code and area code using comprehensive mapping
+     * This method handles all duplicate dial code cases systematically
      * 
      * @param {string} value - Phone number with dial code
      * @private
@@ -795,227 +796,72 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             return;
         }
         
+        // First, try comprehensive area code detection for duplicate dial codes
+        const detectedCountry = this.detectCountryByAreaCode(value);
+        
+        if (detectedCountry) {
+            // Found a country using area code detection
+            if (this.selectedCountry?.code !== detectedCountry.code) {
+                this.selectedCountry = detectedCountry;
+                this.countryControl.setValue(detectedCountry, { emitEvent: false });
+                this.countrySetProgrammatically = true;
+                
+                // Extract mobile number without dial code
+                const mobileNumber = value.substring(detectedCountry.dialCode.length);
+                this.mobileControl.setValue(mobileNumber, { emitEvent: false });
+                
+                this.updateValidators();
+                this.countryChanged.emit(detectedCountry);
+            }
+            return;
+        }
+        
+        // If area code detection didn't work, fall back to standard dial code matching
         // Sort countries by dial code length (longest first) to match more specific codes first
-        // This ensures +1340 (US Virgin Islands) is matched before +1 (US)
         const sortedCountries = [...this.countries].sort((a, b) => b.dialCode.length - a.dialCode.length);
         
-        // First, try to find an exact match with longer dial codes
+        // Handle longer dial codes first (like +1340, +1684, etc.)
         for (const country of sortedCountries) {
             if (value.startsWith(country.dialCode) && value.length >= country.dialCode.length) {
-                // For longer dial codes (like +1340), we need exact match
-                if (country.dialCode.length > 2) {
-                    // Only select if we have the complete dial code
-                    if (value.length >= country.dialCode.length) {
-                        if (this.selectedCountry?.dialCode !== country.dialCode) {
-                            this.selectedCountry = country;
-                            this.countryControl.setValue(country, { emitEvent: false });
-                            this.countrySetProgrammatically = true;
-                            
-                            // Extract mobile number without dial code
-                            const mobileNumber = value.substring(country.dialCode.length);
-                            this.mobileControl.setValue(mobileNumber, { emitEvent: false });
-                            
-                            this.updateValidators();
-                            this.countryChanged.emit(country);
-                        }
-                        return; // Found exact match, stop here
-                    }
-                }
-            }
-        }
-        
-        // If no longer dial code matched, handle shorter ones (like +1 for NANP)
-        // Special handling for NANP (+1) - detect US vs Canada by area code
-        if (value.startsWith('+1')) {
-            // Check if this could be a longer dial code (like +1340)
-            // Don't auto-select +1 if the user might be typing a longer code
-            const potentialLongerCodes = sortedCountries.filter(c => 
-                c.dialCode.startsWith('+1') && c.dialCode.length > 2
-            );
-            
-            // Check if the current input could match any longer dial codes
-            const couldBeLongerCode = potentialLongerCodes.some(c => 
-                c.dialCode.startsWith(value) || value.startsWith(c.dialCode.substring(0, value.length))
-            );
-            
-            if (couldBeLongerCode && value.length < 6) {
-                // Don't auto-select yet, user might be typing a longer dial code
-                return;
-            }
-            
-            if (value.length >= 5) { // Need at least +1XX for area code detection
-                const detectedCountry = this.detectNANPCountry(value);
-                if (detectedCountry && this.selectedCountry?.code !== detectedCountry.code) {
-                    this.selectedCountry = detectedCountry;
-                    this.countryControl.setValue(detectedCountry, { emitEvent: false });
-                    this.countrySetProgrammatically = true;
-                    
-                    // Only extract mobile number if we have sufficient digits for area code detection
-                    if (value.length >= 5) {
-                        const mobileNumber = value.substring(detectedCountry.dialCode.length);
+                // For longer dial codes (4+ characters), require exact match
+                if (country.dialCode.length > 3) {
+                    if (this.selectedCountry?.dialCode !== country.dialCode) {
+                        this.selectedCountry = country;
+                        this.countryControl.setValue(country, { emitEvent: false });
+                        this.countrySetProgrammatically = true;
+                        
+                        // Extract mobile number without dial code
+                        const mobileNumber = value.substring(country.dialCode.length);
                         this.mobileControl.setValue(mobileNumber, { emitEvent: false });
+                        
+                        this.updateValidators();
+                        this.countryChanged.emit(country);
                     }
-                    
-                    this.updateValidators();
-                    this.countryChanged.emit(detectedCountry);
-                }
-            } else if (value.length >= 6) {
-                // Only default to US if we're sure it's not a longer dial code
-                const usCountry = this.countries.find(c => c.code === 'US');
-                if (usCountry && this.selectedCountry?.code !== usCountry.code) {
-                    this.selectedCountry = usCountry;
-                    this.countryControl.setValue(usCountry, { emitEvent: false });
-                    this.countrySetProgrammatically = true;
-                    this.updateValidators();
-                    this.countryChanged.emit(usCountry);
+                    return; // Found exact match, stop here
                 }
             }
-            return;
         }
         
-        // Special handling for +7 (Russia/Kazakhstan) - prioritize Russia as requested
-        if (value.startsWith('+7')) {
-            // Always default to Russia first for +7 (user preference)
-            const russiaCountry = this.countries.find(c => c.code === 'RU');
-            
-            if (value.length >= 5) { // Need at least +7XX for area code detection
-                const detectedCountry = this.detectRussiaKazakhstanCountry(value);
-                if (detectedCountry && this.selectedCountry?.code !== detectedCountry.code) {
-                    this.selectedCountry = detectedCountry;
-                    this.countryControl.setValue(detectedCountry, { emitEvent: false });
-                    this.countrySetProgrammatically = true;
-                    
-                    // Extract mobile number without dial code
-                    const mobileNumber = value.substring(detectedCountry.dialCode.length);
-                    this.mobileControl.setValue(mobileNumber, { emitEvent: false });
-                    
-                    this.updateValidators();
-                    this.countryChanged.emit(detectedCountry);
-                }
-            } else if (value.length >= 2 && russiaCountry) {
-                // Immediately default to Russia for +7 (user preference for priority)
-                if (this.selectedCountry?.code !== russiaCountry.code) {
-                    this.selectedCountry = russiaCountry;
-                    this.countryControl.setValue(russiaCountry, { emitEvent: false });
-                    this.countrySetProgrammatically = true;
-                    this.updateValidators();
-                    this.countryChanged.emit(russiaCountry);
-                }
-            }
-            return;
-        }
-        
-        // Special handling for +44 (UK and territories) - prioritize UK
-        if (value.startsWith('+44')) {
-            const ukCountry = this.countries.find(c => c.code === 'GB');
-            if (ukCountry && this.selectedCountry?.code !== ukCountry.code) {
-                this.selectedCountry = ukCountry;
-                this.countryControl.setValue(ukCountry, { emitEvent: false });
-                this.countrySetProgrammatically = true;
-                
-                // Extract mobile number without dial code
-                const mobileNumber = value.substring(ukCountry.dialCode.length);
-                this.mobileControl.setValue(mobileNumber, { emitEvent: false });
-                
-                this.updateValidators();
-                this.countryChanged.emit(ukCountry);
-            }
-            return;
-        }
-        
-        // Special handling for +39 (Italy and Vatican) - prioritize Italy
-        if (value.startsWith('+39')) {
-            const italyCountry = this.countries.find(c => c.code === 'IT');
-            if (italyCountry && this.selectedCountry?.code !== italyCountry.code) {
-                this.selectedCountry = italyCountry;
-                this.countryControl.setValue(italyCountry, { emitEvent: false });
-                this.countrySetProgrammatically = true;
-                
-                // Extract mobile number without dial code
-                const mobileNumber = value.substring(italyCountry.dialCode.length);
-                this.mobileControl.setValue(mobileNumber, { emitEvent: false });
-                
-                this.updateValidators();
-                this.countryChanged.emit(italyCountry);
-            }
-            return;
-        }
-        
-        // Special handling for +47 (Norway and Svalbard) - prioritize Norway
-        if (value.startsWith('+47')) {
-            const norwayCountry = this.countries.find(c => c.code === 'NO');
-            if (norwayCountry && this.selectedCountry?.code !== norwayCountry.code) {
-                this.selectedCountry = norwayCountry;
-                this.countryControl.setValue(norwayCountry, { emitEvent: false });
-                this.countrySetProgrammatically = true;
-                
-                // Extract mobile number without dial code
-                const mobileNumber = value.substring(norwayCountry.dialCode.length);
-                this.mobileControl.setValue(mobileNumber, { emitEvent: false });
-                
-                this.updateValidators();
-                this.countryChanged.emit(norwayCountry);
-            }
-            return;
-        }
-        
-        // Special handling for +64 (New Zealand and territories) - prioritize New Zealand
-        if (value.startsWith('+64')) {
-            const nzCountry = this.countries.find(c => c.code === 'NZ');
-            if (nzCountry && this.selectedCountry?.code !== nzCountry.code) {
-                this.selectedCountry = nzCountry;
-                this.countryControl.setValue(nzCountry, { emitEvent: false });
-                this.countrySetProgrammatically = true;
-                
-                // Extract mobile number without dial code
-                const mobileNumber = value.substring(nzCountry.dialCode.length);
-                this.mobileControl.setValue(mobileNumber, { emitEvent: false });
-                
-                this.updateValidators();
-                this.countryChanged.emit(nzCountry);
-            }
-            return;
-        }
-        
-        // Special handling for +212 (Morocco and Western Sahara) - prioritize Morocco
-        if (value.startsWith('+212')) {
-            const moroccoCountry = this.countries.find(c => c.code === 'MA');
-            if (moroccoCountry && this.selectedCountry?.code !== moroccoCountry.code) {
-                this.selectedCountry = moroccoCountry;
-                this.countryControl.setValue(moroccoCountry, { emitEvent: false });
-                this.countrySetProgrammatically = true;
-                
-                // Extract mobile number without dial code
-                const mobileNumber = value.substring(moroccoCountry.dialCode.length);
-                this.mobileControl.setValue(mobileNumber, { emitEvent: false });
-                
-                this.updateValidators();
-                this.countryChanged.emit(moroccoCountry);
-            }
-            return;
-        }
-        
-        // Special handling for +262 (Reunion and Mayotte) - prioritize Reunion
-        if (value.startsWith('+262')) {
-            const reunionCountry = this.countries.find(c => c.code === 'RE');
-            if (reunionCountry && this.selectedCountry?.code !== reunionCountry.code) {
-                this.selectedCountry = reunionCountry;
-                this.countryControl.setValue(reunionCountry, { emitEvent: false });
-                this.countrySetProgrammatically = true;
-                
-                // Extract mobile number without dial code
-                const mobileNumber = value.substring(reunionCountry.dialCode.length);
-                this.mobileControl.setValue(mobileNumber, { emitEvent: false });
-                
-                this.updateValidators();
-                this.countryChanged.emit(reunionCountry);
-            }
-            return;
-        }
-        
-        // Handle other dial codes (non-duplicate cases)
+        // Handle shorter dial codes (2-3 characters) with caution for potential longer codes
         for (const country of sortedCountries) {
             if (value.startsWith(country.dialCode) && value.length >= country.dialCode.length) {
+                // Check if this could be part of a longer dial code
+                const potentialLongerCodes = sortedCountries.filter(c => 
+                    c.dialCode.startsWith(country.dialCode) && c.dialCode.length > country.dialCode.length
+                );
+                
+                // If there are potential longer codes and input is short, wait for more input
+                if (potentialLongerCodes.length > 0 && value.length < 6) {
+                    const couldBeLongerCode = potentialLongerCodes.some(c => 
+                        value.startsWith(c.dialCode.substring(0, Math.min(value.length, c.dialCode.length)))
+                    );
+                    
+                    if (couldBeLongerCode) {
+                        continue; // Don't select yet, might be a longer code
+                    }
+                }
+                
+                // Safe to select this country
                 if (this.selectedCountry?.dialCode !== country.dialCode) {
                     this.selectedCountry = country;
                     this.countryControl.setValue(country, { emitEvent: false });
@@ -1028,116 +874,276 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                     this.updateValidators();
                     this.countryChanged.emit(country);
                 }
-                break;
+                return;
             }
         }
     }
 
     /**
-     * Detects US vs Canada for NANP numbers based on area code
+     * Comprehensive area code mapping for all countries with duplicate dial codes
+     * Based on ITU-T recommendations and official telecommunications data
+     * Updated with complete verification table from official sources
      * 
-     * @param {string} value - Phone number starting with +1
-     * @returns {Country | null} Detected country or null
      * @private
      * @memberof MobileNumberInputComponent
      */
-    private detectNANPCountry(value: string): Country | null {
-        // Extract area code (first 3 digits after +1)
-        const numberPart = value.substring(2); // Remove +1
-        const areaCode = numberPart.substring(0, 3);
-        
-        if (areaCode.length !== 3) {
-            // Default to US if area code is incomplete
-            return this.countries.find(c => c.code === 'US') || null;
+    private readonly AREA_CODE_MAPPINGS: { [dialCode: string]: { [areaCode: string]: string } } = {
+        // +1 NANP (North American Numbering Plan)
+        '+1': {
+            // Canada area codes
+            '204': 'CA', '226': 'CA', '236': 'CA', '249': 'CA', '250': 'CA', '289': 'CA', '306': 'CA', '343': 'CA',
+            '354': 'CA', '365': 'CA', '367': 'CA', '403': 'CA', '416': 'CA', '418': 'CA', '431': 'CA', '437': 'CA',
+            '438': 'CA', '450': 'CA', '506': 'CA', '514': 'CA', '519': 'CA', '548': 'CA', '579': 'CA', '581': 'CA',
+            '587': 'CA', '604': 'CA', '613': 'CA', '639': 'CA', '647': 'CA', '672': 'CA', '705': 'CA', '709': 'CA',
+            '778': 'CA', '782': 'CA', '807': 'CA', '819': 'CA', '825': 'CA', '867': 'CA', '873': 'CA', '902': 'CA', '905': 'CA',
+            // Caribbean and territories
+            '242': 'BS', '246': 'BB', '264': 'AI', '268': 'AG', '284': 'VG', '340': 'VI', '345': 'KY',
+            '441': 'BM', '473': 'GD', '649': 'TC', '658': 'JM', '664': 'MS', '670': 'MP', '671': 'GU',
+            '684': 'AS', '721': 'SX', '758': 'LC', '767': 'DM', '784': 'VC', '787': 'PR', '809': 'DO',
+            '829': 'DO', '849': 'DO', '868': 'TT', '869': 'KN', '876': 'JM', '939': 'PR'
+            // All other +1 numbers default to US
+        },
+        // +7 Russia, Kazakhstan, and territories
+        '+7': {
+            // Kazakhstan area codes (6xx and 7xx ranges per ITU agreement)
+            '600': 'KZ', '601': 'KZ', '602': 'KZ', '603': 'KZ', '604': 'KZ', '605': 'KZ', '606': 'KZ', '607': 'KZ',
+            '608': 'KZ', '609': 'KZ', '610': 'KZ', '611': 'KZ', '612': 'KZ', '613': 'KZ', '614': 'KZ', '615': 'KZ',
+            '616': 'KZ', '617': 'KZ', '618': 'KZ', '619': 'KZ', '620': 'KZ', '621': 'KZ', '622': 'KZ', '623': 'KZ',
+            '624': 'KZ', '625': 'KZ', '626': 'KZ', '627': 'KZ', '628': 'KZ', '629': 'KZ', '630': 'KZ', '631': 'KZ',
+            '632': 'KZ', '633': 'KZ', '634': 'KZ', '635': 'KZ', '636': 'KZ', '637': 'KZ', '638': 'KZ', '639': 'KZ',
+            '640': 'KZ', '641': 'KZ', '642': 'KZ', '643': 'KZ', '644': 'KZ', '645': 'KZ', '646': 'KZ', '647': 'KZ',
+            '648': 'KZ', '649': 'KZ', '650': 'KZ', '651': 'KZ', '652': 'KZ', '653': 'KZ', '654': 'KZ', '655': 'KZ',
+            '656': 'KZ', '657': 'KZ', '658': 'KZ', '659': 'KZ', '660': 'KZ', '661': 'KZ', '662': 'KZ', '663': 'KZ',
+            '664': 'KZ', '665': 'KZ', '666': 'KZ', '667': 'KZ', '668': 'KZ', '669': 'KZ', '670': 'KZ', '671': 'KZ',
+            '672': 'KZ', '673': 'KZ', '674': 'KZ', '675': 'KZ', '676': 'KZ', '677': 'KZ', '678': 'KZ', '679': 'KZ',
+            '680': 'KZ', '681': 'KZ', '682': 'KZ', '683': 'KZ', '684': 'KZ', '685': 'KZ', '686': 'KZ', '687': 'KZ',
+            '688': 'KZ', '689': 'KZ', '690': 'KZ', '691': 'KZ', '692': 'KZ', '693': 'KZ', '694': 'KZ', '695': 'KZ',
+            '696': 'KZ', '697': 'KZ', '698': 'KZ', '699': 'KZ', '700': 'KZ', '701': 'KZ', '702': 'KZ', '703': 'KZ',
+            '704': 'KZ', '705': 'KZ', '706': 'KZ', '707': 'KZ', '708': 'KZ', '709': 'KZ', '710': 'KZ', '711': 'KZ',
+            '712': 'KZ', '713': 'KZ', '714': 'KZ', '715': 'KZ', '716': 'KZ', '717': 'KZ', '718': 'KZ', '719': 'KZ',
+            '720': 'KZ', '721': 'KZ', '722': 'KZ', '723': 'KZ', '724': 'KZ', '725': 'KZ', '726': 'KZ', '727': 'KZ',
+            '728': 'KZ', '729': 'KZ', '730': 'KZ', '731': 'KZ', '732': 'KZ', '733': 'KZ', '734': 'KZ', '735': 'KZ',
+            '736': 'KZ', '737': 'KZ', '738': 'KZ', '739': 'KZ', '740': 'KZ', '741': 'KZ', '742': 'KZ', '743': 'KZ',
+            '744': 'KZ', '745': 'KZ', '746': 'KZ', '747': 'KZ', '748': 'KZ', '749': 'KZ', '750': 'KZ', '751': 'KZ',
+            '752': 'KZ', '753': 'KZ', '754': 'KZ', '755': 'KZ', '756': 'KZ', '757': 'KZ', '758': 'KZ', '759': 'KZ',
+            '760': 'KZ', '761': 'KZ', '762': 'KZ', '763': 'KZ', '764': 'KZ', '765': 'KZ', '766': 'KZ', '767': 'KZ',
+            '768': 'KZ', '769': 'KZ', '770': 'KZ', '771': 'KZ', '772': 'KZ', '773': 'KZ', '774': 'KZ', '775': 'KZ',
+            '776': 'KZ', '777': 'KZ', '778': 'KZ', '779': 'KZ', '780': 'KZ', '781': 'KZ', '782': 'KZ', '783': 'KZ',
+            '784': 'KZ', '785': 'KZ', '786': 'KZ', '787': 'KZ', '788': 'KZ', '789': 'KZ', '790': 'KZ', '791': 'KZ',
+            '792': 'KZ', '793': 'KZ', '794': 'KZ', '795': 'KZ', '796': 'KZ', '797': 'KZ', '798': 'KZ', '799': 'KZ'
+            // All other +7 numbers default to Russia (RU)
+        },
+        // +20 Egypt and Western Sahara
+        '+20': {
+            '5288': 'EH', '5289': 'EH' // Western Sahara area codes
+            // All other +20 numbers default to Egypt (EG)
+        },
+        // +27 South Africa and territories
+        '+27': {
+            // South Africa uses various city codes (11=Johannesburg, 21=Cape Town, etc.)
+            // Prince Edward Islands are minor case, default to South Africa
+        },
+        // +30 Greece and Mount Athos
+        '+30': {
+            '23770': 'GR' // Mount Athos (autonomous monastic state, but still Greece)
+            // All other +30 numbers default to Greece (GR)
+        },
+        // +31 Netherlands and Caribbean Netherlands
+        '+31': {
+            '7': 'BQ' // Caribbean Netherlands (Bonaire, Saba, Sint Eustatius)
+            // All other +31 numbers default to Netherlands (NL)
+        },
+        // +33 France and overseas territories
+        '+33': {
+            // All French overseas territories use +33 with geographic prefixes
+            // Default to France (FR) as they're all part of France
+        },
+        // +34 Spain, Ceuta and Melilla
+        '+34': {
+            '856': 'ES', '952': 'ES' // Ceuta (856) and Melilla (952) - autonomous cities
+            // All other +34 numbers default to Spain (ES)
+        },
+        // +39 Italy, Vatican City, San Marino
+        '+39': {
+            '06698': 'VA', '0549': 'SM' // Vatican City and San Marino
+            // All other +39 numbers default to Italy (IT)
+        },
+        // +41 Switzerland and Liechtenstein
+        '+41': {
+            '75': 'LI' // Liechtenstein (Vaduz area code)
+            // All other +41 numbers default to Switzerland (CH)
+        },
+        // +44 UK and Crown Dependencies
+        '+44': {
+            // Landline area codes
+            '1481': 'GG', '1534': 'JE', '1624': 'IM', '28': 'GB', // Northern Ireland uses 28
+            // Mobile prefixes
+            '7524': 'IM', '7624': 'IM', '7924': 'IM', // Isle of Man mobile
+            '7781': 'GG', '7839': 'GG', '7911': 'GG', // Guernsey mobile  
+            '7797': 'JE', '7829': 'JE', '7937': 'JE'  // Jersey mobile
+            // All other +44 numbers default to United Kingdom (GB)
+        },
+        // +47 Norway, Svalbard, Jan Mayen
+        '+47': {
+            '79': 'SJ' // Svalbard and Jan Mayen
+            // All other +47 numbers default to Norway (NO)
+        },
+        // +48 Poland and Antarctic station
+        '+48': {
+            '813300': 'PL' // H. Arctowski Antarctic station (special case)
+            // All other +48 numbers default to Poland (PL)
+        },
+        // +49 Germany and Heligoland
+        '+49': {
+            '04725': 'DE' // Heligoland island (still Germany)
+            // All other +49 numbers default to Germany (DE)
+        },
+        // +52 Mexico and Revillagigedo Islands
+        '+52': {
+            // Revillagigedo Islands are part of Mexican numbering plan
+            // All +52 numbers default to Mexico (MX)
+        },
+        // +54 Argentina and Antarctic Territory
+        '+54': {
+            '901': 'AR' // Argentine Antarctica bases
+            // All other +54 numbers default to Argentina (AR)
+        },
+        // +56 Chile, Easter Island, Antarctic Territory
+        '+56': {
+            '32': 'CL' // Easter Island (still Chile)
+            // All other +56 numbers default to Chile (CL)
+        },
+        // +61 Australia and external territories
+        '+61': {
+            '89162': 'CC', '89164': 'CX', '3': 'NF' // Cocos, Christmas, Norfolk Islands
+            // All other +61 numbers default to Australia (AU)
+        },
+        // +64 New Zealand and territories
+        '+64': {
+            '9': 'PN' // Pitcairn Islands
+            // All other +64 numbers default to New Zealand (NZ)
+        },
+        // +290 Saint Helena and Tristan da Cunha
+        '+290': {
+            '8': 'TA' // Tristan da Cunha
+            // All other +290 numbers default to Saint Helena (SH)
+        },
+        // +358 Finland and Åland Islands
+        '+358': {
+            '18': 'AX' // Åland Islands
+            // All other +358 numbers default to Finland (FI)
+        },
+        // +500 Falkland Islands and South Georgia
+        '+500': {
+            '3': 'GS' // South Georgia and South Sandwich Islands
+            // All other +500 numbers default to Falkland Islands (FK)
+        },
+        // +590 Guadeloupe, Saint Barthélemy, Saint Martin
+        '+590': {
+            // All use +590 with different geographic prefixes
+            // Default to Guadeloupe (GP)
+        },
+        // +599 Curaçao and former Netherlands Antilles
+        '+599': {
+            '3': 'BQ', '4': 'BQ', '7': 'BQ', '9': 'CW' // Caribbean Netherlands and Curaçao
+            // Note: Bonaire, Saba, Sint Eustatius now use +31 since 2011
         }
-        
-        // Canadian area codes
-        const canadianAreaCodes = [
-            // Alberta
-            '403', '587', '825',
-            // British Columbia
-            '236', '250', '604', '672', '778',
-            // Manitoba
-            '204', '431',
-            // New Brunswick
-            '506',
-            // Newfoundland and Labrador
-            '709',
-            // Northwest Territories
-            '867',
-            // Nova Scotia
-            '782', '902',
-            // Nunavut
-            '867',
-            // Ontario
-            '226', '249', '289', '343', '365', '416', '437', '519', '548', '613', '647', '705', '807', '905',
-            // Prince Edward Island
-            '902',
-            // Quebec
-            '354', '367', '418', '438', '450', '514', '579', '581', '819', '873',
-            // Saskatchewan
-            '306', '639',
-            // Yukon
-            '867'
-        ];
-        
-        if (canadianAreaCodes.includes(areaCode)) {
-            return this.countries.find(c => c.code === 'CA') || null;
-        } else {
-            return this.countries.find(c => c.code === 'US') || null;
-        }
-    }
+    };
 
     /**
-     * Detects Russia vs Kazakhstan for +7 numbers based on area code
+     * Default country mappings for dial codes with multiple countries
+     * Used when area code detection fails or is incomplete
+     * Updated with complete verification table
      * 
-     * @param {string} value - Phone number starting with +7
+     * @private
+     * @memberof MobileNumberInputComponent
+     */
+    private readonly DEFAULT_COUNTRY_MAPPINGS: { [dialCode: string]: string } = {
+        '+1': 'US',   // Default to United States for NANP
+        '+7': 'RU',   // Default to Russia
+        '+20': 'EG',  // Default to Egypt
+        '+27': 'ZA',  // Default to South Africa
+        '+30': 'GR',  // Default to Greece
+        '+31': 'NL',  // Default to Netherlands
+        '+33': 'FR',  // Default to France
+        '+34': 'ES',  // Default to Spain
+        '+39': 'IT',  // Default to Italy
+        '+41': 'CH',  // Default to Switzerland
+        '+44': 'GB',  // Default to United Kingdom
+        '+47': 'NO',  // Default to Norway
+        '+48': 'PL',  // Default to Poland
+        '+49': 'DE',  // Default to Germany
+        '+52': 'MX',  // Default to Mexico
+        '+54': 'AR',  // Default to Argentina
+        '+56': 'CL',  // Default to Chile
+        '+61': 'AU',  // Default to Australia
+        '+64': 'NZ',  // Default to New Zealand
+        '+290': 'SH', // Default to Saint Helena
+        '+358': 'FI', // Default to Finland
+        '+500': 'FK', // Default to Falkland Islands
+        '+590': 'GP', // Default to Guadeloupe
+        '+599': 'CW'  // Default to Curaçao
+    };
+
+    /**
+     * Detects the correct country based on dial code and area code
+     * This is a comprehensive solution for all duplicate dial code cases
+     * 
+     * @param {string} phoneNumber - Complete phone number with dial code
      * @returns {Country | null} Detected country or null
      * @private
      * @memberof MobileNumberInputComponent
      */
-    private detectRussiaKazakhstanCountry(value: string): Country | null {
-        // Extract area code (first 3 digits after +7)
-        const numberPart = value.substring(2); // Remove +7
-        const areaCode = numberPart.substring(0, 3);
-        
-        if (areaCode.length !== 3) {
-            // Default to Russia if area code is incomplete (more common)
-            return this.countries.find(c => c.code === 'RU') || null;
+    private detectCountryByAreaCode(phoneNumber: string): Country | null {
+        if (!phoneNumber.startsWith('+')) {
+            return null;
         }
+
+        // Find the dial code
+        let dialCode = '';
+        let numberPart = '';
         
-        // Kazakhstan area codes (6xx and 7xx ranges as per ITU agreement)
-        const kazakhstanAreaCodes = [
-            // 6xx range for Kazakhstan
-            '600', '601', '602', '603', '604', '605', '606', '607', '608', '609',
-            '610', '611', '612', '613', '614', '615', '616', '617', '618', '619',
-            '620', '621', '622', '623', '624', '625', '626', '627', '628', '629',
-            '630', '631', '632', '633', '634', '635', '636', '637', '638', '639',
-            '640', '641', '642', '643', '644', '645', '646', '647', '648', '649',
-            '650', '651', '652', '653', '654', '655', '656', '657', '658', '659',
-            '660', '661', '662', '663', '664', '665', '666', '667', '668', '669',
-            '670', '671', '672', '673', '674', '675', '676', '677', '678', '679',
-            '680', '681', '682', '683', '684', '685', '686', '687', '688', '689',
-            '690', '691', '692', '693', '694', '695', '696', '697', '698', '699',
-            // 7xx range for Kazakhstan
-            '700', '701', '702', '703', '704', '705', '706', '707', '708', '709',
-            '710', '711', '712', '713', '714', '715', '716', '717', '718', '719',
-            '720', '721', '722', '723', '724', '725', '726', '727', '728', '729',
-            '730', '731', '732', '733', '734', '735', '736', '737', '738', '739',
-            '740', '741', '742', '743', '744', '745', '746', '747', '748', '749',
-            '750', '751', '752', '753', '754', '755', '756', '757', '758', '759',
-            '760', '761', '762', '763', '764', '765', '766', '767', '768', '769',
-            '770', '771', '772', '773', '774', '775', '776', '777', '778', '779',
-            '780', '781', '782', '783', '784', '785', '786', '787', '788', '789',
-            '790', '791', '792', '793', '794', '795', '796', '797', '798', '799'
-        ];
+        // Try to match dial codes from longest to shortest
+        const sortedDialCodes = Object.keys(this.AREA_CODE_MAPPINGS).sort((a, b) => b.length - a.length);
         
-        if (kazakhstanAreaCodes.includes(areaCode)) {
-            return this.countries.find(c => c.code === 'KZ') || null;
-        } else {
-            // All other area codes belong to Russia
-            return this.countries.find(c => c.code === 'RU') || null;
+        for (const code of sortedDialCodes) {
+            if (phoneNumber.startsWith(code)) {
+                dialCode = code;
+                numberPart = phoneNumber.substring(code.length);
+                break;
+            }
         }
+
+        if (!dialCode || !this.AREA_CODE_MAPPINGS[dialCode]) {
+            return null;
+        }
+
+        const areaCodeMap = this.AREA_CODE_MAPPINGS[dialCode];
+        
+        // Try different area code lengths (from longest to shortest for better matching)
+        const maxAreaCodeLength = Math.max(...Object.keys(areaCodeMap).map(code => code.length));
+        
+        for (let length = maxAreaCodeLength; length >= 2; length--) {
+            if (numberPart.length >= length) {
+                const areaCode = numberPart.substring(0, length);
+                const countryCode = areaCodeMap[areaCode];
+                
+                if (countryCode) {
+                    const country = this.countries.find(c => c.code === countryCode);
+                    if (country) {
+                        return country;
+                    }
+                }
+            }
+        }
+
+        // If no area code match found, use default country for this dial code
+        const defaultCountryCode = this.DEFAULT_COUNTRY_MAPPINGS[dialCode];
+        if (defaultCountryCode) {
+            return this.countries.find(c => c.code === defaultCountryCode) || null;
+        }
+
+        return null;
     }
 
     /**
