@@ -370,14 +370,26 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             variantUniqueName: this.bulkStockData.value[selectTableRowIndex].variantUniqueName
         }
         const unitFields = ['fixedAssetUnits', 'purchaseUnits', 'salesUnits'];
-        Object.keys(this.bulkStockData.value[selectTableRowIndex]).forEach(key => {
+        const customFields = ['customFields'];
+        const currentFieldsData = this.bulkStockData.value[selectTableRowIndex];
+        Object.keys(currentFieldsData).forEach(key => {
             if (unitFields.includes(key)) {
-                if (!isEqual(this.bulkStockData.value[selectTableRowIndex][key], this.dropdownValues[selectTableRowIndex][key][0]?.uniqueName)) {
-                    requestBody[key] = this.bulkStockData.value[selectTableRowIndex][key] ? [{uniqueName: this.bulkStockData.value[selectTableRowIndex][key]}] : [];
+                if (!isEqual(currentFieldsData[key], this.dropdownValues[selectTableRowIndex][key][0]?.uniqueName)) {
+                    requestBody[key] = currentFieldsData[key] ? [{uniqueName: currentFieldsData[key]}] : [];
+                }
+            } else if(customFields.includes(key)) {
+                requestBody[key] = [];
+                currentFieldsData[key].forEach((item: any, index: number) => {
+                    if (!isEqual(item, this.dropdownValues[selectTableRowIndex][key][index])) {
+                        requestBody[key].push(item);
+                    }
+                });
+                if (requestBody[key].length === 0) {
+                    delete requestBody[key];
                 }
             } else {
-                if (!isEqual(this.bulkStockData.value[selectTableRowIndex][key], this.dropdownValues[selectTableRowIndex][key])) {
-                    requestBody[key] = this.bulkStockData.value[selectTableRowIndex][key];
+                if (!isEqual(currentFieldsData[key], this.dropdownValues[selectTableRowIndex][key])) {
+                    requestBody[key] = currentFieldsData[key];
                 }
             }
         });
@@ -508,8 +520,32 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             skuCode: [controlValue.skuCode, Validators.required],
             archive: [controlValue.archive, Validators.required],
             taxes: [controlValue.taxes, Validators.required],
-            customFields: [controlValue.customFields]
+            customFields: this.createCustomFieldsFormArray(controlValue.customFields)
         })
+    }
+
+    /**
+     * Creates FormArray for custom fields
+     * 
+     * @param {any[]} customFields - Array of custom field objects
+     * @returns {FormArray} FormArray containing FormGroups for each custom field
+     * @memberof BulkStockEditComponent
+     */
+    private createCustomFieldsFormArray(customFields: any[]): FormArray {
+        const formArray = this.formBuilder.array([]);
+        
+        if (customFields && customFields.length > 0) {
+            customFields.forEach(field => {
+                formArray.push(this.formBuilder.group({
+                    key: [field.key || ''],
+                    value: [field.value || ''],
+                    uniqueName: [field.uniqueName || ''],
+                    dataType: [field.dataType || '']
+                }));
+            });
+        }
+        
+        return formArray;
     }
 
     /**
@@ -569,7 +605,17 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.inventoryStore.updateInventoryVariantSuccess$.pipe(filter(Boolean), take(1)).subscribe((response) => {
             if (response) {
                 Object.keys(response).forEach(key => {
-                    this.dropdownValues[selectTableRowIndex][key] = response[key];
+                    if (key === 'customFields') {
+                        response[key].forEach((field: any) => {
+                            this.dropdownValues[selectTableRowIndex][key].forEach((customField: any, customFieldIndex: number) => {
+                                if (customField.uniqueName === field.uniqueName) {
+                                    this.dropdownValues[selectTableRowIndex][key][customFieldIndex] = field;
+                                }
+                            });
+                        });
+                    } else {
+                        this.dropdownValues[selectTableRowIndex][key] = response[key];
+                    }
                 });
             }
         });
