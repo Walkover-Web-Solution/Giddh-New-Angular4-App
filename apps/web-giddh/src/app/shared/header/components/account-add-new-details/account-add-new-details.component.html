@@ -261,7 +261,7 @@
                 class="gstin-address"
                 *ngIf="!isHsnSacEnabledAcc"
             >
-                <div class="pd-t15 overflow-hidden" formArrayName="addresses" *ngIf="isTabActivated(0)">
+                <div class="pd-t15 overflow-hidden" formArrayName="addresses">
                     <ng-container
                         *ngFor="
                             let gst of addAccountForm.get('addresses')['controls']
@@ -445,7 +445,7 @@
             </mat-tab>
 
             <mat-tab [label]="localeData?.tabs?.contact" class="contact-form-wrap">
-                <div class="pd-t15 overflow-hidden padding-bottom-100" *ngIf="isTabActivated(1)">
+                <div class="pd-t15 overflow-hidden padding-bottom-100" *ngIf="isTabActivated(localeData?.tabs?.contact)">
                     <div class="row pd-b2">
                         <div class="col-sm-6">
                             <input-field
@@ -519,7 +519,7 @@
                 class="contact-form-wrap"
                 *ngIf="voucherApiVersion === 2 && (activeGroupUniqueName === accountingGroupEnum.SundryDebtors || isParentSundrydebtors)"
             >
-                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100" *ngIf="isTabActivated(2)">
+                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100" *ngIf="isTabActivated(localeData?.tabs?.portal)">
                     <div
                         class="row pd-b2"
                         *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
@@ -626,7 +626,7 @@
             </mat-tab>
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
             <mat-tab [label]="localeData?.tabs?.bank_details" class="bank-details-form" *ngIf="showBankDetail">
-                <div class="pd-t15 overflow-hidden" *ngIf="isTabActivated(3)">
+                <div class="pd-t15 overflow-hidden">
                     <div formArrayName="accountBankDetails">
                         <div
                             class="row"
@@ -730,7 +730,7 @@
             </mat-tab>
 
             <mat-tab [label]="localeData?.tabs?.others" class="other-form-wrap">
-                <div class="pd-t15 overflow-hidden" *ngIf="isTabActivated(4)">
+                <div class="pd-t15 overflow-hidden">
                     <div class="row">
                         <div class="col-sm-6">
                             <input-field
@@ -835,8 +835,8 @@
             </mat-tab>
 
             <mat-tab [label]="localeData?.tabs?.custom">
-                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading && selectedTabIndex === 5"></giddh-page-loader>
-                <div class="pd-t15 overflow-hidden" *ngIf="isTabActivated(5)">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
+                <div class="pd-t15 overflow-hidden">
                     <ng-container formArrayName="customFields">
                         <ng-container
                             *ngFor="let item of companyCustomFields; let index = index; let first = first; let last = last"
