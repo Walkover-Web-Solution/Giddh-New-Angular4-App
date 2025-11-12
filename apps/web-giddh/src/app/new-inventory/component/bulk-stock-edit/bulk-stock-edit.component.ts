@@ -187,6 +187,14 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public selectTableRowName: string = '';
     /** This will use for instance of tax Dropdown */
     public taxDropdown: FormControl = new FormControl();
+    /** Holds list of selected taxes */
+    public selectedTaxes: any[] = [];
+    /** True if tax selection box is open */
+    public isTaxSelectionOpen: boolean = false;
+    /** Holds list of taxes processed while tax selection box was closed */
+    public processedTaxes: any[] = [];
+    /** Temporary array to hold selected taxes */
+    public taxTempArray: any[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -427,18 +435,134 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length > 0) {
-                this.taxes = response.map((item: any) => {
-                    return {
-                        label: item.name,
-                        value: item.uniqueName,
-                        additional: item
-                    }
-                }) || [];
+                this.taxes = response || [];
                 this.taxes$ = of(this.taxes);
                 this.filteredTaxesList = this.taxes;
             }
             this.cdr.detectChanges();
         });
+    }
+
+    /**
+     * Select tax for bulk stock edit - adapted for multiple rows
+     *
+     * @param {*} taxSelected - Selected tax object
+     * @memberof BulkStockEditComponent
+     */
+    public selectTax(taxSelected: any, selectTableRowIndex: number): void {
+        if (!taxSelected) {
+            return;
+        }
+
+        // For bulk edit, we need to handle tax selection per row
+        const currentRowIndex = selectTableRowIndex;
+        if (currentRowIndex === -1) {
+            return;
+        }
+
+        // Initialize row-specific tax arrays if not exists
+        if (!this.selectedTaxes[currentRowIndex]) {
+            this.selectedTaxes[currentRowIndex] = [];
+        }
+        if (!this.taxTempArray[currentRowIndex]) {
+            this.taxTempArray[currentRowIndex] = [];
+        }
+
+        if (!this.isTaxSelectionOpen) {
+            if (this.processedTaxes.includes(taxSelected.uniqueName)) {
+                return;
+            }
+            this.processedTaxes.push(taxSelected.uniqueName);
+        }
+
+        let isSelected = this.selectedTaxes[currentRowIndex]?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
+        
+        if (taxSelected.taxType !== 'gstcess') {
+            let index = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp.taxType === taxSelected.taxType);
+            
+            if (index > -1 && !isSelected?.length) {
+                this.taxes.forEach((tax) => {
+                    if (tax.taxType === taxSelected.taxType) {
+                        tax.isChecked = false;
+                        tax.isDisabled = true;
+                    }
+                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && 
+                        (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
+                        tax.isChecked = false;
+                        tax.isDisabled = true;
+                    }
+                });
+            }
+
+            if (index < 0 && !isSelected?.length) {
+                this.taxes.forEach((tax) => {
+                    if (tax.taxType === taxSelected.taxType) {
+                        tax.isChecked = false;
+                        tax.isDisabled = true;
+                    }
+
+                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && 
+                        (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
+                        tax.isChecked = false;
+                        tax.isDisabled = true;
+                    }
+                    if (tax?.uniqueName === taxSelected.uniqueName) {
+                        taxSelected.isChecked = true;
+                        taxSelected.isDisabled = false;
+                        this.taxTempArray[currentRowIndex].push(taxSelected);
+                    }
+                });
+            } else if (index > -1 && !isSelected?.length) {
+                taxSelected.isChecked = true;
+                taxSelected.isDisabled = false;
+                this.taxTempArray[currentRowIndex] = this.taxTempArray[currentRowIndex]?.filter(taxTemp => {
+                    return taxSelected.taxType !== taxTemp.taxType;
+                });
+                this.taxTempArray[currentRowIndex].push(taxSelected);
+            } else {
+                let idx = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp?.uniqueName === taxSelected.uniqueName);
+                this.taxTempArray[currentRowIndex].splice(idx, 1);
+                taxSelected.isChecked = false;
+                this.taxes.forEach((tax) => {
+                    if (tax.taxType === taxSelected.taxType) {
+                        tax.isDisabled = false;
+                    }
+                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && 
+                        (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
+                        tax.isDisabled = false;
+                    }
+                });
+            }
+        } else {
+            if (!isSelected?.length) {
+                this.taxTempArray[currentRowIndex].push(taxSelected);
+                taxSelected.isChecked = true;
+            } else {
+                let idx = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp?.uniqueName === taxSelected.uniqueName);
+                this.taxTempArray[currentRowIndex].splice(idx, 1);
+                taxSelected.isChecked = false;
+            }
+        }
+        
+        // Update selected taxes for current row
+        this.selectedTaxes[currentRowIndex] = this.taxTempArray[currentRowIndex].map(tax => tax?.uniqueName);
+        
+        this.cdr.detectChanges();
+    }
+
+    /**
+     * Handle tax dropdown open/close events
+     *
+     * @param {boolean} isOpen - Whether the dropdown is open
+     * @memberof BulkStockEditComponent
+     */
+    public openedSelectTax(isOpen: boolean): void {
+        this.isTaxSelectionOpen = isOpen;
+        
+        if (!isOpen) {
+            // When dropdown closes, clear processed taxes for this session
+            this.processedTaxes = [];
+        }
     }
 
     /**

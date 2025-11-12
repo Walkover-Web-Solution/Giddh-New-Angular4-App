@@ -1007,6 +1007,7 @@
                                                 <td
                                                     *ngIf="tableHeaderShowHide.archive"
                                                     (click)="getInputIndex(i, 'archive')"
+                                                    (clickOutside)="menuTrigger?.closeMenu()"
                                                     class="min-width-140"
                                                 >
                                                     <div class="border-line">
@@ -1019,27 +1020,18 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            <span *ngIf="selectTableRowIndex !== i">
-                                                                {{
+                                                            <div [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">{{
+                                                                row.get("archive").value
+                                                                    ? commonLocaleData?.app_yes
+                                                                    : commonLocaleData?.app_no
+                                                            }}</div>
+                                                            <mat-menu #menu="matMenu" [hasBackdrop]="false">
+                                                                <button mat-menu-item (click)="$event.stopPropagation(); row.get('archive').patchValue(!row.get('archive').value); menuTrigger.closeMenu()">{{
                                                                     row.get("archive").value
-                                                                        ? commonLocaleData?.app_yes
-                                                                        : commonLocaleData?.app_no
-                                                                }}
-                                                            </span>
-                                                            <ng-container *ngIf="selectTableRowIndex == i">
-                                                                <div [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">{{
-                                                                    row.get("archive").value
-                                                                        ? commonLocaleData?.app_yes
-                                                                        : commonLocaleData?.app_no
-                                                                }}</div>
-                                                                <mat-menu #menu="matMenu">
-                                                                    <button mat-menu-item (click)="$event.stopPropagation(); row.get('archive').patchValue(!row.get('archive').value); menuTrigger.closeMenu()">{{
-                                                                        row.get("archive").value
-                                                                            ? commonLocaleData?.app_no
-                                                                            : commonLocaleData?.app_yes
-                                                                    }}</button>
-                                                                </mat-menu>
-                                                            </ng-container>
+                                                                        ? commonLocaleData?.app_no
+                                                                        : commonLocaleData?.app_yes
+                                                                }}</button>
+                                                            </mat-menu>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -1067,6 +1059,7 @@
                                                                 name="salesPerson"
                                                                 [multiple]="true"
                                                                 formControlName="taxes"
+                                                                (openedChange)="openedSelectTax($event)"
                                                             >
                                                                 <mat-option class="mt-0">
                                                                     <ngx-mat-select-search
@@ -1077,9 +1070,24 @@
                                                                         <i class="icon-cross" ngxMatSelectSearchClear></i>
                                                                     </ngx-mat-select-search>
                                                                 </mat-option>
-                                                                <mat-option *ngFor="let tax of filteredTaxesList" [value]="tax?.value" (click)="$event.stopPropagation()">
+                                                                <!-- <mat-option *ngFor="let tax of filteredTaxesList" [value]="tax?.value" (click)="$event.stopPropagation()">
                                                                     {{ tax?.label }}
-                                                                </mat-option>
+                                                                </mat-option> -->
+                                                                <mat-option
+                                                                    *ngFor="let tax of taxes"
+                                                                    [value]="tax?.uniqueName"
+                                                                    [disabled]="tax.isDisabled"
+                                                                    [selected]="tax.isChecked"
+                                                                    (click)="$event.stopPropagation()"
+                                                                    (onSelectionChange)="!tax.isDisabled ? selectTax(tax, selectTableRowIndex) : ''"
+                                                                    >{{ tax.name }}</mat-option
+                                                                >
+                                                                <mat-option
+                                                                    class="create-update-no-data"
+                                                                    [disabled]="true"
+                                                                    *ngIf="!taxes?.length"
+                                                                    >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                                                >
                                                             </mat-select>
                                                         <!-- <mat-select
                                                             class="vertical-margin"
@@ -1108,6 +1116,7 @@
                                                 <!-- Sales Tax Inclusive -->
                                                 <td
                                                     (click)="getInputIndex(i, 'salesTaxInclusive')"
+                                                    (clickOutside)="salesTaxInclusiveMenuTrigger?.closeMenu()"
                                                     *ngIf="
                                                         (inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') &&
                                                         tableHeaderShowHide.salesTaxInclusive
@@ -1123,35 +1132,25 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            <span
-                                                                *ngIf="selectTableRowIndex !== i"
-                                                            >
-                                                                {{
+                                                            <div [matMenuTriggerFor]="salesTaxInclusiveMenu" #salesTaxInclusiveMenuTrigger="matMenuTrigger">{{
+                                                                row.get("salesTaxInclusive").value
+                                                                    ? localeData?.inclusive
+                                                                    : localeData?.exclusive
+                                                            }}</div>
+                                                            <mat-menu #salesTaxInclusiveMenu="matMenu" [hasBackdrop]="false">
+                                                                <button mat-menu-item (click)="$event.stopPropagation(); row.get('salesTaxInclusive').patchValue(!row.get('salesTaxInclusive').value); salesTaxInclusiveMenuTrigger.closeMenu()">{{
                                                                     row.get("salesTaxInclusive").value
-                                                                        ? localeData?.inclusive
-                                                                        : localeData?.exclusive
-                                                                }}
-                                                            </span>
-                                                            <ng-container *ngIf="selectTableRowIndex == i">
-                                                                <div [matMenuTriggerFor]="salesTaxInclusiveMenu" #salesTaxInclusiveMenuTrigger="matMenuTrigger">{{
-                                                                    row.get("salesTaxInclusive").value
-                                                                        ? localeData?.inclusive
-                                                                        : localeData?.exclusive
-                                                                }}</div>
-                                                                <mat-menu #salesTaxInclusiveMenu="matMenu">
-                                                                    <button mat-menu-item (click)="$event.stopPropagation(); row.get('salesTaxInclusive').patchValue(!row.get('salesTaxInclusive').value); salesTaxInclusiveMenuTrigger.closeMenu()">{{
-                                                                        row.get("salesTaxInclusive").value
-                                                                            ? localeData?.exclusive
-                                                                            : localeData?.inclusive
-                                                                    }}</button>
-                                                                </mat-menu>
-                                                            </ng-container>
+                                                                        ? localeData?.exclusive
+                                                                        : localeData?.inclusive
+                                                                }}</button>
+                                                            </mat-menu>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <!-- Purchase Tax Inclusive -->
                                                 <td
                                                     (click)="getInputIndex(i, 'purchaseTaxInclusive')"
+                                                    (clickOutside)="purchaseTaxInclusiveMenuTrigger?.closeMenu()"
                                                     *ngIf="
                                                         (inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') &&
                                                         tableHeaderShowHide.purchaseTaxInclusive
@@ -1167,33 +1166,25 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            <span *ngIf="selectTableRowIndex !== i">
-                                                                {{
+                                                            <div [matMenuTriggerFor]="purchaseTaxInclusiveMenu" #purchaseTaxInclusiveMenuTrigger="matMenuTrigger">{{
+                                                                row.get("purchaseTaxInclusive").value
+                                                                    ? localeData?.inclusive
+                                                                    : localeData?.exclusive
+                                                            }}</div>
+                                                            <mat-menu #purchaseTaxInclusiveMenu="matMenu" [hasBackdrop]="false">
+                                                                <button mat-menu-item (click)="$event.stopPropagation(); row.get('purchaseTaxInclusive').patchValue(!row.get('purchaseTaxInclusive').value); purchaseTaxInclusiveMenuTrigger.closeMenu()">{{
                                                                     row.get("purchaseTaxInclusive").value
-                                                                        ? localeData?.inclusive
-                                                                        : localeData?.exclusive
-                                                                }}
-                                                            </span>
-                                                            <ng-container *ngIf="selectTableRowIndex == i">
-                                                                <div [matMenuTriggerFor]="purchaseTaxInclusiveMenu" #purchaseTaxInclusiveMenuTrigger="matMenuTrigger">{{
-                                                                    row.get("purchaseTaxInclusive").value
-                                                                        ? localeData?.inclusive
-                                                                        : localeData?.exclusive
-                                                                }}</div>
-                                                                <mat-menu #purchaseTaxInclusiveMenu="matMenu">
-                                                                    <button mat-menu-item (click)="$event.stopPropagation(); row.get('purchaseTaxInclusive').patchValue(!row.get('purchaseTaxInclusive').value); purchaseTaxInclusiveMenuTrigger.closeMenu()">{{
-                                                                        row.get("purchaseTaxInclusive").value
-                                                                            ? localeData?.exclusive
-                                                                            : localeData?.inclusive
-                                                                    }}</button>
-                                                                </mat-menu>
-                                                            </ng-container>
+                                                                        ? localeData?.exclusive
+                                                                        : localeData?.inclusive
+                                                                }}</button>
+                                                            </mat-menu>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <!-- FixedAsset Tax Inclusive -->
                                                 <td
                                                     (click)="getInputIndex(i, 'fixedAssetTaxInclusive')"
+                                                    (clickOutside)="fixedAssetTaxInclusiveMenuTrigger?.closeMenu()"
                                                     *ngIf="
                                                         inventoryType === 'FIXED_ASSETS' &&
                                                         tableHeaderShowHide.fixedAssetTaxInclusive
@@ -1209,27 +1200,18 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            <span *ngIf="selectTableRowIndex !== i">
-                                                                {{
+                                                            <div [matMenuTriggerFor]="fixedAssetTaxInclusiveMenu" #fixedAssetTaxInclusiveMenuTrigger="matMenuTrigger">{{
+                                                                row.get("fixedAssetTaxInclusive").value
+                                                                    ? localeData?.inclusive
+                                                                    : localeData?.exclusive
+                                                            }}</div>
+                                                            <mat-menu #fixedAssetTaxInclusiveMenu="matMenu" [hasBackdrop]="false">
+                                                                <button mat-menu-item (click)="$event.stopPropagation(); row.get('fixedAssetTaxInclusive').patchValue(!row.get('fixedAssetTaxInclusive').value); fixedAssetTaxInclusiveMenuTrigger.closeMenu()">{{
                                                                     row.get("fixedAssetTaxInclusive").value
-                                                                        ? localeData?.inclusive
-                                                                        : localeData?.exclusive
-                                                            }}
-                                                            </span>
-                                                            <ng-container *ngIf="selectTableRowIndex == i">
-                                                                <div [matMenuTriggerFor]="fixedAssetTaxInclusiveMenu" #fixedAssetTaxInclusiveMenuTrigger="matMenuTrigger">{{
-                                                                    row.get("fixedAssetTaxInclusive").value
-                                                                        ? localeData?.inclusive
-                                                                        : localeData?.exclusive
-                                                                }}</div>
-                                                                <mat-menu #fixedAssetTaxInclusiveMenu="matMenu">
-                                                                    <button mat-menu-item (click)="$event.stopPropagation(); row.get('fixedAssetTaxInclusive').patchValue(!row.get('fixedAssetTaxInclusive').value); fixedAssetTaxInclusiveMenuTrigger.closeMenu()">{{
-                                                                        row.get("fixedAssetTaxInclusive").value
-                                                                            ? localeData?.exclusive
-                                                                            : localeData?.inclusive
-                                                                    }}</button>
-                                                                </mat-menu>
-                                                            </ng-container>
+                                                                        ? localeData?.exclusive
+                                                                        : localeData?.inclusive
+                                                                }}</button>
+                                                            </mat-menu>
                                                         </div>
                                                     </div>
                                                 </td>
