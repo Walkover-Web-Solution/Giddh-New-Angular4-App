@@ -98,7 +98,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ocrList: [], ocrListInProgress: true });
-                return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model).pipe(
+                return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model, req?.ocrType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
@@ -137,7 +137,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ocrMainList: [], ocrMainListInProgress: true });
-                return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model).pipe(
+                return this.aiOcrService.getAllOcrDocuments(req?.pagination, req?.model, req?.ocrType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
@@ -215,7 +215,7 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ ocrImportInProgress: true, ocrImportSuccess: null });
-                return this.aiOcrService.importOcrDocument(req).pipe(
+                return this.aiOcrService.importOcrDocument(req?.signedUrlResponse, req?.ocrType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
@@ -253,9 +253,9 @@ export class AiOcrStore extends ComponentStore<AiOcrState> implements OnDestroy 
      */
     readonly getCompletedCount = this.effect((data: Observable<any>) => {
         return data.pipe(
-            switchMap((req) => {
+            switchMap((ocrType) => {
                 this.patchState({ ocrCompletedCount: null, ocrCompletedCountInProgress: true });
-                return this.aiOcrService.getCompletedCount().pipe(
+                return this.aiOcrService.getCompletedCount(ocrType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {

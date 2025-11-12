@@ -6,7 +6,7 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
-import { debounceTime, distinctUntilChanged, map, Observable, ReplaySubject, switchMap, takeUntil } from "rxjs";
+import { debounceTime, delay, distinctUntilChanged, filter, Observable, ReplaySubject, startWith, Subject, switchMap, takeUntil } from "rxjs";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -19,6 +19,8 @@ import { OrganizationType } from "../../models/user-login-state";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { GeneralActions } from "../../actions/general/general.actions";
+import { ActivatedRoute } from "@angular/router";
+import { VoucherTypeEnum } from "../../models/api-models/Sales";
 
 @Component({
     selector: "ai-ocr-list",
@@ -38,8 +40,12 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Subject to manage the route scope */
+    private routeScope$: Subject<void> = new Subject<void>();
+    /** Interval ID for completed count */
+    private completedIntervalId: any;
     /** This will use for table heading */
-    public displayedColumns: string[] = ["date", "fileName", "uploadedBy", "fileStatus", "convertedStatus"];
+    public displayedColumns: string[] = ["date", "fileName", "uploadedBy", "fileStatus", "convertedStatus", 'action'];
     /** Hold the data of ocr list */
     public dataSource: any;
     /** True if translations loaded */
@@ -86,6 +92,10 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public broadcast: any;
     /** True if show clear filter */
     public showClearFilter: boolean = false;
+    /** This will use for ocr type */
+    public ocrType: string = "";
+    /** This will use for transaction type */
+    public transactionOptions: Array<{ label: string; value: string }> = [];
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -94,7 +104,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         private aiOcrService: AiOcrService,
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
-        private generalActions: GeneralActions
+        private generalActions: GeneralActions,
+        private route: ActivatedRoute
     ) {
     }
 
@@ -105,127 +116,153 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.initForm();
+        this.route.params.pipe(delay(100), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                // End previous route scope and clear any existing interval before starting new scope
+                this.routeScope$.next();
+                this.routeScope$.complete();
+                this.routeScope$ = new Subject<void>();
+                if (this.completedIntervalId) {
+                    clearInterval(this.completedIntervalId);
+                    this.completedIntervalId = null;
+                }
+                this.ocrType = response.type;
+                this.transactionOptions = this.ocrType === 'income'
+                    ? [
+                        { label: this.commonLocaleData?.app_create_invoice, value: VoucherTypeEnum.sales },
+                        { label: this.commonLocaleData?.app_create_credit_note, value: VoucherTypeEnum.creditNote },
+                        { label: this.commonLocaleData?.app_create_receipt, value: VoucherTypeEnum.receipt }
+                    ]
+                    : [
+                        { label: this.commonLocaleData?.app_create_bill, value: VoucherTypeEnum.purchase },
+                        { label: this.commonLocaleData?.app_create_debit_note, value: VoucherTypeEnum.debitNote },
+                        { label: this.commonLocaleData?.app_create_payment, value: VoucherTypeEnum.payment }
+                    ];
+                /** Subscribe to main page OCR data only */
+                this.aiOcrService.mainPageOcrData$.pipe(
+                    takeUntil(this.destroyed$),
+                    takeUntil(this.routeScope$),
+                    filter(data => data !== null),
+                    distinctUntilChanged()
+                ).subscribe((data) => {
+                    this.updateDataSource(data);
+                });
 
-        /** Get Ocr List */
-        this.aiOcrService.mainPage$.pipe(
-            takeUntil(this.destroyed$),
-            switchMap((isMainPage) => {
-                if (isMainPage) {
-                    return this.aiOcrService.mainPageOcrData$.pipe(
-                        map(data => ({ data, isMainPage: true }))
-                    );
-                } else {
-                    return this.ocrList$.pipe(
-                        map(data => ({ data, isMainPage: false }))
-                    );
-                }
-            })
-        ).subscribe(({ data, isMainPage }) => {
-            if (!isMainPage) {
-                this.store.dispatch(this.generalActions.openSideMenu(true));
-            }
-            
-            this.updateDataSource(data);
-        });
 
-
-        this.aiOcrService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.getAllOcrDocuments(false);
-            }
-        });
-
-        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
-                this.activeCompany = response;
-            }
-        });
-
-        this.componentStore.branches$.pipe(takeUntil(this.destroyed$)).subscribe(branchList => {
-            if (branchList) {
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
-                if (!this.isCompany) {
-                    this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
-                }
-            }
-        });
-
-        this.ocrDocumentListForm?.controls["status"].valueChanges
-            .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
-            .subscribe((searchedText) => {
-                if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.aiOcrService.mainPage$.next(false);
-                }
-                if (this.isNullOrEmpty(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.showStatus = false;
-                }
-            });
-
-        this.ocrDocumentListForm?.controls["convertedStatus"].valueChanges
-            .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
-            .subscribe((searchedText) => {
-                if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.aiOcrService.mainPage$.next(false);
-                }
-                if (this.isNullOrEmpty(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.showconvertedStatus = false;
-                }
-            });
-
-        this.ocrDocumentListForm?.controls["uploadedBy"].valueChanges
-            .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
-            .subscribe((searchedText) => {
-                if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.aiOcrService.mainPage$.next(false);
-                }
-                if (this.isNullOrEmpty(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.showUploadedBy = false;
-                }
-            });
-
-        this.ocrDocumentListForm?.controls["fileName"].valueChanges
-            .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
-            .subscribe((searchedText) => {
-                if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.aiOcrService.mainPage$.next(false);
-                }
-                if (this.isNullOrEmpty(searchedText)) {
-                    this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
-                    this.showFileName = false;
-                }
-            });
-            
-        this.aiOcrService.mainPage$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (!response) {
-                this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                this.aiOcrService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
                     if (res) {
-                        this.dateSelectedCallback(res);
+                        this.aiOcrService.mainPageOcrData$.next(null);
+                        this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
+                    }
+                });
+
+                this.ocrDocumentListForm.valueChanges.pipe(
+                    takeUntil(this.destroyed$),
+                    takeUntil(this.routeScope$),
+                    debounceTime(700),
+                    distinctUntilChanged()
+                ).subscribe((value) => {
+                    if (value) {
+                        this.ocrDataUpdate();
+                    }
+                });
+
+                this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
+                    if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
+                        this.activeCompany = response;
+                    }
+                });
+
+                this.componentStore.branches$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe(branchList => {
+                    if (branchList) {
+                        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
+                        if (!this.isCompany) {
+                            this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
+                        }
+                    }
+                });
+
+                this.ocrDocumentListForm?.controls["status"].valueChanges
+                    .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$), takeUntil(this.routeScope$))
+                    .subscribe((searchedText) => {
+                        if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
+                            this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            // Switch to list mode when filtering
+                            this.aiOcrService.mainPage$.next(false);
+                        }
+                        if (this.isNullOrEmpty(searchedText)) {
+                            this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.showStatus = false;
+                        }
+                    });
+
+                this.ocrDocumentListForm?.controls["convertedStatus"].valueChanges
+                    .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$), takeUntil(this.routeScope$))
+                    .subscribe((searchedText) => {
+                        if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
+                            this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.mainPage$.next(false);
+                        }
+                        if (this.isNullOrEmpty(searchedText)) {
+                            this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.showconvertedStatus = false;
+                        }
+                    });
+
+                this.ocrDocumentListForm?.controls["uploadedBy"].valueChanges
+                    .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$), takeUntil(this.routeScope$))
+                    .subscribe((searchedText) => {
+                        if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
+                            this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.mainPage$.next(false);
+                        }
+                        if (this.isNullOrEmpty(searchedText)) {
+                            this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.showUploadedBy = false;
+                        }
+                    });
+
+                this.ocrDocumentListForm?.controls["fileName"].valueChanges
+                    .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$), takeUntil(this.routeScope$))
+                    .subscribe((searchedText) => {
+                        if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
+                            this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.mainPage$.next(false);
+                        }
+                        if (this.isNullOrEmpty(searchedText)) {
+                            this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.showFileName = false;
+                        }
+                    });
+
+                this.aiOcrService.mainPage$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
+                    if (!response) {
+                        this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                            if (res) {
+                                this.dateSelectedCallback(res);
+                            }
+                        });
+                    }
+                });
+
+                this.aiOcrService.resetData$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                    if (res) {
+                        this.resetFilter(res);
+                    }
+                });
+
+                this.aiOcrService.selectBranch$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                    if (res) {
+                        this.ocrDocumentsRequestParams.branchUniqueName = res.branchUniqueName;
+                        this.ocrDocumentsRequestParams.from = res.from;
+                        this.ocrDocumentsRequestParams.to = res.to;
+                        this.showClearFilter = false;
+                        this.getAllOcrDocuments(false);
                     }
                 });
             }
-        });
-
-        this.aiOcrService.resetData$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.resetFilter(res);
-            }
-        });
-
-        this.aiOcrService.selectBranch$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.ocrDocumentsRequestParams.branchUniqueName = res.branchUniqueName;
-                this.ocrDocumentsRequestParams.from = res.from;
-                this.ocrDocumentsRequestParams.to = res.to;
-                this.showClearFilter = false;
-                this.getAllOcrDocuments(false);
-            }
+            this.changeDetection.detectChanges();
         });
     }
 
@@ -460,6 +497,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         let request = {
             pagination: this.ocrDocumentsRequestParams,
             model: this.ocrDocumentListForm.value,
+            ocrType: this.ocrType,
         };
         this.componentStore.getAllOcrList(request);
     }
@@ -492,6 +530,23 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentsRequestParams.from = event.from;
         this.ocrDocumentsRequestParams.to = event.to;
         this.getAllOcrDocuments(true);
+        this.ocrDataUpdate();
+    }
+
+    /**
+     * This will be used to update the data source.
+     *
+     * @memberof AiOcrListComponent
+     */
+    public ocrDataUpdate(): void {
+        setTimeout(() => {
+            this.ocrList$.pipe(
+                takeUntil(this.routeScope$),
+            ).subscribe((data) => {
+                this.store.dispatch(this.generalActions.openSideMenu(true));
+                this.updateDataSource(data);
+            });
+        }, 100);
     }
 
     /**
@@ -512,7 +567,30 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
      * @memberof AiOcrListComponent
      */
     public ngOnDestroy(): void {
+        if (this.completedIntervalId) {
+            clearInterval(this.completedIntervalId);
+            this.completedIntervalId = null;
+        }
+        this.routeScope$.next();
+        this.routeScope$.complete();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will be used to check null or undefined values.
+     *
+     * @param {*} voucherTypeObj
+     * @param {*} element
+     * @return {*} {boolean}
+     * @memberof AiOcrListComponent
+     */
+    public selectVoucher(voucherTypeObj: any, element: any): void {
+        const req = {
+            row: element,
+            type: voucherTypeObj.value,
+            ocrType: this.ocrType
+        }
+        this.aiOcrService.ocrListToCreate$.next(req);
     }
 }
