@@ -45,14 +45,15 @@
             }
         }
         .company-name {
-            .icon-down-new {
-                position: relative;
-                right: 5px;
+            // .icon-down-new {
+                // position: relative;
+                // right: 5px;
                 // color: var(--color-black);
-            }
+            // }
             .icon-cross {
                 display: flex;
-                font-size: 12px;
+                align-items: center;
+                justify-content: center;
                 // color: var(--color-black);
             }
         }
