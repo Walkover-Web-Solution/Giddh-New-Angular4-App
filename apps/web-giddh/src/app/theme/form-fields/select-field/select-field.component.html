@@ -1,7 +1,8 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <input
         type="text"
-        [ngClass]="cssClass"
+        [ngClass]="{'padding-right-18':showDropdownIcon}"    
+        [ngClass]="cssClass"    
         class="select-field-input"
         [placeholder]="placeholder"
         matInput

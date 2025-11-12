@@ -215,10 +215,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isActivePortalMobileNumber: number = -1;
     /** Holds active selected Tab Index */
     public selectedTabIndex: number = 0;
+    /** Holds active selected Tab Label */
+    public selectedTabLabel: string = '';
     /** True if there are duplicate contact number errors */
     public hasDuplicateContactErrors: boolean = false;
     /** Tracks which tabs have been activated at least once */
-    public activatedTabs: Set<number> = new Set([0]);
+    public activatedTabs: Set<string> = new Set([]);
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** Flag to determine if the parent group is "sundrydebtors". */
@@ -1471,11 +1473,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
+            this.selectedTabLabel = event.tab.textLabel;
             this.selectedTabIndex = event.index;
             this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
             
             // Mark this tab as activated
-            this.activatedTabs.add(event.index);
+            this.activatedTabs.add(event.tab.textLabel);
         }
     }
 
@@ -1523,12 +1526,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /**
      * Checks if a tab has been activated at least once
      *
-     * @param {number} tabIndex - Index of the tab to check
+     * @param {string} textLabel - Label of the tab to check
      * @returns {boolean} True if tab has been activated
      * @memberof AccountAddNewDetailsComponent
      */
-    public isTabActivated(tabIndex: number): boolean {
-        return this.activatedTabs.has(tabIndex);
+    public isTabActivated(textLabel: string): boolean {
+        return this.activatedTabs.has(textLabel);
     }
 
     /**
@@ -1771,6 +1774,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public translationComplete(event: boolean): void {
         if (event) {
+            this.activatedTabs.add(this.localeData?.tabs?.address);
             this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
                     if (res.fields) {

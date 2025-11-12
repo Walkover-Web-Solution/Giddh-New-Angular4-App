@@ -140,7 +140,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public formFields: any[] = [];
     /** Flag indicating whether the entered GSTIN number is valid. */
     public isGstValid: boolean = true;
-    public selectedTab: string = 'address';
+    /** Holds active selected Tab Label */
+    public selectedTabLabel: string = '';
     public moveAccountSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;
     public discountList: any[] = [];
@@ -266,7 +267,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** True if there are duplicate contact number errors */
     public hasDuplicateContactErrors: boolean = false;
     /** Tracks which tabs have been activated at least once */
-    public activatedTabs: Set<number> = new Set([0]);
+    public activatedTabs: Set<string> = new Set([]);
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** Flag to determine if the parent group is "sundrydebtors". */
@@ -728,7 +729,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public tabChanged(event: MatTabChangeEvent): void {
         if (event) {
-            this.selectedTab = event.tab.textLabel;
+            this.selectedTabLabel = event.tab.textLabel;
             this.selectedTabIndex = event.index;
             this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
             if (event.tab.textLabel === this.localeData?.tabs?.others) {
@@ -738,7 +739,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             
             // Mark this tab as activated
-            this.activatedTabs.add(event.index);
+            this.activatedTabs.add(event.tab.textLabel);
             this.changeDetectorRef.detectChanges();
         }
     }
@@ -1916,6 +1917,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public translationComplete(event: boolean): void {
         if (event) {
+            this.activatedTabs.add(this.localeData?.tabs?.address);
             this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
                     if (res.fields) {
@@ -2639,11 +2641,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /**
      * Checks if a tab has been activated at least once
      *
-     * @param {number} tabIndex - Index of the tab to check
+     * @param {string} textLabel - Label of the tab to check
      * @returns {boolean} True if tab has been activated
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public isTabActivated(tabIndex: number): boolean {
-        return this.activatedTabs.has(tabIndex);
+    public isTabActivated(textLabel: string): boolean {
+        return this.activatedTabs.has(textLabel);
     }
 }

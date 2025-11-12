@@ -35,7 +35,7 @@
         content: "";
         width: 26px;
         height: 26px;
-        background-color: var(--theme-primary-light);
+        // background-color: var(--theme-primary-light);
         top: 50%;
         transform: translateY(-42%);
         right: -5px;
@@ -49,7 +49,7 @@
         // color: var(--color-white);
         text-decoration: none;
         cursor: pointer;
-        opacity: 0.4;
+        // opacity: 0.4;
     }
     /*Additional properties for button version
      iOS requires the button element instead of an anchor tag.
