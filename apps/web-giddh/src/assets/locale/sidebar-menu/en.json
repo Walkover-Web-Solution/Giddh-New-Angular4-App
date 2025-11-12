@@ -665,14 +665,8 @@
             ]
         }, 
         {
-            "label": "AI OCR for Income",
-            "link": "/pages/ai-ocr/income",
-            "icon": "icon-audit-log",
-            "description": "Upload images, pdf, jpeg, zip"
-        },
-        {
-            "label": "AI OCR for Expense",
-            "link": "/pages/ai-ocr/expense",
+            "label": "AI OCR",
+            "link": "/pages/ai-ocr",
             "icon": "icon-audit-log",
             "description": "Upload images, pdf, jpeg, zip"
         }

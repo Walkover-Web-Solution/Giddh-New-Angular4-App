@@ -68,7 +68,7 @@
                         <mat-button-toggle
                             [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0 || voucherApiVersion === 1"
                             value="create"
-                            (click)="onToggleChange(ocrAction.Create, true)"
+                             (click)="onToggleChange(ocrAction.Create)"
                             [checked]="selectedToggle === ocrAction.Create"
                         >
                             <div matBadge="{{ countVariable }}" matBadgeOverlap="true">
@@ -79,7 +79,7 @@
                             class="w125"
                             value="list"
                             [checked]="selectedToggle === ocrAction.List"
-                            (click)="onToggleChange(ocrAction.List, false)"
+                            (click)="onToggleChange(ocrAction.List)"
                         >
                             <span>{{ localeData?.list }}</span>
                         </mat-button-toggle>
