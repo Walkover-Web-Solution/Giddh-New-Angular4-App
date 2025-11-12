@@ -58,22 +58,6 @@
         }
         h3 {
             font-weight: var(--font-weight-semibold);
-            // color: var(--color-dark-gray);
-            .company-alice {
-                width: 30px;
-                height: 30px;
-                min-width: 30px;
-                border: 1px solid var(--color-black);
-                padding: 15px;
-                border-radius: 50px;
-                display: inline-flex;
-                justify-content: center;
-                align-items: center;
-                white-space: nowrap;
-                letter-spacing: -2px;
-                font-size: var(--font-size-15) !important;
-                // color: var(--color-black);
-            }
             .company-full-name {
                 white-space: normal;
                 word-break: break-word;
@@ -274,12 +258,6 @@
             h3 {
                 justify-content: center;
                 align-items: center;
-                .company-alice {
-                    margin-right: 0;
-                    width: 26px;
-                    height: 26px;
-                    min-width: 26px;
-                }
             }
             .company-name {
                 .icon-down-new {
