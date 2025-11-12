@@ -39,14 +39,14 @@
                                         *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
                                     ></i>
                                 </span>
-                                <span class="d-flex">
+                                <button mat-icon-button class="ml-1">
                                     <i
-                                        [ngClass]="{
-                                            'icon-cross font-size-15': showCompanyBranchSwitch,
-                                            'icon-down-new': !showCompanyBranchSwitch
-                                        }"
-                                    ></i>
-                                </span>
+                                    [ngClass]="{
+                                        'icon-cross font-size-15': showCompanyBranchSwitch,
+                                        'icon-down-new': !showCompanyBranchSwitch
+                                    }"
+                                ></i>
+                                </button>
                             </div>
                         </div>
                     </h3>
