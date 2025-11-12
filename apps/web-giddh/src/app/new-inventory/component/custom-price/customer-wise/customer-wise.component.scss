@@ -44,9 +44,9 @@
                 }
                 .custom-tab {
                     border: 1px solid var(--color-border-medium);
-                    border-radius: 5px;
+                    border-radius: var(--mat-border-radius-4);
                     button {
-                        background-color: var(--color-white);
+                        // background-color: var(--color-white);
                         flex-grow: 1;
                         height: 33px;
                         transition: all 300ms;
@@ -62,7 +62,8 @@
                         }
 
                         &.active {
-                            background-color: var(--color-blue-primary);
+                            background-color: var(--bg-primary-color);
+                            color: var(--color-white);
                         }
                     }
                 }
@@ -70,7 +71,7 @@
             .customer-right-side {
                 width: calc(100% - $sidebar-width);
                 padding: 12px 16px;
-                border-left: 1px solid var(--color-silver);
+                border-left: 1px solid var(--border-color);
                 height: calc(100vh - 92px);
                 overflow-y: auto;
                 .right-heading {
@@ -78,7 +79,7 @@
                     justify-content: space-between;
                     align-items: center;
                     h2 {
-                        color: var(--color-blue-primary) !important;
+                        color: var(--text-primary-color) !important;
                         font-weight: 600;
                     }
                 }
@@ -90,7 +91,7 @@
                     .save-discount-header {
                         top: 0;
                         right: 0;
-                        background-color: var(--color-blue-primary);
+                        background-color: var(--bg-primary-color);
                         color: var(--color-white) !important;
                         width: calc(100vw - #{$header-giddh-logo-width});
                         height: 59px;
@@ -103,22 +104,24 @@
                     }
                 }
                 .table-inventory {
-                    background: var(--color-white);
+                    // background: var(--color-white);
                     border: 1px solid var(--color-border-medium);
                     margin: 6px 0;
-                    border-radius: 4px;
+                    border-radius: var(--mat-border-radius-4);
                     width: max-content;
                     min-width: 100%;
                     .inventory-head {
                         strong {
                             font-size: var(--font-size-16);
                             margin-left: 12px;
-                            color: var(--color-blue-primary) !important;
+                            color: var(--text-primary-color) !important;
                         }
                     }
-                    .column-gap42 {
+                    /* UNUSED COMPONENT CLASS: column-gap-42 - Auto-commented by script
+.column-gap-42 {
                         column-gap: 42px;
                     }
+*/
                     table {
                         &:hover {
                             thead {
@@ -149,7 +152,7 @@
                         thead {
                             tr {
                                 td {
-                                    vertical-align: middle;
+                                    padding: 10px;
                                     &.variant-name {
                                         width: auto;
                                         @media (max-width: 1366px) {
@@ -186,12 +189,14 @@
                                             transform: translateY(-50%);
                                         }
                                     }
-                                    &.variant-quantity {
+                                    /*& UNUSED COMPONENT CLASS: variant-quantity - Auto-commented by script
+.variant-quantity {
                                         @include setWidth(100px);
                                         @media (max-width: 1556px) {
                                             @include setWidth(160px);
                                         }
                                     }
+*/
                                     &.variant-delete {
                                         @include setWidth(60px);
                                         .delete-show {
@@ -244,9 +249,9 @@
                     justify-content: center;
                     height: 32px;
                     min-width: 42px;
-                    border-radius: 5px;
+                    border-radius: var(--mat-border-radius-4);
                     color: var(--color-dark-gray) !important;
-                    border: 1px solid var(--color-silver);
+                    border: 1px solid var(--border-color);
                     background-color: var(--color-transparent);
                     i {
                         font-size: var(--font-size-15);

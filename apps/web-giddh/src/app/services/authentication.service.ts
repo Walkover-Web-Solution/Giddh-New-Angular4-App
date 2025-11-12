@@ -101,7 +101,6 @@ export class AuthenticationService {
     }
 
     public LoginWithGoogle(token: string) {
-        // debugger;
         let args: any = { headers: {} };
         args.headers['cache-control'] = 'no-cache';
         args.headers['Content-Type'] = 'application/json';

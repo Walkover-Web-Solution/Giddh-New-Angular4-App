@@ -24,7 +24,7 @@
             <ng-container *ngIf="!groupDetail.level1; else elseBlock">
                 <ng-container *ngFor="let key of getKeys(groupDetail.closingBalance) ">
                     <span
-                        class="col text-right py-2 px-0 pd-r15 bd-rl row-height"
+                        class="col text-right py-2 px-0 pd-r15 border-left row-height"
                     >
                             <span
                                 *ngIf="
@@ -55,7 +55,7 @@
                 </ng-container>
             <ng-template #elseBlock>
                 <ng-container *ngFor="let key of plHeaders">
-                    <span class="col py-2 px-0 bd-rl row-height">&nbsp;</span>
+                    <span class="col py-2 px-0 border-left row-height">&nbsp;</span>
                 </ng-container>
             </ng-template>
         </span>
@@ -105,7 +105,7 @@
                 <p class="account-name" [innerHTML]="account.name | lowercase | highlight : search"></p>
             </div>
             <ng-container *ngFor="let key of getKeys(account.closingBalance)">
-                <div class="col bd-rl text-right px-0 pd-r15">
+                <div class="col border-left text-right px-0 pd-r15">
                     <span
                         *ngIf="
                             account.category === 'income' &&

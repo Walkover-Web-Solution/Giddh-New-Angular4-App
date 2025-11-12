@@ -1,0 +1,15 @@
+{
+    "mobile_number": "मोबाइल नंबर",
+    "select_country": "देश निवडा",
+    "enter_mobile_number": "मोबाइल नंबर प्रविष्ट करा",
+    "mobile_number_required": "मोबाइल नंबर आवश्यक आहे",
+    "invalid_mobile_number": "कृपया {{country}} साठी वैध मोबाइल नंबर प्रविष्ट करा",
+    "invalid_length": "{{country}} साठी अवैध मोबाइल नंबर लांबी",
+    "wrong_country": "हा नंबर वेगळ्या देशाचा आहे",
+    "invalid_number": "हा वैध फोन नंबर नाही",
+    "not_mobile": "हा मोबाइल फोन नंबर नाही",
+    "obviously_invalid": "हा नंबर अवैध दिसतो (पुनरावृत्ती किंवा अनुक्रमिक अंक)",
+    "impossible_number": "हा नंबर {{country}} साठी शक्य नाही",
+    "parse_error": "हा फोन नंबर पार्स करण्यात अक्षम",
+    "invalid_format": "अवैध फोन नंबर स्वरूप"
+}

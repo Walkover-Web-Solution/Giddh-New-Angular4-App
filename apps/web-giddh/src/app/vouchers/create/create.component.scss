@@ -3,11 +3,6 @@
 
     .container-lg {
         max-width: 1540px !important;
-
-        @media screen and (max-width: 768px) {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-        }
     }
 
     .vouchers-title {
@@ -19,7 +14,6 @@
         }
         .voucher-heading {
             font-size: var(--font-size-24);
-            color: var(--color-blue-primary);
         }
     }
 
@@ -43,11 +37,11 @@
         }
 
         .vouchers-form-fields-detail {
-            color: var(--color-blue-primary);
+            color: var(--text-primary-color);
         }
 
         .vouchers-copy-sales {
-            color: var(--color-blue-primary);
+            color: var(--text-primary-color);
         }
     }
 
@@ -80,11 +74,11 @@
             .billing-deliver-label {
                 font-size: var(--font-size-16);
                 font-weight: 600;
-                color: var(--color-blue-primary);
+                // color: var(--text-primary-color);
             }
 
             .vouchers-address-form {
-                border: 1px solid var(--color-fields-border);
+                border: 1px solid var(--border-color);
 
                 .address-field {
                     textarea {
@@ -93,7 +87,7 @@
                 }
 
                 &.form-disabled {
-                    background: var(--color-border-light);
+                    // background: var(--color-border-light);
                     opacity: 0.7;
                     pointer-events: none;
                 }
@@ -108,11 +102,11 @@
         }
 
         .vouchers-large-container {
-            border-top: 1px solid var(--color-silver);
+            border-top: 1px solid var(--border-color);
 
             #init-contact-wrapper {
                 input {
-                    height: var(--mat-form-field-height);
+                    height: var(--custom-mat-form-field-height);
                 }
             }
 
@@ -123,15 +117,17 @@
                         th,
                         td {
                             padding: 16px 8px;
-                            border: 1px solid var(--color-silver);
+                            border: 1px solid var(--border-color);
 
                             &.total-column {
                                 min-width: 120px;
                                 padding-bottom: 36px !important;
 
-                                .wrap-other-tax {
+                                /* UNUSED COMPONENT CLASS: wrap-other-tax - Auto-commented by script
+.wrap-other-tax {
                                     padding-right: 6px;
                                 }
+*/
                             }
 
                             &.product-column {
@@ -146,7 +142,7 @@
                         }
 
                         th {
-                            color: var(--color-blue-primary);
+                            // color: var(--text-primary-color);
 
                             &:not(:first-child, :nth-child(2)) {
                                 padding-right: 14px !important;
@@ -166,10 +162,6 @@
                                 }
                             }
 
-                            .select-account-label {
-                                color: var(--color-black);
-                            }
-
                             amount-field {
                                 display: inline-block;
                             }
@@ -177,6 +169,7 @@
                             &.description {
                                 .description-text {
                                     word-wrap: break-word;
+                                    word-break: break-all;
                                 }
 
                                 .characters-left-text {
@@ -205,7 +198,7 @@
                 max-width: calc(100% - 36px);
 
                 .vouchers-attachment {
-                    height: var(--mat-form-field-height);
+                    height: var(--custom-mat-form-field-height);
 
                     .attachment-add-icon {
                         width: 36px;
@@ -216,7 +209,7 @@
                         border: 1px solid var(--color-border-medium);
                     }
 
-                    &.text-success {
+                    &.text-green {
                         .attachment-add-icon {
                             border-color: var(--color-green);
                             font-size: var(--font-size-12);
@@ -232,14 +225,14 @@
                     }
 
                     .attachment-placeholder {
-                        color: var(--color-blue-primary);
+                        color: var(--text-primary-color);
                     }
 
                     input {
                         width: 100%;
                         height: 100%;
                         left: 0;
-                        border-radius: 5px;
+                        border-radius: var(--mat-border-radius-4);
                         z-index: 1;
                         opacity: 0;
                         cursor: pointer;
@@ -277,11 +270,7 @@
             }
 
             .vouchers-actions {
-                border-top: 1px solid var(--color-silver);
-
-                .vouchers-more-option-btn {
-                    min-width: unset;
-                }
+                border-top: 1px solid var(--border-color);
             }
         }
     }
@@ -293,12 +282,11 @@
     }
 }
 
-.option-label {
-    color: var(--color-black);
-}
-
 .option-value, .option-value-stock {
     color: var(--color-medium-gray);
+}
+.option-label {
+    color: var(--theme-foreground-color);
 }
 
 .single-toggle-button {

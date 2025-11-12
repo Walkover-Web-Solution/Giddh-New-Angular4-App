@@ -30,18 +30,18 @@
             </div>
         </div>
 
-        <mat-card-content class="position-relative">
+        <mat-card-content class="position-relative ">
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <div class="dashboard-doughnut-chart-container">
+            <div class="dashboard-doughnut-chart-container" [ngClass]="{ 'visibility-hidden': requestInFlight }">
                 <canvas id="totaloverDueChartCanvas" [ngClass]="{ 'hide-chart': !dataFound }"></canvas>
                 <div class="no-data-available" *ngIf="!dataFound">
                     <img src="{{ imgPath }}noDataChart.svg" [alt]="commonLocaleData?.app_no_data_found" />
                 </div>
             </div>
             <div class="chart-div mt-auto" *ngIf="!requestInFlight">
-                <div class="clearfix mr-b2">
+                <div class="clear-both mr-b2">
                     <div class="due">
                         <span class="mr-b1 due-amount">{{ localeData?.invoice_due }}</span>
                         <span class="total-amount pull-right vendor-due-text">
@@ -55,7 +55,7 @@
                             </span>
                         </span>
                     </div>
-                    <div class="clearfix" *ngIf="voucherApiVersion === 2">
+                    <div class="clear-both" *ngIf="voucherApiVersion === 2">
                         <small>{{ localeData?.pending_invoices }}</small>
                         <small class="d-inline-flex pull-right">
                             {{ pendingInvoices }}
@@ -64,7 +64,7 @@
                         </small>
                     </div>
                 </div>
-                <div class="clearfix">
+                <div class="clear-both">
                     <div class="due">
                         <span class="mr-b1 due-amount">{{ localeData?.bill_due }}</span>
                         <span class="total-amount pull-right customer-due-text">
@@ -78,7 +78,7 @@
                             </span>
                         </span>
                     </div>
-                    <div class="clearfix" *ngIf="voucherApiVersion === 2">
+                    <div class="clear-both" *ngIf="voucherApiVersion === 2">
                         <small>{{ localeData?.pending_bills }}</small>
                         <small class="d-inline-flex pull-right">
                             {{ pendingBills }}

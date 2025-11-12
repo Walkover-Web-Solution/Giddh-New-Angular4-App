@@ -24,20 +24,23 @@
     top: 18px;
     margin-right: 0;
     border: 0;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
     display: block;
 }
 
-:host .container-fluid {
+/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
+:host 
+.container-fluid {
     padding-left: 0;
     padding-right: 0;
 }
+*/
 
 :host .aside-pane {
     max-width: 760px;
     width: 100%;
     padding: 0;
-    background: var(--color-light-gray);
+    // background: var(--color-light-gray);
 }
 .aside-pane-form {
     box-shadow: 0px 3px 6px var(--color-shadow-light);
@@ -46,41 +49,4 @@
 }
 .auth-state {
     border-bottom: 1px solid var(--color-black);
-}
-
-@media (max-width: 768px) {
-    :host.in,
-    :host {
-        max-width: 600px;
-    }
-    :host .aside-pane {
-        max-width: 600px;
-    }
-}
-@media (max-width: 575px) {
-    :host.in,
-    :host {
-        max-width: 370px;
-    }
-    :host .aside-pane {
-        max-width: 370px;
-    }
-}
-@media (max-width: 375px) {
-    :host.in,
-    :host {
-        max-width: 310px;
-    }
-    :host .aside-pane {
-        max-width: 310px;
-    }
-}
-@media (max-width: 320px) {
-    :host.in,
-    :host {
-        max-width: 280px;
-    }
-    :host .aside-pane {
-        max-width: 280px;
-    }
 }

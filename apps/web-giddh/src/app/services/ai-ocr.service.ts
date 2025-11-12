@@ -190,6 +190,7 @@ export class AiOcrService {
                     ?.replace(":nextToken", encodeURIComponent(req.type === "save" ? req.token : ""))
                     ?.replace(":voucherType", encodeURIComponent((req.type && req.type !== "skip" && req.type !== "save") ? req.type : ""))
                     ?.replace(":requestId", encodeURIComponent(req.row?.requestId ? req.row?.requestId : ""))
+                    ?.replace(":ocrType", encodeURIComponent(req?.ocrType)),
             )
             .pipe(
                 map((res) => {

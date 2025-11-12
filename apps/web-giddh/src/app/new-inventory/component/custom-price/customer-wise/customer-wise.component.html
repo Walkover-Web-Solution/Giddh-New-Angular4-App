@@ -42,10 +42,10 @@
                                         <a href="javascript:;" (click)="selectUser(user)">
                                             <span>
                                                 <ng-container *ngIf="user.type === 'GROUP'">
-                                                    <span class="icon-users font-16 font-weight-bold pd-r05"></span>
+                                                    <span class="icon-users font-size-16 font-weight-bold pd-r05"></span>
                                                 </ng-container>
                                                 <ng-container *ngIf="user.type === 'ACCOUNT'">
-                                                    <span class="icon-user font-12 pd-r05"></span>
+                                                    <span class="icon-user font-size-12 pd-r05"></span>
                                                 </ng-container>
 
                                                 {{ user?.name }}
@@ -57,16 +57,16 @@
                                 </cdk-virtual-scroll-viewport>
                             </ng-container>
                             <ng-container *ngIf="!isLoading && !userList?.length ">
-                                <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
+                                <div class="p-3 text-light">{{ commonLocaleData?.app_no_data_found }}</div>
                             </ng-container>
                         </mat-list>
                         <div class="customer-right-side" #stocksContainer>
                                 <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                     <button mat-raised-button aria-label="inventory" color="primary" (click)="openSearchModal('stocks')"> {{
                                         localeData?.add_inventory }} </button>
-                                    <div class="d-flex align-items-center justify-content-end column-gap5 w-50">
+                                    <div class="d-flex align-items-center justify-content-end column-gap-1 w-50">
                                         <watch-video [cssClass]="'text-primary'" [moduleName]="'MRP_DISCOUNT'" *ngIf="!isTabScreen"></watch-video>
-                                        <div class="search-list position-relative" [formGroup]="searchForm"
+                                        <div class="search-list position-relative " [formGroup]="searchForm"
                                             *ngIf="!currentUser?.isTempUser">
                                             <text-field type="text" [placeholder]="commonLocaleData?.app_search"
                                                 [cssClass]="'form-control search-bar'"
@@ -89,7 +89,7 @@
                                                     {{ localeData?.unsaved_changes }}
                                                 </span>
                                                 <div>
-                                                    <button mat-stroked-button aria-label="discard" (click)="discardChanges()" class="mr-3">{{ localeData?.discard }}</button>
+                                                    <button mat-stroked-button aria-label="discard" (click)="discardChanges()" class="btn-stroked-white mr-3">{{ localeData?.discard }}</button>
                                                     <button mat-raised-button aria-label="save" (click)="saveDiscount()">
                                                         {{ commonLocaleData?.app_save }}
                                                     </button>
@@ -120,7 +120,7 @@
                                                                         <span>
                                                                             <button mat-stroked-button
                                                                                 aria-label="delete button"
-                                                                                class="delete-icon"
+                                                                                class="delete-icon w-inherit"
                                                                                 (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)"><i
                                                                                     class="icon-trash"></i>
                                                                             </button>
@@ -149,7 +149,7 @@
                                                                                 (change)="updateDiscountInVariant(variant)"></input-field>
                                                                         </td>
                                                                         <td class="variant-tax-toggle">
-                                                                            <div class="d-flex align-items-center column-gap1">
+                                                                            <div class="d-flex align-items-center column-gap-1">
                                                                                 <mat-radio-group color="primary"
                                                                                     [name]="'taxInclusive' + i + '-' + j"
                                                                                     formControlName="taxInclusive">
@@ -165,7 +165,7 @@
                                                                                     matTooltipPosition="above"></span>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="overflow-visible variant-discount position-relative">
+                                                                        <td class="overflow-visible variant-discount position-relative ">
                                                                             <reactive-dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
@@ -180,7 +180,7 @@
                                                                                 <button mat-stroked-button
                                                                                     aria-label="delete button"
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
-                                                                                    class="delete-icon"
+                                                                                    class="delete-icon w-inherit"
                                                                                     (click)="confirmationPopup(variant?.get('variantUniqueName')?.value,  'variant', variant?.get('isTemproraryVariant')?.value, i, j)">
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
@@ -215,7 +215,7 @@
 
                                                 <ng-container [formGroupName]="i">
                                                     <div>
-                                                        <table class="table mb-0 no-border">
+                                                        <table>
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
                                                                     formArrayName="variants">
@@ -236,7 +236,7 @@
                                                                                 (change)="updateDiscountInVariant(variant)"></input-field>
                                                                         </td>
                                                                         <td class="variant-tax-toggle">
-                                                                            <div class="d-flex align-items-center column-gap1">
+                                                                            <div class="d-flex align-items-center column-gap-1">
                                                                                 <mat-radio-group color="primary"
                                                                                     [name]="'taxInclusive' + i + '-' + j"
                                                                                     formControlName="taxInclusive">
@@ -252,7 +252,7 @@
                                                                                     matTooltipPosition="above"></span>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="overflow-visible variant-discount position-relative">
+                                                                        <td class="overflow-visible variant-discount position-relative ">
                                                                             <reactive-dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
@@ -266,7 +266,7 @@
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
                                                                                     aria-label="delete button"
-                                                                                    class="delete-icon"
+                                                                                    class="delete-icon w-inherit"
                                                                                     (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)">
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
@@ -295,9 +295,9 @@
                                     <section class="mr-b8"></section>
                                 </div>
                             </ng-container>
-                            <div class="text-center mt-5 text-gray font-24"
+                            <div class="no-data"
                                 *ngIf="!currentUserStocks?.length && !currentUser?.uniqueName && !isStockLoading ">
-                                <span class="font">{{ commonLocaleData?.app_no_data_found }}</span>
+                                <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
                             </div>
                             <div *ngIf="isStockLoading">
                                 <giddh-page-loader></giddh-page-loader>

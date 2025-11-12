@@ -6,7 +6,7 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
-import { debounceTime, delay, distinctUntilChanged, map, Observable, ReplaySubject, Subject, switchMap, takeUntil } from "rxjs";
+import { debounceTime, delay, distinctUntilChanged, filter, Observable, ReplaySubject, startWith, Subject, switchMap, takeUntil } from "rxjs";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -129,41 +129,42 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.ocrType = response.type;
                 this.transactionOptions = this.ocrType === 'income'
                     ? [
-                        { label: this.commonLocaleData?.app_voucher_types?.sales, value: VoucherTypeEnum.sales },
-                        { label: this.commonLocaleData?.app_voucher_types?.credit_note, value: VoucherTypeEnum.creditNote },
-                        { label: this.commonLocaleData?.app_voucher_types?.receipt, value: VoucherTypeEnum.receipt }
+                        { label: this.commonLocaleData?.app_create_invoice, value: VoucherTypeEnum.sales },
+                        { label: this.commonLocaleData?.app_create_credit_note, value: VoucherTypeEnum.creditNote },
+                        { label: this.commonLocaleData?.app_create_receipt, value: VoucherTypeEnum.receipt }
                     ]
                     : [
-                        { label: this.commonLocaleData?.app_voucher_types?.purchase, value: VoucherTypeEnum.purchase },
-                        { label: this.commonLocaleData?.app_voucher_types?.debit_note, value: VoucherTypeEnum.debitNote },
-                        { label: this.commonLocaleData?.app_voucher_types?.payment, value: VoucherTypeEnum.payment }
+                        { label: this.commonLocaleData?.app_create_bill, value: VoucherTypeEnum.purchase },
+                        { label: this.commonLocaleData?.app_create_debit_note, value: VoucherTypeEnum.debitNote },
+                        { label: this.commonLocaleData?.app_create_payment, value: VoucherTypeEnum.payment }
                     ];
-                /** Get Ocr List */
-                this.aiOcrService.mainPage$.pipe(
+                /** Subscribe to main page OCR data only */
+                this.aiOcrService.mainPageOcrData$.pipe(
                     takeUntil(this.destroyed$),
                     takeUntil(this.routeScope$),
-                    switchMap((isMainPage) => {
-                        if (isMainPage) {
-                            return this.aiOcrService.mainPageOcrData$.pipe(
-                                map(data => ({ data, isMainPage: true }))
-                            );
-                        } else {
-                            return this.ocrList$.pipe(
-                                map(data => ({ data, isMainPage: false }))
-                            );
-                        }
-                    })
-                ).subscribe(({ data, isMainPage }) => {
-                    if (!isMainPage) {
-                        this.store.dispatch(this.generalActions.openSideMenu(true));
-                    }
-
+                    filter(data => data !== null),
+                    distinctUntilChanged()
+                ).subscribe((data) => {
                     this.updateDataSource(data);
                 });
 
+
                 this.aiOcrService.uploadDataSuccess$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
                     if (res) {
+                        this.aiOcrService.mainPageOcrData$.next(null);
                         this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
+                    }
+                });
+
+                this.ocrDocumentListForm.valueChanges.pipe(
+                    takeUntil(this.destroyed$),
+                    takeUntil(this.routeScope$),
+                    debounceTime(700),
+                    distinctUntilChanged()
+                ).subscribe((value) => {
+                    if (value) {
+                        this.ocrDataUpdate();
                     }
                 });
 
@@ -187,6 +188,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     .subscribe((searchedText) => {
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            // Switch to list mode when filtering
                             this.aiOcrService.mainPage$.next(false);
                         }
                         if (this.isNullOrEmpty(searchedText)) {
@@ -528,6 +530,23 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentsRequestParams.from = event.from;
         this.ocrDocumentsRequestParams.to = event.to;
         this.getAllOcrDocuments(true);
+        this.ocrDataUpdate();
+    }
+
+    /**
+     * This will be used to update the data source.
+     *
+     * @memberof AiOcrListComponent
+     */
+    public ocrDataUpdate(): void {
+        setTimeout(() => {
+            this.ocrList$.pipe(
+                takeUntil(this.routeScope$),
+            ).subscribe((data) => {
+                this.store.dispatch(this.generalActions.openSideMenu(true));
+                this.updateDataSource(data);
+            });
+        }, 100);
     }
 
     /**
@@ -570,7 +589,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         const req = {
             row: element,
             type: voucherTypeObj.value,
-            list: this.transactionOptions
+            ocrType: this.ocrType
         }
         this.aiOcrService.ocrListToCreate$.next(req);
     }

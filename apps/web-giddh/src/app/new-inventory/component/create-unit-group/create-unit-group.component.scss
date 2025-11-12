@@ -9,20 +9,25 @@
     top: 18px;
     margin-right: 0;
     border: 0;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
 }
 
+/* UNUSED COMPONENT CLASS: flexy-child - Auto-commented by script
 .flexy-child {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: flexy-child-1 - Auto-commented by script
 .flexy-child-1 {
     flex-grow: 1;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: vertical-align-middle - Auto-commented by script
 .vertical-align-middle {
     position: absolute;
     top: 50%;
@@ -35,10 +40,14 @@
     text-align: center;
     margin: 0 auto;
 }
+*/
+/* UNUSED COMPONENT CLASS: aside-body - Auto-commented by script
 .aside-body {
     padding: 15px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: aside-pane-form - Auto-commented by script
 .aside-pane-form {
     background-color: var(--color-white);
     box-shadow: 0 3px 6px var(--color-silver);
@@ -47,15 +56,20 @@
     overflow: auto;
     scroll-behavior: smooth;
     position: relative;
-    .form-gap {
+    /* UNUSED COMPONENT CLASS: form-gap - Auto-commented by script
+.form-gap {
         row-gap: 10px;
     }
 }
+*/
+/* UNUSED COMPONENT CLASS: header-create-unit - Auto-commented by script
 .header-create-unit {
-    .form-header {
+    /* UNUSED COMPONENT CLASS: form-header - Auto-commented by script
+.form-header {
         display: flex;
     }
 }
+*/
 
 /*--- custom ---*/
 .unit-quantity {
@@ -63,20 +77,15 @@
     justify-content: space-between;
     .row {
         width: 92%;
-        .unit-equal {
-            .equal-sign {
+        /* UNUSED COMPONENT CLASS: unit-equal - Auto-commented by script
+.unit-equal {
+            /* UNUSED COMPONENT CLASS: equal-sign - Auto-commented by script
+.equal-sign {
                 position: absolute;
                 right: -4px;
                 top: 55%;
             }
-        }
-    }
 }
-
-@media (max-width: 768px) {
-    .unit-quantity {
-        .row {
-            width: 94%;
-        }
+*/
     }
 }

@@ -24,13 +24,13 @@
             height: 100%;
             min-height: inherit;
             table {
-                background: var(--color-white);
+                // background: var(--color-white);
                 thead {
                     th {
-                        color: var(--color-blue-primary);
+                        // color: var(--text-primary-color);
                         border-width: 2px;
                         vertical-align: baseline;
-                        h3 {
+                        p {
                             padding: 0 10px;
                             line-height: 38.5px;
                             position: relative;
@@ -42,7 +42,7 @@
                 th {
                     padding: 0;
                     min-width: 216px;
-                    color: var(--color-black);
+                    // color: var(--color-black);
                     height: 36px;
                     .border-line {
                         border: 2px solid transparent;
@@ -52,7 +52,7 @@
                             width: inherit;
                         }
                         // &.active {
-                        //     border-color: var(--color-blue-primary);
+                        //     border-color: var(--theme-primary-color);
                         // }
                         .custom-padding {
                             padding: 6px 10px;
@@ -61,7 +61,7 @@
                     //========= PLEASE UN COMMENT BELOW CODE TO SHOW LINE ON HOVER ON THE TABLE CELL =============
                     // &:hover{
                     //     .border-line{
-                    //         border-color: var(--color-blue-primary);
+                    //         border-color: var(--theme-primary-color);
                     //     }
                     // }
                     &.min-width-140 {

@@ -1,9 +1,8 @@
 <div class="container-fluid" *ngIf="!isPettyCashRejectedReportLoading">
-    <div class="table-responsive overflow-visible">
+    <div class="table-responsive overflow-visible" *ngIf="pettyCashRejectedReportResponse?.totalItems > 0">
         <table
             mat-table
-            [@.disabled]="true"
-            class="w-100 on-mobile-view"
+            class="w-100"
             [dataSource]="rejectedItems"
             matSort
             (matSortChange)="sortChange($event)"
@@ -11,7 +10,7 @@
             [matSortDirection]="pettycashRequest.sort"
         >
             <ng-container matColumnDef="s_no">
-                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>#</th>
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef class="serial-no-column">#</th>
                 <td mat-cell *matCellDef="let rejected" data-title="#">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">#</span>
                     {{ rejected.index + 1 }}
@@ -89,16 +88,16 @@
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
                         localeData?.payment_receipt
                     }}</span>
-                    <span *ngIf="rejected.baseAccountCategory === 'OTHER'" class="font-12 text-gray mr-r05">{{
+                    <span *ngIf="rejected.baseAccountCategory === 'OTHER'" class="font-size-12 text-light mr-r05">{{
                         commonLocaleData?.app_ac
                     }}</span>
                     <span
                         *ngIf="rejected.baseAccountCategory === 'BANK'"
-                        class="font-12 text-gray icon-atm-card mr-r05"
+                        class="font-size-12 text-light icon-atm-card mr-r05"
                     ></span>
                     <span
                         *ngIf="rejected.baseAccountCategory === 'CASH'"
-                        class="font-12 text-gray icon-cash mr-r05"
+                        class="font-size-12 text-light icon-cash mr-r05"
                     ></span>
                     {{ rejected?.baseAccount?.name ? rejected.baseAccount.name : "-" }}
                 </td>
@@ -111,7 +110,7 @@
                     <i
                         *ngIf="rejected.fileNames"
                         (click)="openZoomImageView(rejected.fileNames)"
-                        class="icon-image middle text-gray pointer"
+                        class="icon-image vertical-align-middle text-light pointer"
                     ></i>
                 </td>
             </ng-container>
@@ -152,25 +151,18 @@
             <tr mat-header-row *matHeaderRowDef="rejectedTableColumns; sticky: true"></tr>
             <tr mat-row *matRowDef="let rejected; columns: rejectedTableColumns"></tr>
         </table>
+        <mat-paginator
+            *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashRejectedReportLoading"
+            [length]="pettyCashRejectedReportResponse?.totalItems"
+            [pageSize]="pettycashRequest.count"
+            [pageIndex]="pettycashRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
     </div>
 </div>
-
-<div
-    *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashRejectedReportLoading"
-    class="mt-4"
->
-    <mat-paginator
-        [length]="pettyCashRejectedReportResponse?.totalItems"
-        [pageSize]="pettycashRequest.count"
-        [pageIndex]="pettycashRequest.page - 1"
-        [pageSizeOptions]="pageSizeOptions"
-        [showFirstLastButtons]="true"
-        [hidePageSize]="false"
-        (page)="handlePageEvent($event)"
-    ></mat-paginator>
-    <section class="mr-b8"></section>
-</div>
-
 <div *ngIf="isPettyCashRejectedReportLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
@@ -178,6 +170,8 @@
 <div class="no-data" *ngIf="!pettyCashRejectedReportResponse?.totalItems && !isPettyCashRejectedReportLoading">
     <no-data></no-data>
 </div>
+
+<section class="mr-b8"></section>
 
 <ng-template #deleteEntryModal>
     <confirm-modal

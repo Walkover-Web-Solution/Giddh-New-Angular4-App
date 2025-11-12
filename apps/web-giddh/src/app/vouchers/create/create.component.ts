@@ -662,6 +662,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.aiOcrService.aiOcrDetails$.next(null);
                         this.aiOcrService.saveAndNext$.next(null);
                         this.aiOcrService.skipAndNext$.next(null);
+                        this.selectedVoucherType = "";
+                        this.ocrType = "";
+                        this.transactionOptions = [];
                         this.queryParams = cloneDeep(response[1]);
 
                         if (this.queryParams?.redirect) {
@@ -735,6 +738,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     } else {
                         this.isMainVoucher = false;
+                        this.ocrType = params.type;
+                        this.transactionOptions = this.ocrType === 'income'
+                            ? [
+                                { label: this.commonLocaleData?.app_invoice, value: VoucherTypeEnum.invoice },
+                                { label: this.commonLocaleData?.app_voucher_types?.credit_note, value: VoucherTypeEnum.creditNote },
+                                { label: this.commonLocaleData?.app_voucher_types?.receipt, value: VoucherTypeEnum.receipt }
+                            ]
+                            : [
+                                { label: this.commonLocaleData?.app_bill, value: VoucherTypeEnum.bill },
+                                { label: this.commonLocaleData?.app_voucher_types?.debit_note, value: VoucherTypeEnum.debitNote },
+                                { label: this.commonLocaleData?.app_voucher_types?.payment, value: VoucherTypeEnum.payment }
+                            ];
                         this.aiOcrService.getOcrData$
                             .pipe(skip(1), takeUntil(this.destroyed$))
                             .subscribe((response) => {
@@ -746,7 +761,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             });
 
                         this.aiOcrService.aiOcrDetails$.pipe(takeUntil(this.destroyed$)).subscribe((voucherDetails) => {
-                            this.aiOcrDetails = voucherDetails;
+                            if (voucherDetails && voucherDetails.type) {
+                                this.aiOcrDetails = voucherDetails;
+                                if (!this.rowData) {
+                                    this.selectedVoucherType = voucherDetails.type?.toLowerCase() === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : voucherDetails.type?.toLowerCase() === VoucherTypeEnum.purchase ? VoucherTypeEnum.bill : voucherDetails.type;
+                                    this.voucherType = voucherDetails.type;
+                                    this.getVoucherType();
+                                    this.invoiceForm.get("type").patchValue(this.voucherType);
+                                    this.changeDetection.detectChanges();
+                                }
+                            }
                         });
 
                         this.aiOcrService.saveAndNext$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -759,10 +783,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
 
         this.aiOcrService.ocrListToCreate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.transactionOptions = response.list;
-                this.selectedVoucherType = this.titleCasePipe.transform(response.type);
+            if (response && response.type && response.row) {
+                this.selectedVoucherType = response.type?.toLowerCase() === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : response.type?.toLowerCase() === VoucherTypeEnum.purchase ? VoucherTypeEnum.bill : response.type;
                 this.rowData = response.row;
+            } else if (response && response.type && response.row == null) {
+                this.rowData = null;
+                this.selectedVoucherType = response.type?.toLowerCase() === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : response.type?.toLowerCase() === VoucherTypeEnum.purchase ? VoucherTypeEnum.bill : response.type;
             }
         });
 
@@ -982,7 +1008,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.company.countryName = "";
                     this.openAccountDropdown = false;
                     this.urlVoucherType = aiOcrDetails.type;
-                    this.voucherType = this.vouchersUtilityService.parseVoucherType(aiOcrDetails.type);
+                    this.voucherType = this.vouchersUtilityService.parseVoucherType(this.urlVoucherType);
                     this.ocrVoucherType = aiOcrDetails.type;
                     this.aiOcrService.saveAndNext$.next(null);
                     this.aiOcrService.skipAndNext$.next(null);
@@ -1049,8 +1075,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             ?.get("mobileNumber")
                             .patchValue(voucherDetails.account?.mobileNumber ?? "");
                         this.account.mobileNumber = voucherDetails.account?.mobileNumber ?? "";
-                        this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
-                        this.checkMobileNumber();
+                        // Disabled old mobile input initialization as we're using mobile-number-input component
+                        // this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+                        // this.checkMobileNumber();
                     }
 
                     if (voucherDetails?.purchaseOrderDetails?.length && !this.isCopyMode) {
@@ -1682,7 +1709,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ngAfterViewInit(): void {
-        this.initIntl();
+        // Removed initIntl() call as we're now using mobile-number-input component
+        // this.initIntl();
     }
 
     /**
@@ -2443,7 +2471,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const account = entries.at(entryIndex)?.value?.transactions?.[0]?.account;
             // Delete entry if account is not selected
             if (!(account?.uniqueName && account?.name)) {
-            this.deleteLineEntry(entryIndex);
+                this.deleteLineEntry(entryIndex);
             }
             return;
         }
@@ -2618,9 +2646,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"]?.get("email").setValue(accountData?.email);
             this.invoiceForm.controls["account"]?.get("mobileNumber").setValue(accountData?.mobileNo ?? "");
             this.account.mobileNumber = accountData?.mobileNo ?? "";
-            this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+            // Disabled old mobile input initialization as we're using mobile-number-input component
+            // this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
             this.updateDueDate();
-            this.checkMobileNumber();
+            // this.checkMobileNumber();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
@@ -3821,17 +3850,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.dateChangeType = "voucher";
+        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder)) {
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: "mat-dialog-sm",
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+                },
+            });
+            dialogRef.afterClosed().subscribe((response) => {
+                this.handleDateChangeConfirmation(response);
+            });
+        }
 
-        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            panelClass: "mat-dialog-sm",
-            data: {
-                configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
-            },
-        });
-
-        dialogRef.afterClosed().subscribe((response) => {
-            this.handleDateChangeConfirmation(response);
-        });
     }
 
     /**
@@ -3979,6 +4009,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public initIntl(inputValue?: string): void {
+        return;
         let times = 0;
         const parentDom = document.querySelector("create");
         const input = document.getElementById("init-contact");
@@ -4881,6 +4912,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
                                 type: OcrAction.Save,
+                                ocrType: this.ocrType
                             });
                             this.resetVoucherForm();
 
@@ -4954,6 +4986,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
                                 type: OcrAction.Save,
+                                ocrType: this.ocrType
                             });
                             if (callback) {
                                 this.resetVoucherForm(false);
@@ -5086,6 +5119,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
                                 type: OcrAction.Save,
+                                ocrType: this.ocrType
                             });
                             const isCashSalesPurchaseInvoice =
                                 this.invoiceType.isCashInvoice &&
@@ -5323,7 +5357,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.forceClear = true;
 
         setTimeout(() => {
-             this.forceClear = false;
+            this.forceClear = false;
             this.openAccountDropdown = openAccountDropdown;
         }, 200);
     }
@@ -6469,7 +6503,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             barcodeValue: this.barcodeValue,
             customerUniqueName: this.invoiceForm.controls["account"]?.get("uniqueName")?.value ?? ""
         };
-        
+
         if (this.invoiceType.isPurchaseOrder) {
             params.invoiceType = VoucherTypeEnum.purchase;
         } else if (this.invoiceType.isCashInvoice) {
@@ -6959,12 +6993,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
       * @param {string} type - The unique name to search for
       * @memberof VoucherCreateComponent
       */
-    public selectVoucherType(type: string): void {
-        this.selectedVoucherType = type?.toLowerCase();
+    public selectVoucherType(value: string): void {
+        this.selectedVoucherType = value?.toLowerCase();
+
+        // Optimize type mapping using object lookup instead of if-else chain
+        const typeMapping = { 'bill': 'purchase', 'invoice': 'sales' };
+        const mappedType = typeMapping[this.selectedVoucherType] || this.selectedVoucherType;
+
         const req = {
             row: this.rowData,
-            type: this.selectedVoucherType,
-            list: this.transactionOptions
+            type: mappedType,
+            list: this.transactionOptions,
+            aiOcrDetails: this.aiOcrDetails,
+            ocrType: this.ocrType
         }
         this.voucherType = this.vouchersUtilityService.parseVoucherType(req.type);
         this.getVoucherType();

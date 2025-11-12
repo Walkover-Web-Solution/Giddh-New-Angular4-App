@@ -7,7 +7,7 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <form #bulkUpdateForm="ngForm" autocomplete="off" (ngSubmit)="updateBulkInvoice()">
-            <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+            <div class="modal-body pd-l2 pd-r2 clear-both" id="export-body">
                 <small>{{ localeData?.choose_field_bulk_update }}</small>
                 <div class="row mr-b1 mt-2">
                     <div class="col-md-6 col-sm-6">
@@ -60,7 +60,7 @@
                             ></reactive-dropdown-field>
                         </div>
 
-                        <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
+                        <div class="position-relative form-group" *ngIf="selectedField === 'dueDate'">
                             <giddh-datepicker
                                 [(ngModel)]="updateDueDatesRequest.dueDate"
                                 [appearance]="'outline'"
@@ -81,7 +81,7 @@
                                     id="bulkUploadfileInput"
                                     (change)="uploadImage()"
                                 />
-                                <label class="cp font-15 text-gray" for="bulkUploadfileInput">
+                                <label class="cursor-pointer font-size-15 text-light" for="bulkUploadfileInput">
                                     {{ localeData?.upload_logo }}
                                 </label>
                             </label>
@@ -117,7 +117,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <div class="relative form-group">
+                                <div class="position-relative form-group">
                                     <reactive-dropdown-field
                                         [placeholder]="commonLocaleData?.app_state"
                                         [options]="allTemplatesOptions"
@@ -144,7 +144,7 @@
 
                     <div *ngIf="selectedField === 'customFields'" class="row mb-2">
                         <div class="col-md-4">
-                            <div class="relative form-group">
+                            <div class="position-relative form-group">
                                 <div class="form-group">
                                     <input
                                         type="text"
@@ -187,7 +187,7 @@
                     <small>{{ localeData?.bulk_invoice_update_note }}</small>
                 </div>
             </div>
-            <div class="d-flex column-gap1 justify-content-end">
+            <div class="d-flex column-gap-1 justify-content-end">
                 <button
                     mat-raised-button color="primary"
                     (click)="updateBulkInvoice()"
@@ -210,13 +210,13 @@
             <i class="icon-cross"></i>
         </button>
     </div>
-    <div mat-dialog-content class="dialog-body">
-        <h3>{{ localeData?.bulk_image_note }}</h3>
-        <h4 class="mr-t2">
+    <div mat-dialog-content class="dialog-body max-height-65vh">
+        <p>{{ localeData?.bulk_image_note }}</p>
+        <p class="mr-t2">
             <b> {{ localeData?.want_proceed }}</b>
-        </h4>
+        </p>
     </div>
-    <div mat-dialog-actions class="text-left mr-t2 clearfix">
+    <div mat-dialog-actions class="text-left mr-t2 clear-both">
         <button
             type="submit"
             mat-raised-button color="primary"

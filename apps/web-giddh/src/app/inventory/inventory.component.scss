@@ -2,6 +2,7 @@
     min-height: 100%;
 }
 
+/* UNUSED COMPONENT CLASS: nav - Auto-commented by script
 .inventory-control ::ng-deep.nav > li > a {
     padding: 2px 0px !important;
     margin-right: 35px !important;
@@ -13,8 +14,10 @@
     font-size: var(--font-size-16);
     height: 36px;
 }
-
-.inventory-control ::ng-deep.nav.nav-tabs {
+*/
+/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
+.inventory-control ::ng-deep.nav
+.nav-tabs {
     margin-bottom: 0;
     padding: 0 0px 0 15px !important;
     background-color: var(--color-white);
@@ -23,17 +26,18 @@
     left: 0;
     width: 100%;
     padding: 10px 0px 0 15px !important;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
+*/
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
-    color: var(--color-blue-primary) !important;
+    color: var(--text-primary-color) !important;
 }
 .inventory-control ::ng-deep.nav-tabs > ::ng-deep li.active > a,
 .inventory-control .nav-tabs > ::ng-deep li.active > a:focus,
 .inventory-control ::ng-deep.nav-tabs > li.active > a:hover {
-    color: var(--color-blue-primary) !important;
-    border-bottom: 4px solid var(--color-blue-primary) !important;
+    color: var(--text-primary-color) !important;
+    border-bottom: 4px solid var(--theme-primary-color) !important;
     cursor: pointer !important;
     background-color: unset !important;
     border-top: transparent !important;
@@ -41,13 +45,15 @@
     border-left: transparent !important;
 }
 .inventory-control .nav-tabs > li > a:hover {
-    color: var(--color-blue-primary) !important;
-    border-bottom: 4px solid var(--color-blue-primary) !important;
+    color: var(--text-primary-color) !important;
+    border-bottom: 4px solid var(--theme-primary-color) !important;
 }
+/* UNUSED COMPONENT CLASS: navbar - Auto-commented by script
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
 }
+*/
 .inventory-control ::ng-deep.nav > li > a:focus,
 .inventory-control ::ng-deep.nav > li > a:hover {
     background-color: unset !important;
@@ -84,50 +90,8 @@
 .inventory-head {
     padding-top: 55px;
 }
-@media (max-width: 767px) {
-    .inventory-control ::ng-deep.nav.nav-tabs {
-        position: fixed !important;
-        width: 100%;
-        top: 90px;
-        padding: 5px 0px 0 15px !important;
-    }
-    .inventory-head {
-        padding-top: 15px;
-    }
-}
 @media (max-width: 1024px) {
     .wrap-top-inventory {
         display: flex;
-    }
-}
-@media (max-width: 575px) {
-    .wrap-top-inventory {
-        flex-direction: column;
-    }
-}
-@media (max-width: 445px) {
-    .inventory-control .container-fluid {
-        .branch-warehouse-filter {
-            width: 100%;
-            sh-select {
-                min-width: auto;
-            }
-        }
-        .branch-filter {
-            margin-right: 0px;
-            width: 100% !important;
-        }
-        .warehouse-filter {
-            max-width: auto;
-            width: 100%;
-            margin-left: 15px;
-        }
-    }
-}
-
-@media (max-width: 325px) {
-    .inventory-control ::ng-deep.nav.nav-tabs {
-        display: inline-block;
-        white-space: nowrap;
     }
 }

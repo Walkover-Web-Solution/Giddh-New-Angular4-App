@@ -28,10 +28,10 @@
                     {{ localeData?.upload_button }}
                 </button>
                 <div
-                    class="mr-t1 d-flex justify-content-center align-items-center"
+                    class="mr-t1 d-flex justify-content-center align-items-center flex-column row-gap-15"
                     *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
                 >
-                    <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+                    <span class="font-size-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
                     <button mat-raised-button color="primary" (click)="gotToBranchTab()">
                         {{ localeData?.go_to_branch }}
                     </button>
@@ -54,7 +54,6 @@
                         [disabled]="isCompany || isConsolidatedBranch"
                         class="icomoon-ico d-flex align-items-center cursor-pointer"
                         [matTooltip]="commonLocaleData?.app_upload"
-                        matTooltipClass="tooltip-black"
                         [matTooltipPosition]="'above'"
                         (click)="onUploadFile($event, fileInput, false)"
                     >
@@ -68,7 +67,7 @@
                         <mat-button-toggle
                             [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0 || voucherApiVersion === 1"
                             value="create"
-                            (click)="onToggleChange(ocrAction.Create); rowData = null"
+                            (click)="onToggleChange(ocrAction.Create, true)"
                             [checked]="selectedToggle === ocrAction.Create"
                         >
                             <div matBadge="{{ countVariable }}" matBadgeOverlap="true">
@@ -79,7 +78,7 @@
                             class="w125"
                             value="list"
                             [checked]="selectedToggle === ocrAction.List"
-                            (click)="onToggleChange(ocrAction.List); rowData = null"
+                            (click)="onToggleChange(ocrAction.List, false)"
                         >
                             <span>{{ localeData?.list }}</span>
                         </mat-button-toggle>
@@ -144,7 +143,7 @@
                         <button
                             *ngIf="showClearFilter"
                             mat-stroked-button
-                            class="min160 mr-l1"
+                            class="min-width-160 mr-l1"
                             color="primary"
                             (click)="resetData()"
                         >
@@ -162,7 +161,7 @@
                 </div>
             </div>
             <div class="mr-t1 d-flex align-items-center" *ngIf="isCompany">
-                <span class="font-16 mr-r1">{{ localeData?.create_voucher_messgae }} </span>
+                <span class="font-size-16 mr-r1">{{ localeData?.create_voucher_messgae }} </span>
             </div>
             <main class="flex-grow-1 overflow-auto main-ocr">
                 <ng-container [ngSwitch]="selectedToggle">
@@ -175,7 +174,7 @@
                             </ng-container>
                             <ng-template #noDataFound>
                                 <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
-                                    <h1>{{ localeData?.no_data_found }}</h1>
+                                    <p>{{ localeData?.no_data_found }}</p>
                                     <img
                                         class="mr-t1"
                                         height="200"

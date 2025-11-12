@@ -159,6 +159,10 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.manufactureUniqueName = params?.uniqueName;
                 this.getManufacturingDetails(params?.uniqueName);
             }
+            setTimeout(() => {
+                this.changeDetectionRef.detectChanges();
+                console.log("changes")
+            }, 2000);
             if (!this.manufactureUniqueName) {
                 this.increaseExpenseAmount = this.manufacturingObject.manufacturingDetails[0].increaseAssetValue;
             }
@@ -1075,7 +1079,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      */
     public showBorder(dataType: any): void {
         if (!this.isCompany) {
-            dataType.cssClass = 'form-control mat-field-border';
+            dataType.cssClass = 'form-control border';
         }
     }
 
@@ -1088,21 +1092,21 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public hideBorder(type: any, dataType: any): void {
         if (type === 'linkedStock') {
             if (!dataType?.variant?.uniqueName && !this.isCompany) {
-                dataType.cssClass = 'form-control mat-field-border';
+                dataType.cssClass = 'form-control border';
             } else {
                 dataType.cssClass = 'form-control';
             }
         }
         if (type === 'expense') {
             if (!dataType?.baseAccount?.uniqueName && !this.isCompany) {
-                dataType.cssClass = 'form-control mat-field-border';
+                dataType.cssClass = 'form-control border';
             } else {
                 dataType.cssClass = 'form-control';
             }
         }
         if (type === 'byProductLinkedStock') {
             if (!dataType?.baseAccount?.uniqueName && !this.isCompany) {
-                dataType.cssClass = 'form-control mat-field-border';
+                dataType.cssClass = 'form-control border';
             } else {
                 dataType.cssClass = 'form-control';
             }
@@ -1111,7 +1115,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
     public hideByProductLinkedStockBorder(expense: any): void {
         if (!expense.baseAccount.uniqueName && !this.isCompany) {
-            expense.cssClass = 'form-control mat-field-border';
+            expense.cssClass = 'form-control border';
         } else {
             expense.cssClass = 'form-control';
         }
@@ -1119,12 +1123,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
     public showByProductLinkedStockBorder(expense: any): void {
         if (!this.isCompany) {
-            expense.cssClass = 'form-control mat-field-border';
+            expense.cssClass = 'form-control border';
         }
     }
     public hideExpenseBorder(expense: any): void {
         if (!expense.baseAccount.uniqueName && !this.isCompany) {
-            expense.cssClass = 'form-control mat-field-border';
+            expense.cssClass = 'form-control border';
         } else {
             expense.cssClass = 'form-control';
         }
@@ -1132,7 +1136,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
     public showExpenseBorder(expense: any): void {
         if (!this.isCompany) {
-            expense.cssClass = 'form-control mat-field-border';
+            expense.cssClass = 'form-control border';
         }
     }
 

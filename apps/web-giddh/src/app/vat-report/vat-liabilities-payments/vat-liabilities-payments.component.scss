@@ -8,10 +8,15 @@
     }
     .custom-datepicker {
         input {
-            height: var(--mat-form-field-height);
-            width: 100% !important;
-            min-width: 230px;
             max-width: unset !important;
+        }
+    }
+}
+
+:host ::ng-deep giddh-page-loader {
+    &.unset-loader-margin {
+        .loader-main {
+            margin: 0 !important;
         }
     }
 }
