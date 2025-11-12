@@ -417,7 +417,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getStockUnits(index: number): void {
         this.stockMainUnits = [];
-        console.log(this.bulkStockData.value[index]);
         if (!this.bulkStockData.value[index].stockUnitCode) {
             return;
         }
