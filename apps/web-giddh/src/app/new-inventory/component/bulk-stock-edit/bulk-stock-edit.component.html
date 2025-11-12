@@ -1237,17 +1237,24 @@
                                                 <ng-container
                                                     *ngIf="
                                                         tableHeaderDynamicColumns.length &&
-                                                        row?.get('customFields')?.value?.length
+                                                        row?.get('customFields')?.controls?.length
                                                     "
                                                 >
                                                     <td
-                                                        *ngFor="let column of row.get('customFields').value" (click)="getInputIndex(i, column.key)"
+                                                        *ngFor="let customField of row.get('customFields').controls; let j = index" 
+                                                        (click)="getInputIndex(i, customField.get('key')?.value)"
                                                         class="min-width-140"
                                                     >
                                                         <div class="border-line">
-                                                            <div class="custom-padding">
-                                                                {{ column?.value }}
-                                                            </div>
+                                                            <ng-container formArrayName="customFields">
+                                                                <ng-container [formGroupName]="j">
+                                                                    <text-field
+                                                                        [type]="'text'"
+                                                                        formControlName="value"
+                                                                    >
+                                                                    </text-field>
+                                                                </ng-container>
+                                                            </ng-container>
                                                         </div>
                                                     </td>
                                                 </ng-container>
