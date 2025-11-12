@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, ReplaySubject, debounceTime, distinctUntilChanged, filter, take, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, debounceTime, distinctUntilChanged, filter, of, take, takeUntil } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
@@ -177,9 +177,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public fixedAssetAccountList: any[] = [];
     /** This will use for taxes list */
     public taxes: any[] = [];
+    /** This will use for taxes list Observable */
+    public taxes$: Observable<any>;
+    /** This will use for filtered taxes list */
+    public filteredTaxesList: any[] = [];
     /** This will use for stock main units list */
     public stockMainUnits: any[] = [];
-    /** This will use for purchase account list */
+    /** This will use for select table row name */
     public selectTableRowName: string = '';
     /** This will use for instance of tax Dropdown */
     public taxDropdown: FormControl = new FormControl();
@@ -243,6 +247,20 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         });
+
+        this.taxDropdown.valueChanges.pipe(debounceTime(700),
+            takeUntil(this.destroyed$)).subscribe((search: string) => {
+                if (!search) {
+                    this.taxes$.pipe(take(1)).subscribe(res => {
+                        this.filteredTaxesList = res as IOption[];
+                    });
+                } else {
+                    this.taxes$.pipe(take(1)).subscribe(res => {
+                        this.filteredTaxesList = res?.filter((tax: IOption) => tax?.label?.toLowerCase()?.includes(search?.toLowerCase())) as IOption[];
+                    });
+                }
+                this.cdr.detectChanges();
+            });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
@@ -404,6 +422,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                         additional: item
                     }
                 }) || [];
+                this.taxes$ = of(this.taxes);
+                this.filteredTaxesList = this.taxes;
             }
             this.cdr.detectChanges();
         });
