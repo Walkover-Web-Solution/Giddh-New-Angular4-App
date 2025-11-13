@@ -17,6 +17,7 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { isEqual } from '../../../lodash-optimized';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { ManufacturingService } from '../../../services/manufacturing.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'bulk-stock',
@@ -31,6 +32,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('bulkStockAdvanceFilter') public bulkStockAdvanceFilter: TemplateRef<any>
     /** ViewChildren for tax select dropdowns */
     @ViewChildren('taxSelect') public taxSelects: QueryList<MatSelect>;
+    /** ViewChildren for menu triggers */
+    @ViewChildren(MatMenuTrigger) menuTriggers!: QueryList<MatMenuTrigger>;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -195,6 +198,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public processedTaxes: any[] = [];
     /** Temporary array to hold selected taxes */
     public taxTempArray: any[] = [];
+    /** Number of menus per row */
+    public get menusPerRow(): number {
+        const firstRowMenus = document.querySelectorAll('tr:first-child mat-menu').length;
+        return firstRowMenus || 1;
+    }
 
     constructor(
         private route: ActivatedRoute,
@@ -410,6 +418,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public hideTableInput(): void {
+        if (this.selectTableRowIndex !== -1) {
+            for (let i = 0; i < this.menusPerRow; i++) {
+                this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i).closeMenu();
+            }
+        }
         this.selectTableRowIndex = -1;
     }
 
@@ -422,6 +435,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public showTableInput($event: any, index: number): void {
         $event.stopPropagation();
+        if (this.selectTableRowIndex !== -1 && this.selectTableRowIndex !== index) {
+            for (let i = 0; i < this.menusPerRow; i++) {
+                this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i).closeMenu();
+            }
+        }
         this.selectTableRowIndex = index;
         this.getStockUnits(index);
     }
