@@ -1074,7 +1074,6 @@
                                                                     *ngFor="let tax of taxes"
                                                                     [value]="tax?.uniqueName"
                                                                     [disabled]="tax.isDisabled"
-                                                                    [selected]="tax.isChecked"
                                                                     (click)="$event.stopPropagation()"
                                                                     (onSelectionChange)="!tax.isDisabled ? selectTax(tax, selectTableRowIndex) : ''"
                                                                     >{{ tax.name }}</mat-option
