@@ -46,7 +46,7 @@
     th {
         border: none !important;
         border-bottom: 1px solid var(--border-color) !important;
-        padding: 13px 0 14px 0 !important;
+        padding: 13px 5px 14px 0 !important;
         min-width: 275px;
 
         &:first-child {
@@ -93,7 +93,7 @@
 }
 
 .row-height {
-    min-height: 38px;
+    min-height: 37px;
 }
 
 @media (max-width: 1024px) {

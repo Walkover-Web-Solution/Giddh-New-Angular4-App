@@ -4978,6 +4978,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container {
+    background-color: var(--table-background-color) !important;
     .account {
         background: var(--color-light-gray);
         color: var(--color-black);
@@ -4995,7 +4996,6 @@ input[type="checkbox"][disabled]:after {
     position: sticky;
     left: 0;
     z-index: 9;
-    background: var(--theme-background-color);
     max-width: 300px !important;
     min-width: 300px !important;
     padding-block: 10px !important;
@@ -6549,10 +6549,6 @@ hamburger-menu {
     font-size: var(--font-size-15);
 }
 
-.search-table {
-    min-width: 140px;
-}
-
 // Table amount styles
 .table-amount {
     &[disabled] {
@@ -6570,9 +6566,10 @@ hamburger-menu {
 }
 
 .name-column {
-    width: 180px !important;
-    min-width: 180px !important;
-    max-width: 195px !important;
+    $name-column-width: 210px;
+    width: $name-column-width !important;
+    min-width: $name-column-width !important;
+    max-width: $name-column-width !important;
 }
 
 // Main table responsive styles
@@ -10000,7 +9997,7 @@ body.update-scroll-hidden {
 }
 
 .search-table {
-    min-width: 140px;
+    min-width: 132px;
 }
 
 .download-arrow {
