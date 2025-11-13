@@ -6572,6 +6572,7 @@ hamburger-menu {
 .name-column {
     width: 180px !important;
     min-width: 180px !important;
+    max-width: 195px !important;
 }
 
 // Main table responsive styles
@@ -11841,4 +11842,46 @@ body {
     z-index: 9999;
     background: #ffa01b;
     border-radius: 50%;
+}
+
+
+.activity-log-page {
+    .giddh-table.mat-mdc-table {
+        tbody {
+            > tr.history-child-row {
+                > td {
+                    background-color: var(--theme-primary-light) !important;
+                    color: var(--color-black);
+                    .mat-mdc-checkbox {
+                        --mdc-checkbox-unselected-focus-icon-color: var(--color-black) !important;
+                        --mdc-checkbox-unselected-hover-icon-color: var(--color-black) !important;
+                        --mdc-checkbox-unselected-icon-color: var(--color-black) !important;
+                    }
+                }
+
+                &:hover {
+                    > td {
+                        background-color: var(--theme-primary-light) !important;
+                        color: var(--color-black);
+                        .mat-mdc-checkbox {
+                           --mdc-checkbox-unselected-focus-icon-color: var(--color-black) !important;
+                            --mdc-checkbox-unselected-hover-icon-color: var(--color-black) !important;
+                            --mdc-checkbox-unselected-icon-color: var(--color-black) !important;
+                        }
+                    }
+                }
+
+                .mat-column-history {
+                    .history-checkbox {
+                        .mat-checkbox-inner-container-no-side-margin {
+                            .mat-checkbox-input {
+                                padding: 15px !important;
+                                transform: translate(-7px, -9px);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

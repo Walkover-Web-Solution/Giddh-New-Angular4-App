@@ -1,9 +1,8 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <input
         type="text"
-        [ngClass]="{'padding-right-18':showDropdownIcon}"    
-        [ngClass]="cssClass"    
-        class="select-field-input"
+        [ngClass]="cssClass"
+        [class]="'select-field-input'"
         [placeholder]="placeholder"
         matInput
         [matAutocomplete]="auto"
@@ -19,6 +18,7 @@
         (keydown.enter)="$event.preventDefault()"
         (clickOutside)="closeDropdownPanel($event)"
         matAutocompletePosition="auto"
+        [style.padding-right]="showDropdownIcon ? '18px' : '0'"
     />
     <mat-autocomplete
         autoActiveFirstOption

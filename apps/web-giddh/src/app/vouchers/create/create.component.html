@@ -772,7 +772,12 @@
                                     <div class="col-12"
                                         *ngIf="showTaxColumn && (invoiceType.isPurchaseInvoice || (currentVoucherFormDetails?.rcmAllowed && (company.countryName === 'India' || company.countryName === 'United Kingdom')))">
                                         <mat-checkbox 
-                                            [disabled]="true" [color]="primary">
+                                            (keydown.enter)="$event.preventDefault()"
+                                            #rcmCheckbox
+                                            class="mr-r05"
+                                            [disabled]="isEinvoiceGenerated"
+                                            color="primary"
+                                        >
                                         </mat-checkbox>
                                         <label for="reverse-charge"
                                             (click)="!isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"

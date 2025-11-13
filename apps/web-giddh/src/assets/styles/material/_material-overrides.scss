@@ -25,6 +25,10 @@
 .form-control:disabled {
     @include cursor(not-allowed);
     @include pointer-events(auto);
+    * {
+        @include cursor(not-allowed);
+        @include pointer-events(auto);
+    }
 }
 
 // Table

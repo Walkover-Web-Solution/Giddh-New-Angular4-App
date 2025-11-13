@@ -4585,18 +4585,17 @@ body {
 
     .giddh-table.mat-mdc-table {
         tbody {
-            // > tr.history-child-row {
-            //     > td {
-            //         background-color: var(--color-light-gray) !important;
-            //     }
+            > tr.history-child-row {
+                > td {
+                    background-color: var(--color-light-gray) !important;
+                }
 
-            //     &:hover {
-            //         > td {
-            //             background-color: var(--color-light-gray) !important;
-            //         }
-            //     }
+                &:hover {
+                    > td {
+                        background-color: var(--color-light-gray) !important;
+                    }
+                }
 
-            /* UNUSED GLOBAL CLASS: mat-column-history - Auto-commented by script
                 .mat-column-history {
                     .history-checkbox {
                         .mat-checkbox-inner-container-no-side-margin {
@@ -4607,8 +4606,7 @@ body {
                         }
                     }
                 }
-                */
-            // }
+            }
         }
     }
 
