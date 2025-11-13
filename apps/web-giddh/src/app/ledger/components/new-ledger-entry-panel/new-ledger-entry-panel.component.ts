@@ -447,7 +447,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe(salesPersonList => {
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$), filter(Boolean)).subscribe(salesPersonList => {
             if (!this.isSalesPersonExists(this.blankLedger.salesPersonUniqueName, salesPersonList)) {
                 let salesPersonName = "";
                 let salesPersonUniqueName = null;
