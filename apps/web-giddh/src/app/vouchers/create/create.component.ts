@@ -5438,30 +5438,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Handles country change event from mobile number input component
-     *
-     * @param {Country} country - Selected country
-     * @memberof VoucherCreateComponent
-     */
-    public onCountryChanged(country: Country): void {
-        console.log('Country changed to:', country.name, country.dialCode);
-        // You can add additional logic here if needed
-        // For example, update user preferences or validate based on country
-    }
-
-    /**
-     * Handles mobile number change event from mobile number input component
-     *
-     * @param {string} mobile - Mobile number
-     * @memberof VoucherCreateComponent
-     */
-    public onMobileChanged(mobile: string): void {
-        console.log('Mobile number changed to:', mobile);
-        // The form control will be automatically updated by the component
-        // You can add additional validation or processing logic here if needed
-    }
-
-    /**
      * Lifecycle hook for component destroy
      *
      * @memberof VoucherCreateComponent

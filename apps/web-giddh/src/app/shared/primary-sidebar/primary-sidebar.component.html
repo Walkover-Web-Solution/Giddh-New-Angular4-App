@@ -27,6 +27,7 @@
                     >
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center">
+                                <span class="company-alice mr-r05 text-uppercase">{{ companyInitials }}</span>
                                 <span class="d-flex justify-content-between w-100 company-full-name flex-column">
                                     <span class="company-ellipsis" [matTooltip]="selectedCompanyDetails?.name" matTooltipPosition="above">{{ selectedCompanyDetails?.name }}</span>
                                     <span
@@ -39,7 +40,7 @@
                                         *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
                                     ></i>
                                 </span>
-                                <button mat-icon-button class="ml-1">
+                                <button mat-icon-button class="ml-1 toggle-btn">
                                     <i
                                     [ngClass]="{
                                         'icon-cross font-size-15': showCompanyBranchSwitch,
