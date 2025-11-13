@@ -1414,7 +1414,7 @@ td span {
                         background-color: var(--theme-primary-light) !important;
                         border-radius: 50px;
                         padding: 0 15px;
-                        filter: var(--color-image-filter-quaternary);
+                        filter: invert(0);
                     }
                 }
             }
