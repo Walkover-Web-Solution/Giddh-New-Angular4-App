@@ -14,7 +14,7 @@ import { InventoryComponentStore } from '../inventory.store';
 import { SalesService } from '../../../services/sales.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { CompanyActions } from '../../../actions/company.actions';
-import { isEqual } from '../../../lodash-optimized';
+import { cloneDeep, isEqual } from '../../../lodash-optimized';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { ManufacturingService } from '../../../services/manufacturing.service';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -190,14 +190,16 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public selectTableRowName: string = '';
     /** This will use for instance of tax Dropdown */
     public taxDropdown: FormControl = new FormControl();
-    /** Holds list of selected taxes */
-    public selectedTaxes: any[] = [];
+    /** Holds list of selected taxes - index wise for each row */
+    public selectedTaxes: any[][] = [];
     /** True if tax selection box is open */
     public isTaxSelectionOpen: boolean = false;
     /** Holds list of taxes processed while tax selection box was closed */
     public processedTaxes: any[] = [];
-    /** Temporary array to hold selected taxes */
-    public taxTempArray: any[] = [];
+    /** Temporary array to hold selected taxes - index wise for each row */
+    public taxTempArray: any[][] = [];
+    /** This will use for taxes list Observable - index wise for each row */
+    public taxesList: any[][] = [];
     /** Number of menus per row */
     public get menusPerRow(): number {
         const firstRowMenus = document.querySelectorAll('tr:first-child mat-menu').length;
@@ -419,6 +421,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public hideTableInput(): void {
         if (this.selectTableRowIndex !== -1) {
+            // Close mat-menus for current row
             for (let i = 0; i < this.menusPerRow; i++) {
                 this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i).closeMenu();
             }
@@ -436,6 +439,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public showTableInput($event: any, index: number): void {
         $event.stopPropagation();
         if (this.selectTableRowIndex !== -1 && this.selectTableRowIndex !== index) {
+            // Close mat-menus for previous row
             for (let i = 0; i < this.menusPerRow; i++) {
                 this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i).closeMenu();
             }
@@ -471,7 +475,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!taxSelected) {
             return;
         }
-
         // For bulk edit, we need to handle tax selection per row
         const currentRowIndex = selectTableRowIndex;
         if (currentRowIndex === -1) {
@@ -485,6 +488,12 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!this.taxTempArray[currentRowIndex]) {
             this.taxTempArray[currentRowIndex] = [];
         }
+        if (!this.taxesList[currentRowIndex]) {
+            this.taxesList[currentRowIndex] = cloneDeep(this.taxes);
+        }
+
+        // Work with row-specific tax list to maintain state per row
+        let rowTaxes = this.taxesList[currentRowIndex];
 
         if (!this.isTaxSelectionOpen) {
             if (this.processedTaxes.includes(taxSelected.uniqueName)) {
@@ -499,7 +508,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             let index = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp.taxType === taxSelected.taxType);
             
             if (index > -1 && !isSelected?.length) {
-                this.taxes.forEach((tax) => {
+                rowTaxes.forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
@@ -513,7 +522,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             if (index < 0 && !isSelected?.length) {
-                this.taxes.forEach((tax) => {
+                rowTaxes.forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
@@ -525,23 +534,31 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                         tax.isDisabled = true;
                     }
                     if (tax?.uniqueName === taxSelected.uniqueName) {
-                        taxSelected.isChecked = true;
-                        taxSelected.isDisabled = false;
-                        this.taxTempArray[currentRowIndex].push(taxSelected);
+                        tax.isChecked = true;
+                        tax.isDisabled = false;
+                        this.taxTempArray[currentRowIndex].push(cloneDeep(tax));
                     }
                 });
             } else if (index > -1 && !isSelected?.length) {
-                taxSelected.isChecked = true;
-                taxSelected.isDisabled = false;
+                // Find and update the tax in row-specific list
+                let rowTax = rowTaxes.find(tax => tax.uniqueName === taxSelected.uniqueName);
+                if (rowTax) {
+                    rowTax.isChecked = true;
+                    rowTax.isDisabled = false;
+                }
                 this.taxTempArray[currentRowIndex] = this.taxTempArray[currentRowIndex]?.filter(taxTemp => {
                     return taxSelected.taxType !== taxTemp.taxType;
                 });
-                this.taxTempArray[currentRowIndex].push(taxSelected);
+                this.taxTempArray[currentRowIndex].push(cloneDeep(rowTax || taxSelected));
             } else {
                 let idx = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp?.uniqueName === taxSelected.uniqueName);
                 this.taxTempArray[currentRowIndex].splice(idx, 1);
-                taxSelected.isChecked = false;
-                this.taxes.forEach((tax) => {
+                // Update row-specific tax list
+                let rowTax = rowTaxes.find(tax => tax.uniqueName === taxSelected.uniqueName);
+                if (rowTax) {
+                    rowTax.isChecked = false;
+                }
+                rowTaxes.forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isDisabled = false;
                     }
@@ -553,18 +570,23 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         } else {
             if (!isSelected?.length) {
-                this.taxTempArray[currentRowIndex].push(taxSelected);
-                taxSelected.isChecked = true;
+                let rowTax = rowTaxes.find(tax => tax.uniqueName === taxSelected.uniqueName);
+                if (rowTax) {
+                    rowTax.isChecked = true;
+                }
+                this.taxTempArray[currentRowIndex].push(cloneDeep(rowTax || taxSelected));
             } else {
                 let idx = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp?.uniqueName === taxSelected.uniqueName);
                 this.taxTempArray[currentRowIndex].splice(idx, 1);
-                taxSelected.isChecked = false;
+                let rowTax = rowTaxes.find(tax => tax.uniqueName === taxSelected.uniqueName);
+                if (rowTax) {
+                    rowTax.isChecked = false;
+                }
             }
         }
         
         // Update selected taxes for current row
         this.selectedTaxes[currentRowIndex] = this.taxTempArray[currentRowIndex].map(tax => tax?.uniqueName);
-        
         this.cdr.detectChanges();
     }
 
@@ -584,6 +606,20 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Get taxes for a specific row index
+     *
+     * @param {number} rowIndex - The row index
+     * @returns {any[]} Array of taxes for the row
+     * @memberof BulkStockEditComponent
+     */
+    public getTaxesForRow(rowIndex: number): any[] {
+        if (!this.taxesList[rowIndex]) {
+            this.taxesList[rowIndex] = cloneDeep(this.taxes);
+        }
+        return this.taxesList[rowIndex] || [];
+    }
+
+    /**
      * This will use for get stock units
      * 
      * @param {number} index
@@ -591,11 +627,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getStockUnits(index: number): void {
         this.stockMainUnits = [];
-        if (!this.bulkStockData.value[index].stockUnitCode) {
+        if (!this.bulkStockData.value[index].stockUnitUniqueName) {
             return;
         }
         
-        this.manufacturingService.loadStockUnits(this.bulkStockData.value[index].stockUnitCode).pipe(takeUntil(this.destroyed$)).subscribe(units => {
+        this.manufacturingService.loadStockUnits(this.bulkStockData.value[index].stockUnitUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(units => {
             if (units?.length) {
                 units?.forEach(unit => {
                     this.stockMainUnits.push({ label: unit?.code, value: unit?.uniqueName });
@@ -635,6 +671,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             stockGroupUniqueName: [controlValue.stockGroupUniqueName, Validators.required],
             stockUnitCode: [controlValue.stockUnitCode, Validators.required],
             stockUnitName: [controlValue.stockUnitName, Validators.required],
+            stockUnitUniqueName: [controlValue.stockUnitUniqueName, Validators.required],
 
             purchaseUnitsCode: [(controlValue.purchaseUnits?.length && controlValue.purchaseUnits[0] !== null ? controlValue.purchaseUnits[0]?.code : ""), Validators.required],
             purchaseUnits: [(controlValue.purchaseUnits?.length && controlValue.purchaseUnits[0] !== null ? controlValue.purchaseUnits[0]?.uniqueName : ""), Validators.required],
@@ -697,6 +734,12 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     * @memberof BulkStockEditComponent
     */
     private addRow(data: any): void {
+        const currentIndex = this.bulkStockData.length;
+        // Initialize tax arrays for this row index
+        this.selectedTaxes[currentIndex] = data.taxes ? data.taxes.map((tax: any) => tax.uniqueName) : [];
+        this.taxTempArray[currentIndex] = data.taxes ? cloneDeep(data.taxes) : [];
+        this.taxesList[currentIndex] = cloneDeep(this.taxes);
+        
         this.bulkStockData.push(this.addNewRow(data));
     }
 
@@ -850,10 +893,28 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public getInputIndex(index: number, key: string): void {
         this.selectTableRowName = key;
         // Trigger dropdown opening if it's the taxes field
+        if (key === 'archive' || key === 'salesTaxInclusive' || key === 'purchaseTaxInclusive' || key === 'fixedAssetTaxInclusive') {
+            for (let i = 0; i < this.menusPerRow; i++) {
+                if(key === 'archive' && i === 0 || key === 'salesTaxInclusive' && i === 1 || key === 'purchaseTaxInclusive' && i === 2 || key === 'fixedAssetTaxInclusive' && i === 3) {
+                    continue;
+                }
+                this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i)?.closeMenu();
+            }
+        }else {
+            for (let i = 0; i < this.menusPerRow; i++) {
+                this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i)?.closeMenu();
+            }
+        }
         if (key === 'taxes') {
             setTimeout(() => {
                 this.openTaxDropdownIfNeeded();
             }, 50);
+        } else {
+            const taxSelect = this.taxSelects.toArray()[0];
+            if (taxSelect && taxSelect.panelOpen) {
+                taxSelect.close();
+                this.cdr.detectChanges();
+            }
         }
     }
 

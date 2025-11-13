@@ -1007,7 +1007,6 @@
                                                 <td
                                                     *ngIf="tableHeaderShowHide.archive"
                                                     (click)="getInputIndex(i, 'archive')"
-                                                    (clickOutside)="menuTrigger?.closeMenu()"
                                                     class="min-width-140"
                                                 >
                                                     <div class="border-line">
@@ -1054,10 +1053,11 @@
                                                             <mat-select
                                                                 #taxSelect
                                                                 *ngIf="selectTableRowIndex === i"
-                                                                panelClass="py-0"
+                                                                panelClass="py-0 no-backdrop"
                                                                 class="w-100"
                                                                 name="salesPerson"
                                                                 [multiple]="true"
+                                                                [disableOptionCentering]="true"
                                                                 formControlName="taxes"
                                                                 (openedChange)="openedSelectTax($event)"
                                                             >
@@ -1071,17 +1071,17 @@
                                                                     </ngx-mat-select-search>
                                                                 </mat-option>
                                                                 <mat-option
-                                                                    *ngFor="let tax of taxes"
+                                                                    *ngFor="let tax of getTaxesForRow(i)"
                                                                     [value]="tax?.uniqueName"
                                                                     [disabled]="tax.isDisabled"
                                                                     (click)="$event.stopPropagation()"
-                                                                    (onSelectionChange)="!tax.isDisabled ? selectTax(tax, selectTableRowIndex) : ''"
+                                                                    (onSelectionChange)="!tax.isDisabled ? selectTax(tax, i) : ''"
                                                                     >{{ tax.name }}</mat-option
                                                                 >
                                                                 <mat-option
                                                                     class="create-update-no-data"
                                                                     [disabled]="true"
-                                                                    *ngIf="!taxes?.length"
+                                                                    *ngIf="!getTaxesForRow(i)?.length"
                                                                     >{{ commonLocaleData?.app_no_result_found }}</mat-option
                                                                 >
                                                             </mat-select>
@@ -1112,7 +1112,6 @@
                                                 <!-- Sales Tax Inclusive -->
                                                 <td
                                                     (click)="getInputIndex(i, 'salesTaxInclusive')"
-                                                    (clickOutside)="salesTaxInclusiveMenuTrigger?.closeMenu()"
                                                     *ngIf="
                                                         (inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') &&
                                                         tableHeaderShowHide.salesTaxInclusive
@@ -1146,7 +1145,6 @@
                                                 <!-- Purchase Tax Inclusive -->
                                                 <td
                                                     (click)="getInputIndex(i, 'purchaseTaxInclusive')"
-                                                    (clickOutside)="purchaseTaxInclusiveMenuTrigger?.closeMenu()"
                                                     *ngIf="
                                                         (inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') &&
                                                         tableHeaderShowHide.purchaseTaxInclusive
@@ -1180,7 +1178,6 @@
                                                 <!-- FixedAsset Tax Inclusive -->
                                                 <td
                                                     (click)="getInputIndex(i, 'fixedAssetTaxInclusive')"
-                                                    (clickOutside)="fixedAssetTaxInclusiveMenuTrigger?.closeMenu()"
                                                     *ngIf="
                                                         inventoryType === 'FIXED_ASSETS' &&
                                                         tableHeaderShowHide.fixedAssetTaxInclusive
@@ -1227,7 +1224,7 @@
                                                             <ng-container formArrayName="customFields">
                                                                 <ng-container [formGroupName]="j">
                                                                     <text-field
-                                                                        [type]="'text'"
+                                                                        [type]="customField.get('dataType')?.value"
                                                                         formControlName="value"
                                                                     >
                                                                     </text-field>

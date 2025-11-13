@@ -85,3 +85,16 @@
         }
     }
 }
+
+// Remove CDK backdrop for mat-select
+::ng-deep .no-backdrop {
+    .cdk-overlay-backdrop {
+        display: none !important;
+    }
+}
+
+// Alternative: Hide backdrop globally for this component
+::ng-deep .cdk-overlay-backdrop {
+    pointer-events: none !important;
+    background: transparent !important;
+}
