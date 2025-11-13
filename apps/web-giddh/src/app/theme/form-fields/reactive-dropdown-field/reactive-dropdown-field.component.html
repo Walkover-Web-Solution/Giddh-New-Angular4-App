@@ -5,8 +5,7 @@
                 <mat-label *ngIf="showMatLabel">{{ label ? label : placeholder }}</mat-label>
                 <input 
                     type="text" 
-                    [ngClass]="{'padding-right-18': showCaretIcon }"
-                    [ngClass]="cssClass" 
+                    [ngClass]="cssClass"
                     class="select-field-input" 
                     [placeholder]="placeholder" 
                     matInput
@@ -15,6 +14,7 @@
                     (input)="searchFormControl.next($event.target.value)"
                     (blur)="onBlur()"
                     #trigger="matAutocompleteTrigger"
+                    [style.padding-right]="showCaretIcon ? '18px' : '0'"
                     #selectField matAutocompletePosition="auto" (focusout)="
                         closeOnFocusOut &&
                         $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
