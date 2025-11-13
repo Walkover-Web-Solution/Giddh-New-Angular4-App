@@ -59,6 +59,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isLedgerAccSelected: boolean = false;
     /** Holds the navigated accounts */
     public accountItemsFromIndexDB: any[] = [];
+    /** Company name initials (upto 2 characters) */
+    public companyInitials: any = '';
     /** Stores the total company list */
     public companyList: CompanyResponse[] = [];
     /** Stores all the menu items to be shown */
@@ -247,6 +249,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
                 this.selectedCompanyDetails = selectedCmp;
+                this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
+
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';

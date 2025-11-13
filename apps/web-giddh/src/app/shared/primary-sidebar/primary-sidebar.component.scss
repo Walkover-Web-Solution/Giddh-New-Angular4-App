@@ -59,6 +59,22 @@
         }
         h3 {
             font-weight: var(--font-weight-semibold);
+
+            .company-alice {
+                width: 30px;
+                height: 30px;
+                min-width: 30px;
+                border: 1px solid var(--color-black);
+                padding: 15px;
+                border-radius: 50px;
+                display: none;
+                justify-content: center;
+                align-items: center;
+                white-space: nowrap;
+                letter-spacing: -2px;
+                font-size: var(--font-size-15) !important;
+            }
+
             .company-full-name {
                 white-space: normal;
                 word-break: break-word;
@@ -233,12 +249,18 @@
     }
 */
     &.sidebar-collapse {
+        .company-alice {
+            display: inline-flex !important;
+        }
         .company-branch-nav {
             display: none !important;
         }
         .company-full-name {
             margin-top: 5px;
             display: none !important;
+        }
+        .toggle-btn {
+            display: none;
         }
         .company-branch-block {
             padding: 0 10px !important;
@@ -259,6 +281,13 @@
             h3 {
                 justify-content: center;
                 align-items: center;
+
+                .company-alice {
+                    margin-right: 0;
+                    width: 26px;
+                    height: 26px;
+                    min-width: 26px;
+                }
             }
             .company-name {
                 .icon-down-new {

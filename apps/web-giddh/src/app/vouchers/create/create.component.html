@@ -433,12 +433,11 @@
                                                         localeData?.invalid_mobile }}</mat-error>
                                                 </div> -->
                                                 <mobile-number-input
+                                                    *ngIf="!forceClear"
                                                     formControlName="mobileNumber"
                                                     [label]="commonLocaleData?.app_mobile_number"
                                                     [required]="false"
-                                                    [useImageFlags]="true"
-                                                    (countryChanged)="onCountryChanged($event)"
-                                                    (mobileChanged)="onMobileChanged($event)">
+                                                    [useImageFlags]="true">
                                                 </mobile-number-input>
                                             </div>
                                         </ng-container>
