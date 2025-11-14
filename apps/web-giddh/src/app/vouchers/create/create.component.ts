@@ -6980,8 +6980,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             row: this.rowData,
             type: mappedType,
             list: this.transactionOptions,
-            aiOcrDetails: this.aiOcrDetails,
-            ocrType: this.ocrType
+            aiOcrDetails : this.aiOcrDetails,
+            ocrType : this.ocrType
         }
         this.voucherType = this.vouchersUtilityService.parseVoucherType(req.type);
         this.getVoucherType();

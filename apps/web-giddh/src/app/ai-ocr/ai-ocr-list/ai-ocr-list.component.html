@@ -166,7 +166,7 @@
                 </table>
             </form>
         </section>
-        <div class="no-data" *ngIf="!(ocrListInProgress$ | async) && !dataSource?.filteredData?.length">
+        <div class="no-data" *ngIf="!(ocrListInProgress$ | async) && dataSource && !dataSource?.filteredData?.length">
             <no-data
                 class="mr-t15 d-block mr-b1"
                 *ngIf="
