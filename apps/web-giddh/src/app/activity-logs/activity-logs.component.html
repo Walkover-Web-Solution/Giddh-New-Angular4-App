@@ -87,7 +87,7 @@
                             type="text"
                             name="selectedEntryDateRange"
                             [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker h-100 bg-white "
+                            class="giddh-datepicker date-range-picker h-100 bg-white"
                             readonly
                         />
                     </div>
@@ -225,7 +225,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div *ngIf="!isLoading" class="table-header-sticky">
+        <div *ngIf="!isLoading">
             <table
                 mat-table
                 [dataSource]="dataSource"

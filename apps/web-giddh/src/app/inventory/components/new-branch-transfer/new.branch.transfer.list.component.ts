@@ -339,7 +339,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.dialog.open(
             this.branchtransfertemplate,
             {
-                panelClass: ['mat-dialog-lg', 'receipt-note-modal', 'mb-0', 'pd-t85'],
+                panelClass: ['mat-dialog-lg', 'receipt-note-modal', 'mb-0', 'pt-custom-85'],
                 disableClose: true
             }
         );

@@ -128,7 +128,16 @@
     background-color: var(--theme-primary-light);
 }
 
-/* Legacy custom spacing classes completely removed - now using Bootstrap 4 utilities only */
+/* Custom Bootstrap 4 spacing utilities for non-standard values */
+.pt-custom-85 {
+    padding-top: 85px !important;
+}
+.mt-custom-100 {
+    margin-top: 100px !important;
+}
+.mb-custom-100 {
+    margin-bottom: 100px !important;
+}
 
 .text-limit {
     display: -webkit-box;
@@ -214,9 +223,15 @@
     inset: 0;
 }
 
-.float-left { float: left !important; }
-.float-right { float: right !important; }
-.float-none { float: none !important; }
+.float-left {
+    float: left !important;
+}
+.float-right {
+    float: right !important;
+}
+.float-none {
+    float: none !important;
+}
 .clear-both {
     clear: both;
     &::after {
@@ -368,7 +383,8 @@
     .hover-target {
         visibility: hidden;
     }
-    &.hover-trigger--active, &:hover {
+    &.hover-trigger--active,
+    &:hover {
         .hover-target {
             visibility: visible;
         }

@@ -63,7 +63,7 @@
             <div *ngIf="discountAccountsDetails?.length > 1">
                 <div class="discount-checkbox-wrapper d-flex flex-column">
                     <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
-                        <span *ngIf="idx > 0" class="d-flex align-items-center width-100 m-0 pd-0">
+                        <span *ngIf="idx > 0" class="d-flex align-items-center width-100 m-0 p-0">
                             <label
                                 class="checkbox overflow-hidden width-100 p-0 m-0"
                                 (click)="$event.stopPropagation()"
