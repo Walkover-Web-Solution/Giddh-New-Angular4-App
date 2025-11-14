@@ -4,7 +4,6 @@
 }
 
 .import-type li {
-    // list-style: none;
     width: 20%;
     text-align: center;
     display: flex;
@@ -13,7 +12,6 @@
     justify-content: flex-end;
     margin: 0 15px;
     border: 1px solid var(--border-color);
-    // background: var(--color-light-gray);
     cursor: pointer;
     transition: all 0.3s ease;
     color: initial;
@@ -32,12 +30,6 @@
     margin-bottom: 10px;
 }
 
-/* UNUSED COMPONENT CLASS: has-error - Auto-commented by script
-.has-error .form-control {
-    border-color: var(--color-red) !important;
-}
-*/
-
 .import-type img {
     max-width: 90px;
     filter: invert(0);
@@ -46,7 +38,6 @@
     display: block;
     padding: 30px 40px;
     width: 100%;
-    // background-color: var(--color-white);
 }
     .text-link-2 {
         color: var(--theme-primary-color) !important;
@@ -63,13 +54,3 @@
         }
     }
 }
-
-/* UNUSED COMPONENT CLASS: icon-import - Auto-commented by script
-.import-type .icon-import,
-.import-type .icon-invoice-new {
-    background: var(--color-light-gray);
-    width: 90px;
-    height: 90px;
-    line-height: 90px;
-}
-*/

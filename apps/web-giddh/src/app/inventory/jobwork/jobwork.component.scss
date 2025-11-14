@@ -5,11 +5,6 @@
 .btn-group.open.show {
     display: inline-block !important;
 }
-/* UNUSED COMPONENT CLASS: border-top - Auto-commented by script
-.border-top {
-    border-color: var(--border-color);
-}
-*/
 
 :host ::ng-deep .fb-1-container {
     justify-content: flex-start;
@@ -37,7 +32,6 @@
 }
 .td-search-box div i {
     margin-top: 1px;
-    // color: var(--text-primary-color);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -61,25 +55,10 @@
     right: 0px;
     top: 10px;
 }
-/* UNUSED COMPONENT CLASS: table-border - Auto-commented by script
-.table-border {
-    border: 1px solid var(--border-color);
-}
-*/
+
 .basic > thead > tr > th {
     border-right: 1px solid var(--border-color);
 }
-/* .icon-pointer  UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
-.glyphicon {
-    cursor: pointer;
-}
-*/
-
-// .td-search-box div i:hover {
-//     color: var(--color-medium-gray);
-// }
-
-/* class name same as what we are getting data */
 
 .Inward.Note {
     color: var(--color-green);
@@ -91,7 +70,6 @@
     color: var(--color-dark-gray);
 }
 
-/* voucher type DDL */
 .c-3 {
     color: var(--color-white);
 }
@@ -154,14 +132,7 @@ button[aria-expanded="true"] i {
 .stock-description {
     white-space: normal;
 }
-/* voucher type DDL */
 
-/* UNUSED COMPONENT CLASS: modal-content - Auto-commented by script
-.modal-content {
-    border-radius: var(--mat-border-radius-0);
-    margin-top: 200px;
-}
-*/
 .right-bar {
     width: calc(100% - 260px);
     margin-top: 45px;
@@ -206,19 +177,7 @@ button[aria-expanded="true"] i {
     padding-left: 5px;
     cursor: pointer;
 }
-/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
-button.btn
-.btn-filter {
-    background: var(--color-border-light);
-    border: 1px solid var(--border-color);
-    font-size: var(--font-size-15);
-    color: var(--text-primary-color);
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 10px;
-}
-*/
+
 .job-work-content {
     width: 100%;
     justify-content: space-between;

@@ -1,17 +1,3 @@
-/* UNUSED COMPONENT CLASS: close-btn-absolute - Auto-commented by script
-#close
-.close-btn-absolute {
-    position: absolute !important;
-    left: auto !important;
-    right: 0 !important;
-    z-index: 9999999 !important;
-    background-color: transparent;
-    color: var(--color-white);
-    font-size: 17px;
-    top: 9px !important;
-    margin-right: 0;
-}
-*/
 :host {
     position: fixed;
     left: auto;
@@ -41,45 +27,12 @@
     display: block;
 }
 
-/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
-:host 
-.container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-*/
-
 :host {
     .aside-pane {
         width: 100%;
         max-width: 760px;
-        // background: var(--color-white);
     }
 }
-
-/* UNUSED COMPONENT CLASS: flexy-child - Auto-commented by script
-.flexy-child {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: vertical-align-middle - Auto-commented by script
-.vertical-align-middle {
-    position: absolute;
-    top: 50%;
-    bottom: 0;
-    left: 0;
-    display: table;
-    width: 100%;
-    right: 0;
-    transform: translateY(-50%);
-    text-align: center;
-    margin: 0 auto;
-}
-*/
 
 #back {
     display: none;

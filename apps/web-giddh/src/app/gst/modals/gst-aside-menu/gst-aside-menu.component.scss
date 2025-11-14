@@ -28,19 +28,10 @@
     display: block;
 }
 
-/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
-:host 
-.container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-*/
-
 :host .aside-pane {
     max-width: 760px;
     width: 100%;
     padding: 0;
-    // background: var(--color-light-gray);
 }
 .aside-pane-form {
     box-shadow: 0px 3px 6px var(--color-shadow-light);

@@ -7,18 +7,6 @@
         column-gap: 30px;
     }
 
-    /* UNUSED COMPONENT CLASS: image-group - Auto-commented by script
-.image-group {
-        padding-top: 35px;
-
-        /* UNUSED COMPONENT CLASS: group-vector - Auto-commented by script
-.group-vector {
-            position: absolute;
-            right: 15px;
-            top: 60px;
-        }
-}
-*/
     .input-width {
         width: unset;
         min-width: 530px;
@@ -28,39 +16,11 @@
         width: 530px;
         min-height: var(--custom-mat-form-field-height);
         .input-min-width {
-            min-width: 50%; 
+            min-width: 50%;
         }
     }
 }
 
-/* UNUSED COMPONENT CLASS: create-inventory-btn - Auto-commented by script
-.create-inventory-btn {
-    height: 36px;
-    color: var(--color-white);
-    background-color: var(--color-green);
-    margin-right: 15px;
-
-    &:disabled {
-        background-color: var(--color-green-light);
-    }
-}
-*/
-
-/* UNUSED COMPONENT CLASS: new-inventory-page-header - Auto-commented by script
-.new-inventory-page-header {
-    padding: 0 15px 15px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--color-medium-gray);
-    align-items: center;
-
-    /* UNUSED COMPONENT CLASS: inventory-header-right - Auto-commented by script
-.inventory-header-right {
-        display: flex;
-    }
-}
-*/
 .footer-wrapper {
     margin-top: 45px;
     max-width: 560px;
@@ -72,14 +32,6 @@
         }
     }
 }
-
-/* UNUSED COMPONENT CLASS: page-title-inventory - Auto-commented by script
-.page-title-inventory {
-    font-weight: bold;
-    color: var(--text-primary-color);
-    font-size: var(--font-size-15);
-}
-*/
 
 .mat-select {
     min-width: unset !important;

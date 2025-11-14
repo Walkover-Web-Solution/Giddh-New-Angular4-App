@@ -1,6 +1,5 @@
 @use "../abstracts/mixins" as *;
 
-// Border styles
 .border {
     border: 1px solid var(--border-color) !important;
 }
@@ -8,7 +7,6 @@
     border-color: var(--color-transparent) !important;
 }
 
-// Border sides
 .border-top {
     border-top: 1px solid var(--border-color) !important;
 }
@@ -25,7 +23,6 @@
     border-bottom: 1px solid var(--border-color) !important;
 }
 
-// Border removal
 .border-none {
     border: none !important;
 }
@@ -42,7 +39,6 @@
     border-right: none !important;
 }
 
-// Border radius
 .only-left-radius {
     @include border-radius(var(--mat-border-radius-4), 0, 0, var(--mat-border-radius-4));
 }
@@ -56,21 +52,15 @@
     @include border-radius(0, 0, var(--mat-border-radius-4), var(--mat-border-radius-4));
 }
 
-// ===== COLORS =====
-// Primary colors
 .text-primary {
     color: var(--text-primary-color) !important;
 }
 .text-color-inherit {
     color: inherit !important;
 }
-// Grayscale colors
 .text-light {
     color: var(--color-medium-gray) !important;
 }
-// .text-default {
-//     color: var(--color-black) !important;
-// }
 .text-white {
     color: var(--color-white) !important;
 }
@@ -78,7 +68,6 @@
     color: var(--color-black) !important;
 }
 
-// Status colors
 .text-green {
     color: var(--color-green);
 }
@@ -92,8 +81,6 @@
     color: var(--color-dark-gray) !important;
 }
 
-// ===== TYPOGRAPHY =====
-// Line height
 .lh-0 {
     line-height: 0 !important;
 }
@@ -101,12 +88,10 @@
     line-height: 1 !important;
 }
 
-// Font style
 .font-style-italic {
     font-style: italic !important;
 }
 
-// ===== BACKGROUNDS =====
 .dot-warning {
     background: var(--color-deep-orange);
 }
@@ -143,8 +128,6 @@
     background-color: var(--theme-primary-light);
 }
 
-// ===== SPACING =====
-// Padding - All sides
 .p-0 {
     padding: 0 !important;
 }
@@ -167,7 +150,6 @@
     padding: 40px !important;
 }
 
-// Padding - Top
 .pd-t05 {
     padding-top: 5px !important;
 }
@@ -196,7 +178,6 @@
     padding-top: 85px !important;
 }
 
-// Padding - Bottom
 .pd-b05 {
     padding-bottom: 5px !important;
 }
@@ -222,7 +203,6 @@
     padding-bottom: 100px !important;
 }
 
-// Padding - Left
 .pl-0 {
     padding-left: 0 !important;
 }
@@ -254,7 +234,6 @@
     padding-left: 50px !important;
 }
 
-// Padding - Right
 .pr-0 {
     padding-right: 0 !important;
 }
@@ -283,7 +262,6 @@
     padding-right: 50px !important;
 }
 
-// Margin - All sides
 .mr-05 {
     margin: 5px !important;
 }
@@ -303,7 +281,6 @@
     margin: 40px !important;
 }
 
-// Margin - Top
 .mr-t05 {
     margin-top: 5px !important;
 }
@@ -329,7 +306,6 @@
     margin-top: 100px !important;
 }
 
-// Margin - Bottom
 .mr-b05 {
     margin-bottom: 5px !important;
 }
@@ -355,7 +331,6 @@
     margin-bottom: 80px !important;
 }
 
-// Margin - Left
 .mr-l05 {
     margin-left: 5px !important;
 }
@@ -378,7 +353,6 @@
     margin-left: 50px !important;
 }
 
-// Margin - Right
 .mr-r05 {
     margin-right: 5px !important;
 }
@@ -401,9 +375,6 @@
     margin-right: 50px !important;
 }
 
-// ===== LAYOUT =====
-
-// Text utilities
 .text-limit {
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -426,7 +397,6 @@
     text-wrap: wrap;
 }
 
-// Text decoration
 .text-underline {
     text-decoration: underline !important;
     &:hover {
@@ -440,7 +410,6 @@
     }
 }
 
-// Text transform
 .text-capitalize {
     text-transform: capitalize !important;
 }
@@ -454,7 +423,6 @@
     text-transform: none !important;
 }
 
-// Font sizes
 .icon-font-11 {
     font-size: 11px !important;
 }
@@ -465,7 +433,6 @@
     font-size: var(--font-size-48) !important;
 }
 
-// Table and alignment
 .vertical-align-middle {
     vertical-align: middle !important;
 }
@@ -476,8 +443,6 @@
     vertical-align: bottom;
 }
 
-// ===== POSITIONING =====
-// Position inset classes
 .top-0 {
     top: 0;
 }
@@ -494,7 +459,6 @@
     inset: 0;
 }
 
-// Float and clear
 .float-left { float: left !important; }
 .float-right { float: right !important; }
 .float-none { float: none !important; }
@@ -507,8 +471,6 @@
     }
 }
 
-// ===== DIMENSIONS =====
-// Width
 .width-100 {
     width: 100% !important;
 }
@@ -532,7 +494,6 @@
     width: 200px !important;
 }
 
-// Min width
 .min-width-unset {
     min-width: unset !important;
 }
@@ -546,7 +507,6 @@
     min-width: 160px !important;
 }
 
-// Max width
 .max-width-50 {
     max-width: 50px;
 }
@@ -566,7 +526,6 @@
     max-width: 500px;
 }
 
-// Height
 .min-height-100 {
     min-height: 100px;
 }
@@ -578,16 +537,12 @@
     height: calc(100vh - var(--header-height));
 }
 
-// ===== DISPLAY & FLEXBOX =====
-// Display types
 .d-inline-grid {
     display: inline-grid !important;
 }
 .d-grid {
     display: grid !important;
 }
-// Flexbox utilities
-// Gap utilities
 .column-gap-05 {
     column-gap: 5px !important;
 }
@@ -631,8 +586,6 @@
     row-gap: 50px !important;
 }
 
-// ===== INTERACTIONS =====
-// Pointer events
 .pointer-event-none {
     pointer-events: none !important;
 }
@@ -640,7 +593,6 @@
     pointer-events: all !important;
 }
 
-// ===== UTILITIES =====
 .box-shadow-none {
     box-shadow: none !important;
 }
@@ -649,24 +601,14 @@
     align-items: baseline;
 }
 
-/* UNUSED GLOBAL CLASS: grid-column-2 - Auto-commented by script
-.grid-column-2 {
-    grid-template-columns: repeat(2, 1fr);
-}
-*/
 .grid-column-3 {
     grid-template-columns: repeat(3, 1fr);
 }
-/* UNUSED GLOBAL CLASS: grid-column-4 - Auto-commented by script
-.grid-column-4 {
-    grid-template-columns: repeat(4, 1fr);
-}
-*/
+
 .grid-child-column-full {
     grid-column: 1 / -1;
 }
 
-// Global class use to show/hide element on hover
 .hover-trigger {
     .hover-target {
         visibility: hidden;
@@ -677,7 +619,6 @@
         }
     }
 }
-
 
 [hidden],
 [hidden].d-flex,

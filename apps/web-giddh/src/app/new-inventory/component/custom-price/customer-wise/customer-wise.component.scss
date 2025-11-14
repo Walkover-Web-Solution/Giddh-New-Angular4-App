@@ -46,7 +46,6 @@
                     border: 1px solid var(--color-border-medium);
                     border-radius: var(--mat-border-radius-4);
                     button {
-                        // background-color: var(--color-white);
                         flex-grow: 1;
                         height: 33px;
                         transition: all 300ms;
@@ -104,7 +103,6 @@
                     }
                 }
                 .table-inventory {
-                    // background: var(--color-white);
                     border: 1px solid var(--color-border-medium);
                     margin: 6px 0;
                     border-radius: var(--mat-border-radius-4);
@@ -117,11 +115,7 @@
                             color: var(--text-primary-color) !important;
                         }
                     }
-                    /* UNUSED COMPONENT CLASS: column-gap-42 - Auto-commented by script
-.column-gap-42 {
-                        column-gap: 42px;
-                    }
-*/
+
                     table {
                         &:hover {
                             thead {
@@ -189,14 +183,7 @@
                                             transform: translateY(-50%);
                                         }
                                     }
-                                    /*& UNUSED COMPONENT CLASS: variant-quantity - Auto-commented by script
-.variant-quantity {
-                                        @include setWidth(100px);
-                                        @media (max-width: 1556px) {
-                                            @include setWidth(160px);
-                                        }
-                                    }
-*/
+
                                     &.variant-delete {
                                         @include setWidth(60px);
                                         .delete-show {
@@ -270,7 +257,6 @@
         }
     }
 }
-/*---- responsive ----*/
 @media screen and (max-width: 1440px) {
     .custom-grid-wrapper {
         .mat-list-wrap {

@@ -5,12 +5,8 @@
     margin: 0 -15px;
     flex-direction: row;
 
-    // li {
-    //     list-style: none;
-    // }
 }
 
-// new dashboard css
 .warning-msg-row {
     background-color: var(--color-white);
     padding: 9px;
@@ -31,7 +27,6 @@ span
     margin-right: 10px;
 }
 
-
 span
 .icon-info-icon {
     color: var(--color-medium-gray);
@@ -39,11 +34,9 @@ span
     margin-right: 10px;
 }
 
-
 .dashboard-notification {
     margin-bottom: 20px;
 }
-
 
 .panel-heading {
     padding: 15px 12px;
@@ -56,16 +49,13 @@ span
     }
 }
 
-
 .basic > tbody > tr:hover td {
     background: transparent;
 }
 
-
 .form-control:focus {
     border-color: var(--theme-primary-color) !important;
 }
-
 
 .no-data-available {
     display: flex;
@@ -79,7 +69,6 @@ span
     align-items: flex-start;
     height: 40px;
 
-   
 .icon-arrow-down {
         line-height: 22px !important;
     }

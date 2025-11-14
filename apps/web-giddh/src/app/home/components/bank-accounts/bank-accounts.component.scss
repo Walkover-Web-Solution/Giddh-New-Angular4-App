@@ -17,23 +17,7 @@ p.bank-balance {
     margin-bottom: 10px;
 }
 
-a/* UNUSED COMPONENT CLASS: connect-bank - Auto-commented by script
-.connect-bank {
-    color: var(--color-black);
-    font-size: var(--font-size-15);
-    text-decoration: underline;
-    padding-top: 5px;
-    display: block;
-}
-*/
-
-// .bank-details-block { =====  WRITE THIS CODE INLINE STYLE
-//     cdk-virtual-scroll-viewport {
-//     .virtual-group-list {
-//         height: 334px;
-//     }
-//     }
-// }
+a
 
 .add-bank-details {
     display: flex;
@@ -58,14 +42,4 @@ p {
 
 .width-86 {
     width: 86% !important;
-}
-
-.dashboard-filter {
-    // color: var(--color-dark-gray);
-    /* UNUSED COMPONENT CLASS: icon-collapse-icon - Auto-commented by script
-.icon-collapse-icon {
-        margin-left: 8px;
-        font-size: var(--font-size-15);
-    }
-*/
 }

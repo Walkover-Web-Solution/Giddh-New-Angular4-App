@@ -36,9 +36,6 @@
             #table-receipt {
                 width: 100%;
 
-                // th{
-                //     color: var(--text-primary-color) !important;
-                // }
                 th,
                 td {
                     padding: 10px 15px;
@@ -72,11 +69,6 @@
                         }
 
                         td {
-                            /* UNUSED COMPONENT CLASS: placeholder-color - Auto-commented by script
-.placeholder-color {
-                                color: var(--color-silver);
-                            }
-*/
 
                             .show-code-position {
                                 position: absolute;

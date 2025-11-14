@@ -9,16 +9,9 @@
     z-index: 99;
     box-shadow: -2px -2px 15px var(--color-shadow-light) !important;
     .aside-pane {
-        // background: var(--color-white);
         overflow: initial;
         z-index: unset;
-        /* UNUSED COMPONENT CLASS: back-to-main-slider - Auto-commented by script
-.back-to-main-slider {
-            display: block;
-            padding: 15px 15px 3px;
-            margin-bottom: 0;
-        }
-*/
+
         .help-aside-body {
             .gst-menu-items {
                 mat-list {
@@ -29,7 +22,6 @@
                         }
                         &.active {
                             background-color: var(--bg-primary-color) !important;
-                            // min-height: 34px;
                             span,
                             span i {
                                 color: var(--color-white) !important;
@@ -42,7 +34,6 @@
                             display: flex;
                             align-items: flex-start;
                             padding: 7px 20px;
-                            // margin-bottom: 4px;
                             span {
                                 i {
                                     color: var(--color-dark-gray);
@@ -73,7 +64,6 @@
     padding: 15px 0 0;
     mat-list {
         padding: 0;
-        // list-style: none;
         font-size: var(--font-size-15);
         font-weight: var(--font-weight-semibold);
         color: var(--color-dark-gray);
@@ -118,11 +108,6 @@
             }
             &:hover {
                 background-color: var(--color-border-light);
-                // span {
-                //     i {
-                //         color: var(--color-black) !important;
-                //     }
-                // }
             }
         }
     }
