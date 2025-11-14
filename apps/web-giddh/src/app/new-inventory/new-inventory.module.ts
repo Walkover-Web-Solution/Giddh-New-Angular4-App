@@ -61,6 +61,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/aside-create-reason.component";
 import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
 
 @NgModule({
     declarations: [
@@ -128,7 +129,8 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
         MatExpansionModule,
         MatPaginatorModule,
         ReactiveFormsModule,
-        AmountFieldComponentModule
+        AmountFieldComponentModule,
+        MatButtonToggleModule
     ],
     exports: [
         NewInventoryComponent,

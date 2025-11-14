@@ -1050,41 +1050,41 @@
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
-                                                            <mat-select
-                                                                #taxSelect
-                                                                *ngIf="selectTableRowIndex === i"
-                                                                panelClass="py-0 no-backdrop"
-                                                                class="w-100"
-                                                                name="salesPerson"
-                                                                [multiple]="true"
-                                                                [disableOptionCentering]="true"
-                                                                formControlName="taxes"
-                                                                (openedChange)="openedSelectTax($event)"
+                                                        <mat-select
+                                                            #taxSelect
+                                                            *ngIf="selectTableRowIndex === i"
+                                                            panelClass="py-0 no-backdrop"
+                                                            class="w-100"
+                                                            name="salesPerson"
+                                                            [multiple]="true"
+                                                            [disableOptionCentering]="true"
+                                                            formControlName="taxes"
+                                                            (openedChange)="openedSelectTax($event)"
+                                                        >
+                                                            <mat-option class="mt-0">
+                                                                <ngx-mat-select-search
+                                                                    [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
+                                                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                                                    [formControl]="taxDropdown"
+                                                                >
+                                                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                                                </ngx-mat-select-search>
+                                                            </mat-option>
+                                                            <mat-option
+                                                                *ngFor="let tax of getTaxesForRow(i)"
+                                                                [value]="tax?.uniqueName"
+                                                                [disabled]="tax.isDisabled"
+                                                                (click)="$event.stopPropagation()"
+                                                                (onSelectionChange)="!tax.isDisabled ? selectTax(tax, i) : ''"
+                                                                >{{ tax.name }}</mat-option
                                                             >
-                                                                <mat-option class="mt-0">
-                                                                    <ngx-mat-select-search
-                                                                        [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                                                        [formControl]="taxDropdown"
-                                                                    >
-                                                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                                                    </ngx-mat-select-search>
-                                                                </mat-option>
-                                                                <mat-option
-                                                                    *ngFor="let tax of getTaxesForRow(i)"
-                                                                    [value]="tax?.uniqueName"
-                                                                    [disabled]="tax.isDisabled"
-                                                                    (click)="$event.stopPropagation()"
-                                                                    (onSelectionChange)="!tax.isDisabled ? selectTax(tax, i) : ''"
-                                                                    >{{ tax.name }}</mat-option
-                                                                >
-                                                                <mat-option
-                                                                    class="create-update-no-data"
-                                                                    [disabled]="true"
-                                                                    *ngIf="!getTaxesForRow(i)?.length"
-                                                                    >{{ commonLocaleData?.app_no_result_found }}</mat-option
-                                                                >
-                                                            </mat-select>
+                                                            <mat-option
+                                                                class="create-update-no-data"
+                                                                [disabled]="true"
+                                                                *ngIf="!getTaxesForRow(i)?.length"
+                                                                >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                                            >
+                                                        </mat-select>
                                                         <!-- <mat-select
                                                             class="vertical-margin"
                                                             name="taxes"
@@ -1223,11 +1223,23 @@
                                                         <div class="border-line">
                                                             <ng-container formArrayName="customFields">
                                                                 <ng-container [formGroupName]="j">
-                                                                    <text-field
-                                                                        [type]="customField.get('dataType')?.value"
+                                                                    <text-field 
+                                                                        *ngIf="customField.get('dataType')?.value === availableFieldTypes.String || customField.get('dataType')?.value === availableFieldTypes.Barcode || customField.get('dataType')?.value === availableFieldTypes.Number"
+                                                                        [type]="customField.get('dataType')?.value === availableFieldTypes.String || customField.get('dataType')?.value === availableFieldTypes.Barcode ? 'text' : 'number'"
                                                                         formControlName="value"
+                                                                        [minlength]="allCustomField[customField.get('uniqueName')?.value]?.dataRange?.min"
+                                                                        [maxlength]="allCustomField[customField.get('uniqueName')?.value]?.dataRange?.max"
+                                                                        [pattern]="allCustomField[customField.get('uniqueName')?.value]?.regex"
                                                                     >
                                                                     </text-field>
+                                                                    <div *ngIf="customField.get('dataType')?.value === availableFieldTypes.Boolean" class="text-center">
+                                                                        <mat-slide-toggle
+                                                                            color="primary"
+                                                                            formControlName="value"
+                                                                        >
+                                                                            <span>{{ customField.get('value')?.value ? commonLocaleData?.app_true : commonLocaleData?.app_false }}</span>
+                                                                        </mat-slide-toggle>
+                                                                    </div>
                                                                 </ng-container>
                                                             </ng-container>
                                                         </div>
