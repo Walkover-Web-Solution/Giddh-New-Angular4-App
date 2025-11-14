@@ -2,7 +2,6 @@
     .download-table {
         width: 100%;
         .download-table-btn {
-            // color: var(--color-dark-gray);
             background-color: var(--color-transparent);
             box-shadow: none;
             border-radius: var(--mat-border-radius-4);
@@ -21,19 +20,7 @@
         text-align: center;
         justify-content: center;
     }
-    // .clear-filter {
-    //     color: var(--text-primary-color);
-    //     cursor: pointer;
-    // }
-    /* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
-.btn-success {
-        background-color: var(--color-green);
-        color: var(--color-white);
-        &:hover {
-            background-color: var(--color-green) !important;
-        }
-    }
-*/
+
     .download-button-status {
         min-width: 160px;
         max-width: 160px;
@@ -43,16 +30,5 @@
         width: 160px;
         min-width: 160px;
     }
-    /* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
-.btn-filter {
-        background: var(--color-border-light);
-        border: 1px solid var(--border-color);
-        font-size: var(--font-size-15);
-        color: var(--text-primary-color);
-        display: inline-flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 4px 10px;
-    }
-*/
+
 }

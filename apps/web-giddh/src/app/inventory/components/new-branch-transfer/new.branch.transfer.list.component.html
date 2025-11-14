@@ -6,7 +6,7 @@
                     <!-- <button
                         *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
                         mat-raised-button color="primary"
-                        class="mr-r1 pull-right mobile-none"
+                        class="mr-2 pull-right mobile-none"
                         matTooltip="Alt+N"
                         (click)="openTransferAsidePaneDialog()"
                     >
@@ -15,7 +15,7 @@
                     <div class="d-flex flex-sm-row flex-column branch-transfer-flex">
                         <div
                             *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
-                            class="input-group form-group linked-entities mb-0 mr-r1"
+                            class="input-group form-group linked-entities mb-0 mr-2"
                         >
                             <reactive-dropdown-field
                                 [options]="currentCompanyBranches"
@@ -59,11 +59,11 @@
                     matTooltip="Advance Search"
                     (click)="openSearchModal(searchDialog)"
                 >
-                    <span class="pd-r05 d-sm-flex d-none">Filter</span>
+                    <span class="pr-1 d-sm-flex d-none">Filter</span>
                     <span class="icon-advance-filter"></span>
                 </div>
             </div>
-            <div class="d-lg-none mr-b1">
+            <div class="d-lg-none mb-2">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
                     <button mat-stroked-button class="mr-0" (click)="clearFilters()">
                         <span class="icon-cross"></span> Clear Filter
@@ -290,7 +290,7 @@
             [hidePageSize]="false"
             (page)="handlePageEvent($event)"
         ></mat-paginator>
-        <section class="mr-b8"></section>
+        <section class="mb-custom-80"></section>
         <div
             class="no-data"
             *ngIf="!isLoading && (!branchTransferResponse.items || branchTransferResponse.items.length === 0)"
@@ -344,8 +344,8 @@
                     </div>
                 </div>
             </div>
-            <div class="pull-right mr-t1">
-                <button mat-raised-button color="primary" class="mr-r1" type="button" (click)="search()">Search</button>
+            <div class="pull-right mt-2">
+                <button mat-raised-button color="primary" class="mr-2" type="button" (click)="search()">Search</button>
                 <button
                     mat-stroked-button
                     class="mr-0"

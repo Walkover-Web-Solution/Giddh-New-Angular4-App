@@ -4,11 +4,11 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="tb-wrapper mr-t2 clear-both">
+    <div class="tb-wrapper mt-4 clear-both">
         <div class="table-container" *ngIf="!hideData">
-            <div class="income mr-b1">
+            <div class="income mb-2">
                 <div class="clear-both profit-loss">
-                    <table class="mr-b05 table basic bs-table-grid">
+                    <table class="mb-1 table basic bs-table-grid">
                         <thead>
                             <tr>
                                 <th class="p-0 font-size-16" width="33.33%">
@@ -17,7 +17,7 @@
                                             [ngClass]="{ 'd-none': showClearSearch }"
                                             class="d-flex align-items-center"
                                         >
-                                            <span class="mr-l15 mr-r05">{{ localeData?.particular }}</span>
+                                            <span class="ml-3 mr-1">{{ localeData?.particular }}</span>
                                             <i class="icon-search" (click)="toggleSearch()"></i>
                                         </div>
                                         <div [hidden]="!showClearSearch">
@@ -42,7 +42,7 @@
                             </tr>
                         </thead>
                     </table>
-                    <div class="m-10">
+                    <div class="m-2">
                         <strong class="font-size-15">{{ localeData?.equity_liabilities }}</strong>
                     </div>
                     <ng-template #groupDetails let-list let-padding="padding">
@@ -108,7 +108,7 @@
 
             <div class="expenses">
                 <div class="clear-both profit-loss">
-                    <div class="m-10">
+                    <div class="m-2">
                         <strong class="font-size-15">{{ localeData?.ii_assets }}</strong>
                     </div>
                     <ng-template #groupDetails let-list let-padding="padding">

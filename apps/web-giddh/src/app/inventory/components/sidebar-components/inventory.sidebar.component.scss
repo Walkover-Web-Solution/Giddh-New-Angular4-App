@@ -5,11 +5,7 @@
 .parent-group > ul > li ul li div {
     color: var(--color-dark-gray);
 }
-.btn-grou/* p UNUSED COMPONENT CLASS: show - Auto-commented by script
-.show {
-    display: inline-block !important;
-}
-*/
+.btn-grou
 .btn-group > .btn:first-child {
     margin-left: 8px;
     margin-top: -3px;
@@ -29,12 +25,7 @@
 .dropdown-menu > li > a {
     color: var(--text-primary-color);
 }
-/* UNUSED COMPONENT CLASS: caret - Auto-commented by script
-span
-.caret {
-    display: none;
-}
-*/
+
 #inventory-sidebar {
     background: var(--color-white);
     width: 260px !important;
@@ -42,18 +33,7 @@ span
         height: 100vh;
     }
 }
-/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
-ul#dropdown-nested li 
-.dropdown-menu {
-    display: block !important;
-    right: auto;
-    top: 0;
-    left: 184px;
-    visibility: hidden;
-    opacity: 0;
-    transition: 0.5s all ease;
-}
-*/
+
 ul#dropdown-nested li:hover .dropdown-menu {
     visibility: visible;
     opacity: 1;

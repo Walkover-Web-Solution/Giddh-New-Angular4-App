@@ -10,7 +10,7 @@
                     decimalDigitsDirective
                     name="discountSum"
                     [ngClass]="{'field-disabled': readonly}"
-                    class="form-control text-right cursor-pointer pd-r2"
+                    class="form-control text-right cursor-pointer pr-4"
                     (focus)="!readonly ? showDiscountMenu() : ''"
                     [(ngModel)]="discountSum"
                     [mask]="inputMaskFormat"
@@ -28,7 +28,7 @@
         #disInptEle
     >
         <div class="value-wrapper">
-            <div class="mr-b1">
+            <div class="mb-2">
                 <mat-form-field  class="initial-height w-100" appearance="outline">
                     <mat-label>{{ commonLocaleData?.app_percent }}</mat-label>
                     <input
@@ -48,7 +48,7 @@
                     </mat-form-field>
             </div>
 
-            <div class="mr-b1">
+            <div class="mb-2">
                 <mat-form-field  class="initial-height w-100" appearance="outline">
                     <mat-label>{{ commonLocaleData?.app_value }}</mat-label>
                     <input

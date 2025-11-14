@@ -16,8 +16,8 @@
                 <div class="d-flex mb-1" *ngIf="selectedAccForBulkPayment?.length > 1">
                     <span class="text-red font-size-14">{{ localeData?.bulk_payment_warning }}</span>
                 </div>
-                <div class="d-flex mr-b1">
-                    <div class="form-group mr-r15 select-bank" *ngIf="selectIntegratedBankList?.length !== 1">
+                <div class="d-flex mb-2">
+                    <div class="form-group mr-3 select-bank" *ngIf="selectIntegratedBankList?.length !== 1">
                         <label>{{ localeData?.select_bank }}<span class="text-red">*</span></label>
                         <div class="relative">
                             <img
@@ -74,7 +74,7 @@
                                     }}</span>
                                 </mat-slide-toggle>
                             </p>
-                                <p *ngIf="totalAvailableBalance && showBankBalance" class="mr-t05">
+                                <p *ngIf="totalAvailableBalance && showBankBalance" class="mt-1">
                                 <small class="text-light"
                                     >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
                                     {{ commonLocaleData?.app_dr }}</small
@@ -82,7 +82,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="form-group mr-r15">
+                    <div class="form-group mr-3">
                         <label>{{ localeData?.select_payor }}<span class="text-red">*</span></label>
                         <div class="relative">
                             <img
@@ -119,7 +119,7 @@
                                 }}</span>
                                 </mat-slide-toggle>
                             </p>
-                            <p *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance && showBankBalance" class="mr-t05">
+                            <p *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance && showBankBalance" class="mt-1">
                                 <small class="text-light"
                                     >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
                                     {{ commonLocaleData?.app_dr }}</small
@@ -127,7 +127,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="form-group mr-r15">
+                    <div class="form-group mr-3">
                         <label>{{ commonLocaleData?.app_total_amount }}<span class="text-red">*</span></label>
                         <text-field
                             type="text"
@@ -139,7 +139,7 @@
                             name="amount"
                         ></text-field>
                     </div>
-                    <div class="form-group mr-r15" *ngIf="isPayClicked">
+                    <div class="form-group mr-3" *ngIf="isPayClicked">
                         <label class="position-relative d-flex"
                             >{{ commonLocaleData?.app_enter_otp }}<span class="text-red">*</span>
                             <p class="resend-btn" *ngIf="!timerOn">
@@ -161,7 +161,7 @@
                             [(ngModel)]="receivedOtp"
                         ></text-field>
                     </div>
-                    <div class="form-group mr-r15 d-flex column-gap-15 confirm-btn" *ngIf="!isPayClicked">
+                    <div class="form-group mr-3 d-flex column-gap-15 confirm-btn" *ngIf="!isPayClicked">
                         <button
                             mat-raised-button
                             color="primary"
@@ -181,7 +181,7 @@
                     </div>
                 </div>
                 <div class="form-group" *ngIf="isPayClicked">
-                    <div class="mr-t1 d-flex column-gap-15">
+                    <div class="mt-2 d-flex column-gap-15">
                         <button
                             mat-raised-button
                             color="primary"
@@ -217,7 +217,7 @@
                 </div>
             </div>
             <div class="col-sm-12" *ngIf="otpReceiverNameMessage">
-                <p class="otp-success-msg mr-t05">
+                <p class="otp-success-msg mt-1">
                     <span class="mr-1 d-inline-block"> <img src="{{ imgPath }}checked-success.svg" /> </span
                     >{{ otpReceiverNameMessage }}
                 </p>
@@ -242,7 +242,7 @@
                                 class="text-red cursor-pointer"
                                 *ngIf="selectedAccForBulkPayment?.length > 1"
                                 (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"
-                                ><i class="icon-trash mr-r05"></i>{{ commonLocaleData?.app_remove }}</span
+                                ><i class="icon-trash mr-1"></i>{{ commonLocaleData?.app_remove }}</span
                             >
                         </p>
                     </div>
@@ -274,7 +274,7 @@
                         </div>
                         <div class="amount-remark-section">
                             <div class="d-flex flex-column flex-md-row">
-                                <div class="form-group pd-r15">
+                                <div class="form-group pr-3">
                                     <label
                                         >{{ commonLocaleData?.app_amount }}<span class="text-danger">*</span></label
                                     >

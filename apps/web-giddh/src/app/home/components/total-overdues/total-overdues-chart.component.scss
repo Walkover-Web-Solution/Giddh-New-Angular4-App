@@ -9,64 +9,22 @@
 .vendor-due-text {
     color: var(--color-red);
 }
-/* UNUSED COMPONENT CLASS: month-dropdown - Auto-commented by script
-span
-.month-dropdown {
-    font-size: var(--font-size-12);
-    color: var(--color-dark-gray);
-    vertical-align: top;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: btn-group - Auto-commented by script
-.dashboard-filter 
-.btn-group {
-    display: block;
-    line-height: 1;
-}
-*/
 
 .dashboard-filter .btn-group span {
     vertical-align: middle;
-    // color: var(--color-dark-gray);
 }
-
-/* UNUSED COMPONENT CLASS: underline - Auto-commented by script
-.underline {
-    text-decoration: underline;
-}
-*/
 
 .dashboard-filter {
     display: inline-flex;
-    // color: var(--color-dark-gray);
     align-items: center;
 }
 
-/* UNUSED COMPONENT CLASS: icon-collapse-icon - Auto-commented by script
-.dashboard-filter 
-.icon-collapse-icon {
-    margin-left: 8px;
-    font-size: var(--font-size-15);
-}
-*/
-
 .due-amount {
-    // color: var(--color-black);
     font-size: var(--font-size-15);
     margin: 0;
     padding: 0;
 }
-/* UNUSED COMPONENT CLASS: icon-rupees - Auto-commented by script
-span
-.icon-rupees {
-    font-size: 12px;
-}
-/* UNUSED COMPONENT CLASS: panel-body - Auto-commented by script
-.panel-body small {
-    color: var(--color-dark-gray);
-}
-*/
+
 .dashboard-datepicker {
     min-width: 218px;
     border-radius: 30px;

@@ -7,9 +7,9 @@
     <div class="clear-both petty-cash collection-integration">
         <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
             <mat-tab [label]="localeData?.portal_information" *ngIf="voucherApiVersion === 2">
-                <div class=" pd-15 clear-both mb-2 pd-t05">
+                <div class=" p-3 clear-both mb-2 pt-1">
                     <form novalidate name="profileForm" [formGroup]="profileForm" class="container-fluid">
-                        <div class="row pd-b1 mt-3">
+                        <div class="row pb-2 mt-3">
                             <div class="pl-0 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
                                 <input-field
                                     [name]="'portalDomain'"
@@ -24,12 +24,12 @@
                                 </input-field>
                             </div>
                         </div>
-                        <div class="row pd-b1" *ngIf="organizationType !== 'COMPANY'">
+                        <div class="row pb-2" *ngIf="organizationType !== 'COMPANY'">
                             <div class="pl-0 col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
                                 <span>{{ commonLocaleData?.go_to_company_mode }}</span>
                             </div>
                         </div>
-                        <div class="row pd-b1 mt-3">
+                        <div class="row pb-2 mt-3">
                             <div
                                 class="pl-0 col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 d-flex align-items-center"
                             >
@@ -41,7 +41,7 @@
                                         <a class="portal-url text-underline" [href]="portalLoginUrl" target="_blank"
                                             >{{ portalUrl }}{{ profileData.portalDomain }}
                                         </a>
-                                        <span class="input-group-btn mr-l05 cursor-pointer">
+                                        <span class="input-group-btn ml-1 cursor-pointer">
                                             <i
                                                 class="icon-copy-file"
                                                 (click)="copyUrl()"
@@ -59,7 +59,7 @@
                 </div>
             </mat-tab>
             <mat-tab [label]="localeData?.payment_gateway">
-                <div class=" pd-15 clear-both mb-2">
+                <div class=" p-3 clear-both mb-2">
                     <p class="font-size-16 font-weight-semibold mb-3">{{ localeData?.collection?.razorpay_form_heading }}</p>
                     <form #razorPayform="ngForm" novalidate>
                         <div class="row">
@@ -113,7 +113,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
+                            <div class="col-lg-4 col-md-6 col-xs-12 mt-2 empty-label" id="inlnImg">
                                 <mat-slide-toggle
                                     [(ngModel)]="razorPayObj.autoCapturePayment"
                                     name="autoCapturePayment"
@@ -163,7 +163,7 @@
                     </form>
                 </div>
                 <mat-divider class="w-100 my-3"></mat-divider>
-                <div class="pd-15 clear-both mb-2">
+                <div class="p-3 clear-both mb-2">
                     <p class="font-size-16 font-weight-semibold mb-3">{{ localeData?.collection?.paypal_form_heading }}</p>
                     <form #paypalForm="ngForm" novalidate>
                         <div class="row">
@@ -245,7 +245,7 @@
                     </form>
                 </div>
                 <mat-divider class="w-100"></mat-divider>
-                <div class=" pd-15 clear-both mb-2">
+                <div class=" p-3 clear-both mb-2">
                     <p class="font-size-16 font-weight-semibold mb-3">{{ localeData?.collection?.payu_form_heading }}</p>
                     <form [formGroup]="payuForm" novalidate>
                         <div class="row">

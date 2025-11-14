@@ -4,7 +4,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <div *ngIf="newVariants?.length" class="pd-l15 pt-3">
+    <div *ngIf="newVariants?.length" class="pl-3 pt-3">
         <div class="save-recipe">{{ localeData?.save_variants }}</div>
     </div>
     <section class="create-recipe">
@@ -85,7 +85,7 @@
                                             {{ localeData?.raw_stock }}
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
-                                    <div class="consumption-details-wrapper w-100 pd-r1 pd-l1">
+                                    <div class="consumption-details-wrapper w-100 pr-2 pl-2">
                                         <div class="mt-2">
                                             <table class="table-raw-stock">
                                                 <thead>
@@ -195,7 +195,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <div class="mt-2 mb-3 pd-r1 pd-l1">
+                                            <div class="mt-2 mb-3 pr-2 pl-2">
                                                 <a
                                                     href="javascript:void(0);"
                                                     (click)="addNewLinkedStockInRecipe(recipe)"
@@ -213,7 +213,7 @@
                                             >{{ commonLocaleData?.app_by_product_output }}
                                         </mat-panel-title>
                                     </mat-expansion-panel-header>
-                                    <div class="consumption-details-wrapper w-100 pd-r1 pd-l1">
+                                    <div class="consumption-details-wrapper w-100 pr-2 pl-2">
                                         <div class="mt-2">
                                             <table class="table-raw-stock">
                                                 <thead>
@@ -340,7 +340,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <div class="mt-2 mb-2 pd-r1 pd-l1">
+                                            <div class="mt-2 mb-2 pr-2 pl-2">
                                                 <a
                                                     href="javascript:void(0);"
                                                     (click)="addNewByProductLinkedStockInRecipe(recipe)"
@@ -355,7 +355,7 @@
                             </mat-accordion>
                         </div>
                     </div>
-                    <div class="col-12 mr-t15" *ngIf="recipe.isEdit">
+                    <div class="col-12 mt-3" *ngIf="recipe.isEdit">
                         <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false" aria-label="done">
                             {{ commonLocaleData?.app_done }}
                         </button>
@@ -387,7 +387,7 @@
                         <div class="col-1 d-flex justify-content-center"></div>
                         <div class="col-3 pr-0">
                             <div class="row">
-                                <div class="consumption-details-wrapper w-100 pd-r1 pd-l1">
+                                <div class="consumption-details-wrapper w-100 pr-2 pl-2">
                                     <p class="section-head" *ngIf="i === 0">{{ localeData?.raw_stock }}</p>
                                     <div class="d-flex align-items-baseline">
                                         <table class="table-filled view-mode-table table-raw-stock">
@@ -421,7 +421,7 @@
                         </div>
                         <div class="col-3 pr-0">
                             <div class="row">
-                                <div class="consumption-details-wrapper w-100 pd-r1 pd-l1">
+                                <div class="consumption-details-wrapper w-100 pr-2 pl-2">
                                     <p class="section-head" *ngIf="i == 0">
                                         {{ commonLocaleData?.app_by_product_output }}
                                     </p>

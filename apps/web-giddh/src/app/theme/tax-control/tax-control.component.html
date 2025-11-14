@@ -17,7 +17,7 @@
                     readonly
                     name="sum"
                     *ngIf="!maskInput"
-                    class="form-control cursor-pointer text-right tax-input pd-r3"
+                    class="form-control cursor-pointer text-right tax-input pr-5"
                     [(ngModel)]="taxTotalAmount"
                     [ngClass]="{ 'field-disabled': readonly }"
                     (focus)="!readonly ? handleInputFocus() : ''"
@@ -32,7 +32,7 @@
                     readonly
                     name="sum"
                     *ngIf="maskInput"
-                    class="form-control cursor-pointer text-right tax-input pd-r2"
+                    class="form-control cursor-pointer text-right tax-input pr-4"
                     [(ngModel)]="taxTotalAmount"
                     [mask]="maskInput"
                     [prefix]="prefixInput"
@@ -64,10 +64,10 @@
     </ng-container>
 
     <mat-menu #taxMenu="matMenu" [hasBackdrop]="hasBackdrop">
-        <div (click)="$event.stopPropagation()" class="discount-wrapper pd-l1 pd-r1">
+        <div (click)="$event.stopPropagation()" class="discount-wrapper pl-2 pr-2">
             <div class="tax-wrapper">
                 <div *ngIf="taxRenderData.length === 0">
-                    <p class="lead pd-05 font-size-14 text-center">{{ commonLocaleData?.app_no_tax_found }}</p>
+                    <p class="lead p-1 font-size-14 text-center">{{ commonLocaleData?.app_no_tax_found }}</p>
                 </div>
                 <p *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
                     <mat-checkbox

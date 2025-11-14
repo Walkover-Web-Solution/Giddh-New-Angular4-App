@@ -23,7 +23,7 @@
                         <button
                             *ngIf="showClearFilter"
                             mat-stroked-button
-                            class="min-width-160 mr-l1"
+                            class="min-width-160 ml-2"
                             (click)="clearFilter()"
                             aria-label="clear"
                         >
@@ -48,7 +48,7 @@
                 <div *ngIf="companyListInProgress$ | async">
                     <giddh-page-loader></giddh-page-loader>
                 </div>
-                <section *ngIf="!(companyListInProgress$ | async)" class="mr-t15">
+                <section *ngIf="!(companyListInProgress$ | async)" class="mt-3">
                     <table
                         mat-table
                         [dataSource]="dataSource"

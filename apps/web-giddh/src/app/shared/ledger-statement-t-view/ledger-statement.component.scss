@@ -36,7 +36,6 @@
                 }
             }
 
-            
             &.highlighted-transaction {
                 .mat-grid-tile {
                     background-color: var(--color-success-light) !important;
@@ -136,39 +135,15 @@ input {
 
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
-    // background-color: var(--theme-background-color);
 }
-
-/* UNUSED COMPONENT CLASS: entry-popup - Auto-commented by script
-.ledg-head.entry-popup table td[class*="col-"] {
-    padding: 0px !important;
-    padding-bottom: 1px !important;
-    border-bottom: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    font-size: var(--font-size-15);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-*/
 
 .transaction-mapped-table {
-    /* UNUSED COMPONENT CLASS: top-head-table - Auto-commented by script
-.top-head-table {
-        border-top: none;
-    }
-*/
 
     thead {
         th {
             border-bottom: none;
         }
     }
-
-    /* UNUSED COMPONENT CLASS: transaction-mapped-head - Auto-commented by script
-.transaction-mapped-head {
-        border-top: none !important;
-    }
-*/
 
     .ledger-main {
         .ledger-row.row {
@@ -190,50 +165,20 @@ table.ledger-footer-1 td[class*="col-"] {
             padding-left: 15px;
         }
     }
-
-    tr {
-        /* td UNUSED COMPONENT CLASS: upper-td - Auto-commented by script
-.upper-td {
-            padding: 0 !important;
-            border: none !important;
-        }
-*/
-    }
 }
 
 .total-col td {
     border: 0 !important;
 }
 
-/* UNUSED COMPONENT CLASS: ledger-main - Auto-commented by script
-.ledger-main .form-control {
-    border: 0;
-}
-/* UNUSED COMPONENT CLASS: thead-background1 - Auto-commented by script
-
-.thead-background1 th {
-    border-left: 0;
-}
-*/
-
 .ledg-head {
     .single-search-box {
         position: relative;
 
         i {
-            // color: var(--color-dark-gray);
             left: 12px;
             top: -8px;
             z-index: 1;
-        }
-
-        .mat-form-field {
-            /* UNUSED COMPONENT CLASS: mat-icon-button - Auto-commented by script
-.mat-icon-button {
-                top: -22px;
-                left: -34px;
-            }
-*/
         }
     }
 }
@@ -254,8 +199,6 @@ table.ledger-footer-1 td[class*="col-"] {
 
 .ledger-stat {
     padding: 10px 15px 0;
-    // background: var(--color-white);
-    // color: var(--color-dark-gray);
     font-size: var(--font-size-16);
     box-shadow: 0px 2px 6px var(--color-shadow-light);
     position: relative;
@@ -266,14 +209,6 @@ table.ledger-footer-1 td[class*="col-"] {
     display: flex;
     flex-wrap: wrap;
 }
-
-/* UNUSED COMPONENT CLASS: account_Name - Auto-commented by script
-.account_Name {
-    color: rgba(0, 0, 0, 0.8);
-    font-weight: var(--font-weight-semibold);
-    text-transform: capitalize;
-}
-*/
 
 .ledger-footer-1 {
     position: absolute;
@@ -322,7 +257,6 @@ table.ledger-footer-1 td[class*="col-"] {
     left: 5% !important;
     right: 5%;
     bottom: 100px;
-    // background: var(--color-white);
     padding: 5px;
     font-size: var(--font-size-12);
     z-index: 0;
@@ -334,28 +268,12 @@ table.ledger-footer-1 td[class*="col-"] {
     width: 100%;
     text-align: center;
 }
-/* UNUSED COMPONENT CLASS: ledger-panel - Auto-commented by script
-.ledger-panel label {
-    font-weight: 400;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: upload-div - Auto-commented by script
-.upload-div {
-    float: left;
-    text-decoration: underline;
-    margin: 0px 5px;
-    border: 1px solid var(--border-color);
-}
-*/
 
 .upload-div label {
     padding: 6px;
 }
 
 .thead-background1 th {
-    // background: var(--color-white);
-    // color: var(--color-black);
     border-right: 1px solid var(--border-color);
     padding: 15px 11px !important;
     border-bottom: 1px solid var(--border-color);
@@ -376,39 +294,8 @@ table.ledger-footer-1 td[class*="col-"] {
     float: left;
     width: 100%;
     margin-bottom: 16px;
-    // background: var(--color-white);
     box-shadow: 0 0 6px var(--color-shadow-light);
 }
-
-/* UNUSED COMPONENT CLASS: Width600 - Auto-commented by script
-.Width600 {
-    position: absolute;
-    width: 600px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: daterange-picker-ledger - Auto-commented by script
-.daterange-picker-ledger {
-    border: 0;
-    background-color: transparent !important;
-    text-decoration-line: none;
-    text-decoration-style: none;
-    padding-left: 35px !important;
-    position: relative;
-    z-index: 99;
-    cursor: default;
-    top: 1px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: input-wrapper - Auto-commented by script
-.input-wrapper {
-    display: block !important;
-    width: 100% !important;
-    position: relative;
-    height: 37px !important;
-}
-*/
 
 .input-wrapper:before {
     position: absolute;
@@ -423,13 +310,6 @@ table.ledger-footer-1 td[class*="col-"] {
     display: none;
 }
 
-/* UNUSED COMPONENT CLASS: C-flex-end - Auto-commented by script
-.C-flex-end {
-    display: flex;
-    justify-content: flex-end;
-}
-*/
-
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -439,67 +319,21 @@ input[type="date"]::-webkit-outer-spin-button {
     display: none;
 }
 
-/* UNUSED COMPONENT CLASS: focus-unset - Auto-commented by script
-.focus-unset.ledger-main .form-control:focus {
-    border: unset !important;
-}
-*/
 .amount-total {
     font-size: var(--font-size-12);
     color: var(--color-medium-gray);
     padding-left: 5px;
 }
 
-.ledger-book {
-    /* UNUSED COMPONENT CLASS: statement-view - Auto-commented by script
-    .left-col-new,
-    .right-col-new,
-    
-.statement-view {
-        background: var(--color-white);
-        padding: 0 0px 350px;
-    }
-*/
-}
-
-/* UNUSED COMPONENT CLASS: mat-grid-title - Auto-commented by script
-.left-col-new .mat-grid-list .mat-grid-title:last-child,
-.left-col-new .mat-grid-list
-.mat-grid-title:last-child {
-    border-right: 0px !important;
-}
-*/
-
 .left-col-new .mat-grid-list .mat-grid-title:first-child,
 .left-col-new .mat-grid-list .mat-grid-title:first-child {
     border-left: 1px solid var(--border-color) !important;
 }
 
-/* UNUSED COMPONENT CLASS: icomoon-ico - Auto-commented by script
-.ledg-head 
-.icomoon-ico {
-    color: var(--color-dark-gray);
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
-    border: 1px solid var(--border-color);
-    padding: 3px;
-    display: flex;
-    justify-content: center;
-    border-top-width: 1px;
-    background-color: var(--color-white);
-    border-radius: var(--mat-border-radius-4);
-}
-*/
-
 .advance-search-block input {
     background: var(--color-light-gray) !important;
     height: 28px;
     border-color: var(--border-color) !important;
-}
-
-.advance-search-block input::placeholder {
-    // color: var(--color-dark-gray);
 }
 
 .left-col-new,
@@ -517,35 +351,7 @@ input[type="date"]::-webkit-outer-spin-button {
         max-width: 80% !important;
     }
 
-    /* UNUSED COMPONENT CLASS: custom-tabs - Auto-commented by script
-.custom-tabs {
-        /* UNUSED COMPONENT CLASS: nav - Auto-commented by script
-.nav/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
-.nav-tabs {
-            position: static !important;
-            background-color: var(--color-white) !important;
-            padding: 0 5px !important;
-        }
-    }
-*/
 }
-
-/* UNUSED COMPONENT CLASS: icon-search - Auto-commented by script
-.advance-search-block 
-.icon-search {
-    right: 0;
-    top: 0;
-    background-color: var(--bg-primary-color);
-    padding: 6px 9px;
-    color: var(--color-white);
-}
-/* UNUSED COMPONENT CLASS: width-100 - Auto-commented by script
-
-.left-col-new .width-100.h-table#blank-ledger-container /* UNUSED COMPONENT CLASS: no-left-border - Auto-commented by script
-.no-left-border {
-    border-left: none !important;
-}
-*/
 
 .ledger-book .ledger-footer-1 .total-col .border-top {
     border-top: 1px solid var(--border-color) !important;
@@ -554,15 +360,6 @@ input[type="date"]::-webkit-outer-spin-button {
 .ledger-book .ledger-footer-1 .total-col .border-top {
     border: none;
 }
-
-/* UNUSED COMPONENT CLASS: advance-search-by-date - Auto-commented by script
-.advance-search-by-date {
-    display: inline-flex;
-    position: relative;
-    min-width: 252px;
-    height: var(--custom-mat-form-field-height);
-}
-*/
 
 .advance-search-by-date:before {
     position: absolute;
@@ -589,7 +386,6 @@ input[type="date"]::-webkit-outer-spin-button {
 }
 
 .ledger-stat h1 {
-    // color: var(--color-black);
     font-size: var(--font-size-15);
     margin-bottom: 10px;
 }
@@ -627,98 +423,21 @@ input[type="date"]::-webkit-outer-spin-button {
     border-bottom: 8px solid var(--theme-primary-light);
 }
 
-/* UNUSED COMPONENT CLASS: advance-search-filter - Auto-commented by script
-.advance-search-filter {
-    justify-content: center;
-    align-items: center;
-    margin-right: 8px;
-
-    img {
-        width: 18px;
-    }
-}
-*/
-
 #clear-filter {
     margin-right: 8px;
 }
-
-/* UNUSED COMPONENT CLASS: advance-search-block - Auto-commented by script
-.ledg-head 
-.advance-search-block {
-    height: 34px;
-    vertical-align: middle;
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-}
-*/
 
 .justify-content-between {
     justify-content: space-between;
 }
 
-/* UNUSED COMPONENT CLASS: search-ledger-field - Auto-commented by script
-.d-flex
-.search-ledger-field {
-    align-items: center;
-    margin-right: 0;
-    min-height: var(--custom-mat-form-field-height);
-}
-*/
-
-/* UNUSED COMPONENT CLASS: clear-filter-btn - Auto-commented by script
-.clear-filter-btn {
-    border-radius: var(--mat-border-radius-4);
-    border: 1px solid var(--border-color);
-    color: var(--color-dark-gray);
-    font-size: var(--font-size-15);
-    background-color: var(--color-white);
-    width: 36px;
-    height: 36px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 3px;
-}
-*/
-
 .clear-filter-btn i {
     font-size: var(--font-size-16);
-}
-
-.search-ledger-field {
-    /* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
-/* UNUSED COMPONENT CLASS: btn-danger - Auto-commented by script
-.btn-danger,
-    .btn-success,
-    /* UNUSED COMPONENT CLASS: btn-warning - Auto-commented by script
-.btn-warning {
-        font-size: var(--font-size-15);
-        width: 36px !important;
-        padding: 0px !important;
-        height: 36px !important;
-        border-radius: 50%;
-        min-width: 36px !important;
-        margin-right: 8px !important;
-    }
-*/
 }
 
 .transaction-in-short {
     margin-bottom: 80px;
 }
-
-/* UNUSED COMPONENT CLASS: ledger-account-label - Auto-commented by script
-.ledger-account-label {
-    align-items: center;
-    flex: auto;
-
-    sh-select {
-        width: 100%;
-    }
-}
-*/
 
 .ledger-main .ledger-row:hover {
     background-color: transparent;
@@ -738,7 +457,6 @@ input[type="date"]::-webkit-outer-spin-button {
     min-width: 180px !important;
     border-radius: 30px;
     box-sizing: content-box !important;
-    // color: var(--color-black) !important;
     text-align: center;
     border: 1px solid var(--border-color) !important;
 
@@ -771,13 +489,6 @@ input[type="date"]::-webkit-outer-spin-button {
     padding: 1px 0 !important;
 }
 
-/* UNUSED COMPONENT CLASS: mat-raised-button - Auto-commented by script
-.mat-raised-button {
-    min-width: 36px;
-}
-*/
-
-/*mobile ledger view css*/
 .mobile-ledger-view {
     margin: 0 -15px;
 
@@ -785,14 +496,6 @@ input[type="date"]::-webkit-outer-spin-button {
         width: 100%;
 
         tbody {
-            // background-color: var(--color-white);
-
-            /* UNUSED COMPONENT CLASS: transaction-date - Auto-commented by script
-.transaction-date {
-                font-size: var(--font-size-15);
-                font-weight: var(--font-weight-semibold);
-            }
-*/
 
             td {
                 padding-top: 8px;
@@ -808,20 +511,6 @@ input[type="date"]::-webkit-outer-spin-button {
                         width: 60%;
                     }
 
-                    /* span UNUSED COMPONENT CLASS: account-holder-checkbox - Auto-commented by script
-.account-holder-checkbox {
-                        width: 20px;
-                        margin-right: 3px;
-                    }
-*/
-
-                    /* span UNUSED COMPONENT CLASS: account-holder-name - Auto-commented by script
-.account-holder-name {
-                        float: left;
-                        width: 82%;
-                        display: inline-flex;
-                    }
-*/
                 }
             }
         }
@@ -843,23 +532,8 @@ input[type="date"]::-webkit-outer-spin-button {
     flex-wrap: wrap;
 }
 
-/* UNUSED COMPONENT CLASS: ipad-view-datepicker - Auto-commented by script
-.input-wrapper
-.ipad-view-datepicker {
-    display: none !important;
-}
-*/
-
 .no-btn,
 .no-btn:active,
-/* UNUSED COMPONENT CLASS: no-btn - Auto-commented by script
-.no-btn:focus {
-    background-color: transparent !important;
-    border: none !important;
-    outline: none !important;
-    padding-left: 0;
-}
-*/
 
 .transaction-mapped-table {
     font-size: var(--font-size-15);
@@ -909,23 +583,10 @@ input[type="date"]::-webkit-outer-spin-button {
         }
     }
 
-    /* UNUSED COMPONENT CLASS: transaction-table-row - Auto-commented by script
-.transaction-table-row table td {
-        border-bottom: 1px solid var(--border-color);
-    }
-*/
-
     .transaction-table-row table:last-child td {
         border-bottom: none;
     }
 }
-
-/* UNUSED COMPONENT CLASS: show - Auto-commented by script
-.ledger-book/* UNUSED COMPONENT CLASS: fade - Auto-commented by script
-.fade:not(.show) {
-    opacity: 1 !important;
-}
-*/
 
 .multicurrency-amount {
     display: flex;
@@ -941,12 +602,6 @@ input[type="date"]::-webkit-outer-spin-button {
     padding-right: 0 !important;
 }
 
-/* UNUSED COMPONENT CLASS: list-item - Auto-commented by script
-.list-item {
-    border-bottom: 1px solid var(--border-color);
-}
-*/
-
 .ledger-row {
     .text-ellipsis {
         max-width: 400px;
@@ -954,44 +609,7 @@ input[type="date"]::-webkit-outer-spin-button {
     }
 }
 
-/* UNUSED COMPONENT CLASS: icon-upload - Auto-commented by script
-.icon-upload {
-    font-size: 14px;
-}
-*/
-
 .icon-refresh,
-/* UNUSED COMPONENT CLASS: icon-plus - Auto-commented by script
-.icon-plus {
-    font-size: var(--font-size-15);
-}
-*/
-
-/* UNUSED COMPONENT CLASS: icon-link - Auto-commented by script
-.icon-link {
-    font-weight: 800;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: account-placeholder - Auto-commented by script
-.account-placeholder {
-    font-size: var(--font-size-15);
-    min-height: 49px;
-    padding-top: 14px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: account-placeholder-text - Auto-commented by script
-.account-placeholder-text {
-    color: var(--color-black) !important;
-}
-*/
-
-/* a#reload-bank-transaction i UNUSED COMPONENT CLASS: icon-refresh - Auto-commented by script
-.icon-refresh {
-    font-size: var(--font-size-16) !important;
-}
-*/
 
 input#ledger-search {
     padding-left: 27px !important;
@@ -1002,33 +620,16 @@ input#ledger-search {
         border: 1px solid var(--border-color) !important;
     }
 
-    // &::placeholder {
-    //     color: var(--color-dark-gray);
-    // }
 }
-
-/* UNUSED COMPONENT CLASS: select2-ledger - Auto-commented by script
-.mat-grid-tile
-.select2-ledger {
-    overflow: visible !important;
-}
-*/
 
 .no-right-border {
     border-right: none !important;
 }
 
-/* UNUSED COMPONENT CLASS: mat-checkbox - Auto-commented by script
-.mat-checkbox {
-    margin-right: 8px;
-}
-*/
-
 .text-primary-heading {
     color: var(--text-primary-color);
 }
 
-/*responsive*/
 .ledger-head {
     position: relative;
 }
@@ -1037,88 +638,15 @@ input#ledger-search {
     position: sticky;
     top: 0px;
     z-index: 1;
-    // background-color: var(--color-white);
     border-bottom: 1px solid var(--border-color);
 }
 
-/* UNUSED COMPONENT CLASS: show-if-ledger-open - Auto-commented by script
-.show-if-ledger-open {
-    height: 300px;
-}
-*/
-
 .linked-entities {
-    width: 200px;
-
-    .list-item {
-        /* UNUSED COMPONENT CLASS: entity-icon - Auto-commented by script
-.entity-icon {
-            padding: 4px;
-        }
-*/
-
-        /* UNUSED COMPONENT CLASS: entity-details - Auto-commented by script
-.entity-details {
-            margin-left: 6px;
-            flex: 1;
-            text-align: left;
-
-            .item {
-                font-weight: var(--font-weight-semibold);
-            }
-        }
-*/
-
-        /* UNUSED COMPONENT CLASS: default-entity - Auto-commented by script
-.default-entity {
-            align-items: center;
-            display: flex;
-
-            &:hover:after {
-                color: var(--text-primary-color);
-            }
-
-            /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
-.icon-favorite-selected {
-                color: var(--text-primary-color);
-            }
-        }
-*/
-    }
 
     i {
         font-size: unset;
         line-height: normal;
     }
-}
-
-// ::ng-deep {
-    // .ledg-head .mat-grid-tile-content {
-    //     color: var(--color-black);
-    // }
-    /* UNUSED COMPONENT CLASS: mat-input-element - Auto-commented by script
-    .ledg-head .ledger-row 
-.mat-input-element {
-        color: var(--color-black) !important;
-    }
-*/
-// }
-
-/* UNUSED COMPONENT CLASS: icon-button-width - Auto-commented by script
-.icon-button-width {
-    width: 36px;
-    min-width: 36px !important;
-    height: 36px;
-    padding: 3px !important;
-}
-*/
-
-@media only screen and (max-width: 1366px) {
-    /* UNUSED COMPONENT CLASS: linked-entities - Auto-commented by script
-.linked-entities {
-        max-width: 155px;
-    }
-*/
 }
 
 @media screen and (max-width: 1280px) {
@@ -1144,18 +672,6 @@ input#ledger-search {
     }
 }
 
-@media (max-width: 1190px) {
-    /* UNUSED COMPONENT CLASS: date-advance-search - Auto-commented by script
-.date-advance-search {
-
-        &:before,
-        &:after {
-            display: none;
-        }
-    }
-*/
-}
-
 @media only screen and (max-width: 1024px) {
     .container {
         width: 100%;
@@ -1168,15 +684,6 @@ input#ledger-search {
         margin-top: 10px;
         margin-bottom: 0;
     }
-
-    /* UNUSED COMPONENT CLASS: date-range-options - Auto-commented by script
-.date-range-options {
-        margin-bottom: 10px;
-        text-align: left !important;
-        z-index: 1;
-        margin-left: 0;
-    }
-*/
 
     .advance-search-by-date:before,
     .advance-search-by-date:after {
@@ -1218,15 +725,6 @@ input#ledger-search {
         padding-left: 20px;
     }
 
-    /* UNUSED COMPONENT CLASS: select2-container - Auto-commented by script
-    .ledg-head .mat-grid-list .mat-grid-title,
-    .ledg-head .mat-grid-list .mat-grid-title 
-.select2-container {
-        border-bottom: none;
-        border-right: none;
-    }
-*/
-
     .ledger-state-box {
         margin-bottom: 0;
     }
@@ -1258,14 +756,6 @@ input#ledger-search {
         padding-left: 80px !important;
     }
 
-    /* UNUSED COMPONENT CLASS: h-table - Auto-commented by script
-    .ledger-book 
-.h-table {
-        display: block;
-        clear: both;
-    }
-*/
-
     .ledger-book .h-table tbody {
         display: block;
     }
@@ -1291,26 +781,6 @@ input#ledger-search {
     #blank-ledger-container tbody tr:empty {
         display: none;
     }
-
-    /* UNUSED COMPONENT CLASS: ledger-head-top - Auto-commented by script
-.ledger-head-top {
-        flex-wrap: wrap;
-    }
-*/
-
-    /* UNUSED COMPONENT CLASS: xs-mb-1 - Auto-commented by script
-.xs-mb-1 {
-        margin-bottom: 10px;
-    }
-*/
-
-    /* UNUSED COMPONENT CLASS: ledger-btn - Auto-commented by script
-.ledger-btn /* UNUSED COMPONENT CLASS: btn - Auto-commented by script
-.btn {
-        font-size: var(--font-size-12) !important;
-        padding: 6px;
-    }
-*/
 
     .ledger-btn button.btn {
         font-size: var(--font-size-12) !important;
@@ -1373,19 +843,6 @@ input#ledger-search {
     .search-ledger-field {
         margin-right: 0 !important;
 
-        /* UNUSED COMPONENT CLASS: ledger-datepicker - Auto-commented by script
-.ledger-datepicker {
-            width: 36px;
-            height: 36px;
-            background-color: var(--color-white);
-            border: 1px solid var(--border-color);
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            //display: none;
-        }
-*/
     }
 
     .ledger-ellipse {
@@ -1418,34 +875,6 @@ input#ledger-search {
         }
     }
 
-    /* UNUSED COMPONENT CLASS: select-all-icons - Auto-commented by script
-.select-all-icons {
-        display: flex;
-        align-items: center;
-
-        button {
-            height: 36px;
-            width: 36px;
-        }
-    }
-*/
-
-    .search-ledger-wrapper {
-        width: 100% !important;
-
-        .single-search-box {
-            /* UNUSED COMPONENT CLASS: full-width-input - Auto-commented by script
-.full-width-input {
-                /* UNUSED COMPONENT CLASS: mat-form-field - Auto-commented by script
-.mat-form-field {
-                    width: 100%;
-                }
-
-            }
-*/
-        }
-    }
-
     .download-invoice-ledger {
         top: 50%;
         transform: translateY(-50%);
@@ -1455,7 +884,6 @@ input#ledger-search {
 
         i {
             top: 0;
-            // color: var(--color-dark-gray);
         }
     }
 
@@ -1484,30 +912,6 @@ input#ledger-search {
         }
     }
 }
-
-/* UNUSED COMPONENT CLASS: ledger-checkbox - Auto-commented by script
-.ledger-checkbox {
-    /* UNUSED COMPONENT CLASS: entry-date - Auto-commented by script
-.entry-date {
-        margin-left: 8px;
-    }
-}
-*/
-
-/* UNUSED COMPONENT CLASS: bank-menu - Auto-commented by script
-.bank-menu {
-    padding: 3px !important;
-    border: 1px solid var(--border-color);
-    border-radius: var(--mat-border-radius-4);
-    width: 36px;
-    height: 36px;
-
-    button {
-        top: -13px;
-        right: 10px;
-    }
-}
-*/
 
 .h32 {
     height: 32px;

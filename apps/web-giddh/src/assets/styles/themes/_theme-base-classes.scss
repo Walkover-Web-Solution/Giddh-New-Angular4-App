@@ -3,22 +3,13 @@ body {
     --bg-primary-color: var(--theme-primary-color);
     --border-color: var(--theme-border-color);
 
-    // Theme color base variables with contrast : CURRENTLY TAKE THIS COLOR FORM MAT THEME
-    // --theme-primary-color: #1a237e;
-    // --theme-primary-contrast-color: white;
-    // --theme-accent-color: #198754;
-    // --theme-accent-contrast-color: white;
-    // --theme-warn-color: #dc3545;
-    // --theme-warn-contrast-color: white;
-    // --theme-foreground-color: rgba(0, 0, 0, 0.26);
-    // --theme-background-color: rgba(0, 0, 0, 0.12);
-
     --theme-primary-light: color-mix(in oklch, var(--theme-primary-color) 10%, white);
     --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) 10%, white);
     --theme-warn-light: color-mix(in oklch, var(--theme-warn-color) 10%, white);
 
-    &.default-theme, &.dark-theme {
-        --color-black: #0D0D0D;
+    &.default-theme,
+    &.dark-theme {
+        --color-black: #0d0d0d;
         --color-danger-light: #e545561a;
         --color-orange-light: #e58a0026;
         --color-red-light: #e5455626;
@@ -36,36 +27,34 @@ body {
         --color-orange: #e58a00;
         --color-deep-orange: #ff9933;
         --color-brown-gold: #996515;
-        --color-red: #C51E3A;
+        --color-red: #c51e3a;
         --color-green: #098757;
         --color-transparent: transparent;
-    
-        // other color pending 
+
         --color-apple-search-background: #575150;
         --color-field-hover: #000000de;
         --color-border-focus: #3f51b5;
         --color-mat-option: #0000000a;
-        
-        // Box shadow
+
         --color-shadow-light: #00000033;
         --color-drag-bottom-shadow: #00000024;
         --color-drag-right-shadow: #0000001f;
-        --mat-menu-box-shadow: 0px 5px 5px -3px var(--color-shadow-light), 0px 8px 10px 1px var(--color-drag-bottom-shadow),
-            0px 3px 14px 2px var(--color-drag-right-shadow);
-    
+        --mat-menu-box-shadow: 0px 5px 5px -3px var(--color-shadow-light),
+            0px 8px 10px 1px var(--color-drag-bottom-shadow), 0px 3px 14px 2px var(--color-drag-right-shadow);
+
         // Filter for Image
         --filter-image-color-white: brightness(0) invert(1);
-        // Use this class on black color image (icon) to  change color in dark theme 
-        --color-image-filter-quaternary: invert(100%) sepia(1%) saturate(2%) hue-rotate(1deg) brightness(33%) contrast(100%);
-    
-    
-        // Image url 
+        // Use this class on black color image (icon) to  change color in dark theme
+        --color-image-filter-quaternary: invert(100%) sepia(1%) saturate(2%) hue-rotate(1deg) brightness(33%)
+            contrast(100%);
+
+        // Image url
         --url-caret-image: url("../../images/caret-light.svg");
 
         --table-background-color: #ffffff;
     }
 
-    &.dark-theme { 
+    &.dark-theme {
         // --text-primary-color: var(--color-white);
         --color-dark-gray: var(--color-light-gray);
         --color-image-filter-quaternary: brightness(0) invert(1);
@@ -74,11 +63,8 @@ body {
     }
 }
 
-.default-theme { 
+.default-theme {
     .bg-light-gray {
         background-color: var(--color-light-gray) !important;
     }
 }
-.dark-theme { 
-    
-}   

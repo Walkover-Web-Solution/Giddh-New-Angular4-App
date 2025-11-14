@@ -7,10 +7,10 @@
     <div [formGroup]="downloadForm" *ngIf="!(isVoucherFileDownloading$ | async)">
 
             <ng-container *ngIf="voucherType === 'sales'">
-                <p class="font-size-16 mr-b1">{{ localeData?.invoice_copy }}</p>
+                <p class="font-size-16 mb-2">{{ localeData?.invoice_copy }}</p>
                 <hr />
             </ng-container>
-            <div class="mr-t1">
+            <div class="mt-2">
                 <mat-checkbox
                     name="originalCopy"
                     formControlName="isOriginal"
@@ -60,7 +60,7 @@
             </div>
 
 
-        <div class="pd-t15">
+        <div class="pt-3">
             <button
                 mat-raised-button
                 color="primary"
@@ -74,7 +74,7 @@
             >
                 {{ commonLocaleData?.app_download }}
             </button>
-            <button mat-stroked-button class="mr-l15" mat-dialog-close>
+            <button mat-stroked-button class="ml-3" mat-dialog-close>
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>

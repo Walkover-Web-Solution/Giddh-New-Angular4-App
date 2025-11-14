@@ -26,7 +26,7 @@
                             <!-- uiView: inventory-detail -->
                             <section class="container-fluid clear-both inventory-head">
                                 <div *ngIf="shouldShowInventoryReport$ | async" class="wrap-top-inventory">
-                                    <div *ngIf="isTabletScreen && activeView === 'group'" class="mr-b15">
+                                    <div *ngIf="isTabletScreen && activeView === 'group'" class="mb-3">
                                         <button
                                             mat-raised-button color="primary"
                                             [routerLink]="['/pages/inventory/']"
@@ -35,7 +35,7 @@
                                             Back
                                         </button>
                                     </div>
-                                    <div *ngIf="activeView" class="d-flex mr-b1 branch-warehouse-filter">
+                                    <div *ngIf="activeView" class="d-flex mb-2 branch-warehouse-filter">
                                         <reactive-dropdown-field
                                             *ngIf="
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&

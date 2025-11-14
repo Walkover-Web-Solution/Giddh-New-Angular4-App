@@ -36,13 +36,6 @@
     cursor: pointer;
     border-radius: var(--mat-border-radius-0);
 }
-/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
-:host
-.container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-*/
 
 :host .aside-pane {
     max-width: 760px;
@@ -53,12 +46,7 @@
     margin: 0 auto;
     max-width: 168px;
 }
-/* UNUSED COMPONENT CLASS: aside-header - Auto-commented by script
-.aside-header {
-    padding: 20px 10px;
-    background-color: var(--color-light-gray);
-}
-*/
+
 .aside-pane {
     .aside-help-header {
         display: flex;
@@ -98,7 +86,6 @@
             padding: 15px 10px;
             border-bottom: 1px solid var(--border-color);
             ul {
-                // list-style: none;
                 li {
                     font-size: var(--font-size-15);
                     font-weight: var(--font-weight-semibold);
@@ -123,7 +110,6 @@
                 font-weight: var(--font-weight-semibold);
             }
             ul {
-                // list-style: none;
                 li {
                     float: left;
                     width: 50%;
@@ -160,35 +146,8 @@
             }
         }
     }
-    mat-dialog-content {
-        .mdc-list-item{
-            /* UNUSED COMPONENT CLASS: mdc-list-item - Auto-commented by script
-/*& UNUSED COMPONENT CLASS: mdc-list-item--with-one-line - Auto-commented by script
-.mdc-list-item--with-one-line{
-                height: unset !important;
-                margin-bottom: 10px;
-            }
-*/
-        }
-    }
 }
-/* UNUSED COMPONENT CLASS: aside-pane-form - Auto-commented by script
-.aside-pane-form {
-    background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-shadow-light);
-    padding: 15px 15px;
-    height: calc(100vh - 90px);
-    overflow: auto;
-    scroll-behavior: smooth;
-    position: relative;
-    margin-top: 15px;
-}
-*/
-/* UNUSED COMPONENT CLASS: mat-mdc-dialog-content - Auto-commented by script
-.mat-mdc-dialog-content{
-    max-height: 100vh !important;
-}
-*/
+
 @media (max-height: 900px) {
     .aside-pane {
         .help-aside-body {

@@ -14,7 +14,7 @@
         <giddh-page-loader *ngIf="createReasonInProgress$ | async"></giddh-page-loader>
         <ng-container *ngIf="!(createReasonInProgress$ | async)">
             <form autocomplete="off" novalidate name="reasonForm" [formGroup]="reasonForm">
-                <div class="row mr-b15">
+                <div class="row mb-3">
                     <div class="col-xl-5 col-lg-5 col-sm-5">
                         <input-field
                             [name]="'code'"

@@ -32,7 +32,7 @@
                 <!--endregion-->
                 <div class="vouchers-content-wrapper"
                     [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
-                    <div class="font-size-15 mr-l1 mb-4" *ngIf="isEinvoiceGenerated">{{
+                    <div class="font-size-15 ml-2 mb-4" *ngIf="isEinvoiceGenerated">{{
                         commonLocaleData?.app_special_note
                         }}</div>
                     <form autocomplete="off" novalidate name="invoiceForm">
@@ -127,7 +127,7 @@
                                             "
                                         >
                                             <div
-                                                class="vouchers-copy-sales mr-l3 cursor-pointer"
+                                                class="vouchers-copy-sales ml-5 cursor-pointer"
                                                 [matMenuTriggerFor]="copyLastVouchers"
                                                 role="button"
                                             >
@@ -143,7 +143,7 @@
                                                             (click)="copyInvoice(item)"
                                                             class="line-height-initial"
                                                         >
-                                                            <div class="pd-05">
+                                                            <div class="p-1">
                                                                 <div class="d-flex flex-column">
                                                                     <div class="d-flex justify-content-between">
                                                                         <span>{{ item?.versionNumber }}</span>
@@ -358,7 +358,7 @@
                                 'vouchers-form-disable':
                                     !invFormData.voucherDetails.customerName &&
                                     !invFormData.voucherDetails.customerUniquename,
-                                'mr-t15': isCreditNote || isDebitNote
+                                'mt-3': isCreditNote || isDebitNote
                             }"
                         >
                             <div class="vouchers-small-container">
@@ -965,7 +965,7 @@
                                         </ng-container>
                                     </div>
                                     <!-- Attention to -->
-                                    <div class="col-6 mr-t15">
+                                    <div class="col-6 mt-3">
                                         <input-field
                                             [type]="'text'"
                                             [name]="'accountDetails.attention'"
@@ -975,7 +975,7 @@
                                         ></input-field>
                                     </div>
                                     <!-- Email Id -->
-                                    <div class="col-6 mr-t15">
+                                    <div class="col-6 mt-3">
                                         <input-field
                                             [type]="'email'"
                                             [placeholder]="commonLocaleData?.app_email_id"
@@ -985,7 +985,7 @@
                                         ></input-field>
                                     </div>
                                     <!-- Mobile Number -->
-                                    <div class="col-6 mr-t15 mobile-number-wrapper">
+                                    <div class="col-6 mt-3 mobile-number-wrapper">
                                         <div id="init-contact-wrapper" class="position-relative w-100">
                                             <input-field
                                                 [name]="'accountDetails.mobileNumber'"
@@ -1005,7 +1005,7 @@
                                     </div>
                                     <!-- Warehouse -->
                                     <div
-                                        class="col-6 mr-t15"
+                                        class="col-6 mt-3"
                                         *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1"
                                     >
                                         <reactive-dropdown-field
@@ -1022,7 +1022,7 @@
                                     </div>
                                 </div>
                                 <div class="row" *ngIf="isPurchaseInvoice">
-                                    <div class="col-12 mr-t15">
+                                    <div class="col-12 mt-3">
                                         <span class="billing-deliver-label">{{ localeData?.deliver_to }}</span>
                                     </div>
                                     <!-- Billing Address -->
@@ -1330,7 +1330,7 @@
                                 </div>
                                 <!-- Row 3 -->
                                 <div
-                                    class="row row-gap-15 mr-t15 mr-b15"
+                                    class="row row-gap-15 mt-3 mb-3"
                                     *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))"
                                 >
                                     <!-- Purchase Order -->
@@ -1379,7 +1379,7 @@
                                     </div>
                                 </div>
                                 <!-- Row 4 -->
-                                <div class="row row-gap-15 mr-t15">
+                                <div class="row row-gap-15 mt-3">
                                     <!-- Voucher Number -->
                                     <div class="col-6">
                                         <input-field
@@ -1483,7 +1483,7 @@
                                     </div>
                                 </div>
                                 <div
-                                    class="row mr-t15"
+                                    class="row mt-3"
                                     *ngIf="isCreditNote || isDebitNote || companyCountryCode === 'AE'"
                                 >
                                     <div class="col-6" *ngIf="isCreditNote || isDebitNote">
@@ -1576,7 +1576,7 @@
                                                 class="cursor-pointer for-mobile-screen remove-invoice"
                                                 (click)="removeSelectedInvoice()"
                                             >
-                                                <span class="remove-invoice-icon mr-r05"
+                                                <span class="remove-invoice-icon mr-1"
                                                     ><i class="icon-trash"></i
                                                 ></span>
                                             </div>
@@ -1621,7 +1621,7 @@
                                     <!-- For Tourist Scheme end -->
                                 </div>
                                 <div
-                                    class="row mr-t15 pb-1"
+                                    class="row mt-3 pb-1"
                                     *ngIf="
                                         isPurchaseInvoice ||
                                         (currentVoucherFormDetails?.rcmAllowed &&
@@ -1637,7 +1637,7 @@
                                                 id="reverse-charge"
                                                 [(ngModel)]="isRcmEntry"
                                                 (change)="changeRcmCheckboxState($event)"
-                                                class="mr-r1"
+                                                class="mr-2"
                                                 name="rcmEntry"
                                                 [disabled]="isEinvoiceGenerated"
                                                 color="primary"
@@ -2752,12 +2752,12 @@
                                                                 </label>
                                                                 </mat-checkbox>
                                                             </div>
-                                                            <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
+                                                            <div *ngIf="entry.isOtherTaxApplicable" class="mt-2">
                                                                 <span>
                                                                     <div
                                                                         class="d-flex align-items-center justify-content-end"
                                                                     >
-                                                                        <span class="mr-r05">
+                                                                        <span class="mr-1">
                                                                             <a
                                                                                 href="javascript:void(0);"
                                                                                 aria-label="edit-icon"
@@ -2794,7 +2794,7 @@
                                                                             [(ngModel)]="entry.otherTaxSum"
                                                                         ></text-field>
                                                                     </div>
-                                                                    <p class="mr-r05 font-size-12 text-capitalize mr-b2">
+                                                                    <p class="mr-1 font-size-12 text-capitalize mb-4">
                                                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                                     </p>
                                                                 </span>
@@ -3023,10 +3023,10 @@
                                                                                     "
                                                                                 >
                                                                                     <div
-                                                                                        class="d-flex align-items-center column-gap-1 adjustment-height pd-b05"
+                                                                                        class="d-flex align-items-center column-gap-1 adjustment-height pb-1"
                                                                                     >
                                                                                         <div
-                                                                                            class="clear-both mr-b1 text-left"
+                                                                                            class="clear-both mb-2 text-left"
                                                                                             *ngIf="
                                                                                                 voucherApiVersion !== 2
                                                                                             "
@@ -3627,7 +3627,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="vouchers-actions d-flex justify-content-end column-gap-1 pd-t2 pd-b2 mt-4">
+                                <div class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4">
                                     <div
                                         class="pull-right position-relative update-mode d-flex column-gap-15"
                                         *ngIf="!isUpdateMode"

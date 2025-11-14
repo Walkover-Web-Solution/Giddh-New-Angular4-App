@@ -1,13 +1,4 @@
 @use "../../assets/styles/abstracts/_mixins" as *;
-// @mixin all-table {
-//     td {
-//         .mat-cell {
-//             &:last-child {
-//                 padding: 5px 10px 5px 50% !important;
-//             }
-//         }
-//     }
-// }
 .dropdown-menu {
     > li {
         > a {
@@ -29,92 +20,26 @@
 
 .dis {
     display: flex;
-    .btn-group{
-        button{
+    .btn-group {
+        button {
             min-width: 150px;
         }
     }
 }
-
-/* UNUSED COMPONENT CLASS: pd-1 - Auto-commented by script
-.pd-1 {
-    padding: 5px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: aging-table - Auto-commented by script
-.aging-table > tbody > tr input[type="checkbox"] {
-    position: absolute !important;
-    opacity: 0;
-    top: 3px;
-}
-*/
 
 .aging-table > tbody > tr:hover input[type="checkbox"] {
     position: relative !important;
     opacity: 1;
 }
 
-/* UNUSED COMPONENT CLASS: checkbox-visible - Auto-commented by script
-.checkbox-visible {
-    opacity: 1 !important;
-    position: relative !important;
-}
-*/
-
 .icon-pointer {
     margin-left: 6px;
     cursor: pointer;
 }
 
-/* UNUSED COMPONENT CLASS: icon-class-search - Auto-commented by script
-.icon-pointer
-.icon-class-search {
-    top: 30%;
-    color: var(--color-medium-gray);
-}
-*/
-
-/* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
-.icon-pointer .d-block.font-size-9.glyphicon/* UNUSED COMPONENT CLASS: glyphicon-triangle-top - Auto-commented by script
-.glyphicon-triangle-top {
-    line-height: 0.5;
-    height: 8px;
-}
-*/
-
 .icon-pointer .font-size-9 {
     font-size: var(--font-size-12);
 }
-
-/* UNUSED COMPONENT CLASS: account-detail-modal-header - Auto-commented by script
-.account-detail-modal-header {
-    position: absolute;
-    top: 20px;
-    left: 30%;
-    right: auto;
-    z-index: 1;
-    margin: 0;
-    background: var(--color-white);
-    width: 50%;
-    padding: 1px;
-    box-shadow: 1px 0 9px var(--color-shadow-light);
-}
-*/
-
-/* UNUSED COMPONENT CLASS: account-detail-modal-header-div - Auto-commented by script
-.account-detail-modal-header-div {
-    padding: 0;
-    border-radius: var(--mat-border-radius-0);
-}
-*/
-
-/* UNUSED COMPONENT CLASS: account-detail-modal-div - Auto-commented by script
-.account-detail-modal-div {
-    height: 100%;
-    padding: 0;
-}
-*/
 
 .account-detail-custom-header {
     border-right: 0;
@@ -152,80 +77,9 @@ button.mat-menu-item {
     font-family: var(--font-family) !important;
 }
 
-/* UNUSED COMPONENT CLASS: list-unstyled - Auto-commented by script
-ul.list-unstyled li a {
-    color: var(--color-dark-black);
-}
-*/
-
-/* UNUSED COMPONENT CLASS: p-modal-tooltip - Auto-commented by script
-.p-modal-tooltip {
-    display: block;
-    position: absolute;
-    background-color: var(--color-white);
-    z-index: 1000;
-    width: 257px;
-    border: 1px solid var(--color-medium-gray);
-    border-radius: var(--mat-border-radius-4);
-    box-shadow: 0 7px 24px var(--color-shadow-light);
-    top: -2px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: wd00 - Auto-commented by script
-.wd00 {
-    min-height: 0px !important;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
-/* UNUSED COMPONENT CLASS: dropdown-menu-right - Auto-commented by script
-.dropdown-menu-right {
-    z-index: 2;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: model-position - Auto-commented by script
-.model-position {
-    float: right;
-    right: -234px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: li-link - Auto-commented by script
-.li-link {
-    a {
-        padding: 7px 10px;
-        display: block;
-    }
-
-    &:first-child {
-        margin-top: 0 !important;
-    }
-
-    a:hover {
-        color: var(--text-primary-color) !important;
-        background-color: var(--theme-primary-light);
-    }
-}
-*/
-
-/* UNUSED COMPONENT CLASS: transform-inherit - Auto-commented by script
-.transform-inherit {
-    transform: inherit !important;
-}
-*/
-
-/* td UNUSED COMPONENT CLASS: comment-field - Auto-commented by script
-.comment-field {
-    white-space: normal;
-}
-*/
-
 .date-range-picker {
     width: 225px !important;
 }
-//  my css
 .aging-table tbody tr:first-child td {
     border-top: none;
 }
@@ -244,14 +98,6 @@ td.position-relative.word-wrap.customer-name.cursor-pointer {
     padding-right: 35px;
 }
 
-/* UNUSED COMPONENT CLASS: vendor-customer-name - Auto-commented by script
-td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
-    height: 42px;
-    line-height: 1;
-    border-right: none;
-}
-*/
-
 .checkbox-left-side-in-table {
     visibility: hidden;
 }
@@ -262,17 +108,6 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
 }
 
 .position-relative.word-wrap {
-    /* UNUSED COMPONENT CLASS: table-menu-first-td - Auto-commented by script
-.table-menu-first-td {
-        font-size: var(--font-size-15);
-        vertical-align: middle;
-        display: none;
-        color: var(--color-dark-gray);
-        position: absolute;
-        right: 0;
-    }
-*/
-
     &:hover {
         .table-menu-first-td {
             display: inline-block;
@@ -283,13 +118,6 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
         }
     }
 }
-
-/* UNUSED COMPONENT CLASS: aging-table-top - Auto-commented by script
-tr.aging-table-top td {
-    width: 320px;
-    padding: 1px 0;
-}
-*/
 
 .aging-table {
     max-width: 100%;
@@ -310,13 +138,6 @@ tr.aging-table-top td {
         }
     }
 }
-
-/* UNUSED COMPONENT CLASS: table-aging-report - Auto-commented by script
-.table-aging-report {
-    max-width: 100%;
-    width: 100%;
-}
-*/
 
 #dropdown-basics {
     position: fixed !important;
@@ -343,16 +164,6 @@ tr.aging-table-top td {
     background-color: var(--color-border-light);
     color: var(--text-primary-color);
 }
-
-/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
-.open > .dropdown-toggle
-.btn-primary {
-    color: var(--color-black);
-    background-color: var(--color-border-light);
-    border-color: var(--color-border-light);
-    box-shadow: none !important;
-}
-*/
 
 i.icon-options {
     width: 36px;
@@ -419,30 +230,9 @@ span.input-addon {
     min-width: 170px;
 }
 
-/* UNUSED COMPONENT CLASS: icon-ellipse - Auto-commented by script
-.customer-name 
-.icon-ellipse {
-    height: 14px;
-    width: 14px;
-}
-*/
-
 .icon-ellipse.open.show {
     display: inline-block !important;
 }
-
-/* UNUSED COMPONENT CLASS: due-as-on - Auto-commented by script
-.due-as-on {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    strong {
-        width: 80px;
-        padding-left: 10px;
-    }
-}
-*/
 
 .form-control[readonly] {
     background-color: inherit !important;
@@ -485,37 +275,6 @@ button.btn.btn-filter {
     display: flex;
     justify-content: space-between;
 }
-
-/* UNUSED COMPONENT CLASS: linked-entities - Auto-commented by script
-.linked-entities {
-    width: 200px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
-.more-button {
-.btn-default {
-        border-radius: 50% !important;
-        padding: 0px !important;
-        width: 28px;
-        height: 28px;
-    }
-}
-*/
-
-/* UNUSED COMPONENT CLASS: input-container - Auto-commented by script
-.input-container {
-    input {
-        height: 36px;
-        min-width: 100%;
-        padding: 11px;
-        padding-right: 40px;
-        color: var(--color-black);
-        border: none;
-        background-color: var(--color-light-gray) !important;
-    }
-}
-*/
 
 .total-customer-vendor-count {
     color: var(--color-dark-gray) !important;
@@ -570,59 +329,6 @@ button.btn.btn-filter {
     background-color: var(--bg-primary-color);
 }
 
-// .all-table {
-//     .mat-header-cell {
-//         &:first-of-type {
-//             width: 595px;
-//             padding-left: 5px !important;
-//         }
-//     }
-//     .mat-header-row {
-//         border-bottom: 1.5px solid var(--border-color);
-//     }
-//     .icon-search:before {
-//         position: relative;
-//         bottom: 2px;
-//     }
-//     .mat-vendor-name {
-//         padding-left: 10px !important;
-//     }
-//     .mat-customer-name {
-//         padding-left: 10px !important;
-//         .mat-checkbox {
-//             transform: translateX(-3px);
-//         }
-//         span:nth-child(2) {
-//             position: relative;
-//             right: 0px;
-//             left: 3px;
-//         }
-//     }
-// }
-
-/* UNUSED COMPONENT CLASS: btn-filters - Auto-commented by script
-.btn-filters {
-    @include common-filters(
-        var(--theme-primary-color),
-        var(--color-border-light),
-        1px solid var(--border-color)
-    );
-}
-*/
-
-// .customer-vendor-name-search-icon {
-//     top: 2px;
-//     width: 25px;
-//     height: 25px;
-//     padding: 0;
-//     align-items: center;
-//     justify-content: center;
-//     display: flex;
-//     // .mat-mdc-icon-button .mat-mdc-button-touch-target {
-//     //     width: 25px !important;
-//     //     height: 25px !important;
-//     // }
-// }
 .customer-img {
     height: 360px;
     width: 489px;
@@ -632,7 +338,6 @@ button.btn.btn-filter {
     min-width: max(150px, 10%);
 }
 
-/*responsive*/
 @media screen and (max-width: 1280px) {
     .min-width-230 {
         min-width: 195px !important;
@@ -684,29 +389,12 @@ button.btn.btn-filter {
 }
 
 @media (min-width: 769px) and (max-width: 1023px) {
-    /* UNUSED COMPONENT CLASS: separate-top-aging - Auto-commented by script
-.separate-top-aging {
-        display: none;
-    }
-*/
     .customer-img {
         height: auto;
         width: 100%;
     }
 }
 
-/* UNUSED COMPONENT CLASS: close-btn-in-mat-model - Auto-commented by script
-.close-btn-in-mat-model {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    right: 9px;
-    top: 6px;
-    font-size: 25px;
-    color: var(--color-white);
-}
-*/
 .min-width-230 {
     min-width: 230px;
 }
@@ -741,16 +429,6 @@ button.btn.btn-filter {
     min-width: 150px;
 }
 
-/* UNUSED COMPONENT CLASS: btn-light - Auto-commented by script
-.btn-light:not(:disabled):not(.disabled).active,
-.btn-light:not(:disabled):not(.disabled):active,
-.show > .btn-light/* UNUSED COMPONENT CLASS: dropdown-toggle - Auto-commented by script
-.dropdown-toggle {
-    color: var(--color-black);
-    background-color: var(--color-light-gray);
-    border: 1px solid var(--border-color);
-}
-*/
 th.mat-header-cell {
     white-space: nowrap !important;
 }

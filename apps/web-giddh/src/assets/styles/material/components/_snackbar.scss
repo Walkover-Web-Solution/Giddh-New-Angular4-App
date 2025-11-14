@@ -14,7 +14,6 @@
         background-position-y: center;
     }
 
-    // Error state
     &.error {
         .mdc-snackbar__surface {
             background-color: var(--color-red) !important;
@@ -25,7 +24,6 @@
         }
     }
 
-    // Success state
     &.success {
         .mdc-snackbar__surface {
             background-color: var(--color-green) !important;
@@ -36,7 +34,6 @@
         }
     }
 
-    // Warning and Info states (shared styles)
     &.warning,
     &.info {
         .mdc-snackbar__surface {
@@ -86,33 +83,3 @@
         }
     }
 }
-// .mat-mdc-snack-bar-container {
-//     .mat-mdc-snack-bar-label {
-//         padding: 0px !important;
-//     }
-//     padding: 0px !important;
-//     &.error {
-//         .snack-container {
-//             background-image: url("../images/failure.svg");
-//             background-position-y: center;
-//         }
-//     }
-//     &.success {
-//         .snack-container {
-//             background-image: url("../images/success.svg");
-//             background-position-y: center;
-//         }
-//     }
-//     &.warning {
-//         .snack-container {
-//             background-image: url("../images/exclamation-black.svg");
-//             background-position-y: center;
-//         }
-//     }
-//     &.info {
-//         .snack-container {
-//             background-image: url("../images/info-black.svg");
-//             background-position-y: center;
-//         }
-//     }
-// }

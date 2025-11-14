@@ -1,54 +1,20 @@
-// .appearance-none {
-//     background: none !important;
-//     border: 0 !important;
-//     font-size: var(--font-size-15);
-//     color: var(--color-black);
-// }
-
-// .sidebar-menu {
-//     min-height: 100vh;
-//     background: var(--color-black);
-//     color: var(--color-white);
-//     float: right;
-//     position: relative;
-// }
-
 .menu-list {
     padding: 0;
-}
 
-.menu-list li a {
-    color: var(--color-black);
-    padding: 7px 12px;
-    display: block;
-    font-size: var(--font-size-15);
-}
+    li {
+        a {
+            color: var(--color-black);
+            padding: 7px 12px;
+            display: block;
+            font-size: var(--font-size-15);
 
-.menu-list li a:hover {
-    background: var(--theme-primary-light);
+            &:hover {
+                background: var(--theme-primary-light);
+            }
+        }
+    }
 }
-
-/* UNUSED COMPONENT CLASS: isHidden - Auto-commented by script
-.menu-list li a
-.isHidden {
-    color: var(--color-dark-gray);
-}
-*/
-
-// .active-child {
-//     background: var(--theme-primary-light);
-//     padding-left: 20px;
-// }
 
 .active-parent {
     background: var(--theme-primary-light);
 }
-
-// .active-child>span {
-//     margin-right: 2px;
-// }
-
-// .dblUnderlined {
-//     border-bottom: 1px double;
-//     text-decoration: underline;
-// }

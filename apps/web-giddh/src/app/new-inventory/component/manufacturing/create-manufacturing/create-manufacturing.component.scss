@@ -8,9 +8,6 @@
         }
         .max-width-stock {
             max-width: 1400px;
-            // .section-head {
-            //     color: var(--text-primary-color);
-            // }
         }
         .less-than-text {
             font-size: 32px;
@@ -30,12 +27,7 @@
         }
 
         .form-fields {
-            /* UNUSED COMPONENT CLASS: max-width-230 - Auto-commented by script
-.max-width-230 {
-                display: block;
-                width: auto;
-            }
-*/
+
             .gap-between {
                 gap: 1rem;
             }
@@ -75,7 +67,6 @@
                     border-bottom: 1px solid var(--border-color);
                     tr {
                         th {
-                            // color: var(--text-primary-color);
                             font-weight: 500;
                         }
                     }
@@ -83,23 +74,6 @@
                 tbody {
                     tr {
                         td {
-                            /*& UNUSED COMPONENT CLASS: before-line - Auto-commented by script
-.before-line {
-                                &::before {
-                                    content: "";
-                                    position: absolute;
-                                    left: -1px;
-                                    top: 20px;
-                                    width: 14px;
-                                    height: 50px;
-                                    border: 2px solid
-                                        var(--color-silver);
-                                    border-right: 0px;
-                                    border-top: 0px;
-                                    border-radius: 3px 0 0 3px;
-                                }
-                            }
-*/
 
                             .mat-stroked-button {
                                 padding: 4px 6px !important;
@@ -127,7 +101,6 @@
                     border-top: 1px solid var(--border-color);
                     tr {
                         td {
-                            // color: var(--color-black);
                             font-weight: 100;
                             &:nth-child(2) {
                                 text-align: right;
@@ -166,11 +139,7 @@
                     width: 10%;
                 }
             }
-            /* UNUSED COMPONENT CLASS: icon-cross - Auto-commented by script
-.icon-cross {
-                color: var(--color-red);
-            }
-*/
+
         }
         .total-cost-card {
             padding: 15px 0;
@@ -187,23 +156,10 @@
 
                 .col-5 {
                     flex: unset !important;
-                    /* & ~  UNUSED COMPONENT CLASS: col-5 - Auto-commented by script
-.col-5 {
-                        text-align: right;
-                    }
-*/
+
                 }
             }
         }
-        /* UNUSED COMPONENT CLASS: arrow - Auto-commented by script
-.arrow {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 600;
-            font-size: 44px;
-        }
-*/
 
         .custom-card {
             padding: 12px 15px;

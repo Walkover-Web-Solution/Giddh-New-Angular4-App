@@ -62,7 +62,6 @@
             }
         }
 
-
         .vouchers-small-container {
             max-width: 860px;
 
@@ -74,7 +73,6 @@
             .billing-deliver-label {
                 font-size: var(--font-size-16);
                 font-weight: 600;
-                // color: var(--text-primary-color);
             }
 
             .vouchers-address-form {
@@ -87,7 +85,6 @@
                 }
 
                 &.form-disabled {
-                    // background: var(--color-border-light);
                     opacity: 0.7;
                     pointer-events: none;
                 }
@@ -123,11 +120,6 @@
                                 min-width: 120px;
                                 padding-bottom: 36px !important;
 
-                                /* UNUSED COMPONENT CLASS: wrap-other-tax - Auto-commented by script
-.wrap-other-tax {
-                                    padding-right: 6px;
-                                }
-*/
                             }
 
                             &.product-column {
@@ -142,7 +134,6 @@
                         }
 
                         th {
-                            // color: var(--text-primary-color);
 
                             &:not(:first-child, :nth-child(2)) {
                                 padding-right: 14px !important;
@@ -237,7 +228,6 @@
                         opacity: 0;
                         cursor: pointer;
 
-                        //  This will hide "Default Choose file" button
                         &::-webkit-file-upload-button {
                             display: none;
                         }

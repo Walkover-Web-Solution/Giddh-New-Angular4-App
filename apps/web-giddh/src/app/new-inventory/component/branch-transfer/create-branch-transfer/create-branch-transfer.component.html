@@ -50,7 +50,7 @@
                         <div class="row clear-both primary-form-wrapper row-gap-15">
                             <div class="col-lg-8 px-0">
                                 <div class="row">
-                                    <div class="col-lg-6 mr-b15">
+                                    <div class="col-lg-6 mb-3">
                                         <div
                                             class="direct-mat-datepicker"
                                             [ngClass]="{
@@ -112,7 +112,7 @@
                                             </reactive-dropdown-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
-                                                    <div class="mr-b15 mr-t15">
+                                                    <div class="mb-3 mt-3">
                                                         <span
                                                             formGroupName="variant"
                                                             class="w-100"
@@ -148,7 +148,7 @@
                                                             </reactive-dropdown-field>
                                                         </span>
                                                     </div>
-                                                    <div class="mr-b15 mr-t15">
+                                                    <div class="mb-3 mt-3">
                                                         <input-field
                                                             [type]="'text'"
                                                             [name]="'skuCode'"
@@ -176,7 +176,7 @@
                                                             </mat-radio-button>
                                                         </mat-radio-group>
                                                         <div
-                                                            class="mr-b15 mr-t15"
+                                                            class="mb-3 mt-3"
                                                             *ngIf="
                                                                 branchTransferCreateEditForm.get(
                                                                     'products.0.showCodeType'
@@ -203,7 +203,7 @@
                                                             </input-field>
                                                         </div>
                                                         <div
-                                                            class="mr-b15 mr-t15"
+                                                            class="mb-3 mt-3"
                                                             *ngIf="
                                                                 branchTransferCreateEditForm.get(
                                                                     'products.0.showCodeType'
@@ -235,7 +235,7 @@
                                         </div>
                                         <ng-container *ngIf="transferType === 'products'">
                                             <div>
-                                                <div class="mr-b15 position-relative info-field receipt-note">
+                                                <div class="mb-3 position-relative info-field receipt-note">
                                                     <reactive-dropdown-field
                                                         [name]="'senderName'"
                                                         [label]="localeData?.sender_name"
@@ -277,7 +277,7 @@
                                             </div>
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
-                                                    <div class="mr-b15 four">
+                                                    <div class="mb-3 four">
                                                         <reactive-dropdown-field
                                                             [label]="localeData?.senders_warehouse"
                                                             [placeholder]="localeData?.select_senders_warehouse"
@@ -315,7 +315,7 @@
                                                     </div>
                                                     <div formGroupName="warehouse">
                                                         <div
-                                                            class="mr-b15"
+                                                            class="mb-3"
                                                             *ngIf="
                                                                 branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.taxNumber'
@@ -348,7 +348,7 @@
                                                             </input-field>
                                                         </div>
                                                         <div
-                                                            class="mr-b15"
+                                                            class="mb-3"
                                                             [ngClass]="{
                                                                 'readonly-field': branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.uniqueName'
@@ -378,7 +378,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div
-                                            class="position-relative info-field mr-b15"
+                                            class="position-relative info-field mb-3"
                                             *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                         >
                                             <input-field
@@ -412,7 +412,7 @@
                                         </div>
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
-                                                <div *ngIf="isUpdateMode" class="mr-b15 position-relative info-field">
+                                                <div *ngIf="isUpdateMode" class="mb-3 position-relative info-field">
                                                     <reactive-dropdown-field
                                                         [name]="'receiverName'"
                                                         [label]="localeData?.receiver_name"
@@ -454,7 +454,7 @@
                                                     >
                                                     </i>
                                                 </div>
-                                                <div class="mr-b15">
+                                                <div class="mb-3">
                                                     <reactive-dropdown-field
                                                         [name]="'receiverWarehouse'"
                                                         [label]="localeData?.receiver_warehouse"
@@ -491,7 +491,7 @@
                                                 </div>
                                                 <div formGroupName="warehouse">
                                                     <div
-                                                        class="mr-b15"
+                                                        class="mb-3"
                                                         *ngIf="
                                                             branchTransferCreateEditForm.get(
                                                                 'destinations.0.warehouse.taxNumber'
@@ -522,7 +522,7 @@
                                                         </input-field>
                                                     </div>
                                                     <div
-                                                        class="mr-b15"
+                                                        class="mb-3"
                                                         [ngClass]="{
                                                             'readonly-field': branchTransferCreateEditForm.get(
                                                                 'destinations.0.warehouse.uniqueName'
@@ -566,7 +566,7 @@
                         <div class="row clear-both primary-form-wrapper row-gap-15">
                             <div class="col-lg-8 px-0">
                                 <div class="row">
-                                    <div class="col-lg-6 mr-b15">
+                                    <div class="col-lg-6 mb-3">
                                         <div
                                             class="direct-mat-datepicker"
                                             [ngClass]="{
@@ -634,7 +634,7 @@
                                             </reactive-dropdown-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
-                                                    <div class="mr-b15 mr-t15">
+                                                    <div class="mb-3 mt-3">
                                                         <span
                                                             formGroupName="variant"
                                                             class="w-100"
@@ -670,7 +670,7 @@
                                                             </reactive-dropdown-field>
                                                         </span>
                                                     </div>
-                                                    <div class="mr-b15 mr-t15">
+                                                    <div class="mb-3 mt-3">
                                                         <input-field
                                                             [type]="'text'"
                                                             [name]="'skuCode'"
@@ -698,7 +698,7 @@
                                                             >
                                                         </mat-radio-group>
                                                         <div
-                                                            class="mr-b15 mr-t15"
+                                                            class="mb-3 mt-3"
                                                             *ngIf="
                                                                 branchTransferCreateEditForm.get(
                                                                     'products.0.showCodeType'
@@ -725,7 +725,7 @@
                                                             </input-field>
                                                         </div>
                                                         <div
-                                                            class="mr-b15 mr-t15"
+                                                            class="mb-3 mt-3"
                                                             *ngIf="
                                                                 branchTransferCreateEditForm.get(
                                                                     'products.0.showCodeType'
@@ -756,7 +756,7 @@
                                             </div>
                                         </div>
                                         <div *ngIf="transferType === 'products'">
-                                            <div class="mr-b15">
+                                            <div class="mb-3">
                                                 <div class="position-relative info-field">
                                                     <input-field
                                                         *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
@@ -829,7 +829,7 @@
                                         
                                         <div *ngIf="transferType === 'products'" formArrayName="sources">
                                             <div [formGroupName]="0">
-                                                <div class="mr-b15 one">
+                                                <div class="mb-3 one">
                                                     <reactive-dropdown-field
                                                         [name]="'senderWarehouse'"
                                                         [label]="localeData?.senders_warehouse"
@@ -858,7 +858,7 @@
                                                 </div>
                                                 <div formGroupName="warehouse">
                                                     <div
-                                                        class="mr-b15"
+                                                        class="mb-3"
                                                         *ngIf="
                                                             branchTransferCreateEditForm.get(
                                                                 'sources.0.warehouse.taxNumber'
@@ -891,7 +891,7 @@
                                                         </input-field>
                                                     </div>
                                                     <div
-                                                        class="mr-b15"
+                                                        class="mb-3"
                                                         [ngClass]="{
                                                             'readonly-field': branchTransferCreateEditForm.get(
                                                                 'sources.0.warehouse.uniqueName'
@@ -921,7 +921,7 @@
                                     <div class="col-lg-6">
                                         <div *ngIf="transferType === 'products'" formArrayName="destinations">
                                             <div [formGroupName]="0">
-                                                <div class="mr-b15">
+                                                <div class="mb-3">
                                                     <div class="position-relative info-field">
                                                         <reactive-dropdown-field
                                                             [name]="'receiverName'"
@@ -963,7 +963,7 @@
                                                         </i>
                                                     </div>
                                                 </div>
-                                                <div class="mr-b15">
+                                                <div class="mb-3">
                                                     <reactive-dropdown-field
                                                         #destinationWarehouse
                                                         [name]="'receiverWarehouse'"
@@ -1006,7 +1006,7 @@
                                                 </div>
                                                 <div formGroupName="warehouse">
                                                     <div
-                                                        class="mr-b15"
+                                                        class="mb-3"
                                                         *ngIf="
                                                             branchTransferCreateEditForm.get(
                                                                 'destinations.0.warehouse.taxNumber'
@@ -1037,7 +1037,7 @@
                                                         </input-field>
                                                     </div>
                                                     <div
-                                                        class="mr-b15"
+                                                        class="mb-3"
                                                         [ngClass]="{
                                                             'readonly-field': branchTransferCreateEditForm.get(
                                                                 'destinations.0.warehouse.uniqueName'
@@ -1099,7 +1099,7 @@
                                             </div>
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
-                                                    <div class="mr-b15">
+                                                    <div class="mb-3">
                                                         <reactive-dropdown-field
                                                             *ngIf="isUpdateMode"
                                                             [name]="'senderWarehouse'"
@@ -1123,7 +1123,7 @@
                                                         >
                                                         </reactive-dropdown-field>
                                                     </div>
-                                                    <div class="mr-b15 thrree">
+                                                    <div class="mb-3 thrree">
                                                         <reactive-dropdown-field
                                                             [name]="'senderWarehouse'"
                                                             [placeholder]="localeData?.select_senders_warehouse"
@@ -1162,7 +1162,7 @@
                                                     </div>
                                                     <div formGroupName="warehouse">
                                                         <div
-                                                            class="mr-b15"
+                                                            class="mb-3"
                                                             *ngIf="
                                                                 branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.taxNumber'
@@ -1193,7 +1193,7 @@
                                                             </input-field>
                                                         </div>
                                                         <div
-                                                            class="mr-b15"
+                                                            class="mb-3"
                                                             [ngClass]="{
                                                                 'readonly-field': branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.uniqueName'
@@ -1591,7 +1591,7 @@
                                                                     (click)="$event.stopPropagation()"
                                                                 >
                                                                     <div>
-                                                                        <label class="mr-b1"
+                                                                        <label class="mb-2"
                                                                             >{{ commonLocaleData?.app_sku_code }}:
                                                                         </label>
                                                                         <text-field
@@ -1676,7 +1676,7 @@
                                                                     class="show-code-menu"
                                                                     (click)="$event.stopPropagation()"
                                                                 >
-                                                                    <div class="radio-btns mr-b1">
+                                                                    <div class="radio-btns mb-2">
                                                                         <mat-radio-group
                                                                             [name]="'showCodeType' + i"
                                                                             class="d-flex font-size-15"
@@ -1705,7 +1705,7 @@
                                                                         *ngIf="product.get('showCodeType')?.value"
                                                                     >
                                                                         <div
-                                                                            class="mr-b15 mr-t15"
+                                                                            class="mb-3 mt-3"
                                                                             *ngIf="
                                                                                 product.get('showCodeType')?.value ===
                                                                                 'hsn'
@@ -1730,7 +1730,7 @@
                                                                             </text-field>
                                                                         </div>
                                                                         <div
-                                                                            class="mr-b15 mr-t15"
+                                                                            class="mb-3 mt-3"
                                                                             *ngIf="
                                                                                 product.get('showCodeType')?.value ===
                                                                                 'sac'
@@ -1830,7 +1830,7 @@
                                                                 </text-field>
                                                                 <div
                                                                     *ngIf="activeIndx === i"
-                                                                    class="w-100 mr-b15 mr-t15"
+                                                                    class="w-100 mb-3 mt-3"
                                                                 >
                                                                     <select-field
                                                                         [cssClass]="'form-control border'"
@@ -2263,7 +2263,7 @@
                     <div class="row">
                         <div class="col-xl-8 col-lg-10 col-sm-12">
                             <div>
-                                <p class="mr-b15">{{ commonLocaleData?.app_transport_details }}</p>
+                                <p class="mb-3">{{ commonLocaleData?.app_transport_details }}</p>
                                 <div class="row row-gap-15" formGroupName="transporterDetails">
                                     <div class="col-sm-6 pl-0">
                                         <div class="direct-mat-datepicker">
@@ -2296,7 +2296,7 @@
                                         >
                                         </reactive-dropdown-field>
                                     </div>
-                                    <div class="col-sm-6 pl-0 mr-b15">
+                                    <div class="col-sm-6 pl-0 mb-3">
                                         <reactive-dropdown-field
                                             [name]="'transporterMode'"
                                             [placeholder]="commonLocaleData?.app_transport_mode"
@@ -2309,7 +2309,7 @@
                                         >
                                         </reactive-dropdown-field>
                                     </div>
-                                    <div class="col-sm-6 pr-0 mr-b15">
+                                    <div class="col-sm-6 pr-0 mb-3">
                                         <input-field
                                             [type]="'text'"
                                             [name]="'vehicleNumber'"

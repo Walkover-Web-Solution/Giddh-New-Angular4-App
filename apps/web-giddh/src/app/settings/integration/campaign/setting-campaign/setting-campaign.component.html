@@ -40,7 +40,7 @@
         </div>
     </div>
     <div
-        class="verify-page mr-t15"
+        class="verify-page mt-3"
         *ngIf="
             (!isCommunicationPlatformsLoading && !communicationPlatforms?.MSG91?.isConnected) ||
             editCommunicationPlatform === 'MSG91'
@@ -55,7 +55,7 @@
                 ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
             </span>
         </button>
-        <div class="d-flex align-items-center verify-form mr-t15">
+        <div class="d-flex align-items-center verify-form mt-3">
             <div class="input-field">
                 <input-field
                     [label]="communicationPlatforms?.MSG91?.fields?.auth_key?.label"
@@ -153,13 +153,13 @@
                             alt=""
                         />
                         <img
-                            class="mr-l2 icon-visibility cursor-pointer"
+                            class="ml-4 icon-visibility cursor-pointer"
                             src="{{ imgPath }}edit.svg"
                             alt=""
                             (click)="editTrigger(element, 'update')"
                         />
                         <img
-                            class="mr-l2 icon-visibility cursor-pointer"
+                            class="ml-4 icon-visibility cursor-pointer"
                             src="{{ imgPath }}delete.svg"
                             (click)="deleteTrigger(element?.uniqueName)"
                         />
@@ -194,7 +194,7 @@
                 (page)="handlePageEvent($event)"
                 aria-label="Select page of campaigns"
             ></mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
         </div>
     </ng-container>
     <!-- Page-6 to Page-9 -->
@@ -223,7 +223,7 @@
                     (onClear)="createTrigger.title = ''"
                 ></input-field>
             </div>
-            <div class="trigger-input mr-t15">
+            <div class="trigger-input mt-3">
                 <reactive-dropdown-field
                     [label]="localeData?.communication?.condition"
                     [placeholder]="localeData?.communication?.select_condition"
@@ -234,7 +234,7 @@
                     (onClear)="createTrigger.condition.action[0] = ''"
                 ></reactive-dropdown-field>
             </div>
-            <div class="trigger-input mr-t15">
+            <div class="trigger-input mt-3">
                 <reactive-dropdown-field
                     [label]="localeData?.communication?.entity"
                     [placeholder]="localeData?.communication?.select_entity"
@@ -246,7 +246,7 @@
                     [required]="true"
                 ></reactive-dropdown-field>
             </div>
-            <div class="trigger-input mr-t15">
+            <div class="trigger-input mt-3">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{ localeData?.communication?.sub_entity }}</mat-label>
                     <mat-select
@@ -271,7 +271,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="trigger-input mr-t15">
+            <div class="trigger-input mt-3">
                 <reactive-dropdown-field
                     [label]="localeData?.communication?.campaign"
                     [placeholder]="localeData?.communication?.select_campaign"
@@ -308,8 +308,8 @@
             <div class="dropdown-box-1">
                 <div class="compose-trigger-dropdowns">
                     <div class="chiplist-wrapper">
-                        <div class="pd-l2 pd-r2 border-bottom">
-                            <span class="dropdown-heading pd-b15 d-block">{{ localeData?.communication?.receiver }}</span>
+                        <div class="pl-4 pr-4 border-bottom">
+                            <span class="dropdown-heading pb-3 d-block">{{ localeData?.communication?.receiver }}</span>
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_mobile"
                                 [options]="triggerMobileDropdown"
@@ -320,7 +320,7 @@
                                 class="select-multiple-chiplist mobile-margin"
                             ></select-multiple-fields>
                         </div>
-                        <div class="border-left border-right chip-gap pd-l2 pd-r2 pd-t2">
+                        <div class="border-left border-right chip-gap pl-4 pr-4 pt-4">
                             <select-multiple-fields
                                 [showError]="mandatoryFields.triggerToChiplist"
                                 [placeholder]="localeData?.communication?.select_to"
@@ -351,7 +351,7 @@
                             ></select-multiple-fields>
                         </div>
                         <mat-checkbox
-                            class="font-size-15 pd-l2 pd-r2"
+                            class="font-size-15 pl-4 pr-4"
                             #sendVoucherPdf
                             color="primary"
                             name="voucherpdf"

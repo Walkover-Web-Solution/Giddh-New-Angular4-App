@@ -43,7 +43,7 @@
             ></reactive-dropdown-field>
         </div>
         <span class="ml-auto">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GST_FILLING_DASHBOARD'"></watch-video>
+            <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'GST_FILLING_DASHBOARD'"></watch-video>
         </span>
     </div>
     <div
@@ -87,7 +87,7 @@
                 </div>
                 <!-- ============================ GSTR3B SUMMARY ================================== -->
                 <div
-                    class="return-content pd-15 d-flex justify-content-between align-items-center flex-wrap"
+                    class="return-content p-3 d-flex justify-content-between align-items-center flex-wrap"
                     [ngClass]="{ 'content-disabled': !isMonthSelected || !activeCompanyGstNumber }"
                 >
                     <div class="d-flex justify-content-between align-items-center column-gap-1">
@@ -104,11 +104,11 @@
                     </button>
                 </div>
                 <!-- ============================ GSTR3B SUMMARY ================================== -->
-                <div class="seperate-border mr-t1"></div>
+                <div class="seperate-border mt-2"></div>
                 <!-- ============================ GSTR1 ================================== -->
                 <div class="mt-2 parent position-relative ">
                     <div
-                        class="return-content pd-15"
+                        class="return-content p-3"
                         [ngClass]="{
                             'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async)
                         }"
@@ -139,7 +139,7 @@
                                 mat-raised-button
                                 color="primary"
                                 aria-label="summary"
-                                class="mr-t1"
+                                class="mt-2"
                                 (click)="navigateToOverview(GstReport.Gstr1)"
                             >
                                 {{ localeData?.view_summary }}
@@ -243,7 +243,7 @@
                     <div class="loader" *ngIf="gstr1OverviewDataInProgress$ | async"></div>
                 </div>
                 <!-- ============================ GSTR1 ================================== -->
-                <div class="seperate-border mr-t1"></div>
+                <div class="seperate-border mt-2"></div>
                 <!-- ============================ GSTR2 ================================== -->
                 <div class="mt-2 position-relative ">
                     <div class="text-overdue ss" *ngIf="!isMonthSelected">
@@ -251,7 +251,7 @@
                     </div>
 
                     <div
-                        class="return-content pd-15"
+                        class="return-content p-3"
                         [ngClass]="{
                             'content-disabled':
                                 !isMonthSelected || !activeCompanyGstNumber || (gstr2OverviewDataInProgress$ | async)
@@ -262,7 +262,7 @@
                         mat-raised-button
                         color="primary"
                         aria-label="summary"
-                        class="pull-right mr-t1"
+                        class="pull-right mt-2"
                         (click)="navigateToOverview(GstReport.Gstr2)"
                     >
                         {{ localeData?.view_summary }}
@@ -321,7 +321,7 @@
                             </div>
                         </div>
 
-                        <div class="text-overdue ss mr-t3">
+                        <div class="text-overdue ss mt-5">
                             <span class="theme-primary-color">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-middle">
                                     <path
@@ -333,7 +333,7 @@
                                     ></path>
                                 </svg>
                             </span>
-                            <i class="text-vertical-align-middle p-0 mr-l05">{{ localeData?.gstr2_push_disabled }}</i>
+                            <i class="text-vertical-align-middle p-0 ml-1">{{ localeData?.gstr2_push_disabled }}</i>
                         </div>
                     </div>
 
@@ -396,7 +396,7 @@
                 </div>
                 <!-- ============================ GSTR2 ================================== -->
                 <!-- =================================== FINAL RETURN ============================= -->
-                <div class="return-content pd-15" *ngIf="false">
+                <div class="return-content p-3" *ngIf="false">
                     <span class="btn-toolbar pull-right">
                         <button
                             mat-raised-button
@@ -422,7 +422,7 @@
                 </div>
                 <!-- =================================== FINAL RETURN ============================= -->
                 <!-- =================================== TAX RETURN ============================= -->
-                <div class="return-content pd-15" *ngIf="false">
+                <div class="return-content p-3" *ngIf="false">
                     <button
                         mat-raised-button
                         color="primary"

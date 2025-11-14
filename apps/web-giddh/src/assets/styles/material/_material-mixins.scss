@@ -1,6 +1,10 @@
 @use "@angular/material" as mat;
 
-/** Consolidated mixin to define all theme color variables */
+/**
+ * Consolidated mixin to define all theme color variables
+ * 
+ * @param {Map} $theme - Angular Material theme map
+ */
 @mixin define-theme-colors($theme) {
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
@@ -8,35 +12,6 @@
     $foreground: map-get($theme, foreground);
     $background: map-get($theme, background);
 
-    // Complete Example Start
-    // $theme-color-map: (
-    //     'primary': ($primary, 'default'),
-    //     'primary-contrast': ($primary, 'default-contrast'),
-    //     'accent': ($accent, 'default'),
-    //     'accent-contrast': ($accent, 'default-contrast'),
-    //     'warn': ($warn, 'default'),
-    //     'warn-contrast': ($warn, 'default-contrast'),
-
-    //     // Foreground variants
-    //     'foreground': ($foreground, 'text'),
-    //     'secondary-text': ($foreground, 'secondary-text'),
-    //     'disabled-text': ($foreground, 'disabled-text'),
-    //     'hint-text': ($foreground, 'hint-text'),
-    //     'icon': ($foreground, 'icon'),
-    //     'divider': ($foreground, 'divider'),
-
-    //     // Background variants
-    //     'background': ($background, 'background'),
-    //     'card': ($background, 'card'),
-    //     'dialog': ($background, 'dialog'),
-    //     'hover': ($background, 'hover'),
-    //     'app-bar': ($background, 'app-bar'),
-    //     'raised-button': ($background, 'raised-button'),
-    //     'tooltip': ($background, 'tooltip')
-    // );
-    // Complete Example End
-
-    // Theme color variables with contrast
     $theme-color-map: (
         "primary": (
             $primary,

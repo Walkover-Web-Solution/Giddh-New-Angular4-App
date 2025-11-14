@@ -1,30 +1,3 @@
-/************ login page start *****************/
-
-/*typography styles*/
-
-// body.unresponsive {
-//     padding: 0;
-//     background: var(--color-black);
-// }
-
-/* UNUSED COMPONENT CLASS: intro - Auto-commented by script
-.intro.login {
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    width: 100%;
-    display: table;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: btn-lg - Auto-commented by script
-.btn-lg {
-    padding: 10px 16px;
-    font-size: var(--font-size-15);
-    line-height: 1.3333333;
-}
-*/
-
 .btn {
     cursor: pointer;
 }
@@ -32,13 +5,6 @@
 .btn:focus {
     outline: 0;
 }
-
-/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
-.modal-header h3 {
-    color: var(--color-white);
-    font-size: var(--font-size-16);
-}
-*/
 
 .login {
     padding-top: 0;
@@ -56,12 +22,6 @@
     text-transform: uppercase;
 }
 
-/* UNUSED COMPONENT CLASS: login-btn - Auto-commented by script
-.login-btn {
-    position: relative;
-}
-*/
-
 #box img {
     max-height: 30px;
     position: absolute;
@@ -69,65 +29,18 @@
     top: 4px;
 }
 
-/* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
-#box 
-.glyphicon {
-    max-height: 30px;
-    position: absolute;
-    left: 15px;
-    top: 13px;
-}
-*/
-
 #box .btn:hover,
 #box .btn:hover {
     color: var(--color-white);
 }
 
-.mr-b1 {
-    margin-bottom: 10px;
-}
-
-/* UNUSED COMPONENT CLASS: twitter - Auto-commented by script
-.twitter {
-    background: var(--bg-primary-color);
-}
-*/
-
 .google {
     background: var(--color-red);
 }
 
-/* UNUSED COMPONENT CLASS: linkedin - Auto-commented by script
-.linkedin {
-    background: var(--bg-primary-color);
-}
-*/
-
 .mobile {
     background: var(--color-black);
 }
-
-/* UNUSED COMPONENT CLASS: btn-login - Auto-commented by script
-.btn-login {
-    text-transform: uppercase;
-    color: var(--color-white);
-    margin-bottom: 10px;
-    display: inline-block;
-    vertical-align: middle;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    box-shadow: 0 0 1px var(--color-shadow-light);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    -webkit-transition-property: transform;
-    transition-property: transform;
-    padding: 10px 16px !important;
-}
-*/
 
 .btn-login:hover,
 .btn-login:focus,
@@ -135,22 +48,6 @@
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
-
-/*giddh loader*/
-
-/* UNUSED COMPONENT CLASS: giddh-spinner - Auto-commented by script
-.giddh-spinner {
-    animation: rotate 1.5s infinite linear;
-    background: var(--color-black) none repeat scroll 0 0;
-    border: 7px solid var(--color-red);
-    border-radius: 50%;
-    box-shadow: 0 -10px 0 14px var(--color-shadow-light) inset;
-    box-sizing: border-box;
-    height: 60px;
-    width: 60px;
-    margin: 0 auto 20px;
-}
-*/
 
 @keyframes rotate {
     0% {
@@ -161,44 +58,12 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: lead - Auto-commented by script
-.intro 
-.lead {
-    text-align: center;
-    font-size: var(--font-size-16);
-}
-*/
-
-/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
-.btn-login
-.btn-default {
-    color: var(--color-black);
-    background-color: var(--color-white);
-    border-color: var(--border-color);
-}
-*/
-
 .btn-login.btn-default:hover {
     color: var(--color-black) !important;
     background-color: var(--color-white);
     border-color: var(--border-color);
     box-shadow: none;
 }
-
-/* UNUSED COMPONENT CLASS: intro-body - Auto-commented by script
-.intro 
-.intro-body {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    padding: 100px 0;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    top: 0;
-    left: 0;
-}
-*/
 
 button.close {
     float: right;
@@ -214,33 +79,12 @@ button.close {
     background: var(--bg-primary-color);
 }
 
-/************* end login page *************/
-
-/***********************SIGN IN REDESIGN ***********************/
-
 .form-control,
 :host ::ng-deep .form-control {
     height: 41px;
     font-size: var(--font-size-15);
     color: var(--color-black) !important;
 }
-
-/* UNUSED COMPONENT CLASS: clear - Auto-commented by script
-:host ::ng-deep 
-.clear {
-    top: 50% !important;
-    font-size: var(--font-size-24) !important;
-    right: 6px !important;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: btn-text-primary - Auto-commented by script
-.btn-text-primary {
-    color: var(--color-white) !important;
-    border-color: var(--theme-primary-color);
-    background: var(--bg-primary-color);
-}
-*/
 
 .btn-text-primary:hover {
     color: var(--color-white) !important;
@@ -264,36 +108,10 @@ h1 {
     font-size: var(--font-size-24);
 }
 
-/* UNUSED COMPONENT CLASS: slide-content - Auto-commented by script
-.slide-content {
-    padding: 80px 100px;
-    color: var(--color-white);
-    background: #2c2c43;
-    text-align: center;
-    flex-direction: column;
-    justify-content: center;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: login_box - Auto-commented by script
-.login_box {
-    background: var(--color-light-gray) url("/assets/images/banner-grid-design.png") repeat;
-    padding: 20px 70px;
-}
-*/
-
 .login_box h1 {
     color: var(--color-black);
     font-weight: 500;
 }
-
-/* UNUSED COMPONENT CLASS: form-wrapper - Auto-commented by script
-.form-wrapper {
-    display: flex;
-    margin-bottom: 40px;
-    flex-direction: column;
-}
-*/
 
 small {
     color: var(--color-black);
@@ -303,8 +121,6 @@ small {
     width: 300px;
 }
 
-/* social-login */
-
 .social-login {
     overflow: hidden;
     display: flex;
@@ -312,7 +128,6 @@ small {
 }
 
 .social-login li {
-    // list-style: none;
     display: inline-block;
     margin-right: 15px;
 }
@@ -331,14 +146,6 @@ small {
 .google-ico span {
     padding: 0 15px;
 }
-
-/* UNUSED COMPONENT CLASS: linkedin-ico - Auto-commented by script
-
-.linkedin-ico a {
-    color: var(--text-primary-color);
-    border-color: var(--theme-primary-color);
-}
-*/
 
 .google-ico a {
     background: var(--bg-primary-color);
@@ -362,22 +169,6 @@ small {
     height: 18px;
 }
 
-/* UNUSED COMPONENT CLASS: ico-apple - Auto-commented by script
-.ico-apple img {
-    width: 21px !important;
-    height: 21px !important;
-    margin-bottom: 3px;
-}
-/* UNUSED COMPONENT CLASS: login-option - Auto-commented by script
-
-.login-option,
-.login-option a {
-    color: var(--text-primary-color);
-    margin-top: 55px;
-    font-weight: 500;
-}
-*/
-
 .login-option a {
     border-bottom: 2px dotted var(--theme-primary-color);
 }
@@ -389,12 +180,6 @@ small {
     line-height: 34px;
 }
 
-/* UNUSED COMPONENT CLASS: hash-tag - Auto-commented by script
-.hash-tag {
-    color: var(--color-red);
-}
-*/
-
 .slide-content .btn {
     font-size: var(--font-size-16);
     font-weight: 500;
@@ -402,14 +187,6 @@ small {
     transition: all 0.5s ease;
     padding: 4px 18px;
 }
-
-/* UNUSED COMPONENT CLASS: btn-white - Auto-commented by script
-.slide-content 
-.btn-white {
-    color: var(--color-orange-light);
-    border: 1px solid var(--color-white);
-}
-*/
 
 .slide-content .btn-white:hover {
     color: var(--color-black);
@@ -421,16 +198,6 @@ small {
     margin-bottom: 40px;
 }
 
-/* UNUSED COMPONENT CLASS: app-ico - Auto-commented by script
-.app-ico,
-/* UNUSED COMPONENT CLASS: download-app - Auto-commented by script
-.download-app {
-    display: flex;
-    width: 100%;
-    justify-content: space-evenly;
-}
-*/
-
 .app-ico ul h1 {
     margin-top: 10px;
 }
@@ -438,7 +205,6 @@ small {
 .app-ico ul li,
 .download-app ul li {
     display: inline-block;
-    // list-style: none;
     border-radius: var(--mat-border-radius-0);
 }
 
@@ -473,16 +239,9 @@ small {
     border-color: var(--color-black);
 }
 
-/* UNUSED COMPONENT CLASS: img-hover - Auto-commented by script
-.img-hover:hover img:last-child {
-    display: block !important;
-}
-*/
-
 .img-hover:hover img:first-child {
     display: none;
 }
-/* new theme login page css start */
 .login-box {
     position: relative;
 }
@@ -537,17 +296,7 @@ small {
     color: var(--text-primary-color);
     font-size: var(--font-size-16);
 }
-/* UNUSED COMPONENT CLASS: btn-outline-primary - Auto-commented by script
-.btn-outline-primary {
-    background-color: var(--bg-primary-color);
-    border-radius: var(--mat-border-radius-4);
-    min-width: 160px;
-    border-radius: var(--mat-border-radius-4);
-    color: var(--color-white);
-    margin-bottom: 10px;
-    font-size: var(--font-size-15);
-}
-*/
+
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
     background-color: var(--bg-primary-color);
@@ -562,35 +311,13 @@ small {
     color: var(--text-primary-color);
     font-size: var(--font-size-15);
 }
-/* UNUSED COMPONENT CLASS: btn-secondary - Auto-commented by script
-.btn-secondary {
-    border-radius: var(--mat-border-radius-4);
-    color: var(--color-white);
-    border: 1px solid var(--theme-primary-color);
-    background-color: var(--bg-primary-color);
-}
-*/
+
 .btn-secondary:hover {
     color: var(--color-white) !important;
     border-color: var(--theme-primary-color);
     background-color: var(--bg-primary-color);
 }
 
-/* UNUSED COMPONENT CLASS: loader-main - Auto-commented by script
-.loader-main {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 9999999;
-    background: var(--color-white);
-    top: var(--top-distance);
-    right: 0;
-    left: 0;
-    margin: 0px;
-    align-items: center;
-    display: flex;
-}
-*/
 .form-inline {
     width: 80px;
 }

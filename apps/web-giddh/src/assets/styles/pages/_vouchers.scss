@@ -1,26 +1,4 @@
 .vouchers {
-    .vouchers-address-form {
-        input,
-        textarea {
-            // background: var(--color-transparent);
-
-            // &::placeholder {
-            //     color: var(--color-medium-gray) !important;
-            // }
-        }
-
-        // reactive-dropdown-field {
-        //     .mat-mdc-form-field-infix {
-        //         padding-bottom: 1px !important;
-        //         min-height: 1rem !important;
-        //         padding-top: 0px !important;
-        //     }
-
-        //     .mdc-text-field--no-label {
-        //         padding: 0 !important;
-        //     }
-        // }
-    }
 
     .po-mat-select {
         padding: 10px;
@@ -30,17 +8,6 @@
             padding: 0 10px;
         }
     }
-
-    // input,
-    // textarea,
-    // mat-select {
-    //     &.form-control {
-    //         &:hover,
-    //         &:focus {
-    //             border-color: var(--color-dark-gray) !important;
-    //         }
-    //     }
-    // }
 
     .vouchers-large-container {
         .change-currency {
@@ -100,7 +67,6 @@
     }
 }
 
-// disable slide toggle
 .slide-toggle {
     .mdc-form-field {
         column-gap: 10px;
@@ -115,7 +81,6 @@
     }
 }
 
-// template scroll
 .template-scroll {
     overflow-y: auto;
     padding-right: 15px;
@@ -193,16 +158,3 @@
 .mdc-tooltip__surface {
     white-space: pre-line;
 }
-
-// Handle Bootstrap Modal Z-index issue on Mat Tab
-// body {
-//     &.modal-open {
-//         mat-tab-body {
-//             &.mat-mdc-tab-body-active {
-//                 &:has(edit-invoice, app-invoice-setting, app-invoice-generate) {
-//                     z-index: unset !important;
-//                 }
-//             }
-//         }
-//     }
-// }

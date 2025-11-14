@@ -3,18 +3,6 @@
     min-height: 500px;
 }
 
-// .day-date {
-//     display: flex;
-
-//     .voucher-date-field {
-//         width: auto;
-//     }
-// }
-
-// .discount-sidebar-section {
-//     padding: 5px !important;
-// }
-
 .grp-list {
     padding: 0 !important;
 
@@ -26,6 +14,7 @@
 .hilighted {
     color: var(--text-primary-color) !important;
     background-color: var(--color-border-light) !important;
+
     & > a {
         color: var(--text-primary-color) !important;
     }
@@ -48,10 +37,6 @@
     font-weight: bolder;
 }
 
-// #content-wrapper {
-//     padding-bottom: 0px !important;
-// }
-
 .current-balance {
     font-size: var(--font-size-15);
     font-style: italic;
@@ -59,7 +44,6 @@
     padding-left: 70px;
 }
 
-// .cheque-popup .new-account-form .modal-body {
 .new-account-form {
     .check-clearance-date {
         .form-control[readonly] {
@@ -67,72 +51,6 @@
         }
     }
 }
-
-// .debtor-details-form {
-//     display: flex;
-//     font-size: var(--font-size-15);
-//     background-color: var(--color-medium-gray);
-//     padding: 10px 9px;
-//     margin-bottom: 10px;
-
-//     .form-fields {
-//         display: flex;
-//         align-items: center;
-
-//         .single-field {
-//             width: 20%;
-//             margin-right: 15px;
-//             min-width: 180px;
-
-//             &.cr-dr-field {
-//                 width: 5% !important;
-//             }
-
-//             label {
-//                 margin-bottom: 5px;
-//                 display: none;
-//             }
-
-//             input.form-control {
-//                 background-color: var(--color-white) !important;
-//                 border: 1px solid var(--border-color);
-//                 border-radius: var(--mat-border-radius-4) !important;
-//             }
-
-//             &.set-width {
-//                 width: 30%;
-//             }
-
-//             &:last-child {
-//                 width: 5%;
-//             }
-
-//             .icon-arrow-down {
-//                 font-size: var(--font-size-15);
-//                 position: absolute;
-//                 right: 5px;
-//                 top: 7px;
-//                 color: var(--color-black);
-//             }
-//         }
-
-//         .icon-cross {
-//             color: var(--color-dark-gray);
-//             cursor: pointer;
-//             padding: 5px;
-//         }
-
-//         .cr-dr-field,
-//         .delete-row {
-//             min-width: 30px;
-//             max-width: 30px;
-//         }
-//     }
-// }
-
-// .modal-dialog {
-//     width: 298px !important;
-// }
 
 ::ng-deep .account-wrapper {
     .from-or-to-acc[type="text"],

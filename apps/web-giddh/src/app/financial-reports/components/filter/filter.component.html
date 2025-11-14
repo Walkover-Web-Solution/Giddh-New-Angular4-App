@@ -110,7 +110,7 @@
                     </div>
                     <ng-container *ngIf="!showLoader">
                         <div
-                            class="pull-left mr-r15 d-inline-flex position-relative"
+                            class="pull-left mr-3 d-inline-flex position-relative"
                             *ngIf="!isProjectWiseAccounting && tags?.length"
                         >
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
@@ -207,7 +207,7 @@
                         <trial-balance-export-xls
                             *ngIf="tbExportXLS"
                             [trialBalanceRequest]="filterForm?.value"
-                            class="pull-right mr-r05"
+                            class="pull-right mr-1"
                         >
                         </trial-balance-export-xls>
                         <profit-loss-export-xls

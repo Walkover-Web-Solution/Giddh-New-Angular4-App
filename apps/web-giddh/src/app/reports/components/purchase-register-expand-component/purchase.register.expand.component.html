@@ -76,9 +76,9 @@
             </div>
         </div>
 
-        <div class="top-content pd-l15 pd-r15" [hidden]="!(purchaseRegisteDetailedResponse$ | async)?.items?.length">
+        <div class="top-content pl-3 pr-3" [hidden]="!(purchaseRegisteDetailedResponse$ | async)?.items?.length">
             <div class="d-flex justify-content-between w-100 overflow-x-auto" *ngIf="PurchaseRegisteDetailedItems">
-                <div class="total-details-box mr-r05 count-box mat-app-background">
+                <div class="total-details-box mr-1 count-box mat-app-background">
                     <h5>
                         {{ localeData?.transaction_count }}
                         <div>
@@ -88,7 +88,7 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none opening-box" *ngIf="displayedColumns?.includes('purchase')">
+                <div class="total-details-box mr-1 border-none opening-box" *ngIf="displayedColumns?.includes('purchase')">
                     <h5>
                         {{ commonLocaleData?.app_purchase }}
                         <div>
@@ -103,7 +103,7 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none sales-purchase" *ngIf="displayedColumns?.includes('return')">
+                <div class="total-details-box mr-1 border-none sales-purchase" *ngIf="displayedColumns?.includes('return')">
                     <h5>
                         {{ commonLocaleData?.app_return }}
                         <div>
@@ -118,7 +118,7 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none payment-receipt" *ngIf="displayedColumns?.includes('discount')">
+                <div class="total-details-box mr-1 border-none payment-receipt" *ngIf="displayedColumns?.includes('discount')">
                     <h5>
                         {{ localeData?.net_discount }}
                         <div>
@@ -134,7 +134,7 @@
                     </h5>
                 </div>
                 <div
-                    class="total-details-box mr-r05 border-none due-box"
+                    class="total-details-box mr-1 border-none due-box"
                     *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tcsTotal"
                 >
                     <h5>
@@ -152,7 +152,7 @@
                     </h5>
                 </div>
                 <div
-                    class="total-details-box mr-r05 border-none due-box"
+                    class="total-details-box mr-1 border-none due-box"
                     *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tdsTotal"
                 >
                     <h5>
@@ -169,7 +169,7 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none due-box" *ngIf="displayedColumns?.includes('tax')">
+                <div class="total-details-box mr-1 border-none due-box" *ngIf="displayedColumns?.includes('tax')">
                     <h5>
                         {{ localeData?.net_tax }}
                         <div>
@@ -204,7 +204,7 @@
     </div>
 
     <ng-container *ngIf="isGetPurchaseDetailsSuccess$ | async">
-        <div class="clear-both sales-register-table pd-15 overflow-visible">
+        <div class="clear-both sales-register-table p-3 overflow-visible">
             <div class="table-responsive overflow-visible table-header-sticky">
                 <ng-container *ngIf="(purchaseRegisteDetailedResponse$ | async)?.items?.length">
                     <table mat-table [dataSource]="dataSource" class="manufacturing-table">
@@ -527,7 +527,7 @@
                     [hidePageSize]="false"
                     [pageIndex]="getDetailedPurchaseRequestFilter.page - 1"
                 ></mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </div>
         </div>
         <div

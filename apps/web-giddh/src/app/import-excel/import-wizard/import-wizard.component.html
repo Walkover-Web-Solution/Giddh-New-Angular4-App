@@ -6,18 +6,18 @@
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <ng-container *ngIf="entity === 'stock'">
-        <span class="pull-right mr-t1">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'IMPORT_INVENTORY'"></watch-video>
+        <span class="pull-right mt-2">
+            <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'IMPORT_INVENTORY'"></watch-video>
         </span>
     </ng-container>
     <ng-container *ngIf="entity === 'master'">
-        <span class="pull-right mr-t1">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'IMPORT_MASTER'"></watch-video>
+        <span class="pull-right mt-2">
+            <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'IMPORT_MASTER'"></watch-video>
         </span>
     </ng-container>
     <ng-container *ngIf="entity === 'entries'">
-        <span class="pull-right mr-t1">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'IMPORT_ENTRIES'"></watch-video>
+        <span class="pull-right mt-2">
+            <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'IMPORT_ENTRIES'"></watch-video>
         </span>
     </ng-container>
     <div class="container-fluid clear-both">

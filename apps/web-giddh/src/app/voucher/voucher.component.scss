@@ -10,7 +10,7 @@
         right: -15px;
         top: 14px
     }
-    
+
     .container-lg {
         max-width: 1540px !important;
 
@@ -89,7 +89,6 @@
                 opacity: 0.7;
             }
         }
-
 
         .vouchers-small-container {
             max-width: 860px;
@@ -185,12 +184,6 @@
                                 text-align: right;
                             }
 
-                            /*& UNUSED COMPONENT CLASS: total-column - Auto-commented by script
-.total-column {
-                                min-width: 120px;
-                            }
-*/
-
                             &.product-column {
                                 @media screen and (max-width: 1280px) {
                                     max-width: 120px;
@@ -203,7 +196,6 @@
                         }
 
                         th {
-                            // color: var(--text-primary-color);
 
                             &:not(:first-child, :nth-child(2)) {
                                 padding-right: 14px !important;
@@ -263,7 +255,6 @@
                     }
                 }
 
-
                 @media screen and (max-width: 1140px) {
                     overflow-x: auto;
                 }
@@ -313,7 +304,6 @@
                         opacity: 0;
                         cursor: pointer;
 
-                        //  This will hide "Default Choose file" button
                         &::-webkit-file-upload-button {
                             display: none;
                         }

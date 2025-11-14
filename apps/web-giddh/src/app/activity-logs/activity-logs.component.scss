@@ -23,14 +23,7 @@
         padding-bottom: 4px;
         padding-top: 4px;
         margin-bottom: 0px;
-        // margin-top: 5px;
     }
-
-    /* UNUSED COMPONENT CLASS: entry-datepicker - Auto-commented by script
-.entry-datepicker {
-        padding-left: 10px;
-    }
-*/
 
     .and-text {
         margin-left: 10px !important;
@@ -39,10 +32,6 @@
         color: var(--color-black) !important;
         margin: auto;
     }
-
-    // .button-wrapper {
-    //     margin-bottom: 5px !important;
-    // }
 
     .add-button {
         border: none;
@@ -67,32 +56,12 @@
         display: flex;
     }
 
-    /* UNUSED COMPONENT CLASS: clear-filter - Auto-commented by script
-.clear-filter {
-        color: var(--text-primary-color);
-        cursor: pointer;
-    }
-*/
-
-    /* UNUSED COMPONENT CLASS: log-clear-button - Auto-commented by script
-.log-clear-button {
-        margin-bottom: 15px;
-    }
-*/
-
     .activity-filter-wrap {
         align-items: stretch;
         display: flex;
         flex-wrap: wrap;
         row-gap: 5px;
     }
-
-    /* UNUSED COMPONENT CLASS: filter-button - Auto-commented by script
-.filter-button {
-        float: left;
-        width: 15%;
-    }
-*/
 
     .activity-table {
         .activity-td {
@@ -104,13 +73,6 @@
             visibility: hidden;
             transition: 0ms;
         }
-
-        /* UNUSED COMPONENT CLASS: mat-column-history - Auto-commented by script
-.mat-column-history {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-*/
 
         tr {
             &:hover {
@@ -134,13 +96,6 @@
         .activity-history {
             min-height: 0;
         }
-
-        /* UNUSED COMPONENT CLASS: mat-column-operation - Auto-commented by script
-.mat-column-operation {
-            padding-right: 0;
-            margin-right: 0;
-        }
-*/
 
         .history-child-row {
             position: relative;

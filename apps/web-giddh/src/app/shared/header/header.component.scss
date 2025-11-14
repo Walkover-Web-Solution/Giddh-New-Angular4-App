@@ -1,36 +1,7 @@
-/* UNUSED COMPONENT CLASS: giddh-logo - Auto-commented by script
-.giddh-logo {
-    width: 100px;
-}
-*/
-
-// .company-button {
-//     background-color: var(--color-white);
-// }
-
-/* UNUSED COMPONENT CLASS: custom-header - Auto-commented by script
-.custom-header {
-    background-color: var(--bg-primary-color);
-    padding: 15px;
-    min-height: 60px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
-.nav-tabs {
-    padding-top: 0;
-}
-*/
-
 .nav-left-bar.open {
     left: 0;
     width: 240px;
 
-    /*& UNUSED COMPONENT CLASS: width-60 - Auto-commented by script
-.width-60 {
-        width: 60px;
-    }
-*/
 }
 
 .menu-wrapper {
@@ -41,17 +12,6 @@
 .modal-open {
     overflow: hidden !important;
 }
-
-/* UNUSED COMPONENT CLASS: inner-tooltip - Auto-commented by script
-.inner-tooltip {
-    white-space: nowrap !important;
-    max-width: none !important;
-}
-*/
-
-// .d-inline-block {
-//     display: inline-block !important;
-// }
 
 .notification {
     padding: 0 !important;
@@ -65,32 +25,16 @@
 .universal-date {
     li {
         display: inline-block;
-        // position: relative;
         border: 1px solid var(--color-white);
         border-radius: var(--mat-border-radius-16);
         i {
             vertical-align: bottom;
             display: inline-block;
-            // position: relative;
-            // left: 16px;
             padding: 0 20px;
-            // color: var(--color-white);
             font-size: 18px;
         }
     }
 }
-
-/* UNUSED COMPONENT CLASS: mega-menu - Auto-commented by script
-.mega-menu {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 15px;
-
-    button {
-        color: var(--text-primary-color) !important;
-    }
-}
-*/
 
 .menu-dropdown-wrapper {
     padding: 0 30px 15px;
@@ -118,9 +62,7 @@
             column-gap: 8px;
 
             a {
-                // color: var(--text-primary-color);
                 text-decoration: underline;
-                // position: relative;
             }
 
             .dot {
@@ -171,10 +113,6 @@ ul{
                     &:hover {
                         .icon-circle{
                             background-color: var(--color-white);
-                            // i[class^='icon-'],
-                            // i[class*=' icon-'] {
-                            //   color: var(--text-primary-color) !important;
-                            // }
                         }
                       }
                 }
@@ -251,50 +189,9 @@ ul{
     text-transform: uppercase;
 }
 
-// top header css
-/* UNUSED COMPONENT CLASS: company-text - Auto-commented by script
-.company-text {
-    padding: 6px 8px 6px 0 !important;
-    overflow: hidden;
-}
-*/
-
-/*ul  UNUSED COMPONENT CLASS: sub-list - Auto-commented by script
-.sub-list {
-    min-height: 50px;
-    max-height: 290px;
-}
-*/
-
 .upgrade-plan.list-inline > li {
     padding-left: 0 !important;
 }
-
-/* UNUSED COMPONENT CLASS: company-name - Auto-commented by script
-.nav-left-bar .company-name .company-text span {
-    color: var(--color-black);
-    word-break: break-all;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: company-name-finance-year - Auto-commented by script
-.nav-left-bar 
-.company-name-finance-year {
-    display: inline;
-    padding-left: 0;
-    position: relative;
-    top: -3px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: branch-unique-name - Auto-commented by script
-.nav-left-bar .company-name 
-.branch-unique-name {
-    font-size: var(--font-size-12);
-    color: var(--text-primary-color) !important;
-    padding: 0 0 3px 0;
-}
-*/
 
 .overlay-cal {
     background: rgba(43, 38, 38, 0.6901960784313725);
@@ -329,7 +226,6 @@ ul{
     top: 60px;
 }
 
-/*notification css*/
 .warning-msg-row {
     background-color: var(--theme-warn-light);
     padding: 10px 15px;
@@ -348,14 +244,6 @@ ul{
         font-size: var(--font-size-15);
         margin-right: 10px;
     }
-
-    /* span UNUSED COMPONENT CLASS: icon-info-icon - Auto-commented by script
-.icon-info-icon {
-        color: var(--color-medium-gray);
-        font-size: var(--font-size-16);
-        margin-right: 10px;
-    }
-*/
 
     i.icon-traingle-info {
         color: var(--color-red);
@@ -377,13 +265,6 @@ ul{
     }
 }
 
-/* UNUSED COMPONENT CLASS: branch-icon-tooltip - Auto-commented by script
-.branch-icon-tooltip {
-    padding: 0 5px;
-}
-*/
-
-/*new header css starts*/
 .fixed-padding {
     padding-top: 60px;
 }
@@ -391,7 +272,6 @@ ul{
 #primary-new-header.primary-main-header {
     padding-left: 15px;
     padding-right: 15px;
-    // border-bottom: 1px solid var(--color-white);
     position: fixed;
     width: 100%;
     top: var(--top-distance);
@@ -429,12 +309,6 @@ ul{
         .icon-calender,
         .icon-plus,
         i,
-        /* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
-.btn-link {
-            color: var(--color-light-gray);
-            position: static !important;
-        }
-*/
 
         .not-today {
             .calendar-addon {
@@ -486,14 +360,6 @@ ul{
                 }
             }
 
-            /*& UNUSED COMPONENT CLASS: disable-icon - Auto-commented by script
-.disable-icon {
-                i {
-                    color: var(--color-silver) !important;
-                    cursor: no-drop;
-                }
-            }
-*/
         }
     }
     .logo-wrapper {
@@ -503,7 +369,6 @@ ul{
     }
 }
 
-/*new header css end*/
 aside-setting {
     -moz-transition: all 400ms linear;
     -webkit-transition: all 400ms linear;
@@ -527,13 +392,7 @@ aside-setting {
         -ms-transform: translate(0, 0px);
         transform: translate3d(0, 0px, 0px);
         right: 0;
-        // z-index: 9991;
 
-        /*& UNUSED COMPONENT CLASS: z-index-990 - Auto-commented by script
-.z-index-990 {
-            z-index: 990 !important;
-        }
-*/
     }
 }
 
@@ -571,41 +430,12 @@ aside-setting {
     }
 }
 
-/* responsive */
-
-@media (max-width: 1023px) {
-    /* UNUSED COMPONENT CLASS: modal-liq-90 - Auto-commented by script
-.modal-liq-90 {
-        width: 100% !important;
-    }
-*/
-
-    /* UNUSED COMPONENT CLASS: logo-hide-ipad - Auto-commented by script
-.logo-hide-ipad {
-        display: none;
-    }
-*/
-}
-
 @media (max-width: 840px) {
     ul.sub-list {
         min-height: 30px;
         max-height: 190px;
     }
 
-    /* UNUSED COMPONENT CLASS: sub-menu-nav - Auto-commented by script
-.sub-menu-nav {
-        top: -60px;
-    }
-*/
-}
-
-@media (min-width: 992px) {
-    /* UNUSED COMPONENT CLASS: modal-lg - Auto-commented by script
-.modal-lg {
-        max-width: 100% !important;
-    }
-*/
 }
 @media screen and (max-width: 1024px) {
     ul{
@@ -618,12 +448,7 @@ aside-setting {
         }
     }
 }
-/* UNUSED COMPONENT CLASS: schedule-now-link - Auto-commented by script
-.schedule-now-link {
-    width: 1px;
-    height: 1px;
-}
-*/
+
 .hide-sidebar {
     display: none;
 }

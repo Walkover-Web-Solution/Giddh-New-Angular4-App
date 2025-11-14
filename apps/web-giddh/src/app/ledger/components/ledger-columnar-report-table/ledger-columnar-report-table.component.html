@@ -177,7 +177,7 @@
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 ></amount-field>
-                                  <span *ngIf=" item?.grossTotal?.type" class="mr-l05"> {{ item.grossTotal.type === "DEBIT" ? "dr" : "cr" }}</span>
+                                  <span *ngIf=" item?.grossTotal?.type" class="ml-1"> {{ item.grossTotal.type === "DEBIT" ? "dr" : "cr" }}</span>
                             </span>
                         </td>
                     </ng-container>
@@ -202,7 +202,7 @@
                 (page)="handlePageEvent($event)"
                 aria-label="Select page of columnar report"
             ></mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
             <div class="no-data" *ngIf="reportResponse && reportResponse?.totalItems === 0">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>

@@ -16,7 +16,7 @@
         <i (click)="closeDialog()" aria-label="close icon" class="icon-cross cursor-pointer"></i>
     </div>
     <mat-dialog-content class="dialog-content">
-        <div class="d-flex mr-b15 p-0 align-items-center">
+        <div class="d-flex mb-3 p-0 align-items-center">
             <mat-form-field class="w-100" appearance="outline">
                 <mat-label>
                     {{ commonLocaleData?.app_search }}
@@ -47,7 +47,7 @@
             </mat-form-field>
             <div *ngIf="showClearFilter">
                 <a
-                    class="cursor-pointer refresh-button pd-1 mr-l1"
+                    class="cursor-pointer refresh-button p-2 ml-2"
                     (click)="resetFilter()"
                     matTooltip="{{ commonLocaleData?.app_reset_filter }}"
                 >
@@ -72,10 +72,10 @@
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef width="30%">
-                        <span class="pd-l15">{{ commonLocaleData?.app_name }}</span>
+                        <span class="pl-3">{{ commonLocaleData?.app_name }}</span>
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <span class="text-transform-none pd-l15">{{ element.name }}</span>
+                        <span class="text-transform-none pl-3">{{ element.name }}</span>
                     </td>
                 </ng-container>
                 <!-- Email Column -->
@@ -126,7 +126,7 @@
                 [hidePageSize]="false"
                 [pageIndex]="requestParams.page - 1"
             ></mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
         </section>
 
         <section
@@ -149,10 +149,10 @@
                 <!-- Date Column -->
                 <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef width="20%" mat-sort-header>
-                        <span class="pd-l15">{{ commonLocaleData?.app_date }}</span>
+                        <span class="pl-3">{{ commonLocaleData?.app_date }}</span>
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <span class="pd-l15"> {{ element.date }}</span>
+                        <span class="pl-3"> {{ element.date }}</span>
                     </td>
                 </ng-container>
                 <!-- Invoice Number Column -->
@@ -283,10 +283,10 @@
                 [hidePageSize]="false"
                 [pageIndex]="requestParams.page - 1"
             ></mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
         </section>
         <div
-            class="mr-t2 no-data-found text-center"
+            class="mt-4 no-data-found text-center"
             *ngIf="
                 !(salesBifurcationDetailsListInProgress$ | async) &&
                 (salesBifurcationDetailsList$ | async)?.totalItems <= 0
